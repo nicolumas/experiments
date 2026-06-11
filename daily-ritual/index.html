@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>LUMAS · The Daily Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Utile+Display:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --surface-page: #FAF6F1;
+    --surface-card: #FFFFFF;
+    --surface-raised: #F7F1E9;
+    --surface-sunken: #F4EDE2;
+    --surface-inverse: #1C1A18;
+
+    --text-primary: #1C1A18;
+    --text-secondary: #5A5752;
+    --text-tertiary: #908C87;
+    --text-disabled: #C7C3BE;
+    --text-inverse: #F4EDE2;
+
+    --border-default: #E2D8CC;
+    --border-subtle: #EAE2D8;
+    --border-strong: #C7C3BE;
+    --border-focus: #1C1A18;
+
+    --status-error: #B5352A;
+
+    --on-dark-55: rgba(244, 237, 226, 0.55);
+    --on-dark-75: rgba(244, 237, 226, 0.75);
+    --on-dark-hairline: rgba(244, 237, 226, 0.32);
+
+    --font-display: 'Utile Display', 'Archivo', system-ui, sans-serif;
+    --font-body: 'Archivo', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--surface-inverse);
+    font-family: var(--font-body);
+    color: var(--text-inverse);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button { font-family: inherit; cursor: pointer; border: none; background: none; border-radius: 0; }
+  input { font-family: inherit; }
+  img { display: block; }
+
+  /* ── Type scale ─────────────────────────────────────── */
+  .display-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 3vw, 46px); line-height: 1.12; letter-spacing: 0; }
+  .display-h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 2.5vw, 34px); line-height: 1.12; letter-spacing: 0; }
+  .display-h4 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 26px); line-height: 1.25; letter-spacing: 0; }
+  .body-large { font-family: var(--font-body); font-weight: 300; font-size: 20px; line-height: 1.6; }
+  .body       { font-family: var(--font-body); font-weight: 400; font-size: 16px; line-height: 1.5; }
+  .caption    { font-family: var(--font-body); font-weight: 400; font-size: 11px; line-height: 1.5; letter-spacing: 0.03em; }
+  .eyebrow    { font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ui-label   { font-family: var(--font-body); font-weight: 700; font-size: 10px; line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* ── Screens ────────────────────────────────────────── */
+  .screen { display: none; }
+  .screen.is-active { display: flex; }
+
+  /* ── Buttons ────────────────────────────────────────── */
+  .btn-primary-inverse {
+    font-weight: 700; font-size: 13px; line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 16px 28px;
+    background: #F4EDE2;
+    color: #1C1A18;
+  }
+  .btn-primary-inverse:hover,
+  .btn-primary-inverse:active { background: #E2D8CC; }
+  .btn-primary-inverse:disabled { background: #E2D8CC; cursor: default; }
+
+  .btn-ghost-inverse {
+    font-weight: 400; font-size: 13px; line-height: 1.5; letter-spacing: 0.10em; text-transform: uppercase;
+    color: var(--text-inverse);
+    padding: 4px 0 6px 0;
+    border-bottom: 1px solid var(--on-dark-55);
+  }
+
+  /* ── Screen 1: OPEN ─────────────────────────────────── */
+  #screen-open {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+  }
+  #screen-open .eyebrow { color: var(--on-dark-55); margin-bottom: 32px; }
+  #screen-open h1 { color: var(--text-inverse); max-width: 320px; margin-bottom: 24px; }
+  #screen-open p { color: var(--on-dark-75); max-width: 280px; margin-bottom: 40px; }
+  #open-date {
+    position: absolute;
+    bottom: 24px;
+    left: 0; right: 0;
+    text-align: center;
+    color: var(--on-dark-55);
+  }
+
+  /* ── Screen 2: DUEL ─────────────────────────────────── */
+  #screen-duel {
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    padding-top: 58px;
+  }
+  .duel-bar {
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--on-dark-hairline);
+  }
+  .duel-bar .eyebrow { color: var(--on-dark-55); }
+  .duel-bar .ui-label { color: var(--on-dark-55); }
+  .duel-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    opacity: 1;
+    transition: opacity 100ms linear;
+  }
+  .duel-stage.is-fading { opacity: 0; }
+  .duel-zone {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .duel-zone img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    object-fit: contain;
+  }
+  .duel-caption {
+    flex: 0 0 auto;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .duel-caption .cap-title {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--on-dark-75);
+  }
+  .duel-caption .cap-artist {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--on-dark-55);
+    margin-top: 3px;
+  }
+  .duel-zone.is-chosen { outline: 2px solid rgba(244, 237, 226, 0.9); outline-offset: -2px; }
+  .duel-divider {
+    flex: 0 0 1px;
+    background: var(--on-dark-hairline);
+  }
+
+  @media (min-width: 768px) {
+    .duel-stage { flex-direction: row; }
+    #screen-duel { padding-top: 64px; }
+  }
+
+  /* ── Screen 3: REVEAL ───────────────────────────────── */
+  #screen-reveal {
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 124px 24px 40px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 250ms linear;
+  }
+  #screen-reveal.is-visible { opacity: 1; }
+
+  #screen-reveal .reveal-eyebrow { color: var(--on-dark-55); margin-bottom: 24px; }
+  #reveal-score { color: var(--text-inverse); max-width: 460px; margin-bottom: 32px; text-wrap: balance; }
+
+  .hairline {
+    width: 100%;
+    max-width: 320px;
+    height: 1px;
+    background: var(--on-dark-hairline);
+    margin: 0 auto;
+  }
+
+  #reveal-taste {
+    color: var(--text-inverse);
+    max-width: 340px;
+    margin: 28px auto;
+    font-size: clamp(20px, 4.7vw, 26px);
+    line-height: 1.42;
+    text-wrap: balance;
+    hyphens: none;
+  }
+
+  .reveal-inner { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .reveal-head { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .reveal-spread { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .reveal-art { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 32px; }
+  .reveal-detail { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .work-eyebrow { color: var(--on-dark-55); margin-bottom: 24px; }
+  .detail-rule { margin: 32px auto; }
+  .matched-img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    margin: 0 auto 24px;
+    box-shadow: 0 18px 60px -16px rgba(0, 0, 0, 0.7);
+  }
+  .matched-artist { color: var(--on-dark-55); margin-bottom: 8px; }
+  .matched-title { color: var(--text-inverse); margin-bottom: 8px; }
+  .matched-medium { color: var(--on-dark-55); margin-bottom: 16px; }
+  .matched-line { color: var(--on-dark-75); max-width: 320px; margin: 0 auto 32px; }
+
+  .email-block {
+    width: 100%;
+    max-width: 320px;
+    margin: 32px auto 0;
+    text-align: left;
+  }
+  .email-block .save-pitch {
+    color: var(--on-dark-75);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .email-block label {
+    display: block;
+    color: var(--on-dark-55);
+    margin-bottom: 8px;
+  }
+  #email-input {
+    display: block;
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 14px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  #email-input::placeholder { color: var(--text-tertiary); }
+  #email-input:focus { outline: none; border: 2px solid var(--border-focus); padding: 13px; }
+  #email-input.is-error { border-color: var(--status-error); }
+  #email-input.is-error:focus { border-color: var(--status-error); }
+  #email-helper {
+    display: none;
+    color: var(--status-error);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  #email-helper.is-visible { display: block; }
+  #save-btn { width: 100%; margin-top: 8px; }
+
+  #share-btn { margin: 32px auto 0; }
+  #play-again { margin: 16px auto 0; }
+
+  #see-everything {
+    display: inline-block;
+    color: var(--text-inverse);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    margin: 40px auto 0;
+  }
+
+  #reveal-footer {
+    color: var(--on-dark-55);
+    margin-top: 48px;
+    max-width: 280px;
+  }
+
+  /* Picks grid — every work the player chose, at the bottom of the reveal. */
+  .picks-section { width: 100%; margin-top: 64px; }
+  .picks-eyebrow { color: var(--on-dark-55); text-align: center; margin-bottom: 28px; }
+  .picks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 16px;
+    width: 100%;
+  }
+  .pick-card { text-align: left; }
+  .pick-tile {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: rgba(244, 237, 226, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    overflow: hidden;
+  }
+  .pick-tile img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .pick-artist { color: var(--on-dark-55); margin: 12px 0 4px; }
+  .pick-title { color: var(--text-inverse); }
+
+  /* ── Reveal on a light surface (white results page) ──── */
+  #screen-reveal { background: var(--surface-page); }
+  #screen-reveal .reveal-eyebrow,
+  #screen-reveal .work-eyebrow,
+  #screen-reveal .picks-eyebrow,
+  #screen-reveal .matched-artist,
+  #screen-reveal .matched-medium,
+  #screen-reveal .pick-artist,
+  #screen-reveal .email-block label,
+  #screen-reveal #reveal-footer { color: var(--text-tertiary); }
+  #screen-reveal #reveal-score,
+  #screen-reveal #reveal-taste,
+  #screen-reveal .matched-title,
+  #screen-reveal .pick-title { color: var(--text-primary); }
+  #screen-reveal .matched-line,
+  #screen-reveal .save-pitch { color: var(--text-secondary); }
+  #screen-reveal .hairline,
+  #screen-reveal .detail-rule { background: var(--border-default); }
+  #screen-reveal .matched-img { box-shadow: 0 18px 60px -16px rgba(28, 26, 24, 0.35); }
+  #screen-reveal .pick-tile { background: var(--surface-card); border: 1px solid var(--border-subtle); }
+  #screen-reveal #save-btn { background: var(--text-primary); color: var(--text-inverse); }
+  #screen-reveal #save-btn:hover { background: #3A3835; }
+  #screen-reveal #save-btn:disabled { background: #3A3835; color: var(--text-inverse); }
+  #screen-reveal #share-btn,
+  #screen-reveal #play-again { color: var(--text-primary); border-bottom-color: var(--border-strong); }
+  #screen-reveal #see-everything { color: var(--text-primary); }
+
+  /* Reveal reads as a wider centered editorial column on tablet / desktop. */
+  @media (min-width: 600px) {
+    #screen-reveal { padding: 124px 24px 56px; }
+    #reveal-score { max-width: 620px; }
+    .hairline { max-width: 560px; }
+    #reveal-taste { max-width: 580px; font-size: 28px; line-height: 1.5; margin: 36px auto; }
+    .matched-img { max-width: 300px; }
+    .matched-line { max-width: 460px; }
+    .email-block { max-width: 400px; }
+    #reveal-footer { max-width: 380px; }
+  }
+
+  /* Desktop: the reveal becomes a gallery-catalogue spread — work beside its story + capture. */
+  @media (min-width: 900px) {
+    #screen-reveal { padding: 116px 56px 56px; justify-content: center; }
+    .reveal-inner { max-width: 1100px; }
+    .reveal-head { max-width: 780px; }
+    #reveal-score { max-width: 780px; }
+    .reveal-head .hairline { max-width: 720px; }
+    #reveal-taste { max-width: 720px; font-size: 30px; line-height: 1.5; margin: 32px auto; }
+
+    .reveal-spread {
+      display: grid;
+      grid-template-columns: 360px 440px;
+      justify-content: center;
+      align-items: start;
+      column-gap: 64px;
+      margin-top: 24px;
+      text-align: left;
+    }
+    .reveal-art { align-items: flex-start; margin-top: 0; position: sticky; top: 72px; }
+    .reveal-art .matched-img { max-width: 100%; width: 100%; margin: 0; }
+    .work-eyebrow { margin-bottom: 20px; }
+    .reveal-detail { align-items: flex-start; text-align: left; width: 100%; max-width: 440px; }
+    .matched-line { text-align: left; max-width: none; margin: 0; }
+    .detail-rule { width: 100%; max-width: none; margin: 28px 0; }
+    .email-block { max-width: none; width: 100%; margin: 0; }
+    .email-block .save-pitch { text-align: left; }
+    #share-btn { margin: 24px 0 0; }
+    #play-again { margin: 16px 0 0; }
+    #see-everything { margin: 28px 0 0; }
+    #reveal-footer { margin-top: 56px; max-width: 460px; }
+
+    .picks-section { margin-top: 88px; }
+    .picks-grid { grid-template-columns: repeat(5, 1fr); gap: 32px 24px; }
+  }
+  /* ── LUMAS site header (chrome) ──────────────────────── */
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 200; font-family: var(--font-body); }
+  .site-promo {
+    background: var(--surface-inverse);
+    color: var(--text-inverse);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    text-align: center; padding: 10px 16px;
+    font-size: 13px; line-height: 1.4;
+  }
+  .site-promo .promo-link {
+    color: var(--text-inverse); text-decoration: none;
+    font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12px;
+    border-bottom: 1px solid rgba(244, 237, 226, 0.6); padding-bottom: 3px;
+  }
+  .site-nav {
+    position: relative;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 12px 16px; color: var(--text-inverse);
+  }
+  .site-nav a { color: inherit; text-decoration: none; }
+  .nav-burger, .ni { background: none; border: none; color: inherit; display: flex; align-items: center; cursor: pointer; padding: 4px; }
+  .lumas-logo {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: inline-flex; align-items: center;
+  }
+  .lumas-logo-svg { height: 19px; width: auto; display: block; }
+  .nav-links, .nav-search, .nav-locale { display: none; }
+  .nav-icons { display: flex; align-items: center; gap: 4px; }
+  .ni-person { display: none; }
+
+  body[data-screen="reveal"] .site-nav {
+    background: var(--surface-page); color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  body[data-screen="duel"] .site-promo { display: none; }
+
+  @media (min-width: 900px) {
+    .site-promo { flex-direction: row; justify-content: center; gap: 20px; padding: 9px 24px; }
+    .site-nav { justify-content: flex-start; gap: 28px; padding: 14px 32px; }
+    .nav-burger { display: none; }
+    .lumas-logo { position: static; transform: none; font-size: 22px; }
+    .nav-links { display: flex; align-items: center; gap: 22px; list-style: none; font-size: 15px; }
+    .nav-search {
+      display: flex; align-items: center; gap: 10px; flex: 1; max-width: 520px;
+      background: var(--surface-sunken); border-radius: 4px; padding: 10px 16px; color: var(--text-tertiary);
+    }
+    body[data-screen="open"] .nav-search { background: rgba(244, 237, 226, 0.12); color: var(--on-dark-55); }
+    .nav-search input { flex: 1; background: none; border: none; outline: none; color: inherit; font-size: 15px; font-family: inherit; }
+    .nav-search input::placeholder { color: inherit; }
+    .ni-search-mobile { display: none; }
+    .ni-person { display: flex; }
+    .nav-locale { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; }
+  }
+</style>
+</head>
+<body data-screen="open">
+
+<!-- LUMAS site header (chrome) -->
+<header class="site-header">
+  <div class="site-promo">
+    <span>10% off your first order — only until 3 May 2026</span>
+    <a href="#" onclick="return false;" class="promo-link">Register now</a>
+  </div>
+  <nav class="site-nav">
+    <button class="nav-burger" type="button" aria-label="Menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a class="lumas-logo" href="#" onclick="return false;" aria-label="LUMAS">
+      <svg class="lumas-logo-svg" viewBox="0 0 160 30" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS">
+        <path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/>
+        <path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/>
+        <path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/>
+        <path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/>
+        <path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/>
+        <path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="return false;">Artworks</a></li>
+      <li><a href="#" onclick="return false;">Top 20</a></li>
+      <li><a href="#" onclick="return false;">ArtFinder</a></li>
+      <li><a href="#" onclick="return false;">Inspiration</a></li>
+      <li><a href="#" onclick="return false;">Galleries</a></li>
+      <li><a href="#" onclick="return false;">About us</a></li>
+    </ul>
+    <label class="nav-search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search" aria-label="Search">
+    </label>
+    <div class="nav-icons">
+      <button class="ni ni-search-mobile" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+      <button class="ni ni-person" type="button" aria-label="Account">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+      </button>
+      <button class="ni" type="button" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.5C7 17 3.5 13.6 3.5 9.8 3.5 7.4 5.4 5.5 7.8 5.5c1.6 0 3 .9 3.7 2.2.7-1.3 2.1-2.2 3.7-2.2 2.4 0 4.3 1.9 4.3 4.3 0 3.8-3.5 7.2-8.5 10.7z"/></svg>
+      </button>
+      <button class="ni" type="button" aria-label="Bag">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 7.5h13l.8 13H4.7l.8-13z"/><path d="M8.5 7.5V6a3.5 3.5 0 0 1 7 0v1.5"/></svg>
+      </button>
+    </div>
+    <span class="nav-locale">DE
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
+    </span>
+  </nav>
+</header>
+
+<!-- SCREEN 1 — OPEN -->
+<main id="screen-open" class="screen is-active">
+  <div class="eyebrow">The Daily Salon</div>
+  <h1 class="display-h2">Ten&nbsp;works. Ten&nbsp;choices. Forty&nbsp;seconds.</h1>
+  <p class="body-large">No right answers. Only yours.</p>
+  <button id="begin-btn" class="btn-primary-inverse" type="button">Begin</button>
+  <div id="open-date" class="caption"></div>
+</main>
+
+<!-- SCREEN 2 — DUEL -->
+<main id="screen-duel" class="screen">
+  <div class="duel-bar">
+    <span class="eyebrow">Which would you hang?</span>
+    <span id="duel-counter" class="ui-label">01 / 10</span>
+  </div>
+  <div id="duel-stage" class="duel-stage">
+    <button id="zone-a" class="duel-zone" type="button" aria-label="Choose work A">
+      <img id="img-a" src="" alt="Work A">
+      <div class="duel-caption">
+        <span id="cap-a-title" class="cap-title"></span>
+        <span id="cap-a-artist" class="cap-artist"></span>
+      </div>
+    </button>
+    <div class="duel-divider"></div>
+    <button id="zone-b" class="duel-zone" type="button" aria-label="Choose work B">
+      <img id="img-b" src="" alt="Work B">
+      <div class="duel-caption">
+        <span id="cap-b-title" class="cap-title"></span>
+        <span id="cap-b-artist" class="cap-artist"></span>
+      </div>
+    </button>
+  </div>
+</main>
+
+<!-- SCREEN 3 — REVEAL -->
+<main id="screen-reveal" class="screen">
+  <div class="reveal-inner">
+    <div class="reveal-head">
+      <div class="reveal-eyebrow eyebrow" id="reveal-date"></div>
+      <h2 id="reveal-score" class="display-h4"></h2>
+      <div class="hairline"></div>
+      <p id="reveal-taste" class="display-h3"></p>
+      <div class="hairline"></div>
+    </div>
+
+    <div class="reveal-spread">
+      <div class="reveal-art">
+        <div class="eyebrow work-eyebrow">The work for you</div>
+        <img id="matched-img" class="matched-img" src="" alt="">
+      </div>
+      <div class="reveal-detail">
+        <div id="matched-artist" class="matched-artist eyebrow"></div>
+        <div id="matched-title" class="matched-title display-h4"></div>
+        <div id="matched-medium" class="matched-medium caption"></div>
+        <p id="matched-line" class="matched-line body"></p>
+
+        <div class="hairline detail-rule"></div>
+
+        <section class="email-block">
+          <p class="save-pitch body-large">Your taste profile sharpens every day. Save it.</p>
+          <label for="email-input" class="ui-label">Email</label>
+          <input id="email-input" type="email" placeholder="you@email.com" autocomplete="email">
+          <div id="email-helper">Enter a valid email</div>
+          <button id="save-btn" class="btn-primary-inverse" type="button">Save my profile</button>
+        </section>
+
+        <button id="share-btn" class="btn-ghost-inverse" type="button">Share result</button>
+
+        <button id="play-again" class="btn-ghost-inverse" type="button">Play again</button>
+
+        <a id="see-everything" class="ui-label" href="#" onclick="return false;">See everything your taste points to →</a>
+      </div>
+    </div>
+
+    <section class="picks-section">
+      <div class="eyebrow picks-eyebrow">The ten you chose</div>
+      <div id="picks-grid" class="picks-grid"></div>
+    </section>
+
+    <p id="reveal-footer" class="caption"></p>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Data ─────────────────────────────────────────── */
+  var pairs = [
+    { a:{seed:"lm01a", temp:"cold",  energy:"quiet", scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm01b", temp:"warm", energy:"loud",  scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"a" },
+    { a:{seed:"lm02a", temp:"warm",  energy:"loud",  scale:"intimate",   lang:"painterly", subject:"organic"},       b:{seed:"lm02b", temp:"cold", energy:"quiet", scale:"monumental", lang:"graphic",   subject:"architectural"}, curator:"b" },
+    { a:{seed:"lm03a", temp:"cold",  energy:"quiet", scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm03b", temp:"warm", energy:"quiet", scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"a" },
+    { a:{seed:"lm04a", temp:"warm",  energy:"loud",  scale:"monumental", lang:"painterly", subject:"organic"},       b:{seed:"lm04b", temp:"cold", energy:"quiet", scale:"intimate",   lang:"graphic",   subject:"architectural"}, curator:"b" },
+    { a:{seed:"lm05a", temp:"cold",  energy:"loud",  scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm05b", temp:"warm", energy:"quiet", scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"a" },
+    { a:{seed:"lm06a", temp:"warm",  energy:"quiet", scale:"intimate",   lang:"painterly", subject:"organic"},       b:{seed:"lm06b", temp:"cold", energy:"loud",  scale:"monumental", lang:"graphic",   subject:"architectural"}, curator:"a" },
+    { a:{seed:"lm07a", temp:"cold",  energy:"quiet", scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm07b", temp:"warm", energy:"loud",  scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"b" },
+    { a:{seed:"lm08a", temp:"warm",  energy:"quiet", scale:"intimate",   lang:"painterly", subject:"organic"},       b:{seed:"lm08b", temp:"cold", energy:"loud",  scale:"monumental", lang:"graphic",   subject:"architectural"}, curator:"a" },
+    { a:{seed:"lm09a", temp:"cold",  energy:"loud",  scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm09b", temp:"warm", energy:"quiet", scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"b" },
+    { a:{seed:"lm10a", temp:"cold",  energy:"quiet", scale:"monumental", lang:"graphic",   subject:"architectural"}, b:{seed:"lm10b", temp:"warm", energy:"loud",  scale:"intimate",   lang:"painterly", subject:"organic"}, curator:"a" }
+  ];
+
+  var AXES = {
+    temp:    ["warm", "cold"],
+    energy:  ["quiet", "loud"],
+    scale:   ["intimate", "monumental"],
+    lang:    ["painterly", "graphic"],
+    subject: ["organic", "architectural"]
+  };
+
+  var TASTE_LINES = {
+    quiet:        "Today you chose stillness over spectacle. Seven of your ten picks were the quieter work in the pair — the one that lowers a room's volume rather than commanding it. You're drawn to art that rewards the second look, not the first.",
+    loud:         "You chose presence. Again and again you reached for the work that fills the wall and sets the terms of the room. Your eye wants a centre of gravity — something that announces itself and makes the rest of the space arrange around it.",
+    cold:         "Your eye runs cool. You repeatedly chose the colder, more composed work — blues, greys, restraint over warmth. This is the taste of clarity: art that holds its distance and lets you come to it, rather than reaching out to meet you halfway.",
+    warm:         "You chose warmth. Across the salon you favoured the work with blood in it — warmer tones, a human hand visible in the making. You want art that feels lived-in rather than installed, closer to a memory than to a statement.",
+    monumental:   "You think in scale. Your picks leaned consistently toward the larger, more architectural work — pieces built to be lived under, not merely looked at. You're choosing for the wall as much as the image: presence first, detail second.",
+    intimate:     "You chose intimacy. The smaller, closer, more personal work won your eye nearly every time — art held at reading distance rather than gallery distance. You collect for the moment of private attention, not for the room's first impression.",
+    graphic:      "Your eye is graphic. You chose the cleaner, more structured work — line, edge and composition over atmosphere. This is a taste for resolution: art that has decided what it is, with nothing left soft or unaccounted for.",
+    painterly:    "You chose the hand. Your picks favoured texture, gesture and atmosphere over clean structure — the work where you can feel it being made. You want evidence of a person in the room, not a perfectly resolved surface.",
+    architectural:"You read buildings. Your picks returned to structure, geometry and the made world — the architectural over the organic. You see a wall as a continuation of the room, and you want art that belongs to that same built logic.",
+    organic:      "You chose the living world. Across the salon your eye went to the organic — bodies, landscape, the grown rather than the built. You want art that breathes a little, that came from somewhere alive rather than something drawn."
+  };
+
+  /* Real LUMAS bestsellers (live img.lumas.com CDN). Artist/title/edition pulled from the webshop feed. */
+  var MATCHED_WORKS = {
+    cold: { artist:"WOLFGANG UHLIG", title:"Sea #14", medium:"Fine art print · Limited Edition", src:"https://img.lumas.com/showimg_wuh900_desktop.jpg", line:"A single horizon, held perfectly still. It is the clearest version of the instinct your picks kept circling: quiet, large, and cool enough to think beside." },
+    warm: { artist:"OLAF HAJEK", title:"Frida", medium:"Fine art print · Limited Edition", src:"https://img.lumas.com/showimg_oha901_desktop.jpg", line:"Soft, close, and unmistakably made by a hand. This is the work your choices kept reaching for — warmth held at reading distance, more memory than statement." },
+    loud: { artist:"SANDRA RAUCH", title:"Berlin III", medium:"Fine art print · Limited Edition", src:"https://img.lumas.com/showimg_sra75_desktop.jpg", line:"Total structure, edge to edge, built to set the terms of a room. It answers the choice you made ten times over: presence first, atmosphere second." }
+  };
+
+  /* Curated duels — real LUMAS bestsellers, one work per artist. Each pair stages a cold/structural
+     work against a warm/organic one, matching the slot's axis tags. Live img.lumas.com CDN. */
+  var L = "https://img.lumas.com/showimg_";
+  var DUEL_SRCS = [
+    { a: L+"cgo405_desktop.jpg", b: L+"saa110_desktop.jpg" }, // Claudio Gotsch: Hochlandrind  vs  Slim Aarons: Positano Beach
+    { a: L+"pfu405_desktop.jpg", b: L+"lyu404_desktop.jpg" }, // Peter Funch: Bouncy II  vs  Larry Yust: Miami Beach, Ocean Drive
+    { a: L+"wpa900_desktop.jpg", b: L+"rwa900_desktop.jpg" }, // Werner Pawlok: Palazzo di Victoria III  vs  Ramona Waldner: Merle
+    { a: L+"cmi51_desktop.jpg",  b: L+"mcu401_desktop.jpg" }, // Carl Miller: Pool 92  vs  Matthew Cusick: Mylan's Wave
+    { a: L+"ala904_desktop.jpg", b: L+"ime403_desktop.jpg" }, // Andrey & Lili: Blue Girl  vs  Isabelle Menin: Dream River 01
+    { a: L+"trn401_desktop.jpg", b: L+"kkr900_desktop.jpg" }, // Jason Schmidt: Love Me Forever (YSL)  vs  Kevin Krautgartner: Salt Shapes II
+    { a: L+"cja902_desktop.jpg", b: L+"ebg400_desktop.jpg" }, // Christophe Jacrot: Man on Broadway  vs  Edward B. Gordon: Der Blick
+    { a: L+"gua900_desktop.jpg", b: L+"pya401_desktop.jpg" }, // Guachinarte: Palm Springs  vs  Peter Yan: Mona Vale Pool
+    { a: L+"tca902_desktop.jpg", b: L+"hhl404_desktop.jpg" }, // Tommy Clarke: Blue Umbrellas Miami  vs  Heiko Hellwig: Blossom III
+    { a: L+"gve400_desktop.jpg", b: L+"dpi402_desktop.jpg" }  // Gavin Evans: Lazarus (Bowie)  vs  Daniel Picard: Wash Your Hand
+  ];
+
+  function duelSrc(pairIndex, side) {
+    return DUEL_SRCS[pairIndex][side];
+  }
+
+  /* Artist · title for every duel work, keyed by image URL — drives the picks grid on the reveal. */
+  var WORK_META = {};
+  [
+    ["cgo405", "Claudio Gotsch", "Hochlandrind"],
+    ["saa110", "Slim Aarons", "Positano Beach"],
+    ["pfu405", "Peter Funch", "Bouncy II"],
+    ["lyu404", "Larry Yust", "Miami Beach, Ocean Drive #2"],
+    ["wpa900", "Werner Pawlok", "Palazzo di Victoria III"],
+    ["rwa900", "Ramona Waldner", "Merle"],
+    ["cmi51",  "Carl Miller", "Pool 92"],
+    ["mcu401", "Matthew Cusick", "Mylan's Wave"],
+    ["ala904", "Andrey Yakovlev & Lili Aleeva", "Blue Girl"],
+    ["ime403", "Isabelle Menin", "Dream River 01"],
+    ["trn401", "Jason Schmidt", "Love Me Forever, YSL Atelier"],
+    ["kkr900", "Kevin Krautgartner", "Salt Shapes II"],
+    ["cja902", "Christophe Jacrot", "Man on Broadway"],
+    ["ebg400", "Edward B. Gordon", "Der Blick"],
+    ["gua900", "Guachinarte", "Palm Springs"],
+    ["pya401", "Peter Yan", "Mona Vale Pool"],
+    ["tca902", "Tommy Clarke", "Blue Umbrellas Miami"],
+    ["hhl404", "Heiko Hellwig", "Blossom III"],
+    ["gve400", "Gavin Evans", "Lazarus LVII"],
+    ["dpi402", "Daniel Picard", "Wash Your Hand"]
+  ].forEach(function (w) { WORK_META[L + w[0] + "_desktop.jpg"] = { artist: w[1], title: w[2] }; });
+
+  var POLE_TO_MATCH = {
+    quiet: "cold", cold: "cold", monumental: "cold",
+    warm: "warm", intimate: "warm", organic: "warm",
+    loud: "loud", graphic: "loud", architectural: "loud",
+    painterly: "cold"
+  };
+
+  var STORAGE_KEY = "lumas-daily-salon";
+
+  /* ── Helpers ──────────────────────────────────────── */
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function todayLabel() {
+    return new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  }
+
+  function readStored() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  function writeStored(result) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(result)); } catch (e) { /* private mode */ }
+  }
+
+  /* ── Elements ─────────────────────────────────────── */
+  var screenOpen = document.getElementById("screen-open");
+  var screenDuel = document.getElementById("screen-duel");
+  var screenReveal = document.getElementById("screen-reveal");
+  var duelStage = document.getElementById("duel-stage");
+  var duelCounter = document.getElementById("duel-counter");
+  var zoneA = document.getElementById("zone-a");
+  var zoneB = document.getElementById("zone-b");
+  var imgA = document.getElementById("img-a");
+  var imgB = document.getElementById("img-b");
+
+  /* ── State ────────────────────────────────────────── */
+  var current = 0;
+  var picks = [];
+  var locked = false;
+
+  function showScreen(el) {
+    [screenOpen, screenDuel, screenReveal].forEach(function (s) { s.classList.remove("is-active"); });
+    el.classList.add("is-active");
+    var name = el === screenDuel ? "duel" : el === screenReveal ? "reveal" : "open";
+    document.body.setAttribute("data-screen", name);
+  }
+
+  /* ── Duel flow ────────────────────────────────────── */
+  function renderPair(index) {
+    var ua = duelSrc(index, "a");
+    var ub = duelSrc(index, "b");
+    imgA.src = ua;
+    imgB.src = ub;
+    var ma = WORK_META[ua] || {};
+    var mb = WORK_META[ub] || {};
+    document.getElementById("cap-a-title").textContent = ma.title || "";
+    document.getElementById("cap-a-artist").textContent = ma.artist || "";
+    document.getElementById("cap-b-title").textContent = mb.title || "";
+    document.getElementById("cap-b-artist").textContent = mb.artist || "";
+    duelCounter.textContent = String(index + 1).padStart(2, "0") + " / 10";
+  }
+
+  function preloadPair(index) {
+    if (index >= pairs.length) return;
+    (new Image()).src = duelSrc(index, "a");
+    (new Image()).src = duelSrc(index, "b");
+  }
+
+  function onPick(side, zoneEl) {
+    if (locked) return;
+    locked = true;
+    picks.push(side);
+    zoneEl.classList.add("is-chosen");
+
+    setTimeout(function () {
+      zoneEl.classList.remove("is-chosen");
+
+      if (picks.length === pairs.length) {
+        duelStage.classList.add("is-fading");
+        setTimeout(finishSalon, 200);
+        return;
+      }
+
+      duelStage.classList.add("is-fading");
+      setTimeout(function () {
+        current += 1;
+        renderPair(current);
+        preloadPair(current + 1);
+        duelStage.classList.remove("is-fading");
+        locked = false;
+      }, 100);
+    }, 180);
+  }
+
+  zoneA.addEventListener("click", function () { onPick("a", zoneA); });
+  zoneB.addEventListener("click", function () { onPick("b", zoneB); });
+
+  /* ── Scoring ──────────────────────────────────────── */
+  function computeResult() {
+    var tally = {};
+    Object.keys(AXES).forEach(function (axis) {
+      tally[axis] = {};
+      AXES[axis].forEach(function (pole) { tally[axis][pole] = 0; });
+    });
+
+    var score = 0;
+    picks.forEach(function (side, i) {
+      var work = pairs[i][side];
+      Object.keys(AXES).forEach(function (axis) { tally[axis][work[axis]] += 1; });
+      if (side === pairs[i].curator) score += 1;
+    });
+
+    var dominantPole = null;
+    var bestDiff = -1;
+    Object.keys(AXES).forEach(function (axis) {
+      var p1 = AXES[axis][0];
+      var p2 = AXES[axis][1];
+      var diff = Math.abs(tally[axis][p1] - tally[axis][p2]);
+      if (diff > bestDiff) {
+        bestDiff = diff;
+        dominantPole = tally[axis][p1] >= tally[axis][p2] ? p1 : p2;
+      }
+    });
+
+    return { score: score, dominantPole: dominantPole };
+  }
+
+  /* ── Reveal ───────────────────────────────────────── */
+  function finishSalon() {
+    var result = computeResult();
+    var stored = readStored();
+    var salonCount = stored && stored.date !== todayKey() ? (stored.salonCount || 0) + 1 : (stored ? stored.salonCount : 1);
+    if (!stored) salonCount = 1;
+
+    var record = {
+      date: todayKey(),
+      score: result.score,
+      dominantPole: result.dominantPole,
+      salonCount: salonCount
+    };
+    writeStored(record);
+    showReveal(record);
+  }
+
+  function renderPicksGrid() {
+    var grid = document.getElementById("picks-grid");
+    grid.innerHTML = "";
+    picks.forEach(function (side, i) {
+      var url = duelSrc(i, side);
+      var meta = WORK_META[url] || {};
+      var card = document.createElement("div");
+      card.className = "pick-card";
+
+      var tile = document.createElement("div");
+      tile.className = "pick-tile";
+      var img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = url;
+      img.alt = (meta.title || "") + (meta.artist ? " by " + meta.artist : "");
+      tile.appendChild(img);
+
+      var artist = document.createElement("div");
+      artist.className = "pick-artist ui-label";
+      artist.textContent = meta.artist || "";
+
+      var title = document.createElement("div");
+      title.className = "pick-title body-small";
+      title.textContent = meta.title || "";
+
+      card.appendChild(tile);
+      card.appendChild(artist);
+      card.appendChild(title);
+      grid.appendChild(card);
+    });
+  }
+
+  function showReveal(record) {
+    document.getElementById("reveal-date").textContent = "The Salon · " + todayLabel();
+    document.getElementById("reveal-score").textContent = record.score + " of 10 with the curators today";
+    document.getElementById("reveal-taste").textContent = TASTE_LINES[record.dominantPole] || TASTE_LINES.quiet;
+
+    var matched = MATCHED_WORKS[POLE_TO_MATCH[record.dominantPole]] || MATCHED_WORKS.cold;
+    document.getElementById("matched-img").src = matched.src;
+    document.getElementById("matched-img").alt = matched.title + " by " + matched.artist;
+    document.getElementById("matched-artist").textContent = matched.artist;
+    document.getElementById("matched-title").textContent = matched.title;
+    document.getElementById("matched-medium").textContent = matched.medium;
+    document.getElementById("matched-line").textContent = matched.line;
+
+    renderPicksGrid();
+
+    var streak = record.salonCount >= 2
+      ? "Salon " + record.salonCount + ". Your eye is sharpening."
+      : "Your first salon. The profile begins.";
+    document.getElementById("reveal-footer").textContent = "Tomorrow's salon opens at midnight. " + streak;
+
+    shareScore = record.score;
+
+    showScreen(screenReveal);
+    void screenReveal.offsetWidth;
+    setTimeout(function () { screenReveal.classList.add("is-visible"); }, 16);
+  }
+
+  /* ── Email capture ────────────────────────────────── */
+  var emailInput = document.getElementById("email-input");
+  var emailHelper = document.getElementById("email-helper");
+  var saveBtn = document.getElementById("save-btn");
+
+  saveBtn.addEventListener("click", function () {
+    if (saveBtn.disabled) return;
+    var value = emailInput.value.trim();
+    if (value.indexOf("@") > 0) {
+      emailInput.classList.remove("is-error");
+      emailHelper.classList.remove("is-visible");
+      saveBtn.textContent = "Saved";
+      saveBtn.disabled = true;
+    } else {
+      emailInput.classList.add("is-error");
+      emailHelper.classList.add("is-visible");
+    }
+  });
+
+  emailInput.addEventListener("input", function () {
+    emailInput.classList.remove("is-error");
+    emailHelper.classList.remove("is-visible");
+  });
+
+  /* ── Share ────────────────────────────────────────── */
+  var shareBtn = document.getElementById("share-btn");
+  var shareScore = 0;
+  var shareTimer = null;
+
+  shareBtn.addEventListener("click", function () {
+    var text = "LUMAS · The Daily Salon — I went " + shareScore + "/10 with the curators today. salon.lumas.com";
+    function flash() {
+      shareBtn.textContent = "Copied";
+      clearTimeout(shareTimer);
+      shareTimer = setTimeout(function () { shareBtn.textContent = "Share result"; }, 1500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(flash, flash);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) { /* no-op */ }
+      document.body.removeChild(ta);
+      flash();
+    }
+  });
+
+  /* ── Begin / replay ───────────────────────────────── */
+  function startGame() {
+    current = 0;
+    picks = [];
+    locked = false;
+    emailInput.value = "";
+    emailInput.classList.remove("is-error");
+    emailHelper.classList.remove("is-visible");
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Save my profile";
+    screenReveal.classList.remove("is-visible");
+    duelStage.classList.remove("is-fading");
+    renderPair(0);
+    preloadPair(1);
+    showScreen(screenDuel);
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("begin-btn").addEventListener("click", startGame);
+  document.getElementById("play-again").addEventListener("click", startGame);
+
+  /* ── Boot ─────────────────────────────────────────── */
+  document.getElementById("open-date").textContent = "Today's salon · " + todayLabel();
+  /* Always begin at the open screen. (Daily-resume to the reveal is disabled for the prototype
+     so it never "starts at the end"; Play again replays from the reveal.) */
+})();
+</script>
+
+</body>
+</html>
