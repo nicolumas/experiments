@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMAS, Collector experience prototypes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="assets/lumas-fonts.css" rel="stylesheet">
+<style>
+:root{
+  --text-primary:#1C1A18; --text-secondary:#5A5752; --text-tertiary:#6E6A64; --text-inverse:#F4EDE2;
+  --surface-page:#FFFFFF; --surface-raised:#F7F1E9; --surface-inverse:#1C1A18; --surface-muted:#F0EBE3;
+  --border-default:#E2D8CC; --border-subtle:#EAE2D8; --border-strong:#C7C3BE;
+  --display:'UtileDisplay',Georgia,serif; --sans:'Archivo',-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(24px,4vw,56px);}
+.eyebrow{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);}
+
+.top{display:flex;align-items:baseline;gap:18px;padding:26px 0;border-bottom:1px solid var(--border-subtle);flex-wrap:wrap;}
+.topnav{margin-left:auto;display:flex;gap:22px;}
+.topnav a{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-tertiary);text-decoration:none;transition:color .15s ease-out;}
+.topnav a:hover{color:var(--text-primary);}
+.wordmark{display:inline-flex;align-items:center;}
+.wordmark svg{height:16px;width:auto;display:block;fill:var(--text-primary);}
+
+.intro{padding:56px 0 40px;max-width:680px;}
+.intro h1{font-family:var(--display);font-weight:400;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-0.01em;text-wrap:balance;margin-bottom:22px;}
+.intro p{font-size:17px;color:var(--text-secondary);line-height:1.65;max-width:62ch;margin-bottom:14px;}
+.intro p b{font-weight:500;color:var(--text-primary);}
+.intro .meta{font-size:12px;color:var(--text-tertiary);letter-spacing:.02em;margin-top:20px;}
+
+.index{padding-bottom:40px;}
+.entry{display:grid;grid-template-columns:148px 1fr auto;gap:32px;align-items:center;padding:30px 4px;border-top:1px solid var(--border-subtle);text-decoration:none;color:inherit;
+  opacity:0;animation:rise .6s cubic-bezier(0.23,1,0.32,1) forwards;}
+.entry:nth-child(1){animation-delay:.05s} .entry:nth-child(2){animation-delay:.12s}
+.entry:nth-child(3){animation-delay:.19s} .entry:nth-child(4){animation-delay:.26s}
+.entry:last-child{border-bottom:1px solid var(--border-subtle);}
+@keyframes rise{from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none}}
+
+.frame{background:var(--surface-inverse);padding:7px;border-radius:1px;box-shadow:0 14px 36px -18px rgba(28,26,24,.5);}
+.mat{background:#fff;aspect-ratio:4/5;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.mat .ph{font-family:var(--display);font-size:11px;color:var(--text-tertiary);padding:8px;text-align:center;}
+.mat img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;opacity:0;transition:opacity .6s cubic-bezier(0.23,1,0.32,1),transform .5s cubic-bezier(0.23,1,0.32,1);}
+.mat img.loaded{opacity:1;}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.mat:has(img:not(.loaded)){background-image:linear-gradient(100deg,#efeae2 25%,#f6f1ea 50%,#efeae2 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;}
+@media (prefers-reduced-motion:reduce){ .mat:has(img:not(.loaded)){animation:none;background-image:none;background:#efeae2;} }
+
+.body .role{font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:7px;}
+.body h2{font-family:var(--display);font-weight:400;font-size:25px;line-height:1.1;margin-bottom:7px;}
+.body p{font-size:14px;color:var(--text-secondary);line-height:1.55;max-width:52ch;margin-bottom:9px;}
+.body .stat{font-size:12px;color:var(--text-tertiary);}
+.body .stat b{font-weight:500;color:var(--text-secondary);}
+
+.go{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-primary);white-space:nowrap;}
+.go svg{width:18px;height:18px;stroke:var(--text-primary);fill:none;stroke-width:1.5;transition:transform .22s cubic-bezier(0.23,1,0.32,1);}
+
+@media (hover:hover){
+  .entry:hover .mat img{transform:scale(1.05);}
+  .entry:hover .go svg{transform:translateX(5px);}
+}
+.entry:active{transform:scale(0.995);}
+
+.foot{padding:30px 0 64px;border-top:1px solid var(--border-subtle);font-size:12px;color:var(--text-tertiary);line-height:1.7;max-width:70ch;}
+
+@media (max-width:660px){
+  .entry{grid-template-columns:76px 1fr;gap:18px;}
+  .go{grid-column:2;}
+}
+@media (prefers-reduced-motion:reduce){
+  .entry{opacity:1;animation:none;transform:none;}
+  .mat img,.go svg{transition:none;}
+}
+/* Frameless, uncropped artworks */
+.frame{background:none;padding:0;box-shadow:none;border-radius:0;}
+.mat{position:relative;background:transparent;aspect-ratio:auto;overflow:visible;display:block;}
+.mat img{position:relative;inset:auto;width:100%;height:auto;object-fit:contain;display:block;box-shadow:0 12px 32px -18px rgba(28,26,24,.45);}
+.mat:has(img) .ph{display:none;}
+.mat:not(:has(img)){border:1px solid var(--border-default);border-radius:2px;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;}
+.entry{align-items:start;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="wordmark"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></span>
+    <span class="eyebrow">Collector experience prototypes</span>
+    <nav class="topnav">
+      <a href="site-map.html">Site map</a>
+      <a href="deck.html">Slide deck</a>
+      <a href="business-case.html">Business case</a>
+    </nav>
+  </div>
+
+  <div class="intro">
+    <h1>Four experiences, one collector relationship.</h1>
+    <p>A dormant buyer becomes a collector through the <b>concierge desk</b>, settles into <b>membership</b> as their home, and the deepest collectors reach a <b>commission</b>. Beneath every purchase sits the <b>returns-confidence</b> layer that makes each step feel safe to take.</p>
+    <p class="meta">Built on verified online-B2C collector data (LUMAS DWH, 0 B2B lines). Names are placeholders; behaviour, collections and artworks are real.</p>
+  </div>
+
+  <div class="index" id="index"></div>
+
+  <div class="foot">
+    Each prototype reconstructs a real collector from line-level data (available from 2022); the people featured joined from 2022, so their collections are complete. Artwork images are live from the LUMAS catalogue. The commission proposal and edition framing are illustrative; the holdings behind them are real.
+  </div>
+</div>
+
+<script>
+const IMG = code => "https://img.lumas.com/showimg_" + code + "_desktop.jpg";
+const entries = [
+  {role:"The front door", name:"Concierge desk", file:"lumas-collector-concierge.html", img:"ylm07",
+   desc:"A private advisor desk that re-opens dormant collectors with a held edition, AR on the wall and a guaranteed return.",
+   stat:"<b>5 verified lapsed collectors</b> · €15k to 33k lifetime"},
+  {role:"The trust floor", name:"Live with it first", file:"lumas-returns-confidence.html", img:"ime117",
+   desc:"See it on your wall at true scale, live with it 30 days, keep it or return it free. The fear removed at the €1k+ moment.",
+   stat:"Real edition: Menin <b>Midnight 01</b> · 137 of 150 remaining"},
+  {role:"The home", name:"Atelier membership", file:"lumas-collector-membership.html", img:"jfo64",
+   desc:"A member's collection wall, a personal curator, 48-hour first-look on new editions, and rolling Atelier credit.",
+   stat:"Real collection · <b>22 works, 9 artists</b>, €22,167"},
+  {role:"The apex", name:"Commission desk", file:"lumas-collector-commission.html", img:"ime130",
+   desc:"By-invitation bespoke originals for an artist's deepest collectors, co-created from brief to white-glove install.",
+   stat:"Real collector · owns <b>8 Isabelle Menin works</b>"},
+];
+document.getElementById("index").innerHTML = entries.map(e=>`
+  <a class="entry" href="${e.file}">
+    <div class="frame"><div class="mat"><span class="ph">${e.name}</span><img src="${IMG(e.img)}" alt="${e.name} featured artwork" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()"></div></div>
+    <div class="body">
+      <div class="role">${e.role}</div>
+      <h2>${e.name}</h2>
+      <p>${e.desc}</p>
+      <div class="stat">${e.stat}</div>
+    </div>
+    <span class="go">Open <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>`).join("");
+</script>
+</body>
+</html>

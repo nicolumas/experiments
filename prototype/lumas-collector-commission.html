@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMAS, Commission desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="assets/lumas-fonts.css" rel="stylesheet">
+<style>
+:root{
+  --text-primary:#1C1A18; --text-secondary:#5A5752; --text-tertiary:#6E6A64; --text-inverse:#F4EDE2;
+  --surface-page:#FFFFFF; --surface-card:#FFFFFF; --surface-raised:#F7F1E9; --surface-sunken:#F4EDE2; --surface-inverse:#1C1A18; --surface-muted:#F0EBE3;
+  --border-default:#E2D8CC; --border-subtle:#EAE2D8; --border-strong:#C7C3BE; --border-focus:#1C1A18;
+  --success:#3A6B4A; --success-bg:#E8F2EB;
+  --display:'UtileDisplay',Georgia,serif; --sans:'Archivo',-apple-system,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+.eyebrow{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);}
+.wrap{max-width:none;margin:0;padding:0 clamp(20px,4vw,64px);}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px clamp(20px,4vw,64px);border-bottom:1px solid var(--border-default);background:var(--surface-card);position:sticky;top:0;z-index:20;}
+.brand{display:flex;align-items:center;gap:18px;}
+.wordmark{display:inline-flex;align-items:center;}
+.wordmark svg{height:15px;width:auto;display:block;fill:var(--text-primary);}
+.back{color:var(--text-tertiary);text-decoration:none;font-size:17px;line-height:1;transition:color .15s ease-out,transform .16s var(--ease);}
+.back:hover{color:var(--text-primary);} .back:active{transform:translateX(-2px);}
+.brand .eyebrow{color:var(--text-secondary);}
+.banner{display:inline-flex;align-items:center;gap:8px;background:var(--surface-muted);border:1px solid var(--border-subtle);border-radius:2px;padding:7px 12px;font-size:11px;color:var(--text-secondary);}
+.banner b{font-weight:500;color:var(--text-primary);}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--success);}
+
+/* ---------- hero (invite + collector, merged) ---------- */
+.hero{background:var(--surface-inverse);color:var(--text-inverse);border-radius:8px;padding:clamp(40px,6vw,84px) clamp(24px,4vw,56px);margin:clamp(20px,3vw,34px) 0 0;text-align:center;}
+.hero .eyebrow{color:rgba(244,237,226,.55);margin-bottom:20px;}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.1;letter-spacing:-0.01em;max-width:15em;margin:0 auto 20px;color:var(--text-inverse);text-wrap:balance;}
+.hero p{font-weight:300;font-size:clamp(15px,1.6vw,19px);color:rgba(244,237,226,.78);max-width:50ch;margin:0 auto;line-height:1.6;text-wrap:pretty;}
+.hero-stats{display:flex;justify-content:center;gap:clamp(26px,5vw,72px);margin-top:clamp(30px,4vw,44px);padding-top:30px;border-top:1px solid rgba(244,237,226,.18);flex-wrap:wrap;}
+.hero-stats .n{font-family:var(--display);font-weight:400;font-size:clamp(24px,3vw,32px);color:var(--text-inverse);line-height:1;}
+.hero-stats .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,237,226,.55);margin-top:9px;}
+
+.section-label{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);margin:clamp(36px,5vw,56px) 0 4px;}
+.section-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;max-width:60ch;}
+
+/* shared artwork tile */
+.art-img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;opacity:0;transition:opacity .5s var(--ease);box-shadow:0 14px 40px -22px rgba(28,26,24,.5);}
+.art-img.loaded{opacity:1;}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.shot{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
+.shot:has(.art-img:not(.loaded)){border-radius:2px;background-image:linear-gradient(100deg,#efeae2 25%,#f6f1ea 50%,#efeae2 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;}
+@media (prefers-reduced-motion:reduce){ .art-img{transition:none;} .shot:has(.art-img:not(.loaded)){animation:none;background-image:none;background:#efeae2;} }
+
+/* owned collection */
+.owned{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.2vw,32px);align-items:start;}
+.mini .t{font-family:var(--display);font-size:14px;line-height:1.2;margin-top:11px;}
+.mini .cap{font-size:11px;color:var(--text-tertiary);margin-top:3px;}
+
+/* ---------- proposal: image + decision rail ---------- */
+.proposal{display:grid;grid-template-columns:1.25fr minmax(350px,430px);gap:clamp(28px,4vw,56px);align-items:start;margin-top:6px;}
+.p-visual{background:linear-gradient(180deg,#efe9e0 0%,#efe9e0 70%,#e6ded2 70%,#e6ded2 100%);border-radius:6px;padding:clamp(34px,4vw,58px) clamp(28px,4vw,52px) clamp(22px,3vw,32px);display:flex;flex-direction:column;align-items:center;}
+.p-visual .work{width:84%;max-width:560px;}
+.p-visual .work .art-img{box-shadow:0 30px 80px -28px rgba(28,26,24,.6);}
+.p-visual .scale{margin-top:18px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);display:flex;align-items:center;gap:8px;}
+.p-visual .scale svg{width:15px;height:15px;stroke:var(--text-secondary);fill:none;stroke-width:1.5;}
+.p-visual .moodnote{margin-top:6px;font-size:11px;color:var(--text-tertiary);font-style:italic;}
+
+.p-rail{position:sticky;top:92px;}
+.p-eyebrow{margin-bottom:10px;}
+.p-title{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,34px);line-height:1.08;margin-bottom:4px;}
+.p-working{font-size:12px;color:var(--text-tertiary);margin-bottom:20px;}
+.spec{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--border-subtle);font-size:14px;}
+.spec .k{color:var(--text-secondary);}
+.spec .v{font-weight:500;text-align:right;}
+.p-price{display:flex;align-items:baseline;gap:10px;margin:20px 0 6px;}
+.p-price .n{font-family:var(--display);font-size:32px;line-height:1;}
+.p-price .lab{font-size:12px;color:var(--text-tertiary);}
+.p-note{font-size:12.5px;color:var(--text-secondary);line-height:1.55;margin-bottom:20px;}
+.cta{display:flex;flex-direction:column;gap:10px;}
+.btn{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;border-radius:4px;cursor:pointer;border:1px solid transparent;transition:background .18s ease-out,color .18s ease-out,transform .16s var(--ease);}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--surface-inverse);color:var(--text-inverse);padding:17px 28px;}
+.btn-primary:hover{background:#000;}
+.btn-secondary{background:transparent;border:1px solid var(--border-focus);color:var(--text-primary);padding:16px 28px;}
+.btn-secondary:hover{background:var(--surface-inverse);color:var(--text-inverse);}
+.dep{font-size:12px;color:var(--text-tertiary);line-height:1.5;margin-top:14px;}
+.trust{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.tb{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-default);border-radius:3px;padding:8px 11px;font-size:12px;color:var(--text-secondary);background:var(--surface-card);}
+.tb svg{width:15px;height:15px;stroke:var(--text-primary);fill:none;stroke-width:1.5;}
+
+.confirm{background:var(--surface-inverse);color:var(--text-inverse);border-radius:6px;padding:26px 28px;animation:rise .5s var(--ease);}
+.confirm .ic{width:38px;height:38px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.confirm .ic svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.4;}
+.confirm h3{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:10px;color:var(--text-inverse);}
+.confirm p{font-size:13.5px;color:rgba(244,237,226,.78);line-height:1.6;margin-bottom:20px;}
+.confirm .undo{background:none;border:none;color:rgba(244,237,226,.7);font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-bottom:1px solid rgba(244,237,226,.4);padding:0 0 4px;transition:color .15s ease-out;}
+.confirm .undo:hover{color:var(--text-inverse);}
+@keyframes rise{from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ .confirm{animation:none;} }
+
+/* stepper */
+.stepper{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:8px;}
+.step{position:relative;padding:0 10px;text-align:center;}
+.step .bar{height:2px;background:var(--border-strong);position:absolute;top:13px;left:-50%;right:50%;}
+.step:first-child .bar{display:none;}
+.step.done .bar,.step.current .bar{background:var(--surface-inverse);}
+.step .sdot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border-strong);background:var(--surface-page);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;position:relative;z-index:1;font-size:12px;font-weight:500;color:var(--text-tertiary);}
+.step.done .sdot{background:var(--surface-inverse);border-color:var(--surface-inverse);color:var(--text-inverse);}
+.step.current .sdot{border-color:var(--surface-inverse);color:var(--text-primary);}
+.step .st{font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:2px;}
+.step .sd{font-size:11px;color:var(--text-tertiary);line-height:1.4;}
+.step.future .st{color:var(--text-tertiary);}
+.live{display:flex;align-items:center;gap:9px;background:var(--success-bg);border-radius:4px;padding:13px 16px;margin-top:24px;font-size:13px;color:var(--success);max-width:760px;}
+.live svg{width:16px;height:16px;stroke:var(--success);fill:none;stroke-width:1.5;flex-shrink:0;}
+
+/* body of work */
+/* tabs */
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border-subtle);margin-top:16px;flex-wrap:wrap;}
+.tab{background:none;border:none;cursor:pointer;font-family:var(--sans);text-align:left;padding:13px 22px 15px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:border-color .18s ease-out;}
+.tab .tt{display:block;font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-tertiary);transition:color .18s ease-out;}
+.tab .ts{display:block;font-size:12px;color:var(--text-tertiary);margin-top:4px;font-weight:400;}
+.tab:hover .tt{color:var(--text-secondary);}
+.tab.on{border-bottom-color:var(--text-primary);}
+.tab.on .tt{color:var(--text-primary);}
+.tabpanel{animation:fade .35s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stepper.s3{grid-template-columns:repeat(3,1fr);}
+
+.bw-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;}
+.car-nav{display:flex;gap:8px;flex-shrink:0;}
+.car-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s ease-out,opacity .15s ease-out,transform .16s var(--ease);}
+.car-nav button:hover{background:var(--surface-raised);} .car-nav button:active{transform:scale(.94);}
+.car-nav button:disabled{opacity:.3;cursor:default;}
+.car-nav svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;}
+.bodywork{display:flex;gap:clamp(16px,1.8vw,26px);overflow-x:auto;scroll-snap-type:x proximity;scroll-behavior:smooth;padding:4px 2px 16px;margin-top:6px;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;}
+.bodywork::-webkit-scrollbar{height:6px;}
+.bodywork::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px;}
+.bodywork::-webkit-scrollbar-track{background:transparent;}
+.bw{flex:0 0 clamp(220px,23vw,280px);scroll-snap-align:start;}
+.bw .t{font-family:var(--display);font-size:14px;line-height:1.2;margin-top:11px;}
+.bw .cap{font-size:11px;color:var(--text-tertiary);margin-top:3px;}
+
+.foot{font-size:11px;color:var(--text-tertiary);line-height:1.6;margin:clamp(40px,5vw,64px) 0 56px;max-width:820px;border-top:1px solid var(--border-subtle);padding-top:20px;}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-inverse);color:var(--text-inverse);padding:14px 22px;border-radius:4px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media (max-width:880px){
+  .topbar{flex-wrap:wrap;} .banner{flex-basis:100%;}
+  .owned{grid-template-columns:repeat(2,1fr);}
+  .proposal{grid-template-columns:1fr;gap:26px;}
+  .p-rail{position:static;}
+  .stepper,.stepper.s3{grid-template-columns:1fr;gap:18px;}
+  .step .bar{display:none;}
+  .step{text-align:left;display:grid;grid-template-columns:28px 1fr;gap:12px;}
+  .step .sdot{margin:0;}
+}
+@media (max-width:560px){ .tab .ts{display:none;} .tab{padding:12px 14px 13px;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><a class="back" href="index.html" title="All prototypes" aria-label="Back to all prototypes">←</a><span class="wordmark"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></span><span class="eyebrow">Commission · by invitation</span></div>
+  <span class="banner"><span class="dot"></span><span><b>Anonymised sample · verified online B2C.</b> Name is a placeholder; collection is real (LUMAS DWH · 0 B2B lines · acquired 2022).</span></span>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">By invitation · for Beatrix H.</div>
+    <h1>Isabelle Menin is opening three commissions this year.</h1>
+    <p>Beatrix, you are one of a small number of collectors invited, because of the eight works of hers you already live with.</p>
+    <div class="hero-stats">
+      <div class="s"><div class="n">8</div><div class="l">Isabelle Menin works owned</div></div>
+      <div class="s"><div class="n" id="invested">€8,567</div><div class="l">Invested in her work</div></div>
+      <div class="s"><div class="n">2022</div><div class="l">Collector since</div></div>
+      <div class="s"><div class="n">Clara Voss</div><div class="l">Your curator</div></div>
+    </div>
+  </div>
+
+  <!-- WHY YOU: the collection -->
+  <div class="section-label">What you already live with</div>
+  <div class="section-sub">Your Isabelle Menin collection, reconstructed from your acquisition history. This is why the invitation came to you.</div>
+  <div class="owned" id="owned"></div>
+
+  <!-- THE OFFER: two ways in -->
+  <div class="section-label" style="margin-bottom:0">Your invitation, two ways</div>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-tab="commission" role="tab" aria-selected="true"><span class="tt">A bespoke commission</span><span class="ts">A unique original, ~14 weeks</span></button>
+    <button class="tab" data-tab="private" role="tab" aria-selected="false"><span class="tt">A private view</span><span class="ts">First pick of the new series, signed for you</span></button>
+  </div>
+
+  <div class="tabpanel" id="panel-commission">
+  <div class="proposal">
+    <div class="p-visual">
+      <div class="work"><img class="art-img" src="https://img.lumas.com/showimg_ime133_desktop.jpg" alt="Mood reference for the proposed Isabelle Menin commission" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+      <div class="scale"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/></svg> See it on your wall · AR at true scale · 240 × 160 cm</div>
+      <div class="moodnote">A mood reference in the artist's hand, your work will be wholly new.</div>
+    </div>
+    <div class="p-rail" id="rail">
+      <div class="eyebrow p-eyebrow">A unique original</div>
+      <div class="p-title">A Garden of One's Own</div>
+      <div class="p-working">Working title, yours to shape with the artist</div>
+      <div class="spec"><span class="k">Medium</span><span class="v">Pigment print, diasec face-mount</span></div>
+      <div class="spec"><span class="k">Scale</span><span class="v">240 × 160 cm · or 180 × 120 cm</span></div>
+      <div class="spec"><span class="k">Edition</span><span class="v">Unique · 1 of 1, signed</span></div>
+      <div class="spec"><span class="k">Timeline</span><span class="v">~14 weeks from brief</span></div>
+      <div class="p-price"><span class="n">€24,000</span><span class="lab">estimate · framing &amp; install included</span></div>
+      <div class="p-note">A 30% deposit (€7,200) begins the commission, and is taken only once you and Isabelle have agreed the brief. You approve a digital proof before final production. Nothing is final until you are.</div>
+      <div class="cta" id="commit4">
+        <button class="btn btn-primary" onclick="commit4go()">Reserve your commission slot</button>
+        <button class="btn btn-secondary" onclick="toast('Clara Voss will call you')">Speak with your curator</button>
+        <div class="dep">No payment today. The €7,200 deposit is taken only once you and Isabelle have agreed the brief.</div>
+      </div>
+      <div class="confirm" id="confirm4" style="display:none">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <h3>Your commission slot is reserved</h3>
+        <p>Clara Voss will arrange your studio visit with Isabelle to shape the brief. No payment today; the €7,200 deposit is taken only once you and Isabelle have agreed the work.</p>
+        <button class="undo" onclick="undo4()">Cancel, back to the proposal</button>
+      </div>
+      <div class="trust">
+        <span class="tb"><svg viewBox="0 0 24 24"><path d="M3 7h18M6 7V5h12v2M5 7l1 13h12l1-13"/></svg> White-glove install</span>
+        <span class="tb"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Provenance &amp; certificate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <div class="section-label">How your commission unfolds</div>
+  <div class="stepper" id="stepper"></div>
+  <div class="live">
+    <svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+    A private studio-visit livestream with Isabelle is scheduled for next week, you'll watch the first frames take shape.
+  </div>
+  </div><!-- /panel-commission -->
+
+  <!-- TAB 2: PRIVATE VIEW (the lighter-touch alternative) -->
+  <div class="tabpanel" id="panel-private" hidden>
+    <div class="proposal">
+      <div class="p-visual">
+        <div class="work"><img class="art-img" src="https://img.lumas.com/showimg_ime142_desktop.jpg" alt="Isabelle Menin, The Beautiful Morning, from the new series" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+        <div class="scale"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/></svg> See it on your wall · AR at true scale · 120 × 90 cm</div>
+        <div class="moodnote">From the new series, before it is released to the public.</div>
+      </div>
+      <div class="p-rail">
+        <div class="eyebrow p-eyebrow">Private view · before public release</div>
+        <div class="p-title">An Artist's Proof, signed for you</div>
+        <div class="p-working">The Beautiful Morning, from Isabelle's new series</div>
+        <div class="spec"><span class="k">What</span><span class="v">Artist's Proof, outside the main edition</span></div>
+        <div class="spec"><span class="k">Scale</span><span class="v">120 × 90 cm · diasec face-mount</span></div>
+        <div class="spec"><span class="k">Personal</span><span class="v">Signed &amp; dedicated to you</span></div>
+        <div class="spec"><span class="k">Window</span><span class="v">48 hours before public release</span></div>
+        <div class="p-price"><span class="n">€5,400</span><span class="lab">Artist's Proof · framing &amp; install included</span></div>
+        <div class="p-note">No studio visit, no wait. We hold your proof for 48 hours; it ships framed within two weeks, signed and dedicated, with the provenance recorded in your collection.</div>
+        <div class="cta" id="commit5">
+          <button class="btn btn-primary" onclick="commit5go()">Reserve your Artist's Proof</button>
+          <button class="btn btn-secondary" onclick="toast('Clara Voss will call you')">Speak with your curator</button>
+          <div class="dep">No payment today. Held for 48 hours while you decide with Clara.</div>
+        </div>
+        <div class="confirm" id="confirm5" style="display:none">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+          <h3>Your Artist's Proof is held</h3>
+          <p>Clara Voss will confirm the size and finish with you. We hold it for 48 hours; it ships framed within two weeks, signed and dedicated, with provenance recorded in your collection.</p>
+          <button class="undo" onclick="undo5()">Cancel, release the proof</button>
+        </div>
+        <div class="trust">
+          <span class="tb"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/></svg> Signed &amp; dedicated</span>
+          <span class="tb"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Provenance &amp; certificate</span>
+        </div>
+      </div>
+    </div>
+    <div class="section-label">How your private view works</div>
+    <div class="stepper s3" id="stepper-private"></div>
+    <div class="live">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Reserved the moment you say yes. Framed and delivered within two weeks, with no studio visit and no fourteen-week wait.
+    </div>
+  </div><!-- /panel-private -->
+
+  <!-- BODY OF WORK -->
+  <div class="bw-head">
+    <div>
+      <div class="section-label">More from Isabelle Menin's studio</div>
+      <div class="section-sub" style="margin-bottom:0">The body of work behind your commission, available now as limited editions.</div>
+    </div>
+    <div class="car-nav">
+      <button id="bwPrev" aria-label="Previous works"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button id="bwNext" aria-label="Next works"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+  </div>
+  <div class="bodywork" id="bodywork"></div>
+
+  <div class="foot">Anonymised sample. Name is a placeholder; behavioural data is real and verified online B2C (0 B2B lines), reconstructed from line-level data (2022+). The commission proposal, title, scale, price and timeline are illustrative; the collection and the artist's catalogue are real LUMAS works.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const eur = n => "€" + n.toLocaleString("en-US");
+const IMG = code => "https://img.lumas.com/showimg_" + code + "_desktop.jpg";
+
+const owned = [
+  {t:"Tondo 3", p:1432, img:"ime154"},
+  {t:"From a Dream 02", p:1032, img:"ime105"},
+  {t:"Up To The Sky 03", p:1112, img:"ime83"},
+  {t:"From a Dream 04", p:1192, img:"ime109"},
+  {t:"Only In Your Heart 03", p:1112, img:"ime97"},
+  {t:"The Lake 1", p:1272, img:"ime146"},
+  {t:"Adventures in the Garden 02", p:1272, img:"ime130"},
+  {t:"Étude Pour Un Après-Midi 06", p:143, img:"ime406"},
+];
+document.getElementById("owned").innerHTML = owned.map(w=>`
+  <div class="mini">
+    <div class="shot"><img class="art-img" src="${IMG(w.img)}" alt="${w.t} by Isabelle Menin" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+    <div class="t">${w.t}</div>
+    <div class="cap">${eur(w.p)}</div>
+  </div>`).join("");
+document.getElementById("invested").textContent = eur(owned.reduce((s,w)=>s+w.p,0));
+
+const bodywork = [
+  {t:"La Vie en Rose", from:719, img:"ime125"},
+  {t:"Midnight 01", from:719, img:"ime117"},
+  {t:"The Tender Land 2", from:639, img:"ime75"},
+  {t:"Les fonds angéliques", from:143, img:"ime405"},
+  {t:"Dream River 01", from:215, img:"ime403"},
+  {t:"Dream River 06", from:103, img:"ime903"},
+  {t:"L'Embarquement pour Cythère 11", from:103, img:"ime902"},
+  {t:"Étude Pour Un Après Midi 02", from:103, img:"ime904"},
+];
+document.getElementById("bodywork").innerHTML = bodywork.map(w=>`
+  <div class="bw">
+    <div class="shot"><img class="art-img" src="${IMG(w.img)}" alt="${w.t} by Isabelle Menin" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+    <div class="t">${w.t}</div>
+    <div class="cap">from ${eur(w.from)}</div>
+  </div>`).join("");
+
+const track = document.getElementById("bodywork");
+const bwPrev = document.getElementById("bwPrev"), bwNext = document.getElementById("bwNext");
+function bwUpdate(){ bwPrev.disabled = track.scrollLeft <= 2; bwNext.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2; }
+function bwScroll(d){ track.scrollBy({left: d * Math.max(280, track.clientWidth * 0.8), behavior:"smooth"}); }
+bwPrev.onclick = ()=>bwScroll(-1); bwNext.onclick = ()=>bwScroll(1);
+track.addEventListener("scroll", bwUpdate); window.addEventListener("resize", bwUpdate); bwUpdate();
+
+const steps = [
+  {n:"1", t:"Brief", d:"Scale, palette, your space", s:"done"},
+  {n:"2", t:"Studio visit", d:"Meet Isabelle, shape the work", s:"current"},
+  {n:"3", t:"Proof approval", d:"You sign off the digital proof", s:"future"},
+  {n:"4", t:"Finishing", d:"Printing, diasec, framing", s:"future"},
+  {n:"5", t:"White-glove install", d:"Delivered & hung, provenance recorded", s:"future"},
+];
+const renderStepper = (el,arr)=>{ el.innerHTML = arr.map(s=>`
+  <div class="step ${s.s}">
+    <div class="bar"></div>
+    <div class="sdot">${s.s==='done'?'✓':s.n}</div>
+    <div><div class="st">${s.t}</div><div class="sd">${s.d}</div></div>
+  </div>`).join(""); };
+renderStepper(document.getElementById("stepper"), steps);
+
+const stepsPrivate = [
+  {n:"1", t:"Your private window", d:"48 hours before the public release", s:"current"},
+  {n:"2", t:"Choose your proof", d:"Size and finish, with your curator", s:"future"},
+  {n:"3", t:"Signed & delivered", d:"Framed, dedicated, provenance recorded", s:"future"},
+];
+renderStepper(document.getElementById("stepper-private"), stepsPrivate);
+
+/* tab switching */
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(t=>{ const on=t===tab; t.classList.toggle("on",on); t.setAttribute("aria-selected", on); });
+    const sel = tab.dataset.tab;
+    document.getElementById("panel-commission").hidden = sel!=="commission";
+    document.getElementById("panel-private").hidden = sel!=="private";
+  });
+});
+function commit5go(){document.getElementById("commit5").style.display="none";var c=document.getElementById("confirm5");c.style.display="block";c.scrollIntoView({block:"nearest",behavior:"smooth"});}
+function undo5(){document.getElementById("confirm5").style.display="none";document.getElementById("commit5").style.display="flex";}
+
+function commit4go(){document.getElementById("commit4").style.display="none";var c=document.getElementById("confirm4");c.style.display="block";c.scrollIntoView({block:"nearest",behavior:"smooth"});}
+function undo4(){document.getElementById("confirm4").style.display="none";document.getElementById("commit4").style.display="flex";}
+let tt;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2800);}
+</script>
+</body>
+</html>

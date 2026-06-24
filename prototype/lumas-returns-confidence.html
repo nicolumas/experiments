@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMAS, Live with it first — Midnight 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="assets/lumas-fonts.css" rel="stylesheet">
+<style>
+:root{
+  --text-primary:#1C1A18; --text-secondary:#5A5752; --text-tertiary:#6E6A64; --text-disabled:#C7C3BE; --text-inverse:#F4EDE2;
+  --surface-page:#FFFFFF; --surface-card:#FFFFFF; --surface-raised:#F7F1E9; --surface-sunken:#F4EDE2; --surface-inverse:#1C1A18; --surface-muted:#F0EBE3;
+  --border-default:#E2D8CC; --border-subtle:#EAE2D8; --border-strong:#C7C3BE; --border-focus:#1C1A18;
+  --success:#3A6B4A; --success-bg:#E8F2EB; --tp:#00B67A;
+  --display:'UtileDisplay',Georgia,serif; --sans:'Archivo',-apple-system,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+.eyebrow{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);}
+a{color:inherit;}
+
+/* proto strip */
+.protobar{display:flex;align-items:center;gap:14px;justify-content:space-between;background:var(--surface-muted);border-bottom:1px solid var(--border-subtle);padding:7px clamp(16px,4vw,40px);font-size:11px;color:var(--text-secondary);}
+.protobar a{font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--text-secondary);transition:color .15s ease-out;}
+.protobar a:hover{color:var(--text-primary);}
+.protobar .r{letter-spacing:.04em;color:var(--text-tertiary);}
+
+/* nav */
+.nav{display:flex;align-items:center;gap:clamp(18px,2.4vw,40px);padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--border-default);position:sticky;top:0;background:var(--surface-card);z-index:20;}
+.nav .logo{display:inline-flex;align-items:center;flex-shrink:0;}
+.nav .logo svg{height:17px;width:auto;display:block;fill:var(--text-primary);}
+.nav .links{display:flex;gap:clamp(14px,1.8vw,30px);}
+.nav .links a{font-size:14px;color:var(--text-primary);text-decoration:none;transition:color .15s ease-out;}
+.nav .links a:hover{color:var(--text-tertiary);}
+.nav .search{margin-left:auto;flex:0 1 380px;display:flex;align-items:center;gap:8px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:30px;padding:9px 16px;color:var(--text-tertiary);}
+.nav .search input{border:none;outline:none;background:none;font-family:var(--sans);font-size:14px;width:100%;color:var(--text-primary);}
+.nav .search svg{width:17px;height:17px;stroke:var(--text-tertiary);fill:none;stroke-width:1.6;flex-shrink:0;}
+.nav .icons{display:flex;align-items:center;gap:16px;}
+.nav .icons button{background:none;border:none;cursor:pointer;position:relative;display:flex;color:var(--text-primary);padding:0;}
+.nav .icons svg{width:20px;height:20px;stroke:var(--text-primary);fill:none;stroke-width:1.5;}
+.nav .badge{position:absolute;top:-7px;right:-9px;background:var(--surface-muted);color:var(--text-primary);font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.nav .lang{font-size:13px;font-weight:700;letter-spacing:.08em;}
+
+.wrap{max-width:1500px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+.pdp{display:grid;grid-template-columns:1fr minmax(400px,500px);gap:clamp(28px,3.5vw,64px);padding:clamp(20px,3vw,40px) 0 20px;align-items:start;}
+
+/* ---------- gallery ---------- */
+.gallery{position:sticky;top:96px;}
+.stage{position:relative;background:#ECE6DC;border-radius:6px;overflow:hidden;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:7%;}
+.hang{position:relative;width:78%;transition:width .5s var(--ease);max-width:96%;}
+.hang img{width:100%;height:auto;display:block;object-fit:contain;opacity:0;transition:opacity .6s var(--ease);box-shadow:0 26px 60px -26px rgba(28,26,24,.6);}
+.hang img.loaded{opacity:1;}
+.hang.framed{padding:14px;background:var(--frame,#1C1A18);box-shadow:0 26px 60px -26px rgba(28,26,24,.6);transition:width .5s var(--ease),background .25s ease-out;}
+.hang.framed img{box-shadow:none;}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.stage:has(img:not(.loaded))::after{content:"";position:absolute;inset:0;background-image:linear-gradient(100deg,#e7e1d6 25%,#f1ece3 50%,#e7e1d6 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;pointer-events:none;}
+.stage-room{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s var(--ease);z-index:1;}
+.stage-room.show{opacity:1;}
+.stage-tools{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:3;}
+.stage-tools button{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.85);backdrop-filter:blur(4px);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s ease-out,transform .16s var(--ease);}
+.stage-tools button:hover{background:#fff;} .stage-tools button:active{transform:scale(.92);}
+.stage-tools svg{width:17px;height:17px;stroke:var(--text-primary);fill:none;stroke-width:1.6;}
+.stage-actions{position:absolute;bottom:14px;right:14px;display:flex;gap:8px;z-index:3;}
+.stage-actions button{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.9);backdrop-filter:blur(4px);border:1px solid var(--border-subtle);border-radius:4px;padding:9px 13px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-primary);cursor:pointer;transition:background .15s ease-out,transform .16s var(--ease);}
+.stage-actions button:hover{background:#fff;} .stage-actions button:active{transform:scale(.97);}
+.stage-actions svg{width:15px;height:15px;stroke:var(--text-primary);fill:none;stroke-width:1.6;}
+.scale-chip{position:absolute;bottom:16px;left:16px;z-index:3;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);background:rgba(255,255,255,.8);border-radius:3px;padding:5px 9px;}
+
+.thumbs{display:flex;gap:10px;margin-top:12px;}
+.thumb{width:74px;height:74px;border-radius:4px;border:1px solid var(--border-default);background:var(--surface-raised);overflow:hidden;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:6px;transition:border-color .15s ease-out,transform .16s var(--ease);}
+.thumb:hover{border-color:var(--border-strong);} .thumb:active{transform:scale(.96);}
+.thumb.active{border:2px solid var(--border-focus);}
+.thumb{padding:0;overflow:hidden;position:relative;}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.thumb.work{padding:6px;}
+.thumb.work img{object-fit:contain;}
+.thumb .cap{position:absolute;bottom:0;left:0;right:0;font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(28,26,24,.55);padding:3px 4px;text-align:center;line-height:1.1;}
+
+/* ---------- buy box ---------- */
+.artist{font-family:var(--display);font-weight:400;font-size:clamp(28px,3vw,38px);line-height:1.05;margin-bottom:4px;}
+.title{font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:14px;}
+.edline{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+.edline b{color:var(--text-primary);font-weight:500;}
+.edline a{text-decoration:underline;text-underline-offset:2px;cursor:pointer;}
+
+.field-l{font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:9px;}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;}
+.size{text-align:center;border:1px solid var(--border-default);border-radius:4px;padding:11px 12px;cursor:pointer;background:var(--surface-card);transition:border-color .15s ease-out,transform .16s var(--ease);}
+.size:hover{border-color:var(--border-strong);} .size:active{transform:scale(.98);}
+.size.active{border:2px solid var(--border-focus);padding:10px 11px;}
+.size .cm{font-size:12.5px;font-weight:500;white-space:nowrap;}
+.size .pr{font-size:12px;color:var(--text-tertiary);margin-top:3px;}
+.size .flag{display:block;margin-top:5px;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9B6D1E;line-height:1.2;}
+
+.mount{position:relative;margin-bottom:24px;}
+.mount select{width:100%;font-family:var(--sans);font-size:14px;color:var(--text-primary);background:var(--surface-card);border:1px solid var(--border-default);border-radius:4px;padding:14px 40px 14px 14px;cursor:pointer;appearance:none;transition:border-color .15s ease-out;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236E6A64' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.mount select:hover{border-color:var(--border-strong);}
+.mount select:focus{outline:none;border:2px solid var(--border-focus);padding:13px 39px 13px 13px;}
+
+.price{display:flex;align-items:baseline;gap:12px;margin-bottom:4px;}
+.price .n{font-family:var(--display);font-size:36px;line-height:1;}
+.price .rrp{font-size:15px;color:var(--text-tertiary);text-decoration:line-through;}
+.price .dims{font-size:13px;color:var(--text-tertiary);}
+.ship{font-size:12px;color:var(--text-tertiary);margin:8px 0 20px;letter-spacing:.01em;}
+.ship b{color:var(--text-secondary);font-weight:500;}
+
+/* CTAs + live-with-it */
+.cta{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+.btn{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;border-radius:4px;cursor:pointer;border:1px solid transparent;transition:background .18s ease-out,color .18s ease-out,transform .16s var(--ease);display:flex;align-items:center;justify-content:center;gap:9px;}
+.btn:active{transform:scale(.985);}
+.btn-primary{background:var(--surface-inverse);color:var(--text-inverse);padding:16px 28px;flex-direction:column;gap:4px;}
+.btn-primary:hover{background:#000;}
+.btn-primary small{display:block;font-weight:400;font-size:10px;letter-spacing:.08em;opacity:.7;text-transform:none;}
+.btn-secondary{background:transparent;border:1px solid var(--border-focus);color:var(--text-primary);padding:15px 28px;}
+.btn-secondary:hover{background:var(--surface-inverse);color:var(--text-inverse);}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;}
+
+.trust{background:var(--surface-muted);border:1px solid var(--border-subtle);color:var(--text-primary);border-radius:6px;padding:24px 26px;margin:16px 0 18px;}
+.trust h3{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:18px;color:var(--text-primary);}
+.tstep{display:flex;gap:13px;align-items:flex-start;margin-bottom:13px;}
+.tstep .num{width:23px;height:23px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:var(--text-primary);}
+.tstep .tx{font-size:13.5px;color:var(--text-secondary);line-height:1.5;}
+.tstep .tx b{color:var(--text-primary);font-weight:500;}
+.tnote{font-size:12px;color:var(--text-tertiary);margin-top:14px;padding-top:14px;border-top:1px solid var(--border-subtle);font-style:italic;}
+
+.confirm{background:var(--surface-inverse);color:var(--text-inverse);border-radius:6px;padding:26px 28px;margin:16px 0 18px;animation:rise .5s var(--ease);}
+.confirm .ic{width:38px;height:38px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.confirm .ic svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.4;}
+.confirm h3{font-family:var(--display);font-weight:400;font-size:23px;margin-bottom:10px;color:var(--text-inverse);}
+.confirm p{font-size:14px;color:rgba(244,237,226,.78);line-height:1.6;margin-bottom:20px;}
+.confirm .undo{background:none;border:none;color:rgba(244,237,226,.7);font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-bottom:1px solid rgba(244,237,226,.4);padding:0 0 4px;transition:color .15s ease-out;}
+.confirm .undo:hover{color:var(--text-inverse);}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ .confirm{animation:none;} .hang,.hang img,.steps .seg{transition:none;} }
+
+/* trustpilot */
+.tp{display:flex;align-items:center;gap:14px;border-top:1px solid var(--border-subtle);padding-top:18px;font-size:12px;color:var(--text-secondary);}
+.tp .rate b{font-size:14px;color:var(--text-primary);}
+.tp .stars{display:flex;gap:2px;}
+.tp .stars span{width:17px;height:17px;background:var(--tp);display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
+.tp .stars svg{width:12px;height:12px;fill:#fff;}
+.tp .name{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--text-primary);}
+.tp .name svg{width:14px;height:14px;fill:var(--tp);}
+
+.reassure{display:flex;gap:22px;flex-wrap:wrap;border-top:1px solid var(--border-subtle);margin-top:10px;padding:22px 0 56px;font-size:12px;color:var(--text-secondary);}
+.reassure span{display:inline-flex;align-items:center;gap:8px;}
+.reassure svg{width:15px;height:15px;stroke:var(--text-primary);fill:none;stroke-width:1.5;}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-inverse);color:var(--text-inverse);padding:14px 22px;border-radius:4px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:50;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media (max-width:1080px){ .nav .links{display:none;} }
+@media (max-width:880px){
+  .pdp{grid-template-columns:1fr;gap:28px;}
+  .gallery{position:static;}
+  .nav .search{flex-basis:auto;}
+}
+@media (max-width:560px){ .nav .search{display:none;} .sizes{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="protobar">
+  <a href="index.html">← All prototypes</a>
+  <span class="r">Prototype · "Live with it first" · real LUMAS catalogue data, edition figures real</span>
+</div>
+
+<nav class="nav">
+  <a class="logo" href="index.html" aria-label="LUMAS home"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></a>
+  <div class="links">
+    <a onclick="toast('Catalogue')">artworks</a>
+    <a onclick="toast('Top 20')">top 20</a>
+    <a onclick="toast('Artfinder')">artfinder</a>
+    <a onclick="toast('Galleries')">galleries</a>
+    <a onclick="toast('Magazine')">magazine</a>
+    <a onclick="toast('About us')">about us</a>
+  </div>
+  <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="search" aria-label="Search"></div>
+  <div class="icons">
+    <button aria-label="Call" onclick="toast('Concierge: +49 30 123456')"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8.1 9.6a16 16 0 006 6l1.1-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg></button>
+    <button aria-label="Wishlist" onclick="toast('Wishlist')"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 10-7.8 7.8l1.1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></button>
+    <button aria-label="Account" onclick="toast('Account')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></button>
+    <button aria-label="Cart" onclick="toast('Basket')"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 2H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span class="badge" id="cartCount">1</span></button>
+    <span class="lang">EN</span>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="pdp">
+
+    <!-- GALLERY -->
+    <div class="gallery">
+      <div class="stage">
+        <div class="stage-tools">
+          <button aria-label="Expand" onclick="toast('Full-screen view')"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg></button>
+          <button aria-label="Add to wishlist" onclick="toast('Saved to wishlist')"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 10-7.8 7.8l1.1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></button>
+        </div>
+        <figure class="hang" id="hang" style="width:78%;visibility:hidden">
+          <img src="https://img.lumas.com/showimg_ime117_desktop.jpg" alt="Midnight 01 by Isabelle Menin" loading="eager" onload="this.classList.add('loaded')">
+        </figure>
+        <img class="stage-room show" id="stageRoom" data-v="dining" src="live%20with%20it/IME118_diasec_180x90cm_milanese-palazzo-dining_v1.jpg" alt="Midnight 01 in a room" loading="eager">
+        <span class="scale-chip" id="scaleChip">180 × 90 cm on your wall</span>
+        <div class="stage-actions">
+          <button onclick="toast('AR: point your camera at the wall, we place it at true scale.')"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/></svg> View in your space</button>
+          <button onclick="toast('3D view')"><svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/></svg> 3D view</button>
+        </div>
+      </div>
+      <div class="thumbs" id="thumbs">
+        <button class="thumb work" data-v="work"><img src="https://img.lumas.com/showimg_ime117_desktop.jpg" alt="The artwork"></button>
+        <button class="thumb active" data-v="dining"><img src="live%20with%20it/IME118_diasec_180x90cm_milanese-palazzo-dining_v1.jpg" alt="In a dining room"></button>
+        <button class="thumb" data-v="living"><img src="live%20with%20it/IME118_schattenfuge-schwarz_180x90cm_midnight-living-room_v1.jpg" alt="In a living room"></button>
+      </div>
+    </div>
+
+    <!-- BUY BOX -->
+    <div class="detail">
+      <h1 class="artist">Isabelle Menin</h1>
+      <div class="title">Midnight 01</div>
+      <div class="edline"><b>Limited Edition of 150</b> · signed &amp; numbered. <a onclick="toast('Pigment print under acrylic glass, diasec face-mount. Signed and numbered by the artist. Certificate of authenticity included.')">More details</a></div>
+
+      <div class="field-l">Size in cm</div>
+      <div class="sizes" id="sizes"></div>
+
+      <div class="field-l">Select mounting / framing</div>
+      <div class="mount">
+        <select id="mount" onchange="setMount(this.selectedIndex)" aria-label="Mounting and framing">
+          <option>Mounted under acrylic glass</option>
+          <option>Acrylic glass with aluminium backing</option>
+          <option>Framed under acrylic · black</option>
+          <option>Framed under acrylic · natural oak</option>
+        </select>
+      </div>
+
+      <div class="price"><span class="n" id="price">€2,392</span><span class="rrp" id="rrp">€2,990</span></div>
+      <div class="ship" id="ship"><b>Ready to ship in 4–9 days.</b> VAT incl. + €62 shipping · 2024/2025 · IME118</div>
+
+      <div class="cta" id="cta2">
+        <button class="btn btn-primary" onclick="commit()">Live with it free for 60 days<small>Delivered framed · keep it or return it free</small></button>
+        <button class="btn btn-secondary" onclick="addCart()">Add to cart</button>
+      </div>
+
+      <div class="trust" id="trustBlock">
+        <h3>Live with it. Then decide.</h3>
+        <div class="tstep"><span class="num">1</span><span class="tx">We deliver it <b>framed and ready to hang</b>, insured, no deposit.</span></div>
+        <div class="tstep"><span class="num">2</span><span class="tx">Live with it on your wall for <b>60 days</b>, in your own light.</span></div>
+        <div class="tstep"><span class="num">3</span><span class="tx">Keep it, or <b>send it back</b> and refund you in full.</span></div>
+        <div class="tnote">Most pieces never come back. Once it's on the wall, it's already yours.</div>
+      </div>
+
+      <div class="confirm" id="confirm2" style="display:none">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <h3>Midnight 01 is on its way</h3>
+        <p id="confirmText">We'll deliver the 180 × 90 cm framed and ready to hang, insured, no deposit. Your 60 days begin the moment it's on your wall. Keep it, or send it back and refund you in full.</p>
+        <button class="undo" onclick="undo2()">Cancel, back to options</button>
+      </div>
+
+      <div class="tp">
+        <span class="rate"><b>Rated 4.7</b> out of 5 stars</span>
+        <span class="stars" id="tpStars"></span>
+        <span>5K reviews</span>
+        <span class="name"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.9 7.5.6-5.7 4.9 1.8 7.3L12 17.8 5.4 21.7l1.8-7.3L1.5 9.5 9 8.9z"/></svg>Trustpilot</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const sizes = [
+  {sku:"IME120", cm:"90 × 45 cm",  price:719,  rrp:899,  ship:15, w:"50%", stage:0, left:null},
+  {sku:"IME119", cm:"120 × 60 cm", price:1112, rrp:1390, ship:16, w:"64%", stage:1, left:null},
+  {sku:"IME118", cm:"180 × 90 cm", price:2392, rrp:2990, ship:62, w:"80%", stage:2, left:3, rising:true},
+  {sku:"IME117", cm:"240 × 120 cm",price:3832, rrp:4790, ship:105,w:"94%", stage:3, left:2},
+];
+let active = 2;
+const eur = n => "€" + n.toLocaleString("en-US");
+
+function renderSizes(){
+  document.getElementById("sizes").innerHTML = sizes.map((s,i)=>`
+    <button class="size ${i===active?'active':''}" data-i="${i}">
+      <div class="cm">${s.cm}</div>
+    </button>`).join("");
+}
+function select(i){
+  active = i; const s = sizes[i];
+  document.getElementById("price").textContent = eur(s.price);
+  document.getElementById("rrp").textContent = eur(s.rrp);
+  document.getElementById("scaleChip").textContent = s.cm + " on your wall";
+  document.getElementById("ship").innerHTML = `<b>Ready to ship in 4–9 days.</b> VAT incl. + €${s.ship} shipping · 2024/2025 · ${s.sku}`;
+  document.getElementById("hang").style.width = s.w;
+  document.getElementById("confirmText").textContent = `We'll deliver the ${s.cm} framed and ready to hang, insured, no deposit. Your 60 days begin the moment it's on your wall. Keep it, or send it back and refund you in full.`;
+  renderSizes();
+}
+document.getElementById("sizes").addEventListener("click", e=>{
+  const el = e.target.closest(".size"); if(!el) return;
+  select(parseInt(el.dataset.i,10));
+});
+
+/* ---- gallery views: the work + two staged room renders ---- */
+const roomSrc = {
+  dining:"live%20with%20it/IME118_diasec_180x90cm_milanese-palazzo-dining_v1.jpg",
+  living:"live%20with%20it/IME118_schattenfuge-schwarz_180x90cm_midnight-living-room_v1.jpg"
+};
+function setHero(v){
+  const isRoom = v!=="work";
+  const sr = document.getElementById("stageRoom");
+  if(isRoom){ if(sr.dataset.v!==v){ sr.src=roomSrc[v]; sr.dataset.v=v; } sr.classList.add("show"); }
+  else { sr.classList.remove("show"); }
+  document.getElementById("hang").style.visibility = isRoom?"hidden":"visible";
+  document.getElementById("scaleChip").style.display = isRoom?"none":"";
+  document.querySelectorAll(".thumb").forEach(t=>t.classList.toggle("active", t.dataset.v===v));
+}
+
+/* mounting drives the frame on the work view, and reveals the matching room render */
+const frames = [null, null, "#1C1A18", "#9B7B4E"]; // acrylic, acrylic+alu (frameless), black, oak
+function applyFrame(i){
+  const hang = document.getElementById("hang");
+  const col = frames[i];
+  if(col){ hang.classList.add("framed"); hang.style.setProperty("--frame", col); }
+  else { hang.classList.remove("framed"); }
+}
+function setMount(i){
+  applyFrame(i);
+  if(i===0) setHero("dining");        // mounted under acrylic → diasec dining render
+  else if(i===2) setHero("living");   // framed black → schattenfuge living render
+  else setHero("work");               // alu backing / oak → artwork on wall
+}
+
+/* trustpilot stars */
+document.getElementById("tpStars").innerHTML = Array.from({length:5}).map(()=>
+  '<span><svg viewBox="0 0 24 24"><path d="M12 2l3 6.9 7.5.6-5.7 4.9 1.8 7.3L12 17.8 5.4 21.7l1.8-7.3L1.5 9.5 9 8.9z"/></svg></span>').join("");
+
+/* thumbnails switch the hero, and sync the mounting selector to the render shown */
+document.getElementById("thumbs").addEventListener("click", e=>{
+  const el = e.target.closest(".thumb"); if(!el) return;
+  const v = el.dataset.v;
+  setHero(v);
+  if(v==="dining"){ document.getElementById("mount").selectedIndex=0; applyFrame(0); }
+  else if(v==="living"){ document.getElementById("mount").selectedIndex=2; applyFrame(2); }
+});
+
+function commit(){document.getElementById("cta2").style.display="none";document.getElementById("trustBlock").style.display="none";var c=document.getElementById("confirm2");c.style.display="block";c.scrollIntoView({block:"nearest",behavior:"smooth"});}
+function undo2(){document.getElementById("confirm2").style.display="none";document.getElementById("cta2").style.display="flex";document.getElementById("trustBlock").style.display="block";}
+function addCart(){const b=document.getElementById("cartCount");b.textContent=parseInt(b.textContent,10)+1;toast("Added to cart · "+sizes[active].cm);}
+let tt;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),3000);}
+
+renderSizes(); setHero("dining");
+</script>
+</body>
+</html>
