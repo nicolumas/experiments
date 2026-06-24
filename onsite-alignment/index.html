@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link href="prototype/assets/lumas-fonts.css" rel="stylesheet">
+<link href="assets/lumas-fonts.css" rel="stylesheet">
 <style>
 :root{
   --text-primary:#1C1A18; --text-secondary:#5A5752; --text-tertiary:#6E6A64; --text-inverse:#F4EDE2;
@@ -28,58 +28,42 @@ a{color:inherit;text-decoration:none;}
 .wordmark svg{height:16px;width:auto;display:block;fill:var(--text-primary);}
 .top .eyebrow{color:var(--text-secondary);}
 
-.hero{padding:clamp(40px,6vw,72px) 0 8px;max-width:780px;}
-.hero h1{font-family:var(--disp);font-weight:400;font-size:clamp(32px,5vw,56px);line-height:1.04;letter-spacing:-0.01em;text-wrap:balance;margin-bottom:20px;}
-.hero p{font-size:17px;color:var(--text-secondary);line-height:1.65;max-width:64ch;}
+.hero{padding:clamp(44px,6vw,80px) 0 8px;max-width:760px;}
+.hero h1{font-family:var(--disp);font-weight:400;font-size:clamp(34px,5.4vw,60px);line-height:1.02;letter-spacing:-0.01em;text-wrap:balance;margin-bottom:20px;}
+.hero p{font-size:17px;color:var(--text-secondary);line-height:1.65;max-width:60ch;}
 .hero .meta{font-size:12px;color:var(--text-tertiary);margin-top:20px;letter-spacing:.02em;}
 
-.section{padding:clamp(36px,5vw,56px) 0 0;}
-.sec-label{font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:18px;}
+.section{padding:clamp(36px,5vw,52px) 0 0;}
+.sec-label{font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:20px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+.sec-label .count{color:var(--text-tertiary);letter-spacing:.04em;font-weight:400;}
 
-/* feature (deck) */
-.feature{display:grid;grid-template-columns:1.1fr 1fr;gap:0;border:1px solid var(--border-default);border-radius:6px;overflow:hidden;transition:border-color .18s ease-out,transform .18s var(--ease);}
-.feature:hover{border-color:var(--border-strong);transform:translateY(-2px);}
-.feature .vis{background:var(--surface-inverse);color:var(--text-inverse);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center;min-height:220px;}
-.feature .vis .k{font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,237,226,.55);margin-bottom:12px;}
-.feature .vis h2{font-family:var(--disp);font-weight:400;font-size:clamp(26px,3vw,38px);line-height:1.08;color:var(--text-inverse);}
-.feature .body{padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;justify-content:center;}
-.feature .body p{font-size:15px;color:var(--text-secondary);line-height:1.6;max-width:46ch;margin-bottom:18px;}
+.projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px;}
+.proj{border:1px solid var(--border-default);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .18s ease-out,transform .18s var(--ease),box-shadow .18s ease-out;}
+.proj:hover{border-color:var(--border-strong);transform:translateY(-3px);box-shadow:0 18px 40px -28px rgba(28,26,24,.45);}
+.proj .shot{aspect-ratio:16/10;background:var(--surface-raised);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.proj .shot img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s var(--ease);}
+.proj .shot img.loaded{opacity:1;}
+.proj .pb{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1;}
+.proj .tag{font-weight:700;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:9px;}
+.proj h2{font-family:var(--disp);font-weight:400;font-size:26px;line-height:1.08;margin-bottom:9px;}
+.proj p{font-size:14px;color:var(--text-secondary);line-height:1.55;flex:1;margin-bottom:18px;}
+.proj .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .go{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-primary);}
 .go svg{width:18px;height:18px;stroke:var(--text-primary);fill:none;stroke-width:1.5;transition:transform .2s var(--ease);}
-.feature:hover .go svg,.tile:hover .go svg,.proto:hover .go svg{transform:translateX(5px);}
+.proj:hover .go svg{transform:translateX(5px);}
+.pill{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:4px 9px;}
+.pill.ready{background:#E8F2EB;color:#3A6B4A;}
+.pill.draft{background:var(--surface-muted);color:var(--text-secondary);}
 
-/* reference tiles */
-.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-.tile{border:1px solid var(--border-default);border-radius:6px;padding:clamp(22px,3vw,30px);transition:border-color .18s ease-out,transform .18s var(--ease);display:flex;flex-direction:column;}
-.tile:hover{border-color:var(--border-strong);transform:translateY(-2px);}
-.tile .k{font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px;}
-.tile h3{font-family:var(--disp);font-weight:400;font-size:24px;line-height:1.1;margin-bottom:8px;}
-.tile p{font-size:14px;color:var(--text-secondary);line-height:1.55;max-width:42ch;margin-bottom:16px;flex:1;}
+/* placeholder for projects still to come */
+.proj.soon{border-style:dashed;border-color:var(--border-strong);background:var(--surface-page);}
+.proj.soon .shot{aspect-ratio:16/10;background:var(--surface-muted);}
+.proj.soon .ph{font-family:var(--disp);font-size:15px;color:var(--text-tertiary);}
+.proj.soon h2{color:var(--text-tertiary);}
 
-/* prototypes */
-.sec-intro{font-size:15px;color:var(--text-secondary);line-height:1.6;max-width:60ch;margin:-8px 0 22px;}
-.protos{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-.proto{border:1px solid var(--border-default);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .18s ease-out,transform .18s var(--ease);}
-.proto:hover{border-color:var(--border-strong);transform:translateY(-2px);}
-.proto .shot{aspect-ratio:4/3;background:var(--surface-raised);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:16px;}
-.proto .shot img{max-width:100%;max-height:100%;object-fit:contain;opacity:0;transition:opacity .5s var(--ease);box-shadow:0 12px 30px -16px rgba(28,26,24,.5);}
-.proto .shot img.loaded{opacity:1;}
-.proto .pb{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1;}
-.proto .role{font-weight:700;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:6px;}
-.proto h3{font-family:var(--disp);font-weight:400;font-size:20px;line-height:1.1;margin-bottom:7px;}
-.proto p{font-size:12.5px;color:var(--text-secondary);line-height:1.5;flex:1;margin-bottom:14px;}
-.proto .go{font-size:10px;}
+.foot{margin:clamp(48px,6vw,80px) 0 64px;padding-top:22px;border-top:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-tertiary);line-height:1.7;max-width:84ch;}
 
-.foot{margin:clamp(48px,6vw,72px) 0 64px;padding-top:22px;border-top:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-tertiary);line-height:1.7;max-width:84ch;}
-
-@media (max-width:900px){
-  .feature{grid-template-columns:1fr;}
-  .protos{grid-template-columns:repeat(2,1fr);}
-}
-@media (max-width:560px){
-  .tiles{grid-template-columns:1fr;}
-  .protos{grid-template-columns:1fr;}
-}
+@media (max-width:560px){ .projects{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
@@ -90,80 +74,53 @@ a{color:inherit;text-decoration:none;}
   </div>
 
   <div class="hero">
-    <div class="eyebrow" style="margin-bottom:16px;">Collector experience · alignment session</div>
-    <h1>The collector relationship.</h1>
-    <p>Everything for the onsite alignment in one place: the strategy deck to present from, how the experiences fit and where they live, and the working prototypes to click through. Turning a declining transaction business into recurring collector revenue, using the customers we already have.</p>
-    <p class="meta">Built on verified online-B2C collector data (LUMAS DWH, 0 B2B lines). Names are placeholders; behaviour, collections and artworks are real.</p>
+    <div class="eyebrow" style="margin-bottom:16px;">Product · alignment session</div>
+    <h1>Onsite alignment.</h1>
+    <p>The projects we'll walk through together in the session. Each opens into its own space, decks, prototypes and reference. This page is the running agenda; more will be added as we go.</p>
+    <p class="meta">Internal working material. Built on verified LUMAS data; names are placeholders, behaviour and artworks are real.</p>
   </div>
 
-  <!-- PRESENT -->
   <div class="section">
-    <div class="sec-label">Present</div>
-    <a class="feature" href="prototype/deck.html">
-      <div class="vis">
-        <div class="k">12 slides · keyboard / click</div>
-        <h2>The collector relationship</h2>
-      </div>
-      <div class="body">
-        <p>The full story to present from: the problem, the insight, the four experiences, the revenue case, the moat, the phased ask, and the risks.</p>
-        <span class="go">Open the deck <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </div>
-    </a>
-  </div>
-
-  <!-- REFERENCE -->
-  <div class="section">
-    <div class="sec-label">Reference</div>
-    <div class="tiles">
-      <a class="tile" href="prototype/site-map.html">
-        <div class="k">Information architecture</div>
-        <h3>Site map</h3>
-        <p>The collector journey and exactly where each experience lives on lumas.com, the new /atelier hub, the trust layer, and the off-site door.</p>
-        <span class="go">Open the site map <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tile" href="prototype/business-case.html">
-        <div class="k">For stakeholders</div>
-        <h3>Business case</h3>
-        <p>The written one-pager: the problem, the insight, indicative revenue, the moat, the phased ask, and the risks.</p>
-        <span class="go">Read the business case <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-    </div>
-  </div>
-
-  <!-- PROTOTYPES -->
-  <div class="section">
-    <div class="sec-label">The prototypes</div>
-    <p class="sec-intro">Four clickable experiences, built on real collector data and real artworks. Start from the <a href="prototype/index.html" style="text-decoration:underline;text-underline-offset:2px;">prototype overview</a>, or open any one directly.</p>
-    <div class="protos" id="protos"></div>
+    <div class="sec-label"><span>Projects</span><span class="count" id="count"></span></div>
+    <div class="projects" id="projects"></div>
   </div>
 
   <div class="foot">
-    Prototypes use the LUMAS V2 brand system; artwork images are live from the LUMAS catalogue. The commission proposal, edition framing and figures are illustrative; the collections and behaviour behind them are real, anonymised online-B2C data.
+    A hub for the onsite alignment meeting. Each project is self-contained and can be presented or clicked through independently.
   </div>
 </div>
 
 <script>
 const IMG = c => "https://img.lumas.com/showimg_" + c + "_desktop.jpg";
-const protos = [
-  {role:"The front door", name:"Concierge desk", file:"prototype/lumas-collector-concierge.html", img:"ylm07",
-   desc:"A private advisor re-opens dormant collectors with a held edition and a guaranteed return."},
-  {role:"The trust floor", name:"Live with it first", file:"prototype/lumas-returns-confidence.html", img:"ime117",
-   desc:"See it on your wall at true scale, live with it 60 days, keep it or send it back."},
-  {role:"The home", name:"Atelier membership", file:"prototype/lumas-collector-membership.html", img:"jfo64",
-   desc:"A member's collection wall, a personal curator, first-look on new editions, rolling credit."},
-  {role:"The apex", name:"Commission desk", file:"prototype/lumas-collector-commission.html", img:"ime130",
-   desc:"By-invitation bespoke originals, or a private view of the new series, signed for you."},
+const projects = [
+  {
+    title:"The Collector Relationship",
+    tag:"Collector experience · strategy",
+    href:"collector-relationship/",
+    img:"ime117",
+    status:"ready",
+    desc:"Turning a declining transaction business into recurring collector revenue, using the customers we already have. Deck, site map, business case and four working prototypes."
+  },
+  // Add future projects here: { title, tag, href, img, status:'ready'|'draft', desc }
 ];
-document.getElementById("protos").innerHTML = protos.map(p=>`
-  <a class="proto" href="${p.file}">
-    <div class="shot"><img src="${IMG(p.img)}" alt="${p.name} featured artwork" loading="lazy" onload="this.classList.add('loaded')" onerror="this.style.display='none'"></div>
+
+const wrap = document.getElementById("projects");
+wrap.innerHTML = projects.map(p=>`
+  <a class="proj" href="${p.href}">
+    <div class="shot"><img src="${IMG(p.img)}" alt="${p.title}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.style.display='none'"></div>
     <div class="pb">
-      <div class="role">${p.role}</div>
-      <h3>${p.name}</h3>
+      <div class="tag">${p.tag}</div>
+      <h2>${p.title}</h2>
       <p>${p.desc}</p>
-      <span class="go">Open <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <div class="row">
+        <span class="go">Open <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="pill ${p.status}">${p.status==='ready'?'Ready':'In progress'}</span>
+      </div>
     </div>
-  </a>`).join("");
+  </a>`).join("")
+  + `<div class="proj soon"><div class="shot"></div><div class="pb"><div class="tag">Coming up</div><h2>More projects</h2><p>Additional alignment topics will be added here ahead of the session.</p><div class="row"><span class="go" style="color:var(--text-tertiary)">Soon</span></div></div></div>`;
+
+document.getElementById("count").textContent = projects.length + (projects.length===1 ? " project" : " projects");
 </script>
 </body>
 </html>
