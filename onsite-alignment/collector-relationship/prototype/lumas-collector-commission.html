@@ -271,19 +271,6 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
     </div>
   </div><!-- /panel-private -->
 
-  <!-- BODY OF WORK -->
-  <div class="bw-head">
-    <div>
-      <div class="section-label">More from Isabelle Menin's studio</div>
-      <div class="section-sub" style="margin-bottom:0">The rest of Isabelle Menin's body of work, available now as limited editions.</div>
-    </div>
-    <div class="car-nav">
-      <button id="bwPrev" aria-label="Previous works"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <button id="bwNext" aria-label="Next works"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-    </div>
-  </div>
-  <div class="bodywork" id="bodywork"></div>
-
   <div class="foot">Anonymised sample. Name is a placeholder; behavioural data is real and verified online B2C (0 B2B lines), reconstructed from line-level data (2022+). The edition framing, figures and offer are illustrative; the collection and the artist's catalogue are real LUMAS works.</div>
 </div>
 
@@ -324,30 +311,6 @@ document.getElementById("hiddenGrid").innerHTML = hidden.map(w=>`
     <div class="ed">${w.ed}</div>
     <div class="cap">${eur(w.p)}</div>
   </div>`).join("");
-
-const bodywork = [
-  {t:"La Vie en Rose", from:719, img:"ime125"},
-  {t:"Midnight 01", from:719, img:"ime117"},
-  {t:"The Tender Land 2", from:639, img:"ime75"},
-  {t:"Les fonds angéliques", from:143, img:"ime405"},
-  {t:"Dream River 01", from:215, img:"ime403"},
-  {t:"Dream River 06", from:103, img:"ime903"},
-  {t:"L'Embarquement pour Cythère 11", from:103, img:"ime902"},
-  {t:"Étude Pour Un Après Midi 02", from:103, img:"ime904"},
-];
-document.getElementById("bodywork").innerHTML = bodywork.map(w=>`
-  <div class="bw">
-    <div class="shot"><img class="art-img" src="${IMG(w.img)}" alt="${w.t} by Isabelle Menin" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
-    <div class="t">${w.t}</div>
-    <div class="cap">from ${eur(w.from)}</div>
-  </div>`).join("");
-
-const track = document.getElementById("bodywork");
-const bwPrev = document.getElementById("bwPrev"), bwNext = document.getElementById("bwNext");
-function bwUpdate(){ bwPrev.disabled = track.scrollLeft <= 2; bwNext.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2; }
-function bwScroll(d){ track.scrollBy({left: d * Math.max(280, track.clientWidth * 0.8), behavior:"smooth"}); }
-bwPrev.onclick = ()=>bwScroll(-1); bwNext.onclick = ()=>bwScroll(1);
-track.addEventListener("scroll", bwUpdate); window.addEventListener("resize", bwUpdate); bwUpdate();
 
 const renderStepper = (el,arr)=>{ el.innerHTML = arr.map(s=>`
   <div class="step ${s.s}">
