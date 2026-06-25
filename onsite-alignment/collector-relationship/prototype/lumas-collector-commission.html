@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUMAS, Commission desk</title>
+<title>LUMAS, The Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
@@ -59,7 +59,16 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
 /* owned collection */
 .owned{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.2vw,32px);align-items:start;}
 .mini .t{font-family:var(--display);font-size:14px;line-height:1.2;margin-top:11px;}
+.mini .ed{font-size:11px;color:var(--text-tertiary);margin-top:6px;letter-spacing:.02em;}
 .mini .cap{font-size:11px;color:var(--text-tertiary);margin-top:3px;}
+
+/* hidden collection */
+.hidden-intro{max-width:66ch;margin:6px 0 24px;}
+.hidden-intro p{font-size:15px;color:var(--text-secondary);line-height:1.6;}
+.hidden-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.4vw,40px);align-items:start;}
+.hidden-cta{max-width:520px;margin-top:clamp(28px,3.4vw,44px);}
+@media (max-width:880px){ .hidden-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:560px){ .hidden-grid{grid-template-columns:1fr;} }
 
 /* ---------- proposal: image + decision rail ---------- */
 .proposal{display:grid;grid-template-columns:1.25fr minmax(350px,430px);gap:clamp(28px,4vw,56px);align-items:start;margin-top:6px;}
@@ -165,7 +174,7 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
 </head>
 <body>
 <div class="topbar">
-  <div class="brand"><a class="back" href="index.html" title="All prototypes" aria-label="Back to all prototypes">←</a><span class="wordmark"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></span><span class="eyebrow">Commission · by invitation</span></div>
+  <div class="brand"><a class="back" href="index.html" title="All prototypes" aria-label="Back to all prototypes">←</a><span class="wordmark"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></span><span class="eyebrow">The Invitation</span></div>
   <span class="banner"><span class="dot"></span><span><b>Anonymised sample · verified online B2C.</b> Name is a placeholder; collection is real (LUMAS DWH · 0 B2B lines · acquired 2022).</span></span>
 </div>
 
@@ -192,53 +201,32 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
   <!-- THE OFFER: two ways in -->
   <div class="section-label" style="margin-bottom:0">Your invitation, two ways</div>
   <div class="tabs" role="tablist">
-    <button class="tab on" data-tab="commission" role="tab" aria-selected="true"><span class="tt">A bespoke commission</span><span class="ts">A unique original, ~14 weeks</span></button>
+    <button class="tab on" data-tab="hidden" role="tab" aria-selected="true"><span class="tt">The hidden collection</span><span class="ts">Low edition numbers, off the public site</span></button>
     <button class="tab" data-tab="private" role="tab" aria-selected="false"><span class="tt">A private view</span><span class="ts">First pick of the new series, signed for you</span></button>
   </div>
 
-  <div class="tabpanel" id="panel-commission">
-  <div class="proposal">
-    <div class="p-visual">
-      <div class="work"><img class="art-img" src="https://img.lumas.com/showimg_ime133_desktop.jpg" alt="Mood reference for the proposed Isabelle Menin commission" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
-      <div class="scale"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/></svg> See it on your wall · AR at true scale · 240 × 160 cm</div>
-      <div class="moodnote">A mood reference in the artist's hand, your work will be wholly new.</div>
+  <div class="tabpanel" id="panel-hidden">
+    <div class="hidden-intro">
+      <div class="eyebrow p-eyebrow" style="margin-bottom:10px">Held back from the public site</div>
+      <p>A small group of Isabelle Menin works kept off the public catalogue, offered in their earliest edition numbers to a short list of established collectors. Ask Clara to see any of them on your own wall.</p>
     </div>
-    <div class="p-rail" id="rail">
-      <div class="eyebrow p-eyebrow">A unique original</div>
-      <div class="p-title">A Garden of One's Own</div>
-      <div class="p-working">Working title, yours to shape with the artist</div>
-      <div class="spec"><span class="k">Medium</span><span class="v">Pigment print, diasec face-mount</span></div>
-      <div class="spec"><span class="k">Scale</span><span class="v">240 × 160 cm · or 180 × 120 cm</span></div>
-      <div class="spec"><span class="k">Edition</span><span class="v">Unique · 1 of 1, signed</span></div>
-      <div class="spec"><span class="k">Timeline</span><span class="v">~14 weeks from brief</span></div>
-      <div class="p-price"><span class="n">€24,000</span><span class="lab">estimate · framing &amp; install included</span></div>
-      <div class="p-note">A 30% deposit (€7,200) begins the commission, and is taken only once you and Isabelle have agreed the brief. You approve a digital proof before final production. Nothing is final until you are.</div>
-      <div class="cta" id="commit4">
-        <button class="btn btn-primary" onclick="commit4go()">Reserve your commission slot</button>
-        <button class="btn btn-secondary" onclick="toast('Clara Voss will call you')">Speak with your curator</button>
-        <div class="dep">No payment today. The €7,200 deposit is taken only once you and Isabelle have agreed the brief.</div>
-      </div>
-      <div class="confirm" id="confirm4" style="display:none">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
-        <h3>Your commission slot is reserved</h3>
-        <p>Clara Voss will arrange your studio visit with Isabelle to shape the brief. No payment today; the €7,200 deposit is taken only once you and Isabelle have agreed the work.</p>
-        <button class="undo" onclick="undo4()">Cancel, back to the proposal</button>
-      </div>
-      <div class="trust">
-        <span class="tb"><svg viewBox="0 0 24 24"><path d="M3 7h18M6 7V5h12v2M5 7l1 13h12l1-13"/></svg> White-glove install</span>
-        <span class="tb"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Provenance &amp; certificate</span>
-      </div>
+    <div class="hidden-grid" id="hiddenGrid"></div>
+    <div class="cta hidden-cta" id="commit4">
+      <button class="btn btn-primary" onclick="commit4go()">Request the hidden collection</button>
+      <button class="btn btn-secondary" onclick="toast('Clara Voss will call you')">Speak with your curator</button>
+      <div class="dep">No payment today. Clara arranges a private viewing and holds any piece, in its earliest edition number, for you.</div>
     </div>
-  </div>
-
-  <!-- PROCESS -->
-  <div class="section-label">How your commission unfolds</div>
-  <div class="stepper" id="stepper"></div>
-  <div class="live">
-    <svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-    A private studio-visit livestream with Isabelle is scheduled for next week, you'll watch the first frames take shape.
-  </div>
-  </div><!-- /panel-commission -->
+    <div class="confirm" id="confirm4" style="display:none">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+      <h3>Clara is preparing your private viewing</h3>
+      <p>She'll walk you through the hidden collection and can hold any piece, in its earliest edition number, while you decide. No payment today.</p>
+      <button class="undo" onclick="undo4()">Cancel, back to the collection</button>
+    </div>
+    <div class="trust" style="margin-top:18px">
+      <span class="tb"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Earliest edition numbers</span>
+      <span class="tb"><svg viewBox="0 0 24 24"><path d="M3 7h18M6 7V5h12v2M5 7l1 13h12l1-13"/></svg> White-glove install</span>
+    </div>
+  </div><!-- /panel-hidden -->
 
   <!-- TAB 2: PRIVATE VIEW (the lighter-touch alternative) -->
   <div class="tabpanel" id="panel-private" hidden>
@@ -287,7 +275,7 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
   <div class="bw-head">
     <div>
       <div class="section-label">More from Isabelle Menin's studio</div>
-      <div class="section-sub" style="margin-bottom:0">The body of work behind your commission, available now as limited editions.</div>
+      <div class="section-sub" style="margin-bottom:0">The rest of Isabelle Menin's body of work, available now as limited editions.</div>
     </div>
     <div class="car-nav">
       <button id="bwPrev" aria-label="Previous works"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -296,7 +284,7 @@ body{background:var(--surface-page);color:var(--text-primary);font-family:var(--
   </div>
   <div class="bodywork" id="bodywork"></div>
 
-  <div class="foot">Anonymised sample. Name is a placeholder; behavioural data is real and verified online B2C (0 B2B lines), reconstructed from line-level data (2022+). The commission proposal, title, scale, price and timeline are illustrative; the collection and the artist's catalogue are real LUMAS works.</div>
+  <div class="foot">Anonymised sample. Name is a placeholder; behavioural data is real and verified online B2C (0 B2B lines), reconstructed from line-level data (2022+). The edition framing, figures and offer are illustrative; the collection and the artist's catalogue are real LUMAS works.</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -323,6 +311,20 @@ document.getElementById("owned").innerHTML = owned.map(w=>`
   </div>`).join("");
 document.getElementById("invested").textContent = eur(owned.reduce((s,w)=>s+w.p,0));
 
+// The hidden collection: low-edition works kept off the public site
+const hidden = [
+  {t:"Les fonds angéliques", ed:"Edition of 7 · earliest numbers", p:7390, img:"ime133"},
+  {t:"La Vie en Rose", ed:"Edition of 10 · earliest numbers", p:4790, img:"ime125"},
+  {t:"The Tender Land 2", ed:"Edition of 9 · earliest numbers", p:6490, img:"ime75"},
+];
+document.getElementById("hiddenGrid").innerHTML = hidden.map(w=>`
+  <div class="mini">
+    <div class="shot"><img class="art-img" src="${IMG(w.img)}" alt="${w.t} by Isabelle Menin" loading="eager" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+    <div class="t">${w.t}</div>
+    <div class="ed">${w.ed}</div>
+    <div class="cap">${eur(w.p)}</div>
+  </div>`).join("");
+
 const bodywork = [
   {t:"La Vie en Rose", from:719, img:"ime125"},
   {t:"Midnight 01", from:719, img:"ime117"},
@@ -347,20 +349,12 @@ function bwScroll(d){ track.scrollBy({left: d * Math.max(280, track.clientWidth 
 bwPrev.onclick = ()=>bwScroll(-1); bwNext.onclick = ()=>bwScroll(1);
 track.addEventListener("scroll", bwUpdate); window.addEventListener("resize", bwUpdate); bwUpdate();
 
-const steps = [
-  {n:"1", t:"Brief", d:"Scale, palette, your space", s:"done"},
-  {n:"2", t:"Studio visit", d:"Meet Isabelle, shape the work", s:"current"},
-  {n:"3", t:"Proof approval", d:"You sign off the digital proof", s:"future"},
-  {n:"4", t:"Finishing", d:"Printing, diasec, framing", s:"future"},
-  {n:"5", t:"White-glove install", d:"Delivered & hung, provenance recorded", s:"future"},
-];
 const renderStepper = (el,arr)=>{ el.innerHTML = arr.map(s=>`
   <div class="step ${s.s}">
     <div class="bar"></div>
     <div class="sdot">${s.s==='done'?'✓':s.n}</div>
     <div><div class="st">${s.t}</div><div class="sd">${s.d}</div></div>
   </div>`).join(""); };
-renderStepper(document.getElementById("stepper"), steps);
 
 const stepsPrivate = [
   {n:"1", t:"Your private window", d:"48 hours before the public release", s:"current"},
@@ -374,7 +368,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
     document.querySelectorAll(".tab").forEach(t=>{ const on=t===tab; t.classList.toggle("on",on); t.setAttribute("aria-selected", on); });
     const sel = tab.dataset.tab;
-    document.getElementById("panel-commission").hidden = sel!=="commission";
+    document.getElementById("panel-hidden").hidden = sel!=="hidden";
     document.getElementById("panel-private").hidden = sel!=="private";
   });
 });
