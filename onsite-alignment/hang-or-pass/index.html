@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lass uns spielen · Entdecke Kunst online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/lumas-fonts.css">
+<style>
+  :root {
+    --c-primary:#1C1A18; --c-secondary:#5A5752; --c-tertiary:#908C87; --c-disabled:#C7C3BE; --c-inverse:#F4EDE2;
+    --s-page:#FFFFFF; --s-card:#FFFFFF; --s-raised:#FBF7F2; --s-sunken:#F4EDE2; --s-inverse:#1C1A18; --s-muted:#EFE9E0;
+    --b-default:#E2D8CC; --b-subtle:#EAE2D8; --b-strong:#C7C3BE; --b-focus:#1C1A18;
+    --shadow-frame:0 24px 70px -20px rgba(28,26,24,0.30);
+    --shadow-soft:0 8px 28px -10px rgba(28,26,24,0.18);
+    --display:'UtileDisplay','Utile Display','Helvetica Neue',Arial,sans-serif;
+    --body:'Archivo','Helvetica Neue',Arial,sans-serif;
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:40px;--sp-12:48px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--s-page);height:100%;}
+  body{font-family:var(--body);color:var(--c-primary);-webkit-font-smoothing:antialiased;line-height:1.5;}
+
+  .eyebrow{font-weight:700;font-size:11px;line-height:1.5;letter-spacing:0.18em;text-transform:uppercase;}
+  .caption{font-size:11px;line-height:1.5;letter-spacing:0.03em;}
+  .label{font-weight:700;font-size:13px;line-height:1.5;letter-spacing:0.14em;text-transform:uppercase;}
+  .body-sm{font-size:13px;line-height:1.6;}
+  .body{font-size:16px;line-height:1.55;}
+
+  /* ── App shell ─────────────────────────────── */
+  .app{min-height:100dvh;display:flex;flex-direction:column;max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,48px);}
+
+  /* ── Site chrome (LUMAS header) ────────────── */
+  .site{width:100%;}
+  .announce{background:var(--s-inverse);color:var(--c-inverse);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+            gap:4px 22px;padding:11px 16px;font-size:13px;line-height:1.45;text-align:center;}
+  .announce a{color:var(--c-inverse);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;font-size:11px;
+              text-decoration:none;border-bottom:1px solid var(--c-inverse);padding-bottom:2px;}
+  .nav{display:flex;align-items:center;gap:clamp(14px,1.8vw,30px);padding:14px clamp(16px,3vw,44px);
+       border-bottom:1px solid var(--b-subtle);background:var(--s-card);}
+  .nav-burger{display:none;background:none;border:none;cursor:pointer;color:var(--c-primary);padding:4px;}
+  .nav-burger svg{width:24px;height:24px;}
+  .nav-logo{display:flex;align-items:center;color:var(--c-primary);flex:0 0 auto;}
+  .nav-logo svg{height:21px;width:auto;display:block;}
+  .nav-links{display:flex;align-items:center;gap:clamp(14px,1.7vw,26px);list-style:none;}
+  .nav-links a{color:var(--c-primary);text-decoration:none;font-size:15px;padding-bottom:4px;border-bottom:2px solid transparent;transition:border-color .18s var(--ease);}
+  .nav-links a.active{border-color:var(--c-primary);}
+  @media(hover:hover){.nav-links a:hover{border-color:var(--b-strong);}}
+  .nav-search{flex:1;min-width:0;max-width:380px;position:relative;}
+  .nav-search input{width:100%;background:var(--s-sunken);border:1px solid var(--b-default);border-radius:4px;
+                    padding:11px 14px 11px 40px;font-family:var(--body);font-size:14px;color:var(--c-primary);}
+  .nav-search input:focus{outline:none;border-color:var(--b-focus);}
+  .nav-search input::placeholder{color:var(--c-tertiary);}
+  .nav-search .mag{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--c-tertiary);width:17px;height:17px;pointer-events:none;}
+  .nav-icons{display:flex;align-items:center;gap:clamp(12px,1.4vw,18px);}
+  .nav-ic{background:none;border:none;cursor:pointer;color:var(--c-primary);padding:2px;position:relative;display:flex;}
+  .nav-ic svg{width:21px;height:21px;}
+  .nav-badge{position:absolute;top:-7px;right:-9px;min-width:16px;height:16px;padding:0 4px;background:var(--s-inverse);color:var(--c-inverse);
+             font-size:10px;font-weight:700;border-radius:999px;display:none;align-items:center;justify-content:center;line-height:1;}
+  .nav-badge.show{display:flex;}
+  .nav-locale{background:none;border:none;cursor:pointer;color:var(--c-primary);font-family:var(--body);font-size:14px;font-weight:700;
+              display:flex;align-items:center;gap:4px;letter-spacing:0.04em;}
+  .nav-locale svg{width:14px;height:14px;}
+
+  /* feature heading (sits under the site nav) */
+  .feature-head{padding:clamp(22px,3vw,34px) 0 clamp(10px,1.5vw,16px);}
+  .feature-head .eyebrow{color:var(--c-secondary);display:block;margin-bottom:10px;}
+  .feature-head .ftitle{font-family:var(--display);font-weight:400;font-size:clamp(26px,3vw,40px);line-height:1.02;}
+
+  /* Context line */
+  .context{padding:2px 0 clamp(12px,2vw,18px);min-height:22px;}
+  .context .lbl{color:var(--c-secondary);}
+  .context .lbl strong{color:var(--c-primary);font-weight:700;}
+
+  /* ── Centered stage: title · hero room · overlaid controls · quiet meta ── */
+  .stage{display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2.2vw,26px);
+         min-height:calc(100dvh - 170px);justify-content:center;padding:clamp(16px,2.6vh,36px) 0 clamp(24px,4vw,40px);}
+  .masthead{text-align:center;display:flex;flex-direction:column;align-items:center;}
+  .masthead .kicker{color:var(--c-secondary);font-size:12px;letter-spacing:0.2em;}
+  .masthead .feature-title{font-family:var(--display);font-weight:400;font-size:clamp(34px,4.2vw,58px);line-height:1.0;
+                           color:var(--c-primary);text-transform:none;margin-top:14px;}
+  .masthead .ctx{color:var(--c-secondary);font-size:15px;letter-spacing:0;min-height:20px;margin-top:14px;}
+  .masthead .ctx strong{color:var(--c-primary);font-weight:700;}
+
+  .cardwrap{position:relative;width:100%;max-width:940px;}
+  .card{position:relative;width:100%;aspect-ratio:16/10;max-height:min(56vh,560px);overflow:hidden;background:var(--s-card);
+        box-shadow:var(--shadow-frame);cursor:grab;touch-action:pan-y;will-change:transform;
+        transition:transform .4s var(--ease);}
+  .card:active{cursor:grabbing;}
+  /* two stacked layers crossfade between works — full artwork, never cropped */
+  .card-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;
+        transition:opacity .5s var(--ease);will-change:opacity;}
+  .card-layer.show{opacity:1;}
+
+  /* drag hints */
+  .hint{position:absolute;top:18px;z-index:6;padding:9px 16px;font-weight:700;font-size:12px;letter-spacing:0.16em;
+        text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .12s linear;}
+  .hint-like{right:18px;background:var(--s-inverse);color:var(--c-inverse);}
+  .hint-pass{left:18px;background:var(--s-card);color:var(--c-primary);}
+
+  /* one bar beneath the room: work details · controls · more details */
+  .actionbar{width:100%;max-width:940px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(20px,3vw,44px);text-align:left;}
+  .meta-left{display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .actionbar .meta-title{font-family:var(--display);font-weight:400;font-size:clamp(22px,2.1vw,30px);line-height:1.05;color:var(--c-primary);text-transform:none;}
+  .actionbar .meta-sub{color:var(--c-secondary);font-size:15px;letter-spacing:0;}
+  .actionbar .meta-sub .dot{margin:0 8px;color:var(--c-tertiary);}
+  .controls{justify-self:center;display:flex;gap:clamp(14px,1.4vw,18px);}
+  .ctl{width:58px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid var(--b-focus);cursor:pointer;
+       background:var(--s-card);color:var(--c-primary);transition:transform .14s var(--ease),background .18s var(--ease),color .18s var(--ease);}
+  .ctl svg{width:23px;height:23px;}
+  .ctl:active{transform:scale(0.95);}
+  .ctl-like{background:var(--s-inverse);border-color:var(--s-inverse);color:var(--c-inverse);}
+  @media(hover:hover){.ctl-pass:hover{background:var(--s-inverse);color:var(--c-inverse);} .ctl-like:hover{filter:brightness(1.25);}}
+  .meta-link{justify-self:end;color:var(--c-secondary);font-weight:700;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;
+                   background:none;border:none;border-bottom:1px solid var(--b-strong);padding:0 0 4px;cursor:pointer;font-family:var(--body);
+                   display:inline-flex;align-items:center;gap:7px;transition:color .18s var(--ease),border-color .18s var(--ease);}
+  .meta-link svg{width:13px;height:13px;}
+  @media(hover:hover){.meta-link:hover{color:var(--c-primary);border-color:var(--b-focus);}}
+
+  .swipehint{text-align:center;color:var(--c-secondary);font-size:13px;letter-spacing:0;transition:opacity .3s var(--ease);}
+  .swipehint.gone{opacity:0;}
+  .heart-pop{animation:pop .4s var(--ease);}
+  @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.09);}100%{transform:scale(1);}}
+
+  /* ── Overlays (detail / wall / taste) ──────── */
+  .scrim{position:fixed;inset:0;background:rgba(28,26,24,0.42);backdrop-filter:blur(3px);opacity:0;pointer-events:none;
+         transition:opacity .24s var(--ease);z-index:40;}
+  .scrim.open{opacity:1;pointer-events:auto;}
+  .sheet{position:fixed;z-index:50;background:var(--s-page);box-shadow:var(--shadow-frame);transition:transform .32s var(--ease),opacity .24s var(--ease);}
+  /* detail sheet: right panel desktop, bottom sheet mobile */
+  .detail{top:0;right:0;height:100dvh;width:min(440px,92vw);transform:translateX(102%);padding:clamp(28px,4vw,44px);overflow:auto;}
+  .detail.open{transform:translateX(0);}
+  .sheet-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:1px solid var(--b-strong);background:transparent;
+               display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .sheet-close svg{width:18px;height:18px;}
+  .detail .d-eyebrow{color:var(--c-secondary);margin-bottom:12px;margin-top:8px;}
+  .detail .d-title{font-family:var(--display);font-weight:400;font-size:clamp(30px,4vw,44px);line-height:1.08;margin-bottom:18px;}
+  .detail .d-img{width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--s-sunken);margin-bottom:20px;box-shadow:var(--shadow-soft);}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .chip{background:var(--s-sunken);border-radius:2px;padding:6px 10px;color:var(--c-secondary);font-size:13px;}
+  .d-price{color:var(--c-primary);margin-bottom:24px;}
+  .d-price .from{color:var(--c-tertiary);}
+  .d-actions{display:flex;flex-direction:column;gap:12px;}
+  .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 28px;background:var(--s-inverse);color:var(--c-inverse);border:none;cursor:pointer;font-family:var(--body);transition:filter .18s var(--ease),transform .14s var(--ease);}
+  .btn-primary:active{transform:scale(0.98);} .btn-primary:hover{filter:brightness(1.25);}
+  .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 28px;border:1px solid var(--b-focus);background:transparent;color:var(--c-primary);text-decoration:none;cursor:pointer;font-family:var(--body);transition:background .18s var(--ease),color .18s var(--ease);}
+  .btn-secondary svg{width:16px;height:16px;}
+  .btn-secondary:hover{background:var(--s-inverse);color:var(--c-inverse);}
+
+  /* wall sheet: full overlay */
+  .wall{top:0;left:0;width:100%;height:100dvh;transform:translateY(101%);overflow:auto;padding:clamp(28px,5vw,56px) clamp(16px,4vw,48px) clamp(40px,6vw,80px);}
+  .wall.open{transform:translateY(0);}
+  .wall-head{max-width:1100px;margin:0 auto clamp(24px,4vw,40px);}
+  .wall-head .eyebrow{color:var(--c-secondary);margin-bottom:14px;}
+  .wall-head h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.5vw,52px);line-height:1.08;text-wrap:balance;max-width:18ch;}
+  .wall-head p{color:var(--c-secondary);max-width:52ch;margin-top:14px;}
+  .wall-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:clamp(16px,2.5vw,28px);}
+  .wall-item{display:block;text-decoration:none;color:inherit;}
+  .wall-item .wi-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--s-sunken);box-shadow:var(--shadow-soft);transition:transform .3s var(--ease);}
+  .wall-item:hover .wi-img{transform:translateY(-4px);}
+  .wall-item .wi-artist{color:var(--c-secondary);margin-top:12px;}
+  .wall-item .wi-title{font-family:var(--display);font-size:20px;line-height:1.1;margin-top:4px;}
+  .wall-item .wi-price{color:var(--c-secondary);margin-top:6px;}
+  .wall-empty{max-width:1100px;margin:0 auto;color:var(--c-secondary);}
+
+  /* taste-read interstitial */
+  .taste{top:50%;left:50%;transform:translate(-50%,-46%);width:min(520px,92vw);background:var(--s-card);
+         border:1px solid var(--b-default);padding:clamp(28px,4vw,44px);opacity:0;text-align:left;}
+  .taste.open{transform:translate(-50%,-50%);opacity:1;}
+  .taste .eyebrow{color:var(--c-secondary);margin-bottom:16px;}
+  .taste h2{font-family:var(--display);font-weight:400;font-size:clamp(28px,3.6vw,42px);line-height:1.1;margin-bottom:14px;text-wrap:balance;}
+  .taste p{color:var(--c-secondary);max-width:42ch;margin-bottom:26px;}
+  .taste-actions{display:flex;flex-wrap:wrap;gap:12px;}
+
+  /* ── Motion guards ─────────────────────────── */
+  @media(prefers-reduced-motion:reduce){
+    .card,.card-layer,.sheet,.scrim,.ctl,.btn-primary,.btn-secondary,.wall-item .wi-img{transition:none;}
+    .heart-pop{animation:none;}
+  }
+
+  /* ── Responsive ─────────────────────────────── */
+  @media(max-width:900px){
+    .app{padding:0;}
+    .stage{gap:clamp(18px,4vw,26px);min-height:0;justify-content:flex-start;padding:clamp(18px,3vw,28px) 0 clamp(28px,6vw,40px);}
+    .masthead{padding:0 16px;}
+    .masthead .feature-title{font-size:clamp(34px,8vw,48px);}
+    .cardwrap{max-width:none;}
+    .card{aspect-ratio:4/3;max-height:62vh;box-shadow:none;}
+    .actionbar{grid-template-columns:1fr;justify-items:center;text-align:center;gap:16px;max-width:none;padding:0 16px;}
+    .meta-left{align-items:center;}
+    .meta-link{justify-self:center;}
+    .ctl{width:56px;height:56px;}
+  }
+  /* phone: collapse the site nav */
+  @media(max-width:760px){
+    .nav{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:10px 16px;}
+    .nav-burger{display:flex;}
+    .nav-logo{justify-self:center;}
+    .nav-links,.nav-search,.nav-locale,.desk-only{display:none !important;}
+    .nav-icons{justify-self:end;gap:18px;}
+    .ctl{width:64px;height:64px;}
+    .detail{width:100%;height:auto;max-height:88dvh;top:auto;bottom:0;right:0;transform:translateY(101%);}
+    .detail.open{transform:translateY(0);}
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="announce">
+    <span>10% off your first order - only until 3 May 2026</span>
+    <a href="#">Register now</a>
+  </div>
+  <nav class="nav">
+    <button class="nav-burger" aria-label="Menü"><i data-lucide="menu"></i></button>
+    <a class="nav-logo" href="#" aria-label="LUMAS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 30" fill="currentColor" role="img" aria-label="LUMAS">
+        <path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/>
+        <path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2 s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/>
+        <path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5 C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9 C66.9,15.9,67.4,14,68.1,11.3z"/>
+        <path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3 C98.7,9.9,98.3,11.3,98,12.1z"/>
+        <path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8 c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2 c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8 c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7 c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/>
+        <path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Artworks</a></li>
+      <li><a href="#">Top 20</a></li>
+      <li><a href="#">ArtFinder</a></li>
+      <li><a href="#">Inspiration</a></li>
+      <li><a href="#">Galleries</a></li>
+      <li><a href="#">About us</a></li>
+    </ul>
+    <div class="nav-search"><i data-lucide="search" class="mag"></i><input type="text" placeholder="Search" aria-label="Suche"></div>
+    <div class="nav-icons">
+      <button class="nav-ic" aria-label="Suche"><i data-lucide="search"></i></button>
+      <button class="nav-ic desk-only" aria-label="Chat"><i data-lucide="message-circle"></i></button>
+      <button class="nav-ic desk-only" aria-label="Telefon"><i data-lucide="phone"></i></button>
+      <button class="nav-ic" id="navHeart" aria-label="Merkzettel"><i data-lucide="heart"></i><span class="nav-badge" id="navCount">0</span></button>
+      <button class="nav-ic desk-only" aria-label="Konto"><i data-lucide="user"></i></button>
+      <button class="nav-ic" aria-label="Warenkorb"><i data-lucide="shopping-bag"></i></button>
+    </div>
+    <button class="nav-locale">DE <i data-lucide="chevron-down"></i></button>
+  </nav>
+</header>
+
+<div class="app">
+  <main class="stage">
+    <header class="masthead">
+      <span class="kicker eyebrow">Entdecke Kunst online</span>
+      <h1 class="feature-title">Lass uns spielen</h1>
+    </header>
+
+    <div class="cardwrap">
+      <div class="hint hint-like" id="hintLike">Merken</div>
+      <div class="hint hint-pass" id="hintPass">Weiter</div>
+      <div class="card" id="card">
+        <img class="card-layer show" id="layerA" src="discover-rooms/lanights.jpg" alt="L.A. Nights, Guachinarte">
+        <img class="card-layer" id="layerB" alt="">
+      </div>
+    </div>
+
+    <div class="actionbar">
+      <div class="meta-left">
+        <h2 class="meta-title" id="cardTitle">L.A. Nights</h2>
+        <p class="meta-sub caption"><span id="cardArtist">Guachinarte</span><span class="dot">·</span><span id="cardPrice">ab 649 €</span></p>
+      </div>
+      <div class="controls">
+        <button class="ctl ctl-pass" id="btnPass" aria-label="Weiter, gefällt mir nicht"><i data-lucide="x"></i></button>
+        <button class="ctl ctl-like" id="btnLike" aria-label="Merken, gefällt mir"><i data-lucide="heart"></i></button>
+      </div>
+      <button class="meta-link" id="infoBtn">Details ansehen <i data-lucide="arrow-right"></i></button>
+    </div>
+  </main>
+</div>
+
+<!-- Overlays -->
+<div class="scrim" id="scrim"></div>
+
+<aside class="sheet detail" id="detail" aria-hidden="true">
+  <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
+  <img class="d-img" id="dImg" src="" alt="">
+  <div class="d-eyebrow eyebrow" id="dArtist"></div>
+  <h3 class="d-title" id="dTitle"></h3>
+  <div class="chips" id="dChips"></div>
+  <div class="d-price body" id="dPrice"></div>
+  <div class="d-actions">
+    <a class="btn-secondary label" id="dLink" href="#" target="_blank" rel="noopener">Zum Werk <i data-lucide="arrow-up-right"></i></a>
+    <button class="btn-primary label" id="dMerk">Merken</button>
+  </div>
+</aside>
+
+<section class="sheet wall" id="wall" aria-hidden="true">
+  <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
+  <div class="wall-head">
+    <div class="eyebrow">Deine Wand</div>
+    <h2 id="wallHead">Deine gemerkten Werke</h2>
+    <p id="wallBody">Was du merkst, sammelt sich hier. Hänge sie zusammen, vergleiche Kombinationen, komm jederzeit zurück.</p>
+  </div>
+  <div class="wall-grid" id="wallGrid"></div>
+  <div class="wall-empty" id="wallEmpty" style="display:none;">Noch nichts gemerkt. Tippe auf das Herz, um Werke zu sammeln.</div>
+</section>
+
+<div class="sheet taste" id="taste" aria-hidden="true">
+  <div class="eyebrow">Dein Geschmack bisher</div>
+  <h2 id="tasteHead">Dein Blick schärft sich.</h2>
+  <p id="tasteBody">Je mehr du merkst und überspringst, desto genauer lernen wir, was dich anspricht.</p>
+  <div class="taste-actions">
+    <button class="btn-primary label" id="tasteContinue">Weiter entdecken</button>
+    <button class="btn-secondary label" id="tasteWall">Zu deiner Wand</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  // ── Real LUMAS catalog (de feed, EUR) — room-staged renders of the real works.
+  // Recommendation mirrors the shop's ArtFinder scorer
+  // (CategoriesPairsFilterAndScoringExpanderPlugin: Euclidean distance over
+  // category vectors, score = 1/(1+distance)). Heart -> min distance, Pass -> max.
+  const P = 'https://www.lumas.de/pictures/';
+  const NODES = {
+    GUA43:{a:'Guachinarte',t:'L.A. Nights',p:'649 €',ed:'Limited Edition',cats:['Architektur','City','Wasser'],img:'discover-rooms/lanights.jpg',link:P+'guachinarte/la_nights/'},
+    GUA46:{a:'Guachinarte',t:'Seaside Glass House',p:'549 €',ed:'Limited Edition',cats:['Architektur','City'],img:'discover-rooms/seasideglass.jpg',link:P+'guachinarte/seaside_glass_house/'},
+    SWI280:{a:'Sabine Wild',t:'NY Projection LXXI',p:'699 €',ed:'Limited Edition',cats:['Architektur','City','Konzept'],img:'discover-rooms/nyprojection.jpg',link:P+'sabine_wild/ny_projection_lxxi/'},
+    PYA12:{a:'Peter Yan',t:'Long Shadow',p:'1.490 €',ed:'Limited Edition',cats:['Wasser'],img:'discover-rooms/longshadow.jpg',link:P+'peter_yan/long_shadow/'},
+    KKR56:{a:'Kevin Krautgartner',t:'Salt Shapes X',p:'449 €',ed:'Limited Edition',cats:['Landschaft'],img:'discover-rooms/saltshapes.jpg',link:P+'kevin_krautgartner/salt_shapes_x/'},
+    KSH07:{a:'Kate Shaw',t:'Frontier',p:'799 €',ed:'Limited Edition',cats:['Landschaft'],img:'discover-rooms/frontier.jpg',link:P+'kate_shaw/frontier-1/'},
+    JSO15:{a:'Javier Soler Esplugues',t:'Catching up I',p:'389 €',ed:'Open Edition',cats:['Menschen'],img:'discover-rooms/catchingup.jpg',link:P+'javier_soler_esplugues/catching_up_i/'},
+    JSO19:{a:'Javier Soler Esplugues',t:'Astro Greece',p:'449 €',ed:'Limited Edition',cats:['Menschen'],img:'discover-rooms/astrogreece.jpg',link:P+'javier_soler_esplugues/astro_greece/'},
+    IME112:{a:'Isabelle Menin',t:'From a Dream 04',p:'449 €',ed:'Limited Edition',cats:['Blumen'],img:'discover-rooms/fromadream.jpg',link:P+'isabelle_menin/from_a_dream_04/'},
+    IME84:{a:'Isabelle Menin',t:'Up to the Sky 03',p:'1.290 €',ed:'Limited Edition',cats:['Blumen'],img:'discover-rooms/uptothesky.jpg',link:P+'isabelle_menin/up_to_the_sky_03/'},
+    TCA12:{a:'Tommy Clarke',t:'Colony',p:'799 €',ed:'Limited Edition',cats:['Menschen','Wasser'],img:'discover-rooms/colony.jpg',link:P+'thomas_clarke/colony/'},
+    GRI02:{a:'Gerhard Richter',t:'Juno',p:'1.490 €',ed:'Limited Edition',cats:['Abstrakt','Graphisch'],img:'discover-rooms/juno.jpg',link:P+'gerhard_richter/juno/'}
+  };
+  const IDS = Object.keys(NODES);
+  const VOCAB = [...new Set(IDS.flatMap(id=>NODES[id].cats))];
+  const vecOf = (id)=>VOCAB.map(c=>NODES[id].cats.includes(c)?1:0);
+  const DIST = {};
+  IDS.forEach(a=>{DIST[a]={};const va=vecOf(a);IDS.forEach(b=>{const vb=vecOf(b);let d=0;for(let k=0;k<va.length;k++)d+=(va[k]-vb[k])**2;DIST[a][b]=d;});});
+
+  const TASTE = {
+    Architektur:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
+    City:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
+    Wasser:{h:'Wasser, Weite, Vogelperspektive.',b:'Dich faszinieren Küsten, Pools und das Spiel von Licht auf Wasser.'},
+    Landschaft:{h:'Landschaften, Farbe, Natur.',b:'Dich ziehen weite, farbintensive Landschaften an.'},
+    Menschen:{h:'Figurativ, verträumt, erzählerisch.',b:'Dich berühren stille, figurative Szenen mit einem Hauch Surrealismus.'},
+    Blumen:{h:'Botanisch, malerisch, üppig.',b:'Dich ziehen organische, malerische Blütenmotive an.'},
+    Abstrakt:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
+    Graphisch:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
+    Konzept:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'},
+    Kreation:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'}
+  };
+
+  const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const $ = (id)=>document.getElementById(id);
+  let curId, seen, collection, reactions, nextTaste;
+
+  const layers = [$('layerA'), $('layerB')];
+  let active = 0;
+  const E = {
+    card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'),
+    navCount:$('navCount'),
+    scrim:$('scrim'), detail:$('detail'), wall:$('wall'), taste:$('taste'),
+    dImg:$('dImg'), dArtist:$('dArtist'), dTitle:$('dTitle'), dChips:$('dChips'), dPrice:$('dPrice'), dLink:$('dLink'), dMerk:$('dMerk'),
+    wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead'),
+    tasteHead:$('tasteHead'), tasteBody:$('tasteBody')
+  };
+
+  const unseen = ()=>IDS.filter(id=>!seen.has(id) && id!==curId);
+
+  function setMeta(){
+    const w = NODES[curId];
+    E.artist.textContent = w.a; E.title.textContent = w.t;
+    E.price.textContent = 'ab ' + w.p;
+  }
+  const IMGV = '?v=landscape2';  // cache-bust the swapped room renders
+  // crossfade the artwork between the two stacked layers
+  function showImage(animate){
+    const w = NODES[curId];
+    const inEl = layers[animate ? active^1 : active];
+    inEl.src = w.img + IMGV; inEl.alt = w.t + ', ' + w.a;
+    inEl.classList.add('show');
+    if(animate){ layers[active].classList.remove('show'); active ^= 1; }
+  }
+
+  function pickLike(){
+    let pool = unseen(); if(!pool.length){ seen = new Set([curId]); pool = unseen(); }
+    pool.sort((a,b)=>DIST[curId][a]-DIST[curId][b] || (NODES[b].a===NODES[curId].a)-(NODES[a].a===NODES[curId].a));
+    return pool[0];
+  }
+  function pickPass(){
+    let pool = unseen(); if(!pool.length){ seen = new Set([curId]); pool = unseen(); }
+    pool.sort((a,b)=>DIST[curId][b]-DIST[curId][a] || (NODES[a].a===NODES[curId].a)-(NODES[b].a===NODES[curId].a));
+    return pool[0];
+  }
+
+  function preloadNext(){
+    const pool = IDS.filter(id=>!seen.has(id) && id!==curId);
+    if(!pool.length) return;
+    const near=[...pool].sort((a,b)=>DIST[curId][a]-DIST[curId][b]);
+    [near[0], near[near.length-1]].forEach(id=>{ const im=new Image(); im.src=NODES[id].img; });
+  }
+  function react(dir){
+    if(dir==='like'){
+      if(!collection.includes(curId)) collection.push(curId);
+      updateMerk(true);
+    }
+    const next = dir==='like' ? pickLike() : pickPass();
+    seen.add(next); reactions++;
+    // settle the card back to centre (if dragged) and crossfade to the next work
+    E.card.style.transition = 'transform .4s var(--ease)';
+    E.card.style.transform = '';
+    curId = next; setMeta(); showImage(true); maybeTaste(); preloadNext();
+  }
+
+  function updateMerk(pulse){
+    const n = collection.length;
+    E.navCount.textContent = n;
+    E.navCount.classList.toggle('show', n>0);
+    if(pulse && !reduce){ E.navCount.classList.remove('heart-pop'); void E.navCount.offsetWidth; E.navCount.classList.add('heart-pop'); }
+  }
+
+  function dominantTaste(){
+    const counts = {};
+    collection.forEach(id=>NODES[id].cats.forEach(c=>{counts[c]=(counts[c]||0)+1;}));
+    const top = Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+    return top && TASTE[top] ? TASTE[top] : null;
+  }
+
+  // taste-read as an occasional reward, never a cap: first after a long run,
+  // then backing off further each time (12, 26, 40 ...). Only if something was liked.
+  function maybeTaste(){
+    if(collection.length && reactions >= nextTaste){
+      nextTaste += 14;
+      const t = dominantTaste();
+      if(t){ E.tasteHead.textContent = t.h; E.tasteBody.textContent = t.b; }
+      openSheet(E.taste);
+    }
+  }
+
+  // ── Overlay plumbing ──
+  let openEl = null;
+  function openSheet(el){ openEl = el; E.scrim.classList.add('open'); el.classList.add('open'); el.setAttribute('aria-hidden','false'); }
+  function closeSheet(){ if(openEl){ openEl.classList.remove('open'); openEl.setAttribute('aria-hidden','true'); openEl=null; } E.scrim.classList.remove('open'); }
+
+  function openDetail(){
+    const w = NODES[curId];
+    E.dImg.src = w.img; E.dArtist.textContent = w.a; E.dTitle.textContent = w.t;
+    E.dPrice.innerHTML = '<span class="from">ab</span> '+w.p;
+    E.dLink.href = w.link;
+    E.dChips.innerHTML = '';
+    w.cats.concat([w.ed]).forEach(c=>{const s=document.createElement('span');s.className='chip';s.textContent=c;E.dChips.appendChild(s);});
+    E.dMerk.onclick = ()=>{ if(!collection.includes(curId)){collection.push(curId);updateMerk(true);} closeSheet(); };
+    openSheet(E.detail);
+  }
+
+  function openWall(){
+    E.wallGrid.innerHTML = '';
+    if(!collection.length){ E.wallEmpty.style.display=''; E.wallGrid.style.display='none'; }
+    else {
+      E.wallEmpty.style.display='none'; E.wallGrid.style.display='';
+      const t = dominantTaste();
+      E.wallHead.textContent = t ? t.h : 'Deine gemerkten Werke';
+      collection.slice().reverse().forEach(id=>{
+        const w = NODES[id];
+        const a = document.createElement('a'); a.className='wall-item'; a.href=w.link; a.target='_blank'; a.rel='noopener';
+        a.innerHTML = '<img class="wi-img" src="'+w.img+'" alt=""><div class="wi-artist eyebrow">'+w.a+'</div><div class="wi-title">'+w.t+'</div><div class="wi-price body-sm"><span style="color:var(--c-tertiary)">ab</span> '+w.p+'</div>';
+        E.wallGrid.appendChild(a);
+      });
+    }
+    openSheet(E.wall);
+  }
+
+  // ── Wire up ──
+  $('btnPass').addEventListener('click', ()=>react('pass'));
+  $('btnLike').addEventListener('click', ()=>react('like'));
+  $('infoBtn').addEventListener('click',(e)=>{e.stopPropagation();openDetail();});
+
+  // drag-to-swipe
+  let dragging=false, startX=0, dx=0, moved=false;
+  E.card.addEventListener('pointerdown',(e)=>{
+    if(openEl) return;
+    dragging=true; moved=false; startX=e.clientX; dx=0;
+    E.card.style.transition='none'; E.card.style.filter='';
+    try{ E.card.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  E.card.addEventListener('pointermove',(e)=>{
+    if(!dragging) return;
+    dx = e.clientX - startX;
+    if(Math.abs(dx)>5) moved=true;
+    E.card.style.transform='translateX('+dx+'px)';
+    const k = Math.min(Math.abs(dx)/120,1);
+    $('hintLike').style.opacity = dx>0?k:0;
+    $('hintPass').style.opacity = dx<0?k:0;
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging=false;
+    $('hintLike').style.opacity=0; $('hintPass').style.opacity=0;
+    if(Math.abs(dx)>110){ react(dx>0?'like':'pass'); return; }
+    if(!moved){ E.card.style.transform=''; openDetail(); return; }
+    E.card.style.transition='transform .2s var(--ease)'; E.card.style.transform='';
+  }
+  E.card.addEventListener('pointerup', endDrag);
+  E.card.addEventListener('pointercancel', endDrag);
+
+  $('navHeart').addEventListener('click', openWall);
+  E.scrim.addEventListener('click', closeSheet);
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeSheet));
+  $('tasteContinue').addEventListener('click', closeSheet);
+  $('tasteWall').addEventListener('click', ()=>{ closeSheet(); openWall(); });
+  document.addEventListener('keydown',(e)=>{
+    if(openEl){ if(e.key==='Escape') closeSheet(); return; }
+    if(e.key==='ArrowRight') react('like');
+    else if(e.key==='ArrowLeft') react('pass');
+    else if(e.key==='ArrowUp' || e.key==='Enter') openDetail();
+  });
+
+  function init(){
+    curId='GUA43'; seen=new Set([curId]); collection=[]; reactions=0; nextTaste=12;
+    setMeta(); showImage(false); updateMerk(false);
+  }
+  init();
+  if(window.lucide) lucide.createIcons({attrs:{'stroke-width':1.5}});
+</script>
+</body>
+</html>
