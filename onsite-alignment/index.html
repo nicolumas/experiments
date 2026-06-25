@@ -42,6 +42,9 @@
     .feature p { font-size: 1.05rem; max-width: 52ch; }
     .rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
     @media (max-width: 620px) { .rest { grid-template-columns: 1fr; } }
+    .section-head { font-family: var(--disp); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 1.9rem); letter-spacing: -0.01em; color: var(--ivory); margin: clamp(2.6rem, 5vw, 3.75rem) 0 1.1rem; }
+    .variations { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    @media (max-width: 620px) { .variations { grid-template-columns: 1fr; } }
     footer { margin-top: 3rem; font-size: 0.78rem; color: var(--muted); }
   </style>
 </head>
@@ -54,6 +57,9 @@
     </header>
 
     <div class="grid" id="grid"></div>
+
+    <h2 class="section-head">PDP Artist Variations</h2>
+    <div class="variations" id="variations"></div>
 
     <footer>LUMAS · onsite alignment · unlisted</footer>
   </div>
@@ -76,6 +82,18 @@
     document.getElementById("grid").innerHTML =
       (first ? card(first, 0) : "") +
       (rest.length ? `<div class="rest">${rest.map((p, idx) => card(p, idx + 1)).join("")}</div>` : "");
+
+    // PDP artist variations
+    const variations = [
+      { title: "Serene Garden", href: "serene-garden.html" },
+      { title: "Long Shadow", href: "long-shadow.html" },
+      { title: "Aset Journey", href: "aset-journey.html" },
+    ];
+    document.getElementById("variations").innerHTML = variations.map(v => `
+      <a class="card" href="${v.href}">
+        <h2>${v.title}</h2>
+        <span class="arrow">Open &#8599;</span>
+      </a>`).join("");
   </script>
 </body>
 </html>
