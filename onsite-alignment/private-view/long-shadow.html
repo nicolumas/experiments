@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A LUMAS Private View</title>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════╗
+  ║  A LUMAS PRIVATE VIEW — data-driven template                              ║
+  ╠══════════════════════════════════════════════════════════════════════════╣
+  ║  ONE artwork drives the whole page. Everything a developer needs to swap  ║
+  ║  lives in the `const ARTWORK = { … }` object at the top of <script>.      ║
+  ║  hydrate(ARTWORK) renders it into the skeleton below; the scroll / slider ║
+  ║  / reveal engine is generic and never needs editing per work.            ║
+  ║                                                                          ║
+  ║  To wire to a backend: replace the ARTWORK literal with data fetched     ║
+  ║  from the LUMAS catalogue (abstract + real feed) and call hydrate().     ║
+  ║                                                                          ║
+  ║  CONTENT RULE: every fact here is real LUMAS data (catalogue feed +       ║
+  ║  the lumas.com artist page). Connective/descriptive prose is minimal      ║
+  ║  and kept truthful to the work and the artist's own statements.          ║
+  ╚══════════════════════════════════════════════════════════════════════════╝
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts-utile.css">
+
+<style>
+:root{
+  /* ── V2 primitives — Charcoal · Ivory · Bone. Forever. ── */
+  --color-charcoal-900:#1C1A18; --color-charcoal-800:#3A3835; --color-charcoal-700:#5A5752;
+  --color-charcoal-500:#908C87; --color-charcoal-300:#C7C3BE; --color-charcoal-100:#E3E0DB;
+  --color-ivory-100:#F4EDE2; --color-ivory-200:#F7F1E9; --color-ivory-300:#FAF6F1;
+  --color-bone-100:#E2D8CC; --color-bone-200:#EAE2D8; --color-bone-300:#F0EBE3;
+  --color-status-success:#3A6B4A; /* functional only: availability */
+
+  /* ── semantic aliases ── */
+  --color-text-primary:var(--color-charcoal-900);
+  --color-text-secondary:var(--color-charcoal-700);
+  --color-text-tertiary:var(--color-charcoal-500);
+  --color-text-disabled:var(--color-charcoal-300);
+  --color-text-inverse:var(--color-ivory-100);
+  --color-surface-page:var(--color-ivory-300);
+  --color-surface-card:#FFFFFF;
+  --color-surface-raised:var(--color-ivory-200);
+  --color-surface-sunken:var(--color-ivory-100);
+  --color-surface-inverse:var(--color-charcoal-900);
+  --color-surface-muted:var(--color-bone-300);
+  --color-border-default:var(--color-bone-100);
+  --color-border-subtle:var(--color-bone-200);
+  --color-border-strong:var(--color-charcoal-300);
+  --color-border-focus:var(--color-charcoal-900);
+  --color-border-inverse:var(--color-ivory-100);
+
+  /* on-dark alpha rhythm: eyebrow .55 · body .75 · headline 1.0 */
+  --on-dark-eyebrow:rgba(244,237,226,.55);
+  --on-dark-body:rgba(244,237,226,.75);
+
+  --font-display:'Utile Display','Archivo',sans-serif;
+  --font-body:'Archivo',system-ui,-apple-system,sans-serif;
+
+  /* shadows: rare, paper-soft; frame = gallery lift, artworks only */
+  --shadow-sm:0 1px 2px rgba(28,26,24,.12);
+  --shadow-md:0 2px 8px rgba(28,26,24,.14);
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.45);
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --reveal:cubic-bezier(.16,.84,.44,1);
+
+  /* artwork aspect ratio (width / height) — set per work by hydrate() */
+  --art-aspect:1.48;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+body{
+  background:var(--color-surface-page);
+  color:var(--color-text-primary);
+  font-family:var(--font-body);
+  font-variation-settings:"wdth" 100;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+
+/* ── Type system ───────────────────────────────────────────── */
+.display{ font-family:var(--font-display); font-weight:300; line-height:1.0; letter-spacing:0; }
+.serif-italic{ font-family:var(--font-display); font-style:italic; font-weight:400; }
+.eyebrow{
+  font-family:var(--font-body); font-weight:700; font-size:11px; line-height:1.5;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-secondary);
+}
+.label{
+  font-family:var(--font-body); font-weight:700; font-size:10px; line-height:1.5;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary);
+}
+.caption{
+  font-family:var(--font-body); font-weight:400; font-size:11px;
+  line-height:1.5; color:var(--color-text-secondary); letter-spacing:.03em;
+}
+.folio{
+  font-family:var(--font-display); font-weight:400; font-size:12px;
+  letter-spacing:.18em; color:var(--color-text-tertiary);
+}
+
+/* ── Line-breaking — balanced headlines, no widows/orphans in body ── */
+.display, h1, h2, .conception h2,
+.walltext h2, .reveal-label h2, .strip-display,
+.closing .reflection, .pullquote, .inroom-cap p, .marginalia,
+.inroom-cap .sub, .reveal-label .cnote, .strip-body, .sub,
+.acq-avail, .artist-line{ text-wrap:balance; }
+.bodycopy p, .conception p, .caption,
+.opt .o-sub, .reveal-label .meta .row, .spec .row dd{ text-wrap:pretty; }
+.display, h1, h2, .conception h2,
+.walltext h2, .strip-display, .closing .reflection{ hyphens:none; }
+
+/* ── Persistent chrome ─────────────────────────────────────── */
+:root{ --anno-h:40px; --nav-h:72px; --header-h:112px; }
+
+#site-header{ position:fixed; top:0; left:0; right:0; z-index:100; }
+
+/* announcement bar — always charcoal */
+.anno{ min-height:var(--anno-h); background:var(--color-surface-inverse); color:var(--color-text-inverse);
+  display:flex; align-items:center; justify-content:center; gap:20px; padding:7px 24px; }
+.anno-text{ font-family:var(--font-body); font-size:12px; letter-spacing:.01em; color:rgba(244,237,226,.82); }
+.anno-cta{ font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--color-text-inverse); text-decoration:none; border-bottom:1px solid var(--color-border-inverse); padding-bottom:2px; white-space:nowrap; transition:opacity .25s var(--ease); }
+.anno-cta:hover{ opacity:.65; }
+
+/* main nav — solid ivory on light spreads, transparent ivory-ink on dark */
+.topnav{ height:var(--nav-h); display:flex; align-items:center; gap:clamp(16px,2vw,32px); padding:0 32px;
+  background:var(--color-surface-page); border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);
+  transition:background .5s var(--ease), border-color .5s var(--ease), color .5s var(--ease); }
+
+.nav-burger{ display:none; flex:0 0 auto; color:inherit; }
+.nav-burger svg{ width:24px; height:24px; display:block; }
+
+.brand{ display:flex; align-items:center; text-decoration:none; color:inherit; flex:0 0 auto; }
+.brand-logo{ height:21px; width:auto; display:block; fill:currentColor; }
+
+.nav-links{ display:flex; align-items:stretch; height:100%; gap:clamp(14px,1.5vw,26px); list-style:none; flex:0 0 auto; }
+.nav-links li{ display:flex; }
+.nav-links a{ display:flex; align-items:center; height:100%; font-family:var(--font-body); font-size:15px; color:inherit;
+  text-decoration:none; border-bottom:2px solid transparent; transition:border-color .25s var(--ease); white-space:nowrap; }
+.nav-links a:hover, .nav-links .is-active a{ border-color:currentColor; }
+
+.nav-search{ flex:1 1 auto; min-width:90px; max-width:560px; display:flex; align-items:center; gap:10px; height:44px; padding:0 16px;
+  background:var(--color-surface-sunken); transition:background .5s var(--ease); }
+.nav-search svg{ width:17px; height:17px; flex:0 0 auto; opacity:.65; }
+.nav-search input{ flex:1; min-width:0; border:none; background:transparent; outline:none; font-family:var(--font-body); font-size:14px; color:inherit; }
+.nav-search input::placeholder{ color:var(--color-text-tertiary); }
+
+.nav-icons{ display:flex; align-items:center; gap:clamp(12px,1.3vw,19px); flex:0 0 auto; }
+.nav-icons button{ display:grid; place-items:center; color:inherit; transition:opacity .25s var(--ease); }
+.nav-icons button:hover{ opacity:.55; }
+.nav-icons svg{ width:20px; height:20px; display:block; }
+
+.nav-locale{ display:flex; align-items:center; gap:5px; flex:0 0 auto; color:inherit; font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.1em; }
+.nav-locale svg{ width:10px; height:7px; }
+
+/* immersive dark spreads → transparent nav, ivory ink */
+body[data-theme="dark"] .topnav{ background:transparent; border-bottom-color:transparent; color:var(--color-text-inverse); }
+body[data-theme="dark"] .nav-search{ background:rgba(244,237,226,.12); }
+
+@media (max-width:1080px){
+  :root{ --anno-h:64px; --nav-h:60px; --header-h:124px; }
+  .anno{ flex-direction:column; gap:5px; padding:11px 20px; text-align:center; }
+  .anno-text{ font-size:11.5px; }
+  .topnav{ justify-content:space-between; gap:0; padding:0 20px; position:relative; }
+  .nav-links, .nav-search, .nav-locale{ display:none; }
+  .nav-icons .ico-desktop{ display:none; }
+  .nav-burger{ display:grid; place-items:center; }
+  .brand{ position:absolute; left:50%; transform:translateX(-50%); }
+  .nav-icons{ gap:22px; }
+}
+.arrival-overlay .eyebrow,
+.reveal-label .eyebrow{ color:var(--on-dark-eyebrow); }
+
+/* progress indicator — a row of dots; the current chapter is a short line */
+#rail{
+  position:fixed; left:0; right:0; bottom:26px; z-index:90;
+  display:flex; justify-content:center;
+  pointer-events:none;
+  transition:color .6s var(--ease);
+  color:var(--color-text-primary);
+}
+.rail-dots{ display:flex; align-items:center; gap:14px; pointer-events:auto; }
+.rail-dots button{ width:18px; height:16px; display:grid; place-items:center; padding:0; border:none; background:none; cursor:pointer; }
+.rail-dots button::before{ content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.3;
+  transition:opacity .35s var(--ease), width .4s var(--ease), border-radius .4s var(--ease); }
+.rail-dots button:hover::before{ opacity:.7; }
+.rail-dots button.active::before{ width:20px; height:6px; border-radius:3px; opacity:1; }
+body[data-theme="dark"] #rail{ color:var(--color-text-inverse); }
+
+/* ── Horizontal engine ─────────────────────────────────────── */
+#viewport{ position:fixed; inset:0; overflow:hidden; z-index:1; }
+#track{ display:flex; height:100vh; will-change:transform;
+  transition:transform 620ms cubic-bezier(.22,.61,.36,1); }
+.spread{
+  position:relative; height:100vh; flex:0 0 auto;
+  display:flex; align-items:center;
+  padding:0 clamp(40px,6vw,120px);
+}
+.spread__folio{ position:absolute; bottom:54px; left:clamp(40px,6vw,120px); }
+.spread__chapter-tag{ position:absolute; top:calc(var(--header-h) + 12px); left:clamp(40px,6vw,120px); }
+#spacer{ width:1px; }
+
+/* reveal-on-enter */
+.reveal{ opacity:0; transform:translateY(20px); transition:opacity 1.1s var(--reveal), transform 1.1s var(--reveal); }
+.reveal.in{ opacity:1; transform:none; }
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+.reveal.d4{transition-delay:.32s}.reveal.d5{transition-delay:.42s}.reveal.d6{transition-delay:.54s}
+.reveal.soft{ transform:translateY(0) scale(.985); }
+.reveal.soft.in{ transform:none; }
+
+/* ════════════════════════════════════════════════════════════
+   1 · ARRIVAL — THE ROOM (full-bleed)
+   ════════════════════════════════════════════════════════════ */
+.spread--arrival{ width:100vw; padding:0; }
+.room{
+  position:relative; width:100%; height:100%; overflow:hidden;
+  background-size:cover; background-position:center;
+}
+.room.has-photo{ background-image:var(--room-photo); }
+/* legibility scrims over photographic rooms */
+.spread--arrival .room.has-photo::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(28,26,24,.66) 0%, rgba(28,26,24,.34) 32%, transparent 58%),
+    linear-gradient(180deg, rgba(28,26,24,.46), transparent 16%),
+    linear-gradient(0deg, rgba(28,26,24,.38), transparent 22%);
+}
+.spread--inroom .room.has-photo::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(48% 56% at 16% 88%, rgba(28,26,24,.72), transparent 72%),
+    linear-gradient(0deg, rgba(28,26,24,.56), rgba(28,26,24,.18) 26%, transparent 46%);
+}
+.inroom-cap .label{ color:var(--on-dark-eyebrow); }
+
+.arrival-overlay{
+  position:absolute; left:clamp(40px,7vw,130px); top:50%; transform:translateY(-50%);
+  max-width:min(40ch,38vw); z-index:3; color:var(--color-text-inverse);
+}
+.arrival-overlay .eyebrow{ display:block; margin-bottom:24px; }
+.arrival-overlay h1{ font-size:clamp(64px,6vw,88px); font-weight:300; color:var(--color-text-inverse); }
+.arrival-overlay h1 em{ font-style:italic; }
+.arrival-overlay .sub{ margin-top:24px; font-size:18px; font-weight:300; color:var(--on-dark-body); max-width:30ch; line-height:1.6;}
+.prompt{
+  margin-top:56px; display:inline-flex; align-items:center; gap:14px;
+  font-family:var(--font-body); font-weight:700; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--color-text-inverse);
+}
+.prompt .arrow{ width:46px; height:1px; background:var(--color-border-inverse); position:relative; }
+.prompt .arrow::after{ content:""; position:absolute; right:0; top:-3px; width:7px; height:7px; border-top:1px solid var(--color-border-inverse); border-right:1px solid var(--color-border-inverse); transform:rotate(45deg); }
+@keyframes nudge{ 0%,100%{transform:translateX(0)} 50%{transform:translateX(8px)} }
+.prompt .arrow{ animation:nudge 2.6s var(--ease) infinite; }
+.arrival-credit{ position:absolute; right:clamp(40px,6vw,120px); bottom:56px; z-index:3; color:var(--on-dark-eyebrow); text-align:right;}
+
+/* ════════════════════════════════════════════════════════════
+   2 · ABOUT THE WORK (editorial spread)
+   ════════════════════════════════════════════════════════════ */
+.spread--conception{ width:88vw; }
+.conception{ display:grid; grid-template-columns:340px 600px; gap:clamp(40px,4vw,72px); align-items:start; }
+.conception h2{ font-family:var(--font-display); font-weight:400; font-size:clamp(34px,3.2vw,46px); line-height:1.12; letter-spacing:0; }
+.conception h2 em{ font-style:italic; }
+.conception p{ font-size:16px; line-height:1.5; color:var(--color-text-secondary); }
+.bodycopy p{ font-size:16px; line-height:1.5; color:var(--color-text-secondary); margin-bottom:12px;}
+.pullquote{ font-family:var(--font-display); font-weight:400; font-size:clamp(24px,2.2vw,31px); line-height:1.22; letter-spacing:0; color:var(--color-text-primary); padding:15px 0; border-top:1px solid var(--color-text-primary); border-bottom:1px solid var(--color-border-default); }
+.pullquote .em{ font-style:italic; }
+.pullquote cite{ display:block; font-family:var(--font-body); font-style:normal; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary); margin-top:16px; }
+.marginalia{ font-family:var(--font-display); font-style:italic; font-size:15px; color:var(--color-text-tertiary); line-height:1.45; padding-left:16px; border-left:1px solid var(--color-border-default); }
+
+/* ════════════════════════════════════════════════════════════
+   3 · THE REVEAL (dark gallery)
+   ════════════════════════════════════════════════════════════ */
+.strip-body{ font-family:var(--font-body); font-weight:300; font-size:18px; line-height:1.6; color:var(--on-dark-body); max-width:46ch; }
+
+.spread--reveal{ width:104vw; background:
+   radial-gradient(70% 85% at 50% 42%, rgba(244,237,226,.06), transparent 60%),
+   var(--color-surface-inverse);
+   justify-content:center; }
+.reveal-stage{ display:flex; align-items:center; gap:clamp(40px,5.5vw,110px); }
+.reveal-art-wrap{ position:relative; }
+.reveal-art{
+  width:min(46vw,680px); aspect-ratio:var(--art-aspect); position:relative; overflow:hidden;
+  box-shadow:var(--shadow-frame), 0 0 0 1px rgba(244,237,226,.08);
+  cursor:zoom-in; background:var(--color-surface-inverse);
+}
+.reveal-art img{ width:100%; height:100%; object-fit:cover; transition:transform 1.4s var(--reveal); transform:scale(1.02); }
+.reveal-art.zoom img{ transform:scale(2.1); cursor:zoom-out; }
+.reveal-art__halo{ position:absolute; inset:-40%; background:radial-gradient(circle at 50% 45%, rgba(244,237,226,.07), transparent 60%); z-index:-1; }
+.reveal-zoomhint{ position:absolute; right:14px; bottom:14px; color:var(--on-dark-eyebrow); display:flex; align-items:center; gap:8px; }
+.reveal-label{ color:var(--color-text-inverse); max-width:32ch; }
+.reveal-label .eyebrow{ display:block; margin-bottom:24px; }
+.reveal-label h2{ font-family:var(--font-display); font-weight:300; font-size:clamp(56px,5vw,80px); line-height:1.0; }
+.reveal-label h2 em{ font-style:italic; }
+.reveal-label .meta{ margin-top:24px; padding-top:20px; border-top:1px solid var(--on-dark-eyebrow); }
+.reveal-label .meta .row{ display:flex; gap:16px; font-size:13px; line-height:1.65; color:var(--on-dark-body); margin-bottom:8px; }
+.reveal-label .meta .row span:first-child{ color:var(--on-dark-eyebrow); min-width:76px; font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; padding-top:4px;}
+.reveal-label .cnote{ margin-top:24px; font-family:var(--font-body); font-weight:300; font-size:18px; line-height:1.6; color:var(--on-dark-body); }
+
+/* ════════════════════════════════════════════════════════════
+   4 · IN THE ROOM (a plain slider — arrows + dots)
+   ════════════════════════════════════════════════════════════ */
+.spread--inroom{ width:300vw; padding:0; }   /* width = (rooms x 100vw) scroll budget; hydrate() overrides for other counts */
+.room-stage{ position:absolute; left:0; top:0; width:100vw; height:100%; overflow:hidden;
+  will-change:transform; transition:transform 620ms cubic-bezier(.22,.61,.36,1); } /* SAME glide as #track -> pins in lockstep */
+.room-panels{ position:absolute; inset:0; }
+.room-panel{ position:absolute; inset:0; opacity:0; transition:opacity 620ms var(--ease); }
+.room-panel .room{ position:absolute; inset:0; background-color:var(--color-charcoal-800); }
+.room-dots{ position:absolute; bottom:clamp(40px,7vh,88px); right:clamp(36px,4vw,72px); z-index:6; display:flex; gap:12px; pointer-events:none; }
+.room-dots span{ width:8px; height:8px; border-radius:50%; background:var(--color-text-inverse); opacity:.35; transition:opacity .4s var(--ease), width .4s var(--ease), border-radius .4s var(--ease); }
+.room-dots span.active{ opacity:1; width:22px; border-radius:4px; }
+.inroom-cap{
+  position:absolute; left:clamp(36px,4vw,72px); bottom:clamp(40px,7vh,88px); z-index:4;
+  max-width:34ch; color:var(--color-text-inverse);
+}
+.inroom-cap .label{ display:block; margin-bottom:12px; }
+.inroom-cap p{ font-family:var(--font-display); font-weight:400; font-size:clamp(22px,1.9vw,26px); line-height:1.25; }
+.inroom-cap .sub{ font-family:var(--font-body); font-size:13px; line-height:1.65; margin-top:12px; color:var(--on-dark-body); }
+
+/* ════════════════════════════════════════════════════════════
+   5 · ACQUISITION (museum wall text + understated controls)
+   ════════════════════════════════════════════════════════════ */
+.spread--acquire{ width:120vw; }
+.acquire{ display:grid; grid-template-columns:27vw 36vw 27vw; gap:clamp(30px,3vw,56px); align-items:center; width:100%; }
+/* live preview — artwork on a wall, reacting to size */
+.acq-preview{ position:relative; align-self:stretch; min-height:62vh; overflow:hidden; box-sizing:border-box;
+  background:linear-gradient(176deg, var(--color-surface-raised), var(--color-bone-300));
+  border:1px solid var(--color-border-subtle); }
+.acq-floor{ position:absolute; left:0; right:0; bottom:0; height:15%; background:var(--color-bone-300); border-top:1px solid var(--color-border-default); }
+.acq-console{ position:absolute; left:50%; bottom:15%; transform:translateX(-50%); width:50%; height:12%;
+  background:var(--color-charcoal-100); border:1px solid var(--color-border-default); opacity:.7; }
+.acq-console::before{ content:""; position:absolute; left:8%; right:8%; bottom:-9px; height:9px; background:var(--color-charcoal-100); opacity:.6; }
+.preview-frame{ position:absolute; left:50%; bottom:36%; transform:translateX(-50%); aspect-ratio:var(--art-aspect);
+  box-shadow:var(--shadow-frame); transition:height .5s var(--ease), width .5s var(--ease); }
+.preview-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+.preview-frame.frame--none{ padding:0; background:transparent; box-shadow:var(--shadow-frame), 0 0 0 1px rgba(28,26,24,.08); }
+.acq-preview-cap{ position:absolute; left:0; right:0; bottom:18px; text-align:center; z-index:3; }
+.acq-preview-cap .label{ color:var(--color-text-secondary); }
+.acq-preview-cap .note{ display:block; font-size:11px; letter-spacing:.02em; color:var(--color-text-tertiary); margin-top:5px; }
+.walltext .eyebrow{ display:block; margin-bottom:32px;}
+.walltext h2{ font-family:var(--font-display); font-weight:400; font-size:clamp(42px,4vw,62px); line-height:1.04;}
+.walltext h2 em{ font-style:italic;}
+.walltext .artist-line{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); margin-top:16px;}
+.spec{ margin-top:32px; }
+.spec .row{ display:grid; grid-template-columns:120px 1fr; gap:16px; padding:12px 0; border-top:1px solid var(--color-border-subtle); font-size:13px; line-height:1.65;}
+.spec .row:last-child{ border-bottom:1px solid var(--color-border-subtle);}
+.spec .row dt{ font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary); padding-top:3px;}
+.spec .row dd{ color:var(--color-text-primary); }
+.acq-panel .label{ display:block; margin-bottom:8px; }
+.opt-group{ margin-bottom:32px; }
+.opt-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+.opt{ border:1px solid var(--color-border-default); background:transparent; padding:16px 20px; text-align:left; transition:border-color .3s var(--ease), background .3s; min-width:128px;}
+.opt:hover{ background:var(--color-surface-raised); border-color:var(--color-border-strong); }
+.opt.sel{ border-color:var(--color-border-focus); background:var(--color-surface-card); box-shadow:inset 0 0 0 1px var(--color-border-focus);}
+.opt .o-title{ font-size:14px; color:var(--color-text-primary); display:block; }
+.opt .o-sub{ font-size:11px; line-height:1.5; color:var(--color-text-tertiary); margin-top:4px; display:block; letter-spacing:.03em;}
+.acq-price{ display:flex; align-items:baseline; gap:16px; margin:8px 0 4px;}
+.acq-price .amt{ font-family:var(--font-display); font-weight:400; font-size:30px;}
+.acq-price .ed{ font-weight:700; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary);}
+.acq-avail{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); margin-bottom:24px;}
+.acq-avail b{ color:var(--color-status-success); font-weight:700;}
+.btn-acquire{ display:inline-flex; align-items:center; gap:16px; background:var(--color-surface-inverse); color:var(--color-text-inverse); padding:16px 28px; font-weight:700; font-size:13px; line-height:1.5; letter-spacing:1.82px; text-transform:uppercase; transition:background .35s var(--ease);}
+.btn-acquire:hover{ background:var(--color-charcoal-800);}
+.btn-quiet{ display:block; margin-top:16px; font-weight:400; font-size:13px; letter-spacing:1.3px; text-transform:uppercase; color:var(--color-text-primary); text-decoration:none; border-bottom:1px solid var(--color-border-focus); width:fit-content; padding:4px 0 6px;}
+.btn-quiet:hover{ opacity:.65;}
+
+/* ════════════════════════════════════════════════════════════
+   6 · CLOSING
+   ════════════════════════════════════════════════════════════ */
+.spread--closing{ width:76vw; background:var(--color-surface-inverse); justify-content:center; }
+.closing{ display:flex; flex-direction:column; align-items:center; gap:24px; text-align:center; max-width:760px; }
+.closing .avail{ font-weight:700; font-size:11px; line-height:1.5; letter-spacing:.18em; text-transform:uppercase; color:var(--on-dark-eyebrow);}
+.closing .reflection{ font-family:var(--font-display); font-weight:400; font-size:clamp(40px,3.9vw,56px); line-height:1.15; letter-spacing:-0.84px; color:var(--color-text-inverse);}
+.closing .reflection em{ font-style:italic;}
+.closing .cta{ display:inline-flex; align-items:center; gap:16px; font-weight:400; font-size:13px; letter-spacing:1.3px; text-transform:uppercase; color:var(--color-text-inverse); text-decoration:none; border-bottom:1px solid var(--color-border-inverse); padding:4px 0 6px; transition:gap .3s var(--ease);}
+.closing .cta:hover{ gap:24px;}
+.colophon{ position:absolute; bottom:70px; left:50%; transform:translateX(-50%); white-space:nowrap; color:var(--on-dark-eyebrow);}
+.colophon em{ font-style:italic; }
+
+/* ── Mobile / reduced-motion: vertical stack fallback ───────── */
+body.is-vertical #viewport{ position:static; overflow:visible; }
+body.is-vertical #track{ flex-direction:column; height:auto; transform:none !important; transition:none; }
+body.is-vertical .spread{ width:100vw !important; height:auto; min-height:auto; padding:calc(var(--header-h) + 28px) clamp(20px,6vw,36px) 72px;
+  flex-direction:column; align-items:stretch; justify-content:flex-start; }
+body.is-vertical .spread--arrival{ height:88vh; padding:0;}
+body.is-vertical .spread--inroom{ height:auto; padding:0; display:block; }
+body.is-vertical #spacer{ display:none; }
+body.is-vertical .reveal-stage,
+body.is-vertical .conception,
+body.is-vertical .acquire{ grid-template-columns:1fr !important; display:flex; flex-direction:column; gap:40px;}
+body.is-vertical #rail{ display:none;}
+
+/* mobile: reflow the absolutely-composed spreads into clean vertical stacks */
+body.is-vertical .spread__chapter-tag{ position:static; margin-bottom:24px; }
+body.is-vertical .spread__folio{ display:none; }
+body.is-vertical .arrival-overlay{ position:absolute; top:auto; bottom:7%; left:0; right:0; padding:0 24px; transform:none; max-width:none; }
+body.is-vertical .arrival-overlay h1{ font-size:clamp(38px,11vw,54px); line-height:1.04; }
+body.is-vertical .arrival-overlay .sub{ font-size:16px; margin-top:18px; }
+body.is-vertical .prompt{ margin-top:32px; }
+body.is-vertical .arrival-credit{ display:none; }
+/* darker foot-scrim so the bottom-anchored hero copy stays legible */
+body.is-vertical .spread--arrival .room.has-photo::after{
+  background:
+    linear-gradient(0deg, rgba(28,26,24,.82), rgba(28,26,24,.28) 36%, transparent 58%),
+    linear-gradient(180deg, rgba(28,26,24,.4), transparent 20%);
+}
+body.is-vertical .inroom-cap{ left:28px; right:28px; bottom:8%; max-width:none; }
+body.is-vertical .room-stage{ position:static; width:100%; height:auto; transform:none !important; }
+body.is-vertical .room-panels{ position:static; }
+body.is-vertical .room-panel{ position:relative; inset:auto; opacity:1 !important; height:74vh; }
+body.is-vertical .room-dots{ display:none; }
+
+body.is-vertical .reveal-art{ width:86vw; height:auto; aspect-ratio:var(--art-aspect); }
+body.is-vertical .colophon{ position:static; transform:none; margin-top:48px; }
+body.is-vertical .spread--closing{ align-items:center; }
+
+/* ── Mobile polish ── */
+body.is-vertical .conception{ padding-top:0; }
+body.is-vertical .conception,
+body.is-vertical .reveal-stage, body.is-vertical .acquire{ gap:32px !important; }
+body.is-vertical .pullquote{ font-size:24px; }
+body.is-vertical .closing{ gap:20px; }
+body.is-vertical .reveal-label .meta .row{ flex-wrap:wrap; gap:2px 16px; }
+body.is-vertical .reveal-label .meta .row span:first-child{ min-width:100%; padding-top:6px; }
+
+@media (max-width:600px){
+  .topnav{ padding:0 16px; }
+  .brand-logo{ height:19px; }
+  .nav-icons{ gap:18px; }
+  body.is-vertical .spread{ padding:calc(var(--header-h) + 20px) 22px 64px; }
+  .spec .row{ grid-template-columns:92px 1fr; gap:12px; }
+  body.is-vertical .reveal-art{ width:90vw; height:auto; }
+  .acq-price .amt{ font-size:26px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1 !important; transform:none !important; }
+  .prompt .arrow{ animation:none; }
+  #track{ transition:none !important; }
+}
+
+/* small screens that still run horizontal get tighter type */
+@media (max-width:860px){
+  body:not(.is-vertical) .spread{ padding:0 28px; }
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<header id="site-header">
+  <div class="anno">
+    <span class="anno-text">10% off your first order — only until 3 May 2026</span>
+    <a class="anno-cta" href="#">Register now</a>
+  </div>
+  <nav class="topnav" aria-label="Main navigation">
+    <button class="nav-burger" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+    <a class="brand" href="#" aria-label="LUMAS — home">
+      <svg class="brand-logo" viewBox="0 0 160 30" fill="currentColor" role="img" aria-label="LUMAS">
+        <path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/>
+        <path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/>
+        <path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/>
+        <path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/>
+        <path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/>
+        <path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li class="is-active"><a href="#">Artworks</a></li>
+      <li><a href="#">Top 20</a></li>
+      <li><a href="#">ArtFinder</a></li>
+      <li><a href="#">Inspiration</a></li>
+      <li><a href="#">Galleries</a></li>
+      <li><a href="#">About us</a></li>
+    </ul>
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+      <input type="text" placeholder="Search" aria-label="Search artworks">
+    </div>
+    <div class="nav-icons">
+      <button aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg></button>
+      <button class="ico-desktop" aria-label="Help &amp; advice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4z"/></svg></button>
+      <button class="ico-desktop" aria-label="Contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.6 3.6 9 4.3l1 3.5L8.2 9.6a11 11 0 0 0 6.2 6.2l1.8-1.8 3.5 1 .7 2.4a1.7 1.7 0 0 1-1.8 1.8A16.5 16.5 0 0 1 4.8 5.4 1.7 1.7 0 0 1 6.6 3.6z"/></svg></button>
+      <button aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20S3.5 14.5 3.5 9.2A4.2 4.2 0 0 1 12 6.6a4.2 4.2 0 0 1 8.5 2.6C20.5 14.5 12 20 12 20z"/></svg></button>
+      <button class="ico-desktop" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></button>
+      <button aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 8h12l1 12H5z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></button>
+    </div>
+    <button class="nav-locale" aria-label="Region: Germany">DE <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1.5 6 6.5 11 1.5"/></svg></button>
+  </nav>
+</header>
+
+<nav id="rail" aria-label="Exhibition chapters">
+  <div class="rail-dots"></div>
+</nav>
+
+<div id="viewport">
+  <div id="track">
+
+    <!-- 1 · ARRIVAL ──────────────────────────────────────── -->
+    <section class="spread spread--arrival" data-theme="dark" data-chapter="Arrival">
+      <div class="room has-photo" data-room="arrival"></div>
+      <div class="arrival-overlay">
+        <span class="eyebrow" data-bind="privateLabel"></span>
+        <h1 class="display" data-html="arrivalH1"></h1>
+        <p class="sub" data-bind="tagline"></p>
+        <span class="prompt">Begin the viewing <span class="arrow"></span></span>
+      </div>
+      <div class="arrival-credit caption" data-bind="arrivalCredit"></div>
+    </section>
+
+    <!-- 2 · ABOUT THE WORK ───────────────────────────────── -->
+    <section class="spread spread--conception" data-theme="light" data-chapter="About">
+      <div class="spread__chapter-tag label" data-bind="aboutTag"></div>
+      <div class="conception">
+        <div class="col">
+          <h2 class="reveal" data-html="aboutHeadingHTML"></h2>
+          <div class="about-margins"></div>
+        </div>
+        <div class="col bodycopy" id="aboutBody"></div>
+      </div>
+      <div class="folio spread__folio">— 02 —</div>
+    </section>
+
+    <!-- 3 · THE REVEAL ───────────────────────────────────── -->
+    <section class="spread spread--reveal" data-theme="dark" data-chapter="The Work">
+      <div class="reveal-stage">
+        <div class="reveal-art-wrap reveal soft d1">
+          <div class="reveal-art" id="revealArt" title="Click to look closer">
+            <div class="reveal-art__halo"></div>
+            <img data-img="artwork" alt="">
+            <span class="reveal-zoomhint caption">+ look closer</span>
+          </div>
+        </div>
+        <div class="reveal-label">
+          <span class="eyebrow reveal d2" data-bind="revealTag"></span>
+          <h2 class="reveal d3" data-bind="title"></h2>
+          <div class="meta reveal d4" id="revealMeta"></div>
+          <p class="cnote reveal d5" data-bind="cnote"></p>
+        </div>
+      </div>
+      <div class="folio spread__folio" style="color:var(--on-dark-eyebrow)">— 03 —</div>
+    </section>
+
+    <!-- 4 · IN THE ROOM (rooms cross-fade in place as you scroll) ──── -->
+    <section class="spread spread--inroom" data-theme="dark" data-chapter="In the Room">
+      <div class="room-stage" id="roomStage">
+        <div class="room-panels" id="roomPanels"></div>
+        <div class="room-dots" id="roomDots"></div>
+      </div>
+    </section>
+
+    <!-- 5 · ACQUISITION ──────────────────────────────────── -->
+    <section class="spread spread--acquire" data-theme="light" data-chapter="Acquisition">
+      <div class="acquire">
+        <div class="walltext">
+          <span class="eyebrow" data-bind="acquireTag"></span>
+          <h2 class="display" data-bind="title"></h2>
+          <div class="artist-line" data-html="artistLineHTML"></div>
+          <dl class="spec" id="specList"></dl>
+        </div>
+
+        <div class="acq-preview">
+          <div class="acq-floor"></div>
+          <div class="acq-console"></div>
+          <div class="preview-frame frame--none" id="previewFrame">
+            <img data-img="artwork" alt="">
+          </div>
+          <div class="acq-preview-cap">
+            <span class="label" id="previewSize"></span>
+            <span class="note" id="previewFrameLabel"></span>
+          </div>
+        </div>
+
+        <div class="acq-panel">
+          <div class="opt-group">
+            <span class="label">Format</span>
+            <div class="opt-row" id="sizeRow"></div>
+          </div>
+
+          <div class="acq-price"><span class="amt"><span data-bind="currency"></span> <span id="acqAmt"></span></span><span class="ed" data-bind="edition"></span></div>
+          <p class="acq-avail"><b>Available.</b> &nbsp;In stock · ships worldwide</p>
+          <button class="btn-acquire">Acquire this work <span style="font-size:14px">→</span></button>
+          <a class="btn-quiet" href="#consult">or request a private consultation</a>
+        </div>
+      </div>
+      <div class="folio spread__folio">— 04 —</div>
+    </section>
+
+    <!-- 6 · CLOSING ──────────────────────────────────────── -->
+    <section class="spread spread--closing" data-theme="dark" data-chapter="Closing" id="consult">
+      <div class="closing">
+        <div class="avail reveal" data-bind="closingAvail"></div>
+        <p class="reflection reveal d1" data-html="closingReflectionHTML"></p>
+        <p class="strip-body reveal d2" data-html="closingBodyHTML"></p>
+        <a class="cta reveal d3" data-href="link">Request a private consultation <span>→</span></a>
+      </div>
+      <div class="colophon caption" data-html="colophonHTML"></div>
+    </section>
+
+  </div>
+</div>
+
+<div id="spacer"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   THE ONLY THING THAT CHANGES PER WORK.
+   Every value below is live LUMAS catalogue data (abstract + real feed) or
+   text from the artist's lumas.com page. Prices are the regular list prices
+   in USD (www.lumas.com); a promotion may be live on the real feed.
+   ════════════════════════════════════════════════════════════════════════ */
+const ARTWORK = {
+  /* — identity — */
+  artist:        "Peter Yan",
+  title:         "Long Shadow",
+  privateLabel:  "Private Viewing",
+  tagline:       "A guided introduction to a singular work.",
+  link:          "https://www.lumas.com/pictures/peter_yan/long_shadow/",
+  artAspect:     1.34,                       /* width / height of the artwork image */
+
+  /* — arrival — */
+  arrivalH1:     "Peter Yan",
+  arrivalRoom:   "long-shadow/room-arrival.jpg",
+  arrivalCredit: "Long Shadow · Limited Edition · Peter Yan",
+
+  /* — about the work (artist bio + work, from the lumas.com artist page) — */
+  aboutTag:        "I · About the work",
+  aboutHeadingHTML:"Seen from <em>above</em>.",
+  marginalia: [
+    "Water and shoreline, photographed straight down &mdash; the long shadow of a single figure on vivid orange sand.",
+    "Peter Yan left a career at Apple to photograph the world from the air; he has since visited more than thirty&nbsp;countries."
+  ],
+  aboutBody: [
+    { html:"Chinese-born Australian photographer Peter Yan (b.&nbsp;1986) specialises in drone photography; his work has appeared in GQ and Lonely Planet, and won the Australia&nbsp;from&nbsp;Above competition." },
+    { html:"Shot from high above a beach, Long Shadow catches the moment the turquoise surf breaks into white against the warm sand &mdash; and the single, long shadow that gives the work its name." }
+  ],
+  pullquoteHTML: "Life is short, and I want to see <span class=\"em\">as much of the world as possible</span>.",
+  pullquoteCite: "Peter Yan",
+
+  /* — the reveal — */
+  artwork:   "long-shadow/long-shadow-full.jpg",
+  revealTag: "II · The work",
+  meta: [
+    { k:"Medium", v:"Aerial photography" },
+    { k:"Format", v:"107 × 80 cm · Limited Edition" }
+  ],
+  cnote: "From a height the shoreline turns abstract: a clean line where colour meets colour, and one small figure for scale.",
+
+  /* — in the room (real installation renders) — */
+  rooms: [
+    { img:"long-shadow/rooms/room-1.jpg", label:"III · In the room — i",  line:"In a sunlit, earthy room the orange sand picks up the warmth of the plaster.", sub:"Oaxaca · 107 × 80 cm · Diasec, frameless" },
+    { img:"long-shadow/rooms/room-2.jpg", label:"In the room — ii", line:"Against a deep wall the turquoise water comes forward and cools the room.", sub:"Milan · 107 × 80 cm · Artbox" },
+    { img:"long-shadow/rooms/room-3.jpg", label:"In the room — iii", line:"In white maple the aerial view reads like a window cut into the wall.", sub:"Bologna · 107 × 80 cm · framed" }
+  ],
+
+  /* — acquisition — */
+  acquireTag:     "IV · Acquisition",
+  artistLineHTML: "Peter Yan · <em>aerial photography</em>",
+  spec: [
+    { k:"Medium",     v:"Aerial photography" },
+    { k:"Dimensions", v:"107 × 80 cm &nbsp;·&nbsp; also 133 × 100 cm" },
+    { k:"Edition",    v:"Limited Edition of 150, numbered &amp; signed" },
+    { k:"Categories", v:"Water · Photography" },
+    { k:"Reference",  v:"LUMAS · PYA12" }
+  ],
+  /* each variant: scale = the preview frame's height as a % of the wall */
+  variants: [
+    { dim:"107 × 80 cm",  label:"Intimate format", price:"1,790", scale:"40%" },
+    { dim:"133 × 100 cm", label:"Large format",    price:"2,790", scale:"50%" }
+  ],
+  currency:     "US$",
+  edition:      "Limited Edition",
+  previewSize:  "107 × 80 cm",
+  previewNote:  "Frameless · shown to scale",
+
+  /* — closing — */
+  closingAvail:          "This work is currently available for acquisition",
+  closingReflectionHTML: "The viewing is complete.",
+  closingBodyHTML:       "You have looked down on a single shoreline from above. What remains is whether it belongs with you.",
+  colophonHTML:          "A LUMAS private view · <em>Long Shadow</em> · Peter Yan"
+};
+
+/* ════════════════════════════════════════════════════════════════════════
+   GENERIC ENGINE — renders ARTWORK, then runs the horizontal journey.
+   Nothing below needs editing to add a new work.
+   ════════════════════════════════════════════════════════════════════════ */
+function hydrate(A){
+  const $  = (s,r=document)=> r.querySelector(s);
+  const $$ = (s,r=document)=> Array.from(r.querySelectorAll(s));
+
+  document.documentElement.style.setProperty('--art-aspect', A.artAspect);
+  document.title = A.title + ' — ' + A.artist + ' · A LUMAS Private View';
+
+  $$('[data-bind]').forEach(el=> el.textContent = A[el.dataset.bind] ?? '');
+  $$('[data-html]').forEach(el=> el.innerHTML   = A[el.dataset.html] ?? '');
+  $$('[data-href]').forEach(el=> el.href        = A[el.dataset.href] || '#');
+  $$('[data-img]').forEach(el=>{ el.src = A.artwork; el.alt = A.title + ' by ' + A.artist; });
+
+  const arr = $('[data-room="arrival"]');
+  if(arr) arr.style.setProperty('--room-photo', "url('" + A.arrivalRoom + "')");
+
+  /* about — marginalia + body + pullquote */
+  const mg = $('.about-margins');
+  if(mg) A.marginalia.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className='marginalia reveal d'+(i+2);
+    d.style.marginTop = i ? '24px' : '28px';
+    if(i) d.style.borderColor='var(--color-text-primary)';
+    d.innerHTML=m; mg.appendChild(d);
+  });
+  const ab = $('#aboutBody');
+  if(ab){
+    A.aboutBody.forEach((p,i)=>{
+      const el=document.createElement('p');
+      el.className='reveal'+(p.dropcap?' dropcap':'')+(i?' d'+i:'');
+      el.innerHTML=p.html; ab.appendChild(el);
+    });
+    if(A.pullquoteHTML){
+      const pq=document.createElement('div');
+      pq.className='pullquote reveal d3'; pq.style.marginTop='16px';
+      pq.innerHTML=A.pullquoteHTML + (A.pullquoteCite?('<cite>'+A.pullquoteCite+'</cite>'):'');
+      ab.appendChild(pq);
+    }
+  }
+
+  /* reveal meta */
+  const rm = $('#revealMeta');
+  if(rm) A.meta.forEach(r=>{ const d=document.createElement('div'); d.className='row'; d.innerHTML='<span>'+r.k+'</span><span>'+r.v+'</span>'; rm.appendChild(d); });
+
+  /* spec list */
+  const sp = $('#specList');
+  if(sp) A.spec.forEach(r=>{ const d=document.createElement('div'); d.className='row'; d.innerHTML='<dt>'+r.k+'</dt><dd>'+r.v+'</dd>'; sp.appendChild(d); });
+
+  /* rooms — stacked panels that cross-fade as you scroll */
+  const rp = $('#roomPanels');
+  if(rp) A.rooms.forEach(r=>{
+    const panel=document.createElement('div'); panel.className='room-panel';
+    panel.innerHTML =
+      '<div class="room has-photo" style="--room-photo:url(\''+r.img+'\')"></div>'+
+      '<div class="inroom-cap"><span class="label">'+r.label+'</span><p>'+r.line+'</p><span class="sub">'+r.sub+'</span></div>';
+    rp.appendChild(panel);
+  });
+  const rdots = $('#roomDots');
+  if(rdots) A.rooms.forEach((r,i)=>{ const d=document.createElement('span'); if(i===0) d.classList.add('active'); rdots.appendChild(d); });
+  const inr = $('.spread--inroom');
+  if(inr) inr.style.width = (A.rooms.length*100)+'vw';   /* scroll budget: one screen per room */
+
+  /* size selector */
+  const sr = $('#sizeRow');
+  if(sr) A.variants.forEach((v,i)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(i===0?' sel':'');
+    b.dataset.price=v.price; b.dataset.dim=v.dim; b.dataset.scale=v.scale;
+    b.innerHTML='<span class="o-title">'+v.dim+'</span><span class="o-sub">'+v.label+'</span>';
+    sr.appendChild(b);
+  });
+
+  /* initial price + preview state */
+  const v0=A.variants[0];
+  if($('#acqAmt'))            $('#acqAmt').textContent        = v0.price;
+  if($('#previewFrame'))      $('#previewFrame').style.height = v0.scale;
+  if($('#previewSize'))       $('#previewSize').textContent   = A.previewSize;
+  if($('#previewFrameLabel')) $('#previewFrameLabel').textContent = A.previewNote;
+}
+
+hydrate(ARTWORK);
+
+(function(){
+  const track   = document.getElementById('track');
+  const spacer  = document.getElementById('spacer');
+  const spreads = Array.from(track.querySelectorAll('.spread'));
+  const railWrap= document.querySelector('#rail .rail-dots');
+  const roomStage = document.getElementById('roomStage');
+  const inroomSpread = track.querySelector('.spread--inroom');
+  const roomPanels = roomStage ? Array.from(roomStage.querySelectorAll('.room-panel')) : [];
+  const roomDots = roomStage ? Array.from(roomStage.querySelectorAll('.room-dots span')) : [];
+  const verticalMQ = matchMedia('(max-width: 1080px), (pointer: coarse)');
+
+  let trackW = 0, maxX = 0, x = 0, vertical = false;
+
+  /* ── Build chapter rail (unique chapters, first spread of each) ── */
+  const chapters = [];
+  spreads.forEach((s)=>{
+    const name = s.dataset.chapter;
+    if(!chapters.length || chapters[chapters.length-1].name !== name){
+      chapters.push({name, el:s});
+    }
+  });
+  chapters.forEach(c=>{
+    const b = document.createElement('button');
+    b.title = c.name; b.setAttribute('aria-label', c.name);
+    b.addEventListener('click', ()=> goTo(c.el));
+    c.btn = b; railWrap.appendChild(b);
+  });
+
+  /* ── Layout / measure ── */
+  function measure(){
+    vertical = verticalMQ.matches;
+    document.body.classList.toggle('is-vertical', vertical);
+    if(vertical){ spacer.style.height='0px'; track.style.transform='none'; return; }
+    trackW = track.scrollWidth;
+    maxX = Math.max(0, trackW - window.innerWidth);
+    spacer.style.height = (maxX + window.innerHeight) + 'px';
+    apply();
+  }
+
+  // Position is applied synchronously; the CSS transition on #track supplies
+  // the slow, cinematic trailing glide (robust, no rAF loop).
+  function apply(){
+    if(vertical) return;
+    x = Math.min(Math.max(window.scrollY,0), maxX);
+    track.style.transform = 'translate3d(' + (-x) + 'px,0,0)';
+    updateProgress();
+    updateRooms();
+  }
+
+  function updateProgress(){
+    const centre = x + window.innerWidth/2;
+    let active = spreads[0];
+    for(const s of spreads){ if(s.offsetLeft <= centre) active = s; else break; }
+    document.body.dataset.theme = active.dataset.theme || 'light';
+    chapters.forEach(c=> c.btn.classList.toggle('active', c.name === active.dataset.chapter));
+
+    const vw = window.innerWidth;
+    for(const s of spreads){
+      const sl = s.offsetLeft;
+      if(!s.dataset.seen && sl < x + vw*1.18 && sl + s.offsetWidth > x - vw*0.15){
+        s.dataset.seen = '1';
+        s.querySelectorAll('.reveal').forEach(e=> e.classList.add('in'));
+      }
+    }
+  }
+
+  /* In the room: pin the stage and cross-fade the rooms as the journey scrolls */
+  function updateRooms(){
+    if(vertical || !roomStage || !inroomSpread || !roomPanels.length) return;
+    const S = inroomSpread.offsetLeft;
+    const budget = inroomSpread.offsetWidth - window.innerWidth;
+    const local = budget>0 ? Math.min(Math.max(x - S, 0), budget) : 0;
+    roomStage.style.transform = 'translate3d(' + local + 'px,0,0)';   // cancels the track -> room holds the screen
+    const pos = budget>0 ? (local/budget) * (roomPanels.length - 1) : 0;
+    roomPanels.forEach((panel,i)=> panel.style.opacity = String(Math.max(0, 1 - Math.abs(pos - i))));
+    roomDots.forEach((d,i)=> d.classList.toggle('active', Math.round(pos) === i));
+  }
+
+  function goTo(el){
+    if(vertical){ el.scrollIntoView({behavior:'smooth', block:'start'}); return; }
+    window.scrollTo({ top: Math.min(el.offsetLeft, maxX), behavior:'smooth' });
+  }
+
+  window.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight' || e.key==='ArrowLeft'){
+      let idx = 0;
+      spreads.forEach((s,i)=>{ if(s.offsetLeft <= x + window.innerWidth*0.5) idx=i; });
+      const dir = e.key==='ArrowRight' ? 1 : -1;
+      const next = spreads[Math.min(Math.max(idx+dir,0),spreads.length-1)];
+      if(next){ e.preventDefault(); goTo(next); }
+    }
+  });
+
+  /* ── Reveal-on-enter (IO fallback for vertical mode) ── */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in'); });
+  }, { root:null, threshold:0.12, rootMargin:'0px 8% 0px 8%' });
+  track.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+  /* ── Reveal zoom interaction ── */
+  const revealArt = document.getElementById('revealArt');
+  if(revealArt){
+    revealArt.addEventListener('click', ()=> revealArt.classList.toggle('zoom'));
+    revealArt.addEventListener('mousemove', e=>{
+      if(!revealArt.classList.contains('zoom')) return;
+      const r = revealArt.getBoundingClientRect();
+      const px = ((e.clientX-r.left)/r.width)*100, py=((e.clientY-r.top)/r.height)*100;
+      revealArt.querySelector('img').style.transformOrigin = px+'% '+py+'%';
+    });
+  }
+
+  /* ── Acquisition: the format size drives the live preview ── */
+  const sizeRow=document.getElementById('sizeRow'), acqAmt=document.getElementById('acqAmt');
+  const previewFrame=document.getElementById('previewFrame'), previewSize=document.getElementById('previewSize');
+  if(sizeRow){
+    sizeRow.addEventListener('click', e=>{ const b=e.target.closest('.opt'); if(!b)return;
+      sizeRow.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); b.classList.add('sel');
+      if(acqAmt) acqAmt.textContent=b.dataset.price;
+      if(previewFrame) previewFrame.style.height=b.dataset.scale;
+      if(previewSize) previewSize.textContent=b.dataset.dim;
+    });
+  }
+
+
+  window.addEventListener('scroll', apply, {passive:true});
+  /* a horizontal trackpad swipe / shift-wheel also drives the journey */
+  window.addEventListener('wheel', (e)=>{
+    if(vertical) return;
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
+      const dx = e.deltaX * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerWidth : 1);
+      window.scrollBy(0, dx); e.preventDefault();
+    }
+  }, {passive:false});
+  window.addEventListener('resize', measure);
+  if(verticalMQ.addEventListener) verticalMQ.addEventListener('change', measure);
+  if(document.readyState!=='loading') measure(); else window.addEventListener('DOMContentLoaded', measure);
+  window.addEventListener('load', measure);
+})();
+</script>
+</body>
+</html>

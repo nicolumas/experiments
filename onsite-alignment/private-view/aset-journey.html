@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aset — Carol Muthiga-Oyekunle · A LUMAS Private View</title>
+
+<!--
+  A LUMAS PRIVATE VIEW — "Aset" by Carol Muthiga-Oyekunle (LUMAS CMU22)
+  A horizontal, cinematic exhibition dossier. The visitor moves LEFT → RIGHT
+  through the fragments that led to a single work, which is revealed late.
+
+  ── Editorial note ───────────────────────────────────────────────────────
+  Real material: the Chika Okeke-Agulu quotation, the artist's handwritten
+  "Modern Woman Warrior" note ("Body armour + hair helmet. A shield for her
+  eyes. Amour → Armour"), the sketchbook measurements (49 cm · 7×7 · luffa),
+  and all study/page imagery are reproduced from the artist's monograph
+  (CKO_Final_Book spreads P-2 / P-4 / P-5). Product data (title, edition,
+  sizes, price) is live LUMAS catalogue data for CMU22 / "Aset". Connective
+  curatorial prose is COMPOSED for this prototype — review before public use.
+
+  ── Room imagery ─────────────────────────────────────────────────────────
+  Rooms use real installation renders from DESIGN/Rooms assets (CMU22/CMU23),
+  copied into aset/rooms/. Each .room element keeps a CSS-built fallback
+  scene: remove the .has-photo class (or the file) and the built scene shows.
+  To swap a render:  <div class="room has-photo"
+                          style="--room-photo:url('aset/rooms/<file>.jpg')">
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts-utile.css">
+
+<style>
+:root{
+  /* ── V2 primitives — Charcoal · Ivory · Bone. Forever. ── */
+  --color-charcoal-900:#1C1A18; --color-charcoal-800:#3A3835; --color-charcoal-700:#5A5752;
+  --color-charcoal-500:#908C87; --color-charcoal-300:#C7C3BE; --color-charcoal-100:#E3E0DB;
+  --color-ivory-100:#F4EDE2; --color-ivory-200:#F7F1E9; --color-ivory-300:#FAF6F1;
+  --color-bone-100:#E2D8CC; --color-bone-200:#EAE2D8; --color-bone-300:#F0EBE3;
+  --color-status-success:#3A6B4A; /* functional only: availability */
+
+  /* ── semantic aliases ── */
+  --color-text-primary:var(--color-charcoal-900);
+  --color-text-secondary:var(--color-charcoal-700);
+  --color-text-tertiary:var(--color-charcoal-500);
+  --color-text-disabled:var(--color-charcoal-300);
+  --color-text-inverse:var(--color-ivory-100);
+  --color-surface-page:var(--color-ivory-300);
+  --color-surface-card:#FFFFFF;
+  --color-surface-raised:var(--color-ivory-200);
+  --color-surface-sunken:var(--color-ivory-100);
+  --color-surface-inverse:var(--color-charcoal-900);
+  --color-surface-muted:var(--color-bone-300);
+  --color-border-default:var(--color-bone-100);
+  --color-border-subtle:var(--color-bone-200);
+  --color-border-strong:var(--color-charcoal-300);
+  --color-border-focus:var(--color-charcoal-900);
+  --color-border-inverse:var(--color-ivory-100);
+
+  /* on-dark alpha rhythm: eyebrow .55 · body .75 · headline 1.0 */
+  --on-dark-eyebrow:rgba(244,237,226,.55);
+  --on-dark-body:rgba(244,237,226,.75);
+
+  --font-display:'Utile Display','Archivo',sans-serif;
+  --font-body:'Archivo',system-ui,-apple-system,sans-serif;
+
+  /* shadows: rare, paper-soft; frame = gallery lift, artworks only */
+  --shadow-sm:0 1px 2px rgba(28,26,24,.12);
+  --shadow-md:0 2px 8px rgba(28,26,24,.14);
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.45);
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --reveal:cubic-bezier(.16,.84,.44,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+body{
+  background:var(--color-surface-page);
+  color:var(--color-text-primary);
+  font-family:var(--font-body);
+  font-variation-settings:"wdth" 100;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+
+/* ── Type system ───────────────────────────────────────────── */
+.display{ font-family:var(--font-display); font-weight:300; line-height:1.0; letter-spacing:0; }
+.serif-italic{ font-family:var(--font-display); font-style:italic; font-weight:400; }
+.eyebrow{
+  font-family:var(--font-body); font-weight:700; font-size:11px; line-height:1.5;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-secondary);
+}
+.label{
+  font-family:var(--font-body); font-weight:700; font-size:10px; line-height:1.5;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary);
+}
+.caption{
+  font-family:var(--font-body); font-weight:400; font-size:11px;
+  line-height:1.5; color:var(--color-text-secondary); letter-spacing:.03em;
+}
+.folio{
+  font-family:var(--font-display); font-weight:400; font-size:12px;
+  letter-spacing:.18em; color:var(--color-text-tertiary);
+}
+.hand{ font-family:var(--font-display); font-style:italic; font-weight:300; color:var(--color-text-secondary); }
+
+/* ── Line-breaking — balanced headlines, no widows/orphans in body ── */
+.display, h1, h2, .notebook-intro .big, .voice__quote, .conception h2,
+.concept-intro h2, .walltext h2, .reveal-label h2, .strip-display,
+.closing .reflection, .pullquote, .inroom-cap p, .note-paper, .marginalia, .hand,
+.sheet figcaption .lead, .sheet figcaption p, .cstep figcaption p,
+.inroom-cap .sub, .reveal-label .cnote, .strip-body, .sub,
+.concept-intro p, .acq-avail, .artist-line{ text-wrap:balance; }
+.bodycopy p, .conception p, .caption, .footnotes p,
+.opt .o-sub, .reveal-label .meta .row, .spec .row dd,
+.voice__sign small{ text-wrap:pretty; }
+/* display headlines never auto-hyphenate */
+.display, h1, h2, .notebook-intro .big, .voice__quote, .conception h2,
+.concept-intro h2, .walltext h2, .strip-display, .closing .reflection{ hyphens:none; }
+
+/* ── Persistent chrome ─────────────────────────────────────── */
+:root{ --anno-h:40px; --nav-h:72px; --header-h:112px; }
+
+#site-header{ position:fixed; top:0; left:0; right:0; z-index:100; }
+
+/* announcement bar — always charcoal */
+.anno{ min-height:var(--anno-h); background:var(--color-surface-inverse); color:var(--color-text-inverse);
+  display:flex; align-items:center; justify-content:center; gap:20px; padding:7px 24px; }
+.anno-text{ font-family:var(--font-body); font-size:12px; letter-spacing:.01em; color:rgba(244,237,226,.82); }
+.anno-cta{ font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--color-text-inverse); text-decoration:none; border-bottom:1px solid var(--color-border-inverse); padding-bottom:2px; white-space:nowrap; transition:opacity .25s var(--ease); }
+.anno-cta:hover{ opacity:.65; }
+
+/* main nav — solid ivory on light spreads, transparent ivory-ink on dark */
+.topnav{ height:var(--nav-h); display:flex; align-items:center; gap:clamp(16px,2vw,32px); padding:0 32px;
+  background:var(--color-surface-page); border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);
+  transition:background .5s var(--ease), border-color .5s var(--ease), color .5s var(--ease); }
+
+.nav-burger{ display:none; flex:0 0 auto; color:inherit; }
+.nav-burger svg{ width:24px; height:24px; display:block; }
+
+.brand{ display:flex; align-items:center; text-decoration:none; color:inherit; flex:0 0 auto; }
+.brand-logo{ height:21px; width:auto; display:block; fill:currentColor; }
+
+.nav-links{ display:flex; align-items:stretch; height:100%; gap:clamp(14px,1.5vw,26px); list-style:none; flex:0 0 auto; }
+.nav-links li{ display:flex; }
+.nav-links a{ display:flex; align-items:center; height:100%; font-family:var(--font-body); font-size:15px; color:inherit;
+  text-decoration:none; border-bottom:2px solid transparent; transition:border-color .25s var(--ease); white-space:nowrap; }
+.nav-links a:hover, .nav-links .is-active a{ border-color:currentColor; }
+
+.nav-search{ flex:1 1 auto; min-width:90px; max-width:560px; display:flex; align-items:center; gap:10px; height:44px; padding:0 16px;
+  background:var(--color-surface-sunken); transition:background .5s var(--ease); }
+.nav-search svg{ width:17px; height:17px; flex:0 0 auto; opacity:.65; }
+.nav-search input{ flex:1; min-width:0; border:none; background:transparent; outline:none; font-family:var(--font-body); font-size:14px; color:inherit; }
+.nav-search input::placeholder{ color:var(--color-text-tertiary); }
+
+.nav-icons{ display:flex; align-items:center; gap:clamp(12px,1.3vw,19px); flex:0 0 auto; }
+.nav-icons button{ display:grid; place-items:center; color:inherit; transition:opacity .25s var(--ease); }
+.nav-icons button:hover{ opacity:.55; }
+.nav-icons svg{ width:20px; height:20px; display:block; }
+
+.nav-locale{ display:flex; align-items:center; gap:5px; flex:0 0 auto; color:inherit; font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:.1em; }
+.nav-locale svg{ width:10px; height:7px; }
+
+/* immersive dark spreads → transparent nav, ivory ink */
+body[data-theme="dark"] .topnav{ background:transparent; border-bottom-color:transparent; color:var(--color-text-inverse); }
+body[data-theme="dark"] .nav-search{ background:rgba(244,237,226,.12); }
+
+@media (max-width:1080px){
+  :root{ --anno-h:64px; --nav-h:60px; --header-h:124px; }
+  .anno{ flex-direction:column; gap:5px; padding:11px 20px; text-align:center; }
+  .anno-text{ font-size:11.5px; }
+  .topnav{ justify-content:space-between; gap:0; padding:0 20px; position:relative; }
+  .nav-links, .nav-search, .nav-locale{ display:none; }
+  .nav-icons .ico-desktop{ display:none; }
+  .nav-burger{ display:grid; place-items:center; }
+  .brand{ position:absolute; left:50%; transform:translateX(-50%); }
+  .nav-icons{ gap:22px; }
+}
+.arrival-overlay .eyebrow, .approach .eyebrow,
+.reveal-label .eyebrow{ color:var(--on-dark-eyebrow); }
+
+/* progress indicator — a row of dots; the current chapter is a short line */
+#rail{
+  position:fixed; left:0; right:0; bottom:26px; z-index:90;
+  display:flex; justify-content:center;
+  pointer-events:none;
+  transition:color .6s var(--ease);
+  color:var(--color-text-primary);
+}
+.rail-dots{ display:flex; align-items:center; gap:14px; pointer-events:auto; }
+.rail-dots button{ width:18px; height:16px; display:grid; place-items:center; padding:0; border:none; background:none; cursor:pointer; }
+.rail-dots button::before{ content:""; width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.3;
+  transition:opacity .35s var(--ease), width .4s var(--ease), border-radius .4s var(--ease); }
+.rail-dots button:hover::before{ opacity:.7; }
+.rail-dots button.active::before{ width:20px; height:6px; border-radius:3px; opacity:1; }
+body[data-theme="dark"] #rail{ color:var(--color-text-inverse); }
+
+/* ── Horizontal engine ─────────────────────────────────────── */
+#viewport{ position:fixed; inset:0; overflow:hidden; z-index:1; }
+#track{ display:flex; height:100vh; will-change:transform;
+  transition:transform 620ms cubic-bezier(.22,.61,.36,1); }
+.spread{
+  position:relative; height:100vh; flex:0 0 auto;
+  display:flex; align-items:center;
+  padding:0 clamp(40px,6vw,120px);
+}
+.spread__folio{ position:absolute; bottom:54px; left:clamp(40px,6vw,120px); }
+.spread__chapter-tag{ position:absolute; top:calc(var(--header-h) + 12px); left:clamp(40px,6vw,120px); }
+#spacer{ width:1px; }
+
+/* reveal-on-enter */
+.reveal{ opacity:0; transform:translateY(20px); transition:opacity 1.1s var(--reveal), transform 1.1s var(--reveal); }
+.reveal.in{ opacity:1; transform:none; }
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+.reveal.d4{transition-delay:.32s}.reveal.d5{transition-delay:.42s}.reveal.d6{transition-delay:.54s}
+.reveal.soft{ transform:translateY(0) scale(.985); }
+.reveal.soft.in{ transform:none; }
+
+/* ════════════════════════════════════════════════════════════
+   1 · ARRIVAL — THE ROOM (full-bleed)
+   ════════════════════════════════════════════════════════════ */
+.spread--arrival{ width:100vw; padding:0; }
+.room{
+  position:relative; width:100%; height:100%; overflow:hidden;
+  background-size:cover; background-position:center;
+}
+/* CSS-built interior (hidden when .has-photo) */
+.room__built{ position:absolute; inset:0; }
+.room.has-photo{ background-image:var(--room-photo); }
+.room.has-photo .room__built{ display:none; }
+/* legibility scrims over photographic rooms */
+.spread--arrival .room.has-photo::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(28,26,24,.66) 0%, rgba(28,26,24,.34) 32%, transparent 58%),
+    linear-gradient(180deg, rgba(28,26,24,.46), transparent 16%),
+    linear-gradient(0deg, rgba(28,26,24,.38), transparent 22%);
+}
+.spread--inroom .room.has-photo::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(48% 56% at 16% 88%, rgba(28,26,24,.72), transparent 72%),
+    linear-gradient(0deg, rgba(28,26,24,.56), rgba(28,26,24,.18) 26%, transparent 46%);
+}
+.inroom-cap .label{ color:var(--on-dark-eyebrow); }
+.inroom-cap.dark-text .label{ color:var(--color-text-secondary); }
+.room__wall{ position:absolute; inset:0; background:
+  radial-gradient(120% 90% at 70% 22%, rgba(244,237,226,.10), transparent 60%),
+  var(--color-charcoal-800); }
+.room__floor{ position:absolute; left:0; right:0; bottom:0; height:26%;
+  background:var(--color-charcoal-900);
+  box-shadow:inset 0 1px 0 rgba(244,237,226,.05); }
+.room__floor::before{ content:""; position:absolute; left:0; right:0; top:-1px; height:1px; background:rgba(28,26,24,.4); }
+.room__light{ position:absolute; inset:0; background:radial-gradient(60% 50% at 68% 30%, rgba(244,237,226,.12), transparent 70%); }
+.room__art{
+  position:absolute; left:50%; top:46%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center;
+}
+.room__plinth{
+  position:absolute; left:50%; bottom:8%; transform:translateX(-50%);
+  width:min(46%,520px); height:1px;
+}
+/* artwork-in-frame component */
+.framed{ position:relative; background:var(--color-surface-inverse); padding:2.4%;
+  box-shadow:var(--shadow-sm); }
+.framed::after{ content:""; position:absolute; inset:0; border:1px solid rgba(244,237,226,.08); pointer-events:none;}
+.framed .mat{ background:var(--color-surface-inverse); padding:0; }
+.framed img{ width:100%; height:100%; object-fit:cover; display:block; }
+.framed--wall{ box-shadow:var(--shadow-frame); }
+
+.arrival-art{ width:min(34vw,440px); aspect-ratio:1/1; }
+.arrival-overlay{
+  position:absolute; left:clamp(40px,7vw,130px); top:50%; transform:translateY(-50%);
+  max-width:min(40ch,38vw); z-index:3; color:var(--color-text-inverse);
+}
+.arrival-overlay .eyebrow{ display:block; margin-bottom:24px; }
+.arrival-overlay h1{ font-size:clamp(64px,6vw,88px); font-weight:300; color:var(--color-text-inverse); }
+.arrival-overlay h1 em{ font-style:italic; }
+.arrival-overlay .sub{ margin-top:24px; font-size:18px; font-weight:300; color:var(--on-dark-body); max-width:30ch; line-height:1.6;}
+.prompt{
+  margin-top:56px; display:inline-flex; align-items:center; gap:14px;
+  font-family:var(--font-body); font-weight:700; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--color-text-inverse);
+}
+.prompt .arrow{ width:46px; height:1px; background:var(--color-border-inverse); position:relative; }
+.prompt .arrow::after{ content:""; position:absolute; right:0; top:-3px; width:7px; height:7px; border-top:1px solid var(--color-border-inverse); border-right:1px solid var(--color-border-inverse); transform:rotate(45deg); }
+@keyframes nudge{ 0%,100%{transform:translateX(0)} 50%{transform:translateX(8px)} }
+.prompt .arrow{ animation:nudge 2.6s var(--ease) infinite; }
+.arrival-credit{ position:absolute; right:clamp(40px,6vw,120px); bottom:56px; z-index:3; color:var(--on-dark-eyebrow); text-align:right;}
+
+/* ════════════════════════════════════════════════════════════
+   2 · NOTEBOOK OPENING (quiet → scattered)
+   ════════════════════════════════════════════════════════════ */
+.spread--notebook-intro{ width:44vw; }
+.notebook-intro{ max-width:30ch; }
+.notebook-intro .big{ font-family:var(--font-display); font-size:clamp(34px,3.2vw,46px); font-weight:400; line-height:1.12; }
+.notebook-intro .big em{ font-style:italic; }
+.notebook-intro .hand{ font-size:20px; margin-top:32px; display:block; }
+
+/* Notebook wall — flow layout (two pinned sheets + a notes column).
+   Captions live in normal flow beneath each sheet, so nothing can overlap. */
+.spread--notebook{ width:118vw; }
+.scatter{ display:flex; align-items:flex-start; justify-content:center; gap:clamp(28px,3vw,60px); width:100%; }
+.sheet{ margin:0; flex:0 0 auto; }
+.sheet--studies{ width:45vw; transform:rotate(-1deg); }
+.sheet--research{ width:32vw; transform:rotate(1deg); margin-top:8vh; }
+.sheet-img{ position:relative; background:var(--color-surface-card); padding:10px 10px 12px;
+  box-shadow:var(--shadow-frame); }
+.sheet-img img{ width:100%; height:auto; display:block; }
+.sheet figcaption{ margin-top:22px; max-width:36ch; }
+.sheet figcaption .num{ display:block; margin-bottom:8px; }
+.sheet figcaption .lead{ font-family:var(--font-display); font-style:italic; font-size:22px; color:var(--color-text-primary); line-height:1.25; }
+.sheet figcaption p{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); margin-top:8px; }
+.notes-col{ flex:0 0 auto; width:17vw; align-self:center; display:flex; flex-direction:column; gap:26px; }
+.note-card{ background:var(--color-surface-raised); padding:24px;
+  box-shadow:var(--shadow-md), 0 14px 30px -20px rgba(28,26,24,.38); }
+.note-paper{ font-family:var(--font-display); font-style:italic; font-weight:300; color:var(--color-text-secondary); line-height:1.45; }
+.scrap--tape::before{ content:""; position:absolute; left:50%; top:-12px; transform:translateX(-50%) rotate(-3deg);
+  width:74px; height:24px; background:rgba(226,216,204,.6); box-shadow:var(--shadow-sm); }
+
+/* ════════════════════════════════════════════════════════════
+   4 · ARTIST VOICE (intimate centre)
+   ════════════════════════════════════════════════════════════ */
+.spread--voice{ width:92vw; background:var(--color-surface-sunken); justify-content:center; }
+.voice{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(40px,5vw,90px); align-items:center; max-width:1080px; }
+.voice__note{ position:relative; }
+.voice__note .eyebrow{ margin-bottom:24px; display:block; }
+.voice__quote{ font-family:var(--font-display); font-weight:400; font-size:clamp(34px,3.2vw,46px); line-height:1.12; letter-spacing:0; }
+.voice__quote .em{ font-style:italic; }
+.voice__sign{ margin-top:32px; font-family:var(--font-display); font-style:italic; font-size:26px; color:var(--color-text-primary); }
+.voice__sign small{ display:block; font-family:var(--font-body); font-style:normal; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary); margin-top:8px;}
+/* audio message card */
+.audio{ display:flex; align-items:center; gap:16px; margin-top:40px; padding:16px 24px; border:1px solid var(--color-border-default); background:var(--color-surface-card);}
+.audio__btn{ width:46px; height:46px; border-radius:50%; background:var(--color-text-primary); color:var(--color-surface-card); display:grid; place-items:center; flex:0 0 auto; transition:transform .3s var(--ease), background .3s;}
+.audio__btn:hover{ transform:scale(1.06); background:var(--color-charcoal-800); }
+.audio__btn svg{ width:14px; height:14px; margin-left:2px; }
+.audio__meta{ flex:1; }
+.audio__wave{ display:flex; align-items:center; gap:3px; height:22px; margin-top:8px; }
+.audio__wave i{ width:2px; background:var(--color-text-tertiary); border-radius:2px; }
+.voice__annot{ position:relative; }
+.annot-portrait{ overflow:hidden; box-shadow:var(--shadow-frame); aspect-ratio:4/3; background:var(--color-surface-card); }
+.annot-portrait img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* the handwritten study, pinned over the portrait like a kept print */
+.annot-note{ position:absolute; left:5%; bottom:13%; width:37%; margin:0; z-index:2;
+  background:var(--color-surface-card); padding:8px 8px 10px; transform:rotate(-2.5deg);
+  box-shadow:var(--shadow-md), 0 16px 34px -18px rgba(28,26,24,.55); }
+.annot-note img{ width:100%; height:auto; display:block; }
+.voice__annot .caption{ display:block; margin-top:20px; max-width:34ch; }
+
+/* ════════════════════════════════════════════════════════════
+   5 · CONCEPTION (editorial spread)
+   ════════════════════════════════════════════════════════════ */
+.spread--conception{ width:88vw; align-items:flex-start; }
+/* fixed column widths so the flowing text always sits within one screen */
+.conception{ display:grid; grid-template-columns:340px 600px; gap:clamp(40px,4vw,72px); align-items:start; padding-top:calc(var(--header-h) + 40px); }
+.conception .col{ }
+.conception h2{ font-family:var(--font-display); font-weight:400; font-size:clamp(34px,3.2vw,46px); line-height:1.12; letter-spacing:0; }
+.conception h2 em{ font-style:italic; }
+.dropcap::first-letter{ font-family:var(--font-display); font-weight:400; float:left; font-size:74px; line-height:.78; padding:6px 12px 0 0; color:var(--color-text-primary); }
+.conception p{ font-size:16px; line-height:1.5; color:var(--color-text-secondary); }
+.bodycopy p{ font-size:16px; line-height:1.5; color:var(--color-text-secondary); margin-bottom:12px;}
+.bodycopy p.dropcap{ color:var(--color-text-primary); }
+.pullquote{ font-family:var(--font-display); font-weight:400; font-size:clamp(24px,2.2vw,31px); line-height:1.22; letter-spacing:0; color:var(--color-text-primary); padding:15px 0; border-top:1px solid var(--color-text-primary); border-bottom:1px solid var(--color-border-default); }
+.pullquote .em{ font-style:italic; }
+.pullquote cite{ display:block; font-family:var(--font-body); font-style:normal; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary); margin-top:16px; }
+.footnotes{ margin-top:16px; padding-top:12px; border-top:1px solid var(--color-border-default); }
+.footnotes p{ font-size:11.5px; line-height:1.5; color:var(--color-text-tertiary); margin-bottom:8px; }
+.footnotes sup{ color:var(--color-text-tertiary); margin-right:5px; }
+.marginalia{ font-family:var(--font-display); font-style:italic; font-size:15px; color:var(--color-text-tertiary); line-height:1.45; padding-left:16px; border-left:1px solid var(--color-border-default); }
+sup.fn{ color:var(--color-text-tertiary); font-size:.7em; }
+
+/* ════════════════════════════════════════════════════════════
+   6 · APPROACH + REVEAL (dark gallery)
+   ════════════════════════════════════════════════════════════ */
+.spread--approach{ width:64vw; background:var(--color-surface-inverse); justify-content:center; }
+.approach{ max-width:760px; display:flex; flex-direction:column; align-items:center; gap:24px; text-align:center; }
+/* EditorialStrip pattern: eyebrow .55 · display 56/1.15/-0.84 · body Archivo Light 18 @.75 */
+.strip-display{ font-family:var(--font-display); font-weight:400; font-size:clamp(40px,3.9vw,56px); line-height:1.15; letter-spacing:-0.84px; color:var(--color-text-inverse); }
+.strip-display em{ font-style:italic; }
+.strip-body{ font-family:var(--font-body); font-weight:300; font-size:18px; line-height:1.6; color:var(--on-dark-body); max-width:46ch; }
+
+.spread--reveal{ width:104vw; background:
+   radial-gradient(70% 85% at 50% 42%, rgba(244,237,226,.06), transparent 60%),
+   var(--color-surface-inverse);
+   justify-content:center; }
+.reveal-stage{ display:flex; align-items:center; gap:clamp(40px,5.5vw,110px); }
+.reveal-art-wrap{ position:relative; }
+.reveal-art{
+  width:min(52vh,560px); aspect-ratio:1/1; position:relative; overflow:hidden;
+  box-shadow:var(--shadow-frame), 0 0 0 1px rgba(244,237,226,.08);
+  cursor:zoom-in; background:var(--color-surface-inverse);
+}
+.reveal-art img{ width:100%; height:100%; object-fit:cover; transition:transform 1.4s var(--reveal); transform:scale(1.02); }
+.reveal-art.zoom img{ transform:scale(2.1); cursor:zoom-out; }
+.reveal-art__halo{ position:absolute; inset:-40%; background:radial-gradient(circle at 50% 45%, rgba(244,237,226,.07), transparent 60%); z-index:-1; }
+.reveal-zoomhint{ position:absolute; right:14px; bottom:14px; color:var(--on-dark-eyebrow); display:flex; align-items:center; gap:8px; }
+.reveal-label{ color:var(--color-text-inverse); max-width:34ch; }
+.reveal-label .eyebrow{ display:block; margin-bottom:24px; }
+.reveal-label h2{ font-family:var(--font-display); font-weight:300; font-size:clamp(64px,6vw,88px); line-height:1.0; }
+.reveal-label h2 em{ font-style:italic; }
+.reveal-label .meta{ margin-top:24px; padding-top:20px; border-top:1px solid var(--on-dark-eyebrow); }
+.reveal-label .meta .row{ display:flex; gap:16px; font-size:13px; line-height:1.65; color:var(--on-dark-body); margin-bottom:8px; }
+.reveal-label .meta .row span:first-child{ color:var(--on-dark-eyebrow); min-width:76px; font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; padding-top:4px;}
+.reveal-label .cnote{ margin-top:24px; font-family:var(--font-body); font-weight:300; font-size:18px; line-height:1.6; color:var(--on-dark-body); }
+
+/* ════════════════════════════════════════════════════════════
+   8 · IN THE ROOM (calmer, multiple views)
+   ════════════════════════════════════════════════════════════ */
+/* A plain slider: one full-screen room at a time; arrows + dots slide between them. */
+.spread--inroom{ width:100vw; padding:0; }
+.room-slider{ position:relative; width:100%; height:100%; overflow:hidden; }
+.room-strip{ display:flex; height:100%; width:max-content; will-change:transform; transition:transform .6s var(--ease); }
+.room-slide{ position:relative; flex:0 0 100vw; height:100%; overflow:hidden; }
+.room-slide .room{ position:absolute; inset:0; background-color:var(--color-charcoal-800); }
+.room-arrow{ position:absolute; top:50%; transform:translateY(-50%); z-index:6; width:48px; height:48px;
+  display:grid; place-items:center; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(28,26,24,.38); color:var(--color-text-inverse); transition:background .3s var(--ease), opacity .3s var(--ease); }
+.room-arrow:hover{ background:rgba(28,26,24,.7); }
+.room-arrow svg{ width:18px; height:18px; display:block; }
+.room-arrow.prev{ left:clamp(20px,3vw,48px); }
+.room-arrow.next{ right:clamp(20px,3vw,48px); }
+.room-arrow[hidden]{ display:none; }
+.room-dots{ position:absolute; bottom:clamp(40px,7vh,88px); right:clamp(36px,4vw,72px); z-index:6; display:flex; gap:12px; }
+.room-dots button{ width:8px; height:8px; border-radius:50%; background:var(--color-text-inverse); opacity:.4; border:none; padding:0; cursor:pointer; transition:opacity .3s var(--ease), width .35s var(--ease), border-radius .35s; }
+.room-dots button:hover{ opacity:.75; }
+.room-dots button.active{ opacity:1; width:22px; border-radius:4px; }
+.inroom-cap{
+  position:absolute; left:clamp(36px,4vw,72px); bottom:clamp(40px,7vh,88px); z-index:4;
+  max-width:32ch; color:var(--color-text-inverse);
+}
+.inroom-cap.dark-text{ color:var(--color-text-primary); }
+.inroom-cap .label{ display:block; margin-bottom:12px; }
+.inroom-cap.dark-text .label{ color:var(--color-text-secondary);}
+.inroom-cap p{ font-family:var(--font-display); font-weight:400; font-size:clamp(22px,1.9vw,26px); line-height:1.25; }
+.inroom-cap .sub{ font-family:var(--font-body); font-size:13px; line-height:1.65; margin-top:12px; color:var(--on-dark-body); }
+.inroom-cap.dark-text .sub{ color:var(--color-text-secondary); }
+.inroom-art{ width:min(22vw,300px); aspect-ratio:1/1; }
+.inroom-art--portraitwall{ width:min(20vw,260px); }
+
+/* ════════════════════════════════════════════════════════════
+   8b · FROM CONCEPT TO YOUR HOME
+   ════════════════════════════════════════════════════════════ */
+.spread--concept{ width:138vw; }
+.concept-flow{ display:flex; align-items:center; gap:clamp(36px,4vw,76px); width:100%; }
+.concept-intro{ flex:0 0 23vw; }
+.concept-intro h2{ font-family:var(--font-display); font-weight:400; font-size:clamp(34px,3.2vw,46px); line-height:1.12; letter-spacing:0; }
+.concept-intro h2 em{ font-style:italic; }
+.concept-intro p{ margin-top:24px; color:var(--color-text-secondary); font-size:16px; line-height:1.5; max-width:30ch; }
+.cstep{ flex:0 0 auto; margin:0; }
+.cstep--lift{ transform:translateY(-4vh); }
+.cstep--drop{ transform:translateY(5vh); }
+.cstep .cimg{ box-shadow:var(--shadow-frame); }
+.cimg--page{ width:19vw; background:var(--color-surface-card); padding:12px; }
+.cimg--page img{ width:100%; height:auto; }
+.cimg--frame{ width:16vw; box-shadow:none !important; }
+.cimg--room{ width:18vw; aspect-ratio:3/4; background-size:cover; background-position:center 40%; }
+.cimg--proof{ width:21vw; background:var(--color-surface-card); padding:12px; }
+.cimg--proof img{ width:100%; height:auto; display:block; }
+.cstep figcaption{ padding-top:16px; max-width:28ch; }
+.cstep figcaption .label{ color:var(--color-text-tertiary); display:block; margin-bottom:8px; }
+.cstep figcaption p{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); }
+
+/* ════════════════════════════════════════════════════════════
+   9 · ACQUISITION (museum wall text + understated controls)
+   ════════════════════════════════════════════════════════════ */
+.spread--acquire{ width:120vw; }
+.acquire{ display:grid; grid-template-columns:27vw 36vw 27vw; gap:clamp(30px,3vw,56px); align-items:center; width:100%; }
+.acquire__rule{ background:var(--color-border-default); width:1px; height:100%; min-height:50vh; }
+/* live preview — artwork on a wall, reacting to size + frame */
+.acq-preview{ position:relative; align-self:stretch; min-height:62vh; overflow:hidden; box-sizing:border-box;
+  background:linear-gradient(176deg, var(--color-surface-raised), var(--color-bone-300));
+  border:1px solid var(--color-border-subtle); }
+.acq-floor{ position:absolute; left:0; right:0; bottom:0; height:15%; background:var(--color-bone-300); border-top:1px solid var(--color-border-default); }
+.acq-console{ position:absolute; left:50%; bottom:15%; transform:translateX(-50%); width:50%; height:12%;
+  background:var(--color-charcoal-100); border:1px solid var(--color-border-default); opacity:.7; }
+.acq-console::before{ content:""; position:absolute; left:8%; right:8%; bottom:-9px; height:9px; background:var(--color-charcoal-100); opacity:.6; }
+.preview-frame{ position:absolute; left:50%; bottom:36%; transform:translateX(-50%); aspect-ratio:1/1;
+  box-shadow:var(--shadow-frame); transition:height .5s var(--ease), padding .45s var(--ease), background .45s var(--ease); }
+.preview-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+.preview-frame.is-120{ height:40%; }
+.preview-frame.is-80{ height:26.7%; }
+.preview-frame.frame--none{ padding:0; background:transparent; box-shadow:var(--shadow-frame), 0 0 0 1px rgba(28,26,24,.08); }
+.preview-frame.frame--black{ padding:3.6%; background:var(--color-charcoal-900); }
+.preview-frame.frame--oak{ padding:3.6%; background:#C2A877; }
+.preview-frame.frame--white{ padding:3.6%; background:var(--color-bone-300); }
+.acq-preview-cap{ position:absolute; left:0; right:0; bottom:18px; text-align:center; z-index:3; }
+.acq-preview-cap .label{ color:var(--color-text-secondary); }
+.acq-preview-cap .note{ display:block; font-size:11px; letter-spacing:.02em; color:var(--color-text-tertiary); margin-top:5px; }
+.walltext .eyebrow{ display:block; margin-bottom:32px;}
+.walltext h2{ font-family:var(--font-display); font-weight:400; font-size:clamp(42px,4vw,62px); line-height:1.04;}
+.walltext h2 em{ font-style:italic;}
+.walltext .artist-line{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); margin-top:16px;}
+.spec{ margin-top:32px; }
+.spec .row{ display:grid; grid-template-columns:120px 1fr; gap:16px; padding:12px 0; border-top:1px solid var(--color-border-subtle); font-size:13px; line-height:1.65;}
+.spec .row:last-child{ border-bottom:1px solid var(--color-border-subtle);}
+.spec .row dt{ font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary); padding-top:3px;}
+.spec .row dd{ color:var(--color-text-primary); }
+.acq-panel .label{ display:block; margin-bottom:8px; }
+.opt-group{ margin-bottom:32px; }
+.opt-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+.opt{ border:1px solid var(--color-border-default); background:transparent; padding:16px 20px; text-align:left; transition:border-color .3s var(--ease), background .3s; min-width:128px;}
+.opt:hover{ background:var(--color-surface-raised); border-color:var(--color-border-strong); }
+.opt.sel{ border-color:var(--color-border-focus); background:var(--color-surface-card); box-shadow:inset 0 0 0 1px var(--color-border-focus);}
+.opt .o-title{ font-size:14px; color:var(--color-text-primary); display:block; }
+.opt .o-sub{ font-size:11px; line-height:1.5; color:var(--color-text-tertiary); margin-top:4px; display:block; letter-spacing:.03em;}
+.frame-row{ display:flex; gap:12px; margin-top:16px;}
+.frame-sw{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.frame-sw .chip{ width:40px; height:40px; border:1px solid var(--color-border-default); transition:transform .25s var(--ease), box-shadow .25s; }
+.frame-sw.sel .chip{ box-shadow:0 0 0 1px var(--color-border-focus); }
+.frame-sw:hover .chip{ transform:translateY(-2px); }
+.frame-sw .cn{ font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary);}
+.chip--none{ background:repeating-linear-gradient(45deg,var(--color-surface-card),var(--color-surface-card) 5px,var(--color-bone-200) 5px,var(--color-bone-200) 10px);}
+.chip--black{ background:var(--color-charcoal-900);}
+.chip--oak{ background:#C2A877;}
+.chip--white{ background:var(--color-bone-300);}
+.acq-price{ display:flex; align-items:baseline; gap:16px; margin:8px 0 4px;}
+.acq-price .amt{ font-family:var(--font-display); font-weight:400; font-size:30px;}
+.acq-price .ed{ font-weight:700; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-tertiary);}
+.acq-avail{ font-size:13px; line-height:1.65; color:var(--color-text-secondary); margin-bottom:24px;}
+.acq-avail b{ color:var(--color-status-success); font-weight:700;}
+.btn-acquire{ display:inline-flex; align-items:center; gap:16px; background:var(--color-surface-inverse); color:var(--color-text-inverse); padding:16px 28px; font-weight:700; font-size:13px; line-height:1.5; letter-spacing:1.82px; text-transform:uppercase; transition:background .35s var(--ease);}
+.btn-acquire:hover{ background:var(--color-charcoal-800);}
+.btn-quiet{ display:block; margin-top:16px; font-weight:400; font-size:13px; letter-spacing:1.3px; text-transform:uppercase; color:var(--color-text-primary); text-decoration:none; border-bottom:1px solid var(--color-border-focus); width:fit-content; padding:4px 0 6px;}
+.btn-quiet:hover{ opacity:.65;}
+
+/* ════════════════════════════════════════════════════════════
+   10 · CLOSING
+   ════════════════════════════════════════════════════════════ */
+.spread--closing{ width:76vw; background:var(--color-surface-inverse); justify-content:center; }
+.closing{ display:flex; flex-direction:column; align-items:center; gap:24px; text-align:center; max-width:760px; }
+.closing .avail{ font-weight:700; font-size:11px; line-height:1.5; letter-spacing:.18em; text-transform:uppercase; color:var(--on-dark-eyebrow);}
+.closing .reflection{ font-family:var(--font-display); font-weight:400; font-size:clamp(40px,3.9vw,56px); line-height:1.15; letter-spacing:-0.84px; color:var(--color-text-inverse);}
+.closing .reflection em{ font-style:italic;}
+.closing .cta{ display:inline-flex; align-items:center; gap:16px; font-weight:400; font-size:13px; letter-spacing:1.3px; text-transform:uppercase; color:var(--color-text-inverse); text-decoration:none; border-bottom:1px solid var(--color-border-inverse); padding:4px 0 6px; transition:gap .3s var(--ease);}
+.closing .cta:hover{ gap:24px;}
+.colophon{ position:absolute; bottom:70px; left:50%; transform:translateX(-50%); white-space:nowrap; color:var(--on-dark-eyebrow);}
+
+/* end-cap arrow on the right edge of arrival to signal motion */
+.edge-hint{ position:absolute; right:18px; top:50%; transform:translateY(-50%); z-index:5; color:var(--on-dark-eyebrow);}
+
+/* ── Mobile / reduced-motion: vertical stack fallback ───────── */
+body.is-vertical #viewport{ position:static; overflow:visible; }
+body.is-vertical #track{ flex-direction:column; height:auto; transform:none !important; transition:none; }
+body.is-vertical .spread{ width:100vw !important; height:auto; min-height:auto; padding:calc(var(--header-h) + 28px) clamp(20px,6vw,36px) 72px;
+  flex-direction:column; align-items:stretch; justify-content:flex-start; }
+body.is-vertical .spread--arrival{ height:88vh; padding:0;}
+body.is-vertical .spread--inroom{ height:88vh; padding:0; display:block; }
+body.is-vertical #spacer{ display:none; }
+body.is-vertical .scatter{ height:auto; }
+body.is-vertical .reveal-stage,
+body.is-vertical .voice,
+body.is-vertical .conception,
+body.is-vertical .acquire{ grid-template-columns:1fr !important; display:flex; flex-direction:column; gap:40px;}
+body.is-vertical .acquire__rule{ display:none;}
+body.is-vertical #rail{ display:none;}
+
+/* mobile: reflow the absolutely-composed spreads into clean vertical stacks */
+body.is-vertical .spread__chapter-tag{ position:static; margin-bottom:24px; }
+body.is-vertical .spread__folio{ display:none; }
+body.is-vertical .arrival-overlay{ position:absolute; top:auto; bottom:7%; left:0; right:0; padding:0 24px; transform:none; max-width:none; }
+body.is-vertical .arrival-overlay h1{ font-size:clamp(38px,11vw,54px); line-height:1.04; }
+body.is-vertical .arrival-overlay .sub{ font-size:16px; margin-top:18px; }
+body.is-vertical .prompt{ margin-top:32px; }
+body.is-vertical .arrival-credit{ display:none; }
+/* darker foot-scrim so the bottom-anchored hero copy stays legible */
+body.is-vertical .spread--arrival .room.has-photo::after{
+  background:
+    linear-gradient(0deg, rgba(28,26,24,.82), rgba(28,26,24,.28) 36%, transparent 58%),
+    linear-gradient(180deg, rgba(28,26,24,.4), transparent 20%);
+}
+body.is-vertical .room__art{ top:29%; }
+body.is-vertical .arrival-art{ width:56vw; }
+body.is-vertical .inroom-art{ width:64vw; }
+body.is-vertical .inroom-cap{ left:28px; right:28px; bottom:8%; max-width:none; }
+body.is-vertical .room-slider{ position:absolute; inset:0; }
+
+body.is-vertical .scatter{ display:flex; flex-direction:column; align-items:stretch; gap:36px; }
+body.is-vertical .sheet, body.is-vertical .notes-col{ width:auto !important; transform:none !important; margin-top:0 !important; }
+body.is-vertical .notes-col{ gap:18px; }
+body.is-vertical .sheet figcaption{ max-width:none; }
+body.is-vertical .reveal-art{ width:80vw; height:80vw; }
+body.is-vertical .concept-flow{ flex-direction:column; align-items:flex-start; gap:44px; }
+body.is-vertical .concept-intro{ flex:none; }
+body.is-vertical .cstep{ transform:none; }
+body.is-vertical .cimg--page{ width:78vw; }
+body.is-vertical .cimg--frame{ width:64vw; }
+body.is-vertical .cimg--room{ width:70vw; }
+body.is-vertical .cimg--proof{ width:82vw; }
+body.is-vertical .colophon{ position:static; transform:none; margin-top:48px; }
+body.is-vertical .spread--approach, body.is-vertical .spread--closing{ align-items:center; }
+
+/* ── Mobile polish ── */
+body.is-vertical .conception{ padding-top:0; }
+body.is-vertical .conception, body.is-vertical .concept-flow,
+body.is-vertical .reveal-stage, body.is-vertical .voice, body.is-vertical .acquire{ gap:32px !important; }
+body.is-vertical .voice__sign{ font-size:22px; }
+body.is-vertical .pullquote{ font-size:24px; }
+body.is-vertical .dropcap::first-letter{ font-size:58px; }
+body.is-vertical .audio{ margin-top:32px; }
+body.is-vertical .approach, body.is-vertical .closing{ gap:20px; }
+body.is-vertical .reveal-label .meta .row{ flex-wrap:wrap; gap:2px 16px; }
+body.is-vertical .reveal-label .meta .row span:first-child{ min-width:100%; padding-top:6px; }
+
+@media (max-width:600px){
+  .topnav{ padding:0 16px; }
+  .brand-logo{ height:19px; }
+  .nav-icons{ gap:18px; }
+  body.is-vertical .spread{ padding:calc(var(--header-h) + 20px) 22px 64px; }
+  .spec .row{ grid-template-columns:92px 1fr; gap:12px; }
+  body.is-vertical .reveal-art{ width:84vw; height:84vw; }
+  body.is-vertical .annot-note{ width:42%; }
+  body.is-vertical .cimg--page{ width:auto; }
+  .acq-price .amt{ font-size:26px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1 !important; transform:none !important; }
+  .prompt .arrow{ animation:none; }
+  #track{ transition:none !important; }
+}
+
+/* small screens that still run horizontal get tighter type */
+@media (max-width:860px){
+  body:not(.is-vertical) .spread{ padding:0 28px; }
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<header id="site-header">
+  <div class="anno">
+    <span class="anno-text">10% off your first order — only until 3 May 2026</span>
+    <a class="anno-cta" href="#">Register now</a>
+  </div>
+  <nav class="topnav" aria-label="Main navigation">
+    <button class="nav-burger" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+    <a class="brand" href="#" aria-label="LUMAS — home">
+      <svg class="brand-logo" viewBox="0 0 160 30" fill="currentColor" role="img" aria-label="LUMAS">
+        <path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/>
+        <path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/>
+        <path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/>
+        <path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/>
+        <path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/>
+        <path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li class="is-active"><a href="#">Artworks</a></li>
+      <li><a href="#">Top 20</a></li>
+      <li><a href="#">ArtFinder</a></li>
+      <li><a href="#">Inspiration</a></li>
+      <li><a href="#">Galleries</a></li>
+      <li><a href="#">About us</a></li>
+    </ul>
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+      <input type="text" placeholder="Search" aria-label="Search artworks">
+    </div>
+    <div class="nav-icons">
+      <button aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg></button>
+      <button class="ico-desktop" aria-label="Help &amp; advice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4z"/></svg></button>
+      <button class="ico-desktop" aria-label="Contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.6 3.6 9 4.3l1 3.5L8.2 9.6a11 11 0 0 0 6.2 6.2l1.8-1.8 3.5 1 .7 2.4a1.7 1.7 0 0 1-1.8 1.8A16.5 16.5 0 0 1 4.8 5.4 1.7 1.7 0 0 1 6.6 3.6z"/></svg></button>
+      <button aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20S3.5 14.5 3.5 9.2A4.2 4.2 0 0 1 12 6.6a4.2 4.2 0 0 1 8.5 2.6C20.5 14.5 12 20 12 20z"/></svg></button>
+      <button class="ico-desktop" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></button>
+      <button aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 8h12l1 12H5z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></button>
+    </div>
+    <button class="nav-locale" aria-label="Region: Germany">DE <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1.5 6 6.5 11 1.5"/></svg></button>
+  </nav>
+</header>
+
+<nav id="rail" aria-label="Exhibition chapters">
+  <div class="rail-dots"></div>
+</nav>
+
+<div id="viewport">
+  <div id="track">
+
+    <!-- 1 · ARRIVAL ──────────────────────────────────────── -->
+    <section class="spread spread--arrival" data-theme="dark" data-chapter="Arrival" data-roman="I">
+      <div class="room room--olive has-photo" style="--room-photo:url('aset/rooms/room-olive.jpg')">
+        <div class="room__built">
+          <div class="room__wall"></div>
+          <div class="room__floor"></div>
+          <div class="room__light"></div>
+          <div class="room__art">
+            <div class="framed framed--wall arrival-art">
+              <div class="mat"><img src="aset/aset-full.jpg" alt="Aset by Carol Muthiga-Oyekunle, installed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrival-overlay">
+        <span class="eyebrow">Private Viewing</span>
+        <h1 class="display">Carol<br>Muthiga-<em>Oyekunle</em></h1>
+        <p class="sub">A guided introduction to a singular work.</p>
+        <span class="prompt">Move through the artist's notebook <span class="arrow"></span></span>
+      </div>
+      <div class="arrival-credit caption">Aset · 2019 · installed, 120 × 120 cm</div>
+    </section>
+
+    <!-- 2 · NOTEBOOK OPENING ─────────────────────────────── -->
+    <section class="spread spread--notebook-intro" data-theme="light" data-chapter="The Notebook" data-roman="II">
+      <div class="spread__chapter-tag label reveal">I · The Notebook</div>
+      <div class="notebook-intro">
+        <p class="big reveal d1">Before a face, <em>a covering</em> for the face.</p>
+        <span class="hand reveal d3">— where it begins, somewhere in May.</span>
+      </div>
+      <div class="folio spread__folio">— 02 —</div>
+    </section>
+
+    <section class="spread spread--notebook" data-theme="light" data-chapter="The Notebook" data-roman="II">
+      <div class="scatter">
+        <figure class="sheet sheet--studies reveal d1">
+          <div class="sheet-img scrap--tape"><img src="aset/process-spread.jpg" alt="Eight mask studies worked over one portrait — the artist's study sheet"></div>
+          <figcaption>
+            <span class="num label">Fig. 1 — The studies</span>
+            <p class="lead">Eight maquettes. Seven set&nbsp;aside.</p>
+            <p>One portrait, photographed in grey, then worked over eight times — drawn, assembled, and finally&nbsp;gilded.</p>
+          </figcaption>
+        </figure>
+
+        <div class="notes-col reveal d2">
+          <span class="hand" style="transform:rotate(-2deg);">eight tries, seven kept&nbsp;aside</span>
+          <div class="note-card" style="transform:rotate(-1.4deg);">
+            <p class="note-paper">&ldquo;The vessel &amp; the shield — recognising the&nbsp;patterns.&rdquo;</p>
+          </div>
+          <div class="note-card" style="transform:rotate(1.4deg);">
+            <p class="note-paper" style="font-size:15px;">49&nbsp;cm · 7&nbsp;×&nbsp;7 — luffa structure, spray&nbsp;powder.</p>
+          </div>
+        </div>
+
+        <figure class="sheet sheet--research reveal d3">
+          <div class="sheet-img scrap--tape"><img src="aset/masking-spread.jpg" alt="The artist's research wall — masquerade, ornament, ancestry"></div>
+          <figcaption>
+            <span class="num label">Fig. 2 — The research</span>
+            <p>Masking, pattern, ancestry — the wall the work grew out of, kept&nbsp;whole.</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="folio spread__folio">— 03 —</div>
+    </section>
+
+    <!-- 4 · ARTIST VOICE ─────────────────────────────────── -->
+    <section class="spread spread--voice" data-theme="light" data-chapter="The Artist's Voice" data-roman="III">
+      <div class="voice">
+        <div class="voice__note">
+          <span class="eyebrow reveal">In her own hand</span>
+          <p class="voice__quote reveal d1">&ldquo;Body armour and hair helmet. A shield for her eyes. <span class="em">Amour into armour</span>.&rdquo;</p>
+          <div class="voice__sign reveal d2">Carol<small>Written on the Modern Woman Warrior study, in her hand</small></div>
+          <div class="audio reveal d3" role="button" tabindex="0" aria-label="Play the artist's note">
+            <span class="audio__btn"><svg viewBox="0 0 12 14" fill="currentColor"><path d="M0 0l12 7-12 7z"/></svg></span>
+            <div class="audio__meta">
+              <span class="label" style="color:var(--color-text-primary)">A note from the artist</span>
+              <div class="audio__wave" id="wave"></div>
+            </div>
+            <span class="caption" style="white-space:nowrap">1:48</span>
+          </div>
+        </div>
+        <div class="voice__annot reveal d2">
+          <div class="annot-portrait">
+            <img src="aset/artist.jpg" alt="Carol Muthiga-Oyekunle in the studio, before one of her works">
+          </div>
+          <figure class="annot-note">
+            <img src="aset/study-warrior.jpg" alt="The Modern Woman Warrior study, carrying the artist's handwritten note">
+          </figure>
+          <span class="caption">Carol Muthiga-Oyekunle — and the study her note is written on.</span>
+        </div>
+      </div>
+      <div class="folio spread__folio">— 04 —</div>
+    </section>
+
+    <!-- 5 · CONCEPTION ───────────────────────────────────── -->
+    <section class="spread spread--conception" data-theme="light" data-chapter="Conception" data-roman="IV">
+      <div class="spread__chapter-tag label reveal">II · Conception</div>
+      <div class="conception">
+        <div class="col">
+          <h2 class="reveal">On <em>masking</em>, and the names of goddesses.</h2>
+          <div class="marginalia reveal d2" style="margin-top:28px;">Each work in the series is named for a goddess or an icon of the Black feminine — Erzulie, Osun, Idia, Iris, bell. This one is named Aset: the Egyptian Isis, keeper of magic, healing and the throne.</div>
+          <div class="marginalia reveal d3" style="margin-top:24px; border-color:var(--color-text-primary);">In the studies, her own gloss on the work: <em>&ldquo;Amour into armour.&rdquo;</em> Ornament, revealed as protection.</div>
+        </div>
+        <div class="col bodycopy">
+          <p class="dropcap reveal">Masking is among the oldest grammars of African art — a way of becoming someone, or something, other than oneself for the length of a ceremony. Muthiga-Oyekunle borrows its logic for the still image: she covers the photographed face with an assembled mask, and in doing so turns a portrait into an apparition.</p>
+          <p class="reveal d1">The covering is built from the natural world — the fins of a lionfish, the eye of a peacock feather, sea anemones, the wings of butterflies — scanned, re-cut and laid over a black-and-white portrait on a ground of gold. What looks like adornment is closer to protection. The face is given, but only in part.</p>
+          <p class="reveal d2">To name the work Aset is to place that face within a far older lineage of powerful women — divine, remembered, renamed across the diaspora.</p>
+          <div class="pullquote reveal d3" style="margin-top:16px;">
+            Masking, Professor Chika Okeke-Agulu points out, is in decline — and <span class="em">"yet it makes one wonder, with great regret, what knowledge of masking in Africa is now forever lost."</span>
+            <cite>Chika Okeke-Agulu, quoted in the artist's monograph<sup class="fn">1</sup></cite>
+          </div>
+          <div class="footnotes reveal d4">
+            <p><sup>1</sup> On the political, religious and cultural pressures bearing on traditional modes of life. "What is remarkable," he writes, "is that it has not declined more."</p>
+            <p><sup>2</sup> Aset / Auset — the Kemetic name for the goddess the Greeks called Isis: throne, mother, magician, protector of the dead.</p>
+          </div>
+        </div>
+      </div>
+      <div class="folio spread__folio">— 05 —</div>
+    </section>
+
+    <!-- 6a · APPROACH (anticipation) ──────────────────────── -->
+    <section class="spread spread--approach" data-theme="dark" data-chapter="The Work" data-roman="V">
+      <div class="approach">
+        <span class="eyebrow reveal">III · The work</span>
+        <p class="strip-display reveal d1">Everything until now has been preparation.</p>
+        <p class="strip-body reveal d2">What follows asked for the dark, and a little distance.</p>
+      </div>
+    </section>
+
+    <!-- 6b · THE REVEAL ──────────────────────────────────── -->
+    <section class="spread spread--reveal" data-theme="dark" data-chapter="The Work" data-roman="V">
+      <div class="reveal-stage">
+        <div class="reveal-art-wrap reveal soft d1">
+          <div class="reveal-art" id="revealArt" title="Click to look closer">
+            <div class="reveal-art__halo"></div>
+            <img src="aset/aset-full.jpg" alt="Aset by Carol Muthiga-Oyekunle, 2019">
+            <span class="reveal-zoomhint caption">+ look closer</span>
+          </div>
+        </div>
+        <div class="reveal-label">
+          <span class="eyebrow reveal d2">The work</span>
+          <h2 class="reveal d3">Aset</h2>
+          <div class="meta reveal d4">
+            <div class="row"><span>Year</span><span>2019</span></div>
+            <div class="row"><span>Medium</span><span>Digital photomontage · archival fine-art print</span></div>
+            <div class="row"><span>Format</span><span>120 × 120 cm · square · Limited Edition</span></div>
+          </div>
+          <p class="cnote reveal d5">Held just off-centre, half-turned, the figure wears the sea and the sky as a single crown. The gold does not frame her — it is the air she stands in.</p>
+        </div>
+      </div>
+      <div class="folio spread__folio" style="color:var(--on-dark-eyebrow)">— 06 —</div>
+    </section>
+
+    <!-- 8 · IN THE ROOM (a plain slider — arrows + dots) ─────────────── -->
+    <section class="spread spread--inroom" data-theme="dark" data-chapter="In the Room" data-roman="VI">
+      <div class="room-slider">
+        <div class="room-strip" id="roomStrip">
+        <div class="room-slide">
+          <div class="room room--plaster has-photo" style="--room-photo:url('aset/rooms/room-brera.jpg')"></div>
+          <div class="inroom-cap">
+            <span class="label">IV · In the room — i</span>
+            <p>On warm plaster, the gold ground reads as a second source of light in the room.</p>
+            <span class="sub">A villa in Brera, Milan · 120&nbsp;×&nbsp;120&nbsp;cm, frameless</span>
+          </div>
+        </div>
+        <div class="room-slide">
+          <div class="room room--walnut has-photo" style="--room-photo:url('aset/rooms/room-walnut.jpg')"></div>
+          <div class="inroom-cap">
+            <span class="label">In the room — ii</span>
+            <p>Against dark wood it withdraws, then holds — a presence you find rather than one that announces itself.</p>
+            <span class="sub">A panelled study · low evening light</span>
+          </div>
+        </div>
+        <div class="room-slide">
+          <div class="room room--terra has-photo" style="--room-photo:url('aset/rooms/room-terracotta.jpg')"></div>
+          <div class="inroom-cap">
+            <span class="label">In the room — iii</span>
+            <p>In daylight the marine blues come forward and the work feels almost cool — a window onto somewhere else.</p>
+            <span class="sub">Sunlit interior · the intimate 80&nbsp;×&nbsp;80&nbsp;cm format</span>
+          </div>
+        </div>
+        </div>
+        <button class="room-arrow prev" id="roomPrev" aria-label="Previous room"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="room-arrow next" id="roomNext" aria-label="Next room"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="room-dots" id="roomDots"></div>
+      </div>
+    </section>
+
+    <!-- 8b · FROM CONCEPT TO YOUR HOME ───────────────────── -->
+    <section class="spread spread--concept" data-theme="light" data-chapter="Concept to Home" data-roman="VII">
+      <div class="spread__chapter-tag label reveal">V · From concept to your home</div>
+      <div class="concept-flow">
+        <div class="concept-intro">
+          <h2 class="reveal">From concept to your <em>home</em>.</h2>
+          <p class="reveal d1">Every LUMAS edition retraces the path you have just walked — out of the notebook, through the atelier, onto your wall.</p>
+        </div>
+        <figure class="cstep cstep--lift reveal d2">
+          <div class="cimg cimg--page"><img src="aset/vessel-page.jpg" alt="The Vessel and the Shield — sketchbook page with working measurements"></div>
+          <figcaption><span class="label">01 — The concept</span><p>Patterns recognised, proportions tested — a page from the artist's working sketchbook.</p></figcaption>
+        </figure>
+        <figure class="cstep cstep--drop reveal d3">
+          <div class="cimg cimg--proof"><img src="aset/proof.jpg" alt="The artist reviewing and approving printed proofs in the studio"></div>
+          <figcaption><span class="label">02 — The proof</span><p>The artist reviews each printed proof — colour, scale, the gold — and signs it off before the edition is made.</p></figcaption>
+        </figure>
+        <figure class="cstep cstep--lift reveal d4">
+          <div class="cimg cimg--frame"><div class="framed framed--wall" style="width:100%; aspect-ratio:1/1;"><div class="mat" style="height:100%;"><img src="aset/aset-full.jpg" alt="Aset, framed edition"></div></div></div>
+          <figcaption><span class="label">03 — The edition</span><p>Archival pigment print on a gold ground — numbered, signed, hand-framed in the LUMAS atelier.</p></figcaption>
+        </figure>
+        <figure class="cstep cstep--drop reveal d5">
+          <div class="cimg cimg--room" style="background-image:url('aset/rooms/room-athens.jpg')"></div>
+          <figcaption><span class="label">04 — Your home</span><p>Delivered ready to hang. The work finds its wall.</p></figcaption>
+        </figure>
+      </div>
+      <div class="folio spread__folio">— 08 —</div>
+    </section>
+
+    <!-- 9 · ACQUISITION ──────────────────────────────────── -->
+    <section class="spread spread--acquire" data-theme="light" data-chapter="Acquisition" data-roman="VIII">
+      <div class="acquire">
+        <div class="walltext">
+          <span class="eyebrow">VI · Acquisition</span>
+          <h2 class="display">Aset</h2>
+          <div class="artist-line">Carol Muthiga-Oyekunle · <em>digital photomontage &amp; portraiture</em></div>
+          <dl class="spec">
+            <div class="row"><dt>Year</dt><dd>2019</dd></div>
+            <div class="row"><dt>Medium</dt><dd>Digital photomontage · archival fine-art print</dd></div>
+            <div class="row"><dt>Dimensions</dt><dd>120 × 120 cm &nbsp;·&nbsp; also 80 × 80 cm</dd></div>
+            <div class="row"><dt>Edition</dt><dd>Limited Edition, numbered &amp; signed</dd></div>
+            <div class="row"><dt>Series</dt><dd>The goddess works (Erzulie · Osun · Idia · Aset)</dd></div>
+            <div class="row"><dt>Reference</dt><dd>LUMAS · CMU22</dd></div>
+          </dl>
+        </div>
+
+        <div class="acq-preview">
+          <div class="acq-floor"></div>
+          <div class="acq-console"></div>
+          <div class="preview-frame frame--none is-120" id="previewFrame">
+            <img src="aset/aset-full.jpg" alt="Aset — framing and scale preview">
+          </div>
+          <div class="acq-preview-cap">
+            <span class="label" id="previewSize">120&nbsp;×&nbsp;120&nbsp;cm</span>
+            <span class="note" id="previewFrameLabel">Frameless · shown to scale</span>
+          </div>
+        </div>
+
+        <div class="acq-panel">
+          <div class="opt-group">
+            <span class="label">Format</span>
+            <div class="opt-row" id="sizeRow">
+              <button class="opt sel" data-price="2,190" data-dim="120 × 120 cm">
+                <span class="o-title">120 × 120 cm</span><span class="o-sub">Large format</span>
+              </button>
+              <button class="opt" data-price="1,490" data-dim="80 × 80 cm">
+                <span class="o-title">80 × 80 cm</span><span class="o-sub">Intimate format</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <span class="label">Framing</span>
+            <div class="frame-row" id="frameRow">
+              <button class="frame-sw sel" data-frame="Frameless"><span class="chip chip--none"></span><span class="cn">None</span></button>
+              <button class="frame-sw" data-frame="Black"><span class="chip chip--black"></span><span class="cn">Black</span></button>
+              <button class="frame-sw" data-frame="Oak"><span class="chip chip--oak"></span><span class="cn">Oak</span></button>
+              <button class="frame-sw" data-frame="White"><span class="chip chip--white"></span><span class="cn">White</span></button>
+            </div>
+          </div>
+
+          <div class="acq-price"><span class="amt">US$ <span id="acqAmt">2,190</span></span><span class="ed">Limited Edition</span></div>
+          <p class="acq-avail"><b>Available.</b> &nbsp;In stock · ships worldwide</p>
+          <button class="btn-acquire">Acquire this work <span style="font-size:14px">→</span></button>
+          <a class="btn-quiet" href="#consult">or request a private consultation</a>
+        </div>
+      </div>
+      <div class="folio spread__folio">— 09 —</div>
+    </section>
+
+    <!-- 10 · CLOSING ─────────────────────────────────────── -->
+    <section class="spread spread--closing" data-theme="dark" data-chapter="Closing" data-roman="IX" id="consult">
+      <div class="closing">
+        <div class="avail reveal">This work is currently available for acquisition</div>
+        <p class="reflection reveal d1">The viewing is complete.</p>
+        <p class="strip-body reveal d2">You have walked the length of a single work — from the <em>covering</em> to the face beneath it. What remains is whether it belongs with you.</p>
+        <a class="cta reveal d3" href="#">Request a private consultation <span>→</span></a>
+      </div>
+      <div class="colophon caption">A LUMAS private view · <em>Aset</em> · Carol Muthiga-Oyekunle</div>
+    </section>
+
+  </div>
+</div>
+
+<div id="spacer"></div>
+
+<script>
+(function(){
+  const track   = document.getElementById('track');
+  const viewport= document.getElementById('viewport');
+  const spacer  = document.getElementById('spacer');
+  const spreads = Array.from(track.querySelectorAll('.spread'));
+  const railWrap= document.querySelector('#rail .rail-dots');
+  const roomStrip= document.getElementById('roomStrip');
+  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const verticalMQ = matchMedia('(max-width: 1080px), (pointer: coarse)');
+
+  let trackW = 0, maxX = 0, x = 0, vertical = false;
+
+  /* ── Build chapter rail (unique chapters, first spread of each) ── */
+  const chapters = [];
+  spreads.forEach((s,i)=>{
+    const name = s.dataset.chapter;
+    if(!chapters.length || chapters[chapters.length-1].name !== name){
+      chapters.push({name, roman:s.dataset.roman, el:s, i});
+    }
+  });
+  chapters.forEach(c=>{
+    const b = document.createElement('button');
+    b.title = c.name;
+    b.setAttribute('aria-label', c.name);
+    b.addEventListener('click', ()=> goTo(c.el));
+    c.btn = b; railWrap.appendChild(b);
+  });
+
+  /* ── Audio waveform (decorative) ── */
+  const wave = document.getElementById('wave');
+  if(wave){
+    const heights=[6,11,16,9,20,14,8,18,12,22,10,15,7,19,13,9,17,11,21,8,14,10,16,12,7,18,9,13];
+    heights.forEach(h=>{ const i=document.createElement('i'); i.style.height=h+'px'; wave.appendChild(i); });
+  }
+
+  /* ── Layout / measure ── */
+  function measure(){
+    vertical = verticalMQ.matches;
+    document.body.classList.toggle('is-vertical', vertical);
+    if(vertical){
+      spacer.style.height = '0px';
+      track.style.transform = 'none';
+      return;
+    }
+    trackW = track.scrollWidth;
+    maxX = Math.max(0, trackW - window.innerWidth);
+    // 1:1 vertical-scroll → horizontal-translate mapping
+    spacer.style.height = (maxX + window.innerHeight) + 'px';
+    apply();
+  }
+
+  // Position is applied synchronously; the CSS transition on #track
+  // supplies the slow, cinematic trailing glide (robust, no rAF loop).
+  function apply(){
+    if(vertical) return;
+    x = Math.min(Math.max(window.scrollY,0), maxX);
+    track.style.transform = 'translate3d(' + (-x) + 'px,0,0)';
+    updateProgress();
+  }
+
+  /* ── Progress + active chapter + theme ── */
+  function updateProgress(){
+    const centre = x + window.innerWidth/2;
+    let active = spreads[0];
+    for(const s of spreads){
+      if(s.offsetLeft <= centre) active = s; else break;
+    }
+    document.body.dataset.theme = active.dataset.theme || 'light';
+    chapters.forEach(c=> c.btn.classList.toggle('active', c.name === active.dataset.chapter));
+
+    // scroll-driven reveals — robust for a transform-based horizontal layout
+    const vw = window.innerWidth;
+    for(const s of spreads){
+      const sl = s.offsetLeft;
+      if(!s.dataset.seen && sl < x + vw*1.18 && sl + s.offsetWidth > x - vw*0.15){
+        s.dataset.seen = '1';
+        s.querySelectorAll('.reveal').forEach(e=> e.classList.add('in'));
+      }
+    }
+  }
+
+  function goTo(el){
+    if(vertical){ el.scrollIntoView({behavior:'smooth', block:'start'}); return; }
+    window.scrollTo({ top: Math.min(el.offsetLeft, maxX), behavior:'smooth' });
+  }
+
+  /* keyboard: left/right arrows jump chapter-to-chapter */
+  window.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight' || e.key==='ArrowLeft'){
+      let idx = 0;
+      spreads.forEach((s,i)=>{ if(s.offsetLeft <= x + window.innerWidth*0.5) idx=i; });
+      const dir = e.key==='ArrowRight' ? 1 : -1;
+      const next = spreads[Math.min(Math.max(idx+dir,0),spreads.length-1)];
+      if(next){ e.preventDefault(); goTo(next); }
+    }
+  });
+
+  /* ── Reveal-on-enter ── */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in'); });
+  }, { root:null, threshold:0.12, rootMargin:'0px 8% 0px 8%' });
+  track.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+  /* ── Reveal zoom interaction ── */
+  const revealArt = document.getElementById('revealArt');
+  if(revealArt){
+    revealArt.addEventListener('click', e=>{
+      revealArt.classList.toggle('zoom');
+    });
+    revealArt.addEventListener('mousemove', e=>{
+      if(!revealArt.classList.contains('zoom')) return;
+      const r = revealArt.getBoundingClientRect();
+      const x = ((e.clientX-r.left)/r.width)*100, y=((e.clientY-r.top)/r.height)*100;
+      revealArt.querySelector('img').style.transformOrigin = x+'% '+y+'%';
+    });
+  }
+
+  /* ── Acquisition interactions (size + frame drive the live preview) ── */
+  const sizeRow=document.getElementById('sizeRow'), frameRow=document.getElementById('frameRow'), acqAmt=document.getElementById('acqAmt');
+  const previewFrame=document.getElementById('previewFrame'), previewSize=document.getElementById('previewSize'), previewNote=document.getElementById('previewFrameLabel');
+  const frameClass={Frameless:'none',Black:'black',Oak:'oak',White:'white'};
+  const frameNote={Frameless:'Frameless · shown to scale',Black:'Black box frame · shown to scale',Oak:'Oak box frame · shown to scale',White:'White box frame · shown to scale'};
+  if(sizeRow){
+    sizeRow.addEventListener('click', e=>{ const b=e.target.closest('.opt'); if(!b)return;
+      sizeRow.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); b.classList.add('sel');
+      acqAmt.textContent=b.dataset.price;
+      if(previewFrame){ const big = b.dataset.dim.trim().indexOf('120')===0; previewFrame.classList.toggle('is-120',big); previewFrame.classList.toggle('is-80',!big); }
+      if(previewSize) previewSize.textContent=b.dataset.dim; });
+    frameRow.addEventListener('click', e=>{ const b=e.target.closest('.frame-sw'); if(!b)return;
+      frameRow.querySelectorAll('.frame-sw').forEach(o=>o.classList.remove('sel')); b.classList.add('sel');
+      const f=b.dataset.frame;
+      if(previewFrame){ ['none','black','oak','white'].forEach(c=>previewFrame.classList.remove('frame--'+c)); previewFrame.classList.add('frame--'+(frameClass[f]||'none')); }
+      if(previewNote) previewNote.textContent=frameNote[f]||''; });
+  }
+
+  /* ── In-the-room slider: arrows + dots flip between the rooms ── */
+  if(roomStrip){
+    const roomSlides = Array.from(roomStrip.children);
+    const roomDotsWrap = document.getElementById('roomDots');
+    const prevBtn = document.getElementById('roomPrev'), nextBtn = document.getElementById('roomNext');
+    const n = roomSlides.length;
+    let ri = 0;
+    roomSlides.forEach((s,i)=>{ const b=document.createElement('button'); b.setAttribute('aria-label','Room view '+(i+1)); b.addEventListener('click', ()=>goRoom(i)); roomDotsWrap.appendChild(b); });
+    const roomDots = Array.from(roomDotsWrap.children);
+    function goRoom(i){
+      ri = Math.max(0, Math.min(n-1, i));
+      roomStrip.style.transform = 'translateX(' + (-ri*100) + 'vw)';
+      roomDots.forEach((d,k)=>d.classList.toggle('active', k===ri));
+      prevBtn.hidden = ri===0; nextBtn.hidden = ri===n-1;
+    }
+    prevBtn.addEventListener('click', ()=>goRoom(ri-1));
+    nextBtn.addEventListener('click', ()=>goRoom(ri+1));
+    goRoom(0);
+  }
+
+  window.addEventListener('scroll', apply, {passive:true});
+  /* a horizontal trackpad swipe / shift-wheel also drives the journey
+     (and we swallow it so it can't trigger browser back/forward) */
+  window.addEventListener('wheel', (e)=>{
+    if(vertical) return;
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
+      const dx = e.deltaX * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerWidth : 1);
+      window.scrollBy(0, dx);
+      e.preventDefault();
+    }
+  }, {passive:false});
+  window.addEventListener('resize', measure);
+  if(verticalMQ.addEventListener) verticalMQ.addEventListener('change', measure);
+  // initial
+  if(document.readyState!=='loading') measure(); else window.addEventListener('DOMContentLoaded', measure);
+  window.addEventListener('load', measure);
+})();
+</script>
+</body>
+</html>
