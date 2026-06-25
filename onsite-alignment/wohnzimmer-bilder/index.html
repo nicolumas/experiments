@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- SEO -->
+<title>Living Room Wall Art: Ideas, Hanging Tips & Curated Prints | LUMAS</title>
+<meta name="description" content="Choose art for your living room with confidence. Expert hanging tips, wall-type ideas, and curated fine-art prints — plus a free visualisation service.">
+<link rel="canonical" href="https://www.lumas.com/living-room-wall-art/">
+
+<!--
+  NOTE ON FONTS – Production display face is "Utile Display" (LUMAS V2).
+  It is not a Google Font, so this prototype loads Fraunces purely as a local
+  rendering stand-in. The font stack lists 'Utile Display' first; in the live
+  shop the real face is picked up automatically.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&family=Fraunces:opsz,wght@9..144,300;9..144,400&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#FFFFFF; --card:#FFFFFF; --raised:#FAF7F3; --sunken:#F4EDE2; --inverse-bg:#1C1A18;
+  --t-primary:#1C1A18; --t-secondary:#5A5752; --t-tertiary:#908C87; --t-disabled:#C7C3BE; --t-inverse:#F4EDE2;
+  --b-default:#E2D8CC; --b-subtle:#EAE2D8; --b-strong:#C7C3BE; --b-focus:#1C1A18;
+  --display:"Utile Display","Fraunces",Georgia,serif;
+  --body:"Archivo",system-ui,-apple-system,sans-serif;
+  --frame-shadow:0 18px 60px -16px rgba(28,26,24,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--bg);color:var(--t-primary);font-family:var(--body);font-weight:400;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ---------- type scale ---------- */
+.eyebrow{font-family:var(--body);font-weight:700;font-size:11px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;color:var(--t-tertiary)}
+.ui-label{font-family:var(--body);font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase}
+.caption{font-size:11px;line-height:1.5;letter-spacing:.03em;color:var(--t-tertiary)}
+.h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,5vw,76px);line-height:1.02;letter-spacing:-.01em}
+.h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12}
+.h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12}
+.h4{font-family:var(--display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25}
+.body-lg{font-family:var(--body);font-weight:300;font-size:20px;line-height:1.6}
+.body-sm{font-size:13px;line-height:1.65}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:15px 28px;border:1px solid transparent;cursor:pointer;transition:all .15s ease;white-space:nowrap}
+.btn--primary{background:var(--inverse-bg);color:var(--t-inverse)}
+.btn--primary:hover{background:#3A3835}
+.btn--light{background:var(--bg);color:var(--t-primary)}
+.btn--light:hover{background:#3A3835;color:var(--t-inverse)}
+.btn--ghost{background:transparent;color:var(--t-primary);border-color:var(--t-primary)}
+.btn--ghost:hover{background:var(--t-primary);color:var(--t-inverse)}
+.btn--ghost-inv{background:transparent;color:var(--t-inverse);border-color:var(--t-inverse)}
+.btn--ghost-inv:hover{background:rgba(244,237,226,.08)}
+
+/* ---------- layout helpers ---------- */
+.wrap{max-width:1920px;margin:0 auto;padding:0 clamp(16px,5vw,112px)}
+.wrap--narrow{max-width:1100px}
+.section{padding:88px 0}
+.section-head{margin-bottom:40px}
+.section-head .h2{margin-top:8px}
+.section-head__lead{margin-top:14px;max-width:64ch;color:var(--t-secondary);line-height:1.6}
+.section-head--center{text-align:center}
+.section-head--center .section-head__lead{margin-left:auto;margin-right:auto;max-width:58ch}
+.txt-link{font-weight:700;font-size:13px;letter-spacing:.02em;border-bottom:1px solid var(--t-primary);padding-bottom:2px;transition:opacity .15s ease}
+.txt-link:hover{opacity:.6}
+
+/* ---------- header: promo bar + nav ---------- */
+.promo{background:var(--inverse-bg);color:var(--t-inverse);display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:11px 24px;text-align:center}
+.promo__text{font-size:13px;color:rgba(244,237,226,.92)}
+.promo__cta{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--t-inverse);border-bottom:1px solid rgba(244,237,226,.5);padding-bottom:3px;transition:border-color .15s ease}
+.promo__cta:hover{border-color:var(--t-inverse)}
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:24px;height:72px;padding:0 clamp(24px,4vw,64px);background:var(--bg);border-bottom:1px solid var(--b-default)}
+.nav__burger{display:none;background:none;border:0;padding:4px;cursor:pointer;color:var(--t-primary)}
+.nav__logo{display:inline-flex;align-items:center;color:var(--t-primary)}
+.nav__logo svg{height:21px;width:auto;display:block}
+.nav__links{display:flex;gap:22px;list-style:none}
+.nav__links a{font-size:15px;color:var(--t-primary);padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color .15s ease}
+.nav__links a:hover,.nav__links a[aria-current]{border-color:var(--t-primary)}
+.nav__search{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:var(--sunken);border:1px solid transparent;border-radius:4px;padding:10px 16px;transition:border-color .15s ease,background .15s ease}
+.nav__search:focus-within{border-color:var(--b-strong);background:#fff}
+.nav__search svg{color:var(--t-tertiary);flex:none}
+.nav__search input{flex:1;min-width:0;border:0;background:none;outline:none;font-family:var(--body);font-size:14px;color:var(--t-primary)}
+.nav__search input::placeholder{color:var(--t-tertiary)}
+.nav__icons{display:flex;align-items:center;gap:18px}
+.nav__icons a{display:flex;color:var(--t-primary);transition:opacity .15s ease}
+.nav__icons a:hover{opacity:.55}
+.nav__icons a.nav__ic--mobile{display:none}
+.nav__locale{display:flex;align-items:center;gap:4px;padding-left:18px;border-left:1px solid var(--b-default);font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--t-primary);cursor:pointer}
+@media(max-width:1100px){
+  .nav{gap:10px;height:58px;padding:0 16px}
+  .nav__burger{display:flex}
+  .nav__links,.nav__search,.nav__locale{display:none}
+  .nav__icons a.nav__ic--desktop{display:none}
+  .nav__icons a.nav__ic--mobile{display:flex}
+  .nav__icons{gap:20px}
+  .nav__logo{flex:1;justify-content:center}
+  .nav__logo svg{height:19px}
+  .promo{flex-direction:column;gap:7px;padding:10px 16px}
+  .promo__text{font-size:12px}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:82vh;display:flex;align-items:flex-end;background:var(--sunken)}
+.hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero__overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,26,24,.74) 0%,rgba(28,26,24,.42) 36%,rgba(28,26,24,.10) 66%,rgba(28,26,24,.28) 100%)}
+.hero__inner{position:relative;max-width:760px;padding:48px;color:var(--t-inverse)}
+.hero__inner .eyebrow,.hero__inner .h1,.hero__lock{text-shadow:0 1px 30px rgba(28,26,24,.45)}
+.hero .eyebrow{color:rgba(244,237,226,.82)}
+.hero .h1{color:var(--t-inverse);margin:14px 0 18px}
+.hero__lock{color:var(--t-inverse);opacity:.92;font-weight:300;font-size:clamp(17px,1.6vw,21px);line-height:1.5;max-width:34ch;margin-bottom:34px}
+.hero__cta{display:flex;gap:16px;flex-wrap:wrap}
+
+/* ---------- editorial intro (two-column) ---------- */
+.intro__eyebrow{margin-bottom:24px}
+.intro__grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:clamp(48px,6vw,128px);align-items:start}
+.intro__lead{font-family:var(--display);font-weight:300;font-size:clamp(28px,3vw,46px);line-height:1.16;letter-spacing:-.01em;color:var(--t-primary)}
+.intro__body{max-width:54ch}
+.intro__body p{color:var(--t-secondary);font-size:clamp(16px,1.15vw,19px);line-height:1.75;margin-bottom:22px}
+.intro__body p:first-child{margin-top:0}
+.intro__body p:last-child{margin-bottom:0}
+.intro__body strong{color:var(--t-primary);font-weight:700}
+@media(max-width:860px){.intro__grid{grid-template-columns:1fr;gap:28px}.intro__body{max-width:none}}
+
+/* ---------- approaches (diagram cards) ---------- */
+.approach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px}
+.approach__diagram{aspect-ratio:5/3;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--t-tertiary);border-bottom:1px solid var(--b-subtle)}
+.approach__diagram svg{width:52%;height:auto;display:block;stroke-width:1;stroke-linecap:round}
+.approach__n{font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.18em;color:var(--t-tertiary);display:block;margin-bottom:6px}
+.approach__title{font-family:var(--display);font-weight:400;font-size:clamp(20px,1.8vw,24px);margin-bottom:8px}
+.approach p{color:var(--t-secondary);font-size:14px;line-height:1.6}
+.approach__best{font-size:13px;color:var(--t-tertiary);margin-top:12px}
+.approach__best b{color:var(--t-secondary);font-weight:700}
+.approach .txt-link{margin-top:14px;display:inline-block;font-size:12px}
+
+/* ---------- match rows (alternating image + products) ---------- */
+.match-row{padding:0 0 clamp(52px,5vw,84px)}
+.match-row + .match-row{border-top:1px solid var(--b-subtle);padding-top:clamp(52px,5vw,84px)}
+.match-row__head{display:grid;grid-template-columns:1.18fr 0.82fr;gap:clamp(40px,4vw,72px);align-items:center;margin-bottom:clamp(28px,3vw,40px)}
+.match-row--flip .match-row__media{order:2}
+.match-row--flip .match-row__text{order:1}
+.match-row__img{aspect-ratio:16/9;object-fit:cover;width:100%;border:1px solid var(--b-default);background:var(--sunken)}
+.match-row__text .h3{margin-bottom:14px}
+.match-row__text p{color:var(--t-secondary);max-width:48ch;font-size:clamp(16px,1.1vw,19px);line-height:1.7}
+.match-row__shop{display:inline-block;margin-top:24px}
+.match-carousel{display:flex;gap:clamp(16px,1.4vw,24px);align-items:flex-start;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding-bottom:4px}
+.match-carousel::-webkit-scrollbar{display:none}
+.match-carousel .card{scroll-snap-align:start}
+.match-carousel .card__img{height:clamp(240px,18vw,340px)}
+.match-carousel__all{align-self:center;flex:0 0 auto;white-space:nowrap;margin-left:4px}
+
+/* ---------- product card ---------- */
+.card{flex:0 0 auto;scroll-snap-align:start}
+.card__img{display:block;height:300px;width:auto;background:var(--sunken);border:1px solid var(--b-default);transition:border-color .15s ease}
+.card:hover .card__img{border-color:var(--b-strong)}
+.card__artist{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-tertiary);margin-top:12px}
+.card__title{font-size:13px;line-height:1.5;margin-top:2px}
+.card__price{font-size:13px;margin-top:4px}
+
+/* ---------- hanging rules + measurement diagram ---------- */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:stretch}
+.rules__list{display:flex;flex-direction:column;justify-content:space-between}
+.rule{display:flex;gap:20px;padding:22px 0;border-top:1px solid var(--b-default)}
+.rule:first-child{border-top:none;padding-top:0}
+.rule__n{font-family:var(--display);font-weight:300;font-size:32px;line-height:1;color:var(--t-disabled);flex:none;width:36px}
+.rule h3{font-family:var(--display);font-weight:400;font-size:20px;margin-bottom:6px}
+.rule p{color:var(--t-secondary);font-size:15px;line-height:1.6}
+.rules__aside{display:flex;flex-direction:column}
+.rules__diagram{flex:1 1 auto;display:flex;align-items:center;justify-content:center;border:1px solid var(--b-subtle);padding:28px;color:var(--t-tertiary)}
+.rules__diagram svg{width:100%;height:auto;display:block;stroke-width:1;stroke-linecap:round}
+.rules__diagram svg path,.rules__diagram svg rect{vector-effect:non-scaling-stroke}
+.curators-note{margin-top:24px;padding:26px 30px;background:var(--inverse-bg);color:var(--t-inverse)}
+.curators-note .ui-label{color:var(--t-disabled);display:block;margin-bottom:10px}
+.curators-note p{font-family:var(--display);font-weight:300;font-size:clamp(18px,1.6vw,21px);line-height:1.35}
+
+/* ---------- sizing by wall ---------- */
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:0 64px;border-top:1px solid var(--b-default)}
+.size{padding:20px 0;border-bottom:1px solid var(--b-default)}
+.size b{display:block;font-family:var(--display);font-weight:400;font-size:18px;margin-bottom:4px;color:var(--t-primary)}
+.size span{color:var(--t-secondary);font-size:15px;line-height:1.55}
+.sizes__link{margin-top:28px;display:inline-block}
+
+/* ---------- curated edit (Section 7) ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.chip{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--b-default);border-radius:2px;color:var(--t-secondary);background:none;cursor:pointer;transition:border-color .15s ease,color .15s ease}
+.chip:hover,.chip.is-active{border-color:var(--t-primary);color:var(--t-primary)}
+.edit-grid{display:flex;flex-wrap:wrap;gap:28px;margin-bottom:36px}
+
+/* ---------- consult / visualisation ---------- */
+.consult{position:relative;background:var(--inverse-bg);color:var(--t-inverse);overflow:hidden}
+.consult__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.20}
+.consult__inner{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.consult__col .eyebrow{color:var(--t-disabled)}
+.consult .h2{color:var(--t-inverse);margin:12px 0 20px;max-width:16ch}
+.consult__intro{color:rgba(244,237,226,.75);font-size:17px;line-height:1.6;margin-bottom:26px;max-width:46ch}
+.cc__list{list-style:none;margin:0 0 30px}
+.cc__list li{color:var(--t-inverse);font-size:15px;line-height:1.5;padding:14px 0;border-top:1px solid #3A3835}
+.cc__list li:first-child{border-top:none}
+.consult__cta{display:flex;gap:16px;flex-wrap:wrap}
+.beforeafter{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.beforeafter figure{margin:0}
+.beforeafter img{width:100%;height:clamp(240px,26vw,380px);object-fit:cover;border:1px solid #5A5752}
+.beforeafter figcaption{margin-top:10px;font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-disabled)}
+
+/* ---------- trust ---------- */
+.trust{background:var(--raised);border-top:1px solid var(--b-default);border-bottom:1px solid var(--b-default)}
+.trust__row{display:grid;grid-template-columns:repeat(5,1fr)}
+.trust__cell{padding:8px 28px;border-left:1px solid var(--b-default)}
+.trust__cell:first-child{border-left:none;padding-left:0}
+.trust__cell .ui-label{color:var(--t-primary);display:block;margin-bottom:6px}
+.trust__cell p{font-size:13px;line-height:1.5;color:var(--t-secondary)}
+
+/* ---------- faq ---------- */
+.faq-list{max-width:860px}
+.faq details{border-bottom:1px solid var(--b-default)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0;font-weight:700;font-size:17px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--body);font-weight:300;font-size:24px;color:var(--t-tertiary)}
+.faq details[open] summary::after{content:"–"}
+.faq .answer{padding-bottom:24px;color:var(--t-secondary);max-width:72ch;line-height:1.65}
+
+/* ---------- closing ---------- */
+.closing{position:relative;min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;background:var(--sunken)}
+.closing__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.closing__overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,26,24,.68),rgba(28,26,24,.34))}
+.closing__inner{position:relative;color:var(--t-inverse);padding:48px;max-width:760px}
+.closing .h2{color:var(--t-inverse);margin-bottom:10px}
+.closing p{color:rgba(244,237,226,.9);font-size:18px;margin-bottom:30px}
+.closing__cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ---------- footer ---------- */
+.footer{background:var(--inverse-bg);color:var(--t-inverse);padding:72px 0}
+.footer__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+.footer__col h4{font-family:var(--display);font-weight:400;font-size:20px;margin-bottom:20px;color:var(--t-inverse)}
+.footer__col a{display:block;font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-disabled);padding:7px 0;transition:color .15s ease}
+.footer__col a:hover{color:var(--t-inverse)}
+.footer__base{margin-top:56px;padding-top:24px;border-top:1px solid #3A3835;font-size:11px;letter-spacing:.03em;color:var(--t-tertiary)}
+
+/* ---------- responsive ---------- */
+@media(max-width:1100px){
+  .approach-grid{grid-template-columns:repeat(2,1fr);gap:32px}
+}
+@media(max-width:860px){
+  .section{padding:60px 0}
+  .match-row__head{grid-template-columns:1fr;gap:20px;margin-bottom:24px}
+  .match-row--flip .match-row__media{order:1}
+  .match-row--flip .match-row__text{order:2}
+  .match-row__img{aspect-ratio:16/10}
+  .rules{grid-template-columns:1fr;gap:40px}
+  .rules__list{display:block}
+  .rules__aside{position:static}
+  .sizes{grid-template-columns:1fr}
+  .consult__inner{grid-template-columns:1fr;gap:40px}
+  .trust__row{grid-template-columns:1fr 1fr}
+  .trust__cell{border-left:none;border-top:1px solid var(--b-default);padding:16px 0}
+  .trust__cell:first-child{border-top:none}
+  .footer__cols{grid-template-columns:1fr}
+  .hero__inner{padding:32px 20px}
+}
+@media(max-width:600px){
+  .approach-grid{grid-template-columns:1fr;gap:28px}
+  .section{padding:48px 0}
+  .section-head{margin-bottom:28px}
+  .hero{min-height:84vh}
+  .hero__inner{padding:28px 16px}
+  .card__img{height:240px}
+  .beforeafter{grid-template-columns:1fr}
+  .trust__row{grid-template-columns:1fr}
+  .footer{padding:56px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ====================== HEADER ====================== -->
+<header class="site-header">
+  <div class="promo">
+    <span class="promo__text">10% off your first order – only until 31 August 2026</span>
+    <a class="promo__cta" href="#">Register now</a>
+  </div>
+  <nav class="nav">
+    <button class="nav__burger" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a class="nav__logo" href="#" aria-label="LUMAS">
+      <svg viewBox="0 0 160 30" fill="currentColor" role="img" aria-label="LUMAS"><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2 s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5 C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9 C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3 C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8 c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2 c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8 c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7 c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></svg>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#" aria-current="page">Artworks</a></li>
+      <li><a href="#">Top 20</a></li>
+      <li><a href="#">ArtFinder</a></li>
+      <li><a href="#">Inspiration</a></li>
+      <li><a href="#">Galleries</a></li>
+      <li><a href="#">About us</a></li>
+    </ul>
+    <div class="nav__search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input type="search" placeholder="Search" aria-label="Search">
+    </div>
+    <div class="nav__icons">
+      <a class="nav__ic--mobile" href="#" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></a>
+      <a class="nav__ic--desktop" href="#consult" aria-label="Chat"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></a>
+      <a class="nav__ic--desktop" href="#consult" aria-label="Phone advice"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></a>
+      <a href="#" aria-label="Wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1z"/></svg></a>
+      <a class="nav__ic--desktop" href="#" aria-label="Account"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></a>
+      <a href="#" aria-label="Cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></a>
+    </div>
+    <span class="nav__locale">EN<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+  </nav>
+</header>
+
+<!-- ====================== 1 · HERO ====================== -->
+<section class="hero">
+  <img class="hero__img" src="img/hero.jpg?v=3" alt="Living room with a single large framed artwork above a low leather sofa in natural light">
+  <div class="hero__overlay"></div>
+  <div class="hero__inner">
+    <p class="eyebrow">Living Room</p>
+    <h1 class="h1">Living Room Wall Art</h1>
+    <p class="hero__lock">A gallery curator's guide to choosing, sizing and hanging art you'll live with for years.</p>
+    <div class="hero__cta">
+      <a class="btn btn--light" href="#edit">Explore living room art →</a>
+      <a class="btn btn--ghost-inv" href="#consult">Request a free visualisation</a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 2 · WHY THE LIVING ROOM IS DIFFERENT ====================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="intro">
+      <p class="eyebrow intro__eyebrow">Why the living room is different</p>
+      <div class="intro__grid">
+        <p class="intro__lead">The living room is the one space everyone sees — and the one wall you look at most. The right piece doesn't just fill it; it sets the temperature of the whole room.</p>
+        <div class="intro__body">
+          <p>Most rooms have a job. The kitchen feeds you; the bedroom rests you. The living room has to do everything — host, relax, impress, disappear into the background on a quiet Sunday. That makes it the hardest room to get right and the most rewarding when you do.</p>
+          <p>Art is what tips a living room from <strong>furnished</strong> to <strong>considered</strong>. A single well-chosen piece can anchor a sofa, balance a tall window, or carry an entire wall that paint and shelving never could. The trick is matching the work not just to your taste, but to the <strong>scale, light and rhythm</strong> of the room itself.</p>
+          <p>Below, we've broken it down the way we'd advise a collector in one of our galleries: first the approach, then the practical rules, then the pieces themselves.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 3 · CHOOSE YOUR APPROACH ====================== -->
+<section class="section" id="approach" style="background:var(--card);border-top:1px solid var(--b-default)">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h2">Choose your approach</h2>
+      <p class="section-head__lead">Before you choose a piece, choose an approach. Four work for almost every living room.</p>
+    </div>
+    <div class="approach-grid">
+      <div class="approach">
+        <div class="approach__diagram">
+          <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="40" y="11" width="40" height="32"/><rect x="26" y="58" width="68" height="20" rx="4"/><path d="M26 64 H94"/></svg>
+        </div>
+        <span class="approach__n">01</span>
+        <h3 class="approach__title">The Statement Piece</h3>
+        <p>One large work, given room to breathe. The cleanest, most confident choice — and the most forgiving, because there's nothing to balance. Aim for roughly two-thirds the width of the furniture beneath it.</p>
+        <p class="approach__best"><b>Best for:</b> high ceilings, minimalist interiors, a wall you want to define in one move.</p>
+        <a class="txt-link" href="#edit">Shop large-format prints →</a>
+      </div>
+      <div class="approach">
+        <div class="approach__diagram">
+          <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="18" y="16" width="23" height="18"/><rect x="49" y="11" width="29" height="25"/><rect x="86" y="18" width="16" height="16"/><rect x="22" y="44" width="21" height="17"/><rect x="51" y="44" width="25" height="21"/><rect x="84" y="46" width="18" height="15"/></svg>
+        </div>
+        <span class="approach__n">02</span>
+        <h3 class="approach__title">The Gallery Wall</h3>
+        <p>A curated cluster of smaller works that reads as one composition. More personal, more flexible — and more demanding. Keep consistent spacing (5–8 cm) and let one piece lead.</p>
+        <p class="approach__best"><b>Best for:</b> collectors, characterful rooms, walls that flank a TV or run along a sofa.</p>
+        <a class="txt-link" href="#edit">See gallery wall sets →</a>
+      </div>
+      <div class="approach">
+        <div class="approach__diagram">
+          <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="16" y="28" width="26" height="34"/><rect x="47" y="28" width="26" height="34"/><rect x="78" y="28" width="26" height="34"/></svg>
+        </div>
+        <span class="approach__n">03</span>
+        <h3 class="approach__title">The Pair or Triptych</h3>
+        <p>Two or three works in dialogue. A diptych frames a sofa with symmetry; a triptych carries a long wall without the busyness of a full gallery hang. The most architectural of the four.</p>
+        <p class="approach__best"><b>Best for:</b> wide walls, symmetrical rooms, above long sideboards.</p>
+        <a class="txt-link" href="#edit">Browse diptychs & triptychs →</a>
+      </div>
+      <div class="approach">
+        <div class="approach__diagram">
+          <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M16 74 H104"/><rect x="30" y="30" width="40" height="44"/><rect x="58" y="42" width="34" height="32"/></svg>
+        </div>
+        <span class="approach__n">04</span>
+        <h3 class="approach__title">The Leaning Edit</h3>
+        <p>Unhung and intentional — pieces leaned on a console, shelf or floor, often layered. Reads as relaxed and gallery-like, and lets you rotate works without touching the wall.</p>
+        <p class="approach__best"><b>Best for:</b> renters, evolving collections, softer, eclectic interiors.</p>
+        <a class="txt-link" href="#edit">Shop framed prints →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 4 · MATCH THE ART TO YOUR ROOM ====================== -->
+<section class="section" id="match">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h2">Match the art to your room</h2>
+      <p class="section-head__lead">Once you know the how, the what gets easier. Here's how to read your own room.</p>
+    </div>
+
+    <div class="match-row">
+      <div class="match-row__head">
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-minimal.jpg?v=2" alt="Minimalist living room with a single restrained artwork"></div>
+        <div class="match-row__text">
+          <h3 class="h3">Minimalist, pared-back interiors</h3>
+          <p>Let the art do something the room won't: a single strong colour, a textured monochrome, an abstract with movement. Restraint on the wall reads as flat.</p>
+          <a class="txt-link match-row__shop" href="#edit">Shop abstract & monochrome →</a>
+        </div>
+      </div>
+      <div class="match-carousel">
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/cosmic_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu100_desktop.jpg" alt="Beatrice Hug – Cosmic Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Cosmic Sphaera</p><p class="card__price">from €2,690</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/sphaera_topaz/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu106_desktop.jpg" alt="Beatrice Hug – Sphaera Topaz"><p class="card__artist">Beatrice Hug</p><p class="card__title">Sphaera Topaz</p><p class="card__price">from €2,690</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/red_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Red Sphaera</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_kkr22_desktop.jpg" alt="Kevin Krautgartner – Salt Shapes II"><p class="card__artist">Kevin Krautgartner</p><p class="card__title">Salt Shapes II</p><p class="card__price">from €1,990</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/pedro_blas/ecliipse_cromatico/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl01_desktop.jpg" alt="Pedro Blas – Gravitational Chromatic Eclipse"><p class="card__artist">Pedro Blas</p><p class="card__title">Gravitational Chromatic Eclipse</p><p class="card__price">from €999</p></a>
+      </div>
+    </div>
+
+    <div class="match-row match-row--flip">
+      <div class="match-row__head">
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-gemuetlich.jpg?v=2" alt="Warm, earthy living room with natural tones"></div>
+        <div class="match-row__text">
+          <h3 class="h3">Warm, earthy interiors</h3>
+          <p>Echo the palette, don't match it. Ochres, terracottas, deep greens and natural photography sit beautifully against wood, linen and stone.</p>
+          <a class="txt-link match-row__shop" href="#edit">Shop landscape & earthy tones →</a>
+        </div>
+      </div>
+      <div class="match-carousel">
+        <a class="card" href="https://www.lumas.de/pictures/werner_pawlok/house_of_chino_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wpa87_desktop.jpg" alt="Werner Pawlok – House of Chino I"><p class="card__artist">Werner Pawlok</p><p class="card__title">House of Chino I</p><p class="card__price">from €899</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/golden_light/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse31_desktop.jpg" alt="Christiane Steinicke – Golden Light"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Golden Light</p><p class="card__price">from €239</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/the_autumnal_whisper/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse18_desktop.jpg" alt="Christiane Steinicke – The Autumnal Whisper"><p class="card__artist">Christiane Steinicke</p><p class="card__title">The Autumnal Whisper</p><p class="card__price">from €239</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/mysterious_wood/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse30_desktop.jpg" alt="Christiane Steinicke – Mysterious Wood"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Mysterious Wood</p><p class="card__price">from €351</p></a>
+      </div>
+    </div>
+
+    <div class="match-row">
+      <div class="match-row__head">
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-farbig.jpg?v=2" alt="Bold, colourful living room with a vivid artwork"></div>
+        <div class="match-row__text">
+          <h3 class="h3">Bold, colourful interiors</h3>
+          <p>Counter-intuitively, go quieter on the wall — or commit fully to one statement work that joins the conversation rather than competing.</p>
+          <a class="txt-link match-row__shop" href="#edit">Shop pop & contemporary →</a>
+        </div>
+      </div>
+      <div class="match-carousel">
+        <a class="card" href="https://www.lumas.de/pictures/pedro_blas/chromatic_bars_01/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl31_desktop.jpg" alt="Pedro Blas – Chromatic Bars 01"><p class="card__artist">Pedro Blas</p><p class="card__title">Chromatic Bars 01</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andrea_b_stone/shades_of_purple/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_abs14_desktop.jpg" alt="Andrea B. Stone – Shades Of Purple"><p class="card__artist">Andrea B. Stone</p><p class="card__title">Shades Of Purple</p><p class="card__price">from €799</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/juno/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri02_desktop.jpg" alt="Gerhard Richter – Juno"><p class="card__artist">Gerhard Richter</p><p class="card__title">Juno</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/holger_lippmann/rose_cherry_object_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_hli63_desktop.jpg" alt="Holger Lippmann – Rose Cherry Object I"><p class="card__artist">Holger Lippmann</p><p class="card__title">Rose Cherry Object I</p><p class="card__price">from €2,390</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/serge_hamad/temporal_perception_101/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_shm15_desktop.jpg" alt="Serge Hamad – Temporal Perception #101"><p class="card__artist">Serge Hamad</p><p class="card__title">Temporal Perception #101</p><p class="card__price">from €1,290</p></a>
+      </div>
+    </div>
+
+    <div class="match-row match-row--flip">
+      <div class="match-row__head">
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-klassisch.jpg?v=2" alt="Classic, traditional living room with framed photography"></div>
+        <div class="match-row__text">
+          <h3 class="h3">Classic, traditional interiors</h3>
+          <p>Black-and-white photography, fine-art figuration and architectural studies add depth without fighting the room.</p>
+          <a class="txt-link match-row__shop" href="#edit">Shop photography & fine art →</a>
+        </div>
+      </div>
+      <div class="match-carousel">
+        <a class="card" href="https://www.lumas.de/pictures/adam_moerk/prada_marfa_836pm-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amr400_desktop.jpg" alt="Adam Mørk – Prada Marfa 8:36PM"><p class="card__artist">Adam Mørk</p><p class="card__title">Prada Marfa 8:36PM</p><p class="card__price">€119</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andre_monet/kate-5/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn401_desktop.jpg" alt="André Monet – Kate"><p class="card__artist">André Monet</p><p class="card__title">Kate</p><p class="card__price">€219</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/landschaft_mit_wolke/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri04_desktop.jpg" alt="Gerhard Richter – Landschaft mit Wolke"><p class="card__artist">Gerhard Richter</p><p class="card__title">Landschaft mit Wolke</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andre_monet/david-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn400_desktop.jpg" alt="André Monet – David"><p class="card__artist">André Monet</p><p class="card__title">David</p><p class="card__price">€175</p></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 5 · HOW TO HANG (RULES) ====================== -->
+<section class="section" id="hanging" style="background:var(--card);border-top:1px solid var(--b-default)">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h2">How to hang art in a living room</h2>
+      <p class="section-head__lead">The four rules that solve 90% of living-room hanging questions.</p>
+    </div>
+    <div class="rules">
+      <div class="rules__list">
+        <div class="rule"><span class="rule__n">1</span><div><h3>Eye level is 145–150 cm to the centre.</h3><p>The standard gallery height. Measure to the centre of the work, not the top. In a living room where you're mostly seated, you can drop slightly lower.</p></div></div>
+        <div class="rule"><span class="rule__n">2</span><div><h3>Above a sofa, hang 15–25 cm above the back.</h3><p>Close enough to relate to the furniture, high enough to clear heads. The art should feel connected to the sofa, not floating above it.</p></div></div>
+        <div class="rule"><span class="rule__n">3</span><div><h3>Match width to the furniture.</h3><p>A piece or arrangement should span roughly two-thirds to three-quarters of the sofa or console beneath it. Too small is the single most common mistake — and the easiest to avoid.</p></div></div>
+        <div class="rule"><span class="rule__n">4</span><div><h3>Leave breathing room.</h3><p>Don't crowd the ceiling, a corner or a light switch. Negative space is part of the composition.</p></div></div>
+      </div>
+      <div class="rules__aside">
+        <div class="rules__diagram">
+          <svg viewBox="0 0 252 170" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" font-family="Archivo, sans-serif">
+            <path d="M16 150 H230" stroke-width="1"/>
+            <rect x="58" y="110" width="126" height="32" rx="4"/>
+            <path d="M58 119 H184"/>
+            <rect x="90" y="42" width="62" height="48"/>
+            <path d="M24 66 H222" stroke-dasharray="3 4" stroke-width="1"/>
+            <text x="150" y="34" font-size="8" fill="currentColor" stroke="none">eye level · 145–150 cm</text>
+            <path d="M190 90 V110" stroke-width="1"/>
+            <text x="195" y="103" font-size="8" fill="currentColor" stroke="none">15–25 cm</text>
+            <path d="M90 100 H152" stroke-width="1"/>
+            <text x="104" y="110" font-size="8" fill="currentColor" stroke="none">≈ ⅔ width</text>
+          </svg>
+        </div>
+        <div class="curators-note">
+          <span class="ui-label">Curator's note</span>
+          <p>When in doubt, size up. A piece that feels slightly too big almost always looks intentional; one that's too small always looks like an afterthought.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 6 · SIZING BY WALL ====================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h2">What size, where</h2>
+      <p class="section-head__lead">A quick reference for the walls that come up most.</p>
+    </div>
+    <div class="sizes">
+      <div class="size"><b>Above a 3-seat sofa (≈210 cm)</b><span>One piece 100–140 cm wide, or a pair / triptych spanning ~150 cm.</span></div>
+      <div class="size"><b>Above a console or sideboard</b><span>One piece about ⅔ the console width, or a small leaning edit.</span></div>
+      <div class="size"><b>A large empty feature wall</b><span>One oversized statement piece, or a gallery wall built on a clear grid.</span></div>
+      <div class="size"><b>Narrow wall / between windows</b><span>A single vertical-format work.</span></div>
+    </div>
+    <a class="txt-link sizes__link" href="#">Use our size guide →</a>
+  </div>
+</section>
+
+<!-- ====================== 7 · CURATED EDIT ====================== -->
+<section class="section" id="edit" style="background:var(--card);border-top:1px solid var(--b-default)">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h2">Living Room Edits</h2>
+      <p class="section-head__lead">Pieces our curators reach for most when the brief is living room. Browse the edit, or filter by size, colour and orientation.</p>
+    </div>
+    <div class="filters">
+      <button class="chip is-active">All</button>
+      <button class="chip">Size</button>
+      <button class="chip">Colour</button>
+      <button class="chip">Orientation</button>
+      <button class="chip">Style</button>
+    </div>
+    <div class="edit-grid">
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/cosmic_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu100_desktop.jpg" alt="Beatrice Hug – Cosmic Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Cosmic Sphaera</p><p class="card__price">from €2,690</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/juno/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri02_desktop.jpg" alt="Gerhard Richter – Juno"><p class="card__artist">Gerhard Richter</p><p class="card__title">Juno</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_kkr22_desktop.jpg" alt="Kevin Krautgartner – Salt Shapes II"><p class="card__artist">Kevin Krautgartner</p><p class="card__title">Salt Shapes II</p><p class="card__price">from €1,990</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/pedro_blas/chromatic_bars_01/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl31_desktop.jpg" alt="Pedro Blas – Chromatic Bars 01"><p class="card__artist">Pedro Blas</p><p class="card__title">Chromatic Bars 01</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/serge_hamad/temporal_perception_101/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_shm15_desktop.jpg" alt="Serge Hamad – Temporal Perception #101"><p class="card__artist">Serge Hamad</p><p class="card__title">Temporal Perception #101</p><p class="card__price">from €1,290</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/holger_lippmann/rose_cherry_object_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_hli63_desktop.jpg" alt="Holger Lippmann – Rose Cherry Object I"><p class="card__artist">Holger Lippmann</p><p class="card__title">Rose Cherry Object I</p><p class="card__price">from €2,390</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/werner_pawlok/house_of_chino_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wpa87_desktop.jpg" alt="Werner Pawlok – House of Chino I"><p class="card__artist">Werner Pawlok</p><p class="card__title">House of Chino I</p><p class="card__price">from €899</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/pedro_blas/ecliipse_cromatico/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl01_desktop.jpg" alt="Pedro Blas – Gravitational Chromatic Eclipse"><p class="card__artist">Pedro Blas</p><p class="card__title">Gravitational Chromatic Eclipse</p><p class="card__price">from €999</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/sphaera_topaz/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu106_desktop.jpg" alt="Beatrice Hug – Sphaera Topaz"><p class="card__artist">Beatrice Hug</p><p class="card__title">Sphaera Topaz</p><p class="card__price">from €2,690</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/golden_light/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse31_desktop.jpg" alt="Christiane Steinicke – Golden Light"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Golden Light</p><p class="card__price">from €239</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/andre_monet/kate-5/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn401_desktop.jpg" alt="André Monet – Kate"><p class="card__artist">André Monet</p><p class="card__title">Kate</p><p class="card__price">€219</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/andrea_b_stone/shades_of_purple/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_abs14_desktop.jpg" alt="Andrea B. Stone – Shades Of Purple"><p class="card__artist">Andrea B. Stone</p><p class="card__title">Shades Of Purple</p><p class="card__price">from €799</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/adam_moerk/prada_marfa_836pm-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amr400_desktop.jpg" alt="Adam Mørk – Prada Marfa 8:36PM"><p class="card__artist">Adam Mørk</p><p class="card__title">Prada Marfa 8:36PM</p><p class="card__price">€119</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/red_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Red Sphaera</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/the_autumnal_whisper/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse18_desktop.jpg" alt="Christiane Steinicke – The Autumnal Whisper"><p class="card__artist">Christiane Steinicke</p><p class="card__title">The Autumnal Whisper</p><p class="card__price">from €239</p></a>
+    </div>
+    <a class="btn btn--ghost" href="#">Shop all living room art →</a>
+  </div>
+</section>
+
+<!-- ====================== 8 · CONSULTATION / VISUALISATION ====================== -->
+<section class="section consult" id="consult">
+  <img class="consult__bg" src="img/consult.jpg" alt="">
+  <div class="wrap consult__inner">
+    <div class="consult__col">
+      <p class="eyebrow">Visualisation</p>
+      <h2 class="h2">See it on your wall before you decide</h2>
+      <p class="consult__intro">Choosing art online comes down to one question: will it work in my room? So let us answer it for you. Send us a photo of your space and a sense of what you're drawn to — one of our art advisors will come back with a personal selection, visualised on your actual wall.</p>
+      <ul class="cc__list">
+        <li>A curated shortlist matched to your room, light and style</li>
+        <li>Each piece visualised on your wall, to scale</li>
+        <li>Framing and sizing recommendations from a specialist</li>
+      </ul>
+      <!-- INTEGRATION TODO: wire to lead-gen / booking endpoints -->
+      <div class="consult__cta">
+        <a class="btn btn--light" href="#">Request a free visualisation →</a>
+        <a class="btn btn--ghost-inv" href="#">Book an art consultation</a>
+      </div>
+    </div>
+    <div class="consult__col">
+      <!-- IMAGE TODO: ideal asset is a true before/after of one customer's wall. Shown here as bare wall → visualised. -->
+      <div class="beforeafter">
+        <figure><img loading="lazy" src="img/style-minimal.jpg?v=2" alt="A living room wall before art"><figcaption>Your wall</figcaption></figure>
+        <figure><img loading="lazy" src="img/room-1.jpg" alt="The same wall visualised with a LUMAS edition"><figcaption>Visualised</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== TRUST ====================== -->
+<section class="trust">
+  <div class="wrap" style="padding-top:40px;padding-bottom:40px">
+    <div class="trust__row">
+      <div class="trust__cell"><span class="ui-label">Limited Edition</span><p>Numbered, not reproduced</p></div>
+      <div class="trust__cell"><span class="ui-label">Hand-Signed</span><p>Signed by the artist</p></div>
+      <div class="trust__cell"><span class="ui-label">Certificate of Authenticity</span><p>With every edition</p></div>
+      <div class="trust__cell"><span class="ui-label">19 Galleries Worldwide</span><p>Art you can experience</p></div>
+      <div class="trust__cell"><span class="ui-label">60-Day Returns</span><p>If it's not right at home</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 9 · FAQ ====================== -->
+<section class="section faq" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="h2">Living room art, answered</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>What size art should I hang in a living room?</summary>
+        <div class="answer">As a rule, art above a sofa or console should span two-thirds to three-quarters of the furniture's width. For a standard three-seat sofa, that's a single piece around 100–140 cm wide, or a pair or triptych spanning a similar width.</div>
+      </details>
+      <details>
+        <summary>How high should I hang art above the sofa?</summary>
+        <div class="answer">Hang it 15–25 cm above the top of the sofa back, with the centre of the work around 145–150 cm from the floor. This keeps the art connected to the furniture while clearing the heads of anyone seated.</div>
+      </details>
+      <details>
+        <summary>Statement piece or gallery wall — which is better?</summary>
+        <div class="answer">A statement piece suits minimalist rooms and high walls and is the easiest to get right. A gallery wall suits characterful, personal spaces but needs consistent spacing and a unifying thread. Neither is "better" — it depends on your room and how hands-on you want to be.</div>
+      </details>
+      <details>
+        <summary>What kind of art works best in a living room?</summary>
+        <div class="answer">The art that best matches your room's scale, light and palette. Minimalist rooms benefit from one bold work; warm interiors from echoed earthy tones; bold rooms from a single confident statement. Photography and abstracts are the most versatile starting points.</div>
+      </details>
+      <details>
+        <summary>Can you help me choose art for my room?</summary>
+        <div class="answer">Yes — send us a photo of your space and our advisors will return a personal selection visualised on your actual wall, to scale, with framing recommendations. It's free and comes with no obligation.<br><a class="txt-link" href="#consult">Request a free visualisation</a></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 10 · CLOSING CTA ====================== -->
+<section class="closing">
+  <img class="closing__img" src="img/guide-1.jpg?v=2" alt="A warm living room with art fully integrated above the sofa">
+  <div class="closing__overlay"></div>
+  <div class="closing__inner">
+    <h2 class="h2">Start with the wall you look at most</h2>
+    <p>Whether you know exactly what you want or have no idea where to start, there's a way in.</p>
+    <div class="closing__cta">
+      <a class="btn btn--light" href="#edit">Explore living room art →</a>
+      <a class="btn btn--ghost-inv" href="#consult">Request a free visualisation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__cols">
+      <!-- INTEGRATION TODO: replace # with live room-cluster, category and service URLs -->
+      <div class="footer__col">
+        <h4>Rooms</h4>
+        <a href="#">Bedroom Art</a>
+        <a href="#">Office Art</a>
+        <a href="#">Kitchen Art</a>
+        <a href="#">Hallway Art</a>
+        <a href="#">Large Formats</a>
+      </div>
+      <div class="footer__col">
+        <h4>Categories</h4>
+        <a href="#">Abstract</a>
+        <a href="#">Photography</a>
+        <a href="#">Black &amp; White</a>
+        <a href="#">Large Format</a>
+      </div>
+      <div class="footer__col">
+        <h4>Service</h4>
+        <a href="#consult">Consultation</a>
+        <a href="#consult">Visualisation</a>
+        <a href="#">Framing</a>
+        <a href="#">Galleries</a>
+      </div>
+    </div>
+    <div class="footer__base">© LUMAS. Limited, hand-signed editions.</div>
+  </div>
+</footer>
+
+<!-- ====================== SCHEMA ====================== -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"Article","headline":"Living Room Wall Art: Ideas, Hanging Tips & Curated Prints","description":"A gallery curator's guide to choosing, sizing and hanging art for the living room, with curated fine-art editions and a free visualisation service.","about":"living room wall art","author":{"@type":"Organization","name":"LUMAS"},"publisher":{"@type":"Organization","name":"LUMAS"}},
+    {"@type":"BreadcrumbList","itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://www.lumas.com/"},
+      {"@type":"ListItem","position":2,"name":"Living Room Wall Art","item":"https://www.lumas.com/living-room-wall-art/"}
+    ]},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What size art should I hang in a living room?","acceptedAnswer":{"@type":"Answer","text":"As a rule, art above a sofa or console should span two-thirds to three-quarters of the furniture's width. For a standard three-seat sofa, that's a single piece around 100–140 cm wide, or a pair or triptych spanning a similar width."}},
+      {"@type":"Question","name":"How high should I hang art above the sofa?","acceptedAnswer":{"@type":"Answer","text":"Hang it 15–25 cm above the top of the sofa back, with the centre of the work around 145–150 cm from the floor. This keeps the art connected to the furniture while clearing the heads of anyone seated."}},
+      {"@type":"Question","name":"Statement piece or gallery wall — which is better?","acceptedAnswer":{"@type":"Answer","text":"A statement piece suits minimalist rooms and high walls and is the easiest to get right. A gallery wall suits characterful, personal spaces but needs consistent spacing and a unifying thread. Neither is better — it depends on your room and how hands-on you want to be."}},
+      {"@type":"Question","name":"What kind of art works best in a living room?","acceptedAnswer":{"@type":"Answer","text":"The art that best matches your room's scale, light and palette. Minimalist rooms benefit from one bold work; warm interiors from echoed earthy tones; bold rooms from a single confident statement. Photography and abstracts are the most versatile starting points."}},
+      {"@type":"Question","name":"Can you help me choose art for my room?","acceptedAnswer":{"@type":"Answer","text":"Yes — send us a photo of your space and our advisors will return a personal selection visualised on your actual wall, to scale, with framing recommendations. It's free and comes with no obligation."}}
+    ]}
+  ]
+}
+</script>
+
+</body>
+</html>

@@ -61,6 +61,9 @@
     <h2 class="section-head">PDP Artist Variations</h2>
     <div class="variations" id="variations"></div>
 
+    <h2 class="section-head">Landing Pages</h2>
+    <div class="variations" id="landing"></div>
+
     <footer>LUMAS · onsite alignment · unlisted</footer>
   </div>
 
@@ -90,6 +93,18 @@
       { title: "Aset Journey", href: "private-view/aset-journey.html" },
     ];
     document.getElementById("variations").innerHTML = variations.map(v => `
+      <a class="card" href="${v.href}">
+        <h2>${v.title}</h2>
+        <span class="arrow">Open &#8599;</span>
+      </a>`).join("");
+
+    // Landing pages
+    const landing = [
+      { title: "Wohnzimmer Bilder", href: "wohnzimmer-bilder/" },
+      { title: "Galleries", href: "galleries/" },
+      { title: "Berlin Mitte", href: "galleries/berlin-mitte.html" },
+    ];
+    document.getElementById("landing").innerHTML = landing.map(v => `
       <a class="card" href="${v.href}">
         <h2>${v.title}</h2>
         <span class="arrow">Open &#8599;</span>
