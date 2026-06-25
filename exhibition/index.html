@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LUMAS Exhibition — Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- V2 type: Archivo (body / UI) from Google Fonts; Utile Display (display) self-hosted in assets/ -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/lumas-fonts.css" />
+  <style>
+    /* =========================================================
+       LUMAS Exhibition — VIEWER (prototype)
+       Extracted from the multi-mode exhibition app, then upgraded to the
+       V2 brand system (Utile Display + Archivo, canonical Charcoal/Ivory/Bone)
+       with Emil-style motion craft (press feedback, entrance stagger, strong easing).
+       No build step, no backend. Fonts: assets/lumas-fonts.css (self-hosted
+       Utile Display) + Google Fonts (Archivo). Artwork via picsum.photos.
+       Open directly, or with #viewer?id=<exhibitionId>&lang=<en|de|fr>.
+       ========================================================= */
+    :root {
+      /* LUMAS V2 brand palette — canonical Charcoal, Ivory, Bone. Three colours, forever. */
+      --charcoal: #1C1A18;
+      --ivory:    #F7F1E9;
+      --bone:     #EAE2D8;
+
+      /* Working aliases */
+      --bg:       #F7F1E9;
+      --surface:  #F7F1E9;
+      --ink:      #1C1A18;
+
+      /* Charcoal opacity scale (for rules, borders, secondary type on light) */
+      --ink-80: rgba(28,26,24,0.80);
+      --ink-60: rgba(28,26,24,0.60);
+      --ink-40: rgba(28,26,24,0.40);
+      --ink-28: rgba(28,26,24,0.28);
+      --ink-20: rgba(28,26,24,0.20);
+      --ink-14: rgba(28,26,24,0.14);
+      --ink-10: rgba(28,26,24,0.10);
+      --ink-06: rgba(28,26,24,0.06);
+      --ink-04: rgba(28,26,24,0.04);
+
+      /* Ivory opacity scale (for rules, borders, secondary type on dark) */
+      --iv-80: rgba(247,241,233,0.80);
+      --iv-60: rgba(247,241,233,0.60);
+      --iv-40: rgba(247,241,233,0.40);
+      --iv-28: rgba(247,241,233,0.28);
+      --iv-20: rgba(247,241,233,0.20);
+      --iv-14: rgba(247,241,233,0.14);
+      --iv-10: rgba(247,241,233,0.10);
+      --iv-06: rgba(247,241,233,0.06);
+      --iv-04: rgba(247,241,233,0.04);
+
+      --muted:     var(--ink-60);
+      --line:      var(--ink-14);
+      --line-soft: var(--ink-10);
+      --wall:      var(--bone);
+
+      --positive: #3d6b32;
+      --warn:     #7a6434;
+      --danger:   #9a3426;
+
+      --shadow: 0 16px 40px -22px rgba(28,26,24,0.26), 0 3px 9px -6px rgba(28,26,24,0.10);
+      /* V2 type — Utile Display (display tiers) + Archivo (body / UI). --serif is kept as an
+         alias so the existing rules render Utile Display without touching every selector. */
+      --display: 'UtileDisplay', 'Cormorant Garamond', Georgia, serif;
+      --serif:   var(--display);
+      --sans:    'Archivo', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      /* Emil — strong custom easing curves; the built-in CSS easings are too weak. */
+      --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+      /* Viewer (dark) surface — still Charcoal / Ivory, just inverted */
+      --gallery-bg:     var(--charcoal);
+      --gallery-wall:   #16130F;
+      --gallery-ink:    var(--ivory);
+      --gallery-muted:  var(--iv-60);
+      --gallery-line:   var(--iv-14);
+      --gallery-line-soft: var(--iv-06);
+      --gallery-line-strong: var(--iv-28);
+      --gallery-ink-60: var(--iv-60);
+      --gallery-ink-40: var(--iv-40);
+      --gallery-shadow: 0 28px 64px -18px rgba(0,0,0,0.60), 0 8px 22px -12px rgba(0,0,0,0.42);
+      --gallery-drop: drop-shadow(0 24px 30px rgba(0,0,0,0.55)) drop-shadow(0 6px 12px rgba(0,0,0,0.42));
+    }
+
+    /* Light gallery surface — Ivory wall, Charcoal ink, Bone work surface */
+    body.mode-viewer.viewer-light {
+      --gallery-bg:   var(--ivory);
+      --gallery-wall: var(--bone);
+      --gallery-ink:  var(--charcoal);
+      --gallery-muted: var(--ink-60);
+      --gallery-line:  var(--ink-14);
+      --gallery-line-soft: var(--ink-06);
+      --gallery-line-strong: var(--ink-28);
+      --gallery-ink-60: var(--ink-60);
+      --gallery-ink-40: var(--ink-40);
+      --gallery-shadow: 0 28px 64px -22px rgba(0,0,0,0.24), 0 8px 20px -10px rgba(0,0,0,0.12);
+      --gallery-drop: drop-shadow(0 20px 26px rgba(28,26,24,0.20)) drop-shadow(0 5px 10px rgba(28,26,24,0.12));
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 300; -webkit-font-smoothing: antialiased; }
+    body.mode-viewer { overflow: hidden; background: var(--gallery-bg); color: var(--gallery-ink); }
+    a { color: inherit; }
+    button { font-family: inherit; }
+
+    /* -------------- Shared primitives -------------- */
+    .btn { display: inline-block; padding: 12px 24px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; background: var(--ink); color: var(--ivory); border: 1px solid var(--ink); cursor: pointer; font-family: inherit; text-decoration: none; transition: background-color 0.16s var(--ease-out), color 0.16s var(--ease-out), border-color 0.16s var(--ease-out), transform 0.16s var(--ease-out); }
+    .btn:hover { background: transparent; color: var(--ink); }
+    .btn-ghost { background: transparent; color: var(--ink); }
+    .btn-ghost:hover { background: var(--ink); color: var(--ivory); }
+    .btn-tiny { padding: 6px 12px; font-size: 10px; }
+    /* Viewer (dark) primary — ivory on charcoal */
+    body.mode-viewer .btn { background: var(--gallery-ink); color: var(--gallery-bg); border-color: var(--gallery-ink); }
+    body.mode-viewer .btn:hover { background: transparent; color: var(--gallery-ink); }
+    body.mode-viewer .btn-ghost { background: transparent; color: var(--gallery-ink); border-color: var(--gallery-ink-40); }
+    body.mode-viewer .btn-ghost:hover { background: var(--gallery-ink); color: var(--gallery-bg); border-color: var(--gallery-ink); }
+
+    /* ============================================================
+       VIEWER VIEW — Charcoal wall, Ivory light
+       ============================================================ */
+    .viewer {
+      position: fixed; inset: 0;
+      background: var(--gallery-bg);
+      color: var(--gallery-ink);
+      overflow: hidden;
+    }
+    .v-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: flex-end; padding: 14px 20px; pointer-events: none; gap: 14px; }
+    .v-topbar > * { pointer-events: auto; }
+    .v-brand { font-family: var(--sans); font-weight: 500; letter-spacing: 0.24em; font-size: 11px; text-transform: uppercase; color: var(--gallery-ink-60); white-space: nowrap; margin-right: auto; }
+    .v-brand strong { color: var(--gallery-ink); font-weight: 500; letter-spacing: 0.28em; }
+    .v-progress { flex: 1; margin: 0 18px; height: 1px; background: var(--gallery-line); position: relative; max-width: 360px; }
+    .v-progress-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gallery-ink); width: 0%; transition: width 0.35s ease; }
+    .v-progress-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gallery-ink-60); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .v-voice {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px;
+      background: transparent; border: 1px solid var(--gallery-line-strong); color: var(--gallery-ink);
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .v-voice:hover { background: var(--gallery-line-soft); border-color: var(--gallery-ink-60); }
+    .v-voice svg { width: 12px; height: 12px; fill: var(--gallery-ink); }
+    .v-voice.playing { background: var(--gallery-ink); color: var(--gallery-bg); border-color: var(--gallery-ink); }
+    .v-voice.playing svg { fill: var(--gallery-bg); }
+    .v-voice[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
+    .v-lang {
+      display: inline-flex; gap: 0; border: 1px solid var(--gallery-line-strong); overflow: hidden;
+    }
+    .v-lang button {
+      background: transparent; color: var(--gallery-ink-60); border: none; padding: 8px 10px;
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+      font-family: inherit; transition: background 0.15s, color 0.15s;
+    }
+    .v-lang button + button { border-left: 1px solid var(--gallery-line); }
+    .v-lang button.active { background: var(--gallery-ink); color: var(--gallery-bg); }
+    .v-lang button:hover:not(.active) { color: var(--gallery-ink); }
+
+    .v-track { display: flex; flex-direction: row; height: 100%; width: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; position: relative; }
+    .v-track::-webkit-scrollbar { display: none; }
+    .v-panel {
+      flex: 0 0 100%; width: 100%; height: 100%;
+      scroll-snap-align: start; scroll-snap-stop: always;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 48px 64px; position: relative;
+      overflow: hidden; /* prevents content from bleeding into neighbouring panels */
+      box-sizing: border-box;
+    }
+
+    /* Full-width panel so the next wall never peeks in — one centered moment per screen.
+       Content is centred by the panel's align-items/justify-content + per-element max-widths. */
+    .v-foyer { flex-direction: column; text-align: center; align-items: center; width: 100%; overflow-y: auto; max-height: 100%; }
+    .v-foyer-eyebrow, .v-foyer-sub, .v-foyer-curator { max-width: 680px; }
+    .v-foyer-eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gallery-ink-60); margin-bottom: 28px; }
+    .v-foyer-rule { width: 40px; height: 1px; background: var(--gallery-ink-40); margin: 0 auto 28px; }
+    .v-foyer h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 6.5vw, 4.6rem); line-height: 1.05; margin: 0 0 20px; letter-spacing: -0.01em; text-wrap: balance; color: var(--gallery-ink); }
+    .v-foyer-sub { font-family: var(--sans); font-weight: 300; font-size: clamp(1rem, 1.4vw, 1.25rem); line-height: 1.5; letter-spacing: 0.01em; color: var(--gallery-ink-60); max-width: 600px; margin: 0 auto 32px; }
+    .v-foyer-statement { font-family: var(--sans); font-weight: 300; font-size: clamp(15px, 1.5vw, 17px); line-height: 1.7; text-wrap: pretty; color: var(--gallery-ink); max-width: 600px; margin: 0 auto 32px; }
+    .v-foyer-curator { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gallery-ink-60); margin-bottom: 36px; }
+    .v-foyer-cta { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gallery-bg); background: var(--gallery-ink); cursor: pointer; padding: 14px 30px; border: 1px solid var(--gallery-ink); font-family: inherit; transition: background 0.15s, color 0.15s; }
+    .v-foyer-cta:hover { background: transparent; color: var(--gallery-ink); }
+    .v-foyer-hint { margin-top: 22px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gallery-ink-40); display: flex; gap: 6px; justify-content: center; align-items: center; }
+    .v-foyer-hint kbd { border: 1px solid var(--gallery-line); padding: 1px 6px; font-family: inherit; font-size: 10px; color: var(--gallery-ink-60); }
+
+    .v-wall { flex-direction: column; }
+    .v-wall-inner {
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%; max-width: 1400px; max-height: 100%;
+      gap: clamp(16px, 2.2vh, 28px);
+      min-height: 0;
+    }
+    .v-wall-number { font-family: var(--sans); font-weight: 500; font-size: 10px; letter-spacing: 0.32em; color: var(--gallery-ink-60); text-transform: uppercase; flex: 0 0 auto; }
+    .v-wall-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.1rem, 1.8vw, 1.7rem); letter-spacing: 0; color: var(--gallery-ink); text-align: center; text-wrap: balance; max-width: 720px; flex: 0 0 auto; }
+    .v-wall-arrangement {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: clamp(16px, 3vw, 44px); width: 100%;
+      flex: 1 1 auto; min-height: 0;
+      max-height: 72vh; /* keep art off the chrome */
+    }
+
+    .v-wall-note {
+      max-width: 580px; text-align: center;
+      font-family: var(--sans); font-weight: 300;
+      font-size: clamp(0.95rem, 1.3vw, 1.1rem); line-height: 1.6; text-wrap: pretty;
+      color: var(--gallery-ink); opacity: 0.85;
+      padding-top: 14px; position: relative;
+      flex: 0 0 auto;
+      max-height: 14vh; overflow: hidden; /* keep note from pushing art off-screen */
+    }
+    .v-wall-note::before {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 28px; height: 1px; background: var(--gallery-ink-40);
+    }
+
+    /* Works — no frame. The art is its own edge. Width & height use min(clamp(vw), vh) so aspect-ratio is preserved. */
+    .v-work { position: relative; cursor: pointer; transition: transform 0.5s cubic-bezier(.2,.8,.2,1); flex: 0 1 auto; min-width: 0; margin: 0; }
+    @media (hover: hover) and (pointer: fine) { .v-work:hover { transform: translateY(-4px); } }
+    /* Never crop the art: contain shows the whole work; drop-shadow() hugs the actual
+       image (the letterbox area is transparent) instead of boxing the empty space. */
+    .v-work .art {
+      display: block; background-color: transparent; background-size: contain; background-repeat: no-repeat; background-position: center;
+      position: relative;
+      filter: var(--gallery-drop);
+    }
+    /* Portrait 2:3 — cap height by 55vh, width stays proportional via 2/3 factor */
+    .v-work.portrait  .art { width: min(clamp(180px, 22vw, 340px), calc(55vh * 2 / 3)); height: min(clamp(270px, 33vw, 510px), 55vh); }
+    /* Landscape 3:2 — cap height by 45vh */
+    .v-work.landscape .art { width: min(clamp(260px, 36vw, 540px), calc(45vh * 3 / 2)); height: min(clamp(170px, 24vw, 356px), 45vh); }
+    /* Square 1:1 — cap by 55vh */
+    .v-work.square    .art { width: min(clamp(220px, 26vw, 400px), 55vh);            height: min(clamp(220px, 26vw, 400px), 55vh); }
+
+    /* Salon hang: five works in one clean row, sized to fit so they never overlap.
+       Each figure is pinned to the art width so long captions wrap within it (rather
+       than widening the figure and forcing a wrap that collides with the wall note). */
+    .v-wall.salon .v-wall-arrangement { gap: clamp(14px, 1.8vw, 30px); flex-wrap: nowrap; align-items: flex-end; }
+    .v-wall.salon .v-work { flex: 0 0 auto; }
+    .v-wall.salon .v-work.landscape { width: min(17vw, 244px); }
+    .v-wall.salon .v-work.portrait  { width: min(11.4vw, 164px); }
+    .v-wall.salon .v-work.square    { width: min(14vw, 200px); }
+    .v-wall.salon .v-work .art { width: 100%; }
+    .v-wall.salon .v-work.landscape .art { height: min(11.3vw, 162px); }
+    .v-wall.salon .v-work.portrait  .art { height: min(17vw, 244px); }
+    .v-wall.salon .v-work.square    .art { height: min(14vw, 200px); }
+    .v-wall.salon .v-work-caption { margin-top: 10px; font-size: 9px; letter-spacing: 0.18em; }
+    @media (hover: hover) and (pointer: fine) { .v-wall.salon .v-work:hover { transform: translateY(-6px); } }
+    /* The salon is the closing room — offer to take the whole show home from here. */
+    .v-secure-cta { margin-top: clamp(6px, 1.2vh, 16px); }
+    /* Single-hero allows more height: cap 68vh */
+    .v-wall.single-hero .v-work.portrait  .art { width: min(clamp(260px, 32vw, 460px), calc(68vh * 2 / 3)); height: min(clamp(390px, 48vw, 690px), 68vh); }
+    .v-wall.single-hero .v-work.landscape .art { width: min(clamp(380px, 48vw, 740px), calc(60vh * 3 / 2)); height: min(clamp(251px, 32vw, 488px), 60vh); }
+    .v-wall.single-hero .v-work.square    .art { width: min(clamp(300px, 36vw, 520px), 68vh);              height: min(clamp(300px, 36vw, 520px), 68vh); }
+
+    .v-wall.diptych .v-wall-arrangement { gap: clamp(30px, 5vw, 70px); }
+    .v-wall.triptych .v-wall-arrangement { gap: clamp(18px, 3vw, 44px); align-items: center; }
+    .v-wall.triptych .v-work:not(:nth-child(2)) { transform: translateY(10px); }
+    @media (hover: hover) and (pointer: fine) { .v-wall.triptych .v-work:not(:nth-child(2)):hover { transform: translateY(4px); } }
+    /* Three landscape works can't sit at hero width without colliding — pin each figure so
+       all three fit the row (the art fills it, long captions wrap within), as the salon does. */
+    @media (min-width: 721px) {
+      .v-wall.triptych .v-work.landscape { flex: 0 0 auto; width: min(26vw, 380px); }
+      .v-wall.triptych .v-work.landscape .art { width: 100%; height: auto; aspect-ratio: 3 / 2; }
+    }
+    /* Comparison — two works, a single quiet rule between them */
+    .v-wall.comparison .v-wall-arrangement { gap: clamp(40px, 6vw, 80px); position: relative; }
+    .v-wall.comparison .v-wall-arrangement::after {
+      content: ''; position: absolute; left: 50%; top: 22%; bottom: 22%; width: 1px;
+      background: var(--gallery-line);
+    }
+
+    .v-sold-dot { position: absolute; top: 10px; right: 10px; width: 7px; height: 7px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 0 2px var(--gallery-bg); z-index: 3; }
+    .v-work-caption { margin-top: 14px; text-align: center; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gallery-ink-60); }
+    .v-work-caption strong { font-weight: 500; color: var(--gallery-ink); letter-spacing: 0.24em; }
+    .v-work-caption em { font-style: normal; color: var(--gallery-ink); font-family: var(--serif); letter-spacing: 0; text-transform: none; font-size: 13px; opacity: 0.92; }
+
+    /* Closing — invite to walk another exhibition */
+    .v-closing { flex-direction: column; text-align: center; align-items: center; width: 100%; padding: 80px 48px 64px; overflow-y: auto; max-height: 100%; }
+    .v-closing-eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gallery-ink-60); margin-bottom: 22px; }
+    .v-closing h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(1.7rem, 4.2vw, 2.8rem); line-height: 1.12; margin: 0 0 18px; text-wrap: balance; color: var(--gallery-ink); }
+    .v-closing p { color: var(--gallery-ink-60); font-size: 15px; line-height: 1.8; margin-bottom: 32px; max-width: 540px; margin-left: auto; margin-right: auto; font-family: var(--sans); font-weight: 300; }
+    .v-closing-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 44px; }
+    .v-other-heading { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gallery-ink-60); margin-bottom: 20px; }
+    .v-other-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(22px, 2.6vw, 40px); width: min(1040px, 100%); margin: 0 auto; }
+    @media (max-width: 820px) { .v-other-grid { grid-template-columns: 1fr; } }
+    /* Borderless teaser cards — one image, title, dek, quiet link. No box, no collage. */
+    .v-other-card {
+      display: flex; flex-direction: column; gap: 12px;
+      text-align: left; cursor: pointer; text-decoration: none; color: inherit;
+    }
+    .v-other-card .cover { aspect-ratio: 3/2; background-size: cover; background-position: center; background-color: var(--gallery-wall); filter: var(--gallery-drop); transition: opacity 0.3s var(--ease-out); }
+    .v-other-card:hover .cover { opacity: 0.82; }
+    .v-other-card h4 { font-family: var(--serif); font-weight: 400; font-size: 19px; margin: 6px 0 0; line-height: 1.2; color: var(--gallery-ink); }
+    .v-other-card p { font-size: 12.5px; color: var(--gallery-ink-60); margin: 0; line-height: 1.55; font-family: var(--sans); font-weight: 300; max-width: 30ch; }
+    .v-other-card .walk-cta { margin-top: 2px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gallery-ink-60); transition: color 0.2s var(--ease-out); }
+    .v-other-card:hover .walk-cta { color: var(--gallery-ink); }
+
+    .v-nav-btn { position: fixed; top: 50%; transform: translateY(-50%); z-index: 35; width: 44px; height: 44px; border-radius: 50%; background: transparent; backdrop-filter: blur(10px); border: 1px solid var(--gallery-line-strong); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+    .v-nav-btn:hover { background: var(--gallery-line-soft); border-color: var(--gallery-ink-60); }
+    .v-nav-btn svg { width: 16px; height: 16px; stroke: var(--gallery-ink); stroke-width: 1.5; fill: none; }
+    .v-nav-prev { left: 20px; }
+    .v-nav-next { right: 20px; }
+    .v-nav-btn.hidden { opacity: 0; pointer-events: none; }
+
+    /* Detail panel — Ivory surface */
+    .v-detail { position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); background: var(--ivory); border-left: 1px solid var(--ink-14); transform: translateX(100%); transition: transform 0.42s var(--ease-drawer); z-index: 60; overflow-y: auto; color: var(--ink); }
+    .v-detail.open { transform: translateX(0); }
+    .v-detail-close { position: absolute; top: 14px; right: 14px; z-index: 2; background: none; border: none; cursor: pointer; padding: 8px; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-60); }
+    .v-detail-close:hover { color: var(--ink); }
+    .v-detail-image { width: 100%; aspect-ratio: 3/4; background: var(--bone); display: flex; align-items: center; justify-content: center; padding: 28px; }
+    .v-detail-image .art { width: 100%; height: 100%; filter: drop-shadow(0 16px 26px rgba(28,26,24,0.20)); background-size: contain; background-repeat: no-repeat; background-position: center; }
+    .v-detail-body { padding: 28px 32px 36px; }
+    .v-detail-eyebrow { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-60); margin-bottom: 10px; }
+    .v-detail-title { font-family: var(--serif); font-weight: 300; font-size: 2rem; line-height: 1.1; text-wrap: balance; margin: 0 0 4px; }
+    .v-detail-artist { font-family: var(--sans); font-weight: 400; font-size: 0.95rem; letter-spacing: 0.01em; color: var(--ink-60); margin-bottom: 22px; }
+    .v-detail-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ink-10); font-size: 13px; }
+    .v-detail-row .k { color: var(--ink-60); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+    .v-detail-note { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.7; color: var(--ink-80); padding: 18px 0; border-bottom: 1px solid var(--ink-10); margin-bottom: 20px; }
+    .v-detail-price { font-family: var(--serif); font-size: 1.7rem; margin: 14px 0 4px; letter-spacing: 0.01em; }
+    .v-detail-price-note { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-60); margin-bottom: 22px; }
+    .v-detail-actions { display: flex; flex-direction: column; gap: 10px; }
+    .v-detail-actions .btn { text-align: center; background: var(--ink); color: var(--ivory); border-color: var(--ink); }
+    .v-detail-actions .btn:hover { background: transparent; color: var(--ink); }
+    .v-detail-actions .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+    .v-detail-actions .btn-ghost:hover { background: var(--ink); color: var(--ivory); }
+    .v-soldout-banner { background: var(--danger); color: #fff; padding: 10px 14px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; text-align: center; margin-bottom: 18px; }
+
+    .v-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 55; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .v-backdrop.open { opacity: 1; pointer-events: auto; }
+    .v-toast { position: fixed; bottom: 28px; left: 50%; transform: translate(-50%, 32px); background: var(--ivory); color: var(--charcoal); padding: 11px 22px; font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 80; border: 1px solid var(--ink); }
+    .v-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* =========================================================
+       Emil polish — press feedback, entrance stagger, motion craft.
+       Placed after the component defs so the transitions win the cascade.
+       ========================================================= */
+    /* Tactile press on every pressable; they share the strong ease-out curve */
+    .v-foyer-cta, .v-voice, .v-lang button, .v-nav-btn, .v-detail-close, .v-other-card {
+      transition: background-color 0.16s var(--ease-out), color 0.16s var(--ease-out),
+                  border-color 0.16s var(--ease-out), transform 0.16s var(--ease-out);
+    }
+    .btn:active, .v-foyer-cta:active, .v-voice:active,
+    .v-lang button:active, .v-detail-close:active { transform: scale(0.97); }
+    .v-nav-btn:active { transform: translateY(-50%) scale(0.94); }
+    .v-other-card:active { transform: scale(0.99); }
+
+    /* Staggered first-view entrance for the foyer — a rare, first-time moment.
+       'backwards' fill (not forwards) so press feedback still works afterwards. */
+    @keyframes vRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .v-foyer > * { animation: vRise 0.7s var(--ease-out) backwards; }
+    .v-foyer-rule      { animation-delay: 0.06s; }
+    .v-foyer h1        { animation-delay: 0.12s; }
+    .v-foyer-sub       { animation-delay: 0.20s; }
+    .v-foyer-statement { animation-delay: 0.28s; }
+    .v-foyer-curator   { animation-delay: 0.36s; }
+    .v-foyer-cta       { animation-delay: 0.44s; }
+    .v-foyer-hint      { animation-delay: 0.52s; }
+
+    /* Gentle pulse while the voice-over is speaking (occasional state indication) */
+    @keyframes vPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .v-voice.playing svg { animation: vPulse 1.6s var(--ease-in-out) infinite; }
+
+    /* ----- Viewer responsive ----- */
+    @media (max-width: 900px) {
+      .v-topbar { padding: 12px 16px; gap: 8px; flex-wrap: wrap; }
+      .v-brand { display: none; }
+      .v-progress { margin: 0 8px; max-width: none; }
+    }
+    @media (max-width: 720px) {
+      .v-track { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; }
+      .v-panel { flex: 0 0 100%; padding: 76px 18px 84px; }
+      .v-nav-btn { display: none; }
+      .v-topbar {
+        padding: 10px 12px 10px 12px;
+        top: auto; bottom: 0; left: 0; right: 0;
+        background: rgba(28,26,24,0.92); backdrop-filter: blur(12px);
+        border-top: 1px solid var(--gallery-line);
+        justify-content: space-between;
+      }
+      body.mode-viewer.viewer-light .v-topbar { background: rgba(247,241,233,0.94); border-top: 1px solid var(--ink-14); }
+      .v-progress { margin: 0 8px; max-width: none; flex: 1; }
+      .v-progress-label { font-size: 9px; letter-spacing: 0.18em; }
+      .v-voice { padding: 6px 10px 6px 8px; font-size: 9px; letter-spacing: 0.18em; }
+      .v-voice .v-voice-label { display: inline; }
+      .v-lang button { padding: 6px 8px; font-size: 9px; letter-spacing: 0.18em; }
+      .v-detail { width: 100vw; top: auto; height: 92vh; border-top: 1px solid var(--ink-14); border-left: none; transform: translateY(100%); }
+      .v-detail.open { transform: translateY(0); }
+      .v-detail-image { aspect-ratio: 4/3; padding: 18px; }
+      .v-detail-body { padding: 22px 22px 28px; }
+      .v-detail-title { font-size: 1.6rem; }
+      .v-wall.salon .v-work:nth-child(odd), .v-wall.salon .v-work:nth-child(even) { transform: translateY(0); }
+      .v-wall-inner { gap: clamp(12px, 2vh, 22px); }
+      .v-wall-arrangement { max-height: 62vh; }
+      .v-work.portrait  .art { width: min(60vw, 300px, calc(55vh * 2 / 3)); height: min(90vw, 450px, 55vh); }
+      .v-work.landscape .art { width: min(84vw, 480px, calc(42vh * 3 / 2)); height: min(56vw, 320px, 42vh); }
+      .v-work.square    .art { width: min(68vw, 360px, 50vh);               height: min(68vw, 360px, 50vh); }
+      .v-wall.single-hero .v-work.portrait  .art { width: min(72vw, 340px, calc(62vh * 2 / 3)); height: min(108vw, 510px, 62vh); }
+      .v-wall.single-hero .v-work.landscape .art { width: min(88vw, 520px, calc(48vh * 3 / 2)); height: min(58vw, 340px, 48vh); }
+      .v-wall.single-hero .v-work.square    .art { width: min(78vw, 400px, 58vh);               height: min(78vw, 400px, 58vh); }
+      /* Triptych and comparison: stack vertically on narrow screens */
+      .v-wall.triptych .v-wall-arrangement,
+      .v-wall.comparison .v-wall-arrangement,
+      .v-wall.diptych .v-wall-arrangement { flex-direction: column; align-items: center; gap: 18px; }
+      .v-wall.triptych .v-work:not(:nth-child(2)) { transform: translateY(0); }
+      .v-wall.comparison .v-wall-arrangement::after { display: none; }
+      /* On narrow, portrait work art shrinks further so captions fit under it */
+      .v-wall.triptych .v-work.portrait  .art,
+      .v-wall.comparison .v-work.portrait .art,
+      .v-wall.diptych .v-work.portrait  .art { width: min(46vw, 220px, calc(38vh * 2 / 3)); height: min(69vw, 330px, 38vh); }
+      .v-wall.triptych .v-work.landscape  .art,
+      .v-wall.comparison .v-work.landscape .art,
+      .v-wall.diptych .v-work.landscape  .art { width: min(72vw, 360px, calc(28vh * 3 / 2)); height: min(48vw, 240px, 28vh); }
+      .v-wall.triptych .v-work.square  .art,
+      .v-wall.comparison .v-work.square .art,
+      .v-wall.diptych .v-work.square  .art { width: min(50vw, 240px, 34vh); height: min(50vw, 240px, 34vh); }
+      .v-other-grid { grid-template-columns: 1fr; }
+      .v-closing { padding: 60px 22px 100px; }
+    }
+    @media (max-width: 520px) {
+      .v-panel { padding: 72px 14px 80px; }
+      .v-wall-title { font-size: 1.05rem; }
+      .v-wall-note { font-size: 0.9rem; max-height: 12vh; }
+    }
+    @media (max-width: 420px) {
+      .v-panel { padding: 68px 12px 80px; }
+      .v-foyer h1 { font-size: clamp(2rem, 9vw, 2.8rem); }
+      .v-foyer-statement { font-size: 15px; }
+      .v-foyer-cta { padding: 12px 22px; font-size: 10px; letter-spacing: 0.22em; }
+      .v-wall-title { font-size: 1rem; }
+      .v-wall-note { font-size: 0.88rem; max-height: 10vh; line-height: 1.5; }
+      .v-wall-number { font-size: 9px; letter-spacing: 0.26em; }
+    }
+    @media (max-width: 360px) {
+      .v-panel { padding: 64px 10px 78px; }
+      .v-topbar { padding: 8px 10px; }
+      .v-progress-label { font-size: 8px; letter-spacing: 0.14em; }
+      .v-voice { padding: 5px 8px 5px 6px; font-size: 8px; letter-spacing: 0.14em; }
+      .v-lang button { padding: 5px 6px; font-size: 8px; letter-spacing: 0.14em; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .v-track { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+      .v-foyer > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .v-voice.playing svg { animation: none !important; }
+    }
+  </style>
+</head>
+<body class="mode-viewer">
+
+  <div id="app"></div>
+
+<script>
+'use strict';
+// =============================================================
+// LUMAS Exhibition — VIEWER (standalone)
+// Extracted from the multi-mode exhibition app. Only the viewer
+// pathway is kept: foyer → walls → closing, with a detail panel,
+// keyboard / wheel / swipe navigation, and AI voice-over.
+// =============================================================
+const app = document.getElementById('app');
+
+const LANGS = ['en', 'de', 'fr'];
+const LANG_SHORT  = { en: 'EN', de: 'DE', fr: 'FR' };
+const MARKET_DEFAULT_LANG = { DACH: 'de', US: 'en', UK: 'en', FR: 'fr', RoW: 'en' };
+
+// =============================================================
+// ANALYTICS — event bus
+// Console logs every event for observability during the demo; forwards to
+// any host page that embeds the viewer via postMessage so a real analytics
+// pipeline (Segment, GA4, internal) can subscribe without any coupling here.
+// =============================================================
+const Analytics = (function () {
+  const sessionId = 'ls_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now().toString(36);
+  const queue = [];
+  const MAX_QUEUE = 500;
+  function track(event, props) {
+    const ev = {
+      source: 'lumas-exhibition',
+      event: event,
+      sessionId,
+      ts: new Date().toISOString(),
+      url: location.href,
+      route: 'viewer',
+      props: props || {},
+    };
+    queue.push(ev);
+    if (queue.length > MAX_QUEUE) queue.shift();
+    try { console.debug('[LUMAS analytics]', ev.event, ev.props); } catch (_) {}
+    // Forward to any embedding parent (Spryker host page, etc.)
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ source: 'lumas-exhibition', type: 'analytics', payload: ev }, '*');
+      }
+    } catch (_) {}
+  }
+  function history() { return queue.slice(); }
+  return { track, history, sessionId };
+})();
+
+// Normalise any exhibition to the V3 shape (markets[], per-language voice objects).
+function migrateExhibition(ex) {
+  if (!ex) return ex;
+  if (!Array.isArray(ex.markets) || !ex.markets.length) {
+    ex.markets = ex.market ? [ex.market] : ['DACH'];
+  }
+  ex.market = ex.markets[0];
+  if (typeof ex.voiceIntro === 'string' || ex.voiceIntro == null) {
+    const s = typeof ex.voiceIntro === 'string' ? ex.voiceIntro : '';
+    ex.voiceIntro = { en: s, de: '', fr: '' };
+  } else {
+    ex.voiceIntro = { en: ex.voiceIntro.en || '', de: ex.voiceIntro.de || '', fr: ex.voiceIntro.fr || '' };
+  }
+  ex.voiceIntroAudio = ex.voiceIntroAudio && typeof ex.voiceIntroAudio === 'object' ? ex.voiceIntroAudio : {};
+  ex.walls = (ex.walls || []).map(w => {
+    if (typeof w.voiceScript === 'string' || w.voiceScript == null) {
+      const s = typeof w.voiceScript === 'string' ? w.voiceScript : '';
+      w.voiceScript = { en: s, de: '', fr: '' };
+    } else {
+      w.voiceScript = { en: w.voiceScript.en || '', de: w.voiceScript.de || '', fr: w.voiceScript.fr || '' };
+    }
+    w.voiceScriptAudio = w.voiceScriptAudio && typeof w.voiceScriptAudio === 'object' ? w.voiceScriptAudio : {};
+    return w;
+  });
+  ex.translationFlags = ex.translationFlags || {};
+  ex.wallTranslationFlags = ex.wallTranslationFlags || {};
+  ex.gallery = (ex.gallery === 'light' || ex.gallery === 'dark') ? ex.gallery : 'dark';
+  return ex;
+}
+
+// Which languages does this exhibition actually have voice-over for?
+function availableLangs(ex) {
+  const has = new Set();
+  LANGS.forEach(l => {
+    if ((ex.voiceIntro && ex.voiceIntro[l] && ex.voiceIntro[l].trim())
+     || (ex.walls || []).some(w => w.voiceScript && w.voiceScript[l] && w.voiceScript[l].trim())) {
+      has.add(l);
+    }
+  });
+  if (!has.size) has.add('en');
+  return LANGS.filter(l => has.has(l));
+}
+
+// =============================================================
+// SAMPLE DATA — works, wall grammars, four published exhibitions
+// =============================================================
+const WORKS = [
+  // ============================================================
+  // MODERN MASTERS — real LUMAS "Master" editions (DWH product master).
+  // image = framed edition render (img.lumas.com/showimg_<article_code>_full.jpg,
+  // hotlinks w/o referer); price = "from" (gross_price/100); year + edition size real.
+  // Shown on the light (Ivory) gallery surface — a white-cube hang for framed work.
+  // ============================================================
+  { id:'cho02', artist:'Candida Höfer',     title:'Elbphilharmonie Hamburg VIII', year:2016, editionSize:100, medium:'Fine art photograph',         editionLabel:'Limited Edition', price:2390, priceFrom:true, currency:'EUR', orientation:'square',    tone:'neutral', palette:'#d8d3c8', soldOut:false, image:'https://img.lumas.com/showimg_cho02_full.jpg' },
+  { id:'cho03', artist:'Candida Höfer',     title:'Kunsthistorisches Institut Bonn I', year:2020, editionSize:50, medium:'Fine art photograph',     editionLabel:'Limited Edition', price:1890, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#d9d6cf', soldOut:false, image:'https://img.lumas.com/showimg_cho03_full.jpg' },
+  { id:'gri01', artist:'Gerhard Richter',   title:'Abstraktes Bild',        year:1984, editionSize:500, medium:'Fine art print',               editionLabel:'Limited Edition', price:1490, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#b89a3a', soldOut:false, image:'https://img.lumas.com/showimg_gri01_full.jpg' },
+  { id:'gri02', artist:'Gerhard Richter',   title:'Juno',                   year:1983, editionSize:500, medium:'Fine art print',               editionLabel:'Limited Edition', price:1490, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#8a7a55', soldOut:false, image:'https://img.lumas.com/showimg_gri02_full.jpg' },
+  { id:'gri04', artist:'Gerhard Richter',   title:'Landschaft mit Wolke',   year:1969, editionSize:500, medium:'Fine art print',               editionLabel:'Limited Edition', price:1490, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#6b7a86', soldOut:false, image:'https://img.lumas.com/showimg_gri04_full.jpg' },
+  { id:'gri05', artist:'Gerhard Richter',   title:'Vögel',                  year:1964, editionSize:500, medium:'Fine art print',               editionLabel:'Limited Edition', price:1490, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#2b2b2b', soldOut:false, image:'https://img.lumas.com/showimg_gri05_full.jpg' },
+  { id:'kgr05', artist:'Katharina Grosse',  title:'Untitled I',             year:2026, editionSize:216, medium:'Fine art print',               editionLabel:'Limited Edition', price:2990, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#cf3f6a', soldOut:false, image:'https://img.lumas.com/showimg_kgr05_full.jpg' },
+  { id:'kgr06', artist:'Katharina Grosse',  title:'Untitled II',            year:2026, editionSize:247, medium:'Fine art print',               editionLabel:'Limited Edition', price:2990, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#d83f55', soldOut:false, image:'https://img.lumas.com/showimg_kgr06_full.jpg' },
+  { id:'kgr07', artist:'Katharina Grosse',  title:'Untitled III',           year:2026, editionSize:208, medium:'Fine art print',               editionLabel:'Limited Edition', price:2990, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#d8454f', soldOut:false, image:'https://img.lumas.com/showimg_kgr07_full.jpg' },
+  { id:'pdo04', artist:'Peter Doig',        title:'D1-1 Couloir 1',         year:2022, editionSize:250, medium:'Giclée print on cotton rag',   editionLabel:'Limited Edition', price:6500, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#9fb3c0', soldOut:false, image:'https://img.lumas.com/showimg_pdo04_full.jpg' },
+  { id:'pdo05', artist:'Peter Doig',        title:'D1-2 Couloir 2',         year:2022, editionSize:250, medium:'Giclée print on cotton rag',   editionLabel:'Limited Edition', price:6500, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#a7b8c4', soldOut:false, image:'https://img.lumas.com/showimg_pdo05_full.jpg' },
+  { id:'pdo06', artist:'Peter Doig',        title:'D1-3 Lost',              year:2022, editionSize:250, medium:'Giclée print on cotton rag',   editionLabel:'Limited Edition', price:9800, priceFrom:true, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#7a8a6a', soldOut:false, image:'https://img.lumas.com/showimg_pdo06_full.jpg' },
+  { id:'pdo12', artist:'Peter Doig',        title:'Painting for a Poet',    year:2026, editionSize:250, medium:'Fine art print',               editionLabel:'Limited Edition', price:7990, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#c98a7a', soldOut:false, image:'https://img.lumas.com/showimg_pdo12_full.jpg' },
+
+  // ============================================================
+  // NORDIC LIGHT — real LUMAS photography (cold north, sea, alpine). Bare art, _desktop.
+  // ============================================================
+  { id:'wuh76', artist:'Wolfgang Uhlig',  title:'Sea #14',            medium:'Fine art photograph', editionLabel:'Limited Edition', price:1352, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#2c5572', soldOut:false, image:'https://img.lumas.com/showimg_wuh76_desktop.jpg' },
+  { id:'dre09', artist:'Daniel Reiter',   title:'Welle V',            medium:'Fine art photograph', editionLabel:'Limited Edition', price:1592, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#2f6076', soldOut:false, image:'https://img.lumas.com/showimg_dre09_desktop.jpg' },
+  { id:'dre11', artist:'Daniel Reiter',   title:'Welle VI',           medium:'Fine art photograph', editionLabel:'Limited Edition', price:1112, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#4a7ba2', soldOut:false, image:'https://img.lumas.com/showimg_dre11_desktop.jpg' },
+  { id:'dre14', artist:'Daniel Reiter',   title:'Welle VII',          medium:'Fine art photograph', editionLabel:'Limited Edition', price:1112, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#356a86', soldOut:false, image:'https://img.lumas.com/showimg_dre14_desktop.jpg' },
+  { id:'dre25', artist:'Daniel Reiter',   title:'Bergwellen IV',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:952,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#a9cadd', soldOut:false, image:'https://img.lumas.com/showimg_dre25_desktop.jpg' },
+  { id:'dre27', artist:'Daniel Reiter',   title:'Bergwellen V',       medium:'Fine art photograph', editionLabel:'Limited Edition', price:952,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#b4d2e0', soldOut:false, image:'https://img.lumas.com/showimg_dre27_desktop.jpg' },
+  { id:'dre29', artist:'Daniel Reiter',   title:'Bergwellen VI',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:952,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#9ec3d6', soldOut:false, image:'https://img.lumas.com/showimg_dre29_desktop.jpg' },
+  { id:'dre35', artist:'Daniel Reiter',   title:'See III',            medium:'Fine art photograph', editionLabel:'Limited Edition', price:799,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#3b6a8c', soldOut:false, image:'https://img.lumas.com/showimg_dre35_desktop.jpg' },
+  { id:'cgo23', artist:'Claudio Gotsch',  title:'Abendstimmung Sils', medium:'Fine art photograph', editionLabel:'Limited Edition', price:920,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#c4cdd2', soldOut:false, image:'https://img.lumas.com/showimg_cgo23_desktop.jpg' },
+  { id:'cgo11', artist:'Claudio Gotsch',  title:'Kraftort Sils',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:1032, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#45596b', soldOut:false, image:'https://img.lumas.com/showimg_cgo11_desktop.jpg' },
+  { id:'cgo15', artist:'Claudio Gotsch',  title:'Bergwelt',           medium:'Fine art photograph', editionLabel:'Limited Edition', price:920,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#8a99a0', soldOut:false, image:'https://img.lumas.com/showimg_cgo15_desktop.jpg' },
+  { id:'hkp01', artist:'Hartwig Klappert',title:'Island 1',           medium:'Fine art photograph', editionLabel:'Limited Edition', price:1912, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#d6d8d7', soldOut:false, image:'https://img.lumas.com/showimg_hkp01_desktop.jpg' },
+  { id:'hkp03', artist:'Hartwig Klappert',title:'Forest 1',           medium:'Fine art photograph', editionLabel:'Limited Edition', price:1912, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#d2d4d1', soldOut:false, image:'https://img.lumas.com/showimg_hkp03_desktop.jpg' },
+
+  // ============================================================
+  // THE WARM SOUTH — real LUMAS photography (Riviera, Italy, Mediterranean).
+  // ============================================================
+  { id:'saa110', artist:'Slim Aarons',     title:'Positano Beach',          medium:'Fine art photograph', editionLabel:'Open Edition',    price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#3f7d86', soldOut:false, image:'https://img.lumas.com/showimg_saa110_desktop.jpg' },
+  { id:'saa45',  artist:'Slim Aarons',     title:'Hôtel du Cap-Eden-Roc',   medium:'Fine art photograph', editionLabel:'Open Edition',    price:263,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#5a86a0', soldOut:false, image:'https://img.lumas.com/showimg_saa45_desktop.jpg' },
+  { id:'saa09',  artist:'Slim Aarons',     title:'Sea Drive',               medium:'Fine art photograph', editionLabel:'Open Edition',    price:263,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#4f7e94', soldOut:false, image:'https://img.lumas.com/showimg_saa09_desktop.jpg' },
+  { id:'saa61',  artist:'Slim Aarons',     title:'Beverly Hills Hotel',     medium:'Fine art photograph', editionLabel:'Open Edition',    price:263,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#caa15e', soldOut:false, image:'https://img.lumas.com/showimg_saa61_desktop.jpg' },
+  { id:'pve235', artist:'Pep Ventosa',     title:'Val d’Orcia, Tuscany',    medium:'Fine art photograph', editionLabel:'Limited Edition', price:519,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#c8a86a', soldOut:false, image:'https://img.lumas.com/showimg_pve235_desktop.jpg' },
+  { id:'rne238', artist:'Rafael Neff',     title:'Sassicaia, Bolgheri',     medium:'Fine art photograph', editionLabel:'Limited Edition', price:479,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#b98f4e', soldOut:false, image:'https://img.lumas.com/showimg_rne238_desktop.jpg' },
+  { id:'rne264', artist:'Rafael Neff',     title:'Marchesi Antinori, Tuscany', medium:'Fine art photograph', editionLabel:'Limited Edition', price:479, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#c79a55', soldOut:false, image:'https://img.lumas.com/showimg_rne264_desktop.jpg' },
+  { id:'ama07',  artist:'Alex Maclean',    title:'Adriatic Coast, Cattolica',medium:'Fine art photograph', editionLabel:'Limited Edition', price:2072, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#5fa3b0', soldOut:false, image:'https://img.lumas.com/showimg_ama07_desktop.jpg' },
+  { id:'ama06',  artist:'Alex Maclean',    title:'Beach Goers, Rosignano',  medium:'Fine art photograph', editionLabel:'Limited Edition', price:2072, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#6fb0bb', soldOut:false, image:'https://img.lumas.com/showimg_ama06_desktop.jpg' },
+  { id:'tna07',  artist:'Tom Nagy',        title:'Colosseum',               medium:'Fine art photograph', editionLabel:'Limited Edition', price:1352, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#b88a55', soldOut:false, image:'https://img.lumas.com/showimg_tna07_desktop.jpg' },
+  { id:'tna05',  artist:'Tom Nagy',        title:'Forum Romanum',           medium:'Fine art photograph', editionLabel:'Limited Edition', price:1352, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#c0935c', soldOut:false, image:'https://img.lumas.com/showimg_tna05_desktop.jpg' },
+  { id:'tna03',  artist:'Tom Nagy',        title:'Castel Sant’Angelo',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:1352, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#b58a5a', soldOut:false, image:'https://img.lumas.com/showimg_tna03_desktop.jpg' },
+  { id:'cgu01',  artist:'Ciuco Gutiérrez', title:'The Dune, Fuerteventura', medium:'Fine art photograph', editionLabel:'Limited Edition', price:920,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#d8b27a', soldOut:false, image:'https://img.lumas.com/showimg_cgu01_desktop.jpg' },
+  { id:'saa112', artist:'Slim Aarons',     title:'Nassau Speed Week',       medium:'Fine art photograph', editionLabel:'Open Edition',    price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#cf8f4a', soldOut:false, image:'https://img.lumas.com/showimg_saa112_desktop.jpg' },
+  { id:'bsr04',  artist:'Ben Simon Rehn',  title:'Desert Ocean',            medium:'Fine art photograph', editionLabel:'Limited Edition', price:639,  priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#cf9b5e', soldOut:false, image:'https://img.lumas.com/showimg_bsr04_desktop.jpg' },
+
+  // ============================================================
+  // CITY, ELECTRIC — real LUMAS photography (skylines, neon, night).
+  // ============================================================
+  { id:'swi189', artist:'Sabine Wild',     title:'NY Projection LIX',        medium:'Fine art photograph', editionLabel:'Limited Edition', price:4472, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#9a7a5a', soldOut:false, image:'https://img.lumas.com/showimg_swi189_desktop.jpg' },
+  { id:'swi190', artist:'Sabine Wild',     title:'Shanghai Projections VIII',medium:'Fine art photograph', editionLabel:'Limited Edition', price:3512, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#8a8f96', soldOut:false, image:'https://img.lumas.com/showimg_swi190_desktop.jpg' },
+  { id:'swi339', artist:'Sabine Wild',     title:'NY Projection LVII',       medium:'Fine art photograph', editionLabel:'Limited Edition', price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#94795f', soldOut:false, image:'https://img.lumas.com/showimg_swi339_desktop.jpg' },
+  { id:'rwo03',  artist:'Reinhart Wolf',   title:'Empire State Building',    medium:'Fine art photograph', editionLabel:'Limited Edition', price:2712, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#5a4a3a', soldOut:false, image:'https://img.lumas.com/showimg_rwo03_desktop.jpg' },
+  { id:'rwo06',  artist:'Reinhart Wolf',   title:'Flatiron Building',        medium:'Fine art photograph', editionLabel:'Limited Edition', price:1832, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#6b665e', soldOut:false, image:'https://img.lumas.com/showimg_rwo06_desktop.jpg' },
+  { id:'rwo02',  artist:'Reinhart Wolf',   title:'Fuller Building',          medium:'Fine art photograph', editionLabel:'Limited Edition', price:2712, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#706a60', soldOut:false, image:'https://img.lumas.com/showimg_rwo02_desktop.jpg' },
+  { id:'rwo01',  artist:'Reinhart Wolf',   title:'New York Life Building',   medium:'Fine art photograph', editionLabel:'Limited Edition', price:2712, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#7a6a4a', soldOut:false, image:'https://img.lumas.com/showimg_rwo01_desktop.jpg' },
+  { id:'hes103', artist:'H.G. Esch',       title:'Hong Kong 05',             medium:'Fine art photograph', editionLabel:'Limited Edition', price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#3a4a5a', soldOut:false, image:'https://img.lumas.com/showimg_hes103_desktop.jpg' },
+  { id:'hes101', artist:'H.G. Esch',       title:'Hong Kong 06',             medium:'Fine art photograph', editionLabel:'Limited Edition', price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#3f5060', soldOut:false, image:'https://img.lumas.com/showimg_hes101_desktop.jpg' },
+  { id:'hes102', artist:'H.G. Esch',       title:'Chicago 01',               medium:'Fine art photograph', editionLabel:'Limited Edition', price:1999, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'cool', palette:'#44525e', soldOut:false, image:'https://img.lumas.com/showimg_hes102_desktop.jpg' },
+  { id:'pve27',  artist:'Pep Ventosa',     title:'The Brooklyn Bridge',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:2712, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#8a8276', soldOut:false, image:'https://img.lumas.com/showimg_pve27_desktop.jpg' },
+  { id:'ppe01',  artist:'Paolo Pettigiani',title:'Infrared NYC I',          medium:'Fine art photograph', editionLabel:'Limited Edition', price:2632, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#9a5a7a', soldOut:false, image:'https://img.lumas.com/showimg_ppe01_desktop.jpg' },
+  { id:'jmr02',  artist:'Jack Marijnissen',title:'Manhattan at Sunset',      medium:'Fine art photograph', editionLabel:'Limited Edition', price:2712, priceFrom:true, currency:'EUR', orientation:'landscape', tone:'warm', palette:'#b5764a', soldOut:false, image:'https://img.lumas.com/showimg_jmr02_desktop.jpg' },
+
+  // Henrik Vogler — cool, architectural, atmospheric (legacy placeholder data, unused)
+  { id:'w01', artist:'Henrik Vogler',  title:'Tokyo, Rain (I)',         year:2023, medium:'Archival pigment print, Diasec', editionSize:150, available:132, price:1890, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#2a3a4a', soldOut:false },
+  { id:'w02', artist:'Henrik Vogler',  title:'Tokyo, Rain (II)',        year:2023, medium:'Archival pigment print, Diasec', editionSize:150, available:128, price:1890, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#243140', soldOut:false },
+  { id:'w03', artist:'Henrik Vogler',  title:'Shinjuku, 04:12',         year:2022, medium:'Archival pigment print, Diasec', editionSize:75,  available:0,   price:3400, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#1b2530', soldOut:true  },
+  { id:'w13', artist:'Henrik Vogler',  title:'Reykjavík, First Light',  year:2024, medium:'Archival pigment print, Diasec', editionSize:120, available:118, price:1890, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#8ea3b2', soldOut:false },
+  { id:'w15', artist:'Henrik Vogler',  title:'Berlin, Blue Hour',       year:2024, medium:'Archival pigment print, Diasec', editionSize:100, available:94,  price:2150, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#3b4e66', soldOut:false },
+
+  // Anya Richter — neutral, coastal, meditative
+  { id:'w04', artist:'Anya Richter',   title:'Silver Shore',            year:2024, medium:'C-print, mounted',               editionSize:120, available:117, price:1450, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#c9c3b8', soldOut:false },
+  { id:'w05', artist:'Anya Richter',   title:'Coastal Fog, North',      year:2024, medium:'C-print, mounted',               editionSize:120, available:110, price:1450, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#b5b0a6', soldOut:false },
+  { id:'w06', artist:'Anya Richter',   title:'Between Tides',           year:2022, medium:'Archival pigment print',         editionSize:60,  available:12,  price:3950, currency:'EUR', orientation:'square',    tone:'neutral', palette:'#a79e92', soldOut:false },
+  { id:'w14', artist:'Anya Richter',   title:'Saltwater Mirror',        year:2023, medium:'C-print, mounted',               editionSize:100, available:76,  price:1750, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#94a3ab', soldOut:false },
+  { id:'w16', artist:'Anya Richter',   title:'Dune, Late March',        year:2024, medium:'C-print, mounted',               editionSize:150, available:143, price:1380, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#bdb4a3', soldOut:false },
+
+  // Marco Rossi — warm, Italian light, architectural interiors
+  { id:'w07', artist:'Marco Rossi',    title:'Architettura della luce', year:2021, medium:'Archival pigment print, Diasec', editionSize:95,  available:18,  price:2780, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#c58a52', soldOut:false },
+  { id:'w08', artist:'Marco Rossi',    title:'Palazzo, mezzogiorno',    year:2021, medium:'Archival pigment print, Diasec', editionSize:95,  available:0,   price:2780, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#b77a44', soldOut:true  },
+  { id:'w09', artist:'Marco Rossi',    title:'Stanza con vista',        year:2023, medium:'Archival pigment print',         editionSize:150, available:141, price:1650, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#a3683a', soldOut:false },
+  { id:'w17', artist:'Marco Rossi',    title:'Colonnade, Sera',         year:2022, medium:'Archival pigment print, Diasec', editionSize:80,  available:24,  price:2450, currency:'EUR', orientation:'square',    tone:'warm',    palette:'#b88658', soldOut:false },
+
+  // Yuki Tanaka — quiet, minimalist Japanese landscapes
+  { id:'w10', artist:'Yuki Tanaka',    title:'Hokkaido, Winter Field',  year:2024, medium:'Archival pigment print, Diasec', editionSize:100, available:100, price:2150, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#e6e4df', soldOut:false },
+  { id:'w11', artist:'Yuki Tanaka',    title:'Solitary Pine',           year:2023, medium:'Archival pigment print',         editionSize:80,  available:42,  price:2650, currency:'EUR', orientation:'portrait',  tone:'neutral', palette:'#d9d5cc', soldOut:false },
+  { id:'w12', artist:'Yuki Tanaka',    title:'Quiet Lake',              year:2022, medium:'Archival pigment print',         editionSize:60,  available:7,   price:3250, currency:'EUR', orientation:'square',    tone:'neutral', palette:'#cdc7ba', soldOut:false },
+  { id:'w18', artist:'Yuki Tanaka',    title:'Snowline, Morning',       year:2024, medium:'Archival pigment print',         editionSize:120, available:116, price:1890, currency:'EUR', orientation:'landscape', tone:'neutral', palette:'#ecebe4', soldOut:false },
+
+  // Elena Moretti — colour-saturated abstract
+  { id:'w19', artist:'Elena Moretti',  title:'Interno, Rosso',          year:2024, medium:'Archival pigment print, Diasec', editionSize:75,  available:68,  price:2280, currency:'EUR', orientation:'square',    tone:'warm',    palette:'#a84234', soldOut:false },
+  { id:'w20', artist:'Elena Moretti',  title:'Campo di luce',           year:2023, medium:'Archival pigment print, Diasec', editionSize:75,  available:22,  price:2780, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#d9a94a', soldOut:false },
+  { id:'w21', artist:'Elena Moretti',  title:'La finestra',             year:2023, medium:'Archival pigment print',         editionSize:120, available:108, price:1590, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#c76b4d', soldOut:false },
+
+  // Klaus Brenner — B&W reportage, Berlin
+  { id:'w22', artist:'Klaus Brenner',  title:'Mitte, Dezember',         year:2022, medium:'Silver gelatin print',           editionSize:50,  available:6,   price:3850, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#3d3d3b', soldOut:false },
+  { id:'w23', artist:'Klaus Brenner',  title:'U-Bahn, 23:04',           year:2023, medium:'Silver gelatin print',           editionSize:50,  available:0,   price:3850, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#2b2b2a', soldOut:true  },
+  { id:'w24', artist:'Klaus Brenner',  title:'Stadtmitte',              year:2024, medium:'Archival pigment print',         editionSize:100, available:87,  price:1950, currency:'EUR', orientation:'square',    tone:'cool',    palette:'#4a4a48', soldOut:false },
+
+  // Sofia Lindqvist — Nordic minimalism
+  { id:'w25', artist:'Sofia Lindqvist',title:'Archipelago',             year:2024, medium:'Archival pigment print, Diasec', editionSize:100, available:94,  price:2050, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#9aacb4', soldOut:false },
+  { id:'w26', artist:'Sofia Lindqvist',title:'Stillhet',                year:2023, medium:'Archival pigment print',         editionSize:80,  available:48,  price:2380, currency:'EUR', orientation:'square',    tone:'neutral', palette:'#bec4bf', soldOut:false },
+  { id:'w27', artist:'Sofia Lindqvist',title:'Winter Light, Gotland',   year:2024, medium:'Archival pigment print, Diasec', editionSize:120, available:119, price:1680, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#a8b1b6', soldOut:false },
+
+  // Noor Haddad — desert, warm monochromes
+  { id:'w28', artist:'Noor Haddad',    title:'Wadi Rum, Noon',          year:2022, medium:'Archival pigment print',         editionSize:100, available:38,  price:2180, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#c8896a', soldOut:false },
+  { id:'w29', artist:'Noor Haddad',    title:'Erg Chebbi',              year:2023, medium:'Archival pigment print, Diasec', editionSize:75,  available:21,  price:2680, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#b9754c', soldOut:false },
+  { id:'w30', artist:'Noor Haddad',    title:'Oasis, Last Light',       year:2024, medium:'Archival pigment print, Diasec', editionSize:100, available:96,  price:2050, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#a86540', soldOut:false },
+
+  // Takeshi Osano — urban Japan, neons
+  { id:'w31', artist:'Takeshi Osano',  title:'Kabukichō, Electric',     year:2023, medium:'Archival pigment print, Diasec', editionSize:120, available:102, price:1750, currency:'EUR', orientation:'portrait',  tone:'cool',    palette:'#2d1a35', soldOut:false },
+  { id:'w32', artist:'Takeshi Osano',  title:'Osaka, Late',             year:2024, medium:'Archival pigment print, Diasec', editionSize:100, available:95,  price:1950, currency:'EUR', orientation:'landscape', tone:'cool',    palette:'#1c2a3a', soldOut:false },
+  { id:'w33', artist:'Takeshi Osano',  title:'Shibuya Scramble',        year:2022, medium:'Archival pigment print',         editionSize:80,  available:14,  price:2680, currency:'EUR', orientation:'square',    tone:'cool',    palette:'#322540', soldOut:false },
+
+  // David Okafor — portrait, West African light
+  { id:'w34', artist:'David Okafor',   title:'Lagos, Saturday',         year:2023, medium:'Archival pigment print',         editionSize:100, available:74,  price:1950, currency:'EUR', orientation:'portrait',  tone:'warm',    palette:'#c9833f', soldOut:false },
+  { id:'w35', artist:'David Okafor',   title:'Makoko, Morning Light',   year:2024, medium:'Archival pigment print, Diasec', editionSize:80,  available:68,  price:2380, currency:'EUR', orientation:'landscape', tone:'warm',    palette:'#d59857', soldOut:false },
+  { id:'w36', artist:'David Okafor',   title:'Market Day',              year:2023, medium:'Archival pigment print',         editionSize:120, available:109, price:1580, currency:'EUR', orientation:'square',    tone:'warm',    palette:'#b47438', soldOut:false },
+
+  // Hanna Weiss — botanical studies
+  { id:'w37', artist:'Hanna Weiss',    title:'Iris, Study II',          year:2023, medium:'Archival pigment print',         editionSize:150, available:138, price:1250, currency:'EUR', orientation:'portrait',  tone:'neutral', palette:'#808a76', soldOut:false },
+  { id:'w38', artist:'Hanna Weiss',    title:'Peony, Late May',         year:2024, medium:'Archival pigment print',         editionSize:150, available:147, price:1250, currency:'EUR', orientation:'square',    tone:'warm',    palette:'#c59aa1', soldOut:false },
+];
+
+const WALL_TYPES = {
+  'single-hero': { label: 'Single hero',   maxWorks: 1, recommendedWorks: 1, hint: 'A single work, given the room. Best for an opening or a closing note.' },
+  'diptych':     { label: 'Diptych',       maxWorks: 2, recommendedWorks: 2, hint: 'Two works in quiet dialogue. Left reads first.' },
+  'triptych':    { label: 'Triptych',      maxWorks: 3, recommendedWorks: 3, hint: 'A three-part sequence. The centre holds the weight.' },
+  'salon':       { label: 'Salon hang',    maxWorks: 8, recommendedWorks: 6, hint: 'Dense, staggered — a room that rewards slower looking.' },
+  'comparison':  { label: 'Comparison',    maxWorks: 2, recommendedWorks: 2, hint: 'Two works deliberately set against each other. A quiet rule holds them apart.' },
+  'custom':      { label: 'Custom (free)', maxWorks: 8, recommendedWorks: 4, hint: 'No prescribed grammar. Use sparingly.' },
+};
+
+// Four published sample exhibitions — enough to show "other exhibitions" on closing.
+const SAMPLE_EXHIBITIONS = [
+  {
+    id: 'ex-master-artists-01',
+    title: 'Modern Masters',
+    subtitle: 'Richter, Höfer, Grosse, Doig — four contemporary masters in limited edition.',
+    curator: 'Lena Brandt', curatorRole: 'LUMAS Curatorial Team',
+    market: 'DACH', language: 'en', status: 'published',
+    gallery: 'dark',
+    statement: 'Four of the most significant artists of our time, in signed limited editions — Gerhard Richter’s painting between abstraction and the photograph, Candida Höfer’s vast and silent interiors, Katharina Grosse’s sprayed fields of colour, and Peter Doig’s dreamlike northern landscapes. Walk slowly; each of these is a museum work, in an edition small enough to live with.',
+    voiceIntro: 'Welcome to Modern Masters. Four artists who shaped contemporary art — Gerhard Richter, Candida Höfer, Katharina Grosse and Peter Doig — gathered here as signed, limited editions. These are not reproductions; they are works the artists themselves released into the world, in small numbers. Take your time.',
+    walls: [
+      { id:'wall-1', type:'single-hero', title:'The cathedral of culture',  curatorNote:'Candida Höfer photographs the great interiors of public life — libraries, opera houses, museums — empty, frontal, perfectly still. Here, Herzog & de Meuron’s Elbphilharmonie in Hamburg.', voiceScript:'We open with Candida Höfer. She photographs the great interiors of public life — libraries, opera houses, concert halls — always empty, always head-on, always silent. This is the Elbphilharmonie in Hamburg. Notice there is not a single person in it. Höfer waited until the room belonged only to itself.', workIds:['cho02'] },
+      { id:'wall-2', type:'diptych',     title:'Grosse — Untitled I & II',  curatorNote:'Katharina Grosse paints with an industrial spray gun, at the scale of whole buildings. These two editions bottle that colour onto paper — read them as a pair.', voiceScript:'Katharina Grosse normally paints with an industrial spray gun, across whole buildings and landscapes. These two editions bottle that energy onto paper. Colour over colour, with no horizon and no subject — just velocity. They were made as a pair; read them together.', workIds:['kgr05','kgr06'] },
+      { id:'wall-3', type:'triptych',    title:'Doig — the road to Zermatt', curatorNote:'Three works from Peter Doig’s alpine series. A couloir, a second couloir, a figure lost in snow — painting that remembers the mountain rather than describes it.', voiceScript:'Peter Doig paints landscape from memory, not from life. These three come from his Zermatt series — a couloir, a second couloir, and a figure lost in the snow. The mountains are not quite real; they are the mountains as you remember them afterwards, half dream, half cold.', workIds:['pdo04','pdo05','pdo06'] },
+      { id:'wall-4', type:'comparison',  title:'Two Richters',               curatorNote:'Gerhard Richter built a career on the gap between abstraction and the photograph. On the left, the squeegeed abstraction; on the right, a blurred landscape painted after a photo.', voiceScript:'Gerhard Richter spent sixty years moving between two ways of painting. On the left, an Abstract Picture — paint dragged with a squeegee, no subject at all. On the right, Landscape with Cloud — a painting made after a photograph, deliberately blurred. The same hand, two opposite faiths about what a picture is for.', workIds:['gri01','gri04'] },
+      { id:'wall-5', type:'salon',       title:'The Collection',             curatorNote:'Five works from across the show, hung close. Museum names, in editions small enough to live with.', voiceScript:'A closing room. A Höfer interior, two Richters, a Grosse and a Doig — hung close, no hierarchy. Every one of these hangs in a museum somewhere. Here they are at the scale of a living room. Stay as long as you like.', workIds:['cho03','gri05','kgr07','pdo12','gri02'] },
+    ],
+  },
+  {
+    id: 'ex-nordic-light-02',
+    title: 'Nordic Light',
+    subtitle: 'Cold light from the far north — the sea, the mountains, the snow.',
+    curator: 'Erik Sandström', curatorRole: 'Guest Curator · Stockholm',
+    market: 'DACH', language: 'en', status: 'published',
+    statement: 'An exhibition about northern light and the patience it asks for — Wolfgang Uhlig at the open sea, Daniel Reiter where the water turns to mountains, Claudio Gotsch in the high Engadin, Hartwig Klappert in the snow. Sit with each a little longer than you would elsewhere.',
+    voiceIntro: 'Nordic Light is an exhibition about cold, clear light and the patience it takes to catch it. The open sea, a wave, an alpine lake at dusk, a stand of trees in the snow. Take your time.',
+    walls: [
+      { id:'wall-1', type:'single-hero', title:'The cold sea',              curatorNote:'Wolfgang Uhlig — LUMAS’ most-collected photographer — at the open sea. Nothing but water and a thin band of sky.', voiceScript:'We open at the open sea, with Wolfgang Uhlig, the most-collected photographer at LUMAS. He waits for the moment the water goes quiet. There is almost nothing here, and that is the point. Let your eye settle.', workIds:['wuh76'] },
+      { id:'wall-2', type:'diptych',     title:'The sea, twice',            curatorNote:'Two frames from Daniel Reiter’s wave series. Read them left to right — the sea does not calm between them, it only changes its mind.', voiceScript:'Daniel Reiter made these two within an hour of each other. Welle Five, then Welle Six. The light is the same; the temperament is not.', workIds:['dre09','dre11'] },
+      { id:'wall-3', type:'triptych',    title:'Bergwellen',                curatorNote:'Reiter calls these “mountain waves” — ridge behind ridge, dissolving into haze. A three-part sequence, hung as he intended it.', voiceScript:'The German word is Bergwellen — mountain waves. Reiter photographs ranges the way he photographs the sea: as rhythm, as repetition. Three frames, each a little further into the haze.', workIds:['dre25','dre27','dre29'] },
+      { id:'wall-4', type:'comparison',  title:'Two winters',               curatorNote:'Claudio Gotsch’s Engadin lake against Hartwig Klappert’s snowbound field. The same season, two temperaments — one mirrored and still, one bare and exact.', voiceScript:'Two winters, set against each other. On the left, Claudio Gotsch — Lake Sils at dusk. On the right, Hartwig Klappert — a stand of trees marooned in snow. One is all softness, the other all edge. Both completely silent.', workIds:['cgo23','hkp01'] },
+      { id:'wall-5', type:'salon',       title:'The long night',            curatorNote:'Five works, hung close — a lake, an alpine evening, a ridge, a forest, one last wave.', voiceScript:'A closing room. A lake with a single sail, an alpine evening, a mountain ridge, a forest in snow, one last wave. No correct order. Stay as long as you like.', workIds:['dre35','cgo11','cgo15','hkp03','dre14'] },
+    ],
+  },
+  {
+    id: 'ex-warm-south-03',
+    title: 'The Warm South',
+    subtitle: 'The Riviera, Tuscany, the Mediterranean sun.',
+    curator: 'Sofia Romano', curatorRole: 'LUMAS Curatorial Team · Milan',
+    market: 'FR', language: 'en', status: 'published',
+    statement: 'Heat, light and the good life — Slim Aarons on the Riviera, Pep Ventosa and Rafael Neff in the hills of Tuscany, Alex Maclean over the Italian coast, Tom Nagy in Rome. An exhibition about what the southern sun does to a photograph.',
+    voiceIntro: 'The Warm South is an exhibition about heat and ease — the Riviera, the Italian coast, the Tuscan hills, Rome at golden hour. Slim Aarons leads; he made a whole career of photographing the sunlit life. Take it slowly, the way you would an afternoon down south.',
+    walls: [
+      { id:'wall-1', type:'single-hero', title:'Positano',                  curatorNote:'Slim Aarons made a career of the sunlit life. Positano from above — umbrellas, sea, the good life.', voiceScript:'We open with Slim Aarons, who spent his life photographing, in his own words, attractive people doing attractive things in attractive places. Positano Beach, from above. The warm south as a state of mind.', workIds:['saa110'] },
+      { id:'wall-2', type:'diptych',     title:'The coast from above',      curatorNote:'Alex Maclean flies low over the Italian shore — the Adriatic at Cattolica, and the bathers at Rosignano. The beach as pure pattern.', voiceScript:'Alex Maclean photographs the world from a small plane, looking straight down. Two stretches of the Italian coast — Cattolica on the Adriatic, and the bright water at Rosignano. From above, the warm south becomes geometry.', workIds:['ama07','ama06'] },
+      { id:'wall-3', type:'triptych',    title:'Roma',                      curatorNote:'Tom Nagy in Rome — the Colosseum, the Forum, the Castel Sant’Angelo, in warm evening stone.', voiceScript:'Tom Nagy photographs the great cities at the hour the stone turns gold. Three Roman landmarks — the Colosseum, the Forum, and Castel Sant’Angelo. The light the painters came south for.', workIds:['tna07','tna05','tna03'] },
+      { id:'wall-4', type:'comparison',  title:'Land and sea',              curatorNote:'Pep Ventosa’s Tuscan hills against Ben Simon Rehn’s dunes meeting the Atlantic — the warm south as land, and as sea.', voiceScript:'Two ways of seeing the south. On the left, Pep Ventosa — the hills of the Val d’Orcia at dawn, soft as a memory. On the right, Ben Simon Rehn, where the desert runs straight into the sea. Heat, from the soil and from the water.', workIds:['pve235','bsr04'] },
+      { id:'wall-5', type:'salon',       title:'Somewhere south',           curatorNote:'Four warm works, hung close — a Slim Aarons afternoon in the Bahamas, two Tuscan estates, a Canary dune.', voiceScript:'A warm closing room. Slim Aarons at the Nassau Speed Week, two Tuscan estates, a dune in the Canaries. Meant to feel like four in the afternoon, somewhere south. Stay as long as you like.', workIds:['saa112','rne238','rne264','cgu01'] },
+    ],
+  },
+  {
+    id: 'ex-city-electric-04',
+    title: 'City, Electric',
+    subtitle: 'Skylines, neon and the electric night.',
+    curator: 'Mara Vogel', curatorRole: 'Guest Curator · New York',
+    market: 'DACH', language: 'en', status: 'published',
+    statement: 'The modern city as light and energy — Sabine Wild’s blurred, electric skylines, Reinhart Wolf’s portraits of the great New York towers, H.G. Esch over Hong Kong and Chicago, Pep Ventosa and Paolo Pettigiani reinventing New York. A show about the city after dark.',
+    voiceIntro: 'City, Electric is an exhibition about the modern metropolis — its skylines, its towers, its neon. New York, Hong Kong, Shanghai, Chicago, seen by photographers who treat the city as pure light and energy. Take it at speed, or slowly; the city does both.',
+    walls: [
+      { id:'wall-1', type:'single-hero', title:'Electric city',            curatorNote:'Sabine Wild photographs cities in motion — the New York skyline smeared into pure electric light.', voiceScript:'We open with Sabine Wild, who photographs cities in motion. The skyline of New York, dragged into streaks of pure light. Not a record of the city, but the feeling of being inside it.', workIds:['swi189'] },
+      { id:'wall-2', type:'diptych',     title:'Two towers',               curatorNote:'Reinhart Wolf’s portraits of two New York icons — the Empire State at dusk, and the Flatiron.', voiceScript:'Reinhart Wolf photographed the great New York towers as if they were portraits. The Empire State at dusk, lit from within. The Flatiron, wedged into its corner. Monuments, made personal.', workIds:['rwo03','rwo06'] },
+      { id:'wall-3', type:'triptych',    title:'Skylines',                 curatorNote:'H.G. Esch over three skylines — Hong Kong twice, then Chicago. The contemporary city as a wall of light.', voiceScript:'H.G. Esch shoots skylines until the city becomes an abstract wall of light. Hong Kong, twice, and then Chicago. Read them as one long horizon.', workIds:['hes103','hes101','hes102'] },
+      { id:'wall-4', type:'comparison',  title:'Reinventing New York',     curatorNote:'Pep Ventosa’s in-the-round Brooklyn Bridge against Paolo Pettigiani’s infrared New York — two ways of making the familiar city strange.', voiceScript:'Two reinventions of the most photographed city on earth. Pep Ventosa turns the Brooklyn Bridge in the round, a hundred frames in one. Paolo Pettigiani shoots New York in infrared, the parks gone shocking pink. The same city, made new.', workIds:['pve27','ppe01'] },
+      { id:'wall-5', type:'salon',       title:'After dark',               curatorNote:'Five works, hung close — Shanghai in motion, two more New York towers, Manhattan at sunset.', voiceScript:'A closing room, after dark. Shanghai in motion, the Fuller and New York Life towers, Manhattan going gold at sunset, one more electric skyline. The city never quite switches off.', workIds:['swi190','rwo02','rwo01','jmr02','swi339'] },
+    ],
+  },
+];
+
+// In-memory exhibition store — deterministic, no localStorage coupling.
+function loadExhibitions() {
+  return SAMPLE_EXHIBITIONS.map(e => migrateExhibition(JSON.parse(JSON.stringify(e))));
+}
+function getExhibition(id) {
+  const ex = loadExhibitions().find(e => e.id === id);
+  return ex ? migrateExhibition(ex) : null;
+}
+
+// --------- images ---------
+function workImage(w, width = 900) {
+  if (w.image) return w.image; // real LUMAS artwork image (bare art, hotlinkable)
+  const seed = parseInt(w.id.replace(/\D/g, ''), 10) + 200;
+  const aspect = w.orientation === 'portrait' ? 1.5 : w.orientation === 'square' ? 1 : 0.66;
+  const h = Math.round(width * aspect);
+  return `https://picsum.photos/seed/lumas${seed}/${width}/${h}`;
+}
+function svgFallback(w) {
+  const c = w.palette || '#c0b8a8';
+  const dark = c.replace(/^#/, '').match(/.{2}/g).map(h => Math.max(0, parseInt(h,16) - 40).toString(16).padStart(2,'0')).join('');
+  // encodeURIComponent leaves apostrophes raw; escape them so the data URI is safe inside single-quoted url('...').
+  const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 90'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${c}'/><stop offset='1' stop-color='#${dark}'/></linearGradient></defs><rect width='60' height='90' fill='url(#g)'/><rect x='12' y='66' width='36' height='1' fill='#fff' fill-opacity='0.25'/></svg>`).replace(/'/g, '%27');
+  return `data:image/svg+xml;charset=UTF-8,${svg}`;
+}
+// Single-quoted url() values so the whole thing is safe inside a double-quoted style="" attribute set via innerHTML.
+// Single layer only: with background-size:contain a second (fallback) layer would
+// show through the letterbox gaps as coloured bands. The transparent tile lets the
+// gallery wall fill the letterbox instead.
+function bgImage(w, px = 900) { return `url('${workImage(w, px)}')`; }
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+// =============================================================
+// AI VOICE-OVER (Web Speech API)
+// Sentence-chunked utterances give natural pauses between clauses.
+// Per-language voice selection with preference for neural/premium voices.
+// =============================================================
+const Voice = {
+  queue: [],       // pending SpeechSynthesisUtterance chunks
+  current: null,   // currently speaking utterance
+  button: null,    // current play button reference
+  token: 0,        // invalidates in-flight async work on stop/route change
+  audio: null,     // HTMLAudioElement currently playing an uploaded file, if any
+};
+
+function voicesReady() {
+  return new Promise(resolve => {
+    const s = window.speechSynthesis;
+    if (!s) return resolve([]);
+    const now = s.getVoices();
+    if (now && now.length) return resolve(now);
+    const handler = () => { s.removeEventListener('voiceschanged', handler); resolve(s.getVoices() || []); };
+    s.addEventListener('voiceschanged', handler);
+    setTimeout(() => resolve(s.getVoices() || []), 800); // fallback
+  });
+}
+
+// Per-language preference lists — prefer neural / premium system voices first,
+// fall back to any voice in the right locale, then any voice at all.
+const VOICE_PREFS = {
+  en: [
+    /Samantha.*\(Premium\)/i, /Samantha/i,
+    /Ava.*\(Premium\)/i, /Ava/i,
+    /Allison.*\(Premium\)/i, /Allison/i,
+    /Evan.*\(Premium\)/i,
+    /Microsoft Jenny Online/i, /Microsoft Aria Online/i,
+    /Google UK English Female/i,
+    /Serena|Karen|Moira|Fiona|Tessa/i,
+    /en-GB/i, /en-US/i, /^en/i,
+  ],
+  de: [
+    /Anna.*\(Premium\)/i, /Anna/i,
+    /Petra.*\(Premium\)/i, /Petra/i,
+    /Markus.*\(Premium\)/i,
+    /Microsoft Katja Online/i, /Microsoft Hedda Online/i,
+    /Google Deutsch/i,
+    /^de-DE/i, /^de/i,
+  ],
+  fr: [
+    /Amélie.*\(Premium\)/i, /Amelie.*\(Premium\)/i, /Amélie|Amelie/i,
+    /Thomas.*\(Premium\)/i, /Thomas/i,
+    /Marie.*\(Premium\)/i,
+    /Microsoft Denise Online/i, /Microsoft Julie Online/i,
+    /Google français/i,
+    /^fr-FR/i, /^fr/i,
+  ],
+};
+
+function pickVoice(voices, lang = 'en') {
+  const prefs = VOICE_PREFS[lang] || VOICE_PREFS.en;
+  for (const re of prefs) {
+    const m = voices.find(v => re.test(v.name) || re.test(v.lang));
+    if (m) return m;
+  }
+  // last-ditch: anything matching the language prefix
+  const prefix = lang.slice(0, 2);
+  return voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix)) || voices[0] || null;
+}
+
+// Split a block of prose into speakable sentences.
+function chunkForSpeech(text) {
+  if (!text) return [];
+  const cleaned = text.replace(/\s+/g, ' ').trim();
+  const parts = cleaned.match(/[^.!?…]+[.!?…]+(?:["'”’)\]]+)?|[^.!?…]+$/g) || [cleaned];
+  return parts.map(s => s.trim()).filter(Boolean);
+}
+
+const BCP47 = { en: 'en-US', de: 'de-DE', fr: 'fr-FR' };
+
+function stopSpeech() {
+  const s = window.speechSynthesis;
+  Voice.token++;             // invalidate any pending queue
+  Voice.queue = [];
+  Voice.current = null;
+  if (s) { try { s.cancel(); } catch(_) {} }
+  // Also stop any uploaded-audio playback sharing this control
+  if (Voice.audio) { try { Voice.audio.pause(); } catch(_) {} Voice.audio = null; }
+  const btn = Voice.button;
+  Voice.button = null;
+  if (btn) {
+    btn.classList.remove('playing');
+    const lbl = btn.querySelector('.v-voice-label');
+    if (lbl) lbl.textContent = btn.dataset.labelIdle || 'Listen';
+  }
+}
+
+// Play an uploaded voice-over file (data URL stored per-language).
+function playAudio(slot, button) {
+  if (!slot || !slot.data) return;
+  if (Voice.button === button && Voice.audio) { stopSpeech(); return; }
+  stopSpeech();
+
+  let audio;
+  try { audio = new Audio(slot.data); } catch (_) { showToast('Could not load voice-over file'); return; }
+  audio.preload = 'auto';
+  Voice.audio = audio;
+  Voice.button = button;
+  if (button) {
+    button.classList.add('playing');
+    const lbl = button.querySelector('.v-voice-label');
+    if (lbl) { button.dataset.labelIdle = lbl.textContent; lbl.textContent = 'Stop'; }
+  }
+  const cleanup = () => {
+    if (Voice.audio !== audio) return;
+    Voice.audio = null;
+    const btn = Voice.button;
+    Voice.button = null;
+    if (btn) {
+      btn.classList.remove('playing');
+      const lbl = btn.querySelector('.v-voice-label');
+      if (lbl) lbl.textContent = btn.dataset.labelIdle || 'Listen';
+    }
+  };
+  audio.addEventListener('ended', cleanup);
+  audio.addEventListener('error', () => { showToast('Voice-over file could not be played'); cleanup(); });
+  audio.play().catch(() => { showToast('Tap again to play voice-over'); cleanup(); });
+}
+
+async function speak(text, button, lang = 'en') {
+  const s = window.speechSynthesis;
+  if (!s) { showToast('Voice-over not supported in this browser'); return; }
+  if (!text || !text.trim()) return;
+
+  // Toggle: same button tapped again → stop.
+  if (Voice.button === button && (Voice.current || Voice.queue.length)) { stopSpeech(); return; }
+  stopSpeech();
+
+  const myToken = ++Voice.token;
+  const voices = await voicesReady();
+  if (myToken !== Voice.token) return;           // stopped while loading voices
+  const voice = pickVoice(voices, lang);
+
+  const chunks = chunkForSpeech(text);
+  Voice.queue = chunks.map(chunk => {
+    const u = new SpeechSynthesisUtterance(chunk);
+    if (voice) u.voice = voice;
+    u.lang = (voice && voice.lang) || BCP47[lang] || 'en-US';
+    u.rate = 0.96;     // slightly slower than default — gallery pace
+    u.pitch = 1.0;
+    u.volume = 1.0;
+    return u;
+  });
+
+  Voice.button = button;
+  if (button) {
+    button.classList.add('playing');
+    const lbl = button.querySelector('.v-voice-label');
+    if (lbl) { button.dataset.labelIdle = lbl.textContent; lbl.textContent = 'Stop'; }
+  }
+
+  // Drain the queue sequentially. Natural gap between utterances = breath.
+  const drain = () => {
+    if (myToken !== Voice.token) return;
+    const next = Voice.queue.shift();
+    if (!next) { Voice.current = null; stopSpeech(); return; }
+    Voice.current = next;
+    next.onend = () => { if (myToken === Voice.token) drain(); };
+    next.onerror = () => { if (myToken === Voice.token) drain(); };
+    try { s.speak(next); } catch(_) { drain(); }
+  };
+  drain();
+}
+
+// =============================================================
+// VIEWER VIEW
+// =============================================================
+let viewerState = { index: 0, total: 0, ex: null, lang: 'en' };
+
+function renderViewer(exhibitionId, urlLang) {
+  const ex = migrateExhibition(getExhibition(exhibitionId) || JSON.parse(JSON.stringify(SAMPLE_EXHIBITIONS[0])));
+  viewerState.ex = ex;
+  viewerState.total = ex.walls.length + 2;
+  viewerState._completed = false;
+  const langs = availableLangs(ex);
+  // Resolve language: explicit URL param wins, otherwise default from first market, otherwise 'en'.
+  let lang = urlLang && langs.includes(urlLang) ? urlLang : null;
+  if (!lang) {
+    const marketLang = MARKET_DEFAULT_LANG[(ex.markets && ex.markets[0]) || 'DACH'];
+    lang = langs.includes(marketLang) ? marketLang : langs[0] || 'en';
+  }
+  viewerState.lang = lang;
+
+  // Apply gallery surface (dark/light). Default dark.
+  document.body.classList.toggle('viewer-light', ex.gallery === 'light');
+
+  Analytics.track('exhibition_opened', {
+    exhibitionId: ex.id, title: ex.title, lang,
+    gallery: ex.gallery || 'dark',
+    walls: ex.walls.length,
+    markets: ex.markets || []
+  });
+
+  const langToggleHtml = langs.length > 1
+    ? `<div class="v-lang" role="tablist" aria-label="Voice-over language">
+         ${langs.map(l => `<button role="tab" data-lang="${l}" class="${l===lang?'active':''}" aria-selected="${l===lang}">${LANG_SHORT[l]}</button>`).join('')}
+       </div>`
+    : '';
+
+  app.innerHTML = `
+    <div class="viewer">
+      <div class="v-topbar">
+        <div class="v-brand"><strong>LUMAS</strong> · Exhibition</div>
+        <div class="v-progress"><div class="v-progress-bar" id="v-progress-bar"></div></div>
+        <div class="v-progress-label" id="v-progress-label">1 / ${viewerState.total}</div>
+        ${langToggleHtml}
+        <button class="v-voice" id="v-voice" aria-label="Play curator voice-over">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <span class="v-voice-label">Listen</span>
+        </button>
+      </div>
+      <button class="v-nav-btn v-nav-prev hidden" id="v-nav-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="v-nav-btn v-nav-next" id="v-nav-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div class="v-track" id="v-track" tabindex="0" aria-label="Exhibition walkthrough">
+        ${viewerFoyer(ex)}
+        ${ex.walls.map((w, i) => viewerWall(w, i)).join('')}
+        ${viewerClosing(ex)}
+      </div>
+      <div class="v-backdrop" id="v-backdrop"></div>
+      <aside class="v-detail" id="v-detail" role="dialog" aria-label="Work detail">
+        <button class="v-detail-close" id="v-detail-close">Close</button>
+        <div class="v-detail-image" id="v-detail-image"></div>
+        <div class="v-detail-body" id="v-detail-body"></div>
+      </aside>
+      <div class="v-toast" id="v-toast">Saved to your wishlist</div>
+    </div>
+  `;
+
+  bindViewer();
+}
+
+function viewerFoyer(ex) {
+  return `
+    <section class="v-panel v-foyer" data-index="0">
+      <div class="v-foyer-eyebrow">LUMAS Exhibition · ${esc((ex.markets || [ex.market || '']).join(' · '))}</div>
+      <div class="v-foyer-rule"></div>
+      <h1>${esc(ex.title)}</h1>
+      <div class="v-foyer-sub">${esc(ex.subtitle)}</div>
+      <p class="v-foyer-statement">${esc(ex.statement)}</p>
+      <div class="v-foyer-curator">Curated by ${esc(ex.curator)} · ${esc(ex.curatorRole)}</div>
+      <button class="v-foyer-cta" id="v-begin">Enter the exhibition <span aria-hidden="true">→</span></button>
+      <div class="v-foyer-hint">Or use <kbd>→</kbd> <kbd>←</kbd> · scroll · swipe</div>
+    </section>`;
+}
+
+function viewerWall(wall, i) {
+  const works = wall.workIds.map(wid => WORKS.find(x => x.id === wid)).filter(Boolean);
+  const worksHtml = works.map(w => {
+    const soldOverride = wall.soldOutOverrides && wall.soldOutOverrides[w.id];
+    const isSold = soldOverride !== undefined ? soldOverride : w.soldOut;
+    return `
+      <figure class="v-work ${w.orientation}" data-work="${w.id}" role="button" tabindex="0" aria-label="${esc(w.artist)} — ${esc(w.title)}">
+        <div class="frame">
+          <div class="art" style="background-image: ${bgImage(w, 900)}" aria-hidden="true"></div>
+          ${isSold ? '<div class="v-sold-dot" title="No longer available"></div>' : ''}
+        </div>
+        <figcaption class="v-work-caption"><strong>${esc(w.artist)}</strong> · <em>${esc(w.title)}</em></figcaption>
+      </figure>`;
+  }).join('');
+  return `
+    <section class="v-panel v-wall ${wall.type}" data-index="${i + 1}" data-wall="${wall.id}">
+      <div class="v-wall-inner">
+        <div class="v-wall-number">Wall ${String(i + 1).padStart(2, '0')} — ${WALL_TYPES[wall.type] ? WALL_TYPES[wall.type].label : wall.type}</div>
+        <div class="v-wall-title">${esc(wall.title || '')}</div>
+        <div class="v-wall-arrangement">${worksHtml}</div>
+        <div class="v-wall-note">${esc(wall.curatorNote || '')}</div>
+        ${wall.type === 'salon' ? `<button class="v-foyer-cta v-secure-cta" data-secure>Secure the exhibition <span aria-hidden="true">→</span></button>` : ''}
+      </div>
+    </section>`;
+}
+
+function viewerClosing(ex) {
+  // Find up to 3 other published exhibitions for the "walk another" grid.
+  const others = loadExhibitions().filter(e => e.id !== ex.id).slice(0, 3);
+  const pool = others.length < 3
+    ? others.concat(SAMPLE_EXHIBITIONS.filter(s => s.id !== ex.id && !others.find(o => o.id === s.id))).slice(0, 3)
+    : others;
+
+  const otherCards = pool.map(o => {
+    // One clean hero image per card — the exhibition's opening work.
+    const hero = o.walls.flatMap(w => w.workIds).map(id => WORKS.find(x => x.id === id)).find(Boolean);
+    const cover = hero ? `<div class="cover" style="background-image: ${bgImage(hero, 900)}"></div>` : `<div class="cover"></div>`;
+    return `
+      <a class="v-other-card" href="#viewer?id=${esc(o.id)}">
+        ${cover}
+        <h4>${esc(o.title)}</h4>
+        <p>${esc(o.subtitle)}</p>
+        <div class="walk-cta">Walk this exhibition →</div>
+      </a>`;
+  }).join('');
+
+  return `
+    <section class="v-panel v-closing" data-index="${ex.walls.length + 1}">
+      <div class="v-closing-eyebrow">End of the walkthrough</div>
+      <h2>Thank you for walking through.</h2>
+      <p>If a work stayed with you, save it to your wishlist — or speak with one of our Art Consultants about how it could live with you.</p>
+      <div class="v-closing-actions">
+        <button class="btn" id="v-cta-restart">Walk it again</button>
+        <button class="btn btn-ghost" id="v-cta-consult">Speak with an Art Consultant</button>
+      </div>
+      ${pool.length ? `<div class="v-other-heading">Or walk another exhibition</div><div class="v-other-grid">${otherCards}</div>` : ''}
+    </section>`;
+}
+
+function bindViewer() {
+  const track = document.getElementById('v-track');
+  const prevBtn = document.getElementById('v-nav-prev');
+  const nextBtn = document.getElementById('v-nav-next');
+  const bar = document.getElementById('v-progress-bar');
+  const label = document.getElementById('v-progress-label');
+  const detail = document.getElementById('v-detail');
+  const backdrop = document.getElementById('v-backdrop');
+  const voiceBtn = document.getElementById('v-voice');
+
+  // Panels are NOT all the same width (the foyer is capped at 820px, the closing at
+  // 1100px), so scroll to each panel's real offset rather than index × clientWidth.
+  // The old index × clientWidth math drifts and skips the first wall on wide
+  // (>~1640px) viewports; offsets land exactly on the snap point at any width.
+  function goTo(i) {
+    i = Math.max(0, Math.min(viewerState.total - 1, i));
+    const mobile = window.matchMedia('(max-width: 720px)').matches;
+    const target = track.querySelectorAll('.v-panel')[i];
+    if (target) {
+      if (mobile) track.scrollTo({ top:  target.offsetTop,  behavior: 'smooth' });
+      else        track.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+    }
+    viewerState.index = i;
+  }
+  function panelMeta(idx) {
+    const ex = viewerState.ex;
+    if (idx === 0) return { kind: 'foyer', id: ex.id + ':foyer', title: 'Foyer' };
+    if (idx > 0 && idx <= ex.walls.length) {
+      const w = ex.walls[idx - 1];
+      return { kind: 'wall', id: w.id, wallType: w.type, title: w.title || WALL_TYPES[w.type]?.label, wallIndex: idx };
+    }
+    return { kind: 'closing', id: ex.id + ':closing', title: 'Closing' };
+  }
+  function updateProgress() {
+    const mobile = window.matchMedia('(max-width: 720px)').matches;
+    const pos = mobile
+      ? track.scrollTop / Math.max(1, track.scrollHeight - track.clientHeight)
+      : track.scrollLeft / Math.max(1, track.scrollWidth - track.clientWidth);
+    bar.style.width = Math.round(pos * 100) + '%';
+    const offset = mobile ? track.scrollTop : track.scrollLeft;
+    const prevIdx = viewerState.index;
+    // Nearest panel by real offset — panels have unequal widths (see goTo).
+    const panels = track.querySelectorAll('.v-panel');
+    let nearest = 0, nd = Infinity;
+    panels.forEach((p, idx) => {
+      const o = mobile ? p.offsetTop : p.offsetLeft;
+      const d = Math.abs(o - offset);
+      if (d < nd) { nd = d; nearest = idx; }
+    });
+    viewerState.index = nearest;
+    label.textContent = `${Math.min(viewerState.index + 1, viewerState.total)} / ${viewerState.total}`;
+    prevBtn.classList.toggle('hidden', viewerState.index === 0);
+    nextBtn.classList.toggle('hidden', viewerState.index === viewerState.total - 1);
+    // Fire a panel_viewed on change
+    if (prevIdx !== viewerState.index) {
+      if (Voice.current || Voice.audio) stopSpeech();
+      const meta = panelMeta(viewerState.index);
+      Analytics.track('panel_viewed', { exhibitionId: viewerState.ex.id, index: viewerState.index, ...meta });
+      // Reached the closing panel for the first time → mark completion.
+      if (meta.kind === 'closing' && !viewerState._completed) {
+        viewerState._completed = true;
+        Analytics.track('exhibition_completed', { exhibitionId: viewerState.ex.id, walls: viewerState.ex.walls.length, lang: viewerState.lang });
+      }
+    }
+    // Disable voice button on closing panel
+    const closingIdx = viewerState.ex.walls.length + 1;
+    voiceBtn.setAttribute('aria-disabled', viewerState.index === closingIdx ? 'true' : 'false');
+  }
+  track.addEventListener('scroll', updateProgress, { passive: true });
+  prevBtn.addEventListener('click', () => { Analytics.track('panel_nav', { exhibitionId: viewerState.ex.id, dir: 'prev' }); goTo(viewerState.index - 1); });
+  nextBtn.addEventListener('click', () => { Analytics.track('panel_nav', { exhibitionId: viewerState.ex.id, dir: 'next' }); goTo(viewerState.index + 1); });
+
+  // Language toggle in the top bar
+  document.querySelectorAll('.v-lang button').forEach(b => b.addEventListener('click', () => {
+    const newLang = b.dataset.lang;
+    if (newLang === viewerState.lang) return;
+    const prevLang = viewerState.lang;
+    viewerState.lang = newLang;
+    document.querySelectorAll('.v-lang button').forEach(x => {
+      x.classList.toggle('active', x === b);
+      x.setAttribute('aria-selected', x === b ? 'true' : 'false');
+    });
+    if (Voice.current) stopSpeech();
+    Analytics.track('language_changed', { exhibitionId: viewerState.ex.id, from: prevLang, to: newLang });
+  }));
+
+  // Pick voice-over text + optional uploaded audio for the current panel + selected language.
+  function voicePayloadForCurrent() {
+    const ex = viewerState.ex;
+    const idx = viewerState.index;
+    const lang = viewerState.lang || 'en';
+    const pickText = (slot, fallback) => {
+      if (!slot) return fallback || '';
+      return (slot[lang] && slot[lang].trim()) || (slot.en && slot.en.trim()) || fallback || '';
+    };
+    const pickAudio = (slot) => {
+      if (!slot) return null;
+      return (slot[lang] && slot[lang].data) ? slot[lang] : (slot.en && slot.en.data ? slot.en : null);
+    };
+    if (idx === 0) return { text: pickText(ex.voiceIntro, ex.statement), audio: pickAudio(ex.voiceIntroAudio) };
+    if (idx > 0 && idx <= ex.walls.length) {
+      const wall = ex.walls[idx - 1];
+      return { text: pickText(wall.voiceScript, wall.curatorNote), audio: pickAudio(wall.voiceScriptAudio) };
+    }
+    return { text: '', audio: null };
+  }
+
+  // Voice-over — prefer uploaded audio file, fall back to Web Speech TTS
+  voiceBtn.addEventListener('click', () => {
+    if (voiceBtn.getAttribute('aria-disabled') === 'true') return;
+    const { text, audio } = voicePayloadForCurrent();
+    if (audio && audio.data) {
+      Analytics.track('voice_started', { exhibitionId: viewerState.ex.id, index: viewerState.index, mode: 'audio-file', lang: viewerState.lang });
+      playAudio(audio, voiceBtn);
+      return;
+    }
+    if (!text.trim()) { showToast('No voice-over written for this wall'); return; }
+    Analytics.track('voice_started', { exhibitionId: viewerState.ex.id, index: viewerState.index, mode: 'tts', lang: viewerState.lang });
+    speak(text, voiceBtn, viewerState.lang);
+  });
+
+  // Keyboard
+  function onKey(e) {
+    if (location.hash.replace(/^#\/?/, '').split('?')[0] !== 'viewer') return;
+    if (detail.classList.contains('open')) { if (e.key === 'Escape') closeDetail(); return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); goTo(viewerState.index + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'PageUp')                    { e.preventDefault(); goTo(viewerState.index - 1); }
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(viewerState.total - 1);
+  }
+  window.addEventListener('keydown', onKey);
+
+  // Wheel on desktop → horizontal
+  let wheelLock = false;
+  track.addEventListener('wheel', (e) => {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+    if (Math.abs(e.deltaY) < 4) return;
+    e.preventDefault();
+    if (wheelLock) return;
+    wheelLock = true;
+    goTo(viewerState.index + (e.deltaY > 0 ? 1 : -1));
+    setTimeout(() => { wheelLock = false; }, 520);
+  }, { passive: false });
+
+  // Begin
+  document.getElementById('v-begin').addEventListener('click', () => {
+    Analytics.track('exhibition_begin_clicked', { exhibitionId: viewerState.ex.id });
+    goTo(1);
+  });
+  const restartBtn = document.getElementById('v-cta-restart');
+  if (restartBtn) restartBtn.addEventListener('click', () => {
+    Analytics.track('exhibition_restart_clicked', { exhibitionId: viewerState.ex.id });
+    goTo(0);
+  });
+  const consultBtn = document.getElementById('v-cta-consult');
+  if (consultBtn) consultBtn.addEventListener('click', () => {
+    Analytics.track('consultant_clicked', { exhibitionId: viewerState.ex.id, lang: viewerState.lang });
+    showToast('Opening Art Consultant — stub.');
+  });
+  // Secure the whole show — primary CTA on the salon (closing) wall.
+  track.querySelectorAll('[data-secure]').forEach(btn => btn.addEventListener('click', () => {
+    Analytics.track('exhibition_secure_clicked', { exhibitionId: viewerState.ex.id, lang: viewerState.lang });
+    postHost('exhibition:secure', { exhibitionId: viewerState.ex.id, title: viewerState.ex.title });
+    showToast('Securing the exhibition — an Art Consultant will be in touch.');
+  }));
+
+  // Work clicks
+  track.querySelectorAll('.v-work').forEach(el => {
+    el.addEventListener('click', () => openDetail(el.dataset.work));
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(el.dataset.work); } });
+  });
+
+  document.getElementById('v-detail-close').addEventListener('click', closeDetail);
+  backdrop.addEventListener('click', closeDetail);
+
+  // Other-exhibition card clicks on the closing panel
+  track.querySelectorAll('.v-other-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const href = card.getAttribute('href') || '';
+      const targetId = (href.match(/id=([^&]+)/) || [])[1] || '';
+      Analytics.track('other_exhibition_clicked', { from: viewerState.ex.id, to: targetId });
+    });
+  });
+
+  function openDetail(workId) {
+    const w = WORKS.find(x => x.id === workId); if (!w) return;
+    const wall = viewerState.ex.walls.find(wl => wl.workIds.includes(workId));
+    const soldOverride = wall && wall.soldOutOverrides && wall.soldOutOverrides[workId];
+    const isSold = soldOverride !== undefined ? soldOverride : w.soldOut;
+    const price = new Intl.NumberFormat('de-DE', { style:'currency', currency:w.currency, maximumFractionDigits:0 }).format(w.price);
+    document.getElementById('v-detail-image').innerHTML = `<div class="art" style="background-image: ${bgImage(w, 900)}"></div>`;
+    document.getElementById('v-detail-body').innerHTML = `
+      ${isSold ? '<div class="v-soldout-banner">No longer available · from the archive</div>' : ''}
+      <div class="v-detail-eyebrow">${esc(w.medium)}</div>
+      <h2 class="v-detail-title">${esc(w.title)}</h2>
+      <div class="v-detail-artist">${esc(w.artist)}${w.year ? ', ' + w.year : ''}</div>
+      <div class="v-detail-row"><span class="k">Edition</span><span>${w.editionSize ? 'Signed, numbered · edition of ' + w.editionSize : esc(w.editionLabel || 'Limited Edition') + (/open/i.test(w.editionLabel || '') ? '' : ' · signed &amp; numbered')}</span></div>
+      <div class="v-detail-row"><span class="k">Medium</span><span>${esc(w.medium)}</span></div>
+      ${(!isSold && w.available != null && w.editionSize) ? `<div class="v-detail-row"><span class="k">Available</span><span>${w.available} of ${w.editionSize}</span></div>` : ''}
+      ${wall ? `<div class="v-detail-note">${esc(wall.curatorNote)}</div>` : ''}
+      ${!isSold ? `
+        <div class="v-detail-price">${w.priceFrom ? 'From ' : ''}${price}</div>
+        <div class="v-detail-price-note">Incl. VAT. Framing available as a paid service.</div>
+        <div class="v-detail-actions">
+          <button class="btn" data-action="wishlist" data-work="${w.id}">Add to wishlist</button>
+          <button class="btn btn-ghost" data-action="pdp" data-work="${w.id}">View the edition on LUMAS</button>
+        </div>` : ''}
+    `;
+    detail.querySelectorAll('[data-action]').forEach(b => b.addEventListener('click', () => {
+      const action = b.dataset.action;
+      if (action === 'wishlist') {
+        postHost('wishlist:add', { workId: b.dataset.work });
+        Analytics.track('wishlist_added', { exhibitionId: viewerState.ex.id, workId: b.dataset.work, artist: w.artist, title: w.title });
+        showToast('Saved to your wishlist');
+      }
+      if (action === 'pdp') {
+        if (w.link) window.open(w.link, '_blank', 'noopener');
+        postHost('pdp:open', { workId: b.dataset.work, url: w.link || null });
+        Analytics.track('pdp_clicked', { exhibitionId: viewerState.ex.id, workId: b.dataset.work, artist: w.artist, title: w.title });
+        showToast('Opening the edition · ' + w.title);
+      }
+    }));
+    Analytics.track('work_detail_opened', { exhibitionId: viewerState.ex.id, workId, artist: w.artist, title: w.title, sold: isSold });
+    detail.classList.add('open'); backdrop.classList.add('open');
+  }
+  function closeDetail() { detail.classList.remove('open'); backdrop.classList.remove('open'); }
+
+  window.addEventListener('hashchange', function once() {
+    window.removeEventListener('keydown', onKey); window.removeEventListener('hashchange', once);
+    stopSpeech();
+  });
+
+  updateProgress();
+  window.addEventListener('resize', updateProgress);
+}
+
+function postHost(type, payload) {
+  try { if (window.parent && window.parent !== window) window.parent.postMessage({ source:'lumas-exhibition', type, payload }, '*'); } catch(_) {}
+  console.log('[LUMAS]', type, payload || '');
+}
+function showToast(msg) {
+  const t = document.getElementById('v-toast'); if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(showToast._t); showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// =============================================================
+// ROUTER (viewer-only) + BOOT
+// Reads #viewer?id=<exhibitionId>&lang=<en|de|fr>. Anything else
+// falls back to the default exhibition, so the page always opens
+// on a working walkthrough.
+// =============================================================
+function parseHash() {
+  const h = location.hash.replace(/^#\/?/, '') || 'viewer';
+  const [route, query] = h.split('?');
+  const params = new URLSearchParams(query || '');
+  return { route, params };
+}
+
+function route() {
+  stopSpeech();
+  const { params } = parseHash();
+  document.body.className = 'mode-viewer';
+  renderViewer(params.get('id') || 'ex-master-artists-01', params.get('lang'));
+}
+
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
