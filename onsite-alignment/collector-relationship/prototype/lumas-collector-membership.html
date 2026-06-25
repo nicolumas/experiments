@@ -234,13 +234,13 @@ function renderFeed(){
     ${f.reserved ? `
     <div class="fl-done">
       <div class="fl-done-h">${checkSm()} Reserved with credit</div>
-      <p>Clara Voss will confirm and arrange framed delivery, with a free 30-day return.</p>
+      <p>Clara Voss will confirm and arrange framed delivery, with a free 60-day return.</p>
       <button class="fl-undo" onclick="unreserve(${i})">Undo</button>
     </div>` : `
     <div class="fl-credit">${f.credit}</div>
     <div class="fl-trust">
       <span class="tb">${arIcon()} See it on your wall</span>
-      <span class="tb">${shieldIcon()} 30-day return</span>
+      <span class="tb">${shieldIcon()} 60-day return</span>
     </div>
     <div class="fl-actions"><button class="btn btn-primary" onclick="reserve(${i})">Reserve with credit</button></div>`}
   </div>`).join("");
