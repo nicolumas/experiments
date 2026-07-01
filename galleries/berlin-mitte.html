@@ -343,8 +343,7 @@
   .catalog-head p { color: var(--text-secondary); max-width: 580px; }
 
   /* Two-column layout: filter sidebar + grid */
-  .catalog-section .container { max-width: none; padding: 0 32px; }
-  .catalog-layout { display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+  .catalog-layout { display: grid; grid-template-columns: 240px 1fr; gap: 56px; align-items: start; }
   .catalog-main { min-width: 0; }
   .catalog-meta { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-default); flex-wrap: wrap; }
   .catalog-meta .count { color: var(--text-tertiary); font-size: 13px; }
@@ -386,7 +385,7 @@
 
   .catalog-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px 20px;
   }
   .catalog-card { display: flex; flex-direction: column; gap: 10px; transition: transform 500ms var(--ease-glide); }
@@ -410,8 +409,7 @@
   .filter-mobile-toggle { display: none; }
 
   @media (max-width: 1200px) {
-    .catalog-layout { grid-template-columns: 200px 1fr; gap: 40px; }
-    .catalog-main { grid-column: auto; }
+    .catalog-layout { grid-template-columns: 220px 1fr; gap: 40px; }
     .catalog-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 900px) {
@@ -830,14 +828,14 @@
 
     <div class="artists-row">
       <a href="#" class="artist-card reveal">
-        <div class="artist-portrait" style="background-image: url('https://img.lumas.com/showimg_wpa05_desktop.jpg');"></div>
-        <span class="name">Werner Pawlok</span>
+        <div class="artist-portrait" style="background-image: url('https://img.lumas.com/showimg_gve36_desktop.jpg');"></div>
+        <span class="name">Gavin Evans</span>
         <span class="focus">Photography</span>
       </a>
       <a href="#" class="artist-card reveal">
-        <div class="artist-portrait" style="background-image: url('https://img.lumas.com/showimg_hli05_desktop.jpg');"></div>
-        <span class="name">Holger Lippmann</span>
-        <span class="focus">Digital art</span>
+        <div class="artist-portrait" style="background-image: url('https://img.lumas.com/showimg_gri02_desktop.jpg');"></div>
+        <span class="name">Gerhard Richter</span>
+        <span class="focus">Painting</span>
       </a>
       <a href="#" class="artist-card reveal">
         <div class="artist-portrait" style="background-image: url('https://img.lumas.com/showimg_wuh110_desktop.jpg');"></div>
