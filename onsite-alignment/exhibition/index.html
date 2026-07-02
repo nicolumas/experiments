@@ -368,7 +368,7 @@
     }
     @media (max-width: 720px) {
       .v-track { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; }
-      .v-panel { flex: 0 0 100%; padding: 76px 18px 84px; }
+      .v-panel { flex: 0 0 100%; padding: 30px 16px 76px; }
       .v-nav-btn { display: none; }
       .v-topbar {
         padding: 10px 12px 10px 12px;
@@ -389,7 +389,7 @@
       .v-detail-body { padding: 22px 22px 28px; }
       .v-detail-title { font-size: 1.6rem; }
       .v-wall.salon .v-work:nth-child(odd), .v-wall.salon .v-work:nth-child(even) { transform: translateY(0); }
-      .v-wall-inner { gap: clamp(12px, 2vh, 22px); }
+      .v-wall-inner { gap: clamp(12px, 2vh, 22px); overflow-y: auto; }
       .v-wall-arrangement { max-height: 62vh; }
       .v-work.portrait  .art { width: min(60vw, 300px, calc(55vh * 2 / 3)); height: min(90vw, 450px, 55vh); }
       .v-work.landscape .art { width: min(84vw, 480px, calc(42vh * 3 / 2)); height: min(56vw, 320px, 42vh); }
@@ -400,7 +400,7 @@
       /* Triptych and comparison: stack vertically on narrow screens */
       .v-wall.triptych .v-wall-arrangement,
       .v-wall.comparison .v-wall-arrangement,
-      .v-wall.diptych .v-wall-arrangement { flex-direction: column; align-items: center; gap: 18px; }
+      .v-wall.diptych .v-wall-arrangement { flex-direction: column; align-items: center; gap: 18px; max-height: none; flex: 0 0 auto; }
       .v-wall.triptych .v-work:not(:nth-child(2)) { transform: translateY(0); }
       .v-wall.comparison .v-wall-arrangement::after { display: none; }
       /* On narrow, portrait work art shrinks further so captions fit under it */
@@ -415,6 +415,22 @@
       .v-wall.diptych .v-work.square  .art { width: min(50vw, 240px, 34vh); height: min(50vw, 240px, 34vh); }
       .v-other-grid { grid-template-columns: 1fr; }
       .v-closing { padding: 60px 22px 100px; }
+
+      /* Salon: five works in one row are postage-stamp size on a phone — reflow to a legible 2-up grid. */
+      .v-wall.salon .v-wall-arrangement { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 14px; align-items: start; max-height: none; flex: 0 0 auto; }
+      .v-wall.salon .v-work.landscape, .v-wall.salon .v-work.portrait, .v-wall.salon .v-work.square { width: auto; }
+      .v-wall.salon .v-work.landscape .art, .v-wall.salon .v-work.portrait .art, .v-wall.salon .v-work.square .art { width: 100%; height: clamp(88px, min(26vw, 14vh), 124px); }
+      .v-wall.salon .v-work:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 7px); }
+      .v-wall.salon .v-work-caption { margin-top: 8px; font-size: 9px; }
+
+      /* Touch targets ≥44px + a bottom-bar safe-area inset (the toolbar sits at the bottom on mobile). */
+      .v-foyer-cta, .v-secure-cta, .btn, body.mode-viewer .btn { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; }
+      .v-voice, .v-lang button { min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
+      .v-detail-close { min-width: 44px; min-height: 44px; padding: 11px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; }
+      .v-topbar { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+
+      /* The arrow-key affordance is meaningless on touch. */
+      .v-foyer-hint .v-hint-keys { display: none; }
     }
     @media (max-width: 520px) {
       .v-panel { padding: 72px 14px 80px; }
@@ -1037,7 +1053,7 @@ function viewerFoyer(ex) {
       <p class="v-foyer-statement">${esc(ex.statement)}</p>
       <div class="v-foyer-curator">Curated by ${esc(ex.curator)} · ${esc(ex.curatorRole)}</div>
       <button class="v-foyer-cta" id="v-begin">Enter the exhibition <span aria-hidden="true">→</span></button>
-      <div class="v-foyer-hint">Or use <kbd>→</kbd> <kbd>←</kbd> · scroll · swipe</div>
+      <div class="v-foyer-hint"><span class="v-hint-keys">Or use <kbd>→</kbd> <kbd>←</kbd> · </span>scroll · swipe</div>
     </section>`;
 }
 
