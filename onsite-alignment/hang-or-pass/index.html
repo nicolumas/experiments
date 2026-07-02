@@ -135,9 +135,6 @@
          transition:opacity .24s var(--ease);z-index:40;}
   .scrim.open{opacity:1;pointer-events:auto;}
   .sheet{position:fixed;z-index:50;background:var(--s-page);box-shadow:var(--shadow-frame);transition:transform .32s var(--ease),opacity .24s var(--ease);}
-  /* detail sheet: right panel desktop, bottom sheet mobile */
-  .detail{top:0;right:0;height:100dvh;width:min(440px,92vw);transform:translateX(102%);padding:clamp(28px,4vw,44px);overflow:auto;}
-  .detail.open{transform:translateX(0);}
   .sheet-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:1px solid var(--b-strong);background:transparent;
                display:flex;align-items:center;justify-content:center;cursor:pointer;}
   .sheet-close svg{width:18px;height:18px;}
@@ -199,8 +196,6 @@
     .nav-links,.nav-search,.nav-locale,.desk-only{display:none !important;}
     .nav-icons{justify-self:end;gap:18px;}
     .ctl{width:64px;height:64px;}
-    .detail{width:100%;height:auto;max-height:88dvh;top:auto;bottom:0;right:0;transform:translateY(101%);}
-    .detail.open{transform:translateY(0);}
   }
 </style>
 </head>
@@ -268,26 +263,13 @@
         <button class="ctl ctl-pass" id="btnPass" aria-label="Weiter, gefällt mir nicht"><i data-lucide="x"></i></button>
         <button class="ctl ctl-like" id="btnLike" aria-label="Merken, gefällt mir"><i data-lucide="heart"></i></button>
       </div>
-      <button class="meta-link" id="infoBtn">Details ansehen <i data-lucide="arrow-right"></i></button>
+      <a class="meta-link" id="infoBtn" href="#" target="_blank" rel="noopener">Details ansehen <i data-lucide="arrow-up-right"></i></a>
     </div>
   </main>
 </div>
 
 <!-- Overlays -->
 <div class="scrim" id="scrim"></div>
-
-<aside class="sheet detail" id="detail" aria-hidden="true">
-  <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
-  <img class="d-img" id="dImg" src="" alt="">
-  <div class="d-eyebrow eyebrow" id="dArtist"></div>
-  <h3 class="d-title" id="dTitle"></h3>
-  <div class="chips" id="dChips"></div>
-  <div class="d-price body" id="dPrice"></div>
-  <div class="d-actions">
-    <a class="btn-secondary label" id="dLink" href="#" target="_blank" rel="noopener">Zum Werk <i data-lucide="arrow-up-right"></i></a>
-    <button class="btn-primary label" id="dMerk">Merken</button>
-  </div>
-</aside>
 
 <section class="sheet wall" id="wall" aria-hidden="true">
   <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
@@ -349,10 +331,9 @@
   const layers = [$('layerA'), $('layerB')];
   let active = 0;
   const E = {
-    card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'),
+    card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'), info:$('infoBtn'),
     navCount:$('navCount'),
-    scrim:$('scrim'), detail:$('detail'), wall:$('wall'),
-    dImg:$('dImg'), dArtist:$('dArtist'), dTitle:$('dTitle'), dChips:$('dChips'), dPrice:$('dPrice'), dLink:$('dLink'), dMerk:$('dMerk'),
+    scrim:$('scrim'), wall:$('wall'),
     wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead')
   };
 
@@ -362,6 +343,7 @@
     const w = NODES[curId];
     E.artist.textContent = w.a; E.title.textContent = w.t;
     E.price.textContent = 'ab ' + w.p;
+    E.info.href = w.link;
   }
   const IMGV = '?v=landscape2';  // cache-bust the swapped room renders
   // crossfade the artwork between the two stacked layers
@@ -423,16 +405,8 @@
   function openSheet(el){ openEl = el; E.scrim.classList.add('open'); el.classList.add('open'); el.setAttribute('aria-hidden','false'); }
   function closeSheet(){ if(openEl){ openEl.classList.remove('open'); openEl.setAttribute('aria-hidden','true'); openEl=null; } E.scrim.classList.remove('open'); }
 
-  function openDetail(){
-    const w = NODES[curId];
-    E.dImg.src = w.img; E.dArtist.textContent = w.a; E.dTitle.textContent = w.t;
-    E.dPrice.innerHTML = '<span class="from">ab</span> '+w.p;
-    E.dLink.href = w.link;
-    E.dChips.innerHTML = '';
-    w.cats.concat([w.ed]).forEach(c=>{const s=document.createElement('span');s.className='chip';s.textContent=c;E.dChips.appendChild(s);});
-    E.dMerk.onclick = ()=>{ if(!collection.includes(curId)){collection.push(curId);updateMerk(true);} closeSheet(); };
-    openSheet(E.detail);
-  }
+  // "Details ansehen" / tapping the work goes straight to the PDP on lumas.com.
+  function openPDP(){ const w = NODES[curId]; if(w && w.link) window.open(w.link, '_blank', 'noopener'); }
 
   function openWall(){
     E.wallGrid.innerHTML = '';
@@ -454,7 +428,6 @@
   // ── Wire up ──
   $('btnPass').addEventListener('click', ()=>react('pass'));
   $('btnLike').addEventListener('click', ()=>react('like'));
-  $('infoBtn').addEventListener('click',(e)=>{e.stopPropagation();openDetail();});
 
   // drag-to-swipe
   let dragging=false, startX=0, dx=0, moved=false;
@@ -478,7 +451,7 @@
     dragging=false;
     $('hintLike').style.opacity=0; $('hintPass').style.opacity=0;
     if(Math.abs(dx)>110){ react(dx>0?'like':'pass'); return; }
-    if(!moved){ E.card.style.transform=''; openDetail(); return; }
+    if(!moved){ E.card.style.transform=''; openPDP(); return; }
     E.card.style.transition='transform .2s var(--ease)'; E.card.style.transform='';
   }
   E.card.addEventListener('pointerup', endDrag);
@@ -491,7 +464,7 @@
     if(openEl){ if(e.key==='Escape') closeSheet(); return; }
     if(e.key==='ArrowRight') react('like');
     else if(e.key==='ArrowLeft') react('pass');
-    else if(e.key==='ArrowUp' || e.key==='Enter') openDetail();
+    else if(e.key==='ArrowUp' || e.key==='Enter') openPDP();
   });
 
   function init(){
