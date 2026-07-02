@@ -130,7 +130,7 @@
   .heart-pop{animation:pop .4s var(--ease);}
   @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.09);}100%{transform:scale(1);}}
 
-  /* ── Overlays (detail / wall / taste) ──────── */
+  /* ── Overlays (detail / wall) ──────── */
   .scrim{position:fixed;inset:0;background:rgba(28,26,24,0.42);backdrop-filter:blur(3px);opacity:0;pointer-events:none;
          transition:opacity .24s var(--ease);z-index:40;}
   .scrim.open{opacity:1;pointer-events:auto;}
@@ -171,14 +171,6 @@
   .wall-item .wi-price{color:var(--c-secondary);margin-top:6px;}
   .wall-empty{max-width:1100px;margin:0 auto;color:var(--c-secondary);}
 
-  /* taste-read interstitial */
-  .taste{top:50%;left:50%;transform:translate(-50%,-46%);width:min(520px,92vw);background:var(--s-card);
-         border:1px solid var(--b-default);padding:clamp(28px,4vw,44px);opacity:0;text-align:left;}
-  .taste.open{transform:translate(-50%,-50%);opacity:1;}
-  .taste .eyebrow{color:var(--c-secondary);margin-bottom:16px;}
-  .taste h2{font-family:var(--display);font-weight:400;font-size:clamp(28px,3.6vw,42px);line-height:1.1;margin-bottom:14px;text-wrap:balance;}
-  .taste p{color:var(--c-secondary);max-width:42ch;margin-bottom:26px;}
-  .taste-actions{display:flex;flex-wrap:wrap;gap:12px;}
 
   /* ── Motion guards ─────────────────────────── */
   @media(prefers-reduced-motion:reduce){
@@ -308,15 +300,6 @@
   <div class="wall-empty" id="wallEmpty" style="display:none;">Noch nichts gemerkt. Tippe auf das Herz, um Werke zu sammeln.</div>
 </section>
 
-<div class="sheet taste" id="taste" aria-hidden="true">
-  <div class="eyebrow">Dein Geschmack bisher</div>
-  <h2 id="tasteHead">Dein Blick schärft sich.</h2>
-  <p id="tasteBody">Je mehr du merkst und überspringst, desto genauer lernen wir, was dich anspricht.</p>
-  <div class="taste-actions">
-    <button class="btn-primary label" id="tasteContinue">Weiter entdecken</button>
-    <button class="btn-secondary label" id="tasteWall">Zu deiner Wand</button>
-  </div>
-</div>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
@@ -345,32 +328,32 @@
   const DIST = {};
   IDS.forEach(a=>{DIST[a]={};const va=vecOf(a);IDS.forEach(b=>{const vb=vecOf(b);let d=0;for(let k=0;k<va.length;k++)d+=(va[k]-vb[k])**2;DIST[a][b]=d;});});
 
+  // Taste clusters — used to title the saved-works wall ("Deine Wand") with the collector's dominant motif.
   const TASTE = {
-    Architektur:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
-    City:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
-    Wasser:{h:'Wasser, Weite, Vogelperspektive.',b:'Dich faszinieren Küsten, Pools und das Spiel von Licht auf Wasser.'},
-    Landschaft:{h:'Landschaften, Farbe, Natur.',b:'Dich ziehen weite, farbintensive Landschaften an.'},
-    Menschen:{h:'Figurativ, verträumt, erzählerisch.',b:'Dich berühren stille, figurative Szenen mit einem Hauch Surrealismus.'},
-    Blumen:{h:'Botanisch, malerisch, üppig.',b:'Dich ziehen organische, malerische Blütenmotive an.'},
-    Abstrakt:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
-    Graphisch:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
-    Konzept:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'},
-    Kreation:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'}
+    Architektur:{h:'Architektonisch, urban, klar.'},
+    City:{h:'Architektonisch, urban, klar.'},
+    Wasser:{h:'Wasser, Weite, Vogelperspektive.'},
+    Landschaft:{h:'Landschaften, Farbe, Natur.'},
+    Menschen:{h:'Figurativ, verträumt, erzählerisch.'},
+    Blumen:{h:'Botanisch, malerisch, üppig.'},
+    Abstrakt:{h:'Abstrakt, grafisch, reduziert.'},
+    Graphisch:{h:'Abstrakt, grafisch, reduziert.'},
+    Konzept:{h:'Konzeptuell, klar, bewusst.'},
+    Kreation:{h:'Konzeptuell, klar, bewusst.'}
   };
 
   const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   const $ = (id)=>document.getElementById(id);
-  let curId, seen, collection, reactions, nextTaste;
+  let curId, seen, collection, reactions;
 
   const layers = [$('layerA'), $('layerB')];
   let active = 0;
   const E = {
     card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'),
     navCount:$('navCount'),
-    scrim:$('scrim'), detail:$('detail'), wall:$('wall'), taste:$('taste'),
+    scrim:$('scrim'), detail:$('detail'), wall:$('wall'),
     dImg:$('dImg'), dArtist:$('dArtist'), dTitle:$('dTitle'), dChips:$('dChips'), dPrice:$('dPrice'), dLink:$('dLink'), dMerk:$('dMerk'),
-    wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead'),
-    tasteHead:$('tasteHead'), tasteBody:$('tasteBody')
+    wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead')
   };
 
   const unseen = ()=>IDS.filter(id=>!seen.has(id) && id!==curId);
@@ -417,7 +400,7 @@
     // settle the card back to centre (if dragged) and crossfade to the next work
     E.card.style.transition = 'transform .4s var(--ease)';
     E.card.style.transform = '';
-    curId = next; setMeta(); showImage(true); maybeTaste(); preloadNext();
+    curId = next; setMeta(); showImage(true); preloadNext();
   }
 
   function updateMerk(pulse){
@@ -427,22 +410,12 @@
     if(pulse && !reduce){ E.navCount.classList.remove('heart-pop'); void E.navCount.offsetWidth; E.navCount.classList.add('heart-pop'); }
   }
 
+  // Reads the collector's most-liked category — titles the saved-works wall.
   function dominantTaste(){
     const counts = {};
     collection.forEach(id=>NODES[id].cats.forEach(c=>{counts[c]=(counts[c]||0)+1;}));
     const top = Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
     return top && TASTE[top] ? TASTE[top] : null;
-  }
-
-  // taste-read as an occasional reward, never a cap: first after a long run,
-  // then backing off further each time (12, 26, 40 ...). Only if something was liked.
-  function maybeTaste(){
-    if(collection.length && reactions >= nextTaste){
-      nextTaste += 14;
-      const t = dominantTaste();
-      if(t){ E.tasteHead.textContent = t.h; E.tasteBody.textContent = t.b; }
-      openSheet(E.taste);
-    }
   }
 
   // ── Overlay plumbing ──
@@ -514,8 +487,6 @@
   $('navHeart').addEventListener('click', openWall);
   E.scrim.addEventListener('click', closeSheet);
   document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeSheet));
-  $('tasteContinue').addEventListener('click', closeSheet);
-  $('tasteWall').addEventListener('click', ()=>{ closeSheet(); openWall(); });
   document.addEventListener('keydown',(e)=>{
     if(openEl){ if(e.key==='Escape') closeSheet(); return; }
     if(e.key==='ArrowRight') react('like');
@@ -524,7 +495,7 @@
   });
 
   function init(){
-    curId='GUA43'; seen=new Set([curId]); collection=[]; reactions=0; nextTaste=12;
+    curId='GUA43'; seen=new Set([curId]); collection=[]; reactions=0;
     setMeta(); showImage(false); updateMerk(false);
   }
   init();
