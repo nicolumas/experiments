@@ -1259,11 +1259,13 @@ function bindViewer() {
     Analytics.track('consultant_clicked', { exhibitionId: viewerState.ex.id, lang: viewerState.lang });
     showToast('Opening Art Consultant — stub.');
   });
-  // Secure the whole show — primary CTA on the salon (closing) wall.
+  // Secure the whole show — adds every available work in the exhibition to the cart.
   track.querySelectorAll('[data-secure]').forEach(btn => btn.addEventListener('click', () => {
-    Analytics.track('exhibition_secure_clicked', { exhibitionId: viewerState.ex.id, lang: viewerState.lang });
-    postHost('exhibition:secure', { exhibitionId: viewerState.ex.id, title: viewerState.ex.title });
-    showToast('Securing the exhibition — an Art Consultant will be in touch.');
+    const ids = [...new Set(viewerState.ex.walls.flatMap(w => w.workIds))];
+    const works = ids.map(id => WORKS.find(x => x.id === id)).filter(w => w && !w.soldOut);
+    Analytics.track('exhibition_secure_clicked', { exhibitionId: viewerState.ex.id, works: works.length, lang: viewerState.lang });
+    postHost('cart:add', { exhibitionId: viewerState.ex.id, workIds: works.map(w => w.id) });
+    showToast(works.length + ' works added to your cart');
   }));
 
   // Work clicks
