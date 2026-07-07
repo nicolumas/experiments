@@ -91,7 +91,7 @@
   .masthead .ctx strong{color:var(--c-primary);font-weight:700;}
 
   .cardwrap{position:relative;width:100%;max-width:940px;}
-  .card{position:relative;width:100%;aspect-ratio:16/10;max-height:min(56vh,560px);overflow:hidden;background:var(--s-card);
+  .card{position:relative;width:100%;aspect-ratio:16/9;max-height:min(56vh,560px);overflow:hidden;background:var(--s-card);
         box-shadow:var(--shadow-frame);cursor:grab;touch-action:pan-y;will-change:transform;
         transition:transform .4s var(--ease);}
   .card:active{cursor:grabbing;}
@@ -130,11 +130,14 @@
   .heart-pop{animation:pop .4s var(--ease);}
   @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.09);}100%{transform:scale(1);}}
 
-  /* ── Overlays (detail / wall) ──────── */
+  /* ── Overlays (detail / wall / taste) ──────── */
   .scrim{position:fixed;inset:0;background:rgba(28,26,24,0.42);backdrop-filter:blur(3px);opacity:0;pointer-events:none;
          transition:opacity .24s var(--ease);z-index:40;}
   .scrim.open{opacity:1;pointer-events:auto;}
   .sheet{position:fixed;z-index:50;background:var(--s-page);box-shadow:var(--shadow-frame);transition:transform .32s var(--ease),opacity .24s var(--ease);}
+  /* detail sheet: right panel desktop, bottom sheet mobile */
+  .detail{top:0;right:0;height:100dvh;width:min(440px,92vw);transform:translateX(102%);padding:clamp(28px,4vw,44px);overflow:auto;}
+  .detail.open{transform:translateX(0);}
   .sheet-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:1px solid var(--b-strong);background:transparent;
                display:flex;align-items:center;justify-content:center;cursor:pointer;}
   .sheet-close svg{width:18px;height:18px;}
@@ -168,6 +171,14 @@
   .wall-item .wi-price{color:var(--c-secondary);margin-top:6px;}
   .wall-empty{max-width:1100px;margin:0 auto;color:var(--c-secondary);}
 
+  /* taste-read interstitial */
+  .taste{top:50%;left:50%;transform:translate(-50%,-46%);width:min(520px,92vw);background:var(--s-card);
+         border:1px solid var(--b-default);padding:clamp(28px,4vw,44px);opacity:0;text-align:left;}
+  .taste.open{transform:translate(-50%,-50%);opacity:1;}
+  .taste .eyebrow{color:var(--c-secondary);margin-bottom:16px;}
+  .taste h2{font-family:var(--display);font-weight:400;font-size:clamp(28px,3.6vw,42px);line-height:1.1;margin-bottom:14px;text-wrap:balance;}
+  .taste p{color:var(--c-secondary);max-width:42ch;margin-bottom:26px;}
+  .taste-actions{display:flex;flex-wrap:wrap;gap:12px;}
 
   /* ── Motion guards ─────────────────────────── */
   @media(prefers-reduced-motion:reduce){
@@ -182,7 +193,7 @@
     .masthead{padding:0 16px;}
     .masthead .feature-title{font-size:clamp(34px,8vw,48px);}
     .cardwrap{max-width:none;}
-    .card{aspect-ratio:4/3;max-height:62vh;box-shadow:none;}
+    .card{aspect-ratio:16/9;max-height:62vh;box-shadow:none;}
     .actionbar{grid-template-columns:1fr;justify-items:center;text-align:center;gap:16px;max-width:none;padding:0 16px;}
     .meta-left{align-items:center;}
     .meta-link{justify-self:center;}
@@ -196,6 +207,8 @@
     .nav-links,.nav-search,.nav-locale,.desk-only{display:none !important;}
     .nav-icons{justify-self:end;gap:18px;}
     .ctl{width:64px;height:64px;}
+    .detail{width:100%;height:auto;max-height:88dvh;top:auto;bottom:0;right:0;transform:translateY(101%);}
+    .detail.open{transform:translateY(0);}
   }
 </style>
 </head>
@@ -260,16 +273,29 @@
         <p class="meta-sub caption"><span id="cardArtist">Guachinarte</span><span class="dot">·</span><span id="cardPrice">ab 649 €</span></p>
       </div>
       <div class="controls">
-        <button class="ctl ctl-pass" id="btnPass" aria-label="Weiter, gefällt mir nicht"><i data-lucide="x"></i></button>
+        <button class="ctl ctl-pass" id="btnPass" aria-label="Weiter, gefällt mir nicht"><i data-lucide="refresh-cw"></i></button>
         <button class="ctl ctl-like" id="btnLike" aria-label="Merken, gefällt mir"><i data-lucide="heart"></i></button>
       </div>
-      <a class="meta-link" id="infoBtn" href="#" target="_blank" rel="noopener">Details ansehen <i data-lucide="arrow-up-right"></i></a>
+      <button class="meta-link" id="infoBtn">Details ansehen <i data-lucide="arrow-right"></i></button>
     </div>
   </main>
 </div>
 
 <!-- Overlays -->
 <div class="scrim" id="scrim"></div>
+
+<aside class="sheet detail" id="detail" aria-hidden="true">
+  <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
+  <img class="d-img" id="dImg" src="" alt="">
+  <div class="d-eyebrow eyebrow" id="dArtist"></div>
+  <h3 class="d-title" id="dTitle"></h3>
+  <div class="chips" id="dChips"></div>
+  <div class="d-price body" id="dPrice"></div>
+  <div class="d-actions">
+    <a class="btn-secondary label" id="dLink" href="#" target="_blank" rel="noopener">Zum Werk <i data-lucide="arrow-up-right"></i></a>
+    <button class="btn-primary label" id="dMerk">Merken</button>
+  </div>
+</aside>
 
 <section class="sheet wall" id="wall" aria-hidden="true">
   <button class="sheet-close" data-close aria-label="Schließen"><i data-lucide="x"></i></button>
@@ -282,6 +308,15 @@
   <div class="wall-empty" id="wallEmpty" style="display:none;">Noch nichts gemerkt. Tippe auf das Herz, um Werke zu sammeln.</div>
 </section>
 
+<div class="sheet taste" id="taste" aria-hidden="true">
+  <div class="eyebrow">Dein Geschmack bisher</div>
+  <h2 id="tasteHead">Dein Blick schärft sich.</h2>
+  <p id="tasteBody">Je mehr du merkst und überspringst, desto genauer lernen wir, was dich anspricht.</p>
+  <div class="taste-actions">
+    <button class="btn-primary label" id="tasteContinue">Weiter entdecken</button>
+    <button class="btn-secondary label" id="tasteWall">Zu deiner Wand</button>
+  </div>
+</div>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
@@ -310,31 +345,32 @@
   const DIST = {};
   IDS.forEach(a=>{DIST[a]={};const va=vecOf(a);IDS.forEach(b=>{const vb=vecOf(b);let d=0;for(let k=0;k<va.length;k++)d+=(va[k]-vb[k])**2;DIST[a][b]=d;});});
 
-  // Taste clusters — used to title the saved-works wall ("Deine Wand") with the collector's dominant motif.
   const TASTE = {
-    Architektur:{h:'Architektonisch, urban, klar.'},
-    City:{h:'Architektonisch, urban, klar.'},
-    Wasser:{h:'Wasser, Weite, Vogelperspektive.'},
-    Landschaft:{h:'Landschaften, Farbe, Natur.'},
-    Menschen:{h:'Figurativ, verträumt, erzählerisch.'},
-    Blumen:{h:'Botanisch, malerisch, üppig.'},
-    Abstrakt:{h:'Abstrakt, grafisch, reduziert.'},
-    Graphisch:{h:'Abstrakt, grafisch, reduziert.'},
-    Konzept:{h:'Konzeptuell, klar, bewusst.'},
-    Kreation:{h:'Konzeptuell, klar, bewusst.'}
+    Architektur:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
+    City:{h:'Architektonisch, urban, klar.',b:'Dich ziehen Stadt- und Architekturmotive an: Linien, Licht, Großstadt.'},
+    Wasser:{h:'Wasser, Weite, Vogelperspektive.',b:'Dich faszinieren Küsten, Pools und das Spiel von Licht auf Wasser.'},
+    Landschaft:{h:'Landschaften, Farbe, Natur.',b:'Dich ziehen weite, farbintensive Landschaften an.'},
+    Menschen:{h:'Figurativ, verträumt, erzählerisch.',b:'Dich berühren stille, figurative Szenen mit einem Hauch Surrealismus.'},
+    Blumen:{h:'Botanisch, malerisch, üppig.',b:'Dich ziehen organische, malerische Blütenmotive an.'},
+    Abstrakt:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
+    Graphisch:{h:'Abstrakt, grafisch, reduziert.',b:'Dich reizen abstrakte, grafische Kompositionen.'},
+    Konzept:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'},
+    Kreation:{h:'Konzeptuell, klar, bewusst.',b:'Dich interessieren konzeptuelle Arbeiten mit Haltung.'}
   };
 
   const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   const $ = (id)=>document.getElementById(id);
-  let curId, seen, collection, reactions;
+  let curId, seen, collection, reactions, nextTaste;
 
   const layers = [$('layerA'), $('layerB')];
   let active = 0;
   const E = {
-    card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'), info:$('infoBtn'),
+    card:$('card'), artist:$('cardArtist'), title:$('cardTitle'), price:$('cardPrice'),
     navCount:$('navCount'),
-    scrim:$('scrim'), wall:$('wall'),
-    wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead')
+    scrim:$('scrim'), detail:$('detail'), wall:$('wall'), taste:$('taste'),
+    dImg:$('dImg'), dArtist:$('dArtist'), dTitle:$('dTitle'), dChips:$('dChips'), dPrice:$('dPrice'), dLink:$('dLink'), dMerk:$('dMerk'),
+    wallGrid:$('wallGrid'), wallEmpty:$('wallEmpty'), wallHead:$('wallHead'),
+    tasteHead:$('tasteHead'), tasteBody:$('tasteBody')
   };
 
   const unseen = ()=>IDS.filter(id=>!seen.has(id) && id!==curId);
@@ -343,7 +379,6 @@
     const w = NODES[curId];
     E.artist.textContent = w.a; E.title.textContent = w.t;
     E.price.textContent = 'ab ' + w.p;
-    E.info.href = w.link;
   }
   const IMGV = '?v=landscape2';  // cache-bust the swapped room renders
   // crossfade the artwork between the two stacked layers
@@ -382,7 +417,7 @@
     // settle the card back to centre (if dragged) and crossfade to the next work
     E.card.style.transition = 'transform .4s var(--ease)';
     E.card.style.transform = '';
-    curId = next; setMeta(); showImage(true); preloadNext();
+    curId = next; setMeta(); showImage(true); maybeTaste(); preloadNext();
   }
 
   function updateMerk(pulse){
@@ -392,7 +427,6 @@
     if(pulse && !reduce){ E.navCount.classList.remove('heart-pop'); void E.navCount.offsetWidth; E.navCount.classList.add('heart-pop'); }
   }
 
-  // Reads the collector's most-liked category — titles the saved-works wall.
   function dominantTaste(){
     const counts = {};
     collection.forEach(id=>NODES[id].cats.forEach(c=>{counts[c]=(counts[c]||0)+1;}));
@@ -400,13 +434,32 @@
     return top && TASTE[top] ? TASTE[top] : null;
   }
 
+  // taste-read as an occasional reward, never a cap: first after a long run,
+  // then backing off further each time (12, 26, 40 ...). Only if something was liked.
+  function maybeTaste(){
+    if(collection.length && reactions >= nextTaste){
+      nextTaste += 14;
+      const t = dominantTaste();
+      if(t){ E.tasteHead.textContent = t.h; E.tasteBody.textContent = t.b; }
+      openSheet(E.taste);
+    }
+  }
+
   // ── Overlay plumbing ──
   let openEl = null;
   function openSheet(el){ openEl = el; E.scrim.classList.add('open'); el.classList.add('open'); el.setAttribute('aria-hidden','false'); }
   function closeSheet(){ if(openEl){ openEl.classList.remove('open'); openEl.setAttribute('aria-hidden','true'); openEl=null; } E.scrim.classList.remove('open'); }
 
-  // "Details ansehen" / tapping the work goes straight to the PDP on lumas.com.
-  function openPDP(){ const w = NODES[curId]; if(w && w.link) window.open(w.link, '_blank', 'noopener'); }
+  function openDetail(){
+    const w = NODES[curId];
+    E.dImg.src = w.img; E.dArtist.textContent = w.a; E.dTitle.textContent = w.t;
+    E.dPrice.innerHTML = '<span class="from">ab</span> '+w.p;
+    E.dLink.href = w.link;
+    E.dChips.innerHTML = '';
+    w.cats.concat([w.ed]).forEach(c=>{const s=document.createElement('span');s.className='chip';s.textContent=c;E.dChips.appendChild(s);});
+    E.dMerk.onclick = ()=>{ if(!collection.includes(curId)){collection.push(curId);updateMerk(true);} closeSheet(); };
+    openSheet(E.detail);
+  }
 
   function openWall(){
     E.wallGrid.innerHTML = '';
@@ -428,6 +481,7 @@
   // ── Wire up ──
   $('btnPass').addEventListener('click', ()=>react('pass'));
   $('btnLike').addEventListener('click', ()=>react('like'));
+  $('infoBtn').addEventListener('click',(e)=>{e.stopPropagation();openDetail();});
 
   // drag-to-swipe
   let dragging=false, startX=0, dx=0, moved=false;
@@ -451,7 +505,7 @@
     dragging=false;
     $('hintLike').style.opacity=0; $('hintPass').style.opacity=0;
     if(Math.abs(dx)>110){ react(dx>0?'like':'pass'); return; }
-    if(!moved){ E.card.style.transform=''; openPDP(); return; }
+    if(!moved){ E.card.style.transform=''; openDetail(); return; }
     E.card.style.transition='transform .2s var(--ease)'; E.card.style.transform='';
   }
   E.card.addEventListener('pointerup', endDrag);
@@ -460,15 +514,17 @@
   $('navHeart').addEventListener('click', openWall);
   E.scrim.addEventListener('click', closeSheet);
   document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeSheet));
+  $('tasteContinue').addEventListener('click', closeSheet);
+  $('tasteWall').addEventListener('click', ()=>{ closeSheet(); openWall(); });
   document.addEventListener('keydown',(e)=>{
     if(openEl){ if(e.key==='Escape') closeSheet(); return; }
     if(e.key==='ArrowRight') react('like');
     else if(e.key==='ArrowLeft') react('pass');
-    else if(e.key==='ArrowUp' || e.key==='Enter') openPDP();
+    else if(e.key==='ArrowUp' || e.key==='Enter') openDetail();
   });
 
   function init(){
-    curId='GUA43'; seen=new Set([curId]); collection=[]; reactions=0;
+    curId='GUA43'; seen=new Set([curId]); collection=[]; reactions=0; nextTaste=12;
     setMeta(); showImage(false); updateMerk(false);
   }
   init();
