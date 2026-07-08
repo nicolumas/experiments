@@ -184,12 +184,12 @@ body.in-room .saved-pill{opacity:0;pointer-events:none}
 .g-back{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.55;transition:opacity .18s var(--eo);padding:4px 0}
 @media(hover:hover)and(pointer:fine){.g-back:hover{opacity:1}.g-back:hover .g-arr{transform:translateX(-4px)}}
 .g-arr{display:inline-block;transition:transform .24s var(--eo)}
-.g-hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.25}
-.g-progress{font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.4;font-variant-numeric:tabular-nums}
+.g-hint{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.25}
+.g-progress{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.4;font-variant-numeric:tabular-nums}
 .g-open{display:flex;flex-direction:column;justify-content:flex-start;padding:var(--sp-8) var(--sp-8) var(--sp-12);max-width:1180px;margin:0 auto;width:100%}
-.g-mood-word{font-family:var(--font-d);font-weight:300;font-size:clamp(64px,11vw,150px);line-height:.95;letter-spacing:-.02em}
+.g-mood-word{font-family:var(--font-d);font-weight:300;font-size:clamp(64px,11vw,150px);line-height:.95;letter-spacing:-.015em}
 .g-intro{margin-top:var(--sp-6);font-family:var(--font-d);font-style:italic;font-size:clamp(15px,1.6vw,19px);line-height:1.65;opacity:.55;max-width:42ch}
-.g-note{display:inline-flex;align-items:center;gap:9px;margin-top:var(--sp-6);font-size:13px;letter-spacing:.01em;opacity:.62}
+.g-note{display:inline-flex;align-items:center;gap:9px;margin-top:var(--sp-6);font-size:13px;line-height:1.65;letter-spacing:0;opacity:.72}
 .g-note svg{width:16px;height:16px;flex:none}
 .g-note .hh{fill:none;stroke:currentColor;stroke-width:1.5}
 .g-scrollcue{margin-top:var(--sp-6);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.3}
@@ -326,13 +326,13 @@ body.in-room .saved-pill{opacity:0;pointer-events:none}
 .detail-close:hover{color:#F4EDE2;transform:scale(1.08)}
 .detail-close:active{transform:scale(.92)}
 .detail-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:var(--sp-12) var(--sp-10) var(--sp-10)}
-.detail-eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,237,226,.5);margin-bottom:var(--sp-5)}
+.detail-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,237,226,.55);margin-bottom:var(--sp-5)}
 .detail-img{margin:0 auto var(--sp-6)}
 .detail-img img{width:100%;height:auto;object-fit:contain;box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
 .detail-img.upright,.detail-img.panorama{max-width:74%}
 .detail-title{font-family:var(--font-d);font-size:clamp(26px,3vw,34px);font-weight:400;line-height:1.12;margin-bottom:8px}
 .detail-by{font-size:14px;opacity:.7;margin-bottom:var(--sp-5)}
-.detail-note{font-family:var(--font-d);font-weight:300;font-size:clamp(17px,1.5vw,19px);line-height:1.55;color:rgba(244,237,226,.82);margin-bottom:var(--sp-8);max-width:42ch}
+.detail-note{font-family:var(--font-d);font-weight:300;font-size:clamp(17px,1.5vw,19px);line-height:1.6;color:rgba(244,237,226,.75);margin-bottom:var(--sp-8);max-width:42ch}
 .detail-price{font-size:22px;font-weight:300;font-variant-numeric:tabular-nums;margin-bottom:var(--sp-6)}
 .detail-save{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 24px;
   border:1px solid rgba(244,237,226,.6);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -375,7 +375,7 @@ body.in-room .saved-pill{opacity:0;pointer-events:none}
 .ry-brand{font-size:12px;font-weight:700;letter-spacing:.2em}
 .ry-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#908C87;margin-bottom:var(--sp-6)}
 .ry-arrival{padding:clamp(72px,12vh,132px) 0 var(--sp-20)}
-.ry-h1{font-family:var(--font-d);font-weight:300;font-size:clamp(40px,6.2vw,74px);line-height:1.04;letter-spacing:-.01em;max-width:18ch;margin-bottom:var(--sp-6);text-wrap:balance}
+.ry-h1{font-family:var(--font-d);font-weight:300;font-size:clamp(40px,6.2vw,74px);line-height:1.04;letter-spacing:-.015em;max-width:18ch;margin-bottom:var(--sp-6);text-wrap:balance}
 .ry-sub{font-size:clamp(15px,1.5vw,18px);font-weight:300;line-height:1.6;color:#5A5752;max-width:54ch}
 .ry-section{padding:var(--sp-16) 0;border-top:1px solid #EAE2D8}
 .ry-h2{font-family:var(--font-d);font-weight:300;font-size:clamp(28px,3.4vw,40px);line-height:1.12;margin-bottom:var(--sp-10);max-width:24ch}
@@ -398,7 +398,7 @@ body.in-room .saved-pill{opacity:0;pointer-events:none}
 .ry-consult-wrap{padding-bottom:0}
 .ry-consult{background:#1C1A18;color:#F4EDE2;text-align:center;padding:clamp(56px,8vw,104px) clamp(28px,6vw,80px);margin-bottom:var(--sp-16)}
 .ry-consult .ry-eyebrow{color:rgba(244,237,226,.55)}
-.ry-consult-h{font-family:var(--font-d);font-weight:300;font-size:clamp(28px,3.6vw,46px);line-height:1.12;letter-spacing:-.01em;max-width:20ch;margin:0 auto var(--sp-6)}
+.ry-consult-h{font-family:var(--font-d);font-weight:300;font-size:clamp(28px,3.6vw,46px);line-height:1.15;letter-spacing:-.015em;max-width:20ch;margin:0 auto var(--sp-6)}
 .ry-consult-b{font-weight:300;font-size:clamp(16px,1.6vw,18px);line-height:1.6;color:rgba(244,237,226,.75);max-width:52ch;margin:0 auto var(--sp-10)}
 .ry-btn{display:inline-block;padding:16px 32px;background:#F4EDE2;color:#1C1A18;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:transform .16s var(--eo)}
 .ry-btn:active{transform:scale(.97)}
@@ -528,12 +528,12 @@ const LOGO='<svg class="lumas-logo" viewBox="0 0 160 30" fill="currentColor" rol
 const W={
   // CALM
   wagner:   {img:'showimg_awg19_desktop.jpg', t:'Birkenwald 3',               a:'André Wagner',           ed:'Limited Edition', p:'€ 7,390', o:'across',  u:'/pictures/andre_wagner/birkenwald_3/', note:'A stand of birches, lit so the light seems to come from inside the trees. It quiets a room without emptying it.'},
-  uhlig:    {img:'showimg_wuh76_desktop.jpg', t:'Sea #14',                     a:'Wolfgang Uhlig',          ed:'Limited Edition', p:'€ 6,490', o:'across',  u:'/pictures/wolfgang_uhlig/sea_14/', note:'Only sea and sky, and the line where they stop arguing. Hang it where you want the day to slow down.'},
+  uhlig:    {img:'showimg_wuh73_desktop.jpg', t:'Cordoama',                    a:'Wolfgang Uhlig',          ed:'Limited Edition', p:'€ 7,590', o:'across',  u:'/pictures/wolfgang_uhlig/cordoama/', note:'Only sea and sky, and the seam where they stop arguing. Uhlig\'s most-collected seascape — hang it where you want the day to slow down.'},
   bock:     {img:'showimg_hbo17_desktop.jpg', t:'Black Beach',                 a:'Henning Bock',            ed:'Limited Edition', p:'€ 5,990', o:'across',  u:'/pictures/henning_bock/black_beach/', note:'Volcanic sand under a low sky. The kind of grey that rests the eyes rather than dimming them.'},
   zielske:  {img:'showimg_hdz115_desktop.jpg',t:'Stourhead II',                a:'Horst & Daniel Zielske',  ed:'Limited Edition', p:'€ 5,590', o:'across',  u:'/pictures/horst_daniel_zielske/stourhead_ii/', note:'An English garden held very still. It reads as a window onto somewhere you have already decided to be calm.'},
   kloss:    {img:'showimg_skl45_desktop.jpg', t:'o.t. (Matterhorn)',           a:'Stephanie Kloss',         ed:'Limited Edition', p:'€ 4,590', o:'square',  u:'/pictures/stephanie_kloss/ot_matterhorn-2/', note:'The mountain at its most reticent. One form, a great deal of air around it, and the wall does the breathing for you.'},
   patino:   {img:'showimg_wpt09_desktop.jpg', t:'The Vision',                  a:'William Patino',          ed:'Limited Edition', p:'€ 3,990', o:'across',  u:'/pictures/william_patino/the_vision/', note:'Mist doing the work light usually does. It asks for a quiet wall and gives one back.'},
-  fennema:  {img:'showimg_sfn42_desktop.jpg', t:'Incantata III',               a:'Sven Fennema',            ed:'Limited Edition', p:'€ 5,290', o:'across',  u:'/pictures/sven_fennema/incantata_iii/', note:'An abandoned interior, lit like a held breath. Stillness with a little melancholy folded in.'},
+  fennema:  {img:'showimg_sfn400_desktop.jpg',t:'Sul Lago',                    a:'Sven Fennema',            ed:'Petites — Small Open Edition', p:'€ 179', o:'across',  u:'/pictures/sven_fennema/sul_lago-2/', note:'A lake held under morning mist, the far shore barely committing to being there. Stillness with a little melancholy folded in.'},
   lipscher: {img:'showimg_jlp03_desktop.jpg', t:'Enchanted Waters VIII',       a:'Juraj Lipscher',          ed:'Limited Edition', p:'€ 1,150', o:'across',  u:'/pictures/juraj_lipscher/enchanted_waters_viii/', note:'Water read as pure surface and reflection. Closer to a held thought than a photograph.'},
   // POWERFUL
   dratwa:   {img:'showimg_ldr30_desktop.jpg', t:"Isabelle's View",             a:'Luc Dratwa',              ed:'Limited Edition', p:'€ 7,990', o:'across',  u:'/pictures/luc_dratwa/isabelles_view/', note:'A figure at the glass, the city laid out beyond. Scale you feel in the chest before you read it.'},
@@ -549,7 +549,7 @@ const W={
   reiswitz: {img:'showimg_are102_desktop.jpg',t:'Maggie',                      a:'Alexander Von Reiswitz',  ed:'Limited Edition', p:'€ 1,990', o:'square',  u:'/pictures/alexander_von_reiswitz/maggie/', note:'A face that withholds as much as it offers. You will keep coming back to settle it.'},
   mork:     {img:'showimg_amr09_desktop.jpg', t:'Blue Stairs',                 a:'Adam Mørk',               ed:'Limited Edition', p:'€ 1,290', o:'upright', u:'/pictures/adam_moerk/blue_stairs/', note:'A staircase reduced to colour and geometry. It turns a corner of the room into a question.'},
   lazzari:  {img:'showimg_alz01_desktop.jpg', t:'Ritaglio di natura #1',       a:'Alberto Lazzari',         ed:'Limited Edition', p:'€ 1,590', o:'across',  u:'/pictures/alberto_lazzari/ritaglio_di_natura_1/', note:'A clipping of nature, framed like evidence. Small, precise, easy to lose an afternoon in.'},
-  cusick:   {img:'showimg_mcu11_desktop.jpg', t:"Mylan's Wave",                a:'Matthew Cusick',          ed:'Limited Edition', p:'€ 6,190', o:'across',  u:'/pictures/matthew_cusick/mylans_wave/', note:'A wave built from cut maps. The longer you look, the more places you find inside it.'},
+  cusick:   {img:'showimg_mcu901_desktop.jpg',t:"Irene's Wave",                a:'Matthew Cusick',          ed:'Darlings — Small Limited Edition', p:'€ 199', o:'across',  u:'/pictures/matthew_cusick/irenes_wave-1/', note:'A breaking wave built entirely from cut road maps. The longer you look, the more places you find inside it.'},
   maxzin:   {img:'showimg_jma32_desktop.jpg', t:'Lounging II',                 a:'Joerg Maxzin',            ed:'Limited Edition', p:'€ 1,990', o:'panorama',u:'/pictures/joerg_maxzin/lounging_ii/', note:'A figure at ease, painted loosely enough that you finish it yourself.'},
   tran:     {img:'showimg_tkt30_desktop.jpg', t:'Vase II',                     a:'Thanh-khoa Tran',         ed:'Limited Edition', p:'€ 1,390', o:'upright', u:'/pictures/thanh_khoa_tran/vase_ii/', note:'A still life tipped slightly off balance. Familiar objects behaving just strangely enough to hold you.'},
   // JOYFUL (live LUMAS eu feed — frameless codes verified to load)
@@ -574,6 +574,38 @@ const W={
   aarons:   {img:'showimg_saa61_desktop.jpg', t:'Beverly Hills Hotel',         a:'Slim Aarons',             ed:'Open Edition',    p:'€ 4,099', o:'square',  u:'/pictures/slim_aarons-1/beverly_hills_hotel/', note:'Mid-century leisure, perfectly poised. A summer that ended anyway, kept on the wall.'},
   hanlei:   {img:'showimg_lha13_desktop.jpg', t:'Summer Palace 02',            a:'Han Lei',                 ed:'Limited Edition', p:'€ 990',   o:'square',  u:'/pictures/han_lei/summer_palace_02/', note:'Classical calm, softly faded. It reads like a postcard you never sent.'},
   lemay:    {img:'showimg_ylm13_desktop.jpg', t:'Bloom',                       a:'Ysabel Lemay',            ed:'Limited Edition', p:'€ 2,290', o:'square',  u:'/pictures/ysabel_lemay-3/bloom/', note:'Flowers built up until they tip into memory. Abundance with a little ache underneath.'},
+
+  /* ── bestseller-backed (DWH units sold, B2C, wall pictures 2024–H1 2026) — each also mood-relevant + frameless-image-verified ── */
+  // CALM
+  menin:    {img:'showimg_ime403_desktop.jpg',t:'Dream River 01',              a:'Isabelle Menin',          ed:'Petites — Small Open Edition', p:'€ 269', o:'across',  u:'/pictures/isabelle_menin/dream_river_01-1/', note:'Colour poured and left to bleed — flowers, water and light with no hard edge to catch on. It softens a wall the way a long exhale softens a room.'},
+  yan:      {img:'showimg_pya400_desktop.jpg',t:'Two Surfers',                 a:'Peter Yan',               ed:'Petites — Small Open Edition', p:'€ 179', o:'across',  u:'/pictures/peter_yan/two_surfers-1/', note:'Two figures and a wide, calm sea, read from above. Small against all that water — the good kind of small.'},
+  // POWERFUL
+  krautgartner:{img:'showimg_kkr22_desktop.jpg',t:'Salt Shapes II',            a:'Kevin Krautgartner',      ed:'Limited Edition', p:'€ 1,990', o:'upright', u:'/pictures/kevin_krautgartner/salt_shapes_ii/', note:'Salt flats shot from directly overhead until the earth turns to pure pigment and edge. Scale you feel before you understand it.'},
+  macdonald:{img:'showimg_jmc401_desktop.jpg',t:'Rajan IV',                    a:'Jody Macdonald',          ed:'Petites — Small Open Edition', p:'€ 219', o:'across',  u:'/pictures/jody_macdonald/rajan_iv-2/', note:'An elephant swimming in open ocean, impossibly at ease. Grand, gentle, and completely sure of the wall it is on.'},
+  rauch:    {img:'showimg_sra57_desktop.jpg', t:'Berlin Eberswalder Himmel',   a:'Sandra Rauch',            ed:'Limited Edition', p:'€ 1,190', o:'across',  u:'/pictures/sandra_rauch/berlin_eberswalder_himmel/', note:'The city printed, scraped and painted back into itself. A skyline that refuses to sit quietly.'},
+  dratwa2:  {img:'showimg_ldr402_desktop.jpg',t:'Taking-Off, 21:45',           a:'Luc Dratwa',              ed:'Petites — Small Open Edition', p:'€ 219', o:'upright', u:'/pictures/luc_dratwa/taking_off_2145-1/', note:'A departures-board glamour — glass, reflection and the promise of somewhere else at 21:45. Cinematic and a little restless.'},
+  // CURIOUS
+  colonna1: {img:'showimg_mcn43_desktop.jpg', t:'Funivia',                     a:'Massimo Colonna',         ed:'Limited Edition', p:'€ 2,590', o:'upright', u:'/pictures/massimo_colonna/funivia/', note:'A lone cable car strung across an impossibly minimal sky. Colonna builds silence you can walk into.'},
+  colonna2: {img:'showimg_mcn55_desktop.jpg', t:'Swan',                        a:'Massimo Colonna',         ed:'Limited Edition', p:'€ 2,390', o:'upright', u:'/pictures/massimo_colonna/swan/', note:'One swan, one plane of water, nothing else invited. Surreal, exact, and quietly unnerving.'},
+  picard1:  {img:'showimg_dpi11_desktop.jpg', t:'Clark Kent Graffiti',         a:'Daniel Picard',           ed:'Limited Edition', p:'€ 3,390', o:'across',  u:'/pictures/daniel_picard/clark_kent_graffiti/', note:'A phone booth, a hint of the cape, the whole myth compressed into one wink. Pop nostalgia with a straight face.'},
+  gotsch:   {img:'showimg_cgo405_desktop.jpg',t:'Hochlandrind',                a:'Claudio Gotsch',          ed:'Petites — Small Open Edition', p:'€ 219', o:'across',  u:'/pictures/claudio_gotsch/hochlandrind-2/', note:'A highland cow met head-on, all fringe and patience. Absurd and dignified in the same glance — you will keep looking.'},
+  // DEFIANT
+  monet:    {img:'showimg_amn401_desktop.jpg',t:'Kate',                        a:'André Monet',             ed:'Petites — Small Open Edition', p:'€ 219', o:'upright', u:'/pictures/andre_monet/kate-5/', note:'A face assembled from newsprint and paint — icon and collage at once. It holds the room, and answers back.'},
+  hajek:    {img:'showimg_oha62_desktop.jpg', t:'Frida',                       a:'Olaf Hajek',              ed:'Limited Edition', p:'€ 699', o:'upright', u:'/pictures/olaf_hajek/frida-6/', note:'Frida rebuilt as a folk-art shrine: flowers, birds, symmetry, defiance. Ornament used as armour.'},
+  muthiga:  {img:'showimg_cmu400_desktop.jpg',t:'Good Hair',                   a:'Carol Muthiga-Oyekunle',  ed:'Petites — Small Open Edition', p:'€ 159', o:'square',  u:'/pictures/carol_muthiga_oyekunle/good_hair-1/', note:'Portraiture and pattern in equal measure, celebrating exactly what the title says. Bold on purpose, and precise about it.'},
+  picard2:  {img:'showimg_dpi401_desktop.jpg',t:'Bruce Wayne Graffiti',        a:'Daniel Picard',           ed:'Petites — Small Open Edition', p:'€ 179', o:'across',  u:'/pictures/daniel_picard/bruce_wayne_graffiti-1/', note:'The billionaire, the bat, the joke — spray-stencilled onto the everyday. It refuses to take the wall too seriously.'},
+  // NOSTALGIC
+  yust1:    {img:'showimg_lyu402_desktop.jpg',t:'Venice, Burano',              a:'Larry Yust',              ed:'Petites — Small Open Edition', p:'€ 119', o:'panorama',u:'/pictures/larry_yust/venice_burano_fondamento_caravello/', note:'Burano\'s painted houses lined up like a paint chart someone actually lived in. A thin band of pure holiday.'},
+  leeuwen:  {img:'showimg_bvl13_desktop.jpg', t:'Sorrento 1992',               a:'Bart van Leeuwen',        ed:'Limited Edition', p:'€ 1,490', o:'upright', u:'/pictures/bart_van_leeuwen/sorrento_1992_irah_light/', note:'A southern coast remembered in warm, faded colour — 1992 kept exactly as it felt. Smaller and warmer than the memory it stands in for.'},
+  evans:    {img:'showimg_gve08_desktop.jpg', t:'David Bowie',                 a:'Gavin Evans',             ed:'Open Edition',    p:'€ 209', o:'upright', u:'/pictures/gavin_evans/david_bowie_oe2/', note:'Bowie, close and unguarded, from Evans\' famous session. The kind of face a wall organises itself around.'},
+  schneider:{img:'showimg_ssn50_desktop.jpg', t:'Palm Trees, Palm Springs',    a:'Stefanie Schneider',      ed:'Limited Edition', p:'€ 2,490', o:'square',  u:'/pictures/stefanie_schneider-2/palm_trees_palm_springs/', note:'Desert palms bleached to a Polaroid dream. Americana that already feels like a memory of itself.'},
+  // JOYFUL
+  jahns2:   {img:'showimg_rja401_desktop.jpg',t:'NYC Penguins',                a:'Robert Jahns',            ed:'Petites — Small Open Edition', p:'€ 219', o:'upright', u:'/pictures/robert_jahns/nyc_penguins-1/', note:'A colony of penguins loose in Times Square, entirely unbothered. Jahns makes the impossible look like the most natural thing to hang.'},
+  swain:    {img:'showimg_psw29_desktop.jpg', t:'Lost Flamingos',              a:'Pat Swain',               ed:'Limited Edition', p:'€ 4,290', o:'square',  u:'/pictures/pat_swain/lost_flamingos_and_some_acquaintances/', note:'Flamingos and unlikely company assembled with deadpan glee. Colour that grins back before you do.'},
+  clarke:   {img:'showimg_tca401_desktop.jpg',t:'Saint-Tropez Boats',          a:'Tommy Clarke',            ed:'Petites — Small Open Edition', p:'€ 219', o:'upright', u:'/pictures/thomas_clarke/saint_tropez_boats-1/', note:'The Riviera from directly above — turquoise, wake and white hulls. Summer flattened into pure pattern.'},
+  miller:   {img:'showimg_cmi19_desktop.jpg', t:'Pool 23',                     a:'Carl Miller',             ed:'Limited Edition', p:'€ 3,290', o:'across',  u:'/pictures/carl_miller/pool_23/', note:'A swimming pool read from the sky, all tile-blue geometry and heat. It puts a holiday on the wall and keeps it there.'},
+  naef:     {img:'showimg_fne03_desktop.jpg', t:'Penny & Wuffy',               a:'Federico Naef',           ed:'Limited Edition', p:'€ 339', o:'upright', u:'/pictures/federico_naef/pennywuffy/', note:'Two dogs given the full studio treatment, absurdly serious about it. Warmth with a wink built in.'},
+  petrilli: {img:'showimg_dpe400_desktop.jpg',t:'The Lady of the Ibis',        a:'Daria Petrilli',          ed:'Petites — Small Open Edition', p:'€ 199', o:'upright', u:'/pictures/daria_petrilli/the_lady_of_the_ibis-1/', note:'A dream-portrait, half woman half plumage, calm as a saint. Strange, tender, and hard to walk past.'},
 };
 
 const G={
@@ -581,7 +613,7 @@ const G={
     word:'Calm', count:142,
     intro:'Nothing here asks for your attention. One work at a time, with all the space it needs.',
     cue:'Walk slowly',
-    works:['wagner','uhlig','bock','zielske','kloss','patino','fennema','lipscher'],
+    works:['uhlig','menin','fennema','yan','wagner','zielske','kloss'],
     turn:'Notice how your breathing changed.',
     reveals:['rv-up','rv-scale','rv-up','rv-scale'],
     next:['nostalgic','curious','joyful'],
@@ -594,7 +626,7 @@ const G={
     word:'Powerful', count:87,
     intro:'Scale is the argument. Every wall here holds a room three times this size.',
     cue:'Brace',
-    works:['dratwa','bakonyi','tsevis','wild','gries','croppi','soria','hausmann'],
+    works:['dratwa','krautgartner','macdonald','rauch','dratwa2','croppi','bakonyi'],
     turn:'A wall is a claim. Make it.',
     reveals:['rv-left','rv-right','rv-up','rv-left'],
     next:['defiant','curious','calm'],
@@ -607,7 +639,7 @@ const G={
     word:'Curious', count:203,
     intro:"Nothing resolves on the first look. The corridor keeps bending. Follow it.",
     cue:'Look twice',
-    works:['horenstein','reiswitz','mork','lazzari','cusick','maxzin','tran'],
+    works:['colonna1','colonna2','picard1','gotsch','cusick','reiswitz','mork'],
     turn:'Wrong turns are still turns.',
     reveals:['rv-tilt-l','rv-tilt-r','rv-up','rv-tilt-r'],
     next:['defiant','powerful','joyful'],
@@ -620,7 +652,7 @@ const G={
     word:'Defiant', count:51,
     intro:'No explanation. No apology. Works that refuse the centre of the wall.',
     cue:'Keep up',
-    works:['lippmann','nicolescu','cneeon','staudach','threedeluxe','guachinarte'],
+    works:['monet','hajek','muthiga','picard2','guachinarte','lippmann','cneeon'],
     turn:'It was never going to match the sofa.',
     reveals:['rv-left','rv-right','rv-up','rv-right'],
     next:['powerful','curious','joyful'],
@@ -633,7 +665,7 @@ const G={
     word:'Nostalgic', count:119,
     intro:'Smaller than memory makes them. A room you lived in. A summer that ended anyway.',
     cue:'Look back',
-    works:['muth','thun','joseph','aarons','hanlei','lemay'],
+    works:['yust1','leeuwen','evans','schneider','aarons','thun','muth'],
     turn:'You can keep what kept you.',
     reveals:['rv-tilt-r','rv-up','rv-tilt-l','rv-up'],
     next:['calm','joyful','curious'],
@@ -646,7 +678,7 @@ const G={
     word:'Joyful', count:96,
     intro:'Colour, before it apologises for itself. Works that lift the room the second you walk in.',
     cue:'Let it land',
-    works:['jahns','lang','fortes','loooop','voorhes','pfrommer','erlikh'],
+    works:['jahns2','swain','clarke','miller','naef','petrilli','jahns'],
     turn:'A wall is allowed to be happy.',
     reveals:['rv-up','rv-scale','rv-up','rv-scale'],
     next:['curious','powerful','calm'],
@@ -689,7 +721,7 @@ function type(el, text, speed=108){
 function wait(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
 /* ── entry: typed question, then the mood row rises (wired to type() promise) ── */
-const ENTRY_Q='How do you want to feel today?';
+const ENTRY_Q='How do you want to feel?';
 async function openQuestion(){
   entry.classList.remove('gone');
   moodRow.classList.remove('in');
