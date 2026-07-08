@@ -728,82 +728,81 @@ body.is-vertical .reveal-label .meta .row span:first-child{ min-width:100%; padd
    ════════════════════════════════════════════════════════════════════════ */
 const ARTWORK = {
   /* — identity — */
-  artist:        "Carol Muthiga-Oyekunle",
-  title:         "Aset",
+  artist:        "Peter Yan",
+  title:         "Long Shadow",
   privateLabel:  "Private Viewing",
   tagline:       "A guided introduction to a singular work.",
-  link:          "https://www.lumas.com/pictures/carol_muthiga_oyekunle/aset/",
-  artAspect:     1,
-  tileAspect:    "3/4",
+  link:          "https://www.lumas.com/pictures/peter_yan/long_shadow/",
+  artAspect:     1.34,                       /* width / height of the artwork image */
 
   /* — arrival — */
-  arrivalH1:     "Carol Muthiga-<em>Oyekunle</em>",
-  arrivalRoom:   "aset/rooms/room-olive.jpg",
-  arrivalCredit: "Aset · Limited Edition · Carol Muthiga-Oyekunle",
+  arrivalH1:     "Peter Yan",
+  arrivalRoom:   "long-shadow/room-arrival.jpg",
+  arrivalCredit: "Long Shadow · Limited Edition · Peter Yan",
 
-  /* — about the work (masking essay + the artist's own gloss) — */
+  /* — about the work (artist bio + work, from the lumas.com artist page) — */
   aboutTag:        "I · About the work",
-  aboutHeadingHTML:"On <em>masking</em>, and the names of goddesses.",
+  aboutHeadingHTML:"Seen from <em>above</em>.",
   marginalia: [
-    "Each work in the series is named for a goddess or an icon of the Black feminine &mdash; Erzulie, Osun, Idia, Iris, bell. This one is named Aset: the Egyptian Isis, keeper of magic, healing and the throne.",
-    "Ornament, here, is closer to protection: the face is given, but only in part."
+    "Water and shoreline, photographed straight down &mdash; the long shadow of a single figure on vivid orange sand.",
+    "Peter Yan left a career at Apple to photograph the world from the air; he has since visited more than thirty&nbsp;countries."
   ],
   aboutBody: [
-    { html:"Masking is among the oldest grammars of African art &mdash; a way of becoming someone, or something, other than oneself for the length of a ceremony. Muthiga-Oyekunle borrows its logic for the still image, covering the photographed face with an assembled mask and turning a portrait into an apparition." },
-    { html:"The covering is built from the natural world &mdash; the fins of a lionfish, the eye of a peacock feather, sea anemones, the wings of butterflies &mdash; scanned, re-cut and laid over a black-and-white portrait on a ground of gold." },
-    { html:"Masking, as Professor Chika Okeke-Agulu notes, is in decline &mdash; &lsquo;it makes one wonder, with great regret, what knowledge of masking in Africa is now forever lost.&rsquo;" }
+    { html:"Chinese-born Australian photographer Peter Yan (b.&nbsp;1986) specialises in drone photography; his work has appeared in GQ and Lonely Planet, and won the Australia&nbsp;from&nbsp;Above competition." },
+    { html:"Shot from high above a beach, Long Shadow catches the moment the turquoise surf breaks into white against the warm sand &mdash; and the single, long shadow that gives the work its name." }
   ],
-  pullquoteHTML: "Body armour and hair helmet. A shield for her eyes &mdash; <span class=\"em\">amour into armour</span>.",
-  pullquoteCite: "Carol Muthiga-Oyekunle",
+  pullquoteHTML: "Life is short, and I want to see <span class=\"em\">as much of the world as possible</span>.",
+  pullquoteCite: "Peter Yan",
 
   /* — the reveal — */
-  artwork:   "aset/aset-full.jpg",
+  artwork:   "long-shadow/long-shadow-full.jpg",
   revealTag: "II · The work",
   meta: [
-    { k:"Medium", v:"Digital art · photography" },
-    { k:"Format", v:"120 × 120 cm · Limited Edition" }
+    { k:"Medium", v:"Aerial photography" },
+    { k:"Format", v:"107 × 80 cm · Limited Edition" }
   ],
-  cnote: "Held just off-centre, half-turned, the figure wears the sea and the sky as a single crown. The gold does not frame her &mdash; it is the air she stands in.",
+  cnote: "From a height the shoreline turns abstract: a clean line where colour meets colour, and one small figure for scale.",
 
-  /* — in the room — */
+  /* — in the room (real installation renders) — */
   rooms: [
-    { img:"aset/rooms/room-brera.jpg",      label:"III · In the room — i",  line:"On warm plaster, the gold ground reads as a second source of light in the room.", sub:"A villa in Brera, Milan · 120 × 120 cm, frameless" },
-    { img:"aset/rooms/room-walnut.jpg",     label:"In the room — ii", line:"Against dark wood it withdraws, then holds &mdash; a presence you find rather than one that announces itself.", sub:"A panelled study · low evening light" },
-    { img:"aset/rooms/room-terracotta.jpg", label:"In the room — iii", line:"In daylight the marine blues come forward and the work feels almost cool &mdash; a window onto somewhere else.", sub:"Sunlit interior · the intimate 80 × 80 cm format" }
+    { img:"long-shadow/rooms/room-1.jpg", label:"III · In the room — i",  line:"In a sunlit, earthy room the orange sand picks up the warmth of the plaster.", sub:"Oaxaca · 107 × 80 cm · Diasec, frameless" },
+    { img:"long-shadow/rooms/room-2.jpg", label:"In the room — ii", line:"Against a deep wall the turquoise water comes forward and cools the room.", sub:"Milan · 107 × 80 cm · Artbox" },
+    { img:"long-shadow/rooms/room-3.jpg", label:"In the room — iii", line:"In white maple the aerial view reads like a window cut into the wall.", sub:"Bologna · 107 × 80 cm · framed" }
   ],
 
   /* — acquisition — */
   acquireTag:     "IV · Acquisition",
-  artistLineHTML: "Carol Muthiga-Oyekunle · <em>digital art &amp; portraiture</em>",
+  artistLineHTML: "Peter Yan · <em>aerial photography</em>",
   spec: [
-    { k:"Medium",     v:"Digital art · photography" },
-    { k:"Dimensions", v:"120 × 120 cm &nbsp;·&nbsp; also 80 × 80 cm" },
+    { k:"Medium",     v:"Aerial photography" },
+    { k:"Dimensions", v:"107 × 80 cm &nbsp;·&nbsp; also 133 × 100 cm" },
     { k:"Edition",    v:"Limited Edition of 150, numbered &amp; signed" },
-    { k:"Series",     v:"The goddess works (Erzulie · Osun · Idia · Aset)" },
-    { k:"Reference",  v:"LUMAS · CMU22" }
+    { k:"Categories", v:"Water · Photography" },
+    { k:"Reference",  v:"LUMAS · PYA12" }
   ],
+  /* each variant: scale = the preview frame's height as a % of the wall */
   variants: [
-    { dim:"120 × 120 cm", label:"Large format",    price:"2,190", scale:"44%" },
-    { dim:"80 × 80 cm",   label:"Intimate format", price:"1,490", scale:"30%" }
+    { dim:"107 × 80 cm",  label:"Intimate format", price:"1,790", scale:"40%" },
+    { dim:"133 × 100 cm", label:"Large format",    price:"2,790", scale:"50%" }
   ],
   currency:     "US$",
   edition:      "Limited Edition",
-  previewSize:  "120 × 120 cm",
+  previewSize:  "107 × 80 cm",
   previewNote:  "Frameless · shown to scale",
 
   /* — full-details PDP overlay — */
   editionLine: "Limited Edition 150 · Signed",
   mounting:    "Mounted under acrylic glass",
-  shipping:    "Ready for shipping in 4–9 days · VAT incl. · plus US$ 39.90 shipping · LUMAS · CMU22",
+  shipping:    "Ready for shipping in 4–9 days · VAT incl. · plus US$ 39.90 shipping · LUMAS · PYA12",
 
   /* — below-the-fold: carousels · USPs · artist — */
   moreWorks: [
-    { img:"aset/related/osun.jpg",     title:"Osun" },
-    { img:"aset/related/idia.jpg",     title:"Idia" },
-    { img:"aset/related/erzulie.jpg",  title:"Erzulie" },
-    { img:"aset/related/bell.jpg",     title:"bell" },
-    { img:"aset/related/iris.jpg",     title:"Iris" },
-    { img:"aset/related/souldier.jpg", title:"Souldier" }
+    { img:"long-shadow/related/cronulla-rock-pool-02.jpg", title:"Cronulla Rock Pool 02" },
+    { img:"long-shadow/related/cronulla-rock-pool-01.jpg", title:"Cronulla Rock Pool 01" },
+    { img:"long-shadow/related/mona-vale-pool.jpg",        title:"Mona Vale Pool" },
+    { img:"long-shadow/related/bondi-beach.jpg",           title:"Bondi Beach" },
+    { img:"long-shadow/related/two-surfers.jpg",           title:"Two Surfers" },
+    { img:"long-shadow/related/lofoten-soccer-field.jpg",  title:"Lofoten Soccer Field" }
   ],
   usps: [
     { icon:"returns",   label:"60-day returns" },
@@ -812,19 +811,19 @@ const ARTWORK = {
     { icon:"packaging", label:"Art-security packaging" }
   ],
   alsoLike: [
-    { img:"aset/related/black-frida.jpg",             title:"Black Frida with Blue Macaws", artist:"Efren Isaza" },
-    { img:"aset/related/southafrican-antoinette.jpg", title:"Southafrican Antoinette",      artist:"Olaf Hajek" },
-    { img:"aset/related/marionette.jpg",              title:"Marionette",                   artist:"Kate Woodman" },
-    { img:"aset/related/the-offering.jpg",            title:"The Offering",                 artist:"Leila Rose Fanner" }
+    { img:"long-shadow/related/ushuaia.jpg",              title:"Ushuaia",              artist:"Erik Chmil" },
+    { img:"long-shadow/related/north-shore-surfing-15.jpg", title:"North Shore Surfing #15", artist:"Ed Freeman" },
+    { img:"long-shadow/related/beach-v.jpg",              title:"Beach V",              artist:"Julia Christe" },
+    { img:"long-shadow/related/sea-monster.jpg",          title:"Sea Monster",          artist:"Ray Collins" }
   ],
-  artistPortrait: "aset/carol-portrait.jpg",
-  artistBio: "Carol Muthiga-Oyekunle is a Kenyan-American artist and designer. In 2001 she founded her own accessory brand in New York; a graduate of the Royal College of Art London (MA Fashion), she now lives and works in Paris.",
+  artistPortrait: "long-shadow/peter-yan-portrait.jpg",
+  artistBio: "Chinese-born Australian photographer Peter Yan (b.&nbsp;1986) has visited more than thirty countries, having left a successful career at Apple to devote himself to photography. He specialises in drone photography; his work has appeared in GQ and Lonely Planet, he won the Australia&nbsp;from&nbsp;Above competition, and his channels now reach close to a million followers. He lives and works in Melbourne.",
 
   /* — closing — */
   closingAvail:          "This work is currently available for acquisition",
   closingReflectionHTML: "The viewing is complete.",
-  closingBodyHTML:       "You have walked the length of a single work &mdash; from the <em>covering</em> to the face beneath it. What remains is whether it belongs with you.",
-  colophonHTML:          "A LUMAS private view · <em>Aset</em> · Carol Muthiga-Oyekunle"
+  closingBodyHTML:       "You have looked down on a single shoreline from above. What remains is whether it belongs with you.",
+  colophonHTML:          "A LUMAS private view · <em>Long Shadow</em> · Peter Yan"
 };
 
 /* ════════════════════════════════════════════════════════════════════════
