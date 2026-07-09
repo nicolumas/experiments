@@ -1,0 +1,1273 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Unwrapping · LUMAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+<link href="../assets/lumas-fonts.css" rel="stylesheet" />
+<style>
+  :root{
+    --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87; --charcoal-300:#C7C3BE;
+    --ivory-100:#F4EDE2; --ivory-300:#FAF6F1; --bone-100:#E2D8CC;
+    --room:#272320; /* warm "room at night" for post-purchase */
+    --display:'UtileDisplay','Utile Display Trial','Utile Display','Spectral',Georgia,serif;
+    --ui:'Archivo',-apple-system,BlinkMacSystemFont,sans-serif;
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --slow:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--ui);background:var(--charcoal-900);color:var(--ivory-100);
+    -webkit-font-smoothing:antialiased;overflow:hidden}
+  .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:rgba(244,237,226,.55)}
+  .stage{position:fixed;inset:0;display:none;opacity:0;transition:opacity .9s var(--ease);
+    align-items:center;justify-content:center}
+  .stage.live{display:flex}.stage.show{opacity:1}
+  .void{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .halo{position:absolute;left:50%;top:50%;width:130vmax;height:130vmax;transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(244,237,226,.10) 0%,rgba(244,237,226,.03) 30%,transparent 62%)}
+
+  /* shared work element */
+  .work{position:absolute;cursor:pointer;will-change:transform,opacity,filter;
+    transition:transform 1.4s var(--slow),opacity 1.2s var(--ease),filter 1.2s var(--ease);
+    display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+  .work .frame{position:relative;line-height:0;
+    box-shadow:0 0 0 1px rgba(244,237,226,.16),0 40px 90px -30px rgba(0,0,0,.85);
+    transition:box-shadow 1s var(--ease)}
+  .work .frame:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 60px 4px rgba(0,0,0,.32);pointer-events:none}
+  .work img{display:block;width:auto;height:auto;object-fit:contain}
+  .work .cap{font-family:var(--ui);font-weight:300;font-size:1.1rem;color:rgba(244,237,226,.6);
+    text-align:center;opacity:0;transition:opacity .7s var(--ease);letter-spacing:.02em}
+  .work .cap b{font-weight:500;color:rgba(244,237,226,.92);font-style:normal}
+  .work:hover{z-index:30}
+  .work:hover .frame{box-shadow:0 0 0 1px rgba(244,237,226,.5),0 50px 110px -30px rgba(0,0,0,.92),0 0 90px 10px rgba(244,237,226,.08)}
+  .work:hover .cap{opacity:1}
+
+  /* buttons */
+  .btn{font-family:var(--ui);font-weight:700;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;
+    background:var(--ivory-100);color:var(--charcoal-900);border:none;padding:1.3rem 2.8rem;cursor:pointer;
+    border-radius:2px;transition:transform .18s var(--ease)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:scale(.97)}
+  .ghost{font-family:var(--ui);font-weight:700;font-size:1rem;letter-spacing:.16em;text-transform:uppercase;
+    background:none;border:1px solid rgba(244,237,226,.4);color:var(--ivory-100);padding:1.1rem 2.2rem;
+    cursor:pointer;border-radius:2px;transition:border-color .25s var(--ease),background .25s var(--ease),transform .18s var(--ease)}
+  .ghost:hover{border-color:var(--ivory-100);background:rgba(244,237,226,.08)}
+  .ghost:active{transform:scale(.97)}
+
+  /* ===== HUB ===== */
+  #hub{flex-direction:column;justify-content:center;padding:8vh 7vw}
+  #hub .wrap{width:100%;max-width:1080px;margin:0 auto}
+  #hub h1{font-family:var(--display);font-weight:400;font-size:clamp(3.2rem,6vw,5.4rem);line-height:1.04;margin:1.4rem 0 1.2rem}
+  #hub h1 em{font-style:italic;color:rgba(244,237,226,.66)}
+  #hub .sub{font-family:var(--ui);font-weight:300;font-size:clamp(1.5rem,2vw,1.9rem);line-height:1.55;
+    color:rgba(244,237,226,.7);max-width:54ch;margin-bottom:5vh}
+  .moments{border-top:1px solid rgba(244,237,226,.14)}
+  .moment{display:flex;align-items:center;gap:2rem;width:100%;text-align:left;background:none;border:none;
+    border-bottom:1px solid rgba(244,237,226,.14);color:var(--ivory-100);cursor:pointer;
+    padding:2.2rem .4rem;transition:padding .45s var(--ease),background .35s}
+  .moment:hover{padding-left:1.8rem;background:rgba(244,237,226,.04)}
+  .moment .idx{font-family:var(--ui);font-weight:700;font-size:1rem;letter-spacing:.2em;color:rgba(244,237,226,.4);width:3rem;flex:none}
+  .moment .nm{font-family:var(--display);font-size:clamp(1.9rem,2.8vw,2.6rem);flex:1}
+  .moment .ds{font-family:var(--ui);font-weight:300;font-size:1.2rem;color:rgba(244,237,226,.55);max-width:34ch}
+  .moment .ar{font-size:1.6rem;color:rgba(244,237,226,.5);transition:transform .4s var(--ease)}
+  .moment:hover .ar{transform:translateX(6px)}
+
+  /* top chrome inside a moment */
+  .topbar{position:fixed;top:3.2vh;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
+    padding:0 7vw;z-index:40;opacity:0;transition:opacity .8s var(--ease)}
+  .topbar.show{opacity:1}
+  .topbar b{font-family:var(--ui);font-weight:700;letter-spacing:.34em;font-size:1.1rem}
+
+  /* ===== generic pre-panel ===== */
+  .pre{position:relative;z-index:6;text-align:center;max-width:680px;padding:0 6vw;
+    transition:opacity .9s var(--ease),transform 1s var(--slow)}
+  .pre .big{font-family:var(--display);font-weight:400;line-height:1.06;letter-spacing:0;
+    font-size:clamp(2.4rem,4.2vw,3.8rem);margin:1.4rem 0}
+  .pre .big em{font-style:italic;color:rgba(244,237,226,.7)}
+  .pre .p{font-family:var(--ui);font-weight:300;font-size:1.2rem;line-height:1.6;color:rgba(244,237,226,.72);max-width:44ch;margin:0 auto 2.8rem}
+
+  /* ===== DROP specifics ===== */
+  .count{font-family:var(--ui);font-weight:700;letter-spacing:.2em;font-size:1.15rem;
+    color:rgba(244,237,226,.55);margin-bottom:1rem}
+  .count b{color:var(--ivory-100)}
+  .snow{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:4}
+  .flake{position:absolute;top:-3vh;width:6px;height:6px;border-radius:50%;background:rgba(244,237,226,.7);
+    filter:blur(.5px);animation:fall linear infinite}
+  @keyframes fall{0%{transform:translateY(-4vh) translateX(0);opacity:0}
+    10%{opacity:.8}90%{opacity:.7}100%{transform:translateY(106vh) translateX(4vw);opacity:0}}
+  /* gift-wrap cover that peels apart on unveil */
+  .cover{position:absolute;inset:0;z-index:3;pointer-events:none}
+  .cover .half{position:absolute;top:-2.5%;bottom:-2.5%;width:52%;
+    background:
+      linear-gradient(115deg,rgba(255,255,255,.12),rgba(0,0,0,.05) 60%),
+      repeating-linear-gradient(135deg,rgba(28,26,24,.045) 0 2px,transparent 2px 10px),
+      linear-gradient(180deg,#EAE2D8,#D6CBBC);
+    transition:transform 1.25s var(--slow),opacity 1.1s var(--ease);will-change:transform}
+  .cover .half.l{left:-1%;transform-origin:left center;
+    box-shadow:inset -24px 0 44px -22px rgba(0,0,0,.4),0 34px 64px -22px rgba(0,0,0,.6)}
+  .cover .half.r{right:-1%;transform-origin:right center;
+    box-shadow:inset 24px 0 44px -22px rgba(0,0,0,.4),0 34px 64px -22px rgba(0,0,0,.6)}
+  .cover.open .half.l{transform:translateX(-126%) translateY(9%) rotate(-8deg);opacity:0}
+  .cover.open .half.r{transform:translateX(126%) translateY(9%) rotate(8deg);opacity:0}
+  .cover .ribbon{position:absolute;top:-3.5%;bottom:-3.5%;left:50%;width:9px;transform:translateX(-50%);
+    background:var(--charcoal-900);transition:opacity .6s var(--ease),transform 1s var(--slow)}
+  .cover.open .ribbon{opacity:0;transform:translateX(-50%) scaleY(0)}
+  .cover .seal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;
+    background:var(--charcoal-900);color:var(--ivory-100);display:flex;align-items:center;justify-content:center;
+    font-family:var(--display);font-size:1.9rem;box-shadow:0 12px 32px -8px rgba(0,0,0,.6);z-index:2;
+    transition:transform .55s var(--ease),opacity .45s}
+  .cover.open .seal{transform:translate(-50%,-50%) scale(.2) rotate(-14deg);opacity:0}
+  /* ---- Winter Edition: premium tactile unboxing (3D lid, spotlight, contact shadow) ---- */
+  .ubx{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);z-index:6;
+    width:min(58vmin,520px);height:min(52vmin,470px);perspective:1500px;perspective-origin:50% 36%}
+  .ubx-spot{position:absolute;left:50%;top:48%;width:210%;height:210%;transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center,rgba(244,237,226,.13),rgba(244,237,226,.04) 33%,transparent 62%);
+    z-index:-2;filter:blur(8px);pointer-events:none}
+  .ubx-shadow{position:absolute;left:50%;bottom:-11%;width:80%;height:15%;transform:translateX(-50%);
+    background:radial-gradient(ellipse at center,rgba(0,0,0,.72),rgba(0,0,0,.32) 46%,transparent 72%);
+    filter:blur(16px);z-index:-1;opacity:.8;transition:transform 1.3s var(--slow),opacity 1.3s var(--ease)}
+  .ubx.s1 .ubx-shadow{transform:translateX(-50%) scale(1.22,1.4);opacity:.42}
+  .ubx-box{position:absolute;inset:0;transform-style:preserve-3d}
+  .ubx-layer{position:absolute;inset:0;border-radius:4px;background-size:cover;background-position:center;
+    will-change:transform,opacity,filter;transition:transform 1.15s var(--slow),opacity 1s var(--ease),filter 1s var(--ease)}
+  .ubx-interior{background:linear-gradient(158deg,#241d16,#110e0c);
+    box-shadow:inset 0 0 90px 20px rgba(0,0,0,.72),inset 0 3px 6px rgba(0,0,0,.6)}
+  .ubx-art{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(6%) scale(.8);filter:blur(5px)}
+  .ubx-art img{max-width:86%;max-height:86%;width:auto;height:auto;object-fit:contain;
+    box-shadow:0 0 0 1px rgba(244,237,226,.16),0 24px 50px -18px rgba(0,0,0,.75)}
+  .ubx.s1 .ubx-art{opacity:1;transform:translateY(0) scale(.88);filter:none;transition-delay:.35s}
+  .ubx.s1 .ubx-art img{box-shadow:0 0 0 1px rgba(244,237,226,.24),0 0 60px 6px rgba(244,237,226,.12),0 24px 50px -18px rgba(0,0,0,.75)}
+  .ubx-flap{position:absolute;left:0;width:100%;height:50%;backface-visibility:hidden;
+    background-image:var(--ubx-tissue,none),linear-gradient(160deg,#efe8dd,#dbd0c2);background-size:cover;
+    box-shadow:0 12px 26px -14px rgba(0,0,0,.55);
+    transition:transform 1.2s var(--slow),opacity 1s var(--ease)}
+  .ubx-flap.top{top:0;transform-origin:top center;background-position:center top}
+  .ubx-flap.bottom{bottom:0;transform-origin:bottom center;background-position:center bottom}
+  .ubx.s2 .ubx-flap.top{transform:rotateX(-162deg)}
+  .ubx.s2 .ubx-flap.bottom{transform:rotateX(162deg)}
+  .ubx-lid{position:absolute;inset:0;border-radius:5px;overflow:hidden;transform:translateZ(12px);
+    background-image:var(--ubx-lid,none),linear-gradient(150deg,#f1eae0,#dccfbf);background-size:cover;background-position:center;
+    box-shadow:0 28px 54px -16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -8px 16px -8px rgba(0,0,0,.28);
+    transition:transform 1.4s cubic-bezier(.2,.85,.25,1),opacity 1.1s var(--ease),filter 1.1s var(--ease);will-change:transform,opacity}
+  .ubx.s1 .ubx-lid{transform:translateY(-66%) translateZ(150px) rotateX(27deg) scale(1.05);opacity:0;filter:blur(3px)}
+  .ubx-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:46%;pointer-events:none;z-index:2}
+  .ubx-logo svg{display:block;width:100%;height:auto;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.6)) drop-shadow(0 -1px 1px rgba(0,0,0,.16))}
+  .ubx-logo svg path{fill:rgba(52,48,43,.32)}
+  .ubx-sheen{position:absolute;top:0;left:-45%;width:38%;height:100%;pointer-events:none;transform:skewX(-18deg);z-index:3;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.42),transparent);animation:sheen 5.5s ease-in-out infinite}
+  @keyframes sheen{0%,20%{left:-45%}44%,100%{left:135%}}
+  .ubx-prompt{position:absolute;left:50%;top:calc(43% + min(31vmin,278px));transform:translateX(-50%);z-index:7;white-space:nowrap;
+    font-family:var(--ui);font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:1rem;color:rgba(244,237,226,.55);
+    transition:opacity .5s var(--ease);animation:promptpulse 2.4s var(--ease) infinite}
+  @keyframes promptpulse{0%,100%{opacity:.4}50%{opacity:.72}}
+  @media (prefers-reduced-motion:reduce){.ubx-prompt,.ubx-sheen{animation:none}}
+
+  /* ===== Winter Edition — the Christmas story (revealed after unboxing) ===== */
+  #dropLanding{position:fixed;inset:0;z-index:60;background:var(--charcoal-900);color:var(--ivory-100);
+    overflow-y:auto;overflow-x:hidden;display:none;opacity:0;transition:opacity 1.1s var(--ease)}
+  #dropLanding.live{display:block}#dropLanding.show{opacity:1}
+  .dl-nav{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+    padding:2.4rem 7vw;background:linear-gradient(180deg,rgba(28,26,24,.9),rgba(28,26,24,0));pointer-events:none}
+  .dl-nav b{font-family:var(--ui);font-weight:700;letter-spacing:.3em;font-size:1.05rem}
+  .dl-nav .ghost{pointer-events:auto}
+  .dl-snow{position:absolute;inset:0;height:130vh;overflow:hidden;pointer-events:none;z-index:1}
+  /* ---- V2 type tokens ---- */
+  .dl-eyebrow{font-family:var(--ui);font-weight:700;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,237,226,.55)}
+  .dl-h1{font-family:var(--display);font-weight:300;font-size:clamp(3.6rem,5.6vw,6rem);line-height:1.05;letter-spacing:0}
+  .dl-h2{font-family:var(--display);font-weight:400;font-size:clamp(2.7rem,4.2vw,4.2rem);line-height:1.12;letter-spacing:0}
+  .dl-tag{font-family:var(--display);font-weight:300;font-style:italic;font-size:clamp(1.7rem,2.3vw,2.35rem);line-height:1.4;color:rgba(244,237,226,.82)}
+  .dl-body{font-family:var(--ui);font-weight:300;font-size:clamp(1.2rem,1.35vw,1.35rem);line-height:1.72;color:rgba(244,237,226,.72);max-width:58ch}
+  .dl-reveal{opacity:0;transform:translateY(30px);transition:opacity 1.2s var(--slow),transform 1.2s var(--slow)}
+  .dl-reveal.in{opacity:1;transform:none}
+  /* ---- hero ---- */
+  .dl-hero{position:relative;z-index:2;min-height:96vh;display:grid;grid-template-columns:1.06fr .94fr;gap:6vw;
+    align-items:center;padding:4vh 7vw 12vh}
+  .dl-hero-art{display:flex;align-items:center;justify-content:center}
+  .dl-hero-art img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:2px;
+    box-shadow:0 0 0 1px rgba(244,237,226,.12),0 60px 140px -50px rgba(0,0,0,.95),0 0 170px 30px rgba(244,237,226,.05)}
+  .dl-hero .dl-eyebrow{margin-bottom:2.2rem}
+  .dl-hero .dl-h1{margin:0 0 1.4rem}
+  .dl-artist{font-family:var(--ui);font-weight:300;font-size:1.35rem;color:rgba(244,237,226,.6);margin-bottom:3rem}
+  .dl-hero .dl-tag{max-width:34ch}
+  .dl-ribbon{display:flex;align-items:baseline;gap:1.4rem;flex-wrap:wrap;
+    border-top:1px solid rgba(244,237,226,.14);padding-top:1.8rem;margin-top:3.4rem}
+  .dl-ribbon .lbl{font-family:var(--ui);font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;color:rgba(244,237,226,.55)}
+  .dl-clock{font-family:var(--display);font-weight:300;font-size:1.9rem;letter-spacing:.04em}
+  .dl-clock i{color:rgba(244,237,226,.34);font-style:normal;margin:0 .1em}
+  /* ---- chapters ---- */
+  .dl-chapter{position:relative;z-index:2;padding:16vh 7vw}
+  .dl-chapter .dl-eyebrow{margin-bottom:1.6rem}
+  .dl-chapter .dl-h2{margin-bottom:2rem}
+  .dl-chapter .dl-body+.dl-body{margin-top:1.3rem}
+  .dl-manifesto{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:.82fr 1.18fr;gap:7vw;align-items:start}
+  .dl-manifesto .dl-h2{margin:0}
+  .dl-manifesto-body{max-width:56ch}
+  .dl-manifesto-body .dl-body+.dl-body{margin-top:1.4rem}
+  .dl-split{display:grid;grid-template-columns:1fr 1fr;gap:7vw;align-items:center;max-width:1200px;margin:0 auto}
+  .dl-split.wide-img{grid-template-columns:1.15fr .85fr}
+  .dl-figure img{width:100%;display:block;border-radius:3px;box-shadow:0 50px 100px -50px rgba(0,0,0,.9)}
+  /* ---- full-bleed Christmas scene ---- */
+  .dl-scene{position:relative;z-index:2;min-height:100vh;display:flex;align-items:flex-end;
+    background-size:cover;background-position:center;padding:10vh 7vw}
+  .dl-scene:before{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(28,26,24,.55) 0%,rgba(28,26,24,.1) 30%,rgba(28,26,24,.9) 100%)}
+  .dl-scene .inner{position:relative;max-width:600px}
+  .dl-scene .dl-h2{margin-bottom:1.6rem}
+  /* ---- craft ---- */
+  .dl-craft{background:#17130f;padding:16vh 7vw}
+  .dl-cert{display:grid;grid-template-columns:.9fr 1.1fr;gap:7vw;align-items:center;max-width:1120px;margin:0 auto}
+  .dl-cert img{width:100%;border-radius:3px;box-shadow:0 50px 100px -50px rgba(0,0,0,.9)}
+  .dl-craft-pair{display:grid;grid-template-columns:1fr 1fr;gap:3vw;max-width:1120px;margin:8vh auto 0}
+  .dl-craft-pair figure{margin:0}
+  .dl-craft-pair img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;box-shadow:0 40px 80px -50px rgba(0,0,0,.85)}
+  .dl-craft-pair figcaption{margin-top:1.4rem;font-family:var(--display);font-weight:400;font-size:1.5rem}
+  .dl-craft-pair figcaption span{display:block;font-family:var(--ui);font-weight:300;font-size:1.05rem;
+    color:rgba(244,237,226,.58);margin-top:.5rem;line-height:1.55}
+  /* ---- artist ---- */
+  .dl-artist-sec{display:grid;grid-template-columns:.6fr 1fr;gap:7vw;align-items:center;max-width:1120px;margin:0 auto}
+  .dl-artist-sec img{width:100%;border-radius:3px;box-shadow:0 50px 100px -50px rgba(0,0,0,.9)}
+  /* ---- the offer (resolution) ---- */
+  .dl-offer{position:relative;z-index:2;padding:18vh 7vw;background:#17130f}
+  .dl-offer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:8vw;align-items:center}
+  .dl-offer .dl-eyebrow{margin-bottom:1.6rem}
+  .dl-offer .dl-h2{margin:0 0 1.6rem;max-width:13ch}
+  .dl-offer .dl-tag{max-width:30ch;margin:0 0 3rem}
+  .dl-bigclock{font-family:var(--display);font-weight:300;font-size:clamp(3rem,6vw,4.8rem);letter-spacing:.04em;margin-bottom:.8rem}
+  .dl-bigclock i{color:rgba(244,237,226,.32);font-style:normal;margin:0 .12em}
+  .dl-offer .lbl{font-family:var(--ui);font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;color:rgba(244,237,226,.55);margin-bottom:3rem}
+  .dl-facts{list-style:none;padding:0;margin:0 0 2.6rem;display:flex;flex-direction:column;gap:0}
+  .dl-facts li{font-family:var(--ui);font-weight:300;color:rgba(244,237,226,.78);font-size:1.15rem;
+    padding:1rem 0;border-bottom:1px solid rgba(244,237,226,.1)}
+  .dl-buy{font-family:var(--ui);font-weight:700;font-size:1.2rem;letter-spacing:.16em;text-transform:uppercase;
+    background:var(--ivory-100);color:var(--charcoal-900);border:none;padding:1.6rem 3.4rem;cursor:pointer;border-radius:2px;
+    transition:transform .18s var(--ease)}
+  .dl-buy:hover{transform:translateY(-2px)}.dl-buy:active{transform:scale(.97)}
+  .dl-buy[disabled]{background:transparent;border:1px solid rgba(244,237,226,.4);color:rgba(244,237,226,.72);cursor:default;transform:none;letter-spacing:.1em}
+  .dl-deliver{display:inline-block;margin-top:1.6rem;font-family:var(--ui);font-weight:300;font-size:1rem;
+    letter-spacing:.02em;color:rgba(244,237,226,.5)}
+  @media (max-width:880px){
+    .dl-hero,.dl-split,.dl-cert,.dl-craft-pair,.dl-artist-sec,.dl-manifesto,.dl-offer-grid{grid-template-columns:1fr;gap:3rem}
+    .dl-hero{min-height:auto;padding-top:12vh}.dl-hero-art{order:-1}.dl-hero-art img{max-height:52vh}
+    .dl-scene{min-height:80vh}
+    .dl-chapter{padding:11vh 7vw}.dl-offer{padding:13vh 7vw}
+  }
+  @media (prefers-reduced-motion:reduce){.dl-snow{display:none}.dl-reveal{opacity:1;transform:none;transition:none}}
+  .drop-series{position:absolute;left:0;right:0;bottom:5vh;display:flex;gap:1.6rem;justify-content:center;
+    z-index:6;opacity:0;transition:opacity 1s var(--ease)}
+  .drop-series.show{opacity:1}
+  .ds-item{cursor:pointer;text-align:center;opacity:.62;transition:opacity .4s,transform .4s var(--ease)}
+  .ds-item:hover{opacity:1;transform:translateY(-4px)}
+  .ds-item img{display:block;height:11vh;width:auto;box-shadow:0 0 0 1px rgba(244,237,226,.2)}
+  .ds-item span{display:block;font-size:.95rem;color:rgba(244,237,226,.5);margin-top:.7rem;letter-spacing:.04em}
+
+  /* ===== GIFT CARD specifics ===== */
+  .chips{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+  .vchip{font-family:var(--ui);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;background:none;
+    border:1px solid rgba(244,237,226,.35);color:var(--ivory-100);padding:1rem 1.8rem;border-radius:2px;cursor:pointer;
+    transition:border-color .25s var(--ease),background .25s var(--ease),color .25s var(--ease),transform .18s var(--ease)}
+  .vchip:hover{border-color:var(--ivory-100)}
+  .vchip:active{transform:scale(.97)}
+  .vchip[aria-pressed="true"]{background:var(--ivory-100);color:var(--charcoal-900);border-color:var(--ivory-100)}
+  .balance{position:fixed;top:3vh;left:50%;transform:translateX(-50%);z-index:41;text-align:center;
+    opacity:0;transition:opacity .8s var(--ease)}
+  .balance.show{opacity:1}
+  .balance .amt{font-family:var(--display);font-size:clamp(2rem,3vw,2.8rem)}
+  .balance .lab{font-size:.95rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(244,237,226,.5)}
+
+  /* ===== POST specifics ===== */
+  #post.warm{background:radial-gradient(120% 90% at 50% 18%,#3a352f 0%,var(--room) 42%,#1b1916 100%)}
+  .spot{position:absolute;left:0;right:0;bottom:8vh;text-align:center;z-index:7;opacity:0;
+    transition:opacity 1s var(--ease);padding:0 6vw}
+  .spot.show{opacity:1}
+  .spot input{font-family:var(--display);font-size:clamp(1.7rem,2.4vw,2.2rem);text-align:center;
+    background:none;border:none;border-bottom:1px solid rgba(244,237,226,.4);color:var(--ivory-100);
+    padding:.6rem 1rem 1rem;width:min(80vw,460px);margin-bottom:2rem}
+  .spot input::placeholder{color:rgba(244,237,226,.35)}
+  .spot input:focus{outline:none;border-color:var(--ivory-100)}
+
+  /* shared outcome meta */
+  .meta{position:absolute;left:0;right:0;bottom:7vh;text-align:center;z-index:8;opacity:0;
+    transition:opacity 1.1s var(--ease);padding:0 6vw;pointer-events:none}
+  .meta.show{opacity:1;pointer-events:auto}
+  .meta .t{font-family:var(--display);font-size:clamp(2rem,3vw,2.7rem);margin-bottom:.5rem}
+  .meta .a{font-family:var(--ui);font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    font-size:1rem;color:rgba(244,237,226,.6);margin-bottom:1.6rem}
+  .meta .line{font-family:var(--display);font-style:italic;font-size:clamp(1.5rem,2.2vw,2rem);
+    color:rgba(244,237,226,.85);margin-bottom:2.4rem;line-height:1.4}
+
+  .instruct{position:absolute;top:11vh;left:50%;transform:translateX(-50%);max-width:680px;text-align:center;
+    z-index:6;opacity:0;transition:opacity 1s var(--ease);padding:0 6vw;pointer-events:none}
+  .instruct.show{opacity:1}
+  .instruct p{font-family:var(--display);font-size:clamp(1.5rem,2vw,1.9rem);color:rgba(244,237,226,.82);line-height:1.45}
+
+  .loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:9;
+    color:rgba(244,237,226,.5);font-family:var(--ui);letter-spacing:.24em;text-transform:uppercase;font-size:1rem}
+  .loader span{animation:pulse 1.6s var(--ease) infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+  /* ===== MOMENT 4 — Composed for someone (compose flow, dark) ===== */
+  #choose.live{display:block;overflow-y:auto}
+  .cwrap{position:relative;z-index:6;width:100%;max-width:1120px;margin:0 auto;box-sizing:border-box;
+    padding:14vh 6vw 9vh;text-align:center;min-height:100%;
+    display:flex;flex-direction:column;justify-content:center;align-items:stretch}
+  .cstep{display:none}
+  .cstep.on{display:block;animation:crise .7s var(--slow) both}
+  @keyframes crise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  .chead{font-family:var(--display);font-weight:400;line-height:1.12;letter-spacing:0;font-size:clamp(2.2rem,3.6vw,3rem);margin-bottom:.7rem}
+  .chint{font-family:var(--ui);font-weight:300;font-size:1.15rem;line-height:1.55;color:rgba(244,237,226,.6);margin-bottom:1.2rem}
+  .cfield{display:block;width:100%;max-width:440px;margin:2.4rem auto 0;font-family:var(--display);font-weight:400;
+    font-size:clamp(2rem,3.2vw,2.8rem);color:var(--ivory-100);background:none;border:none;
+    border-bottom:1px solid rgba(244,237,226,.4);padding:.5rem .2rem 1rem;text-align:center}
+  .cfield::placeholder{color:rgba(244,237,226,.28)}
+  .cfield:focus{outline:none;border-color:var(--ivory-100)}
+  .cchips{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin:2.4rem 0 3rem}
+  .copts{display:grid;grid-template-columns:repeat(2,1fr);column-gap:5vw;margin-top:3rem;
+    border-top:1px solid rgba(244,237,226,.14);text-align:left}
+  .copt{appearance:none;background:none;border:none;border-bottom:1px solid rgba(244,237,226,.14);
+    color:var(--ivory-100);cursor:pointer;padding:1.7rem 1.2rem 1.7rem 0;display:flex;flex-direction:column;align-items:flex-start;gap:.55rem;
+    transition:padding .4s var(--ease),background .35s var(--ease)}
+  .copt:hover,.copt:focus-visible{padding-left:1.2rem;background:rgba(244,237,226,.05);outline:none}
+  .copt:active{background:rgba(244,237,226,.1)}
+  .copt .cn{font-family:var(--display);font-size:clamp(1.7rem,2vw,2.15rem);line-height:1.12;letter-spacing:0}
+  .copt .cd{font-family:var(--ui);font-weight:300;font-size:1.05rem;line-height:1.5;color:rgba(244,237,226,.55)}
+  .cnote{display:block;width:100%;max-width:560px;min-height:180px;margin:2.2rem auto 0;font-family:var(--display);
+    font-weight:400;font-size:clamp(1.2rem,1.6vw,1.45rem);line-height:1.55;color:var(--ivory-100);
+    background:rgba(244,237,226,.05);border:1px solid rgba(244,237,226,.18);border-radius:3px;padding:1.6rem;resize:none;text-align:center}
+  .cnote:focus{outline:none;border-color:rgba(244,237,226,.5)}
+  .cwrap .btn{margin-top:.6rem}
+  .cwrap .big{font-family:var(--display);font-weight:400;line-height:1.08;letter-spacing:0;
+    font-size:clamp(2.2rem,3.6vw,3rem);margin:0 auto .8rem;max-width:18ch}
+  .cwrap .big em{font-style:italic;color:rgba(244,237,226,.74)}
+  .cwrap .p{font-family:var(--ui);font-weight:300;font-size:1.2rem;line-height:1.6;
+    color:rgba(244,237,226,.72);max-width:46ch;margin:1rem auto 2.6rem}
+  @media (max-width:760px){
+    .moment .ds{display:none}
+    .drop-series .ds-item img{height:8vh}
+    .cwrap{max-width:520px}
+    .copts{grid-template-columns:1fr;column-gap:0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.001ms !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HUB ================= -->
+<section class="stage" id="hub">
+  <div class="wrap">
+    <div class="eyebrow">LUMAS · Christmas 2026</div>
+    <h1>The same moment, <em>everywhere art changes hands.</em></h1>
+    <p class="sub">A reveal in the dark, the instant something becomes yours. It belongs at every threshold, but it should never feel the same twice. Step into one.</p>
+    <div class="moments">
+      <button class="moment" data-mode="drop">
+        <span class="nm">The Winter Edition</span>
+        <span class="ds">A seasonal drop. One artist, unveiled. Yours before the public.</span>
+        <span class="ar">→</span>
+      </button>
+      <button class="moment" data-mode="card">
+        <span class="nm">Unlock a world of art</span>
+        <span class="ds">Someone gave you a gift card. Watch what your value opens.</span>
+        <span class="ar">→</span>
+      </button>
+      <button class="moment" data-mode="choose">
+        <span class="nm">Composed for someone</span>
+        <span class="ds">Describe someone you love. A private collection appears; they choose the one that's theirs.</span>
+        <span class="ar">→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DROP ================= -->
+<section class="stage" id="drop">
+  <div class="void"><div class="halo"></div></div>
+  <div class="snow" id="snow"></div>
+  <div class="topbar" id="dropTop"><b>LUMAS</b><button class="ghost" data-home>Back</button></div>
+
+  <div class="pre" id="dropPre">
+    <div class="eyebrow">The Winter Edition · Robert Jahns</div>
+    <div class="big">Every winter, <em>one artist.</em><br>This year, the penguins come to town.</div>
+    <div class="count">Opens to everyone in <b id="cd">02 : 14 : 53</b></div>
+    <p class="p">You're on the first-look list. Three new works, a strictly limited run.</p>
+    <button class="btn" id="dropReveal">Unveil the drop</button>
+  </div>
+
+  <div id="dropStage" style="position:absolute;inset:0;z-index:5;display:none"></div>
+  <div class="drop-series" id="dropSeries"></div>
+  <div class="meta" id="dropMeta">
+    <div class="t" id="dmT"></div><div class="a" id="dmA"></div>
+    <div class="line" id="dmL"></div>
+    <button class="ghost" data-home>Leave the drop</button>
+  </div>
+</section>
+
+<!-- ================= GIFT CARD ================= -->
+<section class="stage" id="card">
+  <div class="void"><div class="halo"></div></div>
+  <div class="topbar" id="cardTop"><b>LUMAS</b><button class="ghost" data-home>Back</button></div>
+  <div class="balance" id="cardBal"><div class="amt" id="balAmt">€0</div><div class="lab">on your card</div></div>
+
+  <div class="pre" id="cardPre">
+    <div class="eyebrow">A gift from Anna</div>
+    <div class="big">She didn't choose <em>for</em> you.<br>She gave you the <em>whole gallery.</em></div>
+    <div class="amt" id="preAmt" style="font-family:var(--display);font-size:clamp(3rem,6vw,5rem);margin:1rem 0"></div>
+    <p class="p">Pick a card value to feel it. Everything within reach lights up.</p>
+    <div class="chips" id="vchips">
+      <button class="vchip" data-val="500">€500</button>
+      <button class="vchip" data-val="1000">€1,000</button>
+      <button class="vchip" data-val="2000">€2,000</button>
+    </div>
+    <button class="btn" id="cardReveal">Unlock the world</button>
+  </div>
+
+  <div class="instruct" id="cardInstruct"><p id="cardInstructP"></p></div>
+  <div id="cardStage" style="position:absolute;inset:0;z-index:5;display:none"></div>
+  <div class="meta" id="cardMeta">
+    <div class="t" id="cmT"></div><div class="a" id="cmA"></div>
+    <div class="line" id="cmL"></div>
+    <button class="ghost" data-home>Done</button>
+  </div>
+</section>
+
+<!-- ================= POST-PURCHASE ================= -->
+<section class="stage" id="post">
+  <div class="topbar" id="postTop"><b>LUMAS</b><button class="ghost" data-home>Back</button></div>
+  <div class="pre" id="postPre">
+    <div class="eyebrow">Order confirmed</div>
+    <div class="big">It's <em>yours.</em></div>
+    <p class="p" id="postPreP">One piece, on its way to you. Take a moment with it first.</p>
+    <button class="btn" id="postReveal">See it</button>
+  </div>
+
+  <div class="instruct" id="postInstruct"><p id="postInstructP"></p></div>
+  <div id="postStage" style="position:absolute;inset:0;z-index:5;display:none"></div>
+  <div class="spot" id="postSpot">
+    <input id="spotIn" placeholder="above the fireplace…" maxlength="40" autocomplete="off" />
+    <div><button class="btn" id="spotGo">Hang it there</button></div>
+  </div>
+  <div class="meta" id="postMeta">
+    <div class="t" id="pmT"></div><div class="a" id="pmA"></div>
+    <div class="line" id="pmL"></div>
+    <button class="ghost" data-home>Close</button>
+  </div>
+</section>
+
+<!-- ================= COMPOSED FOR SOMEONE ================= -->
+<section class="stage" id="choose">
+  <div class="void"><div class="halo"></div></div>
+  <div class="topbar" id="chooseTop"><b>LUMAS</b><button class="ghost" data-home>Back</button></div>
+
+  <div class="cwrap" id="cWrap">
+    <div class="cstep on" data-cstep="intro">
+      <div class="eyebrow">A gift, composed</div>
+      <div class="big">Give art without <em>guessing their taste.</em></div>
+      <p class="p">Tell us about the person, not the art. A private collection appears, and they choose the one that becomes theirs.</p>
+      <button class="btn" id="chooseStart">Begin</button>
+    </div>
+
+    <div class="cstep" data-cstep="who">
+      <div class="chead">Who is it for?</div>
+      <div class="chint">A first name is enough. It's how the gift will greet them.</div>
+      <input class="cfield" id="cName" placeholder="Their name" maxlength="22" autocomplete="off" />
+      <div class="cchips" id="cRel">
+        <button class="vchip" data-rel="my mother">Mother</button>
+        <button class="vchip" data-rel="my father">Father</button>
+        <button class="vchip" data-rel="my partner">Partner</button>
+        <button class="vchip" data-rel="my sister">Sister</button>
+        <button class="vchip" data-rel="my brother">Brother</button>
+        <button class="vchip" data-rel="my friend">A friend</button>
+      </div>
+      <button class="btn" id="cWhoNext" disabled>Continue</button>
+    </div>
+
+    <div class="cstep" data-cstep="q1">
+      <div class="chead">Where does their mind wander?</div>
+      <div class="chint">The world they're drawn to when no one's watching.</div>
+      <div class="copts" id="cQ1opts"></div>
+    </div>
+    <div class="cstep" data-cstep="q2">
+      <div class="chead">The colours of their home.</div>
+      <div class="chint">The walls, the light, the things they keep close.</div>
+      <div class="copts" id="cQ2opts"></div>
+    </div>
+    <div class="cstep" data-cstep="q3">
+      <div class="chead">And how do they move through a room?</div>
+      <div class="chint">One last thing, then we'll compose.</div>
+      <div class="copts" id="cQ3opts"></div>
+    </div>
+
+    <div class="cstep" data-cstep="note">
+      <div class="chead">Say something, only to them.</div>
+      <div class="chint">The first thing they'll read when the gift opens. Leave it, or make it yours.</div>
+      <textarea class="cnote" id="cNoteIn" maxlength="240"></textarea>
+      <div style="margin-top:2rem"><button class="btn" id="cSeal">Seal the gift</button></div>
+    </div>
+
+    <div class="cstep" data-cstep="seal">
+      <div class="eyebrow">Sealed</div>
+      <div class="big" id="cSealHead">It's ready.</div>
+      <p class="p">This is what they open on Christmas morning. You won't know which one they keep until they do.</p>
+      <button class="btn" id="cRun">Preview the unwrapping</button>
+    </div>
+  </div>
+
+  <div class="instruct" id="cInstruct"><div class="from" id="cFrom">Chosen for you</div><p id="cInstructP"></p></div>
+  <div id="chooseStage" style="position:absolute;inset:0;z-index:5;display:none"></div>
+  <div class="meta" id="cMeta">
+    <div class="t" id="ccT"></div><div class="a" id="ccA"></div>
+    <div class="line" id="ccL"></div>
+    <button class="ghost" data-home>Compose another</button>
+  </div>
+</section>
+
+<!-- ============ Winter Edition — the Christmas story ============ -->
+<section id="dropLanding">
+  <div class="dl-snow" id="dlSnow"></div>
+  <div class="dl-nav"><b>LUMAS</b><button class="ghost" data-home>Close</button></div>
+
+  <header class="dl-hero">
+    <div class="dl-hero-art dl-reveal"><img id="dlHeroImg" alt="Dumbo Brooklyn Penguins by Robert Jahns"></div>
+    <div class="dl-hero-copy dl-reveal">
+      <div class="dl-eyebrow">The Winter Edition · 2026</div>
+      <h1 class="dl-h1">Dumbo Brooklyn<br>Penguins</h1>
+      <div class="dl-artist">Robert Jahns</div>
+      <p class="dl-tag">It began on the quietest morning of the year, when the snow had hushed the whole city.</p>
+      <div class="dl-ribbon">
+        <span class="lbl">Open for one day only</span>
+        <span class="dl-clock"><span id="clH">23</span><i>:</i><span id="clM">59</span><i>:</i><span id="clS">59</span></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="dl-chapter dl-manifesto dl-reveal">
+    <h2 class="dl-h2">And then, the impossible.</h2>
+    <div class="dl-manifesto-body">
+      <p class="dl-body">A line of penguins, unhurried, crossing a cobbled Brooklyn street in the hush beneath the great bridge. Robert Jahns builds these worlds by hand, one photograph pressed gently into another, until a place you know becomes a place you dreamed.</p>
+      <p class="dl-body">You look twice. You smile before you decide to. That is the whole trick of it, and there is no trick at all.</p>
+    </div>
+  </section>
+
+  <section class="dl-scene dl-reveal" style="background-image:url('art%20drop/artdrop-rja-raum-01-1000x667.jpg')">
+    <div class="inner">
+      <div class="dl-eyebrow" style="margin-bottom:1.4rem">Christmas morning</div>
+      <h2 class="dl-h2">On a wall, in the low winter light.</h2>
+      <p class="dl-body">Picture it above the mantel, holding the last of the candlelight and the first grey of the morning. The kind of picture a room quietly gathers around.</p>
+    </div>
+  </section>
+
+  <section class="dl-chapter dl-reveal">
+    <div class="dl-split wide-img">
+      <div class="dl-figure"><img src="art%20drop/artdrop-rja-raum-04-1000x667.jpg" alt="Living with the work"></div>
+      <div>
+        <h2 class="dl-h2">A small wonder to live beside.</h2>
+        <p class="dl-body">It keeps its warmth long after the tree comes down. A little impossibility on the wall, catching the eye of everyone who passes, all winter long.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dl-craft dl-reveal">
+    <div class="dl-cert">
+      <img src="art%20drop/artdrop-rja-unterschift-500x500.jpg" alt="Signed and numbered certificate">
+      <div>
+        <h2 class="dl-h2">Made slowly, made to keep.</h2>
+        <p class="dl-body">Printed to the artist's own file and signed by Robert's hand. One of only three hundred, numbered, and yours alone. It arrives with its certificate, ready for the years ahead.</p>
+      </div>
+    </div>
+    <div class="dl-craft-pair">
+      <figure class="dl-reveal"><img src="art%20drop/artdrop-rja-acryl-500x667.jpg" alt="Acrylic glass finish">
+        <figcaption>Faced in museum-grade acrylic<span>Luminous depth and true colour, framed and ready to hang.</span></figcaption></figure>
+      <figure class="dl-reveal"><img src="art%20drop/artdrop-rja-qualitat-500x667.jpg" alt="Archival print detail">
+        <figcaption>Archival fine-art print<span>Rich, lasting detail that holds for a lifetime.</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="dl-chapter dl-reveal">
+    <div class="dl-artist-sec">
+      <img src="art%20drop/artdrop-rja-portrait-500x500.jpg" alt="Robert Jahns">
+      <div>
+        <h2 class="dl-h2">Robert Jahns</h2>
+        <p class="dl-body">The German artist known as @nois7 turns the ordinary world into somewhere gentler and stranger. Millions follow the places he invents. This winter, one of them can be yours.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dl-offer dl-reveal">
+    <div class="dl-offer-grid">
+      <div class="dl-offer-lead">
+        <div class="dl-eyebrow">Before midnight, before Christmas</div>
+        <h2 class="dl-h2">Yours, if you choose it today.</h2>
+        <p class="dl-tag">The edition is open for a single day, and it will arrive gift-ready, before Christmas.</p>
+        <div class="dl-bigclock"><span id="clH2">23</span><i>:</i><span id="clM2">59</span><i>:</i><span id="clS2">59</span></div>
+        <div class="lbl">Until the window closes</div>
+      </div>
+      <div class="dl-offer-buy">
+        <ul class="dl-facts">
+          <li>Limited Edition of 300, hand-signed and numbered</li>
+          <li>Museum-grade acrylic glass, 60 × 80 cm</li>
+          <li>€ 869, with free returns</li>
+          <li>Guaranteed delivery before 24 December</li>
+        </ul>
+        <button class="dl-buy">Acquire this edition</button>
+        <div class="dl-deliver">Reserve within the window and it arrives gift-ready, before Christmas.</div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<div class="loader" id="loader" style="display:none"><span id="loaderTxt">Loading…</span></div>
+
+<script>
+/* ---------- real LUMAS works (feed-sourced hiResImage codes; bare _full) ---------- */
+const POOL=[
+  {c:"ach01",a:"Andreas Chudowski",t:"Mann am Meer",col:["bw","cool"],o:"l",p:599},
+  {c:"amj03",a:"Akos Major",t:"Pedalboats #2",col:["cool"],o:"l",p:719},
+  {c:"amj11",a:"Akos Major",t:"White Pier",col:["cool"],o:"l",p:719},
+  {c:"ams03",a:"Axel M. Mosler",t:"Moraine Lake, Banff",col:["cool"],o:"p",p:439},
+  {c:"ams05",a:"Axel M. Mosler",t:"Peyto Lake, Alberta",col:["cool"],o:"p",p:439},
+  {c:"abr38",a:"Andrej Barov",t:"Tokio, Asakusa",col:["warm"],o:"l",p:1032},
+  {c:"abr39",a:"Andrej Barov",t:"Tokio, Roppongi",col:["bold"],o:"l",p:1032},
+  {c:"abr43",a:"Andrej Barov",t:"Urban Fire 2",col:["bold"],o:"l",p:399},
+  {c:"abr46",a:"Andrej Barov",t:"Urban Fire 3",col:["bold"],o:"l",p:399},
+  {c:"abs01",a:"Andrea B. Stone",t:"City Landscape, Chicago",col:["cool"],o:"l",p:760},
+  {c:"abs03",a:"Andrea B. Stone",t:"Infinite Mirror, Portland",col:["bold"],o:"p",p:479},
+  {c:"abs05",a:"Andrea B. Stone",t:"Triptych, Houston",col:["bold"],o:"p",p:1192},
+  {c:"abe01",a:"Angela Bergling",t:"Hochländer 12",col:["bold"],o:"l",p:479},
+  {c:"abe04",a:"Angela Bergling",t:"Hochländer 17",col:["bw"],o:"p",p:479},
+  {c:"abe10",a:"Angela Bergling",t:"Hochländer 15",col:["cool"],o:"l",p:479},
+  {c:"ada01",a:"Andrea Damp",t:"Paradise Garden 1",col:["cool"],o:"p",p:792},
+  {c:"ada03",a:"Andrea Damp",t:"Paradise Garden 3",col:["bold"],o:"l",p:792},
+  {c:"aam04",a:"Andreas Amrhein",t:"Rabbit King",col:["bold"],o:"l",p:279},
+  {c:"aam05",a:"Andreas Amrhein",t:"Forrest King",col:["cool"],o:"p",p:279},
+  {c:"aam08",a:"Andreas Amrhein",t:"Prince",col:["bold"],o:"p",p:279},
+  {c:"aar01",a:"André Arment",t:"Rooster",col:["bold"],o:"l",p:1000},
+  {c:"aar03",a:"André Arment",t:"My Pigeon",col:["warm"],o:"l",p:479},
+  {c:"are102",a:"Alexander Von Reiswitz",t:"Maggie",col:["bw"],o:"sq",p:952},
+  {c:"ahs53",a:"Anna Halm Schudel",t:"Marlene",col:["bw"],o:"p",p:760},
+  {c:"ahs69",a:"Anna Halm Schudel",t:"Selbstbildnis",col:["warm"],o:"p",p:760},
+  {c:"akh01",a:"Alexander Khokhlov",t:"Comix",col:["bold"],o:"p",p:519},
+  {c:"akh07",a:"Alexander Khokhlov",t:"Shepard",col:["bold"],o:"p",p:519},
+  {c:"ala03",a:"Andrey Yakovlev & Lili Aleeva",t:"Tears Mistress 1",col:["warm"],o:"p",p:760},
+  {c:"amn01",a:"André Monet",t:"Mick",col:["warm"],o:"p",p:1032},
+  {c:"amn03",a:"André Monet",t:"Cate",col:["bold"],o:"p",p:1272},
+  {c:"amn05",a:"André Monet",t:"Jay-Z",col:["warm"],o:"p",p:920},
+  {c:"amn23",a:"André Monet",t:"Freddie",col:["bold"],o:"p",p:359},
+  {c:"amn17",a:"André Monet",t:"Ali",col:["bold"],o:"p",p:359},
+  {c:"ime97",a:"Isabelle Menin",t:"Only In Your Heart 03",col:["bold"],o:"pan",p:840},
+  {c:"ime105",a:"Isabelle Menin",t:"From a Dream 02",col:["bold"],o:"sq",p:399},
+  {c:"adn01",a:"An Doan Nguyen",t:"Jasmine Flowers 01",col:["cool"],o:"sq",p:359},
+  {c:"adn04",a:"An Doan Nguyen",t:"Jasmine Flowers 02",col:["cool"],o:"sq",p:359},
+  {c:"adn07",a:"An Doan Nguyen",t:"Jasmine Flowers 03",col:["cool"],o:"sq",p:359},
+  {c:"abd01",a:"Andrew Bordwin",t:"Enlightment",col:["bw"],o:"p",p:792},
+  {c:"abd05",a:"Andrew Bordwin",t:"Skyscraper",col:["bw"],o:"p",p:792},
+  {c:"abd07",a:"Andrew Bordwin",t:"Tsunami",col:["bw"],o:"p",p:792},
+  {c:"abr20",a:"Andrej Barov",t:"Romance X",col:["bw"],o:"l",p:1112},
+  {c:"abr21",a:"Andrej Barov",t:"2001: Space Odyssey I",col:["bold"],o:"l",p:792},
+  {c:"jbt05",a:"Justin Barton",t:"Trees, St Giles Park, Winter",col:["bw","cool"],o:"pan",p:899},
+  {c:"ssn52",a:"Stefanie Schneider",t:"Snow Flakes",col:["warm"],o:"l",p:559},
+  {c:"mja09",a:"Malgosia Jankowska",t:"Winter Forest",col:["bw"],o:"p",p:840},
+  {c:"rja05",a:"Robert Jahns",t:"NYC Penguins II",col:["cool"],o:"l",p:391},
+  {c:"rja401",a:"Robert Jahns",t:"NYC Penguins",col:["cool"],o:"p",p:175},
+  {c:"rja19",a:"Robert Jahns",t:"Central Park Penguins",col:["warm"],o:"l",p:655},
+];
+/* The Winter Edition — Robert Jahns penguins (hero first) */
+const DROP={
+  artist:"Robert Jahns", edition:100, claimed:23,
+  hero:{c:"rja59",t:"Dumbo Brooklyn Penguins",price:"€ 869",ed:"Open Edition"},
+  series:[
+    {c:"rja19",t:"Central Park Penguins"},
+    {c:"rja38",t:"Manhattan Penguins"},
+  ]
+};
+/* the work "just bought" for post-purchase */
+const BOUGHT={c:"ams03",a:"Axel M. Mosler",t:"Moraine Lake, Banff",arrive:"23 December"};
+
+/* ---------- helpers ---------- */
+function imgUrl(c,v){return `https://img.lumas.com/showimg_${c}_${v}.jpg`;}
+function loadWork(w){return new Promise(res=>{const img=new Image();let f=false;
+  img.onload=()=>res({w,img,ok:true});
+  img.onerror=()=>{if(!f){f=true;img.src=imgUrl(w.c,'desktop');}else res({w,img:null,ok:false});};
+  img.src=imgUrl(w.c,'full');});}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+function show(el){el.classList.add('show');}
+function hide(el){el.classList.remove('show');}
+function rm(prop){return prop;}
+
+const stages={hub:hub_,drop:drop_,card:card_,post:post_};
+function $(id){return document.getElementById(id);}
+const hub=$('hub'),drop=$('drop'),card=$('card'),post=$('post'),choose=$('choose');
+
+function showStage(el){
+  document.querySelectorAll('.stage').forEach(s=>{if(s!==el){s.classList.remove('show');
+    setTimeout(()=>{if(!s.classList.contains('show'))s.classList.remove('live');},950);}});
+  el.classList.add('live');setTimeout(()=>el.classList.add('show'),30);
+}
+document.querySelectorAll('[data-home]').forEach(b=>b.addEventListener('click',goHome));
+function goHome(){
+  const dl=document.getElementById('dropLanding');
+  if(dl&&dl.classList.contains('live')){dl.classList.remove('show');setTimeout(()=>dl.classList.remove('live'),1000);}
+  if(typeof dlTimer!=='undefined')clearInterval(dlTimer);
+  showStage(hub);
+}
+document.querySelectorAll('.moment').forEach(m=>m.addEventListener('click',()=>enter(m.dataset.mode)));
+function enter(mode){
+  if(mode==='drop'){showStage(drop);initDrop();}
+  if(mode==='card'){showStage(card);initCard();}
+  if(mode==='post'){showStage(post);initPost();}
+  if(mode==='choose'){showStage(choose);initChoose();}
+}
+function hub_(){}function drop_(){}function card_(){}function post_(){}
+
+/* layout helpers */
+function place(el,xPct,yPct){el.style.left=xPct+'%';el.style.top=yPct+'%';}
+/* lift + shrink the final work so the outcome text has clear space below */
+function settleChosen(el,topPct,maxH){
+  const cap=el.querySelector('.cap'); if(cap)cap.style.opacity='0';
+  const badge=el.querySelector('.count'); if(badge)badge.style.opacity='0';
+  const im=el.querySelector('img'); if(im){im.style.transition='max-width 1.1s var(--slow),max-height 1.1s var(--slow)';
+    im.style.maxWidth='32vw'; im.style.maxHeight=(maxH||40)+'vh';}
+  el.style.transition='transform 1.3s var(--slow),left 1.3s var(--slow),top 1.3s var(--slow),opacity 1s';
+  place(el,50,topPct); el.style.transform='translate(-50%,-50%) scale(1)'; el.style.opacity='1'; el.style.pointerEvents='none';
+}
+
+/* =====================================================================
+   MOMENT 1 — THE DROP  (singular hero, scarcity, snowfall, edition count)
+   ===================================================================== */
+let dropDone=false;
+function initDrop(){
+  $('dropTop').classList.add('show');
+  $('dropPre').style.display='block';$('dropPre').style.opacity='1';$('dropPre').style.transform='none';
+  $('dropStage').style.display='none';$('dropStage').innerHTML='';
+  hide($('dropSeries'));hide($('dropMeta'));
+  buildSnow();startCountdown();
+}
+function buildSnow(){
+  const s=$('snow');if(s.childElementCount)return;
+  for(let i=0;i<26;i++){const f=document.createElement('div');f.className='flake';
+    const sz=2+Math.random()*5;f.style.width=f.style.height=sz+'px';
+    f.style.left=(Math.random()*100)+'%';
+    f.style.animationDuration=(7+Math.random()*9)+'s';
+    f.style.animationDelay=(-Math.random()*12)+'s';
+    f.style.opacity=(.3+Math.random()*.5);
+    s.appendChild(f);}
+}
+let cdT;
+function startCountdown(){
+  let t=2*3600+14*60+53;clearInterval(cdT);
+  cdT=setInterval(()=>{t--;if(t<0)t=0;const h=String(Math.floor(t/3600)).padStart(2,'0');
+    const m=String(Math.floor(t%3600/60)).padStart(2,'0');const s=String(t%60).padStart(2,'0');
+    $('cd').textContent=`${h} : ${m} : ${s}`;},1000);
+}
+/* ============ Winter Edition — tactile unboxing (modular, feature-flagged) ============ */
+const UNBOXING = !/[?&]unboxing=off/i.test(location.search);   // toggle off: set false, or open with ?unboxing=off
+/* Higgsfield-generated premium materials (empty string → tasteful CSS fallback) */
+const LID_IMG = "";      // clean CSS ivory lid + real embossed LUMAS logo (Higgsfield paper-grain can be wired here when available)
+const TISSUE_IMG = "https://d8j0ntlcm91z4.cloudfront.net/user_3DZQOc1tt6y3NcsGPdhPHgSPlLs/hf_20260706_185524_dfdf5bb4-5df2-4ca6-8eca-358676b0abbe.png";   // Higgsfield: full-frame ivory tissue
+/* the actual LUMAS wordmark, debossed tone-on-tone on the lid */
+const LUMAS_SVG='<svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" aria-label="LUMAS"><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></svg>';
+function reduceMotion(){return window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
+/* subtle synthesized sound cues (WebAudio; silent if unsupported / no gesture) */
+let _actx;
+function sfx(kind){
+  try{
+    _actx=_actx||new (window.AudioContext||window.webkitAudioContext)();
+    if(_actx.state==='suspended')_actx.resume();
+    const t=_actx.currentTime,out=_actx.destination;
+    if(kind==='lid'){
+      const o=_actx.createOscillator(),g=_actx.createGain();o.type='sine';
+      o.frequency.setValueAtTime(190,t);o.frequency.exponentialRampToValueAtTime(90,t+.3);
+      g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.10,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+.42);
+      o.connect(g);g.connect(out);o.start(t);o.stop(t+.44);
+    }else if(kind==='tissue'){
+      const len=Math.floor(_actx.sampleRate*0.5),b=_actx.createBuffer(1,len,_actx.sampleRate),d=b.getChannelData(0);
+      for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+      const s=_actx.createBufferSource();s.buffer=b;
+      const f=_actx.createBiquadFilter();f.type='bandpass';f.frequency.value=3400;f.Q.value=.6;
+      const g=_actx.createGain();g.gain.setValueAtTime(0.07,t);g.gain.exponentialRampToValueAtTime(0.0001,t+.45);
+      s.connect(f);f.connect(g);g.connect(out);s.start(t);s.stop(t+.5);
+    }else if(kind==='reveal'){
+      [[523.25,0],[659.25,.09],[783.99,.18]].forEach(([hz,dt])=>{
+        const o=_actx.createOscillator(),g=_actx.createGain();o.type='triangle';o.frequency.value=hz;const tt=t+dt;
+        g.gain.setValueAtTime(0.0001,tt);g.gain.exponentialRampToValueAtTime(0.06,tt+.02);g.gain.exponentialRampToValueAtTime(0.0001,tt+1.2);
+        o.connect(g);g.connect(out);o.start(tt);o.stop(tt+1.25);
+      });
+    }
+  }catch(e){}
+}
+/* build the hero .work — shared by both reveal paths, so the edition/series/reserve flow is unchanged */
+function presentHeroWork(r,withCover,rise){
+  const stage=$('dropStage');
+  const el=document.createElement('div');el.className='work';
+  place(el,50,46);el.style.opacity='0';
+  el.style.transform=rise?'translate(-50%,-50%) translateY(64px) scale(.94)':'translate(-50%,-50%) scale(.96)';
+  if(rise)el.style.filter='blur(8px)';
+  const im=new Image();im.onerror=()=>{im.src=imgUrl(DROP.hero.c,'desktop');};
+  im.src=(r&&r.img)?r.img.src:imgUrl(DROP.hero.c,'full');
+  im.style.maxWidth='52vw';im.style.maxHeight='62vh';
+  const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
+  let cover=null;
+  if(withCover){cover=document.createElement('div');cover.className='cover';
+    cover.innerHTML='<div class="half l"></div><div class="half r"></div><div class="ribbon"></div><div class="seal">L</div>';
+    fr.appendChild(cover);}
+  el.appendChild(fr);
+  const cap=document.createElement('div');cap.className='cap';cap.innerHTML=`<b>${DROP.hero.t}</b> · ${DROP.artist}`;el.appendChild(cap);
+  stage.appendChild(el);
+  setTimeout(()=>{el.style.transform='translate(-50%,-50%) scale(1)';el.style.opacity='1';el.style.filter='none';},60);
+  return {el,cover};
+}
+function startUnboxing(r){
+  const stage=$('dropStage');stage.style.display='block';stage.innerHTML='';
+  const ubx=document.createElement('div');ubx.className='ubx';ubx.id='ubx';
+  ubx.innerHTML='<div class="ubx-spot"></div>'+
+    '<div class="ubx-shadow"></div>'+
+    '<div class="ubx-box">'+
+      '<div class="ubx-layer ubx-interior"></div>'+
+      '<div class="ubx-layer ubx-art"><img alt=""></div>'+
+      '<div class="ubx-layer ubx-lid"><span class="ubx-logo">'+LUMAS_SVG+'</span><span class="ubx-sheen"></span></div>'+
+    '</div>';
+  if(LID_IMG)ubx.style.setProperty('--ubx-lid',`url("${LID_IMG}")`);
+  if(TISSUE_IMG)ubx.style.setProperty('--ubx-tissue',`url("${TISSUE_IMG}")`);
+  stage.appendChild(ubx);
+  const prompt=document.createElement('div');prompt.className='ubx-prompt';prompt.id='ubxPrompt';prompt.textContent='Lift the lid';
+  stage.appendChild(prompt);
+  const img=ubx.querySelector('.ubx-art img');img.onerror=()=>{img.src=imgUrl(DROP.hero.c,'desktop');};
+  img.src=(r&&r.img)?r.img.src:imgUrl(DROP.hero.c,'full');
+  ubx.style.opacity='0';ubx.style.transform='translate(-50%,-50%) scale(.96)';
+  ubx.style.transition='opacity .7s var(--ease),transform .8s var(--slow)';
+  setTimeout(()=>{ubx.style.opacity='1';ubx.style.transform='translate(-50%,-50%) scale(1)';},60);
+  ubx.style.cursor='pointer';
+  // one tap on "Lift the lid" — then the box unwraps itself
+  ubx.addEventListener('click',function go(){
+    prompt.style.opacity='0';
+    if(reduceMotion()){revealFromBox(r);return;}
+    ubx.classList.add('s1');sfx('lid');                         // lid lifts off, art revealed inside
+    setTimeout(()=>{revealFromBox(r);},1650);                   // the piece rises out
+  },{once:true});
+}
+function revealFromBox(r){
+  const ubx=$('ubx'),prompt=$('ubxPrompt');
+  sfx('reveal');
+  if(prompt)prompt.style.opacity='0';
+  if(ubx){ubx.style.transition='opacity .8s var(--ease),transform 1s var(--slow)';
+    ubx.style.opacity='0';ubx.style.transform='translate(-50%,-50%) scale(1.06)';
+    setTimeout(()=>{ubx.remove();if(prompt)prompt.remove();},820);}
+  setTimeout(()=>openDropLanding(r),600);
+}
+$('dropReveal').addEventListener('click',async()=>{
+  $('dropPre').style.opacity='0';$('dropPre').style.transform='translateY(-26px)';
+  const r=await loadWork(DROP.hero);
+  await wait(620);
+  $('dropPre').style.display='none';
+  if(UNBOXING){ startUnboxing(r); return; }
+  /* classic gift-wrap peel (feature flag off) */
+  const {cover}=presentHeroWork(r,true,false);
+  setTimeout(()=>cover.classList.add('open'),760);
+  setTimeout(()=>cover.remove(),2050);
+  setTimeout(()=>openDropLanding(r),2100);
+});
+function showEdition(){
+  const cap=$('dropStage').querySelector('.cap');
+  const badge=document.createElement('div');badge.className='count';badge.style.marginTop='1.4rem';
+  badge.innerHTML=`Edition of ${DROP.edition} · <b id="clm">0</b> claimed`;
+  cap.parentElement.appendChild(badge);cap.style.opacity='1';
+  let n=0;const target=DROP.claimed;const iv=setInterval(()=>{n++;const e=$('clm');if(e)e.textContent=n;
+    if(n>=target)clearInterval(iv);},45);
+}
+function buildSeries(){
+  const wrap=$('dropSeries');wrap.innerHTML='';
+  const label=document.createElement('div');
+  DROP.series.forEach(async s=>{
+    const it=document.createElement('div');it.className='ds-item';
+    const im=new Image();im.src=imgUrl(s.c,'full');im.onerror=()=>im.src=imgUrl(s.c,'desktop');
+    const sp=document.createElement('span');sp.textContent=s.t;
+    it.appendChild(im);it.appendChild(sp);
+    it.addEventListener('click',()=>swapHero(s));
+    wrap.appendChild(it);
+  });
+  show(wrap);
+}
+function swapHero(s){ // tapping a series work promotes it to the hero slot
+  const im=$('dropStage').querySelector('.work img');
+  im.style.opacity='0';
+  setTimeout(()=>{im.onerror=()=>im.src=imgUrl(s.c,'desktop');im.src=imgUrl(s.c,'full');
+    $('dropStage').querySelector('.cap').innerHTML=`<b>${s.t}</b> · ${DROP.artist}`;
+    im.onload=()=>im.style.opacity='1';},420);
+  DROP.hero.t=s.t;DROP.hero.c=s.c;
+}
+// reserve from the drop = scarcity outcome
+$('dropStage').addEventListener('click',e=>{
+  if(!e.target.closest('.work'))return;
+  reserveDrop();
+});
+function reserveDrop(){
+  const el=$('dropStage').querySelector('.work');
+  settleChosen(el,32,42);
+  const ser=$('dropSeries');hide(ser);setTimeout(()=>ser.style.display='none',650);
+  $('dmT').textContent=DROP.hero.t;
+  $('dmA').textContent=`${DROP.artist} · ${DROP.hero.price}`;
+  $('dmL').textContent=`Reserved for you. The hold lasts 48 hours, yours before it opens to everyone.`;
+  setTimeout(()=>show($('dropMeta')),900);
+}
+
+/* =====================================================================
+   MOMENT 2 — GIFT CARD  (abundance, value-filtered field, claim + balance)
+   ===================================================================== */
+let cardVal=0, cardEls=[];
+function initCard(){
+  $('cardTop').classList.add('show');
+  $('cardPre').style.display='block';$('cardPre').style.opacity='1';$('cardPre').style.transform='none';
+  $('cardStage').style.display='none';$('cardStage').innerHTML='';
+  {const ci=$('cardInstruct');hide(ci);ci.style.display='';ci.style.opacity='';}
+  hide($('cardMeta'));hide($('cardBal'));
+  cardVal=0;$('preAmt').textContent='';
+  document.querySelectorAll('#vchips .vchip').forEach(c=>c.setAttribute('aria-pressed','false'));
+}
+document.querySelectorAll('#vchips .vchip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#vchips .vchip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed','true');
+  const target=+c.dataset.val;animateAmt($('preAmt'),target);cardVal=target;
+}));
+function animateAmt(el,target){
+  let n=Math.max(0, +(el.textContent.replace(/[^\d]/g,''))||0);
+  const step=Math.max(5,Math.round((target-n)/24));const iv=setInterval(()=>{
+    n+=step;if(n>=target){n=target;clearInterval(iv);}el.textContent='€'+n.toLocaleString('en-US');},18);
+}
+function affordable(v){return POOL.filter(w=>w.p<=v);}
+$('cardReveal').addEventListener('click',async()=>{
+  if(!cardVal){animateAmt($('preAmt'),500);cardVal=500;
+    document.querySelector('#vchips .vchip[data-val="500"]').setAttribute('aria-pressed','true');await wait(500);}
+  $('cardPre').style.opacity='0';$('cardPre').style.transform='translateY(-26px)';
+  $('balAmt').textContent='€'+cardVal.toLocaleString('en-US');show($('cardBal'));
+  // preload a generous set
+  const set=affordable(cardVal).slice(0,14);
+  $('loaderTxt').textContent='Unlocking…';$('loader').style.display='flex';
+  const ready=(await Promise.all(set.map(loadWork))).filter(r=>r.ok);
+  $('loader').style.display='none';
+  await wait(500);$('cardPre').style.display='none';
+  $('cardInstructP').textContent=`Everything here is yours for €${cardVal.toLocaleString('en-US')} or less. Raise the card, more unlocks.`;
+  show($('cardInstruct'));
+  bloomField(ready.slice(0,12));
+});
+function scatter(n){ // deep, abundant field with depth (scale/opacity)
+  const pts=[];const cols=Math.ceil(Math.sqrt(n*1.6));
+  for(let i=0;i<n;i++){
+    const cx=(i%cols+0.5)/cols, row=Math.floor(i/cols);
+    const rows=Math.ceil(n/cols);
+    const cy=(row+0.5)/rows;
+    const jx=(Math.random()-0.5)*0.12, jy=(Math.random()-0.5)*0.14;
+    const depth=0.62+Math.random()*0.5; // scale
+    pts.push({x:(cx+jx)*100, y:(0.30+cy*0.5+jy)*100, d:depth});
+  }
+  return pts;
+}
+function bloomField(ready){
+  const stage=$('cardStage');stage.style.display='block';stage.innerHTML='';cardEls=[];
+  const pts=scatter(ready.length);
+  ready.forEach((r,i)=>{
+    const p=pts[i];
+    const el=document.createElement('div');el.className='work';
+    place(el,p.x,p.y);
+    el.style.transform=`translate(-50%,-50%) scale(${p.d*.7})`;el.style.opacity='0';el.style.filter='blur(12px)';
+    el.dataset.depth=p.d;
+    const im=r.img||new Image();if(!r.img)im.src=imgUrl(r.w.c,'full');
+    im.style.maxWidth=(15+p.d*9)+'vw';im.style.maxHeight=(20+p.d*12)+'vh';
+    const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
+    const cap=document.createElement('div');cap.className='cap';
+    cap.innerHTML=`<b>${r.w.t}</b> · ${r.w.a}`;
+    el.appendChild(fr);el.appendChild(cap);
+    el.addEventListener('click',()=>claimCard(el,r.w));
+    el.addEventListener('mouseenter',()=>{el.style.transform=`translate(-50%,-50%) scale(${Math.min(1.05,p.d*1.05)})`;el.style.filter='none';});
+    el.addEventListener('mouseleave',()=>{if(!el.classList.contains('chosen'))el.style.transform=`translate(-50%,-50%) scale(${p.d})`;});
+    stage.appendChild(el);cardEls.push({el,p});
+    setTimeout(()=>{el.style.transform=`translate(-50%,-50%) scale(${p.d})`;el.style.opacity=(0.5+p.d*0.45);el.style.filter='blur(0)';},260+i*120);
+  });
+}
+function claimCard(el,w){
+  {const ci=$('cardInstruct');ci.classList.remove('show');ci.style.opacity='0';setTimeout(()=>ci.style.display='none',650);}
+  cardEls.forEach(o=>{if(o.el!==el){o.el.style.transform='translate(-50%,-50%) scale(.55)';o.el.style.opacity='0';
+    o.el.style.filter='blur(14px)';o.el.style.pointerEvents='none';setTimeout(()=>o.el.remove(),1100);}});
+  el.classList.add('chosen');
+  settleChosen(el,34,46);
+  el.querySelector('.frame').style.boxShadow='0 0 0 1px rgba(244,237,226,.5),0 60px 130px -30px rgba(0,0,0,.95),0 0 120px 16px rgba(244,237,226,.1)';
+  const remain=cardVal-w.p;
+  $('cmT').textContent=w.t;$('cmA').textContent=`${w.a} · €${w.p}`;
+  $('cmL').textContent=remain>0
+    ? `Yours. €${remain.toLocaleString('en-US')} still on your card, toward whatever comes next.`
+    : `Yours, and your card is beautifully, completely spent.`;
+  setTimeout(()=>show($('cardMeta')),1400);
+}
+
+/* =====================================================================
+   MOMENT 3 — POST-PURCHASE  (no choice; the void warms into your room)
+   ===================================================================== */
+function initPost(){
+  $('postTop').classList.add('show');
+  post.classList.remove('warm');
+  $('postPre').style.display='block';$('postPre').style.opacity='1';$('postPre').style.transform='none';
+  $('postStage').style.display='none';$('postStage').innerHTML='';
+  ['postInstruct','postSpot'].forEach(id=>{const e=$(id);hide(e);e.style.display='';e.style.opacity='';});
+  hide($('postMeta'));
+  $('postPreP').textContent=`You just brought home ${BOUGHT.t} by ${BOUGHT.a}. Take a moment with it first.`;
+}
+$('postReveal').addEventListener('click',async()=>{
+  $('postPre').style.opacity='0';$('postPre').style.transform='translateY(-24px)';
+  const r=await loadWork(BOUGHT);
+  await wait(600);$('postPre').style.display='none';
+  const stage=$('postStage');stage.style.display='block';
+  const el=document.createElement('div');el.className='work';el.id='boughtWork';
+  place(el,50,44);el.style.transform='translate(-50%,-50%) scale(1.04)';el.style.opacity='0';el.style.filter='blur(14px)';
+  const im=r.img||new Image();if(!r.img)im.src=imgUrl(BOUGHT.c,'full');
+  im.style.maxWidth='44vw';im.style.maxHeight='56vh';
+  const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
+  el.appendChild(fr);stage.appendChild(el);
+  // it settles in — and the void warms into a room
+  setTimeout(()=>{el.style.transform='translate(-50%,-50%) scale(1)';el.style.opacity='1';el.style.filter='none';},60);
+  setTimeout(()=>{post.classList.add('warm');
+    fr.style.boxShadow='0 0 0 1px rgba(244,237,226,.14),0 70px 90px -20px rgba(0,0,0,.6)';},900);
+  setTimeout(()=>{$('postInstructP').textContent='It’s being prepared for you. Where will it live?';
+    show($('postInstruct'));show($('postSpot'));$('spotIn').focus();},1700);
+});
+$('spotGo').addEventListener('click',placeIt);
+$('spotIn').addEventListener('keydown',e=>{if(e.key==='Enter')placeIt();});
+function placeIt(){
+  const spot=$('spotIn').value.trim()||'right where you’ll see it every day';
+  ['postInstruct','postSpot'].forEach(id=>{const e=$(id);e.classList.remove('show');e.style.opacity='0';setTimeout(()=>e.style.display='none',650);});
+  const el=$('boughtWork');
+  settleChosen(el,34,44);
+  $('pmT').textContent=BOUGHT.t;
+  $('pmA').textContent=`${BOUGHT.a} · ${spot}`;
+  $('pmL').textContent=`We’ll imagine it ${spot.startsWith('the ')||/^(above|over|in|on|by|next)/i.test(spot)?'':'in '}${spot}, until it arrives by ${BOUGHT.arrive}.`;
+  setTimeout(()=>show($('postMeta')),700);
+}
+
+/* =====================================================================
+   MOMENT 4 — COMPOSED FOR SOMEONE (describe a person → collection → they choose)
+   Distinct feel: a questionnaire about the PERSON, then a small composed set to choose from.
+   ===================================================================== */
+const C_WORLDS=[
+  {k:"water",n:"The open water",d:"Coastlines, waves, the long horizon"},
+  {k:"city",n:"Cities & streets",d:"Light, glass, the hum of somewhere"},
+  {k:"nature",n:"Wild, quiet land",d:"Mountains, forests, the untouched"},
+  {k:"creatures",n:"Living creatures",d:"Animals met eye to eye"},
+  {k:"people",n:"Faces & people",d:"Portraits, presence, a held gaze"},
+  {k:"bloom",n:"Flowers & the dreamlike",d:"Blooms, abstraction, the surreal"},
+];
+const C_PAL=[
+  {k:"warm",n:"Warm",d:"Golds, ambers, terracotta"},
+  {k:"cool",n:"Cool & calm",d:"Blues, greens, quiet light"},
+  {k:"bw",n:"Black & white",d:"Tone, contrast, no colour at all"},
+  {k:"bold",n:"Bold & alive",d:"Saturated, electric, unafraid"},
+];
+const C_TMP=[
+  {k:"calm",n:"They seek the quiet corner",d:"Stillness, space, a slow gaze"},
+  {k:"bold",n:"They light up the room",d:"Energy, colour, presence"},
+  {k:"romantic",n:"They feel everything deeply",d:"Tender, sensual, led by the heart"},
+  {k:"curious",n:"They notice what others miss",d:"Strange, playful, endlessly curious"},
+];
+const C_TMPW={
+  calm:{top:{water:2,nature:2,bloom:1},col:{bw:2,cool:2,bold:-2}},
+  bold:{top:{city:2,people:1,creatures:1},col:{bold:3,warm:1}},
+  romantic:{top:{bloom:2,people:2,dream:1},col:{warm:2,bw:-1}},
+  curious:{top:{dream:2,creatures:2,city:1,bloom:1},col:{bold:1}},
+};
+const CHOOSE_POOL=[
+  {c:"ach01",a:"Andreas Chudowski",t:"Mann am Meer",top:["water"],col:["bw","cool"]},
+  {c:"amj03",a:"Akos Major",t:"Pedalboats #2",top:["water"],col:["cool"]},
+  {c:"amj11",a:"Akos Major",t:"White Pier",top:["water"],col:["cool","bw"]},
+  {c:"ams03",a:"Axel M. Mosler",t:"Moraine Lake, Banff",top:["water","nature"],col:["cool"]},
+  {c:"ams05",a:"Axel M. Mosler",t:"Peyto Lake, Alberta",top:["water","nature"],col:["cool"]},
+  {c:"abr38",a:"Andrej Barov",t:"Tokio, Asakusa",top:["city"],col:["warm","bold"]},
+  {c:"abr39",a:"Andrej Barov",t:"Tokio, Roppongi",top:["city"],col:["bold"]},
+  {c:"abr43",a:"Andrej Barov",t:"Urban Fire 2",top:["city"],col:["bold","warm"]},
+  {c:"abs01",a:"Andrea B. Stone",t:"City Landscape, Chicago",top:["city"],col:["cool"]},
+  {c:"abs03",a:"Andrea B. Stone",t:"Infinite Mirror, Portland",top:["city"],col:["bold"]},
+  {c:"abs05",a:"Andrea B. Stone",t:"Triptych, Houston",top:["city"],col:["bold","warm"]},
+  {c:"abe01",a:"Angela Bergling",t:"Hochländer 12",top:["nature"],col:["bold"]},
+  {c:"abe04",a:"Angela Bergling",t:"Hochländer 17",top:["nature"],col:["bw"]},
+  {c:"abe10",a:"Angela Bergling",t:"Hochländer 15",top:["nature"],col:["cool"]},
+  {c:"ada01",a:"Andrea Damp",t:"Paradise Garden 1",top:["nature","dream"],col:["cool"]},
+  {c:"ada03",a:"Andrea Damp",t:"Paradise Garden 3",top:["nature","dream"],col:["bold"]},
+  {c:"aam04",a:"Andreas Amrhein",t:"Rabbit King",top:["creatures"],col:["bold"]},
+  {c:"aam05",a:"Andreas Amrhein",t:"Forrest King",top:["creatures"],col:["cool"]},
+  {c:"aam08",a:"Andreas Amrhein",t:"Prince",top:["creatures"],col:["bold"]},
+  {c:"aar01",a:"André Arment",t:"Rooster",top:["creatures"],col:["bold"]},
+  {c:"aar03",a:"André Arment",t:"My Pigeon",top:["creatures"],col:["warm"]},
+  {c:"are102",a:"Alexander Von Reiswitz",t:"Maggie",top:["creatures"],col:["bw"]},
+  {c:"ahs53",a:"Anna Halm Schudel",t:"Marlene",top:["people"],col:["bw"]},
+  {c:"ahs69",a:"Anna Halm Schudel",t:"Selbstbildnis",top:["people"],col:["warm"]},
+  {c:"akh01",a:"Alexander Khokhlov",t:"Comix",top:["people"],col:["bold"]},
+  {c:"akh07",a:"Alexander Khokhlov",t:"Shepard",top:["people"],col:["bold"]},
+  {c:"ala03",a:"Andrey Yakovlev & Lili Aleeva",t:"Tears Mistress 1",top:["people"],col:["warm"]},
+  {c:"amn01",a:"André Monet",t:"Mick",top:["people"],col:["warm"]},
+  {c:"amn03",a:"André Monet",t:"Cate",top:["people"],col:["bold"]},
+  {c:"amn05",a:"André Monet",t:"Jay-Z",top:["people"],col:["warm"]},
+  {c:"amn23",a:"André Monet",t:"Freddie",top:["people"],col:["bold"]},
+  {c:"ime97",a:"Isabelle Menin",t:"Only In Your Heart 03",top:["bloom"],col:["bold"]},
+  {c:"ime105",a:"Isabelle Menin",t:"From a Dream 02",top:["bloom"],col:["bold"]},
+  {c:"adn01",a:"An Doan Nguyen",t:"Jasmine Flowers 01",top:["bloom"],col:["cool"]},
+  {c:"adn04",a:"An Doan Nguyen",t:"Jasmine Flowers 02",top:["bloom"],col:["cool"]},
+  {c:"adn07",a:"An Doan Nguyen",t:"Jasmine Flowers 03",top:["bloom"],col:["cool"]},
+  {c:"abd01",a:"Andrew Bordwin",t:"Enlightment",top:["bloom","city"],col:["bw"]},
+  {c:"abd05",a:"Andrew Bordwin",t:"Skyscraper",top:["bloom","city"],col:["bw"]},
+  {c:"abd07",a:"Andrew Bordwin",t:"Tsunami",top:["bloom","water"],col:["bw"]},
+  {c:"abr20",a:"Andrej Barov",t:"Romance X",top:["dream","people"],col:["bw"]},
+  {c:"abr21",a:"Andrej Barov",t:"2001: Space Odyssey I",top:["dream","people"],col:["bold"]},
+  {c:"aam01",a:"Andreas Amrhein",t:"Mephisto",top:["dream","people"],col:["warm"]},
+];
+const cx={name:"",rel:"my friend",world:null,palette:null,temper:null,note:""};
+function cCap(s){s=(s||'').trim();return s?s[0].toUpperCase()+s.slice(1):'someone';}
+
+function initChoose(){
+  $('chooseTop').classList.add('show');
+  $('chooseStage').style.display='none';$('chooseStage').innerHTML='';
+  {const ci=$('cInstruct');hide(ci);ci.style.display='';ci.style.opacity='';}
+  hide($('cMeta'));
+  cx.name='';cx.rel='my friend';cx.world=cx.palette=cx.temper=null;cx.note='';
+  $('cName').value='';$('cWhoNext').disabled=true;$('cNoteIn').value='';
+  document.querySelectorAll('#cRel .vchip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  if(!$('cQ1opts').childElementCount){
+    cBuildOpts($('cQ1opts'),C_WORLDS,'world');
+    cBuildOpts($('cQ2opts'),C_PAL,'palette');
+    cBuildOpts($('cQ3opts'),C_TMP,'temper');
+  }
+  cGo('intro');
+}
+function cGo(step){
+  document.querySelectorAll('#choose .cstep').forEach(s=>s.classList.remove('on'));
+  const el=document.querySelector(`#choose [data-cstep="${step}"]`);if(el)el.classList.add('on');
+  if(step==='note'&&!cx.note) $('cNoteIn').value=`${cCap(cx.name)}, I saw these and thought of you. I didn't want to pick for you, so I picked a few. The last choice is yours. Happy Christmas.`;
+  if(step==='seal') $('cSealHead').textContent=`A gift for ${cCap(cx.name)} is ready.`;
+}
+function cBuildOpts(host,items,key){
+  host.innerHTML='';
+  items.forEach(it=>{
+    const b=document.createElement('button');b.className='copt';
+    b.innerHTML=`<span class="cn">${it.n}</span><span class="cd">${it.d}</span>`;
+    b.addEventListener('click',()=>{cx[key]=it.k;const nx={world:'q2',palette:'q3',temper:'note'}[key];setTimeout(()=>cGo(nx),300);});
+    host.appendChild(b);
+  });
+}
+$('cName').addEventListener('input',()=>{cx.name=$('cName').value.trim();$('cWhoNext').disabled=!cx.name;});
+document.querySelectorAll('#cRel .vchip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#cRel .vchip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed','true');cx.rel=c.dataset.rel;}));
+$('chooseStart').addEventListener('click',()=>cGo('who'));
+$('cWhoNext').addEventListener('click',()=>cGo('q1'));
+$('cNoteIn').addEventListener('input',()=>cx.note=$('cNoteIn').value);
+$('cSeal').addEventListener('click',()=>{cx.note=$('cNoteIn').value||'';cGo('seal');});
+$('cRun').addEventListener('click',cRun);
+
+function cScore(){
+  const tw=C_TMPW[cx.temper]||{top:{},col:{}};
+  return CHOOSE_POOL.map(w=>{let s=0;
+    if(w.top.includes(cx.world))s+=9;
+    if(cx.world==='bloom'&&w.top.includes('dream'))s+=3;
+    if(cx.world==='nature'&&w.top.includes('water'))s+=2;
+    if(w.col.includes(cx.palette))s+=4;
+    for(const t of w.top)if(tw.top[t])s+=tw.top[t];
+    for(const c of w.col)if(tw.col[c])s+=tw.col[c];
+    return {w,s};}).sort((a,b)=>b.s-a.s);
+}
+function cPick(n){
+  const r=cScore();const out=[],seen={};
+  for(const {w} of r){if(seen[w.a])continue;out.push(w);seen[w.a]=1;if(out.length>=n)break;}
+  if(out.length<n)for(const {w} of r){if(!out.includes(w)){out.push(w);if(out.length>=n)break;}}
+  return out;
+}
+async function cRun(){
+  document.querySelectorAll('#choose .cstep').forEach(s=>s.classList.remove('on'));
+  $('cFrom').textContent=`Chosen for ${cCap(cx.name)}`;
+  $('cInstructP').textContent=cx.note?('“'+cx.note+'”'):'These were chosen with you in mind. Choose the one that becomes yours.';
+  const cands=cPick(6);
+  $('loaderTxt').textContent='Composing the collection…';$('loader').style.display='flex';
+  const ready=(await Promise.all(cands.map(loadWork))).filter(r=>r.ok).slice(0,4);
+  $('loader').style.display='none';
+  cReveal(ready.length?ready:[]);
+}
+const C_POS=[[22,54],[43,70],[62,52],[81,68]];
+function cReveal(ready){
+  const stage=$('chooseStage');stage.style.display='block';stage.innerHTML='';
+  ready.forEach((r,i)=>{
+    const p=C_POS[i]||[50,50];
+    const el=document.createElement('div');el.className='work';
+    place(el,p[0],p[1]);el.style.transform='translate(-50%,-50%) translateY(70px) scale(.92)';el.style.opacity='0';el.style.filter='blur(10px)';
+    const im=r.img||new Image();if(!r.img)im.src=imgUrl(r.w.c,'full');
+    im.style.maxWidth='26vw';im.style.maxHeight='46vh';im.alt=r.w.t+' by '+r.w.a;
+    const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
+    const cap=document.createElement('div');cap.className='cap';cap.innerHTML=`<b>${r.w.t}</b> · ${r.w.a}`;
+    el.appendChild(fr);el.appendChild(cap);
+    el.addEventListener('click',()=>cChooseWork(el,r.w));
+    stage.appendChild(el);
+    setTimeout(()=>{el.style.transform='translate(-50%,-50%) translateY(0) scale(1)';el.style.opacity='1';el.style.filter='blur(0)';},420+i*600);
+  });
+  setTimeout(()=>show($('cInstruct')),420+ready.length*600+300);
+}
+function cChooseWork(el,w){
+  {const ci=$('cInstruct');ci.classList.remove('show');ci.style.opacity='0';setTimeout(()=>ci.style.display='none',650);}
+  $('chooseStage').querySelectorAll('.work').forEach(o=>{if(o!==el){
+    o.style.transform='translate(-50%,-50%) translateY(60px) scale(.86)';o.style.opacity='0';o.style.filter='blur(12px)';
+    o.style.pointerEvents='none';setTimeout(()=>o.remove(),1100);}});
+  settleChosen(el,34,48);
+  el.querySelector('.frame').style.boxShadow='0 0 0 1px rgba(244,237,226,.5),0 60px 130px -30px rgba(0,0,0,.95),0 0 120px 16px rgba(244,237,226,.1)';
+  $('ccT').textContent=w.t;$('ccA').textContent=`${w.a} · Limited edition`;
+  $('ccL').textContent=`Yours, ${cCap(cx.name)}. The person who gave it will have it framed and on its way to your wall.`;
+  setTimeout(()=>show($('cMeta')),1400);
+}
+
+/* ---- art-drop landing (revealed after the unboxing) ---- */
+let dlTimer;
+function pad(n){return String(n).padStart(2,'0');}
+function startDropCountdown(){
+  clearInterval(dlTimer);
+  let total=24*3600-1;
+  const paint=()=>{const h=Math.floor(total/3600),m=Math.floor(total%3600/60),s=total%60;
+    ['clH','clH2'].forEach(id=>{const e=$(id);if(e)e.textContent=pad(h);});
+    ['clM','clM2'].forEach(id=>{const e=$(id);if(e)e.textContent=pad(m);});
+    ['clS','clS2'].forEach(id=>{const e=$(id);if(e)e.textContent=pad(s);});};
+  paint();
+  dlTimer=setInterval(()=>{if(total>0){total--;paint();}else clearInterval(dlTimer);},1000);
+}
+function fillLandingSnow(){
+  const s=$('dlSnow');if(!s||s.childElementCount)return;
+  for(let i=0;i<22;i++){const f=document.createElement('div');f.className='flake';
+    const sz=2+Math.random()*4;f.style.width=f.style.height=sz+'px';
+    f.style.left=(Math.random()*100)+'%';f.style.animationDuration=(9+Math.random()*10)+'s';
+    f.style.animationDelay=(-Math.random()*14)+'s';f.style.opacity=(.25+Math.random()*.4);
+    s.appendChild(f);}
+}
+function openDropLanding(r){
+  const img=$('dlHeroImg');
+  img.onerror=()=>{img.onerror=null;img.src=imgUrl(DROP.hero.c,'desktop');};
+  img.src=(r&&r.img)?r.img.src:imgUrl(DROP.hero.c,'full');
+  fillLandingSnow();
+  startDropCountdown();
+  const dl=$('dropLanding');dl.scrollTop=0;dl.classList.add('live');
+  setTimeout(()=>dl.classList.add('show'),30);
+  setTimeout(setupDropReveal,80);
+}
+document.querySelectorAll('.dl-buy').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.dl-buy').forEach(x=>{x.disabled=true;x.textContent='Reserved. Arriving before Christmas.';});
+}));
+/* story chapters unfold as they enter view — scroll-driven, reveals the first screen immediately */
+function setupDropReveal(){
+  const dl=$('dropLanding');let els=[...dl.querySelectorAll('.dl-reveal')];
+  if(reduceMotion()){els.forEach(e=>e.classList.add('in'));return;}
+  const check=()=>{const vh=dl.clientHeight||900;
+    els=els.filter(e=>{const r=e.getBoundingClientRect();if(r.top<vh*0.9){e.classList.add('in');return false;}return true;});
+    if(!els.length)dl.removeEventListener('scroll',check);};
+  dl.addEventListener('scroll',check,{passive:true});
+  check();
+}
+
+/* boot */
+showStage(hub);
+</script>
+</body>
+</html>
