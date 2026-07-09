@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your gift · LUMAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Archivo from Google Fonts; Utile Display resolved from the installed family -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --page:#FAF6F1; --card:#FFFFFF; --raised:#F7F1E9; --sunken:#F4EDE2; --inverse:#1C1A18;
+    --t-primary:#1C1A18; --t-secondary:#5A5752; --t-tertiary:#908C87; --t-disabled:#C7C3BE; --t-inverse:#F4EDE2;
+    --b-default:#E2D8CC; --b-subtle:#EAE2D8; --b-strong:#C7C3BE; --b-focus:#1C1A18;
+    --display:'UtileDisplay','Utile Display Trial','Utile Display',Georgia,serif;
+    --ui:'Archivo',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--ui);color:var(--t-primary);background:var(--sunken);overflow:hidden}
+
+  /* type scale */
+  .t-xl{font-family:var(--display);font-weight:300;font-size:clamp(64px,5vw,88px);line-height:1;letter-spacing:0}
+  .t-h1{font-family:var(--display);font-weight:400;font-size:clamp(42px,4vw,62px);line-height:1.04;letter-spacing:0}
+  .t-h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12;letter-spacing:0}
+  .t-h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12;letter-spacing:0}
+  .t-h4{font-family:var(--display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25;letter-spacing:0}
+  .t-large{font-family:var(--ui);font-weight:300;font-size:20px;line-height:1.6}
+  .t-body{font-family:var(--ui);font-weight:400;font-size:16px;line-height:1.5}
+  .t-small{font-family:var(--ui);font-weight:400;font-size:13px;line-height:1.65}
+  .t-caption{font-family:var(--ui);font-weight:400;font-size:11px;line-height:1.5;letter-spacing:.03em}
+  .eyebrow{font-family:var(--ui);font-weight:700;font-size:11px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase}
+  .ui-label{font-family:var(--ui);font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase}
+  .btn{font-family:var(--ui);font-weight:700;font-size:13px;line-height:1.5;letter-spacing:.14em;text-transform:uppercase}
+
+  /* screens + the one animation */
+  .screen{position:fixed;inset:0;transition:opacity .5s ease}
+  #email{background:var(--sunken);display:flex;align-items:center;justify-content:center;padding:40px;opacity:1;z-index:2}
+  #landing{background:var(--inverse);color:var(--t-inverse);overflow-y:auto;opacity:0;pointer-events:none;z-index:1}
+  body.revealed #email{opacity:0;pointer-events:none}
+  body.revealed #landing{opacity:1;pointer-events:auto;z-index:3}
+
+  /* ---------- SCREEN 1 — EMAIL ---------- */
+  .email-body{width:600px;max-width:100%;background:var(--card);border:1px solid var(--b-default);padding:48px}
+  .email-mark{font-family:var(--ui);font-weight:700;font-size:16px;letter-spacing:.34em;text-transform:uppercase;text-align:center}
+  .hair{border:none;border-top:1px solid var(--b-default);height:0}
+  .email-body .hair.top{margin:24px 0 32px}
+  .email-body .hair.bot{margin:32px 0 24px}
+  .em-eyebrow{color:var(--t-tertiary);text-align:center;margin-bottom:16px}
+  .em-head{text-align:center;margin-bottom:32px}
+  .msg{background:var(--raised);padding:32px;margin-bottom:32px}
+  .msg-quote{color:var(--t-primary)}
+  .msg-attn{color:var(--t-tertiary);margin-top:12px}
+  .em-body{text-align:center;color:var(--t-secondary);margin-bottom:24px}
+  .cta-primary{display:block;width:100%;background:var(--inverse);color:var(--t-inverse);border:none;
+    padding:18px 28px;cursor:pointer;border-radius:0;text-align:center}
+  .cta-primary:hover{background:#3A3835}
+  .em-valid{text-align:center;color:var(--t-tertiary);margin-top:16px}
+  .em-foot{text-align:center;color:var(--t-tertiary)}
+
+  /* ---------- SCREEN 2 — LANDING (dark gift world) ---------- */
+  .ln-snow{position:absolute;inset:0;height:200vh;overflow:hidden;pointer-events:none;z-index:1}
+  .flake{position:absolute;top:-4vh;border-radius:50%;background:rgba(244,237,226,.7);filter:blur(.4px);animation:fall linear infinite}
+  @keyframes fall{0%{transform:translateY(-4vh) translateX(0);opacity:0}12%{opacity:.7}88%{opacity:.6}100%{transform:translateY(150vh) translateX(3vw);opacity:0}}
+
+  .nav{position:relative;z-index:10;height:64px;border-bottom:1px solid rgba(244,237,226,.12);display:flex;align-items:center;padding:0 40px}
+  .nav .mark{font-family:var(--ui);font-weight:700;font-size:16px;letter-spacing:.34em;text-transform:uppercase;color:var(--t-inverse)}
+
+  .hero{position:relative;z-index:2;min-height:56vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:80px 40px 56px}
+  .hero-glow{position:absolute;left:50%;top:44%;width:120vmax;height:80vmax;transform:translate(-50%,-50%);pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse at center,rgba(244,237,226,.09),rgba(244,237,226,.03) 32%,transparent 60%)}
+  .hero .eyebrow,.hero h1,.hero-msg{position:relative;z-index:1}
+  .hero .eyebrow{color:rgba(244,237,226,.55);margin-bottom:20px}
+  .hero h1{color:var(--t-inverse);margin-bottom:24px}
+  .hero-msg{max-width:560px;color:rgba(244,237,226,.78);font-style:italic}
+
+  .chooser{position:relative;z-index:2;padding:24px 40px 8px;max-width:1160px;margin:0 auto;width:100%}
+  .sec-head{text-align:center;margin-bottom:44px}
+  .sec-head .eyebrow{color:rgba(244,237,226,.55);margin-bottom:16px}
+  .sec-head h2{color:var(--t-inverse);margin-bottom:16px}
+  .sec-head .sub{color:rgba(244,237,226,.68);max-width:520px;margin:0 auto}
+
+  .paths{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .path{background:transparent;border:1px solid rgba(244,237,226,.18);padding:40px;text-align:center;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;border-radius:0;font:inherit;color:var(--t-inverse)}
+  .path:hover{border-color:rgba(244,237,226,.45)}
+  .path.sel{border:2px solid var(--t-inverse);padding:39px;box-shadow:0 0 70px -14px rgba(244,237,226,.16)}
+  .path .pnum{color:rgba(244,237,226,.5);margin-bottom:16px}
+  .path .ptitle{margin-bottom:12px}
+  .path .pdesc{color:rgba(244,237,226,.66);margin-bottom:16px;max-width:24ch}
+  .path .pmeta{color:rgba(244,237,226,.5)}
+
+  .grid-wrap{position:relative;z-index:2;max-width:1160px;margin:0 auto;width:100%;padding:56px 40px 180px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 40px}
+  .wk{cursor:pointer;opacity:0;transform:translateY(44px);filter:blur(8px);
+    transition:opacity .9s ease,transform 1s cubic-bezier(.16,1,.3,1),filter .9s ease}
+  .wk.in{opacity:1;transform:none;filter:none}
+  .wk.dim{opacity:.3;pointer-events:none;filter:none}
+  .wk-stage{display:flex;align-items:flex-end;justify-content:center;height:340px;margin-bottom:22px}
+  .wk-stage img{max-width:100%;max-height:340px;width:auto;height:auto;object-fit:contain;display:block;
+    outline:2px solid transparent;
+    box-shadow:0 0 0 1px rgba(244,237,226,.14),0 34px 74px -30px rgba(0,0,0,.9)}
+  .wk.sel .wk-stage img{outline-color:var(--t-inverse);
+    box-shadow:0 0 0 1px rgba(244,237,226,.5),0 34px 84px -26px rgba(0,0,0,.95),0 0 90px 6px rgba(244,237,226,.13)}
+  .wk-artist{color:rgba(244,237,226,.55)}
+  .wk-title{color:rgba(244,237,226,.94);margin-top:4px}
+  .wk-format{color:rgba(244,237,226,.5);margin-top:4px}
+  .wk-status{margin-top:14px;min-height:22px}
+  .chip{display:inline-block;background:rgba(244,237,226,.08);color:rgba(244,237,226,.62);padding:6px 10px;border-radius:2px}
+  .wk-status .sel-label{display:inline-block;color:var(--t-inverse);padding:6px 0}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#211F1C;border-top:1px solid rgba(244,237,226,.14);
+    display:none;align-items:center;justify-content:space-between;padding:20px 40px;z-index:20}
+  .bar.show{display:flex}
+  .bar .count{color:var(--t-inverse)}
+  .bar-cta{background:var(--t-inverse);color:var(--inverse);border:none;padding:14px 28px;cursor:pointer;border-radius:0}
+  .bar-cta.disabled{opacity:.4;pointer-events:none}
+  @media (prefers-reduced-motion:reduce){
+    .flake{display:none}
+    .wk{opacity:1;transform:none;filter:none;transition:none}
+  }
+</style>
+  <link href="../assets/lumas-fonts.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ================= SCREEN 1 — EMAIL ================= -->
+<section id="email" class="screen">
+  <div class="email-body">
+    <div class="email-mark">LUMAS</div>
+    <hr class="hair top" />
+    <div class="em-eyebrow eyebrow">A gift for you</div>
+    <h1 class="em-head t-h2">Someone has chosen this for you</h1>
+    <div class="msg">
+      <p class="msg-quote t-large">You've been looking at that empty wall for a year. I thought it was time someone did something about it.</p>
+      <p class="msg-attn t-caption">— Anna</p>
+    </div>
+    <p class="em-body t-body">Anna has given you a LUMAS art gift. What it holds is waiting on the other side of this button.</p>
+    <button class="cta-primary btn" id="unwrap">Unwrap your gift</button>
+    <p class="em-valid t-caption">Your gift is valid for 3 years. No account needed.</p>
+    <hr class="hair bot" />
+    <p class="em-foot t-caption">LUMAS · Editions of exceptional photography · Berlin</p>
+  </div>
+</section>
+
+<!-- ================= SCREEN 2 — LANDING ================= -->
+<main id="landing" class="screen">
+  <div class="ln-snow" id="lnSnow"></div>
+  <nav class="nav"><span class="mark">LUMAS</span></nav>
+
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="eyebrow">From Anna</div>
+    <h1 class="t-h1">Anna has given you art</h1>
+    <p class="hero-msg t-large">You've been looking at that empty wall for a year. I thought it was time someone did something about it. — Anna</p>
+  </section>
+
+  <section class="chooser">
+    <div class="sec-head">
+      <div class="eyebrow">Your gift, three ways</div>
+      <h2 class="t-h2">Choose how to use it</h2>
+      <p class="sub t-small">Every path below is fully covered. Pick the one that fits your wall — and your appetite.</p>
+    </div>
+    <div class="paths">
+      <button class="path" data-path="1">
+        <div class="pnum ui-label">Path one</div>
+        <div class="ptitle t-h4">One statement work</div>
+        <p class="pdesc t-small">A single large-format piece that anchors a room.</p>
+        <div class="pmeta t-caption">Choose 1 of 4 works</div>
+      </button>
+      <button class="path" data-path="2">
+        <div class="pnum ui-label">Path two</div>
+        <div class="ptitle t-h4">A pair</div>
+        <p class="pdesc t-small">Two medium works in conversation — one wall, two voices.</p>
+        <div class="pmeta t-caption">Choose 2 of 6 works</div>
+      </button>
+      <button class="path" data-path="3">
+        <div class="pnum ui-label">Path three</div>
+        <div class="ptitle t-h4">A small collection</div>
+        <p class="pdesc t-small">Three smaller works. The beginning of something.</p>
+        <div class="pmeta t-caption">Choose 3 of 6 works</div>
+      </button>
+    </div>
+  </section>
+
+  <section class="grid-wrap"><div class="grid" id="grid"></div></section>
+
+  <div class="bar" id="bar">
+    <span class="count ui-label" id="barCount"></span>
+    <button class="bar-cta btn disabled" id="claim">Claim your selection</button>
+  </div>
+</main>
+
+<script>
+const F='Photograph under acrylic glass';
+/* real LUMAS works — bare images on the void (amount never shown) */
+const PATHS={
+  '1':{need:1,works:[
+    {c:'ime105',a:'ISABELLE MENIN',t:'From a Dream 02'},
+    {c:'wuh104',a:'WOLFGANG UHLIG',t:'Galé II'},
+    {c:'bhu100',a:'BEATRICE HUG',t:'Cosmic Sphaera'},
+    {c:'cdu01',a:'CHIRON DUONG',t:'Portrait no. 209'},
+  ]},
+  '2':{need:2,works:[
+    {c:'ime97',a:'ISABELLE MENIN',t:'Only In Your Heart 03'},
+    {c:'wuh100',a:'WOLFGANG UHLIG',t:'Vau'},
+    {c:'bhu03',a:'BEATRICE HUG',t:'Jaune'},
+    {c:'cdu04',a:'CHIRON DUONG',t:'Portrait no. 183'},
+    {c:'mcs01',a:'MARTA CONTRERAS SIMÓ',t:'Alika & Siara'},
+    {c:'mcs04',a:'MARTA CONTRERAS SIMÓ',t:'Kya'},
+  ]},
+  '3':{need:3,works:[
+    {c:'ime109',a:'ISABELLE MENIN',t:'From a Dream 04'},
+    {c:'wuh102',a:'WOLFGANG UHLIG',t:'Salgados'},
+    {c:'bhu07',a:'BEATRICE HUG',t:'Body Light IV'},
+    {c:'bhu101',a:'BEATRICE HUG',t:'Sphaera Purple'},
+    {c:'cdu01',a:'CHIRON DUONG',t:'Portrait no. 209'},
+    {c:'mcs04',a:'MARTA CONTRERAS SIMÓ',t:'Kya'},
+  ]},
+};
+function imgUrl(c,v){return 'https://img.lumas.com/showimg_'+c+'_'+v+'.jpg';}
+
+const $=id=>document.getElementById(id);
+let curPath=null, selected=[];
+
+/* screen switch — crossfade from the email into the gift world */
+$('unwrap').addEventListener('click',()=>{document.body.classList.add('revealed');});
+
+/* drifting snow */
+(function fillSnow(){
+  const s=$('lnSnow'); if(!s)return;
+  for(let i=0;i<26;i++){const f=document.createElement('div');f.className='flake';
+    const sz=2+Math.random()*4;f.style.width=f.style.height=sz+'px';
+    f.style.left=(Math.random()*100)+'%';f.style.animationDuration=(10+Math.random()*12)+'s';
+    f.style.animationDelay=(-Math.random()*16)+'s';f.style.opacity=(.25+Math.random()*.45);
+    s.appendChild(f);}
+})();
+
+/* path selection */
+document.querySelectorAll('.path').forEach(p=>p.addEventListener('click',()=>{
+  const id=p.dataset.path;
+  document.querySelectorAll('.path').forEach(x=>x.classList.remove('sel'));
+  p.classList.add('sel');
+  curPath=id; selected=[];
+  renderGrid(id);
+  updateBar();
+}));
+
+function renderGrid(id){
+  const grid=$('grid'); grid.innerHTML='';
+  PATHS[id].works.forEach((w,i)=>{
+    const el=document.createElement('div');
+    el.className='wk'; el.dataset.i=i;
+    el.innerHTML=
+      '<div class="wk-stage"><img alt="'+w.t+' by '+w.a+'"></div>'+
+      '<div class="wk-artist eyebrow">'+w.a+'</div>'+
+      '<div class="wk-title t-small">'+w.t+'</div>'+
+      '<div class="wk-format t-caption">'+F+'</div>'+
+      '<div class="wk-status"><span class="chip ui-label">Covered by your gift</span></div>';
+    const im=el.querySelector('img');
+    im.onerror=function(){this.onerror=null;this.src=imgUrl(w.c,'desktop');};
+    im.src=imgUrl(w.c,'full');
+    el.addEventListener('click',()=>toggleWork(i));
+    grid.appendChild(el);
+    setTimeout(()=>el.classList.add('in'), 80+i*90);   /* works rise from the dark, staggered */
+  });
+}
+
+function toggleWork(i){
+  const need=PATHS[curPath].need;
+  const pos=selected.indexOf(i);
+  if(pos>-1){ selected.splice(pos,1); }
+  else { if(selected.length>=need) return; selected.push(i); }
+  paintWorks();
+  updateBar();
+}
+
+function paintWorks(){
+  const need=PATHS[curPath].need;
+  const full=selected.length>=need;
+  document.querySelectorAll('.wk').forEach(el=>{
+    const i=+el.dataset.i;
+    const on=selected.indexOf(i)>-1;
+    el.classList.toggle('sel',on);
+    el.classList.toggle('dim', full && !on);
+    const status=el.querySelector('.wk-status');
+    status.innerHTML = on
+      ? '<span class="sel-label ui-label">Selected</span>'
+      : '<span class="chip ui-label">Covered by your gift</span>';
+  });
+}
+
+function updateBar(){
+  const bar=$('bar'), claim=$('claim');
+  if(!curPath || selected.length===0){ bar.classList.remove('show'); return; }
+  const need=PATHS[curPath].need;
+  bar.classList.add('show');
+  $('barCount').textContent=selected.length+' of '+need+' selected';
+  claim.classList.toggle('disabled', selected.length!==need);
+}
+
+$('claim').addEventListener('click',()=>{
+  if($('claim').classList.contains('disabled')) return;
+  $('barCount').textContent='Your selection is reserved — check your email';
+  $('claim').classList.add('disabled');
+  document.querySelectorAll('.wk').forEach(el=>el.classList.add('dim'));
+  document.querySelectorAll('.path').forEach(el=>el.style.pointerEvents='none');
+});
+</script>
+</body>
+</html>
