@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMAS · Pop-Ups (V2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+<style>
+  :root {
+    /* V2 primitives */
+    --charcoal-900: #1C1A18;
+    --charcoal-700: #5A5752;
+    --charcoal-500: #908C87;
+    --charcoal-300: #C7C3BE;
+    --charcoal-100: #E3E0DB;
+    --ivory-100: #F4EDE2;
+    --ivory-200: #F7F1E9;
+    --ivory-300: #FAF6F1;
+    --bone-100: #E2D8CC;
+    --bone-200: #EAE2D8;
+    --bone-300: #F0EBE3;
+    --charcoal-800: #3A3835;
+    --success-600: #3A6B4A;
+    --status-error: #B5352A;
+
+    /* V2 semantic aliases */
+    --text-primary: var(--charcoal-900);
+    --text-secondary: var(--charcoal-700);
+    --text-tertiary: var(--charcoal-500);
+    --text-inverse: var(--ivory-100);
+    --surface-page: var(--ivory-300);
+    --surface-card: #FFFFFF;
+    --surface-raised: var(--ivory-200);
+    --surface-inverse: var(--charcoal-900);
+    --border-default: var(--bone-100);
+    --border-subtle: var(--bone-200);
+    --border-strong: var(--charcoal-300);
+    --border-focus: var(--charcoal-900);
+
+    --font-display: 'UtileDisplay', 'Utile Display Trial', 'Utile Display', 'Archivo', system-ui, sans-serif;
+    --font-body: 'Archivo', system-ui, -apple-system, sans-serif;
+
+    /* emil easing */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+    --z-backdrop: 100;
+    --z-modal: 110;
+    --z-chrome: 200;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 62.5%; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: var(--font-body);
+    font-variation-settings: "wdth" 100;
+    color: var(--text-primary);
+    background: var(--surface-page);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---------- Prototype chrome (not part of the brand UI) ---------- */
+  .chrome {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-chrome);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2rem 2rem;
+    padding: 1.4rem 2.4rem;
+    background: rgba(250, 246, 241, 0.82);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .chrome-brand {
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    margin-right: auto;
+  }
+  .chrome-group { display: flex; align-items: center; gap: 0.8rem; }
+  .chrome-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .seg button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+  }
+  .seg button + button { border-left: 1px solid var(--border-strong); }
+  .seg button[aria-pressed="true"] {
+    background: var(--surface-inverse);
+    color: var(--text-inverse);
+  }
+
+  /* ---------- Stage / device preview ---------- */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    padding: 8rem 2rem 3rem;
+    /* dimmed gallery-wall backdrop (tonal, no cropped artwork) */
+    background:
+      radial-gradient(120% 90% at 20% 12%, rgba(58, 107, 74, 0.10), transparent 55%),
+      radial-gradient(120% 90% at 85% 88%, rgba(28, 26, 24, 0.08), transparent 60%),
+      linear-gradient(160deg, var(--ivory-200), var(--bone-300));
+  }
+  .viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    container-type: inline-size;
+    transition: max-width 320ms var(--ease-out);
+  }
+  .stage[data-device="mobile"] .viewport {
+    max-width: 390px;
+    height: min(844px, calc(100dvh - 11rem));
+    background: var(--surface-card);
+    border-radius: 40px;
+    border: 10px solid var(--charcoal-900);
+    box-shadow: 0 30px 80px -30px rgba(28, 26, 24, 0.45);
+    overflow: hidden;
+  }
+  .stage[data-device="mobile"] .stage-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 60% at 30% 10%, rgba(58, 107, 74, 0.12), transparent 60%),
+      linear-gradient(160deg, var(--ivory-200), var(--bone-300));
+  }
+  .stage-bg { display: none; }
+
+  /* mobile bottom-sheet behaviour is driven by a container query on .viewport,
+     so the phone-frame preview and a real phone render identically */
+
+  /* ---------- Backdrop scrim + modal ---------- */
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-backdrop);
+    display: grid;
+    place-items: center;
+    padding: 2.4rem;
+    background: rgba(28, 26, 24, 0.44);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms var(--ease-out);
+  }
+  .backdrop[data-open="true"] { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    background: var(--surface-card);
+    padding: 3.8rem 3.8rem 3rem;
+    border-radius: 4px;
+    box-shadow: 0 24px 70px -20px rgba(28, 26, 24, 0.35);
+    transform: translateY(8px) scale(0.97);
+    opacity: 0;
+    transition: transform 260ms var(--ease-out), opacity 200ms var(--ease-out);
+    max-height: calc(100dvh - 12rem);
+    overflow-y: auto;
+  }
+  .backdrop[data-open="true"] .modal { transform: translateY(0) scale(1); opacity: 1; }
+
+  .modal-close {
+    position: absolute;
+    top: 1.8rem;
+    right: 1.8rem;
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 120ms var(--ease-out);
+  }
+  .modal-close:active { transform: scale(0.94); }
+  .modal-close svg { width: 1.7rem; height: 1.7rem; }
+
+  /* ---------- Typography ---------- */
+  .eyebrow {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 1.2rem;
+  }
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  .h-upsell { font-size: clamp(2.1rem, 1.7rem + 1.4vw, 2.7rem); line-height: 1.16; }
+  .h-artist { font-size: clamp(3.4rem, 2.6rem + 3vw, 4.6rem); margin-top: 0.2rem; }
+  .h-confirm { font-size: clamp(3rem, 2.4rem + 2.4vw, 3.8rem); }
+
+  .lede {
+    font-size: 1.65rem;
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    max-width: 46ch;
+  }
+  .display + .lede { margin-top: 1.6rem; }
+
+  /* ---------- Benefit list (upsell) ---------- */
+  .benefits {
+    list-style: none;
+    margin: 2.4rem 0 2.4rem;
+    display: grid;
+    gap: 1.2rem;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 2rem 0;
+  }
+  .benefits li {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 1.2rem;
+    align-items: start;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .benefits .tick {
+    width: 2rem; height: 2rem;
+    margin-top: 0.2rem;
+    color: var(--success-600);
+    flex-shrink: 0;
+  }
+  .benefits .tick svg { width: 100%; height: 100%; display: block; }
+
+  .prompt {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+  }
+
+  /* ---------- Buttons ---------- */
+  .actions { display: flex; gap: 1.2rem; }
+  .btn {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    padding: 1.6rem 2.8rem;
+    transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out),
+                border-color 180ms var(--ease-out), transform 120ms var(--ease-out);
+    text-align: center;
+    line-height: 1.2;
+  }
+  .btn .ic { width: 1.9rem; height: 1.9rem; flex-shrink: 0; }
+  .btn:active { transform: scale(0.98); }
+  .btn:focus-visible,
+  .ghost:focus-visible,
+  .modal-close:focus-visible,
+  .seg button:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 3px;
+  }
+  .btn-primary { background: var(--surface-inverse); color: var(--text-inverse); flex: 1; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-focus);
+    flex: 1;
+  }
+  .btn-full { width: 100%; flex: none; }
+  .stack-actions .btn { flex: none; width: 100%; }
+
+  .ghost {
+    display: inline-block;
+    margin: 0 auto;
+    background: transparent;
+    border: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: 0.4rem 0 0.6rem;
+    border-bottom: 1px solid var(--border-strong);
+    cursor: pointer;
+    transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: var(--charcoal-800); }
+    .btn-secondary:hover { background: var(--surface-inverse); color: var(--text-inverse); }
+    .ghost:hover { color: var(--text-primary); border-color: var(--border-focus); }
+    .modal-close:hover { background: var(--bone-300); color: var(--text-primary); }
+    .field input:hover { border-color: var(--border-strong); }
+    .seg button:not([aria-pressed="true"]):hover { background: var(--bone-300); }
+  }
+
+  .chrome-select { position: relative; display: inline-flex; }
+  .chrome-select select {
+    appearance: none;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    background: var(--surface-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    padding: 0.8rem 3.4rem 0.8rem 1.4rem;
+    cursor: pointer;
+  }
+  .chrome-select .chev {
+    position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%);
+    width: 1.4rem; height: 1.4rem; pointer-events: none; color: var(--text-secondary);
+  }
+
+  .footnote {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--text-tertiary);
+    margin-top: 2rem;
+  }
+
+  /* ---------- Input (follow) ---------- */
+  .field { display: grid; gap: 0.8rem; margin: 3.2rem 0 1.6rem; }
+  .field label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .field input {
+    font-family: var(--font-body);
+    font-size: 1.6rem; /* >=16px so iOS Safari does not zoom on focus */
+    color: var(--text-primary);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 1.4rem 1.6rem;
+    width: 100%;
+    transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+  .field input::placeholder { color: var(--text-tertiary); }
+  .field input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: inset 0 0 0 1px var(--border-focus);
+  }
+  .field input:user-invalid { border-color: var(--status-error); }
+
+  /* ---------- Layout stacks ---------- */
+  .modal-body > * + .actions,
+  .modal-body > * + .field { margin-top: 0; }
+  .center { text-align: center; }
+  .center .lede { margin-left: auto; margin-right: auto; }
+  .stack-actions { flex-direction: column; }
+  .confirm-close { margin-top: 3.2rem; }
+
+  /* success mark on confirmation */
+  .seal {
+    width: 5.4rem; height: 5.4rem;
+    margin: 0 auto 2.4rem;
+    display: grid; place-items: center;
+    border-radius: 999px;
+    background: rgba(58, 107, 74, 0.10);
+    color: var(--success-600);
+  }
+  .seal svg { width: 2.6rem; height: 2.6rem; }
+
+  /* ========== Wide modals: PDP quick-view + request form ========== */
+  .modal-wide { max-width: 1120px; padding: 0; overflow: hidden; }
+  .modal-wide .modal-close {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .qv { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 432px); max-height: min(90dvh, 780px); }
+  .qv-media { display: flex; gap: 1.4rem; padding: 3rem; background: var(--surface-page); min-width: 0; }
+  .qv-rail { display: flex; flex-direction: column; gap: 0.9rem; width: 6rem; flex-shrink: 0; overflow-y: auto; }
+  .qv-thumb {
+    width: 6rem; height: 6rem; flex-shrink: 0;
+    border: 1px solid var(--border-default); border-radius: 3px;
+    background: var(--surface-card); cursor: pointer; padding: 0;
+    position: relative; overflow: hidden;
+    transition: border-color 160ms var(--ease-out);
+  }
+  span.qv-thumb { cursor: default; }
+  .qv-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 0.5rem; }
+  .qv-thumb[aria-current="true"] { border-color: var(--border-focus); border-width: 2px; }
+  .qv-thumb .lbl {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-tertiary); background: var(--surface-muted); text-align: center;
+  }
+  .qv-stage { flex: 1; display: grid; place-items: center; min-width: 0; }
+  .qv-stage img {
+    max-width: 100%; max-height: min(82dvh, 680px);
+    object-fit: contain; /* full artwork, never cropped */
+    box-shadow: 0 22px 54px -26px rgba(28, 26, 24, 0.42);
+  }
+  .qv-info { padding: 4rem 3.6rem; overflow-y: auto; display: flex; flex-direction: column; }
+  .qv-artist { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.5; color: var(--text-secondary); }
+  .qv-title { font-family: var(--font-display); font-weight: 400; font-size: 3rem; line-height: 1.12; margin-top: 0.8rem; }
+  .qv-sub { font-size: 1.45rem; color: var(--text-secondary); margin-top: 1.4rem; }
+  .qv-code { font-size: 1.35rem; color: var(--text-tertiary); margin-top: 0.6rem; }
+  .qv-rule { border: 0; border-top: 1px solid var(--border-subtle); margin: 2rem 0; width: 100%; }
+  .qv-desc { font-size: 1.45rem; line-height: 1.5; color: var(--text-primary); }
+  .qv-price-row { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.8rem; }
+  .qv-price { font-size: 2.8rem; font-weight: 500; letter-spacing: -0.01em; }
+  .qv-instead { font-size: 1.5rem; color: var(--text-secondary); }
+  .qv-was { text-decoration: line-through; color: var(--text-tertiary); }
+  .qv-save { font-size: 1.45rem; color: var(--text-secondary); margin-top: 0.6rem; }
+  .qv-cta { margin-top: 2rem; }
+  .qv-ship { font-size: 1.35rem; line-height: 1.5; color: var(--text-secondary); margin-top: 1.6rem; }
+  .qv-year { font-size: 1.35rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+  .qv-more { margin-top: 2rem; }
+
+  .gallery-box { background: var(--surface-raised); padding: 2rem 2.2rem; margin-top: 1.8rem; display: grid; gap: 1.1rem; }
+  .gb-title { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); }
+  .gb-row { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; align-items: start; font-size: 1.45rem; color: var(--text-primary); }
+  .gb-row svg { width: 1.8rem; height: 1.8rem; color: var(--text-secondary); margin-top: 0.2rem; }
+  .action-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.2rem; }
+  .action-pair .btn { padding: 1.4rem 1rem; font-size: 1.2rem; gap: 0.7rem; }
+  .qv-more-ghost { margin: 2.4rem auto 0; }
+
+  /* ========== Request Artwork form ========== */
+  .form-modal { padding: 3.4rem 3.8rem 3.8rem; max-height: min(92dvh, 860px); overflow-y: auto; }
+  .form-head { font-family: var(--font-display); font-weight: 400; font-size: 3rem; line-height: 1.1; margin-bottom: 2.6rem; }
+  .form-grid { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 3.4rem; align-items: start; }
+  .form-art { background: var(--surface-page); padding: 2.6rem; border-radius: 4px; }
+  .art-frame { display: grid; place-items: center; }
+  .art-frame img { max-width: 100%; max-height: 40rem; object-fit: contain; } /* full artwork */
+  .art-cap { margin-top: 2rem; }
+  .art-name { font-weight: 700; font-size: 1.7rem; }
+  .art-line { font-size: 1.4rem; color: var(--text-secondary); margin-top: 0.4rem; }
+  .form-fields { display: grid; gap: 1.8rem; }
+  .form-fields .field { margin: 0; }
+  .form-intro { font-size: 1.5rem; line-height: 1.55; color: var(--text-secondary); }
+  .radio-row { display: flex; flex-wrap: wrap; gap: 2rem; }
+  .radio { display: inline-flex; align-items: center; gap: 0.7rem; font-size: 1.5rem; cursor: pointer; }
+  .radio input {
+    appearance: none; width: 2rem; height: 2rem; border: 1px solid var(--border-strong);
+    border-radius: 999px; display: grid; place-items: center; cursor: pointer; margin: 0;
+    transition: border-color 140ms var(--ease-out);
+  }
+  .radio input:checked { border-color: var(--border-focus); }
+  .radio input:checked::after { content: ""; width: 1rem; height: 1rem; border-radius: 999px; background: var(--surface-inverse); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  .select-wrap { position: relative; }
+  .select-wrap select {
+    appearance: none; width: 100%; font-family: var(--font-body); font-size: 1.6rem;
+    padding: 1.4rem 4rem 1.4rem 1.6rem; border: 1px solid var(--border-default);
+    border-radius: 4px; background: var(--surface-card); color: var(--text-primary); cursor: pointer;
+  }
+  .select-wrap select:focus { outline: none; border-color: var(--border-focus); box-shadow: inset 0 0 0 1px var(--border-focus); }
+  .select-wrap .chev { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); width: 1.6rem; height: 1.6rem; pointer-events: none; color: var(--text-secondary); }
+  .check-row { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; align-items: start; font-size: 1.3rem; line-height: 1.5; color: var(--text-secondary); }
+  .check-row input {
+    appearance: none; width: 2rem; height: 2rem; border: 1px solid var(--border-strong);
+    border-radius: 3px; cursor: pointer; margin: 0; display: grid; place-items: center; flex-shrink: 0;
+  }
+  .check-row input:checked { background: var(--surface-inverse); border-color: var(--surface-inverse); }
+  .check-row input:checked::after { content: ""; width: 0.9rem; height: 0.5rem; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translateY(-0.1rem); }
+  .form-submit { display: flex; justify-content: flex-end; margin-top: 0.6rem; }
+  .form-submit .btn { flex: 0 0 auto; min-width: 24rem; }
+
+  /* ========== WhatsApp QR ========== */
+  .qr-modal { max-width: 460px; }
+  .qr-modal .modal-body { padding-top: 2.8rem; } /* clear the close button */
+  .qr-title { font-family: var(--font-display); font-weight: 400; font-size: 2.8rem; line-height: 1.15; text-align: center; margin-bottom: 2.6rem; }
+  .qr-code { width: 22rem; height: 22rem; margin: 0 auto 2.6rem; }
+  .qr-code svg { width: 100%; height: 100%; display: block; border-radius: 4px; }
+  .qr-cta { width: 100%; line-height: 1.4; padding: 1.6rem 2rem; }
+
+  /* ---------- Mobile bottom sheet (container query: fires on real phones
+       AND inside the phone-frame preview, since both make .viewport <=560px) ---------- */
+  @container (max-width: 560px) {
+    .backdrop { align-items: flex-end; padding: 0; }
+    .modal {
+      max-width: none;
+      border-radius: 20px 20px 0 0;
+      padding: 1rem 2.2rem calc(2.8rem + env(safe-area-inset-bottom, 0px));
+      max-height: 94%;
+      transform: translateY(100%);
+      box-shadow: 0 -14px 44px -14px rgba(28, 26, 24, 0.32);
+      overscroll-behavior: contain;
+    }
+    .backdrop[data-open="true"] .modal { transform: translateY(0); }
+    /* grab handle for the sheet */
+    .modal::before {
+      content: "";
+      display: block;
+      width: 4rem;
+      height: 0.4rem;
+      margin: 0 auto 1.6rem;
+      border-radius: 999px;
+      background: var(--border-strong);
+    }
+    .modal-close { top: 1.2rem; right: 1.4rem; width: 4.4rem; height: 4.4rem; }
+    .h-artist { font-size: clamp(3rem, 2.4rem + 3vw, 3.6rem); }
+    .actions { flex-direction: column; }
+    .actions .btn { flex: none; width: 100%; }
+    .ghost { padding: 1rem 1.4rem 1.2rem; } /* >=44px tap height */
+
+    /* wide modals collapse to a single scrolling column */
+    .modal-wide { padding: 1rem 2.2rem calc(2.8rem + env(safe-area-inset-bottom, 0px)); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .qv, .form-grid { display: block; max-height: none; }
+    .qv-media { flex-direction: column; padding: 0 0 1.6rem; background: transparent; gap: 1.2rem; }
+    .qv-stage { order: -1; }
+    .qv-stage img { max-height: 44dvh; }
+    .qv-rail { flex-direction: row; width: auto; overflow-x: auto; }
+    .qv-info { padding: 0.4rem 0 0; overflow: visible; }
+    .form-modal { padding: 1rem 2.2rem calc(2.8rem + env(safe-area-inset-bottom, 0px)); }
+    .form-head { font-size: 2.6rem; margin-bottom: 2rem; }
+    .form-art { margin-bottom: 2.4rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .action-pair { grid-template-columns: 1fr; }
+    .form-submit .btn { width: 100%; }
+    .qr-title { font-size: 2.4rem; padding-right: 0; }
+  }
+
+  /* ---------- Responsive: prototype chrome on narrow real viewports ---------- */
+  @media (max-width: 560px) {
+    .chrome { padding: 1.1rem 1.6rem; gap: 0.8rem 1.4rem; }
+    .chrome-brand { flex-basis: 100%; font-size: 1.15rem; }
+    .stage { padding: 10.5rem 0 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .modal { transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Prototype chrome: launcher + device toggle (not part of the shipped modal UI) -->
+<header class="chrome">
+  <span class="chrome-brand">Lumas · Pop-Ups V2</span>
+  <div class="chrome-group">
+    <label class="chrome-label" for="modalSwitch">Pop-Up</label>
+    <span class="chrome-select">
+      <select id="modalSwitch">
+        <option value="upsell">Rahmung / Kaschierung</option>
+        <option value="follow">Künstler folgen</option>
+        <option value="confirm">Anmeldung bestätigt</option>
+        <option value="pdp-buy">Quick-View · Kauf</option>
+        <option value="pdp-gallery">Quick-View · Galerie</option>
+        <option value="qr">WhatsApp QR</option>
+        <option value="request">Kunstwerk anfragen</option>
+      </select>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </span>
+  </div>
+  <div class="chrome-group" role="group" aria-label="Ansicht wählen">
+    <span class="chrome-label">Ansicht</span>
+    <div class="seg" id="deviceSwitch">
+      <button data-device="desktop" aria-pressed="true">Desktop</button>
+      <button data-device="mobile" aria-pressed="false">Mobil</button>
+    </div>
+  </div>
+</header>
+
+<main class="stage" id="stage" data-device="desktop">
+  <div class="viewport">
+    <div class="stage-bg" aria-hidden="true"></div>
+
+    <!-- BACKDROP -->
+    <div class="backdrop" id="backdrop" data-open="true" role="presentation">
+
+      <!-- MODAL 1: FRAMING / MOUNTING UPSELL -->
+      <section class="modal" data-panel="upsell" role="dialog" aria-modal="true" aria-labelledby="upsell-title" hidden>
+        <button class="modal-close" data-close aria-label="Schließen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="modal-body">
+          <h2 class="display h-upsell" id="upsell-title">90&nbsp;% unserer Kunden bestellen eine Kaschierung oder Rahmung für eine perfekte Galerie-Anmutung.</h2>
+          <ul class="benefits">
+            <li>
+              <span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span>Vollständig abgesichert durch unsere Rückgabegarantie.</span>
+            </li>
+            <li>
+              <span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span>Fertig montiert, einfach auspacken und aufhängen.</span>
+            </li>
+            <li>
+              <span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span>Veredelt das Kunstwerk und lässt es noch eindrucksvoller wirken.</span>
+            </li>
+          </ul>
+          <p class="prompt">Ohne Kaschierung oder Rahmung fortfahren?</p>
+          <div class="actions stack-actions">
+            <button class="btn btn-primary" data-close>Zurück zu den Optionen</button>
+            <button class="btn btn-secondary" data-close>Ja, trotzdem fortfahren</button>
+          </div>
+          <p class="footnote">* Gerollte Drucke sind vom Widerruf ausgeschlossen und können nachträglich nicht mit unseren Rahmen versehen werden.</p>
+        </div>
+      </section>
+
+      <!-- MODAL 2: FOLLOW ARTIST -->
+      <section class="modal" data-panel="follow" role="dialog" aria-modal="true" aria-labelledby="follow-title" hidden>
+        <button class="modal-close" data-close aria-label="Schließen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="modal-body center">
+          <p class="eyebrow">Folgen</p>
+          <h2 class="display h-artist" id="follow-title">Beatrice Hug</h2>
+          <p class="lede">Melde dich mit deiner E-Mail-Adresse an, um exklusive Neuigkeiten und einen ersten Blick auf neue Werke von Beatrice Hug zu erhalten.</p>
+          <form class="field" id="followForm" novalidate>
+            <label for="followEmail">E-Mail-Adresse</label>
+            <input id="followEmail" type="email" required placeholder="name@beispiel.de" autocomplete="email">
+          </form>
+          <button class="btn btn-primary btn-full" type="submit" form="followForm">Folgen</button>
+          <button class="ghost confirm-close" data-close style="display:block;">Nein, danke</button>
+        </div>
+      </section>
+
+      <!-- MODAL 3: CONFIRMATION -->
+      <section class="modal" data-panel="confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+        <button class="modal-close" data-close aria-label="Schließen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="modal-body center">
+          <span class="seal" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
+          <h2 class="display h-confirm" id="confirm-title">Anmeldung bestätigt!</h2>
+          <p class="lede">Gute Wahl! Du bist jetzt registriert, um aktuelle Neuigkeiten von Beatrice Hug zu erhalten. Jede neue Kreation und aufregende Neuigkeiten landen direkt in deinem Posteingang.</p>
+          <button class="ghost confirm-close" data-close style="display:block;">Schliessen</button>
+        </div>
+      </section>
+
+      <!-- MODAL 4: PDP QUICK-VIEW — buyable Limited Edition -->
+      <section class="modal modal-wide" data-panel="pdp-buy" role="dialog" aria-modal="true" aria-labelledby="pdpbuy-title" hidden>
+        <button class="modal-close" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="qv">
+          <div class="qv-media">
+            <div class="qv-rail" role="tablist" aria-label="Views">
+              <button class="qv-thumb" aria-current="true" data-src="https://img.lumas.com/showimg_kkr57_xl.jpg" aria-label="Artwork"><img src="https://img.lumas.com/showimg_kkr57_xl.jpg" alt=""></button>
+              <span class="qv-thumb"><span class="lbl">Room</span></span>
+              <span class="qv-thumb"><span class="lbl">Detail</span></span>
+              <span class="qv-thumb"><span class="lbl">Cert.</span></span>
+              <span class="qv-thumb"><span class="lbl">Video</span></span>
+            </div>
+            <div class="qv-stage"><img src="https://img.lumas.com/showimg_kkr57_xl.jpg" alt="Kevin Krautgartner, Salt Shapes XI"></div>
+          </div>
+          <div class="qv-info">
+            <p class="qv-artist">Kevin Krautgartner</p>
+            <h2 class="qv-title" id="pdpbuy-title">Salt Shapes XI</h2>
+            <p class="qv-sub">Limited Edition, Edition Of: 150, Signed</p>
+            <hr class="qv-rule">
+            <p class="qv-desc">Mounted under acrylic glass<br>depth 2 mm glossy, 140 x 105 cm (External dimensions)</p>
+            <div class="qv-price-row">
+              <span class="qv-price">€ 1,194</span>
+              <span class="qv-instead">instead of <span class="qv-was">€ 1,990</span></span>
+            </div>
+            <p class="qv-save">save € 796 today</p>
+            <button class="btn btn-primary btn-full qv-cta">Add to shopping cart</button>
+            <p class="qv-ship">Ready for shipping in 5 days / VAT incl. Plus € 29 shipping.</p>
+            <p class="qv-year">2022 / 2024 / KKR57</p>
+            <button class="btn btn-secondary btn-full qv-more">More details</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL 5: PDP QUICK-VIEW — gallery only -->
+      <section class="modal modal-wide" data-panel="pdp-gallery" role="dialog" aria-modal="true" aria-labelledby="pdpgal-title" hidden>
+        <button class="modal-close" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="qv">
+          <div class="qv-media">
+            <div class="qv-rail" role="tablist" aria-label="Views">
+              <button class="qv-thumb" aria-current="true" data-src="https://img.lumas.com/showimg_cdu01_xl.jpg" aria-label="Artwork"><img src="https://img.lumas.com/showimg_cdu01_xl.jpg" alt=""></button>
+              <span class="qv-thumb"><span class="lbl">Room</span></span>
+              <span class="qv-thumb"><span class="lbl">Detail</span></span>
+              <span class="qv-thumb"><span class="lbl">Frame</span></span>
+            </div>
+            <div class="qv-stage"><img src="https://img.lumas.com/showimg_cdu01_xl.jpg" alt="Chiron Duong, Portrait no.209"></div>
+          </div>
+          <div class="qv-info">
+            <p class="qv-artist">Chiron Duong</p>
+            <h2 class="qv-title" id="pdpgal-title">Portrait no.209</h2>
+            <p class="qv-sub">Limited Edition, Edition Of: 150, Studio Stamp</p>
+            <p class="qv-code">2023 / 2025 / CDU01</p>
+            <hr class="qv-rule">
+            <p class="qv-desc">Floater frame Basel<br>profile width: 15 mm, with acrylic glass matte, Canadian Maple, White, 124,4 x 100,4 cm (External dimensions)</p>
+            <div class="qv-price-row"><span class="qv-price">€ 1,799</span></div>
+            <div class="gallery-box">
+              <p class="gb-title">Only available in this Lumas gallery</p>
+              <p class="gb-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 1 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Fasanenstrasse 73, 10719, Berlin</span></p>
+              <p class="gb-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Mon–Fri 11am–7pm&nbsp;&nbsp;Sat 10am–7pm</span></p>
+              <p class="gb-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l-1 4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>+49 30 88 62 76 01</span></p>
+            </div>
+            <button class="btn btn-primary btn-full qv-cta">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.4-4A8 8 0 1 1 9 19.6z"/></svg>
+              Enquire now via WhatsApp
+            </button>
+            <div class="action-pair">
+              <button class="btn btn-secondary">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg>
+                Enquire via Email
+              </button>
+              <button class="btn btn-secondary">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l-1 4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                Call now
+              </button>
+            </div>
+            <button class="ghost qv-more-ghost" data-close style="display:block;">More details</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL 6: WHATSAPP QR -->
+      <section class="modal qr-modal center" data-panel="qr" role="dialog" aria-modal="true" aria-labelledby="qr-title" hidden>
+        <button class="modal-close" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="modal-body">
+          <h2 class="qr-title" id="qr-title">Scan QR code to open WhatsApp</h2>
+          <div class="qr-code" aria-label="QR code (placeholder)"></div>
+          <button class="btn btn-primary qr-cta" data-close>Click here if you have WhatsApp installed on this device</button>
+        </div>
+      </section>
+
+      <!-- MODAL 7: REQUEST ARTWORK FORM -->
+      <section class="modal modal-wide form-modal" data-panel="request" role="dialog" aria-modal="true" aria-labelledby="request-title" hidden>
+        <button class="modal-close" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <h2 class="form-head" id="request-title">Request Artwork</h2>
+        <div class="form-grid">
+          <div class="form-art">
+            <div class="art-frame"><img src="https://img.lumas.com/showimg_aww19_xl.jpg" alt="Ai Weiwei, Self-Portrait Embroidery (Purple & Yellow)"></div>
+            <div class="art-cap">
+              <p class="art-name">Ai Weiwei</p>
+              <p class="art-line">Self-Portrait Embroidery (Purple &amp; Yellow)</p>
+              <p class="art-line">40 x 40</p>
+              <p class="art-line">AWW19</p>
+            </div>
+          </div>
+          <form class="form-fields" id="requestForm" novalidate>
+            <p class="form-intro">Our customer service team will gladly check whether or not this artwork is still available. How can we contact you?</p>
+            <div>
+              <p class="field-label" style="margin-bottom:1rem;">Title</p>
+              <div class="radio-row">
+                <label class="radio"><input type="radio" name="title" checked> Mr.</label>
+                <label class="radio"><input type="radio" name="title"> Ms.</label>
+                <label class="radio"><input type="radio" name="title"> Mx.</label>
+              </div>
+            </div>
+            <div class="grid-2">
+              <label class="field"><span>First Name</span><input type="text" placeholder="First Name" autocomplete="given-name"></label>
+              <label class="field"><span>Last Name</span><input type="text" placeholder="Last Name" autocomplete="family-name"></label>
+            </div>
+            <label class="field"><span>Postal Code</span><input type="text" placeholder="Postal Code" autocomplete="postal-code"></label>
+            <div class="field">
+              <span>Country<span aria-hidden="true">*</span></span>
+              <span class="select-wrap">
+                <select required aria-label="Country">
+                  <option>Germany</option>
+                  <option>Austria</option>
+                  <option>Switzerland</option>
+                  <option>France</option>
+                  <option>United Kingdom</option>
+                </select>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </div>
+            <div class="grid-2">
+              <label class="field"><span>Telephone</span><input type="tel" placeholder="Telephone" autocomplete="tel"></label>
+              <label class="field"><span>E-mail</span><input type="email" placeholder="E-mail" autocomplete="email"></label>
+            </div>
+            <label class="check-row">
+              <input type="checkbox">
+              <span>I would like to receive the free LUMAS newsletter. It can be unsubscribed at any time. We protect your data. See our Privacy Policy for details.</span>
+            </label>
+            <div class="form-submit">
+              <button type="submit" class="btn btn-primary">Check availability</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  const stage = document.getElementById('stage');
+  const backdrop = document.getElementById('backdrop');
+  const panels = [...document.querySelectorAll('[data-panel]')];
+  const modalSwitch = document.getElementById('modalSwitch');
+  const deviceSwitch = document.getElementById('deviceSwitch');
+  let current = 'upsell';
+  let lastFocus = null;
+
+  function showPanel(name) {
+    current = name;
+    panels.forEach(p => { p.hidden = p.dataset.panel !== name; });
+    modalSwitch.value = name;
+    if (name === 'qr') {
+      const el = document.querySelector('[data-panel="qr"] .qr-code');
+      if (el && !el.dataset.rendered) { renderQR(el); el.dataset.rendered = '1'; }
+    }
+    open();
+  }
+
+  // deterministic placeholder QR (functional-looking, not a real code)
+  function renderQR(el) {
+    const N = 25, cell = 100 / N;
+    let seed = 91, out = '';
+    const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+    const finder = (x, y) =>
+      `<rect x="${x*cell}" y="${y*cell}" width="${7*cell}" height="${7*cell}"/>` +
+      `<rect x="${(x+1)*cell}" y="${(y+1)*cell}" width="${5*cell}" height="${5*cell}" fill="#fff"/>` +
+      `<rect x="${(x+2)*cell}" y="${(y+2)*cell}" width="${3*cell}" height="${3*cell}"/>`;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const inFinder = (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+      if (inFinder) { rnd(); continue; }
+      if (rnd() > 0.56) out += `<rect x="${x*cell}" y="${y*cell}" width="${cell}" height="${cell}"/>`;
+    }
+    el.innerHTML = `<svg viewBox="0 0 100 100" role="img" aria-label="QR code (placeholder)">` +
+      `<rect width="100" height="100" fill="#fff"/><g fill="#1C1A18">${out}${finder(0,0)}${finder(N-7,0)}${finder(0,N-7)}</g></svg>`;
+  }
+
+  function open() {
+    backdrop.dataset.open = 'true';
+    const active = panels.find(p => !p.hidden);
+    const focusTarget = active.querySelector('input, .btn, .ghost');
+    lastFocus = document.activeElement;
+    // let the enter transition begin before moving focus
+    requestAnimationFrame(() => focusTarget && focusTarget.focus({ preventScroll: true }));
+  }
+
+  function close() {
+    backdrop.dataset.open = 'false';
+  }
+
+  // launcher (dropdown)
+  modalSwitch.addEventListener('change', e => showPanel(e.target.value));
+
+  // quick-view thumbnail rail
+  document.addEventListener('click', e => {
+    const th = e.target.closest('.qv-thumb[data-src]');
+    if (!th) return;
+    const media = th.closest('.qv-media');
+    media.querySelector('.qv-stage img').src = th.dataset.src;
+    media.querySelectorAll('.qv-thumb').forEach(t => t.setAttribute('aria-current', String(t === th)));
+  });
+
+  // device toggle
+  deviceSwitch.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    stage.dataset.device = btn.dataset.device;
+    [...deviceSwitch.children].forEach(b =>
+      b.setAttribute('aria-pressed', String(b === btn)));
+  });
+
+  // close controls
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-close]')) close();
+  });
+  backdrop.addEventListener('click', e => {
+    if (e.target === backdrop) close();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') close();
+  });
+
+  // follow -> confirmation
+  document.getElementById('followForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const input = document.getElementById('followEmail');
+    if (!input.checkValidity()) { input.reportValidity(); return; }
+    showPanel('confirm');
+  });
+
+  // request-artwork form: validate, then acknowledge (prototype)
+  document.getElementById('requestForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Request sent ✓';
+    btn.disabled = true;
+  });
+
+  // start on the upsell modal
+  showPanel('upsell');
+</script>
+</body>
+</html>
