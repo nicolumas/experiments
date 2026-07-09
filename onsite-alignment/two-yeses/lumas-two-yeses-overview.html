@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two yeses · flow overview</title>
+<link rel="stylesheet" href="assets/lumas-fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87;
+  --ivory-100:#F4EDE2; --bone-100:#E2D8CC; --bone-300:#F0EBE3;
+  --page:#FFFFFF; --ink:#1C1A18; --ink-2:#5A5752; --ink-3:#8A857F;
+  --display:'UtileDisplay',Georgia,serif;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,sans-serif;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--page);color:var(--ink);line-height:1.55;
+  font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:56px 32px 100px}
+@media(max-width:600px){.wrap{padding:36px 20px 72px}}
+
+.masthead{border-bottom:1px solid var(--bone-100);padding-bottom:32px;margin-bottom:12px}
+.eyebrow{font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.masthead h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,5vw,52px);line-height:1.04;
+  letter-spacing:0;margin:14px 0 14px;text-wrap:balance;max-width:18ch}
+.masthead p{font-size:17px;font-weight:300;color:var(--ink-2);max-width:60ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:24px;font-size:11px}
+.chip{border:1px solid var(--bone-100);border-radius:2px;padding:5px 11px;color:var(--ink-2)}
+.chip b{color:var(--ink);font-weight:600}
+
+.phase{padding-top:52px}
+.phase-num{font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.phase h2{font-family:var(--display);font-weight:400;font-size:clamp(24px,3.4vw,32px);line-height:1.1;margin:6px 0 4px;letter-spacing:0}
+.phase-lede{font-size:14.5px;font-weight:300;color:var(--ink-2);max-width:64ch;margin-bottom:28px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:40px 32px}
+.card{display:flex;flex-direction:column;gap:18px}
+.device{width:100%;max-width:300px;margin:0 auto;background:#0f0e0d;border-radius:30px;padding:9px;
+  box-shadow:0 24px 60px -34px rgba(28,26,24,.5)}
+.device .screenframe{width:100%;aspect-ratio:300/620;border-radius:23px;overflow:hidden;background:var(--page);position:relative}
+.device iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.device.pdp-tall .screenframe{aspect-ratio:282/1180}
+.cap{padding:0 2px}
+.cap .role{font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.cap h3{font-family:var(--display);font-weight:400;font-size:20px;line-height:1.15;letter-spacing:0;margin-bottom:8px}
+.cap .note{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.cap .note b{color:var(--ink);font-weight:600}
+.cap .note code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--bone-300);color:var(--ink);padding:1px 5px;border-radius:3px}
+
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--bone-100);
+  font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Two Yeses · flow overview</p>
+    <h1>Every screen, annotated</h1>
+    <p>The complete anonymous, no-login flow at a glance. Each frame is the live prototype opened directly to that screen, with the mechanics noted beside it. Nobody signs in and nothing is saved to a wishlist; the viewing itself is the identity.</p>
+    <div class="legend">
+      <span class="chip"><b>Entry</b> · product page</span>
+      <span class="chip"><b>Sign-in</b> · none</span>
+      <span class="chip"><b>Source</b> · recently viewed + similar</span>
+      <span class="chip"><b>Share</b> · message · hand over</span>
+      <span class="chip"><b>Exit</b> · guest cart</span>
+    </div>
+  </header>
+
+  <!-- PHASE 1 -->
+  <section class="phase">
+    <p class="phase-num">Phase 01 · Find</p>
+    <h2>It starts on the product page</h2>
+    <p class="phase-lede">The veto-in-the-kitchen happens on a PDP. The entry lives right there, beside the wishlist heart.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="device pdp-tall"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=pdp" title="Product page"></iframe></div></div>
+        <div class="cap"><p class="role">Initiator</p><h3>Product page</h3><p class="note"><b>"Decide together"</b> sits under the buy actions, quieter than the wishlist heart. It shows on every product page, signed in or not. No login prompt, ever.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase">
+    <p class="phase-num">Phase 02 · Compose</p>
+    <h2>Three works, without saved works</h2>
+    <p class="phase-lede">The initiator arrives with one work already chosen, and swipes to pick two more from sources every anonymous session already has.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=compose" title="Compose"></iframe></div></div>
+        <div class="cap"><p class="role">Initiator</p><h3>Compose</h3><p class="note"><b>Recently viewed</b> is the default source; <b>Similar</b> is seeded from the entry work. Swipe the carousel, tap to add. If signed in, the wishlist appears as one more source, never a gate.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=seal" title="Seal"></iframe></div></div>
+        <div class="cap"><p class="role">Initiator</p><h3>Seal</h3><p class="note">Mark the one you'd live with and write a single line. On seal it is written to the viewing record and <b>never returned by the partner's link</b> until both commit. This is what makes the reveal genuine.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="phase">
+    <p class="phase-num">Phase 03 · Share</p>
+    <h2>Handing it to the other person</h2>
+    <p class="phase-lede">Sealing mints two role-scoped links. This screen is only about getting the invitation across.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=share" title="Share"></iframe></div></div>
+        <div class="cap"><p class="role">Initiator</p><h3>Share</h3><p class="note"><b>Send</b> opens the native share sheet, straight into Messages or WhatsApp. <b>Copy link</b> for anywhere else. <b>Hand over</b> keeps the same-device ritual.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=handover" title="Hand over"></iframe></div></div>
+        <div class="cap"><p class="role">Hand-over</p><h3>The perspective changes</h3><p class="note">A deliberate seam. From here you are the <b>partner</b>, not the initiator. On one device it's a physical hand-over; on two, the moment they open their link. The sealed answer stays hidden.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=waiting" title="Waiting"></iframe></div></div>
+        <div class="cap"><p class="role">Initiator</p><h3>The way back</h3><p class="note">If sent rather than handed over, the initiator waits. Their own link holds the partner's answer until it's committed. An <b>optional, skippable email</b> is the only place an address is asked. This is what login used to do.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="phase">
+    <p class="phase-num">Phase 04 · Open, view, commit</p>
+    <h2>The partner opens the link</h2>
+    <p class="phase-lede">No account, ever. The token in the link is their whole identity — enough to view, vote, and write one sentence.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=invite" title="Invitation"></iframe></div></div>
+        <div class="cap"><p class="role">Partner</p><h3>Invitation</h3><p class="note">Opening the link is the reply. Three works, chosen for the two of you, one answer already sealed inside.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=viewing" title="The viewing"></iframe></div></div>
+        <div class="cap"><p class="role">Partner</p><h3>The viewing</h3><p class="note">One work at a time on a charcoal void, shown full and uncropped. The reveal is the product — the opposite of a thumbnail grid.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=ballot" title="Ballot"></iframe></div></div>
+        <div class="cap"><p class="role">Partner</p><h3>Ballot</h3><p class="note">Mark one work and write a line, still blind to the sealed answer. "None of these" is an honest option, not an error. On <b>Commit</b>, state turns to <code>committed</code> and each link may read the other's answer.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section class="phase">
+    <p class="phase-num">Phase 05 · Reveal</p>
+    <h2>The exchange resolves</h2>
+    <p class="phase-lede">A pure function of the two picks. Same work is a match; different works open the concession round, then a diptych or the meeting point.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=match" title="Match"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Match</h3><p class="note">The same work, chosen twice, apart. Both sentences appear together under it — then a quiet handoff to acquire via a <b>guest cart</b>.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=conc-round" title="Concession"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Concession round</h3><p class="note">A mismatch isn't a dead end. Each sees only the other's work and sentence, and may concede or hold. Blind on both sides again.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=decided" title="Decided"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Decided</h3><p class="note">One gave way. The work that stands is the one that was held; both sentences hang with it.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=diptych" title="Diptych"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Diptych</h3><p class="note">Both conceded. You each surrendered to the other's — so the wall gets the pair.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=meeting" title="Meeting point"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Meeting point</h3><p class="note">Both held. The collection answers with one work between your choices, from the similarity backend, filtered to in-stock. A yes from each, or a quiet close. No push, ever.</p></div>
+      </div>
+      <div class="card">
+        <div class="device"><div class="screenframe"><iframe loading="lazy" src="lumas-two-yeses-flow.html?screen=meet-match" title="Meeting match"></iframe></div></div>
+        <div class="cap"><p class="role">Both of you</p><h3>Two yeses, after all</h3><p class="note">Neither chose it alone; both chose it together. The rarest, warmest ending.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Two Yeses · anonymous token flow · overview of the live prototype</span>
+    <span>lumas · v2 branding</span>
+  </footer>
+</div>
+</body>
+</html>
