@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>LUMAS PDP UX Audit (concise)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+:root{
+  /* LUMAS V2 — Charcoal · Ivory · Bone. Three colours, forever. */
+  --color-text-primary:#1C1A18; --color-text-secondary:#5A5752; --color-text-tertiary:#908C87;
+  --color-text-inverse:#F4EDE2;
+  --color-surface-page:#FAF6F1; --color-surface-card:#FFFFFF; --color-surface-raised:#F7F1E9;
+  --color-surface-sunken:#F4EDE2; --color-surface-inverse:#1C1A18; --color-surface-muted:#F0EBE3;
+  --color-border-default:#E2D8CC; --color-border-subtle:#EAE2D8; --color-border-strong:#C7C3BE;
+  /* status — functional UI only, never decorative */
+  --status-success:#3A6B4A; --status-success-bg:#E8F2EB;
+  --status-warning:#9B6D1E; --status-warning-bg:#FDF5E6;
+  --status-error:#B5352A; --status-error-bg:#FDECEA;
+  /* legacy names remapped to V2 tokens so components inherit the retheme */
+  --bg:var(--color-surface-page);
+  --panel:var(--color-surface-raised);
+  --ink:var(--color-text-primary);
+  --muted:var(--color-text-secondary);
+  --faint:var(--color-text-tertiary);
+  --line:var(--color-border-subtle);
+  --line2:var(--color-border-default);
+  --bone:#EAE2D8;
+  --white:var(--color-surface-card);
+  --save:var(--color-text-primary);   /* discount styled with charcoal, no accent colour */
+  --flag:var(--color-text-primary);   /* brand recedes: no accent — charcoal carries emphasis */
+  --good:var(--status-success);
+  --radius:4px;
+  --shadow:0 1px 2px rgba(28,26,24,.05),0 8px 32px rgba(28,26,24,.07);
+  --font-display:'Utile Display','Utile Display Trial','Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  /* motion — strong custom curves (Emil) */
+  --e-out:cubic-bezier(.23,1,.32,1);
+  --e-io:cubic-bezier(.77,0,.175,1);
+  --e-soft:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.12;text-wrap:balance}
+/* V2 display tiers — Utile Display, Regular weight, sentence case, tracking 0 */
+header h1,.sec-head h2,.info .artist{font-family:var(--font-display);font-weight:400;letter-spacing:0}
+p{margin:0 0 .6em;text-wrap:pretty}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.84em}
+.muted{color:var(--muted)}
+:where(button,a,input,[tabindex]):focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:2px}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#F7F1E9,#FAF6F1)}
+header .wrap{padding:46px 24px 34px}
+.brandmark{font-size:11px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--flag)}
+header h1{font-size:clamp(28px,4.6vw,44px);margin:14px 0 10px;max-width:18ch}
+header .lede{font-size:16.5px;color:var(--muted);max-width:62ch;line-height:1.5}
+
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:24px}
+.sec-head h2{font-size:clamp(21px,3vw,28px);max-width:24ch}
+.sec-head .k{font-size:13px;color:var(--muted);margin-top:6px;max-width:60ch}
+
+/* reveal: enhances an already-visible default (no content gated on JS) */
+.reveal{opacity:1;transform:none}
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--e-soft),transform .6s var(--e-soft)}
+.js .reveal.in{opacity:1;transform:none}
+.js .stagger>*{opacity:0;transform:translateY(12px);transition:opacity .5s var(--e-soft),transform .5s var(--e-soft)}
+.js .stagger.in>*{opacity:1;transform:none}
+.js .stagger.in>*:nth-child(2){transition-delay:.06s}
+.js .stagger.in>*:nth-child(3){transition-delay:.12s}
+
+/* verdict */
+.verdict{background:var(--ink);color:#F4EDE2;border-radius:var(--radius);padding:24px 28px}
+.verdict p{font-size:16.5px;line-height:1.5;color:rgba(244,237,226,.82);max-width:70ch;margin:0}
+.verdict strong{color:var(--color-text-inverse);font-weight:600}
+
+/* issue cards */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.icard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:10px;transition:transform .3s var(--e-out),border-color .3s var(--e-out)}
+.icard:hover{transform:translateY(-2px);border-color:var(--line2)}
+.icard .top{display:flex;align-items:center;gap:8px}
+.sev{font-size:10px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:2px;color:var(--color-text-inverse)}
+.s1{background:#B5352A}.s2{background:#9B6D1E}
+.icard h3{font-size:16px;line-height:1.22}
+.icard .row{font-size:13px;color:#5A5752}
+.icard .row b{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:2px}
+.principle{display:inline-block;font-size:10.5px;font-weight:700;background:var(--color-surface-muted);color:var(--color-text-secondary);padding:2px 8px;border-radius:2px;margin:2px 3px 0 0}
+.fix{margin-top:auto;background:#E8F2EB;border:1px solid #CDE4D5;border-radius:4px;padding:10px 12px;font-size:13px;color:#2E4A3B}
+.fix b{color:var(--good)}
+
+/* playground */
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);background:#F7F1E9}
+.lab{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.seg{position:relative;display:inline-flex;background:#E8E4DA;border-radius:4px;padding:3px}
+.seg-thumb{position:absolute;top:3px;bottom:3px;border-radius:2px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.14);transition:transform .34s var(--e-out),width .34s var(--e-out);z-index:0}
+.seg button{position:relative;z-index:1;border:0;background:transparent;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);padding:7px 14px;border-radius:4px;cursor:pointer;transition:color .25s var(--e-out),transform .12s var(--e-out)}
+.seg button[aria-pressed="true"]{color:var(--ink)}
+.seg button:active{transform:scale(.96)}
+.switch{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;user-select:none}
+.switch input{position:absolute;opacity:0;width:0;height:0}
+.track{width:38px;height:22px;border-radius:100px;background:#C7C3BE;position:relative;transition:background .25s var(--e-out);flex:none}
+.track::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .28s var(--e-out);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.switch input:checked + .track{background:var(--flag)}
+.switch input:checked + .track::after{transform:translateX(16px)}
+.note{padding:12px 18px;background:#F0EBE3;border-bottom:1px solid var(--line);font-size:13px;color:#5A5752;transition:opacity .25s var(--e-out),filter .25s var(--e-out)}
+.note.swap{opacity:0;filter:blur(3px)}
+.note b{color:#1C1A18}
+
+/* PDP */
+.pdp{display:grid;grid-template-columns:1.55fr 1fr;background:var(--white)}
+.mediacol{display:flex;flex-direction:column;min-width:0}
+.media{position:relative;flex:1;background:radial-gradient(120% 120% at 30% 20%,#ECE5D9,#E3DBCC 70%);padding:34px;min-height:520px;display:flex;align-items:center;justify-content:center}
+.thumbs{display:flex;gap:8px;padding:14px 28px 18px;overflow-x:auto;scrollbar-width:none;background:var(--white)}
+.thumbs::-webkit-scrollbar{display:none}
+.tb{flex:0 0 auto;width:54px;height:54px;border:1px solid #E2D8CC;border-radius:4px;background:#F0EBE3;cursor:pointer;padding:0;transition:border-color .16s var(--e-out)}
+.tb:hover{border-color:#C7C3BE}
+.tb-art{background:url('https://img.lumas.com/showimg_mcs13_full.jpg') center/contain no-repeat #F0EBE3;border-color:#1C1A18}
+.tb-vid{display:flex;align-items:center;justify-content:center;background:#d6d0c4;color:#5A5752}
+.tb-vid svg{width:18px;height:18px}
+.frame{position:relative;z-index:1;width:min(480px,100%);aspect-ratio:1/1;background:#cfc7b8;box-shadow:0 18px 44px rgba(0,0,0,.18);overflow:hidden}
+.frame img{width:100%;height:100%;object-fit:contain;display:block;background:#d9d2c4}
+.fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#8a8576,#5f5b50);color:#F4EDE2;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+.ctl{position:absolute;z-index:3;display:flex;gap:8px;transition:opacity .35s var(--e-out),transform .35s var(--e-out)}
+.tl{top:16px;left:16px}.tr{top:16px;right:16px}.br{bottom:16px;right:16px}
+.ib{display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;cursor:pointer;font:inherit;font-size:10.5px;font-weight:600;letter-spacing:.04em;color:#1C1A18;padding:6px;border-radius:4px;transition:background .2s var(--e-out),transform .12s var(--e-out);position:relative}
+[data-icon],.railIco,.premIco,#dIcon{display:inline-flex;align-items:center;justify-content:center}
+.ib svg{width:21px;height:21px;flex:none}
+.ib .l{display:none;text-transform:uppercase;letter-spacing:.07em}
+.ib.pill{background:#fff;padding:8px 12px;box-shadow:0 2px 8px rgba(20,18,12,.16);border-radius:4px}
+.ib.pill .l{display:inline}
+.ib:hover{background:rgba(255,255,255,.72)}
+.ib:active{transform:scale(.95)}
+.tip{position:absolute;top:calc(100% + 7px);left:0;background:#1C1A18;color:#fff;font-size:10.5px;padding:5px 8px;border-radius:4px;white-space:nowrap;opacity:0;transform:translateY(-3px) scale(.97);transform-origin:top left;pointer-events:none;transition:opacity .16s var(--e-out),transform .16s var(--e-out);z-index:5}
+.ib:hover .tip,.ib:focus-visible .tip{opacity:1;transform:translateY(0) scale(1)}
+
+.hot{position:absolute;z-index:8;width:22px;height:22px;border-radius:50%;background:var(--flag);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.hot{transition:transform .16s var(--e-out)}
+.hot:hover{transform:scale(1.14)}
+.hot:active{transform:scale(.94)}
+.hot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--flag);opacity:.5;animation:pulse 2.4s var(--e-out) infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+body:not(.annot) .hot{display:none}
+body.annot .hot{animation:hot-in .4s var(--e-out) backwards}
+body.annot .hot:nth-of-type(2){animation-delay:.06s}
+body.annot .hot:nth-of-type(3){animation-delay:.12s}
+@keyframes hot-in{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+
+.info{padding:28px 28px 32px;border-left:1px solid #EAE2D8}
+.info .artist{font-size:30px;letter-spacing:-.025em;line-height:1.05}
+.info .wt{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:#3A3835;margin:5px 0 12px}
+.edline{font-size:13.5px;color:#3A3835;margin-bottom:18px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.edline .ed{font-weight:600;transition:opacity .2s var(--e-out),filter .2s var(--e-out)}
+.edline .ed.swap{opacity:0;filter:blur(2px)}
+.edline .ed.hide{display:none}
+.edline .d{color:#C7C3BE}.edline u{cursor:pointer}
+.badge{display:none;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-primary);background:var(--color-surface-muted);border:1px solid var(--color-border-default);padding:3px 8px;border-radius:2px}
+.badge.on{display:inline-flex;animation:pop .36s var(--e-out)}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(-2px)}to{opacity:1;transform:none}}
+.fl{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#5A5752;margin:0 0 8px}
+.sizes{display:flex;border:1px solid #1C1A18;border-radius:4px;overflow:hidden;margin-bottom:18px}
+.sizes button{flex:1;border:0;border-right:1px solid #E2D8CC;background:#fff;font:inherit;font-size:12.5px;font-weight:500;padding:11px 4px;cursor:pointer;line-height:1.2;transition:background .2s var(--e-out),color .2s var(--e-out)}
+.sizes button:last-child{border-right:0}
+.sizes button small{display:block;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:#908C87;margin-top:2px}
+.sizes button[aria-pressed="true"]{background:#1C1A18;color:#fff}
+.sizes button[aria-pressed="true"] small{color:#C7C3BE}
+.price{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+.price .now{font-size:28px;font-weight:700;letter-spacing:-.01em}.price .was{font-size:13px;color:#908C87;text-decoration:line-through}.price .save{font-size:13px;color:var(--save);font-weight:600}
+.cart{width:100%;background:var(--color-surface-inverse);color:var(--color-text-inverse);border:0;font:inherit;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 28px;border-radius:var(--radius);cursor:pointer;transition:background .2s var(--e-out),transform .12s var(--e-out)}
+.cart:hover{background:#3A3835}.cart:active{transform:scale(.985)}
+
+/* fuller PDP info, faithful to the real page */
+.pop{border:1px solid #EAE2D8;border-radius:4px;padding:14px 16px;margin-bottom:20px;background:#F7F1E9}
+.pop-h{font-size:13px;font-weight:700;color:#1C1A18}
+.pop-track{height:3px;background:#E2D8CC;border-radius:2px;position:relative;margin:18px 2px 9px}
+.pop-track::before{content:"";position:absolute;left:0;top:0;height:100%;width:46%;background:#1C1A18;border-radius:2px}
+.pop-knob{position:absolute;left:46%;top:50%;width:11px;height:11px;border-radius:50%;background:#1C1A18;border:2px solid #fff;box-shadow:0 0 0 1px #1C1A18;transform:translate(-50%,-50%)}
+.pop-stages{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:#908C87}
+.dim{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#5A5752;margin-bottom:22px}
+.dim [data-icon]{color:#C7C3BE}.dim svg{width:15px;height:15px}
+.selectwrap{position:relative;margin-bottom:24px}
+.selectwrap select{width:100%;font:inherit;font-size:14px;padding:14px 40px 14px 16px;border:1px solid #1C1A18;border-radius:4px;background:#fff;-webkit-appearance:none;appearance:none;cursor:pointer}
+.selectwrap::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid #1C1A18;border-bottom:2px solid #1C1A18;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.btn-gallery{width:100%;background:transparent;color:var(--color-text-primary);border:1px solid var(--color-border-focus,#1C1A18);font:inherit;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:15px 28px;border-radius:var(--radius);cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .18s var(--e-out),color .18s var(--e-out),transform .12s var(--e-out)}
+.btn-gallery:hover{background:var(--color-surface-inverse);color:var(--color-text-inverse)}.btn-gallery:active{transform:scale(.99)}.btn-gallery svg{width:16px;height:16px}
+.ship{font-size:11px;letter-spacing:.03em;color:#908C87;margin-top:14px;text-transform:uppercase;line-height:1.6}
+.artweek{margin-top:18px;border-top:1px solid #EAE2D8;padding-top:16px}
+.aw-h{display:flex;align-items:center;gap:8px}
+.aw-tag{font-size:10px;font-weight:800;background:#1C1A18;color:#fff;padding:4px 8px;border-radius:2px;letter-spacing:.05em}
+.aw-s{font-size:12.5px;color:#5A5752;margin-top:7px;font-weight:600}
+
+/* unified rail (B) — compact, always available, labels on hover */
+.rail{display:none;position:absolute;z-index:4;top:16px;right:16px;flex-direction:column;background:#fff;border-radius:4px;box-shadow:0 4px 16px rgba(20,18,12,.14);padding:4px}
+.rail button{position:relative;display:flex;align-items:center;justify-content:center;border:0;background:#fff;color:#1C1A18;cursor:pointer;width:38px;height:38px;border-radius:2px;transition:background .16s var(--e-out),transform .12s var(--e-out)}
+.rail button:hover{background:#F0EBE3}.rail button:active{transform:scale(.92)}
+.rail svg{width:19px;height:19px;flex:none}
+.rail .rl{position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%) translateX(4px);background:#1C1A18;color:#fff;font-size:11px;font-weight:600;letter-spacing:.01em;padding:5px 9px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .16s var(--e-out),transform .16s var(--e-out)}
+.rail button:hover .rl,.rail button:focus-visible .rl{opacity:1;transform:translateY(-50%) translateX(0)}
+.mode-B .rail{display:flex;animation:rail-in .4s var(--e-out)}
+@keyframes rail-in{from{opacity:0;transform:translateX(8px) scale(.97)}to{opacity:1;transform:none}}
+/* premium (C) */
+.prem{display:none;position:absolute;z-index:4;left:50%;bottom:18px;transform:translateX(-50%) translateY(10px) scale(.97);align-items:center;flex-wrap:nowrap;max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none;background:rgba(20,18,15,.86);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:5px;gap:1px;opacity:0;transition:opacity .32s var(--e-out),transform .32s var(--e-out);pointer-events:none;box-shadow:0 12px 34px rgba(0,0,0,.28)}
+.prem::-webkit-scrollbar{display:none}
+.prem button{flex:0 0 auto}
+.prem button{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#F4EDE2;font:inherit;font-size:11px;font-weight:600;line-height:1;white-space:nowrap;padding:9px 11px;border-radius:4px;cursor:pointer;transition:background .16s var(--e-out),transform .12s var(--e-out)}
+.prem button:hover{background:rgba(255,255,255,.12)}.prem button:active{transform:scale(.95)}
+.prem svg{width:17px;height:17px;flex:none;opacity:.9}
+.prem .sep{width:1px;align-self:stretch;background:rgba(255,255,255,.16);margin:5px 3px}
+
+/* mobile action bar (shown < 640px; the touch fallback for every concept) */
+.mbar{display:none;gap:8px;padding:12px 14px;background:#fff;border-top:1px solid var(--pdp-line,#EAE2D8);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mbar::-webkit-scrollbar{display:none}
+.mbar button{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;border:1px solid #E2D8CC;background:#fff;border-radius:4px;padding:9px 13px;font:inherit;font-size:12px;font-weight:600;color:#1C1A18;white-space:nowrap;cursor:pointer;transition:transform .12s var(--e-out),background .16s var(--e-out)}
+.mbar button:active{transform:scale(.95)}
+.mbar svg{width:17px;height:17px;flex:none}
+.mbar .mbar-note{flex:0 0 auto;align-self:center;font-size:10.5px;color:#908C87;padding-left:2px}
+
+.mode-A .ib{background:rgba(255,255,255,.82);box-shadow:0 1px 3px rgba(0,0,0,.1);border-radius:4px;padding:6px 10px}
+.mode-A .ib .l{display:inline}.mode-A .ib .tip{display:none}.mode-A .br .ib{background:#fff}
+.mode-B .tl,.mode-B .tr,.mode-B .br{opacity:0;pointer-events:none;visibility:hidden;transform:translateY(-4px)}
+.mode-C .tl,.mode-C .tr,.mode-C .br{opacity:0;pointer-events:none;visibility:hidden}
+.mode-C .prem{display:flex}
+.mode-C .media:hover .prem,.mode-C .media:focus-within .prem{opacity:1;transform:translateX(-50%) translateY(0) scale(1);pointer-events:auto}
+
+.annot-panel{padding:14px 18px;border-top:1px solid var(--line);background:#F7F1E9;display:none}
+body.annot .annot-panel{display:block;animation:fade-down .4s var(--e-out)}
+@keyframes fade-down{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.annot-panel h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--flag);margin-bottom:8px}
+.ai{display:flex;gap:10px;font-size:13px;align-items:flex-start;padding:7px 9px;border-radius:4px;margin-bottom:4px;transition:background .25s var(--e-out)}
+.ai.live{background:#F0EBE3}
+.ai .n{width:18px;height:18px;border-radius:50%;background:var(--flag);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+.ai b{display:block}
+
+/* two decisions inline */
+.dec{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.dec .blk{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.dec h3{font-size:14px;margin-bottom:4px}
+.dec .sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:4px;padding:10px 12px;cursor:pointer;background:#fff;margin-bottom:6px;font:inherit;text-align:left;width:100%;transition:border-color .2s var(--e-out),box-shadow .2s var(--e-out),transform .12s var(--e-out)}
+.opt:hover{border-color:var(--line2)}
+.opt:active{transform:scale(.99)}
+.opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.opt .ol{font-size:13px;font-weight:600}
+.opt .rc{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--good)}
+.opt .vg{font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:2px}
+.vb{background:#E8F2EB;color:#3A6B4A}.vo{background:#FDF5E6;color:#9B6D1E}.vn{background:#FDECEA;color:#B5352A}
+.icoset{display:flex;gap:7px;flex-wrap:wrap}
+.ico{flex:1;min-width:64px;border:1px solid var(--line);border-radius:4px;padding:10px 6px;background:#fff;cursor:pointer;text-align:center;font:inherit;transition:border-color .2s var(--e-out),box-shadow .2s var(--e-out),transform .12s var(--e-out)}
+.ico:hover{border-color:var(--line2)}
+.ico:active{transform:scale(.96)}
+.ico[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.ico svg{width:22px;height:22px}.ico .in{font-size:10px;font-weight:700;margin-top:4px;display:block}
+.whyline{font-size:12px;color:var(--muted);margin-top:10px;min-height:32px}
+
+/* compare + roadmap */
+.g3c{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;font-size:12.5px;transition:transform .3s var(--e-out),border-color .3s var(--e-out)}
+.cc:hover{transform:translateY(-2px);border-color:var(--line2)}
+.cc h3{font-size:14px;display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.cc .bd{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cc .pc{color:var(--good);font-weight:700}.cc .cn{color:var(--flag);font-weight:700}
+.cc .lvl{font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:2px;text-transform:uppercase}
+.L{background:#E8F2EB;color:#3A6B4A}.M{background:#FDF5E6;color:#9B6D1E}.H{background:#FDECEA;color:#B5352A}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:12.5px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);background:#F7F1E9;font-weight:800}
+tbody tr:last-child td{border-bottom:0}
+
+.dock{position:sticky;bottom:0;z-index:30;background:rgba(22,20,15,.97);backdrop-filter:blur(10px);color:#F4EDE2;border-top:1px solid #2a261d}
+.dock .wrap{padding:14px 24px;display:flex;gap:16px;align-items:center}
+.dock .pl{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8a8472;margin-bottom:4px}
+.dock .pt{font-size:12.5px;line-height:1.45;color:#F4EDE2;max-width:88ch}
+.dock .pt b{color:#fff}
+.copy{flex:none;background:#F4F1EB;color:#1C1A18;border:0;font:inherit;font-weight:700;font-size:12.5px;padding:12px 20px;border-radius:4px;cursor:pointer;white-space:nowrap}
+.copy:hover{background:#fff}.copy.done{background:var(--good);color:#fff}
+footer{padding:28px 0 110px;color:var(--faint);font-size:11.5px}
+@media(max-width:860px){.g3,.dec,.g3c{grid-template-columns:1fr}.pdp{grid-template-columns:1fr}.info{border-left:0;border-top:1px solid #EAE2D8}.media{min-height:auto}.dock .wrap{flex-direction:column;align-items:stretch}.copy{width:100%}}
+
+/* phones: hover and corner overlays don't work on touch — every concept falls back to a persistent bar */
+@media(max-width:640px){
+  .seg{flex-wrap:wrap}
+  .seg-thumb{display:none}
+  .seg button[aria-pressed="true"]{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+}
+/* small view toggle */
+.seg-sm button{font-size:11.5px;padding:6px 12px}
+#viewSeg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+
+/* phone-frame chrome for the Mobile preview toggle */
+.stage.fm .pdp{max-width:382px;margin:24px auto;border:10px solid #1C1A18;border-radius:38px;overflow-x:hidden;overflow-y:auto;max-height:700px;box-shadow:0 26px 64px rgba(0,0,0,.30)}
+.stage.fm .pdp::-webkit-scrollbar{display:none}
+
+/* swipe dots + sticky cart (mobile e-commerce patterns) */
+.dots{display:none;position:absolute;bottom:12px;left:50%;transform:translateX(-50%);gap:6px;z-index:3}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(28,26,24,.28);transition:width .2s var(--e-out)}
+.dots i.on{background:var(--color-text-primary);width:16px;border-radius:2px}
+.stickybar{display:none;position:sticky;bottom:0;z-index:5;align-items:center;gap:10px;padding:11px 16px;background:var(--white);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(28,26,24,.06)}
+.sb-price{font-size:18px;font-weight:700;color:var(--ink)}
+.sb-was{font-size:12px;color:var(--faint);text-decoration:line-through}
+.sb-cart{margin-left:auto;background:var(--color-surface-inverse);color:var(--color-text-inverse);border:0;font:inherit;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:13px 22px;border-radius:var(--radius);cursor:pointer;transition:transform .12s var(--e-out)}
+.sb-cart:active{transform:scale(.97)}
+
+/* ===== compact mobile — shared by real phones (≤640) and the phone-frame preview ===== */
+.pdp.ismobile{display:block;grid-template-columns:1fr}
+.pdp.ismobile .info{border-left:0;border-top:1px solid var(--line);padding:18px 16px 14px}
+.pdp.ismobile .info .artist{font-size:23px}
+.pdp.ismobile .media{min-height:auto;padding:14px}
+.pdp.ismobile .frame{width:100%;box-shadow:0 6px 20px rgba(28,26,24,.12)}
+.pdp.ismobile .thumbs{display:none}
+.pdp.ismobile .rail,.pdp.ismobile .prem{display:none!important}
+.pdp.ismobile .dots{display:flex}
+/* condensed info rhythm */
+.pdp.ismobile .edline{margin-bottom:14px}
+.pdp.ismobile .pop{padding:11px 13px;margin-bottom:14px}
+.pdp.ismobile .pop-h{font-size:12px}
+.pdp.ismobile .pop-track{margin:13px 2px 8px}
+.pdp.ismobile .pop-stages{font-size:8px}
+.pdp.ismobile .fl{margin-bottom:6px}
+.pdp.ismobile .sizes,.pdp.ismobile .selectwrap,.pdp.ismobile .dim{margin-bottom:14px}
+.pdp.ismobile .artweek{margin-top:14px;padding-top:12px}
+.pdp.ismobile .info .cart{display:none}
+.pdp.ismobile .stickybar{display:flex}
+/* A/B/C: one slim icon-only action row (recognised icons + aria-labels; labels hidden to save height) */
+.pdp.ismobile.mode-A .ctl,.pdp.ismobile.mode-B .ctl,.pdp.ismobile.mode-C .ctl{display:none}
+.pdp.ismobile.mode-A .mbar,.pdp.ismobile.mode-B .mbar,.pdp.ismobile.mode-C .mbar{display:flex}
+.pdp.ismobile .mbar{padding:8px 10px;gap:4px;align-items:stretch;justify-content:space-between;overflow:visible}
+.pdp.ismobile .mbar button{flex:1;min-width:0;height:auto;padding:7px 2px;border-radius:2px;flex-direction:column;justify-content:center;gap:5px}
+.pdp.ismobile .mbar button>span:last-child{display:none}
+.pdp.ismobile .mbar button::after{content:attr(data-short);font-size:9px;font-weight:600;line-height:1;letter-spacing:.01em;color:inherit;white-space:nowrap}
+.pdp.ismobile .mbar svg{width:19px;height:19px}
+/* B — unified: one connected group */
+.pdp.ismobile.mode-B .mbar{gap:0;margin:10px 14px 12px;padding:2px;border:1px solid var(--color-border-default);border-radius:4px}
+.pdp.ismobile.mode-B .mbar button{border:0;border-radius:2px}
+/* C — premium: slim dark bar */
+.pdp.ismobile.mode-C .mbar{background:#1C1A18;border-top-color:#1C1A18}
+.pdp.ismobile.mode-C .mbar button{background:transparent;border-color:transparent;color:#F4EDE2}
+/* current — keep the scattered overlays (icon-only) to show the cramped baseline */
+.pdp.ismobile.mode-current .ctl{display:flex}
+.pdp.ismobile.mode-current .br .l,.pdp.ismobile.mode-current .tr .l,.pdp.ismobile.mode-current .tl .l{display:none}
+.pdp.ismobile.mode-current .ctl .ib.pill{padding:8px}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .js .reveal,.js .stagger>*{opacity:1!important;transform:none!important}
+}
+</style>
+
+<header><div class="wrap">
+  <div class="brandmark">LUMAS · Product Experience Lab</div>
+  <h1>PDP UX Audit, condensed</h1>
+  <p class="lede">Three fixable problems, three live concepts. Built on the real product page (Marta Contreras Simó, <em>Liu</em>), in Archivo.</p>
+</div></header>
+
+<section><div class="wrap reveal">
+  <div class="sec-head"><h2>The verdict</h2></div>
+  <div class="verdict"><p>The image-led layout works. The friction is the <strong>interaction layer on top of the artwork</strong>: three control clusters, three styles, three corners, with no shared system. Worst case is the <strong>binoculars</strong>, which is unlabeled, hover-only and wrong-metaphor, so “discover more” is undiscoverable (and dead on touch). And <strong>“Limited Edition 150”</strong> states a number instead of selling the scarcity. All three map to known heuristics. <strong>Ship the labels and parity fix now; A/B the wording and the unified rail.</strong></p></div>
+</div></section>
+
+<section><div class="wrap reveal">
+  <div class="sec-head"><h2>The three problems</h2></div>
+  <div class="g3 stagger">
+    <div class="icard">
+      <div class="top"><span class="sev s1">SEV 1</span></div>
+      <h3>Controls scattered across 3 corners, 3 styles</h3>
+      <div class="row"><b>Why it hurts</b>No grouping cue, so users can’t inventory what’s possible; bare icons read as décor.</div>
+      <div><span class="principle">Consistency #4</span><span class="principle">Gestalt proximity</span><span class="principle">Fitts</span></div>
+      <div class="fix"><b>Fix →</b> one system, one style, all labeled (Concepts A→B→C).</div>
+    </div>
+    <div class="icard">
+      <div class="top"><span class="sev s2">SEV 2</span></div>
+      <h3>Binoculars / “More like this”</h3>
+      <div class="row"><b>Why it hurts</b>Unlabeled + hover-only = invisible on touch; binoculars reads as “zoom,” not “similar.”</div>
+      <div><span class="principle">Recognition #6</span><span class="principle">Real-world match #2</span><span class="principle">Visibility #1</span></div>
+      <div class="fix"><b>Fix →</b> persistent label and a clearer metaphor. Best is a text chip, “Discover more like this.”</div>
+    </div>
+    <div class="icard">
+      <div class="top"><span class="sev s2">SEV 2</span></div>
+      <h3>“Limited Edition 150” undersells the USP</h3>
+      <div class="row"><b>Why it hurts</b>Buried mid-line at metadata weight; states a fact, triggers no scarcity/prestige.</div>
+      <div><span class="principle">Visual hierarchy</span><span class="principle">Scarcity</span><span class="principle">Art vernacular #2</span></div>
+      <div class="fix"><b>Fix →</b> own line + badge, art-standard wording “Edition of 100.”</div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap reveal">
+  <div class="sec-head"><h2>Live concepts</h2><div class="k">Switch between the current page and concepts A, B and C. Toggle annotations to mark the friction points on the artwork.</div></div>
+  <div class="stage">
+    <div class="bar">
+      <div><div class="lab">Concept</div>
+        <div class="seg" id="seg" role="group" aria-label="Concept">
+          <span class="seg-thumb" id="segThumb"></span>
+          <button data-mode="current" aria-pressed="true">Current</button>
+          <button data-mode="A" aria-pressed="false">A · Minimal</button>
+          <button data-mode="B" aria-pressed="false">B · Unified</button>
+          <button data-mode="C" aria-pressed="false">C · Premium</button>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="annot"><span class="track"></span><span>Annotations</span></label>
+      <div style="margin-left:auto">
+        <div class="lab">View</div>
+        <div class="seg seg-sm" id="viewSeg" role="group" aria-label="Viewport">
+          <button data-view="desktop" aria-pressed="true">Desktop</button>
+          <button data-view="mobile" aria-pressed="false">Mobile</button>
+        </div>
+      </div>
+    </div>
+    <div class="note" id="note"></div>
+
+    <div class="pdp mode-current" id="pdp">
+      <div class="mediacol">
+      <div class="media" tabindex="0" aria-label="Artwork stage">
+        <span class="hot" style="top:14px;left:14px" data-an="0">1</span>
+        <span class="hot" style="top:14px;right:14px" data-an="1">2</span>
+        <span class="hot" style="bottom:56px;right:14px" data-an="2">3</span>
+
+        <div class="ctl tl"><button class="ib" aria-label="Discover more like this"><span id="dIcon"></span><span class="l" id="dLbl">Discover more</span><span class="tip">More like this</span></button></div>
+        <div class="ctl tr">
+          <button class="ib" aria-label="Enlarge"><span data-icon="maximize"></span><span class="l">Enlarge</span></button>
+          <button class="ib" aria-label="Save"><span data-icon="heart"></span><span class="l">Save</span></button>
+        </div>
+        <div class="ctl br">
+          <button class="ib pill" aria-label="View in room"><span data-icon="image"></span><span class="l">View in room</span></button>
+          <button class="ib pill" aria-label="Request visualisation"><span data-icon="visualise"></span><span class="l">Request visualisation</span></button>
+          <button class="ib pill" aria-label="3D view"><span data-icon="box"></span><span class="l">3D view</span></button>
+        </div>
+
+        <div class="rail" aria-label="Image actions">
+          <button aria-label="View in room"><span data-icon="image"></span><span class="rl">View in room</span></button>
+          <button aria-label="Request visualisation"><span data-icon="visualise"></span><span class="rl">Request visualisation</span></button>
+          <button aria-label="3D view"><span data-icon="box"></span><span class="rl">3D view</span></button>
+          <button aria-label="Enlarge"><span data-icon="maximize"></span><span class="rl">Enlarge</span></button>
+          <button aria-label="Save"><span data-icon="heart"></span><span class="rl">Save</span></button>
+          <button aria-label="Discover more like this"><span class="railIco" style="display:inline-flex"></span><span class="rl">Discover more like this</span></button>
+        </div>
+        <div class="prem" aria-label="Artwork tools">
+          <button><span data-icon="image"></span>View in room</button>
+          <button><span data-icon="visualise"></span>Request visualisation</button>
+          <button><span data-icon="box"></span>3D</button>
+          <span class="sep"></span>
+          <button><span class="premIco" style="display:inline-flex"></span>Discover more like this</button>
+          <button aria-label="Save"><span data-icon="heart"></span>Save</button>
+        </div>
+
+        <div class="frame"><div class="fallback">Marta Contreras Simó · Liu</div>
+          <img src="https://img.lumas.com/showimg_mcs13_full.jpg" alt="Marta Contreras Simó, Liu" onerror="this.onerror=null;this.src='https://www.lumas.de/product/image-with-default-frame/?abstractId=6242149&sku=MCS15';this.style.position='relative';this.style.zIndex='2'"></div>
+          <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="mbar" aria-label="Image actions">
+        <button aria-label="View in room" data-short="In room"><span data-icon="image"></span><span>View in room</span></button>
+        <button aria-label="Request visualisation" data-short="Visualise"><span data-icon="visualise"></span><span>Request visualisation</span></button>
+        <button aria-label="3D view" data-short="3D"><span data-icon="box"></span><span>3D view</span></button>
+        <button aria-label="Enlarge" data-short="Zoom"><span data-icon="maximize"></span><span>Enlarge</span></button>
+        <button aria-label="Save" data-short="Save"><span data-icon="heart"></span><span>Save</span></button>
+        <button aria-label="Discover more like this" data-short="Discover"><span class="mbarIco" style="display:inline-flex"></span><span>Discover more like this</span></button>
+      </div>
+
+      <div class="thumbs" aria-label="Other views">
+        <button class="tb tb-art" aria-label="Artwork"></button>
+        <button class="tb" aria-label="In a room"></button>
+        <button class="tb" aria-label="In a room"></button>
+        <button class="tb" aria-label="In a room"></button>
+        <button class="tb" aria-label="Finish detail"></button>
+        <button class="tb" aria-label="Packaging"></button>
+        <button class="tb tb-vid" aria-label="Video"><span data-icon="play"></span></button>
+      </div>
+      </div><!-- /mediacol -->
+
+      <div class="info">
+        <h3 class="artist">Marta Contreras Simó</h3>
+        <div class="wt">Liu</div>
+        <div class="edline"><span class="badge" id="badge">Edition of 100</span><span class="ed" id="edText">Limited Edition 150</span><span class="d">·</span><span>Signed</span><span class="d">·</span><u>About this work</u></div>
+
+        <div class="pop">
+          <div class="pop-h">Highly sought-after, price increase likely.</div>
+          <div class="pop-track"><span class="pop-knob"></span></div>
+          <div class="pop-stages"><span>Hidden gem</span><span>Popular</span><span>In demand</span><span>Last copies</span></div>
+        </div>
+
+        <p class="fl">Choose size (cm) and mounting / framing:</p>
+        <div class="sizes" role="group"><button aria-pressed="true">40 × 40</button><button>80 × 80<small>Bestseller</small></button><button>120 × 120</button></div>
+        <div class="dim"><span>Outer size: 40 × 40 cm</span><span data-icon="info"></span></div>
+
+        <p class="fl">Choose your frame / finish</p>
+        <div class="selectwrap"><select aria-label="Frame / finish"><option>Mounted under acrylic glass</option><option>Framed (natural wood)</option><option>Framed (black)</option><option>Framed (white)</option></select></div>
+
+        <div class="price"><span class="now">€ 359</span><span class="was">€ 449</span><span class="save">Save € 90 today</span></div>
+        <button class="cart">Add to cart</button>
+        <button class="btn-gallery"><span data-icon="map-pin"></span>View in the gallery</button>
+        <div class="ship">Ships in 5 days · incl. VAT · plus € 6.90 shipping<br>2023 / 2024 / MCS15</div>
+
+        <div class="artweek">
+          <div class="aw-h"><span class="aw-tag">ART WEEK</span></div>
+          <div class="aw-s">20% on all LUMAS editions, order today!</div>
+        </div>
+      </div>
+      <div class="stickybar"><span class="sb-price">€ 359</span><span class="sb-was">€ 449</span><button class="sb-cart">Add to cart</button></div>
+    </div>
+
+    <div class="annot-panel"><h4>Friction points</h4><div id="annotList"></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap reveal">
+  <div class="sec-head"><h2>Two decisions</h2><div class="k">Pick an option and the live panel above updates.</div></div>
+  <div class="dec">
+    <div class="blk">
+      <h3>Edition label</h3>
+      <div class="sub">Scarcity speed, perceived value, scannability</div>
+      <div id="edList"></div>
+      <div class="whyline" id="edWhy"></div>
+    </div>
+    <div class="blk">
+      <h3>“Discover more” control</h3>
+      <div class="sub">Which metaphor, or no icon at all</div>
+      <div class="icoset" id="icoSet"></div>
+      <div class="whyline" id="icoWhy"></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap reveal">
+  <div class="sec-head"><h2>Concepts and tests at a glance</h2></div>
+  <div class="g3c stagger" style="margin-bottom:22px">
+    <div class="cc"><h3><span class="bd">A</span>Minimal</h3><p>Keep layout, unify weight, add labels, fix wording.</p><p><span class="pc">+</span> ships in days, zero relearning<br><span class="cn">−</span> targets still scattered</p><p style="margin-top:8px"><span class="lvl L">Low effort</span></p></div>
+    <div class="cc"><h3><span class="bd">B</span>Unified</h3><p>One compact icon rail, always there, labels on hover.</p><p><span class="pc">+</span> one mental model, predictable (Fitts), stays off the art<br><span class="cn">−</span> labels need a hover, needs A/B</p><p style="margin-top:8px"><span class="lvl M">Med effort</span></p></div>
+    <div class="cc"><h3><span class="bd">C</span>Premium</h3><p>Chrome recedes, hover-reveal toolbar, edition as prestige.</p><p><span class="pc">+</span> max image dominance and value<br><span class="cn">−</span> hover hurts touch, highest cost</p><p style="margin-top:8px"><span class="lvl H">High effort</span></p></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Test</th><th>Hypothesis</th><th>Primary KPI</th><th>Win</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td><b>Unified rail</b></td><td>One system raises tool engagement without hurting ATC</td><td>Image-tool engagement (guardrail ATC)</td><td>+10% engagement, ATC flat</td><td><span class="lvl M">M</span></td></tr>
+      <tr><td><b>Discover-more</b></td><td>Labeled + right metaphor beats hover binoculars</td><td>Control CTR → onward PDPs</td><td>+20% CTR</td><td><span class="lvl L">L</span></td></tr>
+      <tr><td><b>Edition wording</b></td><td>Art-standard promoted wording lifts ATC</td><td>PDP→ATC (guardrail returns)</td><td>+3% rel. ATC</td><td><span class="lvl L">L</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:12.5px;margin-top:14px"><b>Evidence vs. assumption:</b> labels-not-hover, single style and USP-gets-hierarchy are evidence-based (Nielsen #4/#6/#1), so ship them without testing. The exact <em>wording</em>, the <em>glyph</em>, and how far to hide the chrome are assumptions, which is why they sit in the test plan.</p>
+</div></section>
+
+<footer><div class="wrap">LUMAS Product Experience Lab. Concise audit, Archivo, self-contained. Artwork © Marta Contreras Simó, <em>Liu</em>.</div></footer>
+
+<script>
+"use strict";
+/* Icons: official Lucide (lucide.dev) path data, inlined for a self-contained file. */
+const LUCIDE={
+  binoculars:'<path d="M10 10h4"/><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"/><path d="M20 21a2 2 0 0 0 2-2v-3.851c0-1.39-2-2.962-2-4.829V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1z"/><path d="M22 16 2 16"/><path d="M4 21a2 2 0 0 1-2-2v-3.851c0-1.39 2-2.962 2-4.829V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1z"/><path d="M9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3"/>',
+  compass:'<path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"/><circle cx="12" cy="12" r="10"/>',
+  sparkle:'<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+  text:'<path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/>',
+  maximize:'<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
+  heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  image:'<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+  box:'<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+  'map-pin':'<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  play:'<polygon points="6 3 20 12 6 21 6 3"/>',
+  visualise:'<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/>'
+};
+const svg=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${LUCIDE[n]||''}</svg>`;
+const ICONS={binoculars:svg('binoculars'),compass:svg('compass'),sparkle:svg('sparkle'),text:svg('text')};
+function paintStaticIcons(){document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=svg(el.dataset.icon);});}
+document.documentElement.classList.add('js');
+const state={mode:'current',edition:'current',icon:'compass'};
+const EDITIONS=[
+  {id:'current',label:'Limited Edition 150',text:'Limited Edition 150',rec:false,why:'Current string. States the number but flattens the USP and carries no prestige cue.'},
+  {id:'edition-of-100',label:'Edition of 100',text:'Edition of 100 · Hand-Signed',rec:true,why:'Gallery standard. Highest perceived value, instantly scannable, matches collectors’ mental model. Front-runner.'},
+  {id:'only-100',label:'Only 100 Produced',text:'Only 100 Produced',rec:false,why:'Fastest scarcity read, but “produced” is manufacturing language that cheapens a premium brand.'},
+  {id:'limited-100-world',label:'Limited to 100 Worldwide',text:'Limited to 100 Worldwide',rec:false,why:'Strong scarcity and prestige. A good A/B challenger to “Edition of 100,” slightly longer to scan.'},
+  {id:'100-collectors',label:'100 Collectors Worldwide',text:'100 Collectors Worldwide',rec:false,why:'Evocative but slower to parse and ambiguous (sold out?). Better as a secondary line.'}
+];
+const ICONOPTS=[
+  {id:'binoculars',name:'Binoculars',vg:'vn',vl:'Replace',why:'Reads as zoom or look-far, and competes with fullscreen. Wrong mapping.'},
+  {id:'compass',name:'Compass',vg:'vb',vl:'Best',why:'Reads as “explore in this direction.” Guided exploration without implying search.'},
+  {id:'sparkle',name:'Sparkle',vg:'vo',vl:'OK',why:'Signals recommendation or similar picks. Can feel generic-AI.'},
+  {id:'text',name:'Text only',vg:'vb',vl:'Safest',why:'“Discover more like this” as visible text. Zero comprehension risk; recommended default on desktop.'}
+];
+const NOTES={
+  current:'<b>Current.</b> Three clusters, three styles, three corners. The binoculars (top-left) is unlabeled and hover-only. Toggle annotations.',
+  A:'<b>A. Minimal.</b> Same layout, but every control now shares one visual weight and a persistent label. Lowest-risk ship.',
+  B:'<b>B. Unified.</b> One compact icon rail, always available in a single corner; <em>hover any icon</em> for its label. Stays out of the artwork, unlike a full open panel.',
+  C:'<b>C. Premium.</b> Chrome recedes; <em>hover the artwork</em> to reveal the toolbar. On touch this needs a persistent bar.'
+};
+const ANNOT=[
+  {t:'Top-left, binoculars. ',d:'Unlabeled, hover-only, wrong metaphor. Dead on touch. (Nielsen #6/#1)'},
+  {t:'Top-right, enlarge and wishlist. ',d:'Bare icons, a different style from the bottom pills, no grouping. (Consistency #4, Gestalt)'},
+  {t:'Bottom-right, room and 3D pills. ',d:'A third visual language in a third corner. Strong, but disconnected (Fitts).'}
+];
+const $=s=>document.querySelector(s),pdp=$('#pdp');
+let firstPaint=true;
+
+function applyIcon(){
+  const html=state.icon==='text'?'':(ICONS[state.icon]||ICONS.compass);
+  const di=$('#dIcon');di.innerHTML=html;di.style.display=html?'inline-flex':'none';
+  document.querySelectorAll('.railIco,.premIco,.mbarIco').forEach(e=>{e.innerHTML=html;e.style.display=html?'inline-flex':'none';});
+  $('#dLbl').textContent=state.icon==='text'?'Discover more like this':'Discover more';
+}
+function moveThumb(){
+  const seg=$('#seg'),thumb=$('#segThumb');
+  const active=seg.querySelector('button[aria-pressed="true"]');
+  if(!active)return;
+  thumb.style.width=active.offsetWidth+'px';
+  thumb.style.transform='translateX('+(active.offsetLeft-3)+'px)';
+}
+function swapText(el,setter){
+  // Emil: blur-masked crossfade so the value change reads as one motion, not two
+  if(firstPaint){setter();return;}
+  el.classList.add('swap');
+  setTimeout(()=>{setter();el.classList.remove('swap');},180);
+}
+function render(){
+  pdp.classList.remove('mode-current','mode-A','mode-B','mode-C');
+  pdp.classList.add('mode-'+state.mode);
+  const note=$('#note');
+  if(firstPaint){note.innerHTML=NOTES[state.mode];}
+  else{note.classList.add('swap');setTimeout(()=>{note.innerHTML=NOTES[state.mode];note.classList.remove('swap');},160);}
+  const ed=EDITIONS.find(e=>e.id===state.edition);
+  const parts=ed.text.split(' · ');                 // [scarcity, optional detail e.g. Hand-Signed]
+  const promoted=state.mode!=='current';
+  const b=$('#badge');b.classList.toggle('on',promoted);b.textContent=parts[0];
+  // promoted: badge carries the scarcity label, inline text shows only the remainder (no repeat)
+  swapText($('#edText'),()=>{
+    const t=$('#edText');
+    t.textContent=promoted?parts.slice(1).join(' · '):ed.text;
+    t.classList.toggle('hide',promoted&&parts.length<2);
+  });
+  applyIcon();
+  [...$('#seg').querySelectorAll('button')].forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.mode===state.mode)));
+  moveThumb();
+}
+function edList(){
+  $('#edList').innerHTML=EDITIONS.map(e=>`<button class="opt" data-ed="${e.id}" aria-pressed="${e.id===state.edition}"><span class="ol">${e.label}</span>${e.rec?'<span class="rc">◆ Rec</span>':''}</button>`).join('');
+  document.querySelectorAll('#edList .opt').forEach(b=>b.onclick=()=>{state.edition=b.dataset.ed;update();});
+}
+function icoSet(){
+  $('#icoSet').innerHTML=ICONOPTS.map(o=>{const ic=o.id==='text'?ICONS.text:ICONS[o.id];return `<button class="ico" data-ico="${o.id}" aria-pressed="${o.id===state.icon}">${ic}<span class="in">${o.name}</span><span class="vg ${o.vg}" style="margin-top:5px;display:inline-block">${o.vl}</span></button>`;}).join('');
+  document.querySelectorAll('#icoSet .ico').forEach(b=>b.onclick=()=>{state.icon=b.dataset.ico;update();});
+}
+function annotList(active){
+  $('#annotList').innerHTML=ANNOT.map((a,i)=>`<div class="ai ${i===active?'live':''}"><span class="n">${i+1}</span><span><b>${a.t}</b>${a.d}</span></div>`).join('');
+}
+function update(){
+  render();
+  $('#edWhy').innerHTML='<b>'+EDITIONS.find(e=>e.id===state.edition).label+'.</b> '+EDITIONS.find(e=>e.id===state.edition).why;
+  $('#icoWhy').innerHTML='<b>'+ICONOPTS.find(o=>o.id===state.icon).name+'.</b> '+ICONOPTS.find(o=>o.id===state.icon).why;
+  document.querySelectorAll('#edList .opt').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ed===state.edition)));
+  document.querySelectorAll('#icoSet .ico').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ico===state.icon)));
+}
+$('#seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;update();});
+$('#annot').onchange=e=>document.body.classList.toggle('annot',e.target.checked);
+const mqMobile=window.matchMedia('(max-width:640px)');
+function syncMobile(){
+  const forced=document.querySelector('.stage').classList.contains('fm');
+  pdp.classList.toggle('ismobile', forced||mqMobile.matches);
+}
+document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
+  document.querySelector('.stage').classList.toggle('fm', b.dataset.view==='mobile');
+  document.querySelectorAll('#viewSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  syncMobile();
+});
+mqMobile.addEventListener('change',syncMobile);
+syncMobile();
+document.querySelectorAll('.hot').forEach(h=>{let open=false;h.onclick=()=>{open=!open;annotList(open?+h.dataset.an:-1);};});
+window.addEventListener('resize',moveThumb);
+
+/* scroll reveal — enhances an already-visible default (no content gated on JS) */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+
+paintStaticIcons();edList();icoSet();annotList(-1);update();
+firstPaint=false;
+requestAnimationFrame(moveThumb);
+</script>
