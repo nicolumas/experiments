@@ -1085,6 +1085,14 @@ function presentScreen(id){
     else if(id==='meet-match'){ setArt('#mm-art',MEET); $('#mm-meta').textContent=meta(MEET); }
   }catch(e){}
   show(id);
+  // In the overview, present the PDP as if the user has already scrolled to the entry point.
+  if(id==='pdp'){
+    const snap=()=>{ const sc=$('#pdp'),b=$('#go-compose'); if(!sc||!b) return;
+      const delta=b.getBoundingClientRect().top - sc.getBoundingClientRect().top;
+      sc.scrollTop += delta - sc.clientHeight*0.5 + b.offsetHeight*0.5; };
+    requestAnimationFrame(()=>requestAnimationFrame(snap));
+    window.addEventListener('load',snap,{once:true});
+  }
 }
 
 /* init */
