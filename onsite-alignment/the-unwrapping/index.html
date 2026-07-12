@@ -84,17 +84,18 @@
   .topbar b{font-family:var(--ui);font-weight:700;letter-spacing:.34em;font-size:1.1rem}
 
   /* ===== generic pre-panel ===== */
-  .pre{position:relative;z-index:6;text-align:center;max-width:680px;padding:0 6vw;
+  .pre{position:relative;z-index:6;text-align:center;max-width:min(1040px,92vw);padding:0 4vw;
     transition:opacity .9s var(--ease),transform 1s var(--slow)}
-  .pre .big{font-family:var(--display);font-weight:400;line-height:1.06;letter-spacing:0;
-    font-size:clamp(2.4rem,4.2vw,3.8rem);margin:1.4rem 0}
+  .pre .big{font-family:var(--display);font-weight:400;line-height:1.1;letter-spacing:0;
+    font-size:clamp(2.1rem,3.7vw,3.35rem);margin:1.6rem auto;text-wrap:balance}
+  .pre .big .l{display:block;text-wrap:balance}
   .pre .big em{font-style:italic;color:rgba(244,237,226,.7)}
-  .pre .p{font-family:var(--ui);font-weight:300;font-size:1.2rem;line-height:1.6;color:rgba(244,237,226,.72);max-width:44ch;margin:0 auto 2.8rem}
+  .pre .p{font-family:var(--ui);font-weight:300;font-size:1.2rem;line-height:1.6;color:rgba(244,237,226,.72);max-width:52ch;margin:0 auto 2.8rem;text-wrap:pretty}
 
   /* ===== DROP specifics ===== */
   .count{font-family:var(--ui);font-weight:700;letter-spacing:.2em;font-size:1.15rem;
     color:rgba(244,237,226,.55);margin-bottom:1rem}
-  .count b{color:var(--ivory-100)}
+  .count b{color:var(--ivory-100);white-space:nowrap}
   .snow{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:4}
   .flake{position:absolute;top:-3vh;width:6px;height:6px;border-radius:50%;background:rgba(244,237,226,.7);
     filter:blur(.5px);animation:fall linear infinite}
@@ -351,6 +352,12 @@
     .drop-series .ds-item img{height:8vh}
     .cwrap{max-width:520px}
     .copts{grid-template-columns:1fr;column-gap:0}
+    /* gift-card field: keep the balance + instruct clear of the topbar and the works below */
+    .balance{top:11.5vh}
+    .balance .amt{font-size:1.8rem}
+    .balance .lab{font-size:.72rem;letter-spacing:.18em}
+    .instruct{top:18.5vh;max-width:92vw;padding:0 5vw}
+    .instruct p{font-size:1.1rem;line-height:1.38}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition-duration:.001ms !important;animation:none !important}
@@ -394,7 +401,7 @@
 
   <div class="pre" id="dropPre">
     <div class="eyebrow">The Winter Edition · Robert Jahns</div>
-    <div class="big">Every winter, <em>one artist.</em><br>This year, the penguins come to town.</div>
+    <div class="big"><span class="l">Every winter, <em>one artist.</em></span> <span class="l">This year, the penguins come to town.</span></div>
     <div class="count">Opens to everyone in <b id="cd">02 : 14 : 53</b></div>
     <p class="p">You're on the first-look list. Three new works, a strictly limited run.</p>
     <button class="btn" id="dropReveal">Unveil the drop</button>
@@ -417,7 +424,7 @@
 
   <div class="pre" id="cardPre">
     <div class="eyebrow">A gift from Anna</div>
-    <div class="big">She didn't choose <em>for</em> you.<br>She gave you the <em>whole gallery.</em></div>
+    <div class="big"><span class="l">She didn't choose <em>for</em> you.</span> <span class="l">She gave you the <em>whole gallery.</em></span></div>
     <div class="amt" id="preAmt" style="font-family:var(--display);font-size:clamp(3rem,6vw,5rem);margin:1rem 0"></div>
     <p class="p">Pick a card value to feel it. Everything within reach lights up.</p>
     <div class="chips" id="vchips">
@@ -953,40 +960,48 @@ $('cardReveal').addEventListener('click',async()=>{
   await wait(500);$('cardPre').style.display='none';
   $('cardInstructP').textContent=`Everything here is yours for €${cardVal.toLocaleString('en-US')} or less. Raise the card, more unlocks.`;
   show($('cardInstruct'));
-  bloomField(ready.slice(0,12));
+  bloomField(ready.slice(0, window.innerWidth<=760?6:12));
 });
-function scatter(n){ // deep, abundant field with depth (scale/opacity)
-  const pts=[];const cols=Math.ceil(Math.sqrt(n*1.6));
+function scatter(n){ // abundant field with depth — spaced so works breathe; gentle layering, not a pile-up
+  const pts=[];const narrow=window.innerWidth<=760;
+  const cols=narrow?2:Math.max(2,Math.min(4,Math.round(Math.sqrt(n*1.15))));
+  const rows=Math.ceil(n/cols);
+  const x0=0.13,x1=0.87,y0=narrow?0.34:0.19,y1=narrow?0.92:0.88;
+  const cellW=(x1-x0)/cols, cellH=(y1-y0)/rows;
   for(let i=0;i<n;i++){
-    const cx=(i%cols+0.5)/cols, row=Math.floor(i/cols);
-    const rows=Math.ceil(n/cols);
-    const cy=(row+0.5)/rows;
-    const jx=(Math.random()-0.5)*0.12, jy=(Math.random()-0.5)*0.14;
-    const depth=0.62+Math.random()*0.5; // scale
-    pts.push({x:(cx+jx)*100, y:(0.30+cy*0.5+jy)*100, d:depth});
+    const col=i%cols, row=Math.floor(i/cols);
+    const inRow=Math.min(cols,n-row*cols);
+    const pad=(cols-inRow)*cellW/2;              // centre a short final row
+    const cx=x0+pad+(col+0.5)*cellW;
+    const cy=y0+(row+0.5)*cellH;
+    const jx=(Math.random()-0.5)*0.045, jy=(Math.random()-0.5)*0.05;
+    const depth=0.74+Math.random()*0.30;         // 0.74..1.04 — tighter range, less size chaos
+    pts.push({x:Math.max(9,Math.min(91,(cx+jx)*100)), y:(cy+jy)*100, d:depth});
   }
   return pts;
 }
 function bloomField(ready){
   const stage=$('cardStage');stage.style.display='block';stage.innerHTML='';cardEls=[];
+  const narrow=window.innerWidth<=760;
   const pts=scatter(ready.length);
   ready.forEach((r,i)=>{
-    const p=pts[i];
+    const p=pts[i];const baseZ=Math.round(p.d*100);   // nearer works paint over farther ones → depth, not clutter
     const el=document.createElement('div');el.className='work';
-    place(el,p.x,p.y);
+    place(el,p.x,p.y);el.style.zIndex=baseZ;
     el.style.transform=`translate(-50%,-50%) scale(${p.d*.7})`;el.style.opacity='0';el.style.filter='blur(12px)';
     el.dataset.depth=p.d;
     const im=r.img||new Image();if(!r.img)im.src=imgUrl(r.w.c,'full');
-    im.style.maxWidth=(15+p.d*9)+'vw';im.style.maxHeight=(20+p.d*12)+'vh';
+    im.style.maxWidth=(narrow?(23+p.d*8):(10.5+p.d*6))+'vw';
+    im.style.maxHeight=(narrow?(15+p.d*7.5):(14+p.d*7))+'vh';
     const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
     const cap=document.createElement('div');cap.className='cap';
     cap.innerHTML=`<b>${r.w.t}</b> · ${r.w.a}`;
     el.appendChild(fr);el.appendChild(cap);
     el.addEventListener('click',()=>claimCard(el,r.w));
-    el.addEventListener('mouseenter',()=>{el.style.transform=`translate(-50%,-50%) scale(${Math.min(1.05,p.d*1.05)})`;el.style.filter='none';});
-    el.addEventListener('mouseleave',()=>{if(!el.classList.contains('chosen'))el.style.transform=`translate(-50%,-50%) scale(${p.d})`;});
+    el.addEventListener('mouseenter',()=>{el.style.zIndex=200;el.style.transform=`translate(-50%,-50%) scale(${Math.min(1.06,p.d*1.06)})`;el.style.filter='none';});
+    el.addEventListener('mouseleave',()=>{if(!el.classList.contains('chosen')){el.style.zIndex=baseZ;el.style.transform=`translate(-50%,-50%) scale(${p.d})`;}});
     stage.appendChild(el);cardEls.push({el,p});
-    setTimeout(()=>{el.style.transform=`translate(-50%,-50%) scale(${p.d})`;el.style.opacity=(0.5+p.d*0.45);el.style.filter='blur(0)';},260+i*120);
+    setTimeout(()=>{el.style.transform=`translate(-50%,-50%) scale(${p.d})`;el.style.opacity=(0.55+p.d*0.4);el.style.filter='blur(0)';},240+i*110);
   });
 }
 function claimCard(el,w){
