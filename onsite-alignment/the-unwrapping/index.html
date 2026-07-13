@@ -306,6 +306,10 @@
     z-index:6;opacity:0;transition:opacity 1s var(--ease);padding:0 6vw;pointer-events:none}
   .instruct.show{opacity:1}
   .instruct p{font-family:var(--display);font-size:clamp(1.5rem,2vw,1.9rem);color:rgba(244,237,226,.82);line-height:1.45}
+  .instruct .from{font-family:var(--ui);font-weight:700;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(244,237,226,.5);margin-bottom:1.1rem}
+  /* choose reveal: the note gets its own centred moment, then the collection rises */
+  .instruct.center{top:50%;transform:translate(-50%,-50%);pointer-events:auto;max-width:640px}
+  .instruct #cRevealBtn{margin-top:2.6rem;pointer-events:auto}
 
   .loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:9;
     color:rgba(244,237,226,.5);font-family:var(--ui);letter-spacing:.24em;text-transform:uppercase;font-size:1rem}
@@ -347,6 +351,43 @@
   .cwrap .big em{font-style:italic;color:rgba(244,237,226,.74)}
   .cwrap .p{font-family:var(--ui);font-weight:300;font-size:1.2rem;line-height:1.6;
     color:rgba(244,237,226,.72);max-width:46ch;margin:1rem auto 2.6rem}
+
+  /* compose — curate step: the giver refines the composed collection before it's sent */
+  #cWrap.curating{justify-content:flex-start;max-width:1040px}
+  .cstep[data-cstep="curate"]{width:100%}
+  .cg-lead .chint{max-width:52ch;margin-left:auto;margin-right:auto}
+  .cg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1.4rem;
+    max-width:920px;margin:2.6rem auto 1.6rem;width:100%}
+  .cg-item{position:relative;opacity:0;transform:translateY(16px);
+    transition:opacity .6s var(--ease),transform .7s var(--slow)}
+  .cg-item.in{opacity:1;transform:none}
+  .cg-frame{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+    background:rgba(244,237,226,.045);border:1px solid rgba(244,237,226,.1);padding:.9rem;overflow:hidden}
+  .cg-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+    opacity:0;transition:opacity .6s var(--ease)}
+  .cg-img.loaded{opacity:1}
+  .cg-remove{position:absolute;top:.55rem;right:.55rem;width:2.3rem;height:2.3rem;border-radius:50%;
+    border:none;background:rgba(28,26,24,.72);color:var(--ivory-100);font-size:1.4rem;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;opacity:0;
+    transition:opacity .25s var(--ease),background .25s var(--ease);backdrop-filter:blur(4px)}
+  .cg-item:hover .cg-remove,.cg-remove:focus-visible{opacity:1}
+  .cg-remove:hover{background:rgba(181,53,42,.92)}
+  @media (hover:none){.cg-remove{opacity:.9}}
+  .cg-cap{margin-top:.7rem;font-family:var(--ui);font-weight:300;font-size:.88rem;
+    color:rgba(244,237,226,.5);text-align:left;line-height:1.4}
+  .cg-cap b{display:block;font-weight:500;font-style:normal;color:rgba(244,237,226,.88);font-size:.92rem}
+  .cg-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;margin:0 auto 2rem}
+  .cg-act{font-family:var(--ui);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    background:none;border:1px solid rgba(244,237,226,.35);color:var(--ivory-100);padding:.95rem 1.7rem;border-radius:2px;
+    cursor:pointer;transition:border-color .25s var(--ease),background .25s var(--ease),opacity .25s var(--ease),transform .18s var(--ease)}
+  .cg-act:hover:not(:disabled){border-color:var(--ivory-100);background:rgba(244,237,226,.06)}
+  .cg-act:active:not(:disabled){transform:scale(.97)}
+  .cg-act:disabled{opacity:.28;cursor:default}
+  .cg-count{font-family:var(--ui);font-weight:300;font-size:1.05rem;color:rgba(244,237,226,.6);display:flex;align-items:baseline;gap:.55rem}
+  .cg-count b{font-family:var(--display);font-weight:400;font-size:1.5rem;color:var(--ivory-100)}
+  .cg-count .cg-hint{font-size:.8rem;letter-spacing:.06em;color:rgba(244,237,226,.42)}
+  .btn:disabled,.btn.disabled{opacity:.32;pointer-events:none;transform:none}
+
   @media (max-width:760px){
     .moment .ds{display:none}
     .drop-series .ds-item img{height:8vh}
@@ -358,6 +399,10 @@
     .balance .lab{font-size:.72rem;letter-spacing:.18em}
     .instruct{top:18.5vh;max-width:92vw;padding:0 5vw}
     .instruct p{font-size:1.1rem;line-height:1.38}
+    .instruct.center{top:50%}
+    .cg-grid{gap:1.1rem}
+    .cg-remove{opacity:.9}
+    .cg-bar{gap:.7rem}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition-duration:.001ms !important;animation:none !important}
@@ -511,6 +556,21 @@
       <div class="copts" id="cQ3opts"></div>
     </div>
 
+    <div class="cstep" data-cstep="curate">
+      <div class="cg-lead">
+        <div class="eyebrow" id="cCurateEye">A collection for them</div>
+        <div class="chead">Shape the collection.</div>
+        <div class="chint">Composed from what you told us. Remove anything that doesn't fit, add more in the same spirit, or reshuffle for a fresh set — then it's theirs to choose from.</div>
+      </div>
+      <div class="cg-grid" id="cGrid"></div>
+      <div class="cg-bar">
+        <button class="cg-act" id="cAddBtn" type="button">Add more like these</button>
+        <button class="cg-act" id="cShuffleBtn" type="button">Shuffle</button>
+        <div class="cg-count"><b id="cCount">0</b><span>works</span><span class="cg-hint" id="cCountHint"></span></div>
+      </div>
+      <button class="btn" id="cCurateNext" type="button">These are the ones</button>
+    </div>
+
     <div class="cstep" data-cstep="note">
       <div class="chead">Say something, only to them.</div>
       <div class="chint">The first thing they'll read when the gift opens. Leave it, or make it yours.</div>
@@ -521,12 +581,12 @@
     <div class="cstep" data-cstep="seal">
       <div class="eyebrow">Sealed</div>
       <div class="big" id="cSealHead">It's ready.</div>
-      <p class="p">This is what they open on Christmas morning. You won't know which one they keep until they do.</p>
+      <p class="p" id="cSealP">This is what they open on Christmas morning. You won't know which one they keep until they do.</p>
       <button class="btn" id="cRun">Preview the unwrapping</button>
     </div>
   </div>
 
-  <div class="instruct" id="cInstruct"><div class="from" id="cFrom">Chosen for you</div><p id="cInstructP"></p></div>
+  <div class="instruct" id="cInstruct"><div class="from" id="cFrom">Chosen for you</div><p id="cInstructP"></p><button class="ghost" id="cRevealBtn" type="button" style="display:none">See the collection</button></div>
   <div id="chooseStage" style="position:absolute;inset:0;z-index:5;display:none"></div>
   <div class="meta" id="cMeta">
     <div class="t" id="ccT"></div><div class="a" id="ccA"></div>
@@ -1136,7 +1196,9 @@ const CHOOSE_POOL=[
   {c:"abr21",a:"Andrej Barov",t:"2001: Space Odyssey I",top:["dream","people"],col:["bold"]},
   {c:"aam01",a:"Andreas Amrhein",t:"Mephisto",top:["dream","people"],col:["warm"]},
 ];
-const cx={name:"",rel:"my friend",world:null,palette:null,temper:null,note:""};
+const cx={name:"",rel:"my friend",world:null,palette:null,temper:null,note:"",selected:[]};
+const cRemoved=new Set();
+const C_MIN=10, C_MAX=12;
 function cCap(s){s=(s||'').trim();return s?s[0].toUpperCase()+s.slice(1):'someone';}
 
 function initChoose(){
@@ -1144,7 +1206,7 @@ function initChoose(){
   $('chooseStage').style.display='none';$('chooseStage').innerHTML='';
   {const ci=$('cInstruct');hide(ci);ci.style.display='';ci.style.opacity='';}
   hide($('cMeta'));
-  cx.name='';cx.rel='my friend';cx.world=cx.palette=cx.temper=null;cx.note='';
+  cx.name='';cx.rel='my friend';cx.world=cx.palette=cx.temper=null;cx.note='';cx.selected=[];cRemoved.clear();
   $('cName').value='';$('cWhoNext').disabled=true;$('cNoteIn').value='';
   document.querySelectorAll('#cRel .vchip').forEach(x=>x.setAttribute('aria-pressed','false'));
   if(!$('cQ1opts').childElementCount){
@@ -1157,15 +1219,18 @@ function initChoose(){
 function cGo(step){
   document.querySelectorAll('#choose .cstep').forEach(s=>s.classList.remove('on'));
   const el=document.querySelector(`#choose [data-cstep="${step}"]`);if(el)el.classList.add('on');
+  $('cWrap').classList.toggle('curating',step==='curate');
+  if(step==='curate'){$('cCurateEye').textContent=`A collection for ${cCap(cx.name)}`;cComposeInitial();cRenderGrid();$('cWrap').scrollTop=0;}
   if(step==='note'&&!cx.note) $('cNoteIn').value=`${cCap(cx.name)}, I saw these and thought of you. I didn't want to pick for you, so I picked a few. The last choice is yours. Happy Christmas.`;
-  if(step==='seal') $('cSealHead').textContent=`A gift for ${cCap(cx.name)} is ready.`;
+  if(step==='seal'){$('cSealHead').textContent=`A collection for ${cCap(cx.name)} is ready.`;
+    $('cSealP').textContent=`${cx.selected.length} works, composed for ${cCap(cx.name)}. This is what they open on Christmas morning — the last choice is theirs.`;}
 }
 function cBuildOpts(host,items,key){
   host.innerHTML='';
   items.forEach(it=>{
     const b=document.createElement('button');b.className='copt';
     b.innerHTML=`<span class="cn">${it.n}</span><span class="cd">${it.d}</span>`;
-    b.addEventListener('click',()=>{cx[key]=it.k;const nx={world:'q2',palette:'q3',temper:'note'}[key];setTimeout(()=>cGo(nx),300);});
+    b.addEventListener('click',()=>{cx[key]=it.k;const nx={world:'q2',palette:'q3',temper:'curate'}[key];setTimeout(()=>cGo(nx),300);});
     host.appendChild(b);
   });
 }
@@ -1178,6 +1243,10 @@ $('cWhoNext').addEventListener('click',()=>cGo('q1'));
 $('cNoteIn').addEventListener('input',()=>cx.note=$('cNoteIn').value);
 $('cSeal').addEventListener('click',()=>{cx.note=$('cNoteIn').value||'';cGo('seal');});
 $('cRun').addEventListener('click',cRun);
+$('cAddBtn').addEventListener('click',cAddSimilar);
+$('cShuffleBtn').addEventListener('click',cShuffle);
+$('cCurateNext').addEventListener('click',()=>{if(cx.selected.length>=C_MIN)cGo('note');});
+$('cRevealBtn').addEventListener('click',cReveal);
 
 function cScore(){
   const tw=C_TMPW[cx.temper]||{top:{},col:{}};
@@ -1196,33 +1265,98 @@ function cPick(n){
   if(out.length<n)for(const {w} of r){if(!out.includes(w)){out.push(w);if(out.length>=n)break;}}
   return out;
 }
+
+/* ---- curate: the giver refines the composed collection before sending (min C_MIN to send) ---- */
+function cComposeInitial(){
+  const ranked=cScore();const out=[],per={};
+  for(const {w} of ranked){if(cRemoved.has(w.c))continue;const n=per[w.a]||0;if(n>=2)continue;out.push(w);per[w.a]=n+1;if(out.length>=C_MIN)break;}
+  if(out.length<C_MIN)for(const {w} of ranked){if(cRemoved.has(w.c)||out.includes(w))continue;out.push(w);if(out.length>=C_MIN)break;}
+  cx.selected=out;
+}
+function cAddSimilar(){
+  const ranked=cScore();
+  for(const {w} of ranked){if(cx.selected.length>=C_MAX)break;if(cRemoved.has(w.c)||cx.selected.includes(w))continue;cx.selected.push(w);}
+  cRenderGrid();
+}
+function cShuffle(){
+  cRemoved.clear();
+  const ranked=cScore(),top=ranked.slice(0,Math.min(24,ranked.length));
+  for(let i=top.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[top[i],top[j]]=[top[j],top[i]];}
+  const out=[],per={};
+  for(const {w} of top){const n=per[w.a]||0;if(n>=2)continue;out.push(w);per[w.a]=n+1;if(out.length>=C_MAX)break;}
+  if(out.length<C_MIN)for(const {w} of ranked){if(out.includes(w))continue;out.push(w);if(out.length>=C_MAX)break;}
+  cx.selected=out;cRenderGrid();
+}
+function cRemoveWork(code){
+  cRemoved.add(code);
+  cx.selected=cx.selected.filter(w=>w.c!==code);
+  cRenderGrid();
+}
+function cRenderGrid(){
+  const grid=$('cGrid');if(!grid)return;grid.innerHTML='';
+  cx.selected.forEach((w,i)=>{
+    const item=document.createElement('div');item.className='cg-item';
+    const fr=document.createElement('div');fr.className='cg-frame';
+    const im=new Image();im.className='cg-img';im.alt=w.t+' by '+w.a;
+    im.onload=()=>im.classList.add('loaded');im.src=imgUrl(w.c,'full');
+    fr.appendChild(im);
+    const rm=document.createElement('button');rm.className='cg-remove';rm.type='button';
+    rm.setAttribute('aria-label','Remove '+w.t);rm.innerHTML='&times;';
+    rm.addEventListener('click',e=>{e.stopPropagation();cRemoveWork(w.c);});
+    const cap=document.createElement('div');cap.className='cg-cap';cap.innerHTML=`<b>${w.t}</b>${w.a}`;
+    item.appendChild(fr);item.appendChild(rm);item.appendChild(cap);
+    grid.appendChild(item);
+    setTimeout(()=>item.classList.add('in'),40+i*45);
+  });
+  cUpdateGate();
+}
+function cUpdateGate(){
+  const n=cx.selected.length;
+  $('cCount').textContent=n;
+  const next=$('cCurateNext');next.disabled=n<C_MIN;next.classList.toggle('disabled',n<C_MIN);
+  $('cAddBtn').disabled=n>=C_MAX;
+  const hint=$('cCountHint');
+  if(hint)hint.textContent=n<C_MIN?`· add ${C_MIN-n} more to send`:(n>=C_MAX?'· the strongest matches':'· ready to send');
+}
+let cReadySet=[];
 async function cRun(){
   document.querySelectorAll('#choose .cstep').forEach(s=>s.classList.remove('on'));
+  $('cWrap').classList.remove('curating');
+  $('chooseStage').style.display='none';$('chooseStage').innerHTML='';
   $('cFrom').textContent=`Chosen for ${cCap(cx.name)}`;
-  $('cInstructP').textContent=cx.note?('“'+cx.note+'”'):'These were chosen with you in mind. Choose the one that becomes yours.';
-  const cands=cPick(6);
+  $('cInstructP').textContent=cx.note?('“'+cx.note+'”'):'These were chosen with you in mind — the last choice is yours.';
+  const cands=(cx.selected&&cx.selected.length)?cx.selected.slice():cPick(C_MIN);
   $('loaderTxt').textContent='Composing the collection…';$('loader').style.display='flex';
-  const ready=(await Promise.all(cands.map(loadWork))).filter(r=>r.ok).slice(0,4);
+  cReadySet=(await Promise.all(cands.map(loadWork))).filter(r=>r.ok);
   $('loader').style.display='none';
-  cReveal(ready.length?ready:[]);
+  // the personal note gets its own moment; the collection rises when they're ready
+  const ci=$('cInstruct');ci.style.display='';ci.classList.add('center');$('cRevealBtn').style.display='';show(ci);
 }
-const C_POS=[[22,54],[43,70],[62,52],[81,68]];
-function cReveal(ready){
+function cReveal(){
+  if(!cReadySet.length)return;
+  const ci=$('cInstruct');ci.classList.remove('center','show');ci.style.opacity='0';
+  setTimeout(()=>{ci.style.display='none';},800);
   const stage=$('chooseStage');stage.style.display='block';stage.innerHTML='';
+  const narrow=window.innerWidth<=760;
+  const ready=narrow?cReadySet.slice(0,6):cReadySet;   // mobile: a clean subset of the curated set fits the field
+  const pts=scatter(ready.length);
   ready.forEach((r,i)=>{
-    const p=C_POS[i]||[50,50];
+    const p=pts[i]||{x:50,y:50,d:1};const baseZ=Math.round(p.d*100);
     const el=document.createElement('div');el.className='work';
-    place(el,p[0],p[1]);el.style.transform='translate(-50%,-50%) translateY(70px) scale(.92)';el.style.opacity='0';el.style.filter='blur(10px)';
+    place(el,p.x,p.y);el.style.zIndex=baseZ;
+    el.style.transform=`translate(-50%,-50%) scale(${p.d*.7})`;el.style.opacity='0';el.style.filter='blur(12px)';
     const im=r.img||new Image();if(!r.img)im.src=imgUrl(r.w.c,'full');
-    im.style.maxWidth='26vw';im.style.maxHeight='46vh';im.alt=r.w.t+' by '+r.w.a;
+    im.style.maxWidth=(narrow?(23+p.d*8):(10.5+p.d*6))+'vw';
+    im.style.maxHeight=(narrow?(15+p.d*7.5):(14+p.d*7))+'vh';im.alt=r.w.t+' by '+r.w.a;
     const fr=document.createElement('div');fr.className='frame';fr.appendChild(im);
     const cap=document.createElement('div');cap.className='cap';cap.innerHTML=`<b>${r.w.t}</b> · ${r.w.a}`;
     el.appendChild(fr);el.appendChild(cap);
     el.addEventListener('click',()=>cChooseWork(el,r.w));
+    el.addEventListener('mouseenter',()=>{el.style.zIndex=200;el.style.transform=`translate(-50%,-50%) scale(${Math.min(1.06,p.d*1.06)})`;el.style.filter='none';});
+    el.addEventListener('mouseleave',()=>{if(!el.classList.contains('chosen')){el.style.zIndex=baseZ;el.style.transform=`translate(-50%,-50%) scale(${p.d})`;}});
     stage.appendChild(el);
-    setTimeout(()=>{el.style.transform='translate(-50%,-50%) translateY(0) scale(1)';el.style.opacity='1';el.style.filter='blur(0)';},420+i*600);
+    setTimeout(()=>{el.style.transform=`translate(-50%,-50%) scale(${p.d})`;el.style.opacity=(0.55+p.d*0.4);el.style.filter='blur(0)';},240+i*110);
   });
-  setTimeout(()=>show($('cInstruct')),420+ready.length*600+300);
 }
 function cChooseWork(el,w){
   {const ci=$('cInstruct');ci.classList.remove('show');ci.style.opacity='0';setTimeout(()=>ci.style.display='none',650);}
