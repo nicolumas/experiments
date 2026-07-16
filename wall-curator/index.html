@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Curate your quartet · LUMAS Petites &amp; Darlings</title>
 <meta name="description" content="Build a gallery wall from LUMAS Petites and Darlings — choose four small-format artworks, arrange them, and enjoy one free." />
@@ -309,6 +313,16 @@ a{color:inherit;text-decoration:none}
 .piece:hover .remove{opacity:1}
 .piece .remove svg{width:13px;height:13px;color:var(--text-inverse)}
 .canvas .complete-pill{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:8;background:var(--surface-inverse);color:var(--text-inverse);padding:6px 12px;border-radius:var(--radius-xs)}
+/* magnetic alignment guides shown while dragging a piece */
+.wall-zone .snap-guide{position:absolute;background:rgba(28,26,24,.55);z-index:6;pointer-events:none;display:none}
+.wall-zone .snap-guide.v{top:-5%;bottom:-5%;width:1px;transform:translateX(-50%)}
+.wall-zone .snap-guide.h{left:-5%;right:-5%;height:1px;transform:translateY(-50%)}
+.wall-zone .snap-guide.on{display:block}
+.piece.grabbing .frame{box-shadow:var(--shadow-lg)}
+/* Surprise me button */
+.surprise-btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:var(--radius-xs);padding:8px 14px;color:var(--text-primary);background:var(--surface-card);white-space:nowrap;transition:background .18s,color .18s,border-color .18s}
+.surprise-btn:hover{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.surprise-btn svg{width:15px;height:15px}
 
 /* ============================================================ QUARTET BUILDER */
 .quartet{margin-top:var(--sp-8);background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-xs)}
@@ -417,25 +431,69 @@ a{color:inherit;text-decoration:none}
 @media(max-width:440px){.modal{padding:var(--sp-8) var(--sp-5)}}
 
 /* ============================================================ MOBILE */
-@media(max-width:760px){
-  .hero{padding:var(--sp-8) 0}
+/* ============================================================ TOUCH & NARROW
+   Layout adapts at ≤900px (covers phones + tablet portrait, closing the old
+   768px gap). Interaction affordances key off the .touch class (JS-detected),
+   which is reliable across touch tablets that also expose a pointer. */
+@media(max-width:900px){
+  .hero{padding:var(--sp-6) 0}
   .offer .sub{display:none}
-  .canvas{aspect-ratio:4/3}
-  .piece{width:26%}
-  .room-switch{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .room-switch::-webkit-scrollbar{display:none}
-  .room-switch button{white-space:nowrap;flex-shrink:0}
-  .card .add{padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-xs)}
-  .card .add:disabled{border-color:var(--border-subtle)}
+  .canvas{aspect-ratio:4/3;margin-top:var(--sp-4)}
+  .piece{width:24%}
+  .canvas .complete-pill{bottom:auto;top:10px;white-space:nowrap}
   .summary .btn-primary{width:100%}
-  .canvas .complete-pill{bottom:auto;top:12px;white-space:nowrap}
+  /* room switcher wraps instead of clipping "Office" */
+  .room-switch{flex-wrap:wrap;max-width:72%;gap:3px}
+  .room-switch button{white-space:nowrap}
+  .curator{padding-bottom:var(--sp-8)}
+
+  /* tray → fixed bottom dock, so the wall and the tray stay co-visible */
+  .tray{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;background:var(--surface-card);border-top:1px solid var(--border-default);box-shadow:0 -10px 30px rgba(28,26,24,.14);padding:6px var(--sp-4) calc(10px + env(safe-area-inset-bottom));transition:transform .3s cubic-bezier(.2,.8,.25,1)}
+  .tray::before{content:"";display:block;width:36px;height:4px;border-radius:999px;background:var(--border-strong);margin:0 auto 8px}
+  .tray.dock-hidden{transform:translateY(115%)}
+  .tray-head{gap:8px;margin-bottom:8px}
+  .tray-head>div:first-child{display:none} /* hide eyebrow + hint in the dock */
+  .tray-controls{width:100%;gap:8px;flex-wrap:nowrap;justify-content:space-between}
+  .tray-arrows{display:none} /* swipe the rail instead */
+  .surprise-btn{flex:0 0 auto}
+  .filters{flex:1;justify-content:center}
+  .filter{flex:1;text-align:center;padding:8px 4px}
+  .tray-carousel{margin-top:0;gap:10px;scroll-snap-type:x proximity;padding-bottom:0}
+
+  /* small, image-forward cards — several visible at once, whole card taps to add */
+  .tray-carousel .card{flex:0 0 128px;flex-direction:column;gap:0;padding:0;overflow:hidden;cursor:pointer}
+  .card .thumb{width:100%;height:112px;background:var(--surface-sunken);padding:8px}
+  .card .thumb img{object-fit:contain}
+  .card .meta{padding:8px}
+  .card .meta .eyebrow,.card .meta .artist,.card .meta .caption{display:none}
+  .card .meta .title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.8125rem}
+  .card .row{padding-top:4px}
+  .card .add{display:none} /* tap the card instead */
+  .card.selected{border-color:var(--text-primary)}
+  .card .grip{display:none}
+  .frame-row{margin-top:6px;justify-content:flex-start}
+  .frame-row .caption{display:none}
+  .frame-swatches{gap:8px}
+  .frame-swatch{width:20px;height:20px}
 }
-/* touch devices have no hover — keep remove controls visible */
+@media(max-width:420px){
+  .tray-carousel .card{flex-basis:118px}
+  .card .thumb{height:104px}
+}
+
+/* interaction affordances driven by real touch capability (reliable on hybrid tablets) */
+.touch .piece .remove{opacity:1}
+.touch .slot .rm{opacity:1;background:color-mix(in srgb,var(--surface-card) 92%,transparent)}
+.touch .card .grip{display:none}
 @media(hover:none){
   .piece .remove{opacity:1}
   .slot .rm{opacity:1;background:color-mix(in srgb,var(--surface-card) 92%,transparent)}
   .card .grip{display:none}
 }
+
+/* subtle entrance when a piece is hung (tap-to-place feedback) */
+@keyframes pieceIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.piece.enter{animation:pieceIn .34s cubic-bezier(.2,.85,.3,1)}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
@@ -520,7 +578,7 @@ a{color:inherit;text-decoration:none}
 <div class="offer">
   <div class="wrap offer-inner">
     <span class="ui-label t-inv lead">Buy 3 · Get 1 Free</span>
-    <span class="body-small sub">Choose four Petites or four Darlings — one collection per set. The lowest-priced artwork is free.</span>
+    <span class="body-small sub">Choose any four Petites or Darlings — mix them freely. The lowest-priced artwork is free.</span>
   </div>
 </div>
 
@@ -548,9 +606,13 @@ a{color:inherit;text-decoration:none}
     <div class="tray-head">
       <div>
         <span class="eyebrow t-3">Artwork tray</span>
-        <p class="body-small t-2" id="trayHint" style="margin-top:4px">Drag a piece onto the wall, or tap Add. One collection per quartet.</p>
+        <p class="body-small t-2" id="trayHint" style="margin-top:4px">Drag onto the wall or tap Add. Mix Petites &amp; Darlings freely — any four, lowest-priced free.</p>
       </div>
       <div class="tray-controls">
+        <button type="button" id="surpriseBtn" class="surprise-btn ui-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3 1.9 4.8L18.8 9l-4.1 3.4 1.4 5.1L12 14.8 7.9 17.5l1.4-5.1L5.2 9l4.9-1.2Z"/></svg>
+          Surprise me
+        </button>
         <div class="filters" id="filters" role="group" aria-label="Filter collection"></div>
         <div class="tray-arrows">
           <button type="button" id="trayPrev" aria-label="Previous artworks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -722,21 +784,27 @@ a{color:inherit;text-decoration:none}
     "room-office":  '<div class="fn fn-chair-back"></div><div class="fn fn-chair"></div><div class="fn fn-desk"></div>'
   };
 
-  var FILTERS = [ {id:"petite",label:"Petites"}, {id:"darling",label:"Darlings"} ];
+  var FILTERS = [ {id:"all",label:"All"}, {id:"petite",label:"Petites"}, {id:"darling",label:"Darlings"} ];
 
   var FAQS = [
-    { q:"How does Buy 3, Get 1 Free work?", a:"Select four artworks from one collection — four Petites or four Darlings. At checkout the lowest-priced artwork in your quartet is automatically free — no code required." },
-    { q:"Can I mix Petites and Darlings?", a:"No — each quartet is built within a single collection. Choose four Petites or four Darlings; the offer applies per set." },
+    { q:"How does Buy 3, Get 1 Free work?", a:"Choose any four small-format artworks — Petites, Darlings, or a mix of both. At checkout the lowest-priced piece in your quartet is automatically free — no code required." },
+    { q:"Can I mix Petites and Darlings?", a:"Yes — mix them freely. Any four artworks form a quartet, and Buy 3, Get 1 Free applies right across both collections." },
     { q:"Are frames included?", a:"Each artwork is supplied gallery-ready with its specified framing. Framing details appear on every artwork card." },
     { q:"What gift packaging is available?", a:"Every Petite arrives in complimentary gift packaging. Darlings can be upgraded with our premium gift box during curation." }
   ];
 
   var MAX = 4;
   var GIFT_BOX_PRICE = 9.99;
-  var DEFAULT_SPOTS = [ {x:30,y:26}, {x:64,y:26}, {x:30,y:76}, {x:64,y:76} ];
 
   /* ============================================================ STATE */
-  var state = { filter:"petite", room:"living", pieces:[], giftBox:false, giftColor:"purple", giftAsked:false, cart:0, frames:{} };
+  var state = { filter:"all", room:"living", pieces:[], giftBox:false, giftColor:"purple", giftAsked:false, cart:0, frames:{}, enterId:null };
+  var isTouch = function(){ return document.documentElement.classList.contains("touch"); };
+  function scrollWallIntoView(){
+    if(!isTouch()) return;
+    var c=$("#canvas"); if(!c) return;
+    var y=c.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top:Math.max(0,y), behavior:"smooth" });
+  }
 
   /* ============================================================ HELPERS */
   var fmt = function(n){ return new Intl.NumberFormat("en-GB",{style:"currency",currency:"EUR",minimumFractionDigits:0,maximumFractionDigits:2}).format(n); };
@@ -744,9 +812,6 @@ a{color:inherit;text-decoration:none}
   // Darlings ship framed: passepartout + choice of white/brown/black frame
   var FRAME_COLORS = { white:"#EFEAE2", brown:"#5E4531", black:"#262220" };
   var frameOf = function(id){ return state.frames[id] || "white"; };
-  // One collection per quartet: the first pick locks the set to Petites OR Darlings
-  var COLLECTION_LABEL = { petite:"Petites", darling:"Darlings" };
-  var setCollection = function(){ return state.pieces.length ? (byId(state.pieces[0].id)||{}).collection || null : null; };
 
   // Darlings gift boxes — no product photography in the feed, so the boxes are
   // drawn as inline SVG renders (slim box, LUMAS wordmark, soft shadow)
@@ -803,29 +868,99 @@ a{color:inherit;text-decoration:none}
     return sel.reduce(function(min,a){ return a.price < min.price ? a : min; }, sel[0]).id;
   };
 
+  /* ============================================================ HANGING RULES
+     Default hangs follow gallery rules: aligned centerlines, even gaps, group
+     centred in the wall zone. Sizes adapt to each room so rows never collide. */
+  var ratioOf = function(a){ return (a && a.cm) ? a.cm[1]/a.cm[0] : 1; }; // height/width
+  var PIECE_W = 0.18; // piece width as fraction of wall-zone width (matches .piece CSS)
+  function zoneDims(){
+    var z=$("#wallZone"); var r=z?z.getBoundingClientRect():null;
+    return { w:(r&&r.width)?r.width:600, h:(r&&r.height)?r.height:340 };
+  }
+  function relayout(){
+    var P=state.pieces, n=P.length; if(!n) return;
+    var Z=zoneDims(), pw=Z.w*PIECE_W;
+    var hPct=function(p){ return (pw*ratioOf(byId(p.id))/Z.h)*100; }; // piece height, % of zone
+    if(n===1){ P[0].x=50; P[0].y=50; return; }
+    if(n===2){ P[0].x=31;P[0].y=50; P[1].x=69;P[1].y=50; return; }
+    if(n===3){ P[0].x=22;P[0].y=50; P[1].x=50;P[1].y=50; P[2].x=78;P[2].y=50; return; }
+    // 4 → balanced 2×2: shared column centres, each row on a shared centreline
+    var topH=Math.max(hPct(P[0]),hPct(P[1])), botH=Math.max(hPct(P[2]),hPct(P[3]));
+    var gap=7, D=topH/2 + gap + botH/2;
+    var y1=clamp(50 - D/2, 8, 92), y2=clamp(50 + D/2, 8, 92);
+    P[0].x=30;P[0].y=y1; P[1].x=70;P[1].y=y1; P[2].x=30;P[2].y=y2; P[3].x=70;P[3].y=y2;
+  }
+
+  /* magnetic snapping — pull a dragged piece onto column thirds, the centre,
+     or any sibling's centreline; return guide coordinates for the overlay */
+  var SNAP = 2.6;
+  function applySnap(selfId, x, y){
+    var xs=[30,50,70], ys=[50];
+    state.pieces.forEach(function(p){ if(p.id!==selfId){ xs.push(p.x); ys.push(p.y); } });
+    var gx=null,gy=null,bdx=SNAP,bdy=SNAP;
+    xs.forEach(function(v){ var d=Math.abs(x-v); if(d<bdx){bdx=d;gx=v;} });
+    ys.forEach(function(v){ var d=Math.abs(y-v); if(d<bdy){bdy=d;gy=v;} });
+    return { x:gx!==null?gx:x, y:gy!==null?gy:y, gx:gx, gy:gy };
+  }
+  function ensureGuides(){
+    var z=$("#wallZone"); if(z.querySelector(".snap-guide")) return;
+    var v=document.createElement("div"); v.className="snap-guide v"; z.appendChild(v);
+    var h=document.createElement("div"); h.className="snap-guide h"; z.appendChild(h);
+  }
+  function showGuides(gx,gy){
+    ensureGuides();
+    var v=$("#wallZone .snap-guide.v"), h=$("#wallZone .snap-guide.h");
+    if(gx!==null){ v.style.left=gx+"%"; v.classList.add("on"); } else v.classList.remove("on");
+    if(gy!==null){ h.style.top=gy+"%"; h.classList.add("on"); } else h.classList.remove("on");
+  }
+  function hideGuides(){ var g=document.querySelectorAll("#wallZone .snap-guide"); Array.prototype.forEach.call(g,function(e){e.classList.remove("on");}); }
+
+  /* curated quartets that sit well together — surfaced via "Surprise me" */
+  var CURATED_SETS = [
+    { name:"Coastal light",  ids:["p1","p5","d5","p2"] },
+    { name:"Modern icons",   ids:["d3","d2","p6","d6"] },
+    { name:"Bold & graphic", ids:["p3","p4","d1","d2"] },
+    { name:"Italian escape", ids:["d5","p2","p1","d4"] },
+    { name:"Blue hour",      ids:["p5","d4","p3","d6"] },
+    { name:"Curator's mix",  ids:["p1","d2","p3","d3"] }
+  ];
+  var lastSurprise = -1;
+  function surpriseMe(){
+    var i; do { i=Math.floor(Math.random()*CURATED_SETS.length); } while (CURATED_SETS.length>1 && i===lastSurprise);
+    lastSurprise=i; var set=CURATED_SETS[i];
+    state.pieces = set.ids.map(function(id){ return {id:id,x:50,y:50}; });
+    state.giftAsked = false; state.enterId = "*";
+    relayout(); render();
+    scrollWallIntoView();
+    toast("Surprise me · " + set.name, "A curated quartet, arranged and ready.");
+  }
+
   /* ============================================================ MUTATIONS */
+  // drop from tray at a point — snaps magnetically to alignment, mixing allowed
   function place(id,x,y){
     var existing = state.pieces.filter(function(p){return p.id===id;})[0];
-    if (existing){ existing.x=x; existing.y=y; render(); return; }
-    var art = byId(id);
-    var setCol = setCollection();
-    if (setCol && art && art.collection !== setCol){
-      toast("One collection per quartet — this set is " + COLLECTION_LABEL[setCol] + ".", "Petites and Darlings can't be combined in the same set.");
-      return;
-    }
+    if (existing){ var s=applySnap(id,x,y); existing.x=s.x; existing.y=s.y; render(); return; }
     if (isFull()){ toast("Your quartet is full — remove a piece to add another."); return; }
-    state.pieces.push({id:id,x:x,y:y});
+    var sn = applySnap(null,x,y);
+    state.pieces.push({id:id,x:sn.x,y:sn.y});
+    state.enterId=id;
     render();
   }
   function remove(id){
     state.pieces = state.pieces.filter(function(p){return p.id!==id;});
+    relayout();
     if (!selectedArtworks().some(function(a){return a.collection==="darling";})) state.giftBox=false;
     render();
   }
+  // tap-Add (and remove) — auto-arranges into the aligned default hang
   function toggle(id){
     if (selectedIds().indexOf(id) > -1){ remove(id); return; }
-    var spot = DEFAULT_SPOTS[state.pieces.length] || {x:50,y:50};
-    place(id, spot.x, spot.y);
+    if (isFull()){ toast("Your quartet is full — remove a piece to add another."); return; }
+    state.pieces.push({id:id,x:50,y:50});
+    state.enterId=id;
+    relayout();
+    render();
+    scrollWallIntoView();
   }
 
   /* ============================================================ ROOM SELECTOR */
@@ -885,16 +1020,10 @@ a{color:inherit;text-decoration:none}
     var list = $("#trayList"); var keepScroll = list.scrollLeft; list.innerHTML="";
     var sel = selectedIds();
     var full = isFull();
-    var setCol = setCollection();
-    var hint = $("#trayHint");
-    if (hint) hint.textContent = setCol
-      ? "Your set: " + COLLECTION_LABEL[setCol] + " — one collection per quartet."
-      : "Drag a piece onto the wall, or tap Add. One collection per quartet.";
-    ARTWORKS.filter(function(a){ return a.collection===state.filter; })
+    ARTWORKS.filter(function(a){ return state.filter==="all" || a.collection===state.filter; })
     .forEach(function(a){
       var isSel = sel.indexOf(a.id) > -1;
-      var locked = !!setCol && a.collection !== setCol;
-      var canDrag = isSel || (!full && !locked);
+      var canDrag = isSel || !full;
       var card = document.createElement("div");
       card.className = "card" + (isSel?" selected":"") + (canDrag?"":" disabled");
       card.setAttribute("draggable", String(canDrag));
@@ -930,6 +1059,13 @@ a{color:inherit;text-decoration:none}
         card.classList.add("dragging");
       });
       card.addEventListener("dragend", function(){ card.classList.remove("dragging"); });
+      // touch: the whole card is the tap target (tap-to-place)
+      if (isTouch()){
+        card.addEventListener("click", function(e){
+          if (e.target.closest("[data-swatch]") || e.target.closest("[data-add]")) return;
+          toggle(a.id);
+        });
+      }
       list.appendChild(card);
     });
 
@@ -971,7 +1107,7 @@ a{color:inherit;text-decoration:none}
       var art = byId(p.id); if(!art) return;
       var isFree = fid === p.id;
       var el = document.createElement("div");
-      el.className = "piece"; el.dataset.id = p.id;
+      el.className = "piece" + ((state.enterId==="*"||state.enterId===p.id)?" enter":""); el.dataset.id = p.id;
       el.style.left = p.x + "%"; el.style.top = p.y + "%";
       el.innerHTML =
         (art.collection==="darling"
@@ -984,14 +1120,17 @@ a{color:inherit;text-decoration:none}
       el.addEventListener("pointerdown", function(e){
         if (e.target.closest(".remove")) return;
         e.preventDefault();
-        el.classList.add("grabbing"); el.setPointerCapture && el.setPointerCapture(e.pointerId);
+        el.classList.add("grabbing"); try{ el.setPointerCapture && el.setPointerCapture(e.pointerId); }catch(_){}
         var moveHandler = function(ev){
           var pt = pointToWallPct(ev.clientX, ev.clientY);
-          p.x = pt.x; p.y = pt.y;
+          var sn = applySnap(p.id, pt.x, pt.y);
+          p.x = sn.x; p.y = sn.y;
           el.style.left = p.x + "%"; el.style.top = p.y + "%";
+          showGuides(sn.gx, sn.gy);
         };
         var upHandler = function(ev){
           el.classList.remove("grabbing");
+          hideGuides();
           window.removeEventListener("pointermove", moveHandler);
           window.removeEventListener("pointerup", upHandler);
         };
@@ -1001,6 +1140,7 @@ a{color:inherit;text-decoration:none}
       el.querySelector(".remove").addEventListener("click", function(e){ e.stopPropagation(); remove(p.id); });
       zone.appendChild(el);
     });
+    state.enterId = null;
 
     // completion pill
     var existingPill = $("#canvas .complete-pill"); if (existingPill) existingPill.remove();
@@ -1032,11 +1172,7 @@ a{color:inherit;text-decoration:none}
     var darlings = sel.filter(function(a){return a.collection==="darling";});
     var hasDarlings = darlings.length > 0;
 
-    var setCol = setCollection();
-    var colLabel = setCol ? COLLECTION_LABEL[setCol] : null;
-    $("#qTitle").textContent = complete
-      ? (colLabel ? colLabel + " quartet complete" : "Quartet complete")
-      : (colLabel ? "Build your " + colLabel + " quartet" : "Build your quartet");
+    $("#qTitle").textContent = complete ? "Quartet complete" : "Build your quartet";
     $("#qCount").textContent = count + "/4";
 
     var dots = $("#qDots"); dots.innerHTML="";
@@ -1076,10 +1212,9 @@ a{color:inherit;text-decoration:none}
     var promo = $("#promo");
     promo.classList.toggle("on", complete);
     var remaining = MAX - count;
-    var noun = colLabel ? (remaining===1 ? colLabel.slice(0,-1) : colLabel) : (remaining===1 ? "artwork" : "artworks");
     $("#promoMsg").textContent = complete
       ? "Buy 3, Get 1 Free applied — your lowest-priced artwork is free."
-      : "Add " + remaining + " more " + noun + " to unlock 1 free.";
+      : "Add " + remaining + " more " + (remaining===1?"artwork":"artworks") + " to unlock 1 free.";
 
     // gift option
     var giftOpt = $("#giftOpt"), giftBox = $("#giftBox"), giftHint = $("#giftHint");
@@ -1089,7 +1224,7 @@ a{color:inherit;text-decoration:none}
     giftBox.checked = state.giftBox && hasDarlings;
     giftHint.textContent = hasDarlings
       ? "Applies to " + darlings.length + " selected " + (darlings.length===1?"Darling":"Darlings") + "."
-      : (setCol==="petite" ? "Available for Darlings quartets." : "Select a Darling to upgrade its packaging.");
+      : "Add a Darling to your set to upgrade its packaging.";
 
     // summary
     var subtotal = sel.reduce(function(sum,a){return sum+a.price;},0);
@@ -1158,13 +1293,31 @@ a{color:inherit;text-decoration:none}
 
   /* ============================================================ INIT */
   function init(){
+    // reliable touch detection (before first render, so tap-to-place wires up)
+    if (('ontouchstart' in window) || (navigator.maxTouchPoints>0) || (window.matchMedia && matchMedia('(pointer:coarse)').matches)){
+      document.documentElement.classList.add("touch");
+      var h2=$(".section-head h2"); if(h2) h2.textContent="Tap to add art to your wall, then drag to arrange";
+      var dh=$("#dropHint .pill p"); if(dh) dh.textContent="Tap a piece below to hang it on the wall";
+    }
+
     renderRoomSwitch(); renderRoom();
     renderFilters(); renderFaq(); wireCanvasDnD();
     render();
 
+    // bottom dock hides once you scroll past the wall (into checkout / editorial)
+    function updateDock(){
+      var tray=$(".tray"), c=$("#canvas"); if(!tray||!c) return;
+      tray.classList.toggle("dock-hidden", c.getBoundingClientRect().bottom < 140);
+    }
+    var dockTick=false;
+    window.addEventListener("scroll", function(){ if(!dockTick){ dockTick=true; requestAnimationFrame(function(){ updateDock(); dockTick=false; }); } }, {passive:true});
+    window.addEventListener("resize", updateDock);
+    updateDock();
+
     var trayScroll = function(dir){ $("#trayList").scrollBy({left:dir*624, behavior:"smooth"}); };
     $("#trayPrev").addEventListener("click", function(){ trayScroll(-1); });
     $("#trayNext").addEventListener("click", function(){ trayScroll(1); });
+    $("#surpriseBtn").addEventListener("click", surpriseMe);
 
     // checking the box opens the colour popup; the popup confirms the upgrade
     $("#giftBox").addEventListener("change", function(e){
@@ -1178,14 +1331,16 @@ a{color:inherit;text-decoration:none}
       $("#cartCount").hidden = state.cart === 0;
       var fid = freeId(); var free = fid ? byId(fid) : null;
       var boxName = (GIFT_BOXES.filter(function(b){return b.id===state.giftColor;})[0]||{}).name;
-      var boxNote = (state.giftBox && setCollection()==="darling") ? (" " + boxName + " gift boxes included.") : "";
+      var hasDarling = selectedArtworks().some(function(a){return a.collection==="darling";});
+      var boxNote = (state.giftBox && hasDarling) ? (" " + boxName + " gift boxes included.") : "";
       toast("Quartet added to cart", (free ? (free.title + " is on us — enjoy your free artwork.") : "") + boxNote);
     }
 
     $("#addCart").addEventListener("click", function(){
       if (state.pieces.length < MAX) return;
-      // upsell moment: a Darlings quartet without boxes gets the popup once
-      if (setCollection()==="darling" && !state.giftBox && !state.giftAsked){
+      // upsell moment: any set containing a Darling, without boxes, gets the popup once
+      var hasDarling = selectedArtworks().some(function(a){return a.collection==="darling";});
+      if (hasDarling && !state.giftBox && !state.giftAsked){
         state.giftAsked = true;
         openGiftModal(true);
         return;
