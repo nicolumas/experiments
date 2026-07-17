@@ -446,23 +446,21 @@ a{color:inherit;text-decoration:none}
 
 /* ===== MOBILE + TABLET-PORTRAIT (≤900px): room-first, slim bar, on-demand sheet ===== */
 @media(max-width:900px){
-  .hero{padding:var(--sp-4) 0 var(--sp-3)}
-  .hero p{display:none}                /* room-first: trim hero copy */
-  .hero h1{font-size:2rem}
-  .offer .sub{display:none}
-  .section-head{display:none}          /* room-first: drop the heading clutter */
+  /* immersive stage: drop the marketing chrome so the room IS the screen */
+  .topbar,.hero,.offer,.section-head{display:none}
   body{padding-bottom:78px}            /* clear the fixed action bar */
 
-  /* full-bleed square room = big art, room as the hero */
-  .canvas{aspect-ratio:1/1;margin:var(--sp-2) calc(-1 * var(--sp-5)) 0;border:0;border-radius:0}
-  .canvas .room-photo{object-position:center 40%}
-  .piece{width:32%}
-  .canvas .complete-pill{display:none} /* the action bar already says "4/4 · complete" */
-  .room-switch{flex-wrap:wrap;max-width:76%;gap:3px}
-  .room-switch button{white-space:nowrap}
+  /* room fills the viewport between the nav and the action bar */
+  .curator{padding-top:0;padding-bottom:var(--sp-4)}
+  .canvas{height:calc(100dvh - 148px);min-height:360px;margin:0 calc(-1 * var(--sp-5));border:0;border-radius:0}
+  .canvas .room-photo{object-position:center 38%}
+  .piece{width:34%}
+  .canvas .complete-pill{display:none}
+  .room-switch{left:10px;bottom:10px;flex-wrap:nowrap;overflow-x:auto;max-width:calc(100% - 20px);gap:4px;padding:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .room-switch::-webkit-scrollbar{display:none}
+  .room-switch button{white-space:nowrap;flex:0 0 auto}
   .drop-hint{pointer-events:auto}
   .drop-hint .pill{cursor:pointer}
-  .curator{padding-bottom:var(--sp-4)}
   .summary .btn-primary{width:100%}
 
   /* slim persistent action bar — the calm primary control */
@@ -504,8 +502,9 @@ a{color:inherit;text-decoration:none}
 }
 
 /* interaction affordances driven by real touch capability (reliable on hybrid tablets) */
-.touch .piece .remove{opacity:1;width:30px;height:30px}
-.touch .piece .remove::before{content:"";position:absolute;inset:-9px} /* ~48px hit area */
+.touch .piece .remove{opacity:1;width:24px;height:24px;background:rgba(28,26,24,.62)}
+.touch .piece .remove svg{width:11px;height:11px}
+.touch .piece .remove::before{content:"";position:absolute;inset:-12px} /* ~48px hit area */
 .touch .slot .rm{opacity:1;background:color-mix(in srgb,var(--surface-card) 92%,transparent)}
 .touch .card .grip{display:none}
 @media(hover:none){
@@ -877,7 +876,15 @@ a{color:inherit;text-decoration:none}
     if(!cta) return;
     if(cnt) cnt.textContent = n + "/4";
     if(n<MAX){ cta.textContent = n===0 ? "Add artwork" : "Add " + (MAX-n) + " more"; if(sub) sub.textContent="Buy 3, get 1 free"; }
-    else { cta.textContent = "Add all to cart"; if(sub) sub.textContent="Quartet complete"; }
+    else {
+      cta.textContent = "Add all to cart";
+      var sel=selectedArtworks(), fid=freeId();
+      var subtotal=sel.reduce(function(s,a){return s+a.price;},0);
+      var discount=fid?(byId(fid)?byId(fid).price:0):0;
+      var darl=sel.filter(function(a){return a.collection==="darling";});
+      var giftTotal=(state.giftBox&&darl.length)?darl.length*GIFT_BOX_PRICE:0;
+      if(sub) sub.textContent = fmt(subtotal-discount+giftTotal) + " · 1 free";
+    }
   }
 
   /* ============================================================ HELPERS */
