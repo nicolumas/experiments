@@ -12,40 +12,114 @@
   <style>
     :root {
       --charcoal: #1c1b19;
+      --raise: #262420;
       --ivory: #f4f1ea;
       --bone: #d8d2c6;
       --muted: #9a958b;
       --line: rgba(244, 241, 234, 0.14);
+      --line-soft: rgba(244, 241, 234, 0.08);
       --disp: 'UtileDisplay', Georgia, serif;
       --sans: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0; min-height: 100vh; background: var(--charcoal); color: var(--ivory);
       font-family: var(--sans);
       -webkit-font-smoothing: antialiased; line-height: 1.5;
     }
-    .wrap { max-width: 920px; margin: 0 auto; padding: clamp(2.5rem, 6vw, 6rem) 1.5rem 5rem; }
-    header { margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+    .wrap { max-width: 940px; margin: 0 auto; padding: clamp(2.5rem, 6vw, 6rem) 1.5rem 5rem; }
+
+    /* ---- Masthead ---- */
+    header { margin-bottom: clamp(1.75rem, 4vw, 2.75rem); }
     .eyebrow { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem; }
     h1 { font-family: var(--disp); font-size: clamp(2.4rem, 5.5vw, 3.9rem); font-weight: 400; letter-spacing: -0.01em; line-height: 1.04; margin: 0 0 0.85rem; }
-    .lede { color: var(--bone); max-width: 44ch; margin: 0; }
-    .grid { display: block; }
-    .card { display: block; background: var(--charcoal); color: inherit; text-decoration: none; border: 1px solid var(--line); border-radius: 14px; padding: 1.6rem 1.5rem; transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease; }
-    .card:hover { background: #262420; border-color: rgba(244, 241, 234, 0.30); transform: translateY(-2px); }
+    .lede { color: var(--bone); max-width: 52ch; margin: 0; }
+
+    /* ---- Entry-way index (the dates as doorways) ---- */
+    .index { display: flex; flex-wrap: wrap; gap: 0.4rem 0; align-items: baseline;
+      margin: clamp(1.75rem, 4vw, 2.75rem) 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    .index a { text-decoration: none; color: var(--bone); display: inline-flex; align-items: baseline; gap: 0.55rem;
+      padding: 0.35rem 0.95rem 0.35rem 0; transition: color 0.2s var(--ease-out); }
+    .index a:first-child { padding-left: 0; }
+    .index a + a { border-left: 1px solid var(--line); padding-left: 0.95rem; }
+    .index a:hover { color: var(--ivory); }
+    .index .d { font-family: var(--disp); font-size: 1.02rem; letter-spacing: -0.01em; }
+    .index .c { font-size: 0.68rem; letter-spacing: 0.12em; color: var(--muted); }
+    .index a.up .d { color: var(--ivory); }
+    .index a.up::before { content: ""; display: inline-block; width: 0.44rem; height: 0.44rem; border-radius: 50%;
+      background: var(--ivory); margin-right: 0.55rem; transform: translateY(-0.15rem); }
+
+    /* ---- Session (a dated batch, entered through its date) ---- */
+    .session { border-top: 1px solid var(--line); padding-top: clamp(2rem, 4vw, 3rem); margin-top: clamp(2.6rem, 5vw, 3.75rem); }
+    .session.up { border-top-color: rgba(244, 241, 234, 0.42); }
+    .session-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.5rem; }
+    .session-kicker { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.7rem; display: flex; align-items: center; gap: 0.5rem; }
+    .session.up .session-kicker { color: var(--ivory); }
+    .session.up .session-kicker::before { content: ""; width: 0.44rem; height: 0.44rem; border-radius: 50%; background: var(--ivory); display: inline-block; }
+    .session-date { font-family: var(--disp); font-weight: 400; font-size: clamp(1.9rem, 4vw, 2.9rem); letter-spacing: -0.015em; line-height: 1; margin: 0; }
+    .session-date .yr { color: var(--muted); }
+    .session-count { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; padding-bottom: 0.35rem; }
+
+    /* ---- Cards ---- */
+    .rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .card { position: relative; display: block; background: var(--charcoal); color: inherit; text-decoration: none;
+      border: 1px solid var(--line); border-radius: 14px; padding: 1.6rem 1.5rem;
+      transition:
+        background 0.2s var(--ease-out) 0s,
+        border-color 0.2s var(--ease-out) 0s,
+        transform 0.2s var(--ease-out) 0s,
+        opacity 0.55s var(--ease-out) var(--d, 0ms),
+        translate 0.55s var(--ease-out) var(--d, 0ms); }
     .card .num { font-size: 0.72rem; letter-spacing: 0.18em; color: var(--muted); }
     .card h2 { font-family: var(--disp); font-size: 1.55rem; font-weight: 400; letter-spacing: 0; margin: 0.5rem 0 0.45rem; }
     .card p { margin: 0; color: var(--bone); font-size: 0.95rem; max-width: 46ch; }
     .card .arrow { display: inline-block; margin-top: 1rem; font-size: 0.85rem; color: var(--ivory); }
+    .card .arrow .g { display: inline-block; transition: transform 0.2s var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) {
+      .card:hover { background: var(--raise); border-color: rgba(244, 241, 234, 0.30); transform: translateY(-2px); }
+      .card:hover .arrow .g { transform: translate(2px, -2px); }
+    }
+    .card:active { transform: scale(0.994); }
+
+    /* Feature card (lead work of the top session) */
     .feature { padding: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
     .feature h2 { font-size: clamp(1.9rem, 3.4vw, 2.7rem); margin-top: 0.6rem; }
-    .feature p { font-size: 1.05rem; max-width: 52ch; }
-    .rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
-    @media (max-width: 620px) { .rest { grid-template-columns: 1fr; } }
-    .section-head { font-family: var(--disp); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 1.9rem); letter-spacing: -0.01em; color: var(--ivory); margin: clamp(2.6rem, 5vw, 3.75rem) 0 1.1rem; }
-    .variations { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    @media (max-width: 620px) { .variations { grid-template-columns: 1fr; } }
-    footer { margin-top: 3rem; font-size: 0.78rem; color: var(--muted); }
+    .feature p { font-size: 1.05rem; max-width: 54ch; }
+
+    /* Placeholder "to be added" slot */
+    .slot { border: 1px dashed var(--line); border-radius: 14px; padding: 1.6rem 1.5rem; color: var(--muted);
+      display: flex; flex-direction: column; justify-content: center; min-height: 6rem; }
+    .slot .num { font-size: 0.72rem; letter-spacing: 0.18em; }
+    .slot p { margin: 0.5rem 0 0; font-size: 0.95rem; max-width: 40ch; }
+
+    /* Compact clusters (variations / landing pages) inside a session */
+    .cluster { margin-top: 1.5rem; }
+    .cluster-head { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.85rem; }
+    .variations { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+    .card.mini { padding: 1.25rem 1.35rem; }
+    .card.mini h2 { font-size: 1.2rem; margin: 0 0 0.75rem; }
+
+    footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line-soft); font-size: 0.78rem; color: var(--muted); }
+
+    /* ---- Motion: a load-time entrance that never hides content ----
+       The default (settled) state is fully visible. @starting-style only
+       supplies the transient "from" state on first render, so if motion
+       is disabled or unsupported the content simply shows, never blank. */
+    .anim:not(.card) { transition: opacity 0.55s var(--ease-out) var(--d, 0ms), translate 0.55s var(--ease-out) var(--d, 0ms); }
+    @starting-style { .anim { opacity: 0; translate: 0 12px; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card, .anim:not(.card) { transition: none; }
+      @starting-style { .anim { opacity: 1; translate: 0 0; } }
+    }
+
+    @media (max-width: 620px) {
+      .rest, .variations { grid-template-columns: 1fr; }
+      .session-head { align-items: flex-start; flex-direction: column; gap: 0.5rem; }
+      .session-count { padding-bottom: 0; }
+    }
   </style>
 </head>
 <body>
@@ -53,73 +127,135 @@
     <header>
       <p class="eyebrow">LUMAS · Internal</p>
       <h1>Onsite Alignment</h1>
-      <p class="lede">Projects for the session. Tap any card to open.</p>
+      <p class="lede">Every prototype, grouped by the session it arrived in. Tomorrow is at the top — the Art Cloud to start, more to follow. Tap a date to jump, or open any card.</p>
+      <nav class="index" id="index" aria-label="Sessions"></nav>
     </header>
 
-    <div class="grid" id="grid"></div>
-
-    <h2 class="section-head">PDP Artist Variations</h2>
-    <div class="variations" id="variations"></div>
-
-    <h2 class="section-head">Landing Pages</h2>
-    <div class="variations" id="landing"></div>
+    <div id="sessions"></div>
 
     <footer>LUMAS · onsite alignment · unlisted</footer>
   </div>
 
   <script>
-    // Add a project: { title, href, desc }
+    /* ---------------------------------------------------------------
+       SESSIONS — dates are the entry ways. Newest / upcoming first.
+       To add a project to a session, add one entry to `projects`
+       below with the matching `s` id. To start a new session, add a
+       row here and give its projects that id.
+    --------------------------------------------------------------- */
+    const sessions = [
+      { id: "s0724", kicker: "Next session · tomorrow", weekday: "Friday",   date: "24 July",  year: "2026", short: "Tomorrow", upcoming: true },
+      { id: "s0713", kicker: "Previous",                 weekday: "Monday",   date: "13 July",  year: "2026", short: "13 Jul" },
+      { id: "s0709", kicker: "Previous",                 weekday: "Thursday", date: "9 July",   year: "2026", short: "9 Jul"  },
+      { id: "s0625", kicker: "Previous",                 weekday: "Thursday", date: "25 June",  year: "2026", short: "25 Jun" },
+    ];
+
+    /* Full cards carry `desc`; compact cards carry a `cluster` label.
+       `feature: true` gives the lead card of the top session extra size. */
     const projects = [
-      { title: "Art Cloud · Mobile & Tablet", href: "art-cloud/", desc: "The desktop-only Art Cloud, reimagined for touch — drag to roam, pinch to zoom, tap a work to visit it, save it, or “Mehr in diesem Stil ansehen” to re-cluster the whole cloud around it using real AI similarity. Real LUMAS editions, V2 type, phone + tablet framing." },
-      { title: "This Day on Earth", href: "this-day-on-earth/", desc: "Drift through 170 years of photography, suspended in the dark — 2,443 in-stock works placed at the year they were made, from Chaplin (1918) to today. Story-led, buy-ready, and fully responsive." },
-      { title: "The Unwrapping", href: "the-unwrapping/", desc: "The moment art becomes yours — unbox the Winter Edition drop, unlock a gift card, or compose a piece for someone." },
-      { title: "Yours to Choose", href: "yours-to-choose/", desc: "Give art without guessing their taste — describe someone you love, a private collection is composed, and they choose the one that becomes theirs." },
-      { title: "A Gift for You", href: "gift-recipient/", desc: "The recipient’s side of an art gift — a notification email opens into a dark, snow-lit reveal, where they choose works fully covered by a gift whose value is never shown." },
-      { title: "The Collector Relationship", href: "collector-relationship/prototype/deck.html", desc: "Recurring collector revenue from the customers we already have." },
-      { title: "How do you want to feel?", href: "feel/", desc: "Choose how you want to feel; walk a mood, and the works you love gather into your wall." },
-      { title: "Lass uns spielen", href: "hang-or-pass/", desc: "Swipe-to-discover art game — real feed-driven recommendations, save to your wishlist." },
-      { title: "The Exhibition", href: "exhibition/", desc: "A curated show, walked wall by wall — with voice-over, and a single move to secure the whole exhibition." },
-      { title: "Two Yeses", href: "two-yeses/lumas-two-yeses-flow.html", desc: "Deciding on art together — seal three works, hand the phone over, and both commit blind. No login, no saved works." },
-      { title: "Two Yeses · flow overview", href: "two-yeses/lumas-two-yeses-overview.html", desc: "Every screen of the Two Yeses flow, laid out and annotated." },
-      { title: "PDP Controls", href: "pdp-controls/", desc: "UX audit of the artwork PDP’s image controls — three live concepts (minimal, unified, premium), desktop + mobile, with an annotated interactive comparison." },
-      { title: "Pop-Ups (V2)", href: "pop-ups/", desc: "Seven storefront pop-ups rebuilt in the V2 brand system — framing upsell, artist follow + confirmation, two PDP quick-views (buyable + gallery), WhatsApp QR, and the Request Artwork form. Desktop + mobile bottom sheets." },
-      { title: "Homepage A/B Pre-Screen", href: "homepage-ab-prescreen/", desc: "Simulated persona-panel pre-screen of 4 mobile homepage variants (DE) — ranked verdict, adversarial review, real-test handoff. A prediction to prioritise real tests, not proof of uplift." },
+      // ── Friday 24 July — next session ──────────────────────────
+      { s: "s0724", feature: true, title: "Art Cloud · Mobile & Tablet", href: "art-cloud/", desc: "The desktop-only Art Cloud, reimagined for touch — drag to roam, pinch to zoom, tap a work to visit it, save it, or “Mehr in diesem Stil ansehen” to re-cluster the whole cloud around it using real AI similarity. Real LUMAS editions, V2 type, phone + tablet framing." },
+
+      // ── Monday 13 July ─────────────────────────────────────────
+      { s: "s0713", title: "This Day on Earth", href: "this-day-on-earth/", desc: "Drift through 170 years of photography, suspended in the dark — 2,443 in-stock works placed at the year they were made, from Chaplin (1918) to today. Story-led, buy-ready, and fully responsive." },
+
+      // ── Thursday 9 July ────────────────────────────────────────
+      { s: "s0709", title: "The Unwrapping", href: "the-unwrapping/", desc: "The moment art becomes yours — unbox the Winter Edition drop, unlock a gift card, or compose a piece for someone." },
+      { s: "s0709", title: "Yours to Choose", href: "yours-to-choose/", desc: "Give art without guessing their taste — describe someone you love, a private collection is composed, and they choose the one that becomes theirs." },
+      { s: "s0709", title: "A Gift for You", href: "gift-recipient/", desc: "The recipient’s side of an art gift — a notification email opens into a dark, snow-lit reveal, where they choose works fully covered by a gift whose value is never shown." },
+      { s: "s0709", title: "Two Yeses", href: "two-yeses/lumas-two-yeses-flow.html", desc: "Deciding on art together — seal three works, hand the phone over, and both commit blind. No login, no saved works." },
+      { s: "s0709", title: "Two Yeses · flow overview", href: "two-yeses/lumas-two-yeses-overview.html", desc: "Every screen of the Two Yeses flow, laid out and annotated." },
+      { s: "s0709", title: "PDP Controls", href: "pdp-controls/", desc: "UX audit of the artwork PDP’s image controls — three live concepts (minimal, unified, premium), desktop + mobile, with an annotated interactive comparison." },
+      { s: "s0709", title: "Pop-Ups (V2)", href: "pop-ups/", desc: "Seven storefront pop-ups rebuilt in the V2 brand system — framing upsell, artist follow + confirmation, two PDP quick-views (buyable + gallery), WhatsApp QR, and the Request Artwork form. Desktop + mobile bottom sheets." },
+      { s: "s0709", title: "Homepage A/B Pre-Screen", href: "homepage-ab-prescreen/", desc: "Simulated persona-panel pre-screen of 4 mobile homepage variants (DE) — ranked verdict, adversarial review, real-test handoff. A prediction to prioritise real tests, not proof of uplift." },
+
+      // ── Thursday 25 June ───────────────────────────────────────
+      { s: "s0625", title: "The Collector Relationship", href: "collector-relationship/prototype/deck.html", desc: "Recurring collector revenue from the customers we already have." },
+      { s: "s0625", title: "How do you want to feel?", href: "feel/", desc: "Choose how you want to feel; walk a mood, and the works you love gather into your wall." },
+      { s: "s0625", title: "Lass uns spielen", href: "hang-or-pass/", desc: "Swipe-to-discover art game — real feed-driven recommendations, save to your wishlist." },
+      { s: "s0625", title: "The Exhibition", href: "exhibition/", desc: "A curated show, walked wall by wall — with voice-over, and a single move to secure the whole exhibition." },
+      { s: "s0625", cluster: "PDP artist variations", title: "Serene Garden", href: "private-view/serene-garden.html" },
+      { s: "s0625", cluster: "PDP artist variations", title: "Long Shadow",   href: "private-view/long-shadow.html" },
+      { s: "s0625", cluster: "PDP artist variations", title: "Aset Journey",  href: "private-view/aset-journey-concise.html" },
+      { s: "s0625", cluster: "Landing pages", title: "Wohnzimmer Bilder", href: "wohnzimmer-bilder/" },
+      { s: "s0625", cluster: "Landing pages", title: "Galleries",         href: "galleries/" },
+      { s: "s0625", cluster: "Landing pages", title: "Berlin Mitte",      href: "galleries/berlin-mitte.html" },
     ];
-    const card = (p, i) => `
-      <a class="card${i === 0 ? ' feature' : ''}" href="${p.href}">
-        <span class="num">${String(i + 1).padStart(2, "0")}</span>
-        <h2>${p.title}</h2>
-        <p>${p.desc}</p>
-        <span class="arrow">Open &#8599;</span>
+
+    /* ---------------------------------------------------------------
+       Render
+    --------------------------------------------------------------- */
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const bySession = (id) => projects.filter((p) => p.s === id);
+
+    // running catalogue number across feature + full cards
+    let n = 0;
+    const delay = (i) => `--d:${Math.min(i, 7) * 45}ms`;
+    const card = (p, i = 0) => {
+      n += 1;
+      return `
+        <a class="card anim${p.feature ? " feature" : ""}" href="${p.href}" style="${delay(i)}">
+          <span class="num">${String(n).padStart(2, "0")}</span>
+          <h2>${esc(p.title)}</h2>
+          ${p.desc ? `<p>${esc(p.desc)}</p>` : ""}
+          <span class="arrow">Open <span class="g">&#8599;</span></span>
+        </a>`;
+    };
+    const miniCard = (p, i = 0) => `
+      <a class="card mini anim" href="${p.href}" style="${delay(i)}">
+        <h2>${esc(p.title)}</h2>
+        <span class="arrow">Open <span class="g">&#8599;</span></span>
       </a>`;
-    const [first, ...rest] = projects;
-    document.getElementById("grid").innerHTML =
-      (first ? card(first, 0) : "") +
-      (rest.length ? `<div class="rest">${rest.map((p, idx) => card(p, idx + 1)).join("")}</div>` : "");
 
-    // PDP artist variations
-    const variations = [
-      { title: "Serene Garden", href: "private-view/serene-garden.html" },
-      { title: "Long Shadow", href: "private-view/long-shadow.html" },
-      { title: "Aset Journey", href: "private-view/aset-journey-concise.html" },
-    ];
-    document.getElementById("variations").innerHTML = variations.map(v => `
-      <a class="card" href="${v.href}">
-        <h2>${v.title}</h2>
-        <span class="arrow">Open &#8599;</span>
-      </a>`).join("");
+    // ---- entry-way index ----
+    document.getElementById("index").innerHTML = sessions.map((s) => {
+      const count = bySession(s.id).length;
+      return `<a class="${s.upcoming ? "up" : ""}" href="#${s.id}">
+        <span class="d">${esc(s.short)}</span>
+        <span class="c">${count}</span>
+      </a>`;
+    }).join("");
 
-    // Landing pages
-    const landing = [
-      { title: "Wohnzimmer Bilder", href: "wohnzimmer-bilder/" },
-      { title: "Galleries", href: "galleries/" },
-      { title: "Berlin Mitte", href: "galleries/berlin-mitte.html" },
-    ];
-    document.getElementById("landing").innerHTML = landing.map(v => `
-      <a class="card" href="${v.href}">
-        <h2>${v.title}</h2>
-        <span class="arrow">Open &#8599;</span>
-      </a>`).join("");
+    // ---- sessions ----
+    document.getElementById("sessions").innerHTML = sessions.map((s) => {
+      const items = bySession(s.id);
+      const features = items.filter((p) => p.feature);
+      const full = items.filter((p) => !p.feature && !p.cluster);
+      const clustered = items.filter((p) => p.cluster);
+      const count = items.length;
+
+      let body = features.map((p, i) => card(p, i)).join("");
+      if (full.length) body += `<div class="rest">${full.map((p, i) => card(p, i)).join("")}</div>`;
+
+      // compact clusters, grouped by label, in first-seen order
+      const labels = [...new Set(clustered.map((p) => p.cluster))];
+      body += labels.map((label) => `
+        <div class="cluster">
+          <p class="cluster-head">${esc(label)}</p>
+          <div class="variations">${clustered.filter((p) => p.cluster === label).map((p, i) => miniCard(p, i)).join("")}</div>
+        </div>`).join("");
+
+      // upcoming session gets an "add more" slot
+      if (s.upcoming) {
+        body += `<div class="slot anim" style="${delay(features.length + full.length)}">
+          <span class="num">+</span>
+          <p>More projects join this session before tomorrow. Add them to the list.</p>
+        </div>`;
+      }
+
+      const label = count === 1 ? "1 project" : `${count} projects`;
+      return `
+        <section class="session${s.upcoming ? " up" : ""}" id="${s.id}">
+          <div class="session-head">
+            <div>
+              <p class="session-kicker anim" style="--d:0ms">${esc(s.kicker)} · ${esc(s.weekday)}</p>
+              <h2 class="session-date anim" style="--d:60ms">${esc(s.date)} <span class="yr">${esc(s.year)}</span></h2>
+            </div>
+            <span class="session-count anim" style="--d:120ms">${label}</span>
+          </div>
+          ${body}
+        </section>`;
+    }).join("");
   </script>
 </body>
 </html>
