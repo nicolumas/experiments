@@ -144,7 +144,7 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0724", kicker: "Next session · tomorrow", weekday: "Friday",   date: "24 July",  year: "2026", short: "Tomorrow", upcoming: true },
+      { id: "s0724", kicker: "Next session · today", weekday: "Thursday", date: "23 July",  year: "2026", short: "Today", upcoming: true },
       { id: "s0713", kicker: "Previous",                 weekday: "Monday",   date: "13 July",  year: "2026", short: "13 Jul" },
       { id: "s0625", kicker: "Previous",                 weekday: "Thursday", date: "25 June",  year: "2026", short: "25 Jun" },
     ];
@@ -152,7 +152,7 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
-      // ── Friday 24 July — next session ──────────────────────────
+      // ── Thursday 23 July — next session ────────────────────────
       { s: "s0724", feature: true, title: "Art Cloud · Mobile", href: "art-cloud/", desc: "The desktop-only Art Cloud, reimagined for touch — drag to roam, pinch to zoom, tap a work to visit it, save it, or “Mehr in diesem Stil ansehen” to re-cluster the whole cloud around it using real AI similarity. Real LUMAS editions, V2 type, phone + tablet framing." },
       { s: "s0724", feature: true, title: "Colour Guide", href: "color-guide/", desc: "An editorial “choose art by colour” landing page — a vivid room hero, then seven colour carousels drawn from live bestseller data and ranked by colour match (every work the same height, uncropped, true aspect ratio). Room-punctuated, full-width and responsive, ending in a CTA into the Browse-by-colour PLP." },
       { s: "s0724", cluster: "Navigation Improvements", title: "The dashboard analysis", href: "navigation/analysis.html" },
