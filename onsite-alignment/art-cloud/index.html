@@ -114,8 +114,8 @@
     display:flex;align-items:center;justify-content:space-between;
     padding:calc(env(safe-area-inset-top,0px) + 16px) 18px 10px;pointer-events:none;
     background:linear-gradient(180deg,rgba(10,9,8,.55),transparent);}
-  .brand{font-family:'Utile Display',Georgia,serif;font-size:17px;letter-spacing:.02em;color:var(--ivory);pointer-events:auto;}
-  .brand sup{font-size:9px;vertical-align:super;opacity:.7;}
+  .brand{display:block;line-height:0;pointer-events:auto;}
+  .brand svg{height:16px;width:auto;display:block;fill:var(--ivory);}
   .icon-btn{pointer-events:auto;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
     background:rgba(16,15,14,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid rgba(244,237,226,.14);color:var(--ivory);transition:transform .16s var(--ease-out),background .2s;}
@@ -129,19 +129,19 @@
     transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);}
   .matchpill.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  /* ---- "more in this style" back bar ---- */
-  .similar-bar{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 60px);transform:translateX(-50%) translateY(-8px);
-    z-index:var(--z-controls);display:none;align-items:center;gap:9px;max-width:82%;padding:9px 16px 9px 12px;border-radius:999px;
-    background:rgba(244,237,226,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--charcoal);
-    font-size:12.5px;box-shadow:0 6px 22px -8px rgba(0,0,0,.5);opacity:0;transition:opacity .3s var(--ease-out),transform .3s var(--ease-out);}
+  /* ---- "back to full cloud" control — centered in the top bar between logo & close ---- */
+  .similar-bar{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%) translateY(-6px);
+    z-index:calc(var(--z-controls) + 1);pointer-events:auto;display:none;align-items:center;gap:8px;max-width:60vw;height:38px;padding:0 15px 0 10px;border-radius:999px;
+    background:rgba(244,237,226,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--charcoal);
+    box-shadow:0 6px 22px -10px rgba(0,0,0,.55);opacity:0;transition:opacity .28s var(--ease-out),transform .28s var(--ease-out);}
   .similar-bar.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
-  .similar-bar svg{width:15px;height:15px;flex:none;}
-  .similar-bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .similar-bar .sb-title{font-family:'Utile Display',Georgia,serif;font-weight:400;}
+  .similar-bar svg{width:16px;height:16px;flex:none;stroke:var(--charcoal);}
+  .similar-bar .sb-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--charcoal-700);flex:none;}
+  .similar-bar .sb-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:14px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* ---- secondary "more in this style" button in the sheet ---- */
-  .btn-similar{width:100%;height:48px;margin-top:10px;border-radius:8px;border:1px solid var(--bone);background:var(--ivory-300);
-    color:var(--charcoal);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  .btn-similar{width:100%;height:50px;margin-top:10px;border-radius:8px;border:1px solid rgba(244,237,226,.24);background:transparent;
+    color:var(--ivory);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
     display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .16s var(--ease-out),background .2s;}
   .btn-similar:active{transform:scale(.98);}
   .btn-similar svg{width:16px;height:16px;}
@@ -172,57 +172,45 @@
   .scrim.show{opacity:1;visibility:visible;background:rgba(8,7,6,.5);pointer-events:auto;}
 
   .sheet{position:absolute;z-index:var(--z-sheet);left:0;right:0;bottom:0;
-    background:var(--ivory-300);color:var(--charcoal);border-radius:26px 26px 0 0;
-    box-shadow:0 -18px 60px -16px rgba(0,0,0,.6);
+    background:#15130f;color:var(--ivory);border-radius:24px 24px 0 0;
+    box-shadow:0 -22px 70px -18px rgba(0,0,0,.8);border-top:1px solid rgba(244,237,226,.10);
     transform:translateY(101%);transition:transform .46s var(--ease-drawer),visibility .46s;
-    padding:var(--sheet-pad) var(--sheet-pad) calc(env(safe-area-inset-bottom,0px) + var(--sheet-pad));
+    padding:12px var(--sheet-pad) calc(env(safe-area-inset-bottom,0px) + 22px);
+    max-height:90vh;
     will-change:transform;touch-action:none;visibility:hidden;pointer-events:none;}
   .sheet.show{transform:translateY(0);visibility:visible;pointer-events:auto;}
-  .sheet .handle{width:38px;height:4px;border-radius:2px;background:rgba(28,26,24,.22);margin:0 auto 16px;}
-  .sheet-row{display:flex;gap:16px;align-items:flex-start;}
-  .sheet-thumb{flex:none;width:96px;height:96px;border-radius:4px;background:var(--bone);
-    display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 8px 24px -10px rgba(0,0,0,.4);}
-  .sheet-thumb img{max-width:100%;max-height:100%;display:block;}
-  .sheet-info{flex:1;min-width:0;padding-top:2px;}
-  .sheet-eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--charcoal-700);}
-  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:23px;line-height:1.12;margin:5px 0 3px;color:var(--charcoal);}
-  .sheet-artist{font-size:14px;color:var(--charcoal-700);}
-  .sheet-cta{display:flex;gap:10px;margin-top:18px;}
-  .btn-primary{flex:1;height:50px;border-radius:8px;background:var(--charcoal);color:var(--ivory);
+  .sheet .handle{width:38px;height:4px;border-radius:2px;background:rgba(244,237,226,.26);margin:2px auto 16px;}
+  /* artwork above */
+  .sheet-hero{display:flex;align-items:center;justify-content:center;height:44vh;margin-bottom:20px;}
+  .sheet-hero img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;box-shadow:0 24px 64px -22px rgba(0,0,0,.85);}
+  /* artist + title underneath */
+  .sheet-meta{text-align:center;margin-bottom:22px;}
+  .sheet-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,226,.5);}
+  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:27px;line-height:1.08;margin:8px 0 5px;color:var(--ivory);text-wrap:balance;}
+  .sheet-artist{font-size:14.5px;color:rgba(244,237,226,.68);}
+  /* buttons */
+  .sheet-cta{display:flex;gap:10px;}
+  .btn-primary{flex:1;height:54px;border-radius:8px;background:var(--ivory);color:var(--charcoal);
     font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .16s var(--ease-out);text-decoration:none;}
   .btn-primary:active{transform:scale(.98);}
   .btn-primary svg{width:14px;height:14px;}
-  .btn-ghost{flex:none;width:50px;height:50px;border-radius:8px;border:1px solid var(--bone);
-    display:flex;align-items:center;justify-content:center;color:var(--charcoal);transition:transform .16s var(--ease-out),background .2s;}
+  .btn-ghost{flex:none;width:54px;height:54px;border-radius:8px;border:1px solid rgba(244,237,226,.24);background:transparent;
+    display:flex;align-items:center;justify-content:center;color:var(--ivory);transition:transform .16s var(--ease-out),color .2s,border-color .2s;}
   .btn-ghost:active{transform:scale(.95);}
-  .btn-ghost svg{width:19px;height:19px;}
+  .btn-ghost svg{width:21px;height:21px;}
+  .btn-ghost.liked{border-color:#C4443A;color:#C4443A;}
+  .btn-ghost.liked svg{fill:#C4443A;}
 
-  /* tablet: selection becomes a right-side panel, not a bottom sheet */
+  /* tablet: selection becomes a right-side panel, same vertical layout */
   .exp[data-mode="tablet"] .sheet{
-    left:auto;top:0;bottom:0;right:0;width:min(360px,42%);border-radius:0;
-    transform:translateX(101%);padding-top:calc(env(safe-area-inset-top,0px) + 64px);
-    box-shadow:-18px 0 60px -20px rgba(0,0,0,.5);
+    left:auto;top:0;bottom:0;right:0;width:min(400px,46%);border-radius:0;max-height:100%;overflow-y:auto;
+    transform:translateX(101%);padding-top:calc(env(safe-area-inset-top,0px) + 60px);
+    border-top:none;border-left:1px solid rgba(244,237,226,.10);box-shadow:-22px 0 70px -22px rgba(0,0,0,.7);
   }
   .exp[data-mode="tablet"] .sheet.show{transform:translateX(0);}
   .exp[data-mode="tablet"] .sheet .handle{display:none;}
-  .exp[data-mode="tablet"] .sheet-row{flex-direction:column;}
-  .exp[data-mode="tablet"] .sheet-thumb{width:100%;height:auto;aspect-ratio:4/3;}
-
-  /* ---- list / grid fallback (a11y + reduced motion) ---- */
-  .listview{position:absolute;inset:0;z-index:var(--z-list);background:var(--ivory-300);color:var(--charcoal);
-    overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);
-    transition:transform .4s var(--ease-drawer);visibility:hidden;}
-  .listview.show{transform:translateY(0);visibility:visible;}
-  .listhead{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;
-    padding:calc(env(safe-area-inset-top,0px) + 16px) 18px 14px;background:var(--ivory-300);border-bottom:1px solid var(--bone);}
-  .listhead h3{margin:0;font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:19px;}
-  .grid{columns:2;column-gap:12px;padding:14px;}
-  @media(min-width:620px){.grid{columns:3;}}
-  .grid a{display:block;break-inside:avoid;margin-bottom:14px;text-decoration:none;color:inherit;}
-  .grid img{width:100%;display:block;border-radius:3px;background:var(--bone);box-shadow:0 6px 18px -10px rgba(0,0,0,.35);}
-  .grid .g-t{font-family:'Utile Display',Georgia,serif;font-size:14px;margin:7px 0 1px;line-height:1.2;}
-  .grid .g-a{font-size:12px;color:var(--charcoal-700);}
+  .exp[data-mode="tablet"] .sheet-hero{height:auto;max-height:44vh;}
 
   @media (prefers-reduced-motion: reduce){
     *{transition-duration:.01ms !important;}
@@ -260,7 +248,16 @@
     <div class="vignette"></div>
 
     <div class="topbar">
-      <div class="brand">LUMAS<sup>◹</sup></div>
+      <div class="brand" aria-label="LUMAS">
+        <svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g>
+          <path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/>
+          <path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/>
+          <path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/>
+          <path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/>
+          <path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/>
+          <path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/>
+        </g></svg>
+      </div>
       <button class="icon-btn close-btn" aria-label="Schließen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
@@ -270,8 +267,9 @@
     <div class="hint"><span class="dot"></span>Ziehen zum Entdecken · zwei Finger zum Zoomen</div>
 
     <button class="similar-bar" aria-label="Zurück zu allen Werken">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 18l-6-6 6-6"/></svg>
-      <span>Zurück · ähnlich zu <span class="sb-title"></span></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span class="sb-label">Ähnlich zu</span>
+      <span class="sb-title"></span>
     </button>
 
     <div class="dock">
@@ -282,9 +280,6 @@
       </label>
       <button class="dock-btn recenter-btn" aria-label="Zurück zur Übersicht">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4.5"/></svg>
-      </button>
-      <button class="dock-btn list-btn" aria-label="Als Liste ansehen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </div>
 
@@ -300,36 +295,24 @@
 
     <div class="sheet" role="dialog" aria-label="Kunstwerk">
       <div class="handle"></div>
-      <div class="sheet-row">
-        <div class="sheet-thumb"><img alt=""></div>
-        <div class="sheet-info">
-          <div class="sheet-eyebrow">LUMAS Edition</div>
-          <div class="sheet-title"></div>
-          <div class="sheet-artist"></div>
-        </div>
+      <div class="sheet-hero"><img alt=""></div>
+      <div class="sheet-meta">
+        <div class="sheet-eyebrow">LUMAS Edition</div>
+        <div class="sheet-title"></div>
+        <div class="sheet-artist"></div>
       </div>
       <div class="sheet-cta">
         <a class="btn-primary" target="_blank" rel="noopener">Kunstwerk ansehen
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>
         </a>
         <button class="btn-ghost like-btn" aria-label="Zur Wunschliste hinzufügen">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.35-9.2-8.5C1.4 8.8 2.6 5.8 5.5 5.2 7.4 4.8 9 5.8 12 8c3-2.2 4.6-3.2 6.5-2.8 2.9.6 4.1 3.6 2.7 6.3C19 15.65 12 20 12 20z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
         </button>
       </div>
       <button class="btn-similar similar-btn-sheet">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.4L12 17l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>
         Mehr in diesem Stil ansehen
       </button>
-    </div>
-
-    <div class="listview">
-      <div class="listhead">
-        <h3>Alle Werke</h3>
-        <button class="icon-btn list-close" aria-label="Liste schließen" style="position:static;background:rgba(28,26,24,.06);border-color:rgba(28,26,24,.12);color:var(--charcoal);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
-        </button>
-      </div>
-      <div class="grid"></div>
     </div>
   </div>
 </template>
@@ -357,8 +340,6 @@
     const enter = root.querySelector('.enter');
     const scrim = root.querySelector('.scrim');
     const sheet = root.querySelector('.sheet');
-    const listview = root.querySelector('.listview');
-    const grid = root.querySelector('.grid');
 
     let W=0,H=0;                 // css pixels
     let mode='phone';
@@ -734,20 +715,16 @@
     let selected=null, prevCam=null;
     function select(a){
       selected=a; prevCam={...cam};
-      const im=sheet.querySelector('.sheet-thumb img');
+      const im=sheet.querySelector('.sheet-hero img');
       im.src=a.d.img; im.alt=a.d.t;
       sheet.querySelector('.sheet-title').textContent=a.d.t;
       sheet.querySelector('.sheet-artist').textContent=a.d.a;
       sheet.querySelector('.btn-primary').href=PDP_BASE+a.d.u;
+      sheet.querySelector('.like-btn').classList.remove('liked');
       scrim.classList.add('show');
       sheet.classList.add('show');
       root.classList.add('sheet-open');
-      // ease the selected work into the visible area above the sheet (phone) / left of panel (tablet)
-      if(!reduceMotion){
-        const s=Math.max(cam.s, 1.0);
-        if(mode==='phone'){ flyTo(a.wx, a.wy - (H*0.18)/s, s); }
-        else { flyTo(a.wx - (W*0.16)/s, a.wy, s); }
-      }
+      // the artwork is shown large in the drawer, so keep the cloud in place behind
       requestRender();
     }
     function deselect(restore){
@@ -793,28 +770,7 @@
     root.querySelector('.search .clear').addEventListener('click',()=>{ search.value=''; applyQueryReset(); });
     function applyQueryReset(){ search.value=''; applyQuery(''); }
 
-    root.querySelector('.like-btn').addEventListener('click',function(){ this.style.color='#B5352A'; this.querySelector('svg').setAttribute('fill','#B5352A'); });
-
-    // list / grid fallback
-    let gridBuilt=false;
-    root.querySelector('.list-btn').addEventListener('click',()=>{
-      deselect();
-      if(!gridBuilt){ buildGrid(); gridBuilt=true; }
-      listview.classList.add('show');
-    });
-    root.querySelector('.list-close').addEventListener('click',()=>listview.classList.remove('show'));
-    function buildGrid(){
-      const frag=document.createDocumentFragment();
-      arts.forEach(a=>{
-        const el=document.createElement('a');
-        el.href=PDP_BASE+a.d.u; el.target='_blank'; el.rel='noopener';
-        const im=document.createElement('img'); im.loading='lazy'; im.src=a.d.img; im.alt=a.d.t;
-        const t=document.createElement('div'); t.className='g-t'; t.textContent=a.d.t;
-        const ar=document.createElement('div'); ar.className='g-a'; ar.textContent=a.d.a;
-        el.append(im,t,ar); frag.append(el);
-      });
-      grid.append(frag);
-    }
+    root.querySelector('.like-btn').addEventListener('click',function(){ this.classList.toggle('liked'); });
 
     // enter-screen ambient mini cloud
     (function enterCloud(){
