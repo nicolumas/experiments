@@ -1,616 +1,418 @@
 <!doctype html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LUMAS · Navigation Strategy & Redesign</title>
-<meta name="description" content="An evidence-based UX, IA and CRO assessment of the lumas.de header navigation, with a proposed structure and prioritized roadmap.">
+<title>LUMAS · Navigation clicks × revenue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  /* neutrals — bone/ivory with a warm bias toward the ochre accent */
-  --charcoal-900:#1C1A18; --charcoal-700:#4E4A45; --charcoal-500:#847F79; --charcoal-300:#BEB9B2;
-  --ivory:#FAF6F1; --ivory-2:#F5EEE4; --bone:#EAE2D8; --bone-2:#E2D8CC;
-  --card:#FFFFFF; --card-2:#FBF7F2;
-  --ink:#1C1A18; --ink-2:#5A5752; --ink-3:#908C87;
-  --line:#E7DED2; --line-strong:#D8CCBC;
-  --accent:#9B6D1E; --accent-bg:#FBF3E2; --accent-line:#E7D3A9;
-  /* verdict palette — deliberately low-saturation so it reads as one system */
-  --keep:#4C6B52; --keep-bg:#EAF0EA;
-  --promote:#1C1A18; --promote-fg:#FAF6F1;
-  --neutral-chip:#6C665F; --neutral-bg:#F0EAE1;
-  --demote:#9B6D1E; --demote-bg:#FBF3E2;
-  --remove:#8A4433; --remove-bg:#F6E9E4;
-  --good:#4C6B52; --warn:#9B6D1E; --crit:#8A4433;
-  --maxw:1120px; --readw:70ch;
-  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
-}
-@media (prefers-color-scheme:dark){
   :root{
-    --charcoal-900:#F2ECE3; --charcoal-700:#C8C2B9; --charcoal-500:#948E85; --charcoal-300:#5E5952;
-    --ivory:#171512; --ivory-2:#1E1B17; --bone:#2A261F; --bone-2:#322D25;
-    --card:#201D19; --card-2:#25211C;
-    --ink:#F2ECE3; --ink-2:#B9B2A8; --ink-3:#8A847B;
-    --line:#302B24; --line-strong:#3D372E;
-    --accent:#D9A94E; --accent-bg:#2A2317; --accent-line:#4A3D22;
-    --keep:#8FB396; --keep-bg:#1E271F;
-    --promote:#F2ECE3; --promote-fg:#171512;
-    --neutral-chip:#B9B2A8; --neutral-bg:#2A261F;
-    --demote:#D9A94E; --demote-bg:#2A2317;
-    --remove:#D08A73; --remove-bg:#2C1F1A;
-    --good:#8FB396; --warn:#D9A94E; --crit:#D08A73;
+    --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87; --charcoal-300:#C7C3BE; --charcoal-100:#E3E0DB;
+    --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+    --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+    --card:#FFFFFF; --text:#1C1A18; --text-2:#5A5752; --text-3:#908C87;
+    --warning:#9B6D1E; --warning-bg:#FDF5E6;
+    --maxw:1180px;
+    font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-variation-settings:"wdth" 100;
   }
-}
-:root[data-theme="light"]{
-  --charcoal-900:#1C1A18; --charcoal-700:#4E4A45; --charcoal-500:#847F79; --charcoal-300:#BEB9B2;
-  --ivory:#FAF6F1; --ivory-2:#F5EEE4; --bone:#EAE2D8; --bone-2:#E2D8CC;
-  --card:#FFFFFF; --card-2:#FBF7F2;
-  --ink:#1C1A18; --ink-2:#5A5752; --ink-3:#908C87;
-  --line:#E7DED2; --line-strong:#D8CCBC;
-  --accent:#9B6D1E; --accent-bg:#FBF3E2; --accent-line:#E7D3A9;
-  --keep:#4C6B52; --keep-bg:#EAF0EA; --promote:#1C1A18; --promote-fg:#FAF6F1;
-  --neutral-chip:#6C665F; --neutral-bg:#F0EAE1; --demote:#9B6D1E; --demote-bg:#FBF3E2;
-  --remove:#8A4433; --remove-bg:#F6E9E4; --good:#4C6B52; --warn:#9B6D1E; --crit:#8A4433;
-}
-:root[data-theme="dark"]{
-  --charcoal-900:#F2ECE3; --charcoal-700:#C8C2B9; --charcoal-500:#948E85; --charcoal-300:#5E5952;
-  --ivory:#171512; --ivory-2:#1E1B17; --bone:#2A261F; --bone-2:#322D25;
-  --card:#201D19; --card-2:#25211C;
-  --ink:#F2ECE3; --ink-2:#B9B2A8; --ink-3:#8A847B;
-  --line:#302B24; --line-strong:#3D372E;
-  --accent:#D9A94E; --accent-bg:#2A2317; --accent-line:#4A3D22;
-  --keep:#8FB396; --keep-bg:#1E271F; --promote:#F2ECE3; --promote-fg:#171512;
-  --neutral-chip:#B9B2A8; --neutral-bg:#2A261F; --demote:#D9A94E; --demote-bg:#2A2317;
-  --remove:#D08A73; --remove-bg:#2C1F1A; --good:#8FB396; --warn:#D9A94E; --crit:#D08A73;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{background:var(--ivory);color:var(--ink);font-family:var(--sans);line-height:1.55;
-  -webkit-font-smoothing:antialiased;font-feature-settings:"kern" 1;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:56px 24px 96px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ivory-300);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:48px 24px 80px;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);}
+  h1{font-size:clamp(30px,4.2vw,46px);font-weight:600;letter-spacing:-.01em;line-height:1.08;margin-top:12px;}
+  .lede{color:var(--text-2);font-weight:300;font-size:18px;max-width:64ch;margin-top:14px;}
+  .meta{color:var(--text-3);font-size:12px;margin-top:10px;}
+  code{font-family:inherit;color:var(--text);}
+  section{margin-top:48px;}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--bone-100);padding-bottom:12px;margin-bottom:24px;flex-wrap:wrap;}
+  .sec-head h2{font-size:20px;font-weight:600;letter-spacing:-.005em;}
+  .sec-head .hint{font-size:12px;color:var(--text-3);}
 
-/* ---- type ---- */
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);}
-h1{font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin-top:14px;text-wrap:balance;}
-.lede{color:var(--ink-2);font-weight:400;font-size:clamp(16px,2vw,19px);max-width:66ch;margin-top:18px;}
-.byline{color:var(--ink-3);font-size:12.5px;margin-top:16px;line-height:1.7;}
-.byline b{color:var(--ink-2);font-weight:600;}
-h2{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.015em;line-height:1.12;text-wrap:balance;}
-h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;}
-h4{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px;}
-p{max-width:var(--readw);}
-.section p+p{margin-top:12px;}
-a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-line);}
-a:hover{border-bottom-color:var(--accent);}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  .tabbar{display:flex;gap:2px;margin-top:32px;border-bottom:1px solid var(--bone-100);}
+  .tab-btn{appearance:none;background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.03em;color:var(--text-3);padding:13px 20px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+  .tab-btn.active{color:var(--text);border-bottom-color:var(--charcoal-900);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
 
-/* ---- section scaffolding ---- */
-.section{margin-top:64px;scroll-margin-top:24px;}
-.part-head{display:flex;align-items:baseline;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:8px;}
-.part-num{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent);white-space:nowrap;padding-top:4px;}
-.part-head h2{flex:1;}
-.section-intro{color:var(--ink-2);font-size:15.5px;margin:18px 0 26px;max-width:var(--readw);}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px;}
+  .kpi{background:var(--card);border:1px solid var(--bone-200);border-radius:4px;padding:22px 20px;}
+  .kpi .n{font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1;}
+  .kpi .l{font-size:12px;color:var(--text-2);margin-top:10px;}
+  .kpi .s{font-size:11px;color:var(--text-3);margin-top:4px;}
 
-/* ---- TOC ---- */
-.toc{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px 24px;margin-top:40px;
-  display:grid;grid-template-columns:repeat(2,1fr);gap:6px 32px;}
-.toc a{display:flex;gap:12px;align-items:baseline;color:var(--ink);border:none;font-size:14px;padding:6px 0;border-bottom:1px solid transparent;}
-.toc a:hover{color:var(--accent);}
-.toc a .n{color:var(--accent);font-weight:700;font-size:11px;letter-spacing:.1em;min-width:44px;}
+  .rank{display:flex;flex-direction:column;gap:12px;}
+  .rank-row{display:grid;grid-template-columns:150px 1fr 140px;align-items:center;gap:16px;}
+  .rank-row .name{font-size:15px;font-weight:600;}
+  .rank-row .name span{color:var(--text-3);font-weight:400;font-size:12px;display:block;}
+  .track{height:16px;background:var(--bone-300);border-radius:2px;overflow:hidden;}
+  .fill{height:100%;background:var(--charcoal-900);border-radius:2px;}
+  .fill.soft{background:var(--charcoal-300);}
+  .rank-row .val{font-size:13px;color:var(--text-2);text-align:right;font-variant-numeric:tabular-nums;}
+  .rank-row .val b{color:var(--text);font-weight:600;}
 
-/* ---- thesis strip ---- */
-/* deliberately an always-dark feature band in both themes */
-.thesis{background:#1C1A18;color:#FAF6F1;border-radius:8px;padding:44px 40px;margin-top:44px;}
-.thesis .eyebrow{color:#D9A94E;}
-.thesis h2{color:#FAF6F1;margin:14px 0 6px;max-width:24ch;}
-.thesis .lead{color:rgba(244,237,226,.74);font-size:16px;max-width:70ch;margin-top:14px;}
-.thesis .twin{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:32px;}
-.thesis .truth{border-top:2px solid #D9A94E;padding-top:16px;}
-.thesis .truth .t-label{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#D9A94E;}
-.thesis .truth h3{color:#FAF6F1;font-size:17px;margin:8px 0;}
-.thesis .truth p{color:rgba(244,237,226,.74);font-size:14px;max-width:none;}
-.thesis .stat{font-size:13px;color:rgba(244,237,226,.55);margin-top:10px;font-variant-numeric:tabular-nums;}
-.thesis .stat b{color:#FAF6F1;font-weight:600;}
+  .cards{display:flex;flex-direction:column;gap:20px;}
+  .card{background:var(--card);border:1px solid var(--bone-200);border-radius:4px;padding:28px 28px 24px;}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--bone-200);padding-bottom:18px;margin-bottom:20px;}
+  .card-head .idx{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--charcoal-300);text-transform:uppercase;}
+  .card-head h3{font-size:26px;font-weight:600;letter-spacing:-.015em;margin-top:4px;}
+  .card-head .sub{font-size:12px;color:var(--text-3);margin-top:3px;max-width:56ch;}
+  .card-head .tot{text-align:right;white-space:nowrap;}
+  .card-head .tot .big{font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1;}
+  .card-head .tot .share{font-size:12px;color:var(--text-2);margin-top:4px;}
+  .chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:2px;}
+  .chip.menu{background:var(--charcoal-900);color:var(--ivory-100);}
+  .chip.url{border:1px solid var(--charcoal-300);color:var(--text-2);}
+  .chip.warn{border:1px solid var(--warning);color:var(--warning);}
+  .chip.mut{border:1px solid var(--bone-100);color:var(--text-3);}
+  .card-head .chip{margin-top:8px;}
+  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px 36px;align-items:start;}
+  .group .ghead{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--bone-200);}
+  .group .ghead .gtot{color:var(--text-3);font-weight:500;letter-spacing:.04em;}
+  .gnote{font-size:11px;color:var(--text-3);margin:-4px 0 12px;line-height:1.5;}
+  .items{display:flex;flex-direction:column;gap:9px;}
+  .item .row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:10px;}
+  .item .lab{font-size:13px;color:var(--text);}
+  .item .lab em{color:var(--text-3);font-style:normal;font-size:11px;}
+  .item .c{font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums;}
+  .item.na .lab{color:var(--text-3);}
+  .item.na .c{color:var(--charcoal-300);}
+  .item .mini{height:4px;background:var(--bone-300);border-radius:2px;overflow:hidden;margin-top:5px;}
+  .item .mini .f{height:100%;background:var(--charcoal-300);}
 
-/* ---- KPI row ---- */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0;}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 18px;}
-.kpi .n{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;}
-.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:8px;line-height:1.4;}
-.kpi .s{font-size:11px;color:var(--ink-3);margin-top:3px;}
+  .strip{background:var(--charcoal-900);color:var(--ivory-100);border-radius:4px;padding:60px 48px;margin-top:48px;text-align:center;}
+  .strip .eyebrow{color:rgba(244,237,226,.55);}
+  .strip h2{font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-.015em;line-height:1.15;margin:16px auto 0;max-width:26ch;}
+  .strip p{color:rgba(244,237,226,.75);font-weight:300;font-size:17px;max-width:68ch;margin:18px auto 0;}
 
-/* ---- tables ---- */
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin:22px 0;background:var(--card);}
-table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px;}
-thead th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
-  padding:14px 16px;border-bottom:1px solid var(--line-strong);white-space:nowrap;vertical-align:bottom;}
-tbody td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2);}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:var(--card-2);}
-td.name{color:var(--ink);font-weight:600;white-space:nowrap;}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
-td .sub{display:block;color:var(--ink-3);font-weight:400;font-size:11.5px;margin-top:2px;white-space:normal;}
-.data-note{font-size:12px;color:var(--ink-3);margin:-8px 0 22px;}
+  .method{background:var(--warning-bg);border:1px solid #EBD9B8;border-radius:4px;padding:22px 24px;margin-top:32px;}
+  .method h3{font-size:13px;font-weight:700;letter-spacing:.04em;margin-bottom:8px;}
+  .method p{font-size:13px;color:var(--text-2);line-height:1.6;max-width:92ch;}
+  .method p+p{margin-top:8px;}
 
-/* ---- verdict chips ---- */
-.chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  padding:3px 8px;border-radius:3px;white-space:nowrap;line-height:1.5;}
-.chip.keep{background:var(--keep-bg);color:var(--keep);}
-.chip.promote{background:var(--promote);color:var(--promote-fg);}
-.chip.rename,.chip.move,.chip.merge{background:var(--neutral-bg);color:var(--neutral-chip);border:1px solid var(--line-strong);}
-.chip.demote{background:var(--demote-bg);color:var(--demote);}
-.chip.remove{background:var(--remove-bg);color:var(--remove);}
-.legend{display:flex;flex-wrap:wrap;gap:8px 10px;margin:0 0 20px;align-items:center;}
-.legend .lg-lbl{font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;font-weight:600;}
+  /* artist comparison */
+  .atable{background:var(--card);border:1px solid var(--bone-200);border-radius:4px;padding:8px 24px 12px;}
+  .ahead,.arow{display:grid;grid-template-columns:172px 1fr 66px 96px 118px;gap:16px;align-items:center;}
+  .ahead{padding:14px 0 10px;border-bottom:1px solid var(--charcoal-300);}
+  .ahead span{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);}
+  .ahead .r,.arow .r{text-align:right;}
+  .arow{padding:11px 0;border-bottom:1px solid var(--bone-200);}
+  .arow:last-child{border-bottom:none;}
+  .arow .an{font-size:13px;font-weight:500;}
+  .arow .num{font-size:12px;font-variant-numeric:tabular-nums;color:var(--text-2);}
+  .arow .num b{color:var(--text);font-weight:600;}
+  .cmp{display:flex;flex-direction:column;gap:5px;}
+  .crow{display:grid;grid-template-columns:30px 1fr 40px;gap:8px;align-items:center;}
+  .crow span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);}
+  .crow .tk{height:8px;background:var(--bone-300);border-radius:2px;overflow:hidden;}
+  .crow .fl{height:100%;border-radius:2px;}
+  .crow .fl.clk{background:var(--charcoal-300);}
+  .crow .fl.rev{background:var(--charcoal-900);}
+  .crow b{font-size:10px;text-align:right;color:var(--text-2);font-variant-numeric:tabular-nums;}
 
-/* severity dot for roadmap */
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;}
-.dot.h{background:var(--crit);} .dot.m{background:var(--warn);} .dot.l{background:var(--charcoal-300);}
-.scale{font-variant-numeric:tabular-nums;letter-spacing:.06em;}
-.scale.hi{color:var(--good);font-weight:600;} .scale.mid{color:var(--warn);font-weight:600;} .scale.lo{color:var(--ink-3);}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .rlist{background:var(--card);border:1px solid var(--bone-200);border-radius:4px;padding:24px;}
+  .rlist h3{font-size:14px;font-weight:600;margin-bottom:4px;}
+  .rlist .sub{font-size:11px;color:var(--text-3);margin-bottom:16px;}
+  .ritem{margin-bottom:12px;}
+  .ritem .top{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:baseline;}
+  .ritem .rl{font-size:13px;color:var(--text);}
+  .ritem .rl em{color:var(--warning);font-style:normal;font-size:11px;}
+  .ritem .rc{font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums;}
+  .ritem .rc b{color:var(--text);font-weight:600;}
+  .ritem .bar{height:5px;background:var(--bone-300);border-radius:2px;overflow:hidden;margin-top:5px;}
+  .ritem .bar .f{height:100%;background:var(--charcoal-900);}
 
-/* ---- callout ---- */
-.callout{background:var(--accent-bg);border:1px solid var(--accent-line);border-left:3px solid var(--accent);
-  border-radius:6px;padding:20px 22px;margin:24px 0;}
-.callout h3{color:var(--accent);font-size:13px;letter-spacing:.04em;text-transform:uppercase;}
-.callout p{font-size:14px;color:var(--ink-2);max-width:88ch;}
-.callout p+p{margin-top:10px;}
-.callout ul{margin:10px 0 0 0;padding-left:18px;}
-.callout li{font-size:14px;color:var(--ink-2);margin-bottom:6px;}
+  .notes{background:var(--bone-300);border:1px solid var(--bone-200);border-radius:4px;padding:28px;}
+  .notes h2{font-size:16px;font-weight:600;margin-bottom:8px;}
+  .notes .intro{font-size:13px;color:var(--text-2);margin-bottom:16px;max-width:80ch;}
+  .notes ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;}
+  .notes li{font-size:13px;color:var(--text-2);padding-left:16px;position:relative;line-height:1.55;}
+  .notes li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;background:var(--charcoal-300);border-radius:1px;}
+  .notes li b{color:var(--text);font-weight:600;}
+  .flag b{color:var(--warning);}
 
-/* ---- findings grid ---- */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px;}
-.pcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px 22px;}
-.pcard h3{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
-.pcard .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);}
-.pcard p{font-size:13.5px;color:var(--ink-2);margin-top:8px;max-width:none;}
-.pcard .ev{font-size:12px;color:var(--ink-3);margin-top:10px;border-top:1px dashed var(--line-strong);padding-top:10px;}
-.pcard .ev b{color:var(--ink-2);font-weight:600;}
-
-/* ---- proposed nav ---- */
-.proposed{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 4px;margin:22px 0;}
-.pnav{display:flex;flex-direction:column;}
-.pnav-item{padding:18px 22px;border-bottom:1px solid var(--line);}
-.pnav-item:last-child{border-bottom:none;}
-.pnav-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
-.pnav-top .lbl{font-size:16px;font-weight:700;color:var(--ink);}
-.pnav-top .tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-line);border-radius:3px;padding:2px 7px;}
-.pnav-top .why{font-size:12.5px;color:var(--ink-3);}
-.pnav-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px 24px;margin-top:14px;}
-.pnav-col .ch{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px;}
-.pnav-col ul{list-style:none;}
-.pnav-col li{font-size:13px;color:var(--ink-2);padding:3px 0;}
-.pnav-col li em{font-style:normal;color:var(--accent);font-size:11px;}
-
-/* footer */
-footer{margin-top:72px;padding-top:22px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3);line-height:1.75;}
-footer b{color:var(--ink-2);}
-.theme-toggle{position:fixed;top:16px;right:16px;z-index:50;background:var(--card);border:1px solid var(--line-strong);
-  color:var(--ink-2);border-radius:20px;padding:7px 14px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;}
-.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
-.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-
-@media(max-width:820px){
-  .wrap{padding:40px 18px 72px;}
-  .toc,.kpis,.thesis .twin,.grid2{grid-template-columns:1fr;}
-  .thesis{padding:32px 24px;}
-  .kpis{grid-template-columns:repeat(2,1fr);}
-}
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--bone-100);font-size:11px;color:var(--text-3);line-height:1.7;}
+  @media(max-width:820px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .rank-row{grid-template-columns:112px 1fr 104px;gap:10px;}
+    .notes ul,.twocol{grid-template-columns:1fr;}
+    .card-head .tot{text-align:left;}
+    .ahead{display:none;}
+    .arow{grid-template-columns:1fr 1fr;gap:8px 12px;}
+    .arow .cmp{grid-column:1 / -1;order:3;}
+    .arow .flagcell{order:4;}
+  }
 </style>
-
-<button class="theme-toggle" id="tt" aria-label="Toggle light or dark theme">Theme</button>
-
+</head>
+<body>
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">LUMAS · lumas.de · Navigation strategy report</div>
-    <h1>The right menu for the wrong audience</h1>
-    <p class="lede">A UX, information-architecture and CRO assessment of the lumas.de header navigation — read against 90 days of click behaviour, web revenue, and the live site on desktop and mobile. It challenges the current structure rather than assuming it is correct.</p>
-    <p class="byline">
-      <b>Scope:</b> lumas.de header / mega-menu navigation · <b>Window:</b> 23 Apr – 21 Jul 2026 (90 days)<br>
-      <b>Evidence:</b> GA4 <code>navigation_click</code> (107,750 clicks, 89,620 labelled) · DWH web order value (€2.90M, 4,510 orders) · GA4 device split · live desktop + mobile navigation walkthrough<br>
-      <b>Two integrity limits kept in view throughout:</b> nav clicks can't be tied to specific orders (share-of-attention vs share-of-revenue, not attribution); ~480 artist-tile clicks log a blank label, so per-artist attention is undercounted.
-    </p>
+    <div class="eyebrow">LUMAS · lumas.de · 90-day view</div>
+    <h1>Navigation — clicks &amp; revenue</h1>
+    <p class="lede">What people click in the header nav, and whether it lines up with what they buy. Clicks from the GA4 <code>navigation_click</code> event; revenue is lumas.de web order value from the DWH (finance source of truth).</p>
+    <p class="meta">Property: <b>de</b> (249927669) · Window: 23 Apr – 21 Jul 2026 (last 90 days) · Sources: GA4 Data API + DWH · Generated 22 Jul 2026</p>
   </header>
 
-  <nav class="toc" aria-label="Contents">
-    <a href="#reframe"><span class="n">00</span><span>The reframe — before touching a single label</span></a>
-    <a href="#part1"><span class="n">01</span><span>Navigation performance analysis</span></a>
-    <a href="#part2"><span class="n">02</span><span>UX &amp; information-architecture review</span></a>
-    <a href="#part3"><span class="n">03</span><span>Opportunities</span></a>
-    <a href="#part4"><span class="n">04</span><span>Proposed navigation structure</span></a>
-    <a href="#part5"><span class="n">05</span><span>Prioritized action plan</span></a>
-    <a href="#part6"><span class="n">06</span><span>Risks &amp; validation</span></a>
-  </nav>
+  <div class="tabbar">
+    <button class="tab-btn active" data-tab="clicks">Navigation clicks</button>
+    <button class="tab-btn" data-tab="revenue">Clicks × revenue</button>
+  </div>
 
-  <!-- ===================== REFRAME ===================== -->
-  <section class="section" id="reframe">
-    <div class="thesis">
-      <div class="eyebrow">The reframe</div>
-      <h2>Two facts govern this redesign — and neither is visible in the click table.</h2>
-      <p class="lead">Before ranking items or renaming labels, two structural truths reset what the nav is actually for. Ignore them and you will optimise a surface that most of your customers barely use, on the device most of them aren't on.</p>
-      <div class="twin">
-        <div class="truth">
-          <div class="t-label">Truth 1 · A minority surface</div>
-          <h3>Only ~1 in 9 users ever touches the nav.</h3>
-          <p>Nav reach is 11.3% of users and 16.6% of sessions. The overwhelming majority discover product through search, PLP filters, editorial links, ads and direct URLs — not the mega-menu. The nav is worth fixing, but its ceiling is capped: it is a steering wheel for a minority, not the engine of discovery.</p>
-          <div class="stat"><b>45,308</b> of 399,680 users · <b>16.6%</b> clicks/session</div>
-        </div>
-        <div class="truth">
-          <div class="t-label">Truth 2 · A desktop habit on a mobile crowd</div>
-          <h3>You run two different navigations — and the rich one is on the small screen's audience.</h3>
-          <p>67% of sessions are mobile, yet mobile drives under half of nav clicks; desktop is 29% of sessions but 47% of clicks. Per session, desktop users open the nav <b>2.2×</b> as often. The elaborate technique/theme/size mega-menu is a desktop-minority behaviour; mobile gets a wholly different search-led drawer.</p>
-          <div class="stat">Mobile <b>0.12</b> nav-clicks/session · Desktop <b>0.26</b></div>
-        </div>
-      </div>
+  <!-- ============ TAB 1: CLICKS ============ -->
+  <div class="tab-panel active" id="tab-clicks">
+    <div class="kpis">
+      <div class="kpi"><div class="n">107,750</div><div class="l">Nav clicks (90 days)</div><div class="s">all header / menu links</div></div>
+      <div class="kpi"><div class="n">16.6%</div><div class="l">Clicks per session</div><div class="s">107,750 ÷ 650,549 sessions</div></div>
+      <div class="kpi"><div class="n">11.3%</div><div class="l">Nav reach (users)</div><div class="s">45,308 of 399,680 users</div></div>
+      <div class="kpi"><div class="n">83.2%</div><div class="l">Labelled coverage</div><div class="s">89,620 labelled · 16.8% unlabelled</div></div>
     </div>
-  </section>
 
-  <!-- ===================== PART 1 ===================== -->
-  <section class="section" id="part1">
-    <div class="part-head"><span class="part-num">PART 01</span><h2>Navigation performance analysis</h2></div>
-    <p class="section-intro">Not a ranking by click volume — an interpretation of what the behaviour reveals about intent. Every item gets an assessment, a likely explanation and a recommendation. Verdicts use one verb: Keep · Rename · Move · Merge · Promote · Demote · Remove.</p>
+    <section>
+      <div class="sec-head"><h2>The six top-level items</h2><span class="hint">Share of the 89,620 labelled nav clicks</span></div>
+      <div class="rank" id="rank"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Inside each dropdown</h2><span class="hint">Sub-groups mirror the mega-menu · locale variants merged</span></div>
+      <div class="cards" id="cards"></div>
+    </section>
+  </div>
+
+  <!-- ============ TAB 2: REVENUE ============ -->
+  <div class="tab-panel" id="tab-revenue">
+
+    <div class="method">
+      <h3>How to read this — and its one honest limit</h3>
+      <p>GA4 can't tie a specific nav click to a specific order, so this isn't click-to-purchase attribution. It compares <b>share of attention</b> (nav clicks) with <b>share of revenue</b> (DWH web order value) on the axes where the two genuinely join.</p>
+      <p><b>The nav is organised by technique (Fotografie, Malerei) and theme (Abstrakt, Wasser); the DWH doesn't measure revenue on those axes at all.</b> It measures by artist, edition tier and product type. So the clean join is <b>artist</b> (Top 20 + Artists in Focus) — shown in full below — plus a few edition/format items. Technique- and theme-level revenue can't be answered until order lines carry a technique tag.</p>
+    </div>
 
     <div class="kpis">
-      <div class="kpi"><div class="n">107,750</div><div class="l">Nav clicks (90d)</div><div class="s">89,620 labelled · 16.8% blank</div></div>
-      <div class="kpi"><div class="n">6</div><div class="l">Top-level items</div><div class="s">Kunstwerke carries 61.7%</div></div>
-      <div class="kpi"><div class="n">€2.90M</div><div class="l">Web revenue (90d)</div><div class="s">AOV €644 · 83.5% Limited Edition</div></div>
-      <div class="kpi"><div class="n">~60%</div><div class="l">Revenue from 19 nav artists</div><div class="s">good curation, poor click allocation</div></div>
+      <div class="kpi"><div class="n">€2.90M</div><div class="l">lumas.de web revenue (90d)</div><div class="s">order-value KPI · 4,510 orders</div></div>
+      <div class="kpi"><div class="n">€644</div><div class="l">Average order value</div><div class="s">web channel</div></div>
+      <div class="kpi"><div class="n">83.5%</div><div class="l">from Limited Edition</div><div class="s">the premium tier drives revenue</div></div>
+      <div class="kpi"><div class="n">~60%</div><div class="l">from the 19 nav-featured artists</div><div class="s">€1.75M of €2.90M</div></div>
     </div>
 
-    <h3 style="margin-top:34px">The six top-level items</h3>
-    <div class="legend" style="margin-top:12px">
-      <span class="lg-lbl">Verdicts:</span>
-      <span class="chip keep">Keep</span><span class="chip promote">Promote</span>
-      <span class="chip rename">Rename</span><span class="chip merge">Merge</span>
-      <span class="chip demote">Demote</span><span class="chip remove">Remove</span>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <thead><tr>
-          <th>Item</th><th class="num">Clicks</th><th class="num">Share</th>
-          <th>Assessment &amp; likely explanation</th><th>Verdict</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td class="name">Kunstwerke<span class="sub">→ shop the collection</span></td>
-            <td class="num">55,306</td><td class="num">61.7%</td>
-            <td>The undisputed primary. Correctly the default entry to the catalogue. But its internal load is enormous (35+ links across 6 sub-groups), and its best-performing children are the merchandising shortcuts, not the taxonomy.</td>
-            <td><span class="chip keep">Keep</span> <span class="chip rename">Restructure</span></td>
-          </tr>
-          <tr>
-            <td class="name">Inspiration<span class="sub">→ editorial &amp; discovery</span></td>
-            <td class="num">12,173</td><td class="num">13.6%</td>
-            <td>Healthy engagement for an editorial hub — LUMAS shoppers browse like museum visitors, so this earns its place. But it is bloated: ~25 links, a long tail of collections under 300 clicks each.</td>
-            <td><span class="chip keep">Keep</span> <span class="chip rename">Curate down</span></td>
-          </tr>
-          <tr>
-            <td class="name">Top 20<span class="sub">→ /alle-kuenstler/ (artist grid)</span></td>
-            <td class="num">11,706</td><td class="num">13.1%</td>
-            <td>Looks strong, but 95% of its clicks are the header word + a "show all" CTA (11,137); the 14 artist tiles get 569 combined, ~480 of them blank-labelled. It points to the <em>same URL</em> as "Top 20 Künstler" inside Kunstwerke, and the label promises 20 while showing 14.</td>
-            <td><span class="chip merge">Merge</span> <span class="chip rename">Rename</span></td>
-          </tr>
-          <tr>
-            <td class="name">Galerien<span class="sub">→ gallery locations</span></td>
-            <td class="num">5,349</td><td class="num">6.0%</td>
-            <td>Strong for a store locator, and a genuine LUMAS differentiator (physical galleries convert at ~2× online AOV). German cities dominate; the header link itself (1,021) does real work.</td>
-            <td><span class="chip keep">Keep</span></td>
-          </tr>
-          <tr>
-            <td class="name">Über uns<span class="sub">→ /warum-lumas/ (plain link)</span></td>
-            <td class="num">2,447</td><td class="num">2.7%</td>
-            <td>A single link, no dropdown. Reasonable volume for a trust/about page — and trust matters for €600+ AOV. No reason to expand it into a menu.</td>
-            <td><span class="chip keep">Keep</span></td>
-          </tr>
-          <tr>
-            <td class="name">Artfinder<span class="sub">→ discovery tool</span></td>
-            <td class="num">2,158</td><td class="num">2.4%</td>
-            <td>The lowest-clicked top-level slot — yet it is also the homepage hero CTA and a strategic bet. One entry (ArtFinder, 1,970) does everything; its four sub-tools are effectively dead (Art Cloud: 2 clicks). It behaves like a feature people launch from a CTA, not a category they browse.</td>
-            <td><span class="chip demote">Demote</span> <span class="chip rename">Reframe as CTA</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="data-note">Shares are of 89,620 labelled clicks. "Top 20" and "Top 20 Künstler" resolve to the identical URL <code>/alle-kuenstler/</code> — confirmed on the live site.</p>
-
-    <h3 style="margin-top:40px">Inside the dropdowns — what the sub-items say about intent</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Sub-group / item</th><th class="num">Clicks</th><th>Reading</th><th>Verdict</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Kunstwerke → Highlights<span class="sub">Neuheiten 7,267 · SALE 6,820 · Bestseller 3,070 · Wert steigt 2,878</span></td><td class="num">27,696</td><td>The single most-used cluster on the site. High-intent shoppers use these merchandising shortcuts, and revenue confirms the intent is real (SALE + editions + finishes). Yet they sit <em>inside</em> a dropdown, requiring a hover-and-scan to reach.</td><td><span class="chip promote">Promote</span></td></tr>
-          <tr><td class="name">Kunstwerke → Nach Kategorie (technique)<span class="sub">Fotografie 5,024 · Malerei 3,411 · Skulpturen 1,904</span></td><td class="num">13,408</td><td>Well-used, and technique is a real LUMAS distinction. But this axis <em>cannot be revenue-validated</em> — order lines carry no technique tag — and "Kategorie" mislabels what is really "Technik".</td><td><span class="chip keep">Keep</span> <span class="chip rename">Rename→Technik</span></td></tr>
-          <tr><td class="name">Kunstwerke → Nach Thema (motif)<span class="sub">Natur 1,740 · Abstrakt 1,447 · Wasser 1,142</span></td><td class="num">7,454</td><td>Moderate, long-tailed. Motif is arguably closer to how a decorator actually shops ("something blue / abstract / for the bedroom") than technique — yet it ranks below technique in the menu order.</td><td><span class="chip keep">Keep</span> <span class="chip move">Reorder up</span></td></tr>
-          <tr><td class="name">Kunstwerke → Nach Größe / Format<span class="sub">XXL 1,220 · Klein 1,184 · Querformat 1,133</span></td><td class="num">6,748</td><td>Used enough to keep — practical, spatial intent (fitting a wall). But every one is a raw <code>/search/?width=…</code> query URL: no landing page, no SEO value, no editorial framing.</td><td><span class="chip keep">Keep</span> <span class="chip move">Give real pages</span></td></tr>
-          <tr><td class="name">Kunstwerke → Nach Preis<span class="sub">bis €250 … ab €5000</span></td><td class="num">0</td><td>Present in the menu, but zero labelled clicks captured. Either a tracking gap or a genuinely ignored filter. Price is a core decorator mental model — this deserves investigation, not silent retention.</td><td><span class="chip rename">Investigate</span></td></tr>
-          <tr><td class="name">Top 20 → the 14 artist tiles<span class="sub">Menin 14 · Evans 12 · Hug 10 … 480 blank</span></td><td class="num">569</td><td>Effectively dead. The image-tile grid — prime real estate — generates almost no clicks, and 84% of the few it gets are unlabelled. This is the clearest "attention wasted on expensive real estate" signal in the nav.</td><td><span class="chip remove">Rebuild</span></td></tr>
-          <tr><td class="name">Inspiration → Collections (long tail)<span class="sub">15 collections, most &lt;300 clicks; Winterwunderland 105</span></td><td class="num">6,033</td><td>Genuine editorial value, but too many at once. A dozen near-identical entries create decision fatigue and dilute the strong performers (Favoriten 802, Zeitlose Klassiker 747).</td><td><span class="chip merge">Curate</span></td></tr>
-          <tr><td class="name">Artfinder → sub-tools<span class="sub">Vorlieben 113 · Raum 34 · Kunstwerk 24 · Kunst liken 15 · Art Cloud 2</span></td><td class="num">188</td><td>Four near-dead entries occupying nav slots. The tool has product-market fit on <em>one</em> door (ArtFinder start, 1,970); the rest belong inside the tool, not in the header.</td><td><span class="chip remove">Remove from nav</span></td></tr>
-        </tbody>
-      </table>
+    <div class="strip">
+      <div class="eyebrow">The headline</div>
+      <h2>The right artists — clicked in the wrong proportions.</h2>
+      <p>The artists LUMAS features in the nav drive ~60% of web revenue: good curation. But attention is badly misallocated across them. Gerhard Richter alone takes 35% of nav-artist clicks yet 6% of their revenue, while Beatrice Hug — the single highest-earning artist at €214k — gets under 2% of the clicks. The image-tile grid starves the very artists who sell most; the famous-name text links pull clicks that don't convert in proportion.</p>
     </div>
 
-    <div class="callout">
-      <h3>The artist paradox — right names, wrong click proportions</h3>
-      <p>The 19 nav-featured artists drive ~60% of web revenue (€1.75M) — the curation is sound. But attention is badly misallocated across them. <b>Gerhard Richter takes 198 clicks (a third of all nav-artist attention) for €108k in revenue; Beatrice Hug, the single highest earner at €214k, gets 10 clicks.</b> Uhlig (€158k / 8 clicks), Guachinarte (€130k / 4), Colonna (€120k / 9) are all near-invisible. Meanwhile seven genuine earners are absent from the nav entirely: Pedro Blas €76k, Damien Hirst €66k, Ai Weiwei €58k, Stefanie Schneider €57k, Katharina Grosse €50k, Rafael Neff €46k, Robert Jahns €40k.</p>
-      <p><b>Read Richter as a marquee hook, not a workhorse</b> — famous-name clicks that don't convert in proportion — and rebuild the artist grid around who actually sells. <em>Caveat: 480 of 569 tile clicks are blank-labelled and several artist counts are single digits, so these verdicts are directional. Fixing the tagging is prerequisite to acting on them.</em></p>
-    </div>
-  </section>
-
-  <!-- ===================== PART 2 ===================== -->
-  <section class="section" id="part2">
-    <div class="part-head"><span class="part-num">PART 02</span><h2>UX &amp; information-architecture review</h2></div>
-    <p class="section-intro">The current nav evaluated against established heuristics. Each card names the principle, the specific violation observed on lumas.de, and the evidence.</p>
-
-    <div class="grid2">
-      <div class="pcard">
-        <h3>Hick's Law <span class="k">Choice overload</span></h3>
-        <p>Kunstwerke exposes 35+ links across six sub-groups on a single hover; Inspiration ~25. Decision time rises with option count. The menu is a catalogue dump, not a decision aid.</p>
-        <div class="ev"><b>Evidence:</b> 6 sub-groups in Kunstwerke; 15 collections in one Inspiration column.</div>
-      </div>
-      <div class="pcard">
-        <h3>Consistency &amp; standards <span class="k">Two IAs</span></h3>
-        <p>Desktop is a technique/theme/size taxonomy; mobile is a search-led drawer (Meist gesucht / Beliebte Seiten / Beliebte Kategorien). The same brand teaches two different mental models by device — and 67% of sessions only ever see the mobile one.</p>
-        <div class="ev"><b>Evidence:</b> live walkthrough, both viewports; mobile hides the taxonomy behind curated shortcuts.</div>
-      </div>
-      <div class="pcard">
-        <h3>Redundancy &amp; competing items <span class="k">Cannibalisation</span></h3>
-        <p>"Top 20" (top-level) and "Top 20 Künstler" (in Kunstwerke) share one URL. "Multi-Phase" appears in two menus. "New York" is both a motif collection and a gallery. Duplicate doors split clicks and blur analytics.</p>
-        <div class="ev"><b>Evidence:</b> both resolve to <code>/alle-kuenstler/</code>; Multi-Phase in Kunstwerke + Inspiration.</div>
-      </div>
-      <div class="pcard">
-        <h3>Match to the real world <span class="k">System vs buyer language</span></h3>
-        <p>The prime browse axis is <em>technique</em> (Fotografie/Malerei) — a gallery's internal taxonomy. LUMAS's core buyer is closer to a decorator, who thinks in motif, size, room and budget. The menu leads with the seller's model, not the buyer's.</p>
-        <div class="ev"><b>Evidence:</b> "Nach Kategorie/Technik" ranks above "Nach Thema" and "Nach Preis" in menu order.</div>
-      </div>
-      <div class="pcard">
-        <h3>Label clarity <span class="k">Jargon &amp; broken promises</span></h3>
-        <p>"Top 20" shows 14 tiles and links to <em>all</em> artists. "Wert steigt", "Multi-Phase", "Cut-Outs", "String Art", "Petites/Darlings" are brand- or technique-coded and opaque to a first-time visitor.</p>
-        <div class="ev"><b>Evidence:</b> label ≠ destination ≠ count for "Top 20".</div>
-      </div>
-      <div class="pcard">
-        <h3>Progressive disclosure <span class="k">Everything at once</span></h3>
-        <p>Desktop mega-menus reveal the entire taxonomy on hover with no staging. Ironically the mobile drawer does this <em>better</em> — it leads with a curated handful and defers the full tree.</p>
-        <div class="ev"><b>Evidence:</b> desktop shows all sub-groups simultaneously; mobile stages via "popular" shortcuts.</div>
-      </div>
-      <div class="pcard">
-        <h3>Visual hierarchy &amp; scanability <span class="k">Intent buried</span></h3>
-        <p>The highest-intent, highest-clicked links (SALE, Neuheiten, Bestseller, Editionen) live <em>inside</em> Kunstwerke, below the fold of a hover. The things people most want are the hardest to reach.</p>
-        <div class="ev"><b>Evidence:</b> Highlights cluster = 27,696 clicks, all one level down.</div>
-      </div>
-      <div class="pcard">
-        <h3>SEO &amp; URL hygiene <span class="k">Mixed</span></h3>
-        <p>Technique/motif use clean, indexable paths (<code>/technik/fotografie/</code>, <code>/natur/wasser/</code>) — good. Size/format use non-semantic search queries (<code>/search/?width=from0-to550…</code>) that can't rank or be linked as landing pages.</p>
-        <div class="ev"><b>Evidence:</b> live hrefs on size/format items are raw filter queries.</div>
-      </div>
-      <div class="pcard">
-        <h3>Fitts's Law &amp; the mobile target <span class="k">Hidden depth</span></h3>
-        <p>On the majority device, the entire category structure sits behind a hamburger, below a search field and three shortcut rows. The catalogue's depth is far from the thumb's easiest reach.</p>
-        <div class="ev"><b>Evidence:</b> mobile taxonomy requires opening the drawer and scrolling past shortcuts.</div>
-      </div>
-      <div class="pcard">
-        <h3>Aesthetic &amp; minimalist design <span class="k">Signal-to-noise</span></h3>
-        <p>Dead entries (four Artfinder tools, empty artist tiles, a price filter with zero clicks) stay in the nav, competing visually with the links that matter. Every dead option dilutes the live ones.</p>
-        <div class="ev"><b>Evidence:</b> Art Cloud 2 clicks, price tiers 0 labelled clicks, tiles 569.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== PART 3 ===================== -->
-  <section class="section" id="part3">
-    <div class="part-head"><span class="part-num">PART 03</span><h2>Opportunities</h2></div>
-    <p class="section-intro">Where the gap between current structure and observed behaviour opens room to improve engagement, discoverability and conversion.</p>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Opportunity</th><th>What changes</th><th>Why it helps</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Surface intent shortcuts</td><td>Lift SALE / Neuheiten / Bestseller / Editionen out of a nested column to a first-glance position (and into the mobile shortcut row).</td><td>The most-clicked, revenue-aligned links stop requiring a hover-and-scan. Directly serves high-intent shoppers.</td></tr>
-          <tr><td class="name">Collapse redundancy</td><td>One artist door, one Multi-Phase, disambiguate "New York".</td><td>Stops splitting clicks across duplicate URLs; cleans analytics; frees a top-level slot.</td></tr>
-          <tr><td class="name">Re-cut around buyer mental models</td><td>Elevate motif, size, room and price alongside (or above) technique.</td><td>Matches how a decorator shops; likely lifts browse-to-PDP for the majority who don't think "Fotografie".</td></tr>
-          <tr><td class="name">Curate Inspiration</td><td>Rotate ~6 strong collections in the menu; move the rest to an "Alle Collections" hub.</td><td>Cuts decision fatigue; concentrates clicks on performers; keeps the museum-browse value LUMAS shoppers reward.</td></tr>
-          <tr><td class="name">Rebuild the artist grid on revenue</td><td>Feature Hug, Uhlig, Guachinarte, Colonna, Menin; add missing earners (Blas, Hirst, Weiwei, Grosse).</td><td>Points the most valuable real estate at the artists who actually convert.</td></tr>
-          <tr><td class="name">Right-size Artfinder</td><td>Demote from a top-level browse slot to a prominent contextual CTA; move dead sub-tools into the tool.</td><td>Reflects real behaviour (launched from a CTA, not browsed) without abandoning the strategic bet.</td></tr>
-          <tr><td class="name">Close the technique/motif tagging gap</td><td>Tag order lines with technique/motif (or ship a SKU→technique map).</td><td>The single highest-value fix: it unlocks revenue-validation of the entire browse taxonomy — currently impossible.</td></tr>
-          <tr><td class="name">Treat mobile as the primary canvas</td><td>Design the drawer first; bring editions and intent shortcuts into it.</td><td>67% of sessions and the known mobile-conversion gap live here; desktop-only nav work optimises the minority.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ===================== PART 4 ===================== -->
-  <section class="section" id="part4">
-    <div class="part-head"><span class="part-num">PART 04</span><h2>Proposed navigation structure</h2></div>
-    <p class="section-intro">A five-item top level that removes a redundant slot, promotes intent, and puts artists on an honest footing. Each item states why it is better than today.</p>
-
-    <div class="proposed">
-      <div class="pnav">
-        <div class="pnav-item">
-          <div class="pnav-top"><span class="lbl">Kunstwerke</span><span class="tag">Restructured</span><span class="why">Why: lead with intent, then the buyer's axes — not a flat taxonomy dump.</span></div>
-          <div class="pnav-cols">
-            <div class="pnav-col"><div class="ch">Editionen &amp; Highlights <em>(promoted)</em></div><ul><li>Neuheiten</li><li>Bestseller</li><li>SALE</li><li>Limited Editions</li><li>Master Editions</li><li>Im Wert steigend <em>(was "Wert steigt")</em></li><li>Fast ausverkauft</li></ul></div>
-            <div class="pnav-col"><div class="ch">Nach Motiv</div><ul><li>Natur &amp; Landschaft</li><li>Abstrakt</li><li>Wasser</li><li>Architektur &amp; Städte</li><li>Florale Welten</li><li>Schwarz &amp; Weiß</li></ul></div>
-            <div class="pnav-col"><div class="ch">Nach Technik <em>(was "Kategorie")</em></div><ul><li>Fotografie</li><li>Malerei</li><li>Digitale Kunst</li><li>Skulpturen &amp; Objekte</li><li>Illustrationen</li><li>Leuchtkästen</li></ul></div>
-            <div class="pnav-col"><div class="ch">Größe, Format &amp; Preis</div><ul><li>Klein / Medium / Groß / XXL</li><li>Hoch / Quer / Quadrat / Panorama</li><li>Preis-Filter <em>(fix &amp; verify tracking)</em></li></ul></div>
-          </div>
+    <section>
+      <div class="sec-head"><h2>Artists — attention vs revenue</h2><span class="hint">Share among the 19 nav-featured artists · sorted by revenue</span></div>
+      <div class="atable">
+        <div class="ahead">
+          <span>Artist</span><span>Click share vs revenue share</span><span class="r">Clicks</span><span class="r">Revenue</span><span class="r">Signal</span>
         </div>
-
-        <div class="pnav-item">
-          <div class="pnav-top"><span class="lbl">Künstler</span><span class="tag">Renamed from "Top 20"</span><span class="why">Why: 14≠20, and it already links to "all artists". Honest, scalable, revenue-led.</span></div>
-          <div class="pnav-cols">
-            <div class="pnav-col"><div class="ch">Im Fokus <em>(revenue-ranked)</em></div><ul><li>Top-earning artists surfaced first</li><li>Künstler des Jahres</li><li>10 Artists to Watch</li></ul></div>
-            <div class="pnav-col"><div class="ch">Entdecken</div><ul><li>Alle Künstler (A–Z)</li><li>Deutsche / US-Künstler</li></ul></div>
-          </div>
-        </div>
-
-        <div class="pnav-item">
-          <div class="pnav-top"><span class="lbl">Inspiration</span><span class="tag">Curated</span><span class="why">Why: keep the museum-browse value; kill the long-tail decision fatigue.</span></div>
-          <div class="pnav-cols">
-            <div class="pnav-col"><div class="ch">Editorial</div><ul><li>LUMAS Art Magazine</li><li>Inspirierende Geschichten</li><li>Leitfaden zur Wertsteigerung</li></ul></div>
-            <div class="pnav-col"><div class="ch">Kollektionen <em>(rotate ~6)</em></div><ul><li>Favoriten unserer Kuratoren</li><li>Zeitlose Klassiker</li><li>Perfekte Paare</li><li>+ seasonal · <em>Alle Collections →</em></li></ul></div>
-            <div class="pnav-col"><div class="ch">Formate</div><ul><li>Petites &amp; Darlings</li><li>Cut-Outs · String Art</li></ul></div>
-          </div>
-        </div>
-
-        <div class="pnav-item">
-          <div class="pnav-top"><span class="lbl">Galerien</span><span class="tag">Kept</span><span class="why">Why: a true differentiator; galleries convert at ~2× online AOV.</span></div>
-          <div class="pnav-cols">
-            <div class="pnav-col"><div class="ch">Standorte</div><ul><li>Deutschland (12)</li><li>International (7)</li><li>Events · Kontakt</li></ul></div>
-          </div>
-        </div>
-
-        <div class="pnav-item">
-          <div class="pnav-top"><span class="lbl">Über uns</span><span class="tag">Kept as link</span><span class="why">Why: trust content matters at €600+ AOV; no menu needed.</span></div>
-        </div>
+        <div id="artists"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="callout">
-      <h3>Where Artfinder goes</h3>
-      <p>Artfinder leaves the top-level browse row and becomes a <b>persistent contextual CTA</b> — homepage hero (as today), a pinned entry inside Kunstwerke, and a shortcut in the mobile drawer. Its four sub-tools (Raum hochladen, Kunstwerk hochladen, Kunst liken, Art Cloud) move <em>inside</em> the tool. Rationale: the data shows people launch it from a CTA (1,970 starts) and ignore it as a menu (four tools under 40 clicks each). This preserves the strategic bet while reclaiming a top-level slot — dropping the top level from six items to five.</p>
-    </div>
+    <section>
+      <div class="sec-head"><h2>Revenue leaders missing from the nav</h2><span class="hint">Top earners with no Top 20 tile or Artists-in-Focus link</span></div>
+      <div class="rlist" id="missing"></div>
+    </section>
 
-    <h3 style="margin-top:36px">Change ledger</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Action</th><th>Item</th><th>Rationale</th></tr></thead>
-        <tbody>
-          <tr><td><span class="chip rename">Rename</span></td><td class="name">Top 20 → Künstler</td><td>Label must match reality (14 tiles, links to all artists) and scale beyond a fixed number.</td></tr>
-          <tr><td><span class="chip merge">Merge</span></td><td class="name">Top 20 (top-level) + Top 20 Künstler (in Kunstwerke)</td><td>Identical URL. One artist door, not two competing for the same clicks.</td></tr>
-          <tr><td><span class="chip merge">Merge</span></td><td class="name">Multi-Phase (two menus → one)</td><td>Duplicate entry splits attention and muddies analytics.</td></tr>
-          <tr><td><span class="chip promote">Promote</span></td><td class="name">Editionen &amp; merchandising shortcuts</td><td>Highest-intent, highest-clicked, revenue-aligned — deserve first-glance placement.</td></tr>
-          <tr><td><span class="chip move">Reorder</span></td><td class="name">Motiv above Technik</td><td>Closer to the buyer's mental model than the seller's taxonomy.</td></tr>
-          <tr><td><span class="chip rename">Rename</span></td><td class="name">"Nach Kategorie" → "Nach Technik"; "Wert steigt" → "Im Wert steigend"</td><td>Accurate, jargon-free labels.</td></tr>
-          <tr><td><span class="chip demote">Demote</span></td><td class="name">Artfinder → contextual CTA</td><td>Behaves like a feature, not a browse category.</td></tr>
-          <tr><td><span class="chip remove">Remove</span></td><td class="name">Dead Artfinder sub-tools; empty artist tiles from nav</td><td>Dead options dilute live ones; move into the tool / rebuild the grid.</td></tr>
-          <tr><td><span class="chip rename">New / fix</span></td><td class="name">Working Preis filter; real size/format landing pages</td><td>Price is a core buyer axis; size pages should be indexable, not search queries.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <section>
+      <div class="sec-head"><h2>Where revenue actually sits</h2><span class="hint">Axes the nav doesn't mirror · lumas.de web, 90d</span></div>
+      <div class="twocol">
+        <div class="rlist" id="edition"><h3>By edition tier</h3><div class="sub">DWH <code>category</code> · nav has no edition-tier view</div></div>
+        <div class="rlist" id="ptype"><h3>By product type</h3><div class="sub">DWH <code>product_category</code></div></div>
+      </div>
+    </section>
 
-  <!-- ===================== PART 5 ===================== -->
-  <section class="section" id="part5">
-    <div class="part-head"><span class="part-num">PART 05</span><h2>Prioritized action plan</h2></div>
-    <p class="section-intro">Sequenced by impact against effort. Scored on business impact, UX impact, complexity and confidence — each Low / Med / High.</p>
+    <section>
+      <div class="sec-head"><h2>The nav items that do map to a revenue bucket</h2><span class="hint">Clicks → the revenue line they lead to</span></div>
+      <div class="rlist" id="navmatch"></div>
+    </section>
 
-    <h3>Quick wins — high impact, low effort</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Action</th><th class="num">Biz</th><th class="num">UX</th><th class="num">Effort</th><th class="num">Conf.</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Fix artist-tile blank-label tracking<span class="sub">unblocks every per-artist decision below</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale hi">High</span></td></tr>
-          <tr><td class="name">De-duplicate &amp; rename "Top 20" → "Künstler"<span class="sub">single artist door, honest label</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale hi">High</span></td></tr>
-          <tr><td class="name">Remove dead Artfinder sub-tools from nav<span class="sub">4 entries under 40 clicks each</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale hi">High</span></td></tr>
-          <tr><td class="name">Rename jargon labels<span class="sub">Wert steigt, Nach Kategorie→Technik</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-          <tr><td class="name">Verify the "Nach Preis" tracking gap<span class="sub">0 labelled clicks — bug or dead filter?</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale lo">Low</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 style="margin-top:32px">Medium-term — structural, some design/eng</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Action</th><th class="num">Biz</th><th class="num">UX</th><th class="num">Effort</th><th class="num">Conf.</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Promote merchandising/editions to first-glance<span class="sub">incl. into the mobile shortcut row</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-          <tr><td class="name">Curate Inspiration + build "Alle Collections" hub<span class="sub">rotate ~6, retire the long tail from the menu</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-          <tr><td class="name">Rebuild the artist grid on revenue<span class="sub">surface earners, add missing €40k+ artists</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-          <tr><td class="name">Real, indexable size/format landing pages<span class="sub">replace /search/?width= query URLs</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-          <tr><td class="name">Mobile-first drawer redesign<span class="sub">the 67%-of-sessions surface + conversion gap</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale mid">Med</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 style="margin-top:32px">Long-term — strategic foundations</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Action</th><th class="num">Biz</th><th class="num">UX</th><th class="num">Effort</th><th class="num">Conf.</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Technique/motif tagging on order lines<span class="sub">the measurement foundation for everything above</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td></tr>
-          <tr><td class="name">Re-cut the full taxonomy on validated mental models<span class="sub">after tagging + tree-testing</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale lo">Low→Med</span></td></tr>
-          <tr><td class="name">Personalised / Artfinder-driven navigation<span class="sub">taste-led entry for returning visitors</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale mid">Med</span></td><td class="num"><span class="scale hi">High</span></td><td class="num"><span class="scale lo">Low</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ===================== PART 6 ===================== -->
-  <section class="section" id="part6">
-    <div class="part-head"><span class="part-num">PART 06</span><h2>Risks &amp; validation</h2></div>
-    <p class="section-intro">For each significant move: the risk, the assumption underneath it, how to validate before rolling out, and the metric that proves it worked.</p>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Move</th><th>Risk</th><th>Assumption</th><th>Validation &amp; success metric</th></tr></thead>
-        <tbody>
-          <tr>
-            <td class="name">Merge / rebuild the artist grid</td>
-            <td>Losing SEO equity &amp; brand real estate for artist discovery.</td>
-            <td>Tile clicks are genuinely low — but 480 are blank-labelled.</td>
-            <td><b>Fix tagging first</b>, observe 2–4 weeks, then A/B the merged structure. Metric: nav→artist-PDP CTR, artist-page entrances, artist-attributed revenue.</td>
-          </tr>
-          <tr>
-            <td class="name">Promote SALE / merchandising higher</td>
-            <td>Cannibalising full-price browse; AOV erosion.</td>
-            <td>High-intent shoppers already seek these shortcuts.</td>
-            <td>A/B promoted vs nested. Metric: conversion rate <em>and</em> AOV together — guard the 83.5%-of-revenue Limited-Edition mix so it doesn't fall.</td>
-          </tr>
-          <tr>
-            <td class="name">Mobile-first drawer redesign</td>
-            <td>Disrupting the 67% majority mid-funnel.</td>
-            <td>Search-led + shortcut model beats a buried taxonomy on mobile.</td>
-            <td>Heavy A/B + Clarity session replays + click/tap maps on the drawer. Metric: mobile PDP-reach, add-to-cart, and the mobile conversion gap.</td>
-          </tr>
-          <tr>
-            <td class="name">Re-cut taxonomy by mental model</td>
-            <td>SEO loss on ranking <code>/technik/</code> &amp; <code>/natur/</code> URLs.</td>
-            <td>Buyer language (motif/size/price) outperforms technique-first.</td>
-            <td><b>Tree-testing / card sort before build</b>, then A/B; preserve URLs with 301s. Metric: task-success in tree test → nav CTR + browse-to-PDP.</td>
-          </tr>
-          <tr>
-            <td class="name">Demote Artfinder from top level</td>
-            <td>Undercutting a strategic initiative.</td>
-            <td>It works better as a CTA than as a browse category.</td>
-            <td>A/B nav-slot vs no-slot with the hero CTA retained. Metric: Artfinder starts and Artfinder→PDP→purchase (must hold or rise).</td>
-          </tr>
-          <tr>
-            <td class="name">Curate Inspiration long tail</td>
-            <td>Hiding a collection that quietly drives niche revenue.</td>
-            <td>Sub-300-click collections add fatigue &gt; value in the menu.</td>
-            <td>Move to an "Alle Collections" hub (not delete); monitor hub entrances &amp; collection revenue for 4 weeks before pruning further.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout">
-      <h3>Measurement integrity — read before acting</h3>
-      <ul>
-        <li><b>No click-to-purchase attribution.</b> GA4 can't tie a nav click to an order; this compares share-of-attention with share-of-revenue. Directionally sound, not causal.</li>
-        <li><b>~480 blank-labelled tile clicks.</b> Per-artist attention is undercounted; single-digit artist counts are fragile. Fix tagging before acting on any per-artist verdict.</li>
-        <li><b>Technique &amp; theme revenue is unmeasurable today.</b> Keep/cut decisions on Fotografie vs Malerei or Abstrakt vs Wasser require a technique/motif tag on order lines — the top long-term fix.</li>
-        <li><b>Web channel only.</b> Revenue here is €2.90M of lumas.de web orders; a large share of LUMAS revenue is offline/gallery and outside this surface.</li>
-      </ul>
-    </div>
-  </section>
+    <section>
+      <div class="sec-head"><h2>What to do with this</h2></div>
+      <div class="notes">
+        <ul>
+          <li><b>Rework the Top 20 tile grid.</b> It holds real revenue leaders but they barely get clicked — and it omits several top earners (Pedro Blas, Damien Hirst, Ai Weiwei, Katharina Grosse). Either surface the high-earning tile artists better or rebuild the selection around revenue, not just reputation.</li>
+          <li><b>Treat Gerhard Richter as a hook, not a workhorse.</b> He's the biggest single click magnet in the whole nav yet converts modestly (5 SKUs, €108k). Fine as a marquee name — just don't read his clicks as buying intent.</li>
+          <li class="flag"><b>You can't revenue-validate the technique/theme nav yet.</b> Deciding whether to keep or cut Fotografie vs Malerei, or Abstrakt vs Wasser, needs a technique/motif tag on order lines (or a SKU→technique map). That's the single highest-value tracking fix here.</li>
+          <li><b>Merchandising tiles look justified.</b> SALE and Neuheiten dominate clicks, and revenue concentrates in Limited Edition (83.5%) and premium finishes — consistent with high-intent shoppers using those shortcuts. No case to remove them.</li>
+          <li class="flag"><b>Fix the artist-tile tagging.</b> ~480 Top 20 tile clicks still log a whitespace label, so per-artist attention is undercounted — the misalignment above is directional, and would sharpen with clean tags.</li>
+          <li><b>Nav clicks are lumas.de web only.</b> Revenue here is the web channel (€2.90M); a large share of LUMAS revenue is offline/gallery and outside this surface entirely.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
 
   <footer>
-    <b>Sources.</b> Clicks: GA4 <code>navigation_click</code>, property <code>de</code> (249927669) — 107,750 clicks, 89,620 labelled. Revenue: DWH web order value (affiliate www.lumas.de) — €2,904,815 across 4,510 orders. Device split: GA4 sessions &amp; event counts by <code>deviceCategory</code> (mobile 448,862 sessions / 53,622 nav clicks; desktop 194,878 / 51,281). Window 23 Apr – 21 Jul 2026. Navigation structure verified live on lumas.de (desktop mega-menus + mobile drawer), 22 Jul 2026.<br>
-    <b>Method.</b> Attention (nav clicks) and revenue (order value) are compared only on axes where they genuinely join — artist, edition tier, product type. Technique/theme/size revenue is not measurable until order lines carry those tags. Built on the LUMAS V2 brand system as a companion to the navigation clicks × revenue dashboard.
+    Clicks: 107,750 nav clicks · 89,620 labelled (GA4, lumas.de). Revenue: €2,904,815 web order value · 4,510 orders (DWH, affiliate www.lumas.de). Window 23 Apr–21 Jul 2026.<br>
+    Artist revenue is per-line <code>net_revenue</code>; edition/product-type figures are line-item attributes (per-value approximate, window total reconciles). Built on the LUMAS V2 brand system.
   </footer>
 
 </div>
 
 <script>
-(function(){
-  var root=document.documentElement, btn=document.getElementById("tt");
-  function current(){
-    var set=root.getAttribute("data-theme");
-    if(set) return set;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-  }
-  btn.addEventListener("click",function(){
-    var next=current()==="dark"?"light":"dark";
-    root.setAttribute("data-theme",next);
-    btn.textContent=next==="dark"?"Light":"Dark";
-  });
-  btn.textContent=current()==="dark"?"Light":"Dark";
-})();
+/* ---------- TAB 1 data ---------- */
+const LABELLED = 89620;
+const sections = [
+  {idx:"01", de:"Kunstwerke", en:"Shop the collection", clicks:55306, verified:true, groups:[
+    {name:"Highlights", tot:27696, items:[{l:"Neuheiten",c:7267},{l:"SALE",c:6820},{l:"Top 20 Künstler",c:3178},{l:"Bestseller",c:3070},{l:"Wert steigt",c:2878},{l:"Master Editions",c:1827},{l:"Alle Editionen",c:1686},{l:"Fast ausverkauft",c:970}]},
+    {name:"Nach Kategorie", tot:13408, items:[{l:"Fotografie",c:5024},{l:"Malerei",c:3411},{l:"Skulpturen & Objekte",c:1904},{l:"Digitale Kunst",c:944},{l:"Leuchtkästen",c:757},{l:"Illustrationen",c:688},{l:"Multi-Phase",c:680,n:"also in Inspiration"}]},
+    {name:"Nach Thema", tot:7454, items:[{l:"Natur & Landschaft",c:1740},{l:"Abstrakt",c:1447},{l:"Wasser",c:1142},{l:"Schwarz & Weiß",c:992},{l:"Architektur & Städte",c:879},{l:"Florale Welten",c:820},{l:"New York",c:278,n:"collection"},{l:"Tierwelt",c:156,n:"not in captured menu"}]},
+    {name:"Nach Größe", tot:3893, items:[{l:"XXL",c:1220},{l:"Klein",c:1184},{l:"Groß",c:1052},{l:"Medium",c:437}]},
+    {name:"Nach Format", tot:2855, items:[{l:"Querformat",c:1133},{l:"Hochformat",c:838},{l:"Quadrat",c:362},{l:"Panorama",c:323},{l:"Rund",c:199}]},
+    {name:"Nach Preis", note:"In the menu, but no labelled clicks captured.", items:[{l:"bis €250",c:null},{l:"bis €500",c:null},{l:"bis €1000",c:null},{l:"bis €2000",c:null},{l:"bis €5000",c:null},{l:"ab €5000",c:null}]}
+  ]},
+  {idx:"02", de:"Inspiration", en:"Editorial & discovery", clicks:12173, verified:true, groups:[
+    {name:"Highlights", tot:5344, items:[{l:"Künstler des Jahres 2026",c:1027},{l:"Petites",c:992},{l:"Darlings",c:791},{l:"10 Artists to Watch",c:676},{l:"String Art",c:459},{l:"Leitfaden zur Wertsteigerung",c:438},{l:"Order LUMAS Art Magazine",c:405},{l:"Cut-Outs",c:325},{l:"Inspirierende Geschichten",c:231},{l:"Multi-Phase",c:null,n:"counted under Kunstwerke"}]},
+    {name:"Collections", tot:6033, items:[{l:"Favoriten unserer Kuratoren",c:802},{l:"Zeitlose Klassiker",c:747},{l:"Sommertage",c:685},{l:"Erschwingliche Kunst",c:661},{l:"Perfekte Paare",c:571},{l:"Akt",c:476},{l:"Botanik",c:413},{l:"Trends der Malerei",c:326},{l:"Großstadtflair",c:319},{l:"Zukunftsvisionen",c:254},{l:"Alle Collections",c:192},{l:"Ästhetik Afrikas",c:190},{l:"Deutsche Künstler",c:176},{l:"Künstler aus den USA",c:116},{l:"Winterwunderland",c:105}]},
+    {name:"Artists in Focus", tot:639, items:[{l:"Gerhard Richter",c:198},{l:"Alle Künstler",c:164},{l:"Marta Contreras Simó",c:72},{l:"Slim Aarons",c:50},{l:"Bert Stern",c:45},{l:"Craig Alan",c:43},{l:"Margarete Schüfer",c:41},{l:"Manu Grinspan",c:26}]},
+    {name:"LUMAS Voices", tot:157, items:[{l:"Alexander Herrmann",c:37},{l:"Marc Ullrich",c:27},{l:"Maurizio Pellizzoni",c:23},{l:"Stefanie Harig",c:20},{l:"Christoph Bamberg",c:18},{l:"Gisela",c:18},{l:"Anika Aberle",c:14}]}
+  ]},
+  {idx:"03", de:"Top 20", en:"Artist grid", clicks:11706, verified:true, groups:[
+    {name:"Entry points", tot:11137, items:[{l:"Alle Top 20 Künstler anzeigen",c:6400,n:"‘show all’ CTA"},{l:"Top 20",c:4737,n:"header item"}]},
+    {name:"The 15 artist tiles", tot:569, note:"~480 still log a whitespace label.", items:[{l:"Unlabelled tiles (whitespace)",c:480,n:"tracking gap"},{l:"Isabelle Menin",c:14},{l:"Gavin Evans",c:12},{l:"Beatrice Hug",c:10},{l:"Marta Contreras Simó",c:10},{l:"Massimo Colonna",c:9},{l:"Wolfgang Uhlig",c:8},{l:"Luc Dratwa",c:7},{l:"Guachinarte",c:4},{l:"Heiko Hellwig",c:3},{l:"Werner Pawlok",c:3},{l:"Carol Muthiga-Oyekunle",c:2},{l:"Claudio Gotsch",c:2},{l:"Slim Aarons",c:2},{l:"Ysabel Lemay",c:2},{l:"Bert Stern",c:1}]}
+  ]},
+  {idx:"04", de:"Galerien", en:"Gallery locations", clicks:5349, verified:true, groups:[
+    {name:"Deutschland", tot:3563, items:[{l:"Berlin – Mitte",c:467},{l:"München",c:427},{l:"Hamburg",c:393},{l:"Düsseldorf",c:357},{l:"Frankfurt",c:351},{l:"Stuttgart",c:311},{l:"Köln",c:309},{l:"Berlin – Kudamm",c:268},{l:"Dortmund",c:205},{l:"Hannover",c:190},{l:"Mannheim",c:183},{l:"Flughafen Frankfurt",c:102}]},
+    {name:"International", tot:556, items:[{l:"Paris",c:142},{l:"Zürich",c:140},{l:"Wien",c:71},{l:"New York",c:65,n:"USA"},{l:"London",c:61},{l:"Miami Beach",c:54},{l:"Budapest",c:23}]},
+    {name:"Service & Events", tot:1230, items:[{l:"Galerien",c:1021,n:"header"},{l:"Events",c:143},{l:"Alle Galerien",c:37},{l:"Kontakt",c:29}]}
+  ]},
+  {idx:"05", de:"Über uns", en:"Company · standalone link", clicks:2447, verified:false, groups:[
+    {name:"Top-level link", note:"No dropdown items in the data — likely a direct link.", items:[{l:"Über uns",c:2447}]}
+  ]},
+  {idx:"06", de:"Artfinder", en:"The discovery tool", clicks:2158, verified:false, groups:[
+    {name:"Tool entries", tot:2158, items:[{l:"ArtFinder",c:1970},{l:"Vorlieben teilen",c:113},{l:"Raum hochladen",c:34},{l:"Kunstwerk hochladen",c:24},{l:"Kunst liken",c:15},{l:"Art Cloud",c:2}]}
+  ]}
+];
+
+/* ---------- TAB 2 data ---------- */
+const WEB_REV = 2904815;
+const artists = [
+  {n:"Beatrice Hug",clicks:10,rev:214202,units:125},
+  {n:"Isabelle Menin",clicks:14,rev:167004,units:233},
+  {n:"Wolfgang Uhlig",clicks:8,rev:158250,units:111},
+  {n:"Marta Contreras Simó",clicks:82,rev:146425,units:180},
+  {n:"Guachinarte",clicks:4,rev:130369,units:127},
+  {n:"Gavin Evans",clicks:12,rev:121409,units:234},
+  {n:"Massimo Colonna",clicks:9,rev:120145,units:205},
+  {n:"Gerhard Richter",clicks:198,rev:108074,units:115},
+  {n:"Luc Dratwa",clicks:7,rev:83972,units:111},
+  {n:"Manu Grinspan",clicks:26,rev:81565,units:107},
+  {n:"Claudio Gotsch",clicks:2,rev:66584,units:132},
+  {n:"Werner Pawlok",clicks:3,rev:62190,units:135},
+  {n:"Slim Aarons",clicks:52,rev:55580,units:87},
+  {n:"Craig Alan",clicks:43,rev:41844,units:71},
+  {n:"Margarete Schüfer",clicks:41,rev:41808,units:46},
+  {n:"Ysabel Lemay",clicks:2,rev:39107,units:36},
+  {n:"Carol Muthiga-Oyekunle",clicks:2,rev:37823,units:75},
+  {n:"Bert Stern",clicks:46,rev:35002,units:16},
+  {n:"Heiko Hellwig",clicks:3,rev:34674,units:95}
+];
+const missingLeaders = [
+  {n:"Pedro Blas",rev:76480},{n:"Damien Hirst",rev:66405},{n:"Ai Weiwei",rev:58432},
+  {n:"Stefanie Schneider",rev:57370},{n:"Katharina Grosse",rev:49642},{n:"Rafael Neff",rev:45910},{n:"Robert Jahns",rev:39674}
+];
+const editionTier = [
+  {n:"Limited Edition",rev:2424826},{n:"Open Edition",rev:223598},
+  {n:"Darlings – Small Limited Edition",rev:145812,nav:"= nav Darlings"},
+  {n:"Petites – Small Open Edition",rev:108169,nav:"= nav Petites"},{n:"Classics",rev:2411}
+];
+const productType = [
+  {n:"Wall Picture",rev:1811065},{n:"Special Finishing",rev:470631},
+  {n:"Master",rev:241592,nav:"= nav Master Editions"},{n:"Sets",rev:108501},
+  {n:"XXL",rev:68970,nav:"= nav size XXL"},{n:"Artware",rev:58701},{n:"Wall Object",rev:53258},
+  {n:"Art Object",rev:44617},{n:"Leinwand",rev:16133},{n:"Sculptures",rev:13652,nav:"→ Skulpturen & Objekte"},
+  {n:"Books",rev:8178},{n:"Acrylic Block",rev:6240}
+];
+const navMatch = [
+  {nav:"Master Editions",clicks:1827,rev:241592,via:"product type ‘Master’"},
+  {nav:"Darlings",clicks:791,rev:145812,via:"edition tier"},
+  {nav:"Petites",clicks:992,rev:108169,via:"edition tier"}
+];
+
+const fmt = n => n.toLocaleString("en-US");
+const eur = n => "€"+Math.round(n).toLocaleString("en-US");
+const eurK = n => "€"+(n/1000).toFixed(0)+"k";
+
+/* ----- render TAB 1 ----- */
+const maxSection = Math.max(...sections.map(s=>s.clicks));
+document.getElementById("rank").innerHTML = sections.map((s,i)=>{
+  const share=(s.clicks/LABELLED*100), w=(s.clicks/maxSection*100);
+  return `<div class="rank-row"><div class="name">${s.de}<span>${s.en}</span></div>
+    <div class="track"><div class="fill ${i>=2?'soft':''}" style="width:${w}%"></div></div>
+    <div class="val"><b>${fmt(s.clicks)}</b> · ${share.toFixed(1)}%</div></div>`;
+}).join("");
+document.getElementById("cards").innerHTML = sections.map(s=>{
+  const share=(s.clicks/LABELLED*100).toFixed(1);
+  const chip=s.verified?`<span class="chip menu">From live menu</span>`:`<span class="chip url">Grouped by URL</span>`;
+  const groups=s.groups.map(g=>{
+    const gmax=Math.max(...g.items.map(it=>it.c||0),1);
+    const items=g.items.map(it=>{const na=it.c==null;const val=na?"—":fmt(it.c);
+      const bar=na?"":`<div class="mini"><div class="f" style="width:${(it.c/gmax*100)}%"></div></div>`;
+      return `<div class="item${na?' na':''}"><div class="row"><div class="lab">${it.l}${it.n?` <em>· ${it.n}</em>`:""}</div><div class="c">${val}</div></div>${bar}</div>`;}).join("");
+    return `<div class="group"><div class="ghead"><span>${g.name}</span>${g.tot?`<span class="gtot">${fmt(g.tot)}</span>`:""}</div>${g.note?`<div class="gnote">${g.note}</div>`:""}<div class="items">${items}</div></div>`;
+  }).join("");
+  return `<div class="card"><div class="card-head"><div><div class="idx">${s.idx} · top-level</div><h3>${s.de}</h3><div class="sub">${s.en}</div>${chip}</div>
+    <div class="tot"><div class="big">${fmt(s.clicks)}</div><div class="share">${share}% of labelled clicks</div></div></div>
+    <div class="groups">${groups}</div></div>`;
+}).join("");
+
+/* ----- render TAB 2 ----- */
+const totClk = artists.reduce((a,b)=>a+b.clicks,0);
+const totRev = artists.reduce((a,b)=>a+b.rev,0);
+const maxShare = Math.max(...artists.map(a=>Math.max(a.clicks/totClk, a.rev/totRev)));
+document.getElementById("artists").innerHTML = artists.map(a=>{
+  const cs=a.clicks/totClk, rs=a.rev/totRev;
+  let cls="mut",lab="Aligned";
+  if(rs>=cs*2){cls="menu";lab="Under-clicked";}
+  else if(cs>=rs*2){cls="warn";lab="Over-clicked";}
+  return `<div class="arow">
+    <div class="an">${a.n}</div>
+    <div class="cmp">
+      <div class="crow"><span>Clicks</span><div class="tk"><div class="fl clk" style="width:${cs/maxShare*100}%"></div></div><b>${(cs*100).toFixed(1)}%</b></div>
+      <div class="crow"><span>Rev</span><div class="tk"><div class="fl rev" style="width:${rs/maxShare*100}%"></div></div><b>${(rs*100).toFixed(1)}%</b></div>
+    </div>
+    <div class="num r">${fmt(a.clicks)}</div>
+    <div class="num r"><b>${eur(a.rev)}</b></div>
+    <div class="r flagcell"><span class="chip ${cls}">${lab}</span></div>
+  </div>`;
+}).join("");
+
+const maxMiss=Math.max(...missingLeaders.map(m=>m.rev));
+document.getElementById("missing").innerHTML =
+  `<div class="sub">Together ${eur(missingLeaders.reduce((a,b)=>a+b.rev,0))} in 90-day web revenue — none surfaced in the Top 20 grid or Artists in Focus.</div>`+
+  missingLeaders.map(m=>`<div class="ritem"><div class="top"><div class="rl">${m.n}</div><div class="rc"><b>${eur(m.rev)}</b></div></div>
+    <div class="bar"><div class="f" style="width:${m.rev/maxMiss*100}%"></div></div></div>`).join("");
+
+function renderRev(el, arr, base){
+  const mx=Math.max(...arr.map(x=>x.rev));
+  document.getElementById(el).insertAdjacentHTML("beforeend", arr.map(x=>{
+    const share=(x.rev/base*100).toFixed(1);
+    return `<div class="ritem"><div class="top"><div class="rl">${x.n}${x.nav?` <em>${x.nav}</em>`:""}</div><div class="rc"><b>${eur(x.rev)}</b> · ${share}%</div></div>
+      <div class="bar"><div class="f" style="width:${x.rev/mx*100}%"></div></div></div>`;
+  }).join(""));
+}
+renderRev("edition", editionTier, WEB_REV);
+renderRev("ptype", productType, WEB_REV);
+
+document.getElementById("navmatch").innerHTML =
+  `<div class="sub">The only nav labels that map to a revenue line the DWH tracks. Everything technique- or theme-based can't be matched.</div>`+
+  navMatch.map(m=>`<div class="ritem"><div class="top"><div class="rl">${m.nav} <em>${m.via}</em></div>
+    <div class="rc">${fmt(m.clicks)} clicks · <b>${eur(m.rev)}</b></div></div></div>`).join("");
+
+/* ----- tabs ----- */
+document.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  document.getElementById("tab-"+b.dataset.tab).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}));
 </script>
+</body>
+</html>
