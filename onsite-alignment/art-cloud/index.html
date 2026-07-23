@@ -179,8 +179,8 @@
   /* artist + title underneath */
   .sheet-meta{text-align:center;margin-bottom:22px;}
   .sheet-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,226,.5);}
-  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:27px;line-height:1.08;margin:8px 0 5px;color:var(--ivory);text-wrap:balance;}
-  .sheet-artist{font-size:14.5px;color:rgba(244,237,226,.68);}
+  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:27px;line-height:1.08;margin:0 0 6px;color:var(--ivory);text-wrap:balance;}
+  .sheet-artist{font-size:16.5px;color:rgba(244,237,226,.78);}
   /* buttons */
   .sheet-cta{display:flex;gap:10px;}
   .btn-primary{flex:1;height:54px;border-radius:8px;background:var(--ivory);color:var(--charcoal);
@@ -192,8 +192,8 @@
     display:flex;align-items:center;justify-content:center;color:var(--ivory);transition:transform .16s var(--ease-out),color .2s,border-color .2s;}
   .btn-ghost:active{transform:scale(.95);}
   .btn-ghost svg{width:21px;height:21px;}
-  .btn-ghost.liked{border-color:#C4443A;color:#C4443A;}
-  .btn-ghost.liked svg{fill:#C4443A;}
+  .btn-ghost.liked{border-color:rgba(244,237,226,.5);color:var(--ivory);}
+  .btn-ghost.liked svg{fill:var(--ivory);}
 
   /* tablet: selection becomes a right-side panel, same vertical layout */
   .exp[data-mode="tablet"] .sheet{
@@ -285,7 +285,6 @@
       <div class="handle"></div>
       <div class="sheet-hero"><img alt=""></div>
       <div class="sheet-meta">
-        <div class="sheet-eyebrow">LUMAS Edition</div>
         <div class="sheet-title"></div>
         <div class="sheet-artist"></div>
       </div>
