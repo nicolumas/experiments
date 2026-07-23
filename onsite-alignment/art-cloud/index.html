@@ -129,15 +129,6 @@
     transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);}
   .matchpill.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  /* ---- "back to full cloud" control — centered in the top bar between logo & close ---- */
-  .similar-bar{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%) translateY(-6px);
-    z-index:calc(var(--z-controls) + 1);pointer-events:auto;display:none;align-items:center;gap:8px;max-width:60vw;height:38px;padding:0 15px 0 10px;border-radius:999px;
-    background:rgba(244,237,226,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--charcoal);
-    box-shadow:0 6px 22px -10px rgba(0,0,0,.55);opacity:0;transition:opacity .28s var(--ease-out),transform .28s var(--ease-out);}
-  .similar-bar.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
-  .similar-bar svg{width:16px;height:16px;flex:none;stroke:var(--charcoal);}
-  .similar-bar .sb-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--charcoal-700);flex:none;}
-  .similar-bar .sb-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:14px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* ---- secondary "more in this style" button in the sheet ---- */
   .btn-similar{width:100%;height:50px;margin-top:10px;border-radius:8px;border:1px solid rgba(244,237,226,.24);background:transparent;
@@ -172,16 +163,18 @@
   .scrim.show{opacity:1;visibility:visible;background:rgba(8,7,6,.5);pointer-events:auto;}
 
   .sheet{position:absolute;z-index:var(--z-sheet);left:0;right:0;bottom:0;
+    display:flex;flex-direction:column;
     background:#15130f;color:var(--ivory);border-radius:24px 24px 0 0;
     box-shadow:0 -22px 70px -18px rgba(0,0,0,.8);border-top:1px solid rgba(244,237,226,.10);
     transform:translateY(101%);transition:transform .46s var(--ease-drawer),visibility .46s;
     padding:12px var(--sheet-pad) calc(env(safe-area-inset-bottom,0px) + 22px);
-    max-height:90vh;
+    /* never reach the top bar (logo / × ), even with a notch safe-area */
+    max-height:calc(100dvh - env(safe-area-inset-top,0px) - 84px);
     will-change:transform;touch-action:none;visibility:hidden;pointer-events:none;}
   .sheet.show{transform:translateY(0);visibility:visible;pointer-events:auto;}
-  .sheet .handle{width:38px;height:4px;border-radius:2px;background:rgba(244,237,226,.26);margin:2px auto 16px;}
-  /* artwork above */
-  .sheet-hero{display:flex;align-items:center;justify-content:center;height:44vh;margin-bottom:20px;}
+  .sheet .handle{flex:none;width:38px;height:4px;border-radius:2px;background:rgba(244,237,226,.26);margin:2px auto 16px;}
+  /* artwork above — flex-basis sets the target height, shrinks to fit shorter screens */
+  .sheet-hero{display:flex;align-items:center;justify-content:center;flex:0 1 34vh;min-height:0;margin-bottom:18px;overflow:hidden;}
   .sheet-hero img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;box-shadow:0 24px 64px -22px rgba(0,0,0,.85);}
   /* artist + title underneath */
   .sheet-meta{text-align:center;margin-bottom:22px;}
@@ -210,7 +203,7 @@
   }
   .exp[data-mode="tablet"] .sheet.show{transform:translateX(0);}
   .exp[data-mode="tablet"] .sheet .handle{display:none;}
-  .exp[data-mode="tablet"] .sheet-hero{height:auto;max-height:44vh;}
+  .exp[data-mode="tablet"] .sheet-hero{flex:0 0 auto;height:auto;max-height:44vh;overflow:visible;}
 
   @media (prefers-reduced-motion: reduce){
     *{transition-duration:.01ms !important;}
@@ -266,11 +259,6 @@
     <div class="matchpill"></div>
     <div class="hint"><span class="dot"></span>Ziehen zum Entdecken · zwei Finger zum Zoomen</div>
 
-    <button class="similar-bar" aria-label="Zurück zu allen Werken">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      <span class="sb-label">Ähnlich zu</span>
-      <span class="sb-title"></span>
-    </button>
 
     <div class="dock">
       <label class="search">
@@ -764,8 +752,6 @@
     root.querySelector('.similar-btn-sheet').addEventListener('click',()=>{
       const seed=selected; deselect(false); if(seed) layoutSimilar(seed);
     });
-    // back to the full cloud
-    root.querySelector('.similar-bar').addEventListener('click',()=>layoutFull());
     search.addEventListener('input',()=>applyQuery(search.value));
     root.querySelector('.search .clear').addEventListener('click',()=>{ search.value=''; applyQueryReset(); });
     function applyQueryReset(){ search.value=''; applyQuery(''); }
