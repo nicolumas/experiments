@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ═══════════════════════════════════════════════════════════════════════
+  PROTO HEADER
+  ID:          PROTO-2026-005
+  Hypothesis:  Among low-intent mobile browsers on a bounded curated set
+               (60–200 works), a colour-sorted browse view (chromatic field
+               + neutral band) increases PDP entry rate (select_item) and
+               wishlist adds versus the default relevance grid — because
+               colour/mood scanning matches museum-browse behaviour better
+               than relevance ranking — WITHOUT depressing add-to-cart on
+               the collection (guardrail, measured downstream of the PLP).
+  Prior:       Formal ledger SILENT (no Confluence Insight Ledger tree —
+               seed at first WRITE). Memory-validated priors:
+               · Discovery surfaces are judged on discovery-to-consideration
+                 (PDP entry), not purchase CVR (VALIDATED — mobile PDP→cart
+                 is the €2–3M leak; this surface sits upstream of it).
+               · Engagement ≠ intent: effortful discovery tools FILTER
+                 intent, they don't create it (INDICATED, Art-Quiz test).
+                 COLLISION FLAG: a dwell-only lift on this page is NOT a
+                 win. That is why the primary metric is select_item, not
+                 scroll/dwell — those are secondary diagnostics only.
+               · Museum-browse behaviour is real (large dormant base browses
+                 without buying) (VALIDATED). The field must hand off to
+                 PDPs, not merely deepen browsing.
+               · Premiumisation works; price never leads (VALIDATED) —
+                 prices appear only on interaction reveal, small type.
+  Goals:       primary   select_item → PDP-clickthrough goal
+                          [UNBOUND — 16-goal library not in repo; bind at
+                          ABlyft config, closest existing goal by the
+                          {page}_{type}_{object} convention. Do NOT invent.]
+               secondary add_to_wishlist (saveIntent) [UNBOUND — same]
+               secondary chromatic_scrub, field_coverage, view_toggle
+                          (custom GA4 events, diagnostics only)
+               guardrail collection-level ATC + RPV, Bayesian analysis,
+                          revenue outliers capped (high-AOV art) — read via
+                          the reconciled ABlyft revenue tag (known prior
+                          failure exp. 17421093: reconcile vs DWH BEFORE
+                          launch).
+  Variants:    control (default relevance grid, faithful: vertical grid,
+               feed order, always-on labels)
+             | chromatic (colour field: neutral band → hue spectrum wall,
+               silent chrome, reveal on interaction)
+               Switch: ?v=control|chromatic · keyboard "v" · the in-page
+               view toggle (which doubles as the honest escape hatch and
+               ships in BOTH variants).
+  Data:        prototype/assets/artworks.verified.json (162 works, verified
+               2026-07-17) + assets/chromatic-prices.json (real DE feed
+               minimums, 2026-07-21). VERIFIED: neither catalogue feed nor
+               DWH carries any colour/palette field (checked feed schema,
+               categories_json, internal_labels_json 2026-07-21) → colour
+               is extracted client-side (canvas k-means → OKLCH), cached in
+               localStorage, optionally preloaded from
+               assets/chromatic-palettes.json. Production would precompute
+               palettes at import time — flag for the ticket.
+  Bounded set: the whole set must be present to sort it. This lens cannot
+               paginate — core tension with the default PLP, by design.
+  States:      loading (tonal skeleton field) · small set <40 (banded rows
+               fallback, demo ?n=24) · error (demo ?state=error) ·
+               fresh extraction demo ?fresh=1 · mood-bands fork ?bands=mood
+  Status:      exploration
+  Next gate:   lumas-05-red-team → ticket
+═══════════════════════════════════════════════════════════════════════ -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Browse by colour — LUMAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="assets/lumas-fonts.css" rel="stylesheet">
+<link href="assets/v2-tokens.css" rel="stylesheet">
+<style>
+  /* Local font binding: lumas-fonts.css registers 'UtileDisplay' (no space). */
+  :root {
+    --display: 'UtileDisplay', Georgia, serif;
+    --sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --header-h: 122px;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { height: 100%; }
+  body {
+    font-family: var(--sans);
+    font-size: var(--type-body);
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--surface-page);
+    min-height: 100dvh;
+  }
+  /* body scrolls vertically in both variants */
+
+  /* ── Header — compact band, headline left, copy + toggle inline ── */
+  .site-header {
+    height: var(--header-h);
+    padding: var(--sp-4) var(--sp-4) var(--sp-3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-1);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-page);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+  }
+  h1 { white-space: nowrap; }
+  .brand-eyebrow {
+    font-size: var(--type-eyebrow);
+    font-weight: 700;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: var(--type-display-h4);
+    line-height: 1.25;
+    letter-spacing: var(--tracking-display);
+  }
+  .header-sub {
+    font-size: var(--type-body-small);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 52ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* View toggle — segmented chips (v2 Chip spec) — the variant switch
+     AND the honest escape hatch for intent-driven shoppers. */
+  .view-toggle { display: inline-flex; gap: var(--sp-2); flex: none; }
+  .view-toggle button {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.96px;
+    text-transform: uppercase;
+    line-height: 1;
+    padding: var(--sp-2) var(--sp-4);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 150ms ease, color 150ms ease, transform 150ms var(--ease-out);
+  }
+  .view-toggle button:active { transform: scale(0.97); }
+  .view-toggle button[aria-pressed="true"] {
+    background: var(--surface-inverse);
+    color: var(--text-inverse);
+    border-color: var(--surface-inverse);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .view-toggle button:not([aria-pressed="true"]):hover {
+      background: var(--surface-raised);
+      border-color: transparent;
+    }
+  }
+  .view-toggle button:focus-visible,
+  .tile:focus-visible,
+  .scrubber:focus-visible,
+  .btn:focus-visible,
+  .tile-save:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  /* ── Field ── */
+  .field-viewport { position: relative; }
+  #field { position: relative; }
+  #field.no-anim .tile { transition: none; }   /* first layout places, never animates */
+
+  /* Mood-band labels (behind ?bands=mood) — sit at each band's first row */
+  .band-label {
+    position: absolute;
+    z-index: 5;
+    padding: 3px 8px;
+    background: rgba(250, 246, 241, 0.9);
+    font-size: var(--type-ui-label);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* ── Tiles — no passepartout: the work fills the frame, contain-fit (never crop) ── */
+  .tile {
+    position: absolute;
+    top: 0; left: 0;
+    display: block;
+    box-shadow: var(--shadow-sm);        /* tonal lift off the ivory, not a white border */
+    text-decoration: none;
+    color: inherit;
+    border-radius: 0;
+    transition: transform 420ms var(--ease-out), width 420ms var(--ease-out),
+                box-shadow 200ms ease, opacity 300ms ease;
+  }
+  .tile-art {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--ar, 0.8);        /* box reserved from layout math — no gaps, no CLS */
+    background: var(--ph, var(--surface-muted));
+  }
+  .tile-art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;                 /* never crop — the whole work, always */
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+  .tile-art img.loaded { opacity: 1; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .silent .tile:hover { box-shadow: var(--shadow-frame); }   /* gallery-lift */
+  }
+  .silent .tile.revealed { box-shadow: var(--shadow-frame); }
+
+  /* Meta — silent chrome: overlay revealed on hover/tap in chromatic;
+     always-on caption below the work in the default grid (faithful control). */
+  .tile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: var(--sp-2) 2px 0;                 /* caption (control + small set) */
+  }
+  .tile-title {
+    font-size: var(--type-body-small);
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tile-artist, .tile-price {
+    font-size: var(--type-caption);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tile-save {
+    font-family: var(--sans);
+    font-size: var(--type-ui-label);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui-label);
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    border-bottom: 1px solid currentColor;
+    color: inherit;
+    padding: 2px 0 3px;
+    margin-top: var(--sp-1);
+    align-self: flex-start;
+    cursor: pointer;
+  }
+  .tile-save[aria-pressed="true"] { border-bottom-style: double; }
+
+  /* Silent chrome: overlay revealed on hover/tap in the colour field */
+  .silent .tile-meta {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: var(--sp-4) var(--sp-3) var(--sp-3);
+    background: linear-gradient(to top, rgba(28, 26, 24, 0.94), rgba(28, 26, 24, 0.55) 68%, rgba(28, 26, 24, 0));
+    color: var(--text-inverse);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+  .silent .tile-artist,
+  .silent .tile-price { color: rgba(244, 237, 226, 0.78); }
+  @media (hover: hover) and (pointer: fine) {
+    .silent .tile:hover .tile-meta { opacity: 1; pointer-events: auto; }
+  }
+  .silent .tile.revealed .tile-meta { opacity: 1; pointer-events: auto; }
+
+  /* ── Scrubber — vertical rail: ivory/white at the top, down through ink, then colour ── */
+  .scrubber {
+    position: fixed;
+    top: var(--header-h);
+    right: 0;
+    bottom: 0;
+    width: 46px;
+    display: none;
+    z-index: 25;
+    cursor: pointer;
+    touch-action: none;
+  }
+  .mode-chromatic .scrubber { display: block; }
+  .scrubber-track {
+    position: absolute;
+    top: var(--sp-4);
+    bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-sm);
+  }
+  .scrubber-neutral {
+    height: calc(var(--neutral-frac, 0.25) * 100%);
+    flex: none;
+    background: linear-gradient(180deg, #f4ede2 0%, #cfc8bd 24%, #8a8681 52%, #45423f 78%, #1c1a18 100%);
+  }
+  .scrubber-spectrum {
+    flex: 1;
+    background: linear-gradient(180deg,
+      oklch(0.55 0.20 300), oklch(0.60 0.15 258), oklch(0.72 0.11 195),
+      oklch(0.72 0.14 145), oklch(0.86 0.15 100), oklch(0.72 0.16 55),
+      oklch(0.62 0.19 25), oklch(0.60 0.16 350));
+  }
+  @supports not (color: oklch(0.5 0.1 20)) {
+    .scrubber-spectrum {
+      background: linear-gradient(180deg, #7f6ba3, #5d7fae, #5b9b94, #6f9d62, #c9b24f, #c0803f, #b4574e, #a95f86);
+    }
+  }
+  .scrubber-thumb {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 22px; height: 4px;
+    background: var(--surface-inverse);
+    border: 2px solid var(--surface-page);
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-xs);
+    pointer-events: none;
+  }
+  .scrubber-band-readout {
+    position: absolute;
+    right: 52px;
+    top: 0;
+    transform: translateY(-50%);
+    font-size: var(--type-ui-label);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: var(--surface-page);
+    padding: 3px var(--sp-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 150ms ease;
+    pointer-events: none;
+  }
+  .scrubber.scrubbing .scrubber-band-readout { opacity: 1; }
+
+  /* ── Notices / states ── */
+  .notice {
+    margin: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xs);
+    font-size: var(--type-body-small);
+    color: var(--text-primary);
+    max-width: 60ch;
+  }
+  .state-panel {
+    min-height: 50dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--sp-5);
+    padding: var(--sp-16) var(--sp-6);
+    max-width: 560px;
+  }
+  .state-panel h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: var(--type-display-h3);
+    line-height: 1.12;
+  }
+  .state-panel p { color: var(--text-secondary); font-size: var(--type-body-small); max-width: 44ch; }
+  .btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: var(--tracking-button);
+    text-transform: uppercase;
+    padding: var(--sp-4) var(--sp-6);
+    border: 1px solid var(--border-focus);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 150ms ease, color 150ms ease, transform 150ms var(--ease-out);
+  }
+  .btn:active { transform: scale(0.97); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { background: var(--surface-inverse); color: var(--text-inverse); }
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 768px) {
+    :root { --header-h: 132px; }
+    .site-header { padding: var(--sp-5) var(--sp-8) var(--sp-4); }
+    .header-sub { max-width: none; white-space: normal; }
+    .scrubber { width: 56px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile, .tile-art img, .tile-meta, .view-toggle button, .btn { transition: none !important; }
+  }
+</style>
+</head>
+<body class="mode-chromatic">
+
+  <header class="site-header">
+    <div class="header-row">
+      <span class="brand-eyebrow">Lumas</span>
+      <!-- ABLYFT-GOAL: view-toggle usage (custom event; diagnostics) -->
+      <div class="view-toggle" role="group" aria-label="View">
+        <button type="button" id="btnChromatic" aria-pressed="true">Colour</button>
+        <button type="button" id="btnControl" aria-pressed="false">Default</button>
+      </div>
+    </div>
+    <h1>Browse by colour</h1>
+    <p class="header-sub" id="headerSub">One colour field, from ivory down through ink, then into full colour. Tap a work to look closer.</p>
+  </header>
+
+  <div class="field-viewport" id="fieldViewport">
+    <div id="field" aria-live="polite"></div>
+  </div>
+
+  <!-- Colour scrubber — vertical rail: ivory/white pinned at the top, then ink, then colour. -->
+  <div class="scrubber" id="scrubber" role="slider" tabindex="0"
+       aria-label="Scroll to a colour" aria-valuemin="0" aria-valuemax="100"
+       aria-valuenow="0" aria-valuetext="Neutrals" aria-orientation="vertical">
+    <span class="scrubber-band-readout" id="bandReadout">Neutrals</span>
+    <div class="scrubber-track">
+      <span class="scrubber-neutral"></span>
+      <span class="scrubber-spectrum"></span>
+    </div>
+    <div class="scrubber-thumb" id="scrubberThumb"></div>
+  </div>
+
+<script src="assets/lumas-img.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ═══ Config — every tunable named, per spec ═══ */
+  var CONFIG = {
+    NEUTRAL_C: 0.045,        // OKLCH chroma below which a swatch is neutral (~15–20% sat)
+    CHROMA_MIN_WEIGHT: 0.12, // a chromatic cluster must cover ≥12% of the work to represent it
+    K: 5,                    // k-means swatches per work
+    KMEANS_ITERS: 12,
+    SAMPLE_PX: 2400,         // extraction pixel budget per work
+    HUE_ORIGIN: 300,         // colour run leads at purple (OKLCH 300°), then blue→…→red→pink
+    HUE_BUCKET: 15,          // degrees per hue bucket
+    SMALL_SET: 40,           // below this the field looks thin → banded-row fallback
+    CONCURRENCY: 6,
+    GAP: 10,
+    META_H: 84,              // caption height (control + small-set)
+    LS_KEY: 'chromatic:palettes:v1'
+  };
+
+  // Chromatic run order, top → bottom of the field (purple first, per the brief).
+  var HUE_ORDER_NAMES = ['Purples', 'Blues', 'Teals', 'Greens', 'Yellows', 'Oranges', 'Reds'];
+  function hueName(h) {
+    if (h < 25 || h >= 335) return 'Reds';
+    if (h < 70) return 'Oranges';
+    if (h < 105) return 'Yellows';
+    if (h < 175) return 'Greens';
+    if (h < 220) return 'Teals';
+    if (h < 285) return 'Blues';
+    return 'Purples';
+  }
+  function hueOrder(h) { return (CONFIG.HUE_ORIGIN - h + 360) % 360; }   // 0 at purple, rising to red/pink
+
+  /* ═══ Event stub layer — 1:1 map to GA4 dataLayer pushes at handoff ═══ */
+  function track(name, params) {
+    console.info('[GA4] ' + name, params || {});
+  }
+
+  var OKLCH_OK = window.CSS && CSS.supports && CSS.supports('color', 'oklch(0.5 0.1 20)');
+
+  /* ═══ URL flags ═══ */
+  var Q = new URLSearchParams(location.search);
+  var variant = Q.get('v') === 'control' ? 'control' : 'chromatic';
+  var moodBands = Q.get('bands') === 'mood';
+  var forceN = parseInt(Q.get('n'), 10) || 0;
+  var forceState = Q.get('state') || '';
+  var fresh = Q.get('fresh') === '1';
+
+  /* ═══ OKLCH — sRGB → OKLab → LCH (Björn Ottosson) ═══ */
+  function srgbToOklch(r8, g8, b8) {
+    function lin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+    var r = lin(r8), g = lin(g8), b = lin(b8);
+    var l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    var m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    var s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    var L = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    var A = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    var B = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+    var C = Math.sqrt(A * A + B * B);
+    var H = Math.atan2(B, A) * 180 / Math.PI;
+    if (H < 0) H += 360;
+    return { l: L, c: C, h: H };
+  }
+  function hex(r, g, b) {
+    function p(v) { v = Math.round(v).toString(16); return v.length < 2 ? '0' + v : v; }
+    return '#' + p(r) + p(g) + p(b);
+  }
+
+  /* ═══ k-means (k=5) on downsampled pixels, area-weighted ═══ */
+  function kmeans(px, k, iters) {
+    var n = px.length / 3, i, j, c;
+    if (n === 0) return [];
+    var cents = [];
+    for (i = 0; i < k; i++) {                       // spaced init
+      var idx = Math.floor(i * (n - 1) / Math.max(1, k - 1)) * 3;
+      cents.push([px[idx], px[idx + 1], px[idx + 2]]);
+    }
+    var assign = new Uint8Array(n);
+    for (var it = 0; it < iters; it++) {
+      for (i = 0; i < n; i++) {
+        var best = 0, bd = Infinity, o = i * 3;
+        for (c = 0; c < k; c++) {
+          var dr = px[o] - cents[c][0], dg = px[o + 1] - cents[c][1], db = px[o + 2] - cents[c][2];
+          var d = dr * dr + dg * dg + db * db;
+          if (d < bd) { bd = d; best = c; }
+        }
+        assign[i] = best;
+      }
+      var sums = [], counts = [];
+      for (c = 0; c < k; c++) { sums.push([0, 0, 0]); counts.push(0); }
+      for (i = 0; i < n; i++) {
+        c = assign[i]; var o2 = i * 3;
+        sums[c][0] += px[o2]; sums[c][1] += px[o2 + 1]; sums[c][2] += px[o2 + 2];
+        counts[c]++;
+      }
+      for (c = 0; c < k; c++) {
+        if (counts[c] > 0) {
+          cents[c] = [sums[c][0] / counts[c], sums[c][1] / counts[c], sums[c][2] / counts[c]];
+        }
+      }
+    }
+    var out = [];
+    for (c = 0; c < k; c++) {
+      if (!counts || counts[c] === 0) continue;
+      var ok = srgbToOklch(cents[c][0], cents[c][1], cents[c][2]);
+      out.push({ w: counts[c] / n, l: ok.l, c: ok.c, h: ok.h, hex: hex(cents[c][0], cents[c][1], cents[c][2]) });
+    }
+    out.sort(function (a, b) { return b.w - a.w; });
+    return out;
+  }
+
+  /* Representative colour: dominant-by-area, UNLESS the work is essentially
+     neutral — then it routes to the neutral band ordered by lightness.
+     A neutral-dominant work with a significant chromatic cluster promotes
+     that cluster (a red thread on a grey wall is a red work). */
+  function representative(clusters) {
+    if (!clusters.length) return { neutral: true, l: 0.5, c: 0, h: 0 };
+    var chrom = clusters.filter(function (cl) {
+      return cl.c >= CONFIG.NEUTRAL_C && cl.w >= CONFIG.CHROMA_MIN_WEIGHT;
+    });
+    if (!chrom.length) {
+      var L = 0;
+      clusters.forEach(function (cl) { L += cl.l * cl.w; });
+      return { neutral: true, l: L, c: 0, h: 0 };
+    }
+    var best = chrom[0], bs = -1;
+    chrom.forEach(function (cl) {
+      var s = cl.w * Math.pow(cl.c, 0.7);          // chroma-weighted area
+      if (s > bs) { bs = s; best = cl; }
+    });
+    return { neutral: false, l: best.l, c: best.c, h: best.h };
+  }
+
+  /* ═══ Binning — swappable per spec: literal spectrum (default) vs curated
+     mood bands (?bands=mood). One function, one contract. ═══ */
+  function binSpectrum(w) {
+    if (w.neutral) return { band: 'Neutrals', key: (1 - w.l) };                  // white → black (top → down)
+    var bucket = Math.floor(hueOrder(w.h) / CONFIG.HUE_BUCKET);
+    return { band: hueName(w.h), key: 1000 + bucket * 10 + (1 - w.l) };          // purple → red, lighter first
+  }
+  function binMood(w) {
+    var b;
+    if (w.neutral) b = 'Monochrome';
+    else if (w.h >= 175 && w.h < 335) b = 'Cool blue-grey';                       // teal · blue · purple
+    else if (w.h >= 105 && w.h < 175) b = 'Verdant';                              // greens
+    else if (w.h >= 25 && w.h < 105) b = 'Warm earth';                            // yellows · oranges
+    else b = 'Muted rose';                                                        // reds · pinks
+    var order = ['Monochrome', 'Cool blue-grey', 'Verdant', 'Warm earth', 'Muted rose'];
+    return { band: b, key: order.indexOf(b) * 1000 + (1 - w.l) };                 // white first, lighter first
+  }
+  var binWork = moodBands ? binMood : binSpectrum;
+
+  /* ═══ Data ═══ */
+  var works = [];            // {code, sku, title, artist, price, pdp, aspect, pal:{neutral,l,c,h,sw}, el}
+  var palettes = {};         // code → {l,c,h,neutral,aspect,sw}
+  var priceMap = {};
+  var field = document.getElementById('field');
+  var viewport = document.getElementById('fieldViewport');
+  var wallMeta = { totalH: 0, neutralH: 0 };
+  var smallSet = false;
+
+  function money(v) { return 'From €' + v.toLocaleString('en-IE'); }
+
+  function loadJSON(url) {
+    return fetch(url).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });
+  }
+
+  /* ═══ States ═══ */
+  function showError() {
+    document.body.className = 'mode-grid';
+    viewport.innerHTML =
+      '<div class="state-panel"><h2>The colour field could not be prepared</h2>' +
+      '<p>The works are still here. Browse the collection in the standard view, or try again.</p>' +
+      '<button class="btn" id="errBtn" type="button">View standard grid</button></div>';
+    track('error_state', { surface: 'chromatic_plp' });
+    document.getElementById('errBtn').addEventListener('click', function () {
+      location.search = '?v=control';
+    });
+  }
+
+  /* ═══ Boot ═══ */
+  if (forceState === 'error') { showError(); return; }
+
+  Promise.all([
+    loadJSON('assets/artworks.verified.json'),
+    loadJSON('assets/chromatic-prices.json').catch(function () { return { prices: {} }; }),
+    fresh ? Promise.resolve({}) : loadJSON('assets/chromatic-palettes.json').catch(function () { return {}; })
+  ]).then(function (res) {
+    priceMap = res[1].prices || {};
+    var pre = res[2].palettes || {};
+    var stored = {};
+    if (!fresh) {
+      try { stored = JSON.parse(localStorage.getItem(CONFIG.LS_KEY) || '{}'); } catch (e) { stored = {}; }
+    }
+    palettes = Object.assign({}, pre, stored);
+
+    var all = res[0].artworks.filter(function (a) { return a.status === 'ok'; });
+    if (forceN > 0) all = all.slice(0, forceN);
+    smallSet = all.length < CONFIG.SMALL_SET;
+
+    works = all.map(function (a) {
+      return {
+        code: a.code, sku: a.sku, title: a.title, artist: a.artist,
+        price: priceMap[a.code] || null, pdp: a.pdp_url,
+        aspect: (palettes[a.code] && palettes[a.code].aspect) || 0.8,
+        pal: palettes[a.code] || null, el: null, failed: false
+      };
+    });
+
+    document.getElementById('headerSub').textContent =
+      all.length + ' works as one colour field, from ivory down through ink, then into full colour. Tap a work to look closer.';
+
+    buildTiles();
+    setVariant(variant, true);
+    track('view_load', {
+      variant: variant, n: works.length,
+      palette_source: Object.keys(pre).length ? 'precomputed' : (Object.keys(stored).length ? 'localStorage' : 'live'),
+      bands: moodBands ? 'mood' : 'spectrum'
+    });
+    startExtraction();
+  }).catch(function (err) {
+    console.error(err);
+    showError();
+  });
+
+  /* ═══ Tiles ═══ */
+  function buildTiles() {
+    field.classList.add('no-anim');
+    setTimeout(function () { field.classList.remove('no-anim'); }, 400);
+    var frag = document.createDocumentFragment();
+    var skTones = ['#F0EBE3', '#E2D8CC', '#C7C3BE', '#E3E0DB', '#908C87'];
+    works.forEach(function (w, i) {
+      var a = document.createElement('a');
+      a.className = 'tile skeleton';
+      a.href = w.pdp;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.dataset.code = w.code;
+      a.setAttribute('aria-label', w.title + ', ' + w.artist + (w.price ? ', from €' + w.price : ''));
+      a.style.setProperty('--ph', skTones[i % skTones.length]);   /* tonal skeleton — Bone→Charcoal */
+      /* ABLYFT-GOAL: PDP clickthrough (select_item) — PRIMARY [UNBOUND: bind from 16-goal library] */
+      a.innerHTML =
+        '<span class="tile-art"><img alt="' + esc(w.title) + ' — ' + esc(w.artist) + '"></span>' +
+        '<span class="tile-meta">' +
+          '<span class="tile-title">' + esc(w.title) + '</span>' +
+          '<span class="tile-artist">' + esc(w.artist) + '</span>' +
+          (w.price ? '<span class="tile-price">' + money(w.price) + '</span>' : '') +
+          /* ABLYFT-GOAL: wishlist add (saveIntent) — SECONDARY [UNBOUND: bind from 16-goal library] */
+          '<button class="tile-save" type="button" aria-pressed="false" aria-label="Save ' + esc(w.title) + ' to wishlist">Save</button>' +
+        '</span>';
+      w.el = a;
+      frag.appendChild(a);
+    });
+    field.appendChild(frag);
+
+    field.addEventListener('click', onTileClick);
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.tile')) collapseReveals();
+    });
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+  var IS_TOUCH = window.matchMedia('(hover: none)').matches || Q.get('touch') === '1';
+  function collapseReveals() {
+    field.querySelectorAll('.tile.revealed').forEach(function (t) { t.classList.remove('revealed'); });
+  }
+  function onTileClick(e) {
+    var save = e.target.closest('.tile-save');
+    var tile = e.target.closest('.tile');
+    if (!tile) return;
+    var w = works.find(function (x) { return x.el === tile; });
+    if (save) {
+      e.preventDefault();
+      e.stopPropagation();
+      var on = save.getAttribute('aria-pressed') !== 'true';
+      save.setAttribute('aria-pressed', String(on));
+      save.textContent = on ? 'Saved' : 'Save';
+      track('add_to_wishlist', { sku: w.sku, artist: w.artist, saved: on });
+      return;
+    }
+    var chrom = document.body.classList.contains('mode-chromatic');
+    if (chrom && IS_TOUCH && !tile.classList.contains('revealed')) {
+      e.preventDefault();                               // first tap reveals, second navigates
+      collapseReveals();
+      tile.classList.add('revealed');
+      track('tile_reveal', { sku: w.sku, artist: w.artist });
+      return;
+    }
+    track('select_item', { sku: w.sku, artist: w.artist, price: w.price, variant: currentVariant() });
+  }
+  function currentVariant() { return variant; }
+
+  /* ═══ Extraction — canvas k-means, cached; lazy image reveal ═══ */
+  var extractQueue = [];
+  function startExtraction() {
+    extractQueue = works.filter(function (w) { return !w.pal && !w.failed; });
+    var missing = extractQueue.length;
+    if (missing) console.info('[chromatic] extracting ' + missing + ' palettes client-side (no colour field in catalogue — verified 2026-07-21)');
+    relayout();
+    var running = 0;
+    function next() {
+      while (running < CONFIG.CONCURRENCY && extractQueue.length) {
+        running++;
+        extract(extractQueue.shift()).then(function () {
+          running--;
+          scheduleRelayout();
+          next();
+        });
+      }
+      if (!running && !extractQueue.length) finishExtraction();
+    }
+    if (!missing) finishExtraction(); else next();
+  }
+  function finishExtraction() {
+    persistPalettes();
+    relayout();
+    var neutral = works.filter(function (w) { return w.pal && w.pal.neutral; }).length;
+    var done = works.filter(function (w) { return w.pal; }).length;
+    console.info('[chromatic] field ready: ' + done + ' works, ' + neutral +
+      ' neutral (' + Math.round(100 * neutral / Math.max(1, done)) + '%) — muted-catalogue check for red-team seed 2');
+    window.__CHROMATIC__ = {
+      palettes: palettes,
+      exportJSON: function () {
+        return JSON.stringify({ generated: new Date().toISOString().slice(0, 10),
+          note: 'Precomputed OKLCH palettes for chromatic PLP (k-means k=5 on _mobile thumbnails). Production: precompute at import.',
+          palettes: palettes }, null, 1);
+      }
+    };
+  }
+  function persistPalettes() {
+    try { localStorage.setItem(CONFIG.LS_KEY, JSON.stringify(palettes)); } catch (e) { /* quota — session cache only */ }
+  }
+  function extract(w) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        try {
+          w.aspect = img.naturalWidth / img.naturalHeight;
+          var cw = Math.max(8, Math.round(Math.sqrt(CONFIG.SAMPLE_PX * w.aspect)));
+          var ch = Math.max(8, Math.round(cw / w.aspect));
+          var cv = document.createElement('canvas');
+          cv.width = cw; cv.height = ch;
+          var ctx = cv.getContext('2d', { willReadFrequently: true });
+          ctx.drawImage(img, 0, 0, cw, ch);
+          var d = ctx.getImageData(0, 0, cw, ch).data;
+          var px = new Float32Array(cw * ch * 3);
+          for (var i = 0, j = 0; i < d.length; i += 4, j += 3) {
+            px[j] = d[i]; px[j + 1] = d[i + 1]; px[j + 2] = d[i + 2];
+          }
+          var clusters = kmeans(px, CONFIG.K, CONFIG.KMEANS_ITERS);
+          var rep = representative(clusters);
+          w.pal = {
+            neutral: rep.neutral, l: round3(rep.l), c: round3(rep.c), h: Math.round(rep.h),
+            aspect: round3(w.aspect),
+            sw: clusters.slice(0, CONFIG.K).map(function (c) { return c.hex; })
+          };
+          palettes[w.code] = w.pal;
+          revealImage(w, img.src);
+        } catch (e) {
+          console.warn('[chromatic] extraction failed for ' + w.code, e);
+          w.failed = true;
+          w.el.remove();
+        }
+        resolve();
+      };
+      img.onerror = function () {                       // 403/network → cull, per LumasImg practice
+        w.failed = true;
+        w.el.remove();
+        resolve();
+      };
+      img.src = LumasImg.sized(w.code, 'mobile');
+    });
+  }
+  function round3(v) { return Math.round(v * 1000) / 1000; }
+  function revealImage(w, src) {
+    var img = w.el.querySelector('img');
+    if (img.src) return;
+    img.addEventListener('load', function () { img.classList.add('loaded'); w.el.classList.remove('skeleton'); }, { once: true });
+    img.src = src || LumasImg.sized(w.code, 'mobile');
+  }
+
+  /* Lazy loading for palette-known works: only load images near the viewport. */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      var w = works.find(function (x) { return x.el === en.target; });
+      if (w && !w.failed) revealImage(w);
+    });
+  }, { root: null, rootMargin: '900px' });
+
+  /* ═══ Layout ═══ */
+  var relayoutTimer = null;
+  function scheduleRelayout() {
+    if (relayoutTimer) return;
+    relayoutTimer = setTimeout(function () { relayoutTimer = null; relayout(); }, 450);
+  }
+
+  function sorted() {
+    var live = works.filter(function (w) { return !w.failed; });
+    var resolved = live.filter(function (w) { return w.pal; });
+    var pending = live.filter(function (w) { return !w.pal; });
+    resolved.forEach(function (w) { w.bin = binWork(w.pal); });
+    resolved.sort(function (a, b) { return a.bin.key - b.bin.key; });
+    return resolved.concat(pending);                    // unresolved trail the field
+  }
+
+  function relayout() {
+    var v = currentVariant();
+    var silent = (v === 'chromatic' && !smallSet);
+    var items = (v === 'chromatic') ? sorted() : works.filter(function (w) { return !w.failed; });
+    layoutMasonry(items, silent);
+  }
+
+  function railW() {
+    return (currentVariant() === 'chromatic' && !smallSet) ? (window.innerWidth < 768 ? 46 : 56) : 0;
+  }
+
+  // One vertical masonry. Colour-sorted + silent chrome for the field; feed-order +
+  // caption for control. Shortest-column packing keeps the colour gradient reading
+  // top → bottom while the columns stay level.
+  function layoutMasonry(items, silent) {
+    field.classList.toggle('silent', !!silent);
+    var containerW = viewport.clientWidth;
+    var maxW = Math.min(containerW, 1320);
+    var offsetX = Math.round((containerW - maxW) / 2);
+    var edge = window.innerWidth < 768 ? 14 : 28;
+    var rail = silent ? railW() : 0;
+    var availW = maxW - 2 * edge - rail;
+    var cols = window.innerWidth < 640 ? 2 : (window.innerWidth < 1024 ? 3 : 4);
+    var gap = CONFIG.GAP + (silent ? 2 : 4);
+    var colW = Math.floor((availW - gap * (cols - 1)) / cols);
+    var ys = [];
+    for (var i = 0; i < cols; i++) ys.push(0);
+    var neutralBottom = 0;
+    var bandTop = {};
+
+    items.forEach(function (w) {
+      var ci = 0;
+      for (var c = 1; c < cols; c++) if (ys[c] < ys[ci]) ci = c;
+      var artH = Math.round(colW / w.aspect);
+      var x = offsetX + edge + ci * (colW + gap);
+      var y = ys[ci];
+      place(w, x, y, colW);
+      var tileH = artH + (silent ? 0 : CONFIG.META_H);
+      if (w.bin) {
+        if (silent && (w.bin.band === 'Neutrals' || w.bin.band === 'Monochrome')) {
+          neutralBottom = Math.max(neutralBottom, y + tileH);
+        }
+        bandTop[w.bin.band] = (w.bin.band in bandTop) ? Math.min(bandTop[w.bin.band], y) : y;
+      }
+      ys[ci] = y + tileH + gap;
+    });
+
+    var totalH = 0;
+    for (i = 0; i < cols; i++) if (ys[i] > totalH) totalH = ys[i];
+    field.style.width = '';
+    field.style.height = totalH + 'px';
+
+    if (silent) {
+      wallMeta.totalH = totalH;
+      wallMeta.neutralH = neutralBottom;
+      renderBandLabels(bandTop, offsetX + edge);
+      updateScrubberGeometry();
+    } else {
+      renderBandLabels({}, 0);
+    }
+    observeAll();
+  }
+
+  function place(w, x, y, tw) {
+    w.el.style.setProperty('--ar', String(w.aspect));
+    w.el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    w.el.style.width = tw + 'px';
+    if (w.pal && !w.el.dataset.tinted) {
+      w.el.dataset.tinted = '1';                        // skeleton in the work's REPRESENTATIVE
+      var tint = OKLCH_OK                               // colour (its sort position), muted —
+        ? 'oklch(' + w.pal.l + ' ' + Math.min(0.09, w.pal.c) + ' ' + w.pal.h + ')'
+        : (w.pal.sw && w.pal.sw[0]) || '';              // the field reads before images arrive
+      if (tint) w.el.style.setProperty('--ph', tint);
+    }
+  }
+  function observeAll() {
+    works.forEach(function (w) {
+      if (!w.failed && !w.el.querySelector('img').src) io.observe(w.el);
+    });
+  }
+  function renderBandLabels(map, x0) {
+    field.querySelectorAll('.band-label').forEach(function (n) { n.remove(); });
+    if (!moodBands) return;                              // labels behind the mood flag only
+    Object.keys(map).forEach(function (band) {
+      var el = document.createElement('span');
+      el.className = 'band-label';
+      el.textContent = band;
+      el.style.top = map[band] + 'px';
+      el.style.left = (x0 || 0) + 'px';
+      field.appendChild(el);
+    });
+  }
+
+  /* ═══ Variant switching — ?v=, the toggle, and the "v" key ═══ */
+  var btnChrom = document.getElementById('btnChromatic');
+  var btnCtrl = document.getElementById('btnControl');
+  function setVariant(v, silent) {
+    variant = v;
+    document.body.className = (v === 'chromatic' && !smallSet) ? 'mode-chromatic' : 'mode-grid';
+    if (v === 'chromatic' && smallSet) document.body.classList.add('small-set');
+    btnChrom.setAttribute('aria-pressed', String(v === 'chromatic'));
+    btnCtrl.setAttribute('aria-pressed', String(v === 'control'));
+    var url = new URL(location.href);
+    url.searchParams.set('v', v);
+    history.replaceState(null, '', url);
+    maybeSmallSetNotice();
+    relayout();
+    window.scrollTo(0, 0);
+    if (!silent) track('view_toggle', { to: v });
+  }
+  btnChrom.addEventListener('click', function () { setVariant('chromatic'); });
+  btnCtrl.addEventListener('click', function () { setVariant('control'); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'v' && !e.metaKey && !e.ctrlKey && !/input|textarea/i.test(e.target.tagName)) {
+      setVariant(currentVariant() === 'chromatic' ? 'control' : 'chromatic');
+    }
+  });
+
+  var noticeShown = false;
+  function maybeSmallSetNotice() {
+    var existing = document.querySelector('.notice');
+    if (existing) existing.remove();
+    if (variant === 'chromatic' && smallSet) {
+      var n = document.createElement('p');
+      n.className = 'notice';
+      n.textContent = 'A colour field needs room. This selection is too small to read as one, so it is shown as colour-ordered rows.';
+      viewport.parentNode.insertBefore(n, viewport);
+      if (!noticeShown) { noticeShown = true; track('fallback_small_set', { n: works.length }); }
+    }
+  }
+
+  /* ═══ Scrubber ═══ */
+  var scrubber = document.getElementById('scrubber');
+  var thumb = document.getElementById('scrubberThumb');
+  var readout = document.getElementById('bandReadout');
+  var scrubTrack = scrubber.querySelector('.scrubber-track');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function updateScrubberGeometry() {
+    var frac = wallMeta.totalH ? (wallMeta.neutralH / wallMeta.totalH) : 0.25;
+    scrubber.style.setProperty('--neutral-frac', String(Math.max(0.06, Math.min(0.7, frac))));
+    if (!scrubbing) setThumb(maxScroll() > 1 ? window.scrollY / maxScroll() : 0);
+  }
+  function maxScroll() { return Math.max(1, document.documentElement.scrollHeight - window.innerHeight); }
+  function fracToBand(f) {
+    var nf = wallMeta.totalH ? wallMeta.neutralH / wallMeta.totalH : 0.25;
+    if (f <= nf) return moodBands ? 'Monochrome' : 'Neutrals';
+    var pos = (f - nf) / Math.max(0.0001, 1 - nf);
+    return HUE_ORDER_NAMES[Math.min(HUE_ORDER_NAMES.length - 1, Math.floor(pos * HUE_ORDER_NAMES.length))];
+  }
+  function setThumb(f) {
+    var y = scrubTrack.offsetTop + f * scrubTrack.clientHeight;
+    thumb.style.top = y + 'px';
+    readout.style.top = y + 'px';
+    var band = fracToBand(f);
+    scrubber.setAttribute('aria-valuenow', String(Math.round(f * 100)));
+    scrubber.setAttribute('aria-valuetext', band);
+    readout.textContent = band;
+  }
+  var scrollWatch = null;
+  function scrollToFrac(f, animate) {
+    var target = Math.round(f * maxScroll());
+    clearTimeout(scrollWatch);
+    if (!animate || reduceMotion) { window.scrollTo(0, target); return; }
+    var before = window.scrollY;
+    window.scrollTo({ top: target, behavior: 'smooth' });
+    scrollWatch = setTimeout(function () {              // frame clock suspended (bg tab /
+      if (Math.abs(window.scrollY - target) > 4 &&      // headless) → snap instead of stall
+          Math.abs(window.scrollY - before) < 24) {
+        window.scrollTo(0, target);
+      }
+    }, 400);
+  }
+
+  var scrubbing = false;
+  function pointerFrac(e) {
+    var r = scrubTrack.getBoundingClientRect();
+    return Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+  }
+  scrubber.addEventListener('pointerdown', function (e) {
+    scrubbing = true;
+    scrubber.classList.add('scrubbing');
+    scrubber.setPointerCapture(e.pointerId);
+    var f = pointerFrac(e);
+    setThumb(f); scrollToFrac(f, true);
+    /* ABLYFT-GOAL: scrubber engagement (custom event; diagnostics) */
+    track('chromatic_scrub', { frac: Math.round(f * 100) / 100, band: fracToBand(f) });
+  });
+  scrubber.addEventListener('pointermove', function (e) {
+    if (!scrubbing) return;
+    var f = pointerFrac(e);
+    setThumb(f); scrollToFrac(f, false);
+  });
+  scrubber.addEventListener('pointerup', function () {
+    scrubbing = false;
+    scrubber.classList.remove('scrubbing');
+  });
+  scrubber.addEventListener('keydown', function (e) {
+    var f = parseInt(scrubber.getAttribute('aria-valuenow'), 10) / 100;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') f = Math.min(1, f + 0.05);
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') f = Math.max(0, f - 0.05);
+    else if (e.key === 'Home') f = 0;
+    else if (e.key === 'End') f = 1;
+    else return;
+    e.preventDefault();
+    setThumb(f); scrollToFrac(f, true);
+    track('chromatic_scrub', { frac: Math.round(f * 100) / 100, band: fracToBand(f), via: 'keyboard' });
+  });
+
+  /* Page scroll → thumb sync + field_coverage milestones (scroll-depth analog) */
+  var maxFrac = 0, milestones = [0.25, 0.5, 0.75, 0.98], hit = {};
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      if (currentVariant() !== 'chromatic' || smallSet) return;
+      var f = window.scrollY / maxScroll();
+      if (!scrubbing) setThumb(f);
+      if (f > maxFrac) {
+        maxFrac = f;
+        milestones.forEach(function (m) {
+          if (f >= m && !hit[m]) { hit[m] = true; track('field_coverage', { pct: Math.round(m * 100) }); }
+        });
+      }
+    });
+  }, { passive: true });
+
+  /* Resize */
+  var rt = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(relayout, 180);
+  });
+})();
+</script>
+</body>
+</html>
