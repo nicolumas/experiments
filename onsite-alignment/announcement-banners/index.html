@@ -242,7 +242,7 @@ a{color:inherit}
   <p>Each block shows the same rotating banner as a full-width desktop bar and inside a phone frame — both live. Switch the variation up top.
      Every message is its own link: the whole bar and its button open that topic’s page — click any banner to preview the destination.</p>
   <div class="rule">
-    <b>Links per topic</b> · Art&nbsp;Week&nbsp;→&nbsp;<code>/art-week</code> · Carol&nbsp;Muthiga&nbsp;→&nbsp;<code>/artists/carol-muthiga</code> · New&nbsp;releases&nbsp;→&nbsp;<code>/new-releases</code> · First&nbsp;order&nbsp;→&nbsp;<code>/register</code> &nbsp;— placeholder slugs, swap for real URLs.
+    <b>Links per topic</b> · Art&nbsp;Week&nbsp;→&nbsp;<code>/art-week</code> · Carol&nbsp;Muthiga-Oyekunle&nbsp;→&nbsp;<code>/artists/carol-muthiga-oyekunle</code> · New&nbsp;releases&nbsp;→&nbsp;<code>/new-releases</code> · First&nbsp;order&nbsp;→&nbsp;<code>/register</code> &nbsp;— placeholder slugs, swap for real URLs.
   </div>
 </div>
 
@@ -253,14 +253,14 @@ a{color:inherit}
 
 <script>
 /* ---------------- content model ---------------- */
-const DROP = {eyebrow:'Art drop', lead:'Carol Muthiga', tail:'3 days only', href:'/artists/carol-muthiga', cta:{label:'See the drop', ghost:true}, mob:'Art drop · Carol Muthiga'};
+const DROP = {eyebrow:'Art drop', lead:'Carol Muthiga-Oyekunle', tail:'', href:'/artists/carol-muthiga-oyekunle', cta:{label:'3 days only', ghost:true}, mob:'Art drop · Carol Muthiga-Oyekunle'};
 const NEWS = {eyebrow:'New releases', lead:'New additions to LUMAS', tail:'', href:'/new-releases', cta:{label:'Discover', ghost:true}, mob:'New releases at LUMAS'};
 const VARIATIONS = {
   artweek:{ label:'Art Week', messages:[
     {eyebrow:'Art week', fig:'20%', lead:'off all LUMAS editions', tail:'', href:'/art-week', cta:{label:'Order now', ghost:true}, mobFig:'20%', mob:'off all editions'},
     DROP, NEWS ]},
   firstorder:{ label:'First order', messages:[
-    {eyebrow:'Welcome offer', fig:'10%', lead:'off your first order', tail:'Only until 26 July 2026', href:'/register', cta:{label:'Register now'}, mobFig:'10%', mob:'off first order'},
+    {eyebrow:'', fig:'10%', lead:'off your first order', tail:'Only until 26 July 2026', href:'/register', cta:{label:'Register now'}, mobFig:'10%', mob:'off first order'},
     DROP, NEWS ]}
 };
 const TREATMENTS = [
@@ -273,13 +273,13 @@ const GLYPHS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789% ';
 const rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
 function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
 function messageInner(msg, kind){
-  const eyebrow=`<span class="eyebrow">${msg.eyebrow}</span>`;
+  const eb=msg.eyebrow?`<span class="eyebrow">${msg.eyebrow}</span><span class="sep">·</span>`:'';
   const fig=msg.fig?`<span class="fig">${msg.fig}</span>`:'';
   const lead=`<span class="lead">${fig}${msg.lead}</span>`;
-  if(kind==='marquee'){ const t=msg.tail?`<span class="sep">·</span><span class="tail">${msg.tail}</span>`:''; return `${eyebrow}<span class="sep">·</span>${lead}${t}`; }
-  const cta=msg.cta?`<a class="cta${msg.cta.ghost?' ghost':''}" href="${msg.href||'#'}">${msg.cta.label}</a>`:'';
   const tail=msg.tail?`<span class="sep">·</span><span class="tail">${msg.tail}</span>`:'';
-  return `<span class="full"><span class="text">${eyebrow}<span class="sep">·</span>${lead}${tail}</span>${cta}</span>`;
+  if(kind==='marquee'){ return `${eb}${lead}${tail}`; }
+  const cta=msg.cta?`<a class="cta${msg.cta.ghost?' ghost':''}" href="${msg.href||'#'}">${msg.cta.label}</a>`:'';
+  return `<span class="full"><span class="text">${eb}${lead}${tail}</span>${cta}</span>`;
 }
 
 /* ---------------- banner engine ---------------- */
