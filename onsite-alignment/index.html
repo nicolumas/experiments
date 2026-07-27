@@ -146,7 +146,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0724", kicker: "Next session · today", weekday: "Friday",   date: "24 July",  year: "2026", short: "24 Jul", upcoming: true },
+      { id: "s0728", kicker: "Next session · today", weekday: "Tuesday",  date: "28 July",  year: "2026", short: "28 Jul", upcoming: true },
+      { id: "s0724", kicker: "Previous",                 weekday: "Friday",   date: "24 July",  year: "2026", short: "24 Jul" },
       { id: "s0723", kicker: "Previous",                 weekday: "Thursday", date: "23 July",  year: "2026", short: "23 Jul" },
       { id: "s0713", kicker: "Previous",                 weekday: "Monday",   date: "13 July",  year: "2026", short: "13 Jul" },
       { id: "s0625", kicker: "Previous",                 weekday: "Thursday", date: "25 June",  year: "2026", short: "25 Jun" },
@@ -155,7 +156,10 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
-      // ── Friday 24 July — next session ──────────────────────────
+      // ── Tuesday 28 July — next session ─────────────────────────
+      { s: "s0728", feature: true, title: "Alice — Art Drop", href: "alice-art-drop/", desc: "The 72-hour drop for Carol Muthiga-Oyekunle’s “Alice”, limited to 300 — a full-bleed room opens it, the work is then isolated on charcoal with every essential beside it, and the whole page is driven by one PHASE constant (Reveal / Early Access / Public / Ended). Real LUMAS nav, unframed catalogue works, V2 type. German canonical, English review build." },
+
+      // ── Friday 24 July ─────────────────────────────────────────
       { s: "s0724", feature: true, title: "Announcement Banners", href: "announcement-banners/", desc: "Four rotating announcement-bar treatments — flip-up, continuous drift, quiet dissolve, editorial slide — across two variations (Art Week 20% / first-order 10%), each shown as a full-width desktop bar and inside a phone frame. The two promos never share a banner; charcoal/ivory, Utile Display + Archivo." },
 
       // ── Thursday 23 July ───────────────────────────────────────

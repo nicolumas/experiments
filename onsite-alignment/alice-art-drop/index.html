@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alice — Carol Muthiga-Oyekunle · LUMAS Art Drop</title>
+<meta name="description" content="Alice von Carol Muthiga-Oyekunle. Limitiert auf 300 Exemplare, 60 × 60 cm. LUMAS Art Drop, 08. – 10. August 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — LUMAS V2
+   ============================================================ */
+:root{
+  --bg:#FFFFFF;
+  --surface-page:#FAF6F1;
+  --surface-raised:#F7F1E9;
+  --surface-sunken:#F4EDE2;
+  --surface-inverse:#1C1A18;
+
+  --text-primary:#1C1A18;
+  --text-secondary:#5A5752;
+  --text-tertiary:#908C87;
+  --text-disabled:#C7C3BE;
+  --text-inverse:#F4EDE2;
+
+  --border-default:#E2D8CC;
+  --border-subtle:#EAE2D8;
+  --border-strong:#C7C3BE;
+  --border-focus:#1C1A18;
+
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.28);
+
+  /* Built-in CSS easings are too weak to read as intentional. */
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+
+  /* Utile Display is licensed and not bundled here. The stack is declared so the
+     page renders correctly the moment the licensed face is installed. */
+  --font-display:'Utile Display','Archivo',Georgia,serif;
+  --font-text:'Helvetica Now Display','Archivo',Helvetica,Arial,sans-serif;
+
+  --gutter:24px;
+  --maxw:1440px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:var(--font-text);
+  font-weight:400;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+.t-display-xl{font-family:var(--font-display);font-weight:300;font-size:clamp(64px,5vw,88px);line-height:1.0;letter-spacing:0;margin:0}
+.t-h1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,4vw,62px);line-height:1.04;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h3{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h4{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25;letter-spacing:0;margin:0;text-wrap:balance}
+.t-body-l{font-weight:400;font-size:20px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body{font-weight:400;font-size:16px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body-s{font-weight:400;font-size:13px;line-height:1.65;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-caption{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.03em;margin:0}
+.t-eyebrow{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.t-ui{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none !important}
+
+.skip-link{
+  position:absolute;left:8px;top:-64px;z-index:100;
+  background:var(--surface-inverse);color:var(--text-inverse);
+  padding:12px 16px;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+}
+.skip-link:focus{top:8px}
+
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--border-focus);outline-offset:2px;
+}
+.on-inverse a:focus-visible,.on-inverse button:focus-visible,.on-inverse input:focus-visible{
+  outline-color:var(--text-inverse);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-text);font-weight:700;font-size:13px;line-height:1.5;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  padding:16px 28px;min-height:48px;border-radius:0;border:1px solid transparent;
+  cursor:pointer;text-align:center;
+  transition:background-color 120ms linear,border-color 120ms linear,color 120ms linear,
+             transform 160ms var(--ease-out);
+}
+.btn--primary{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.btn--secondary{background:transparent;color:var(--text-primary);border-color:var(--text-primary)}
+/* Touch devices fire :hover on tap, which sticks. Gate it. */
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:#3A3835;border-color:#3A3835}
+  .btn--secondary:hover{background:var(--surface-inverse);color:var(--text-inverse)}
+}
+/* On inverse surfaces the primary button was charcoal-on-charcoal: the label
+   read but the button itself was invisible. Invert it. */
+.on-inverse .btn--primary{background:var(--text-inverse);color:var(--surface-inverse);border-color:var(--text-inverse)}
+@media (hover:hover) and (pointer:fine){
+  .on-inverse .btn--primary:hover{background:#FFFFFF;border-color:#FFFFFF}
+}
+.on-inverse .btn--secondary{color:var(--text-inverse);border-color:var(--text-inverse)}
+
+/* the interface should feel like it heard the press */
+.btn:active:not([aria-disabled="true"]){transform:scale(.97)}
+.btn[aria-disabled="true"],.btn:disabled{
+  background:var(--surface-sunken);color:var(--text-tertiary);border-color:var(--border-strong);
+  cursor:not-allowed;pointer-events:none;
+}
+.btn--full{width:100%}
+
+.textlink{
+  color:var(--text-primary);text-decoration:underline;text-underline-offset:3px;
+}
+.on-inverse .textlink{color:var(--text-inverse)}
+
+/* ============================================================
+   IMAGE + FALLBACK BLOCK
+   ============================================================ */
+.media{position:relative;width:100%;background:var(--surface-sunken);overflow:hidden}
+/* absolute, because height:100% resolves to auto when the parent's height is
+   auto — a portrait-ish image would otherwise stretch past the aspect-ratio */
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fallback{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  width:100%;background:var(--surface-sunken);border:1px solid var(--border-default);
+  padding:16px;color:var(--text-secondary);
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+}
+.framed{box-shadow:var(--shadow-frame)}
+/* shadow/frame is charcoal at 28%: on an inverse surface it renders as nothing.
+   A hairline gives the work a defined edge without shifting layout. */
+.on-inverse .framed{box-shadow:0 0 0 1px #3A3835}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar{
+  min-height:44px;background:var(--surface-inverse);color:var(--text-inverse);
+  display:flex;align-items:center;justify-content:center;padding:8px var(--gutter);
+}
+.topbar__inner{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.chip{
+  display:inline-block;border:1px solid #5A5752;border-radius:2px;padding:4px 8px;
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-inverse);
+}
+.chip--light{border-color:var(--border-strong);color:var(--text-primary)}
+
+/* COUNTDOWN */
+.cd{display:inline-flex;align-items:baseline;gap:12px}
+.cd__seg{display:inline-flex;align-items:baseline;gap:4px}
+.cd__num{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;letter-spacing:.06em}
+.cd__unit{font-size:11px;line-height:1.5;letter-spacing:.03em;color:var(--text-tertiary)}
+
+/* ============================================================
+   NAV — LUMAS site chrome
+   ============================================================ */
+.nav{background:#FFFFFF;border-bottom:1px solid var(--border-default);position:relative;z-index:40}
+.nav__inner{display:flex;align-items:center;gap:16px;height:72px}
+
+.nav__logo{display:flex;align-items:center;color:var(--text-primary);flex:0 0 auto}
+.nav__logomark{width:132px;height:auto;display:block}
+
+.nav__burger{display:flex;align-items:center;justify-content:center;width:40px;height:40px;
+  margin-left:-8px;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto}
+.nav__burger svg{width:24px;height:24px}
+
+.nav__links{display:none;align-items:center;gap:28px;flex:0 0 auto}
+.nav__link{font-weight:500;font-size:15px;line-height:1;letter-spacing:0;color:var(--text-primary);
+  text-decoration:none;white-space:nowrap}
+@media (hover:hover) and (pointer:fine){.nav__link:hover{text-decoration:underline;text-underline-offset:4px}}
+
+.nav__search{display:none;position:relative;flex:1 1 200px;min-width:0;max-width:520px;margin-left:auto}
+.nav__searchinput{width:100%;height:40px;border:0;border-radius:4px;background:var(--surface-sunken);
+  padding:0 44px 0 16px;font-family:var(--font-text);font-size:15px;color:var(--text-primary)}
+.nav__searchinput::placeholder{color:var(--text-secondary)}
+.nav__searchinput:focus{outline:2px solid var(--border-focus);outline-offset:2px}
+.nav__searchbtn{position:absolute;right:4px;top:4px;width:32px;height:32px;display:flex;align-items:center;
+  justify-content:center;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary)}
+.nav__searchbtn svg{width:20px;height:20px}
+
+.nav__icons{display:flex;align-items:center;gap:18px;margin-left:auto;flex:0 0 auto}
+.nav__icon{display:flex;align-items:center;color:var(--text-primary);text-decoration:none}
+.nav__icon svg{width:24px;height:24px;display:block}
+.nav__lang{gap:2px;font-weight:500;font-size:14px}
+.nav__lang svg{width:16px;height:16px}
+.nav__icon--desktop{display:none}
+
+/* mobile search sits on its own row, as on the live site */
+.nav__search--mobile{display:block;position:relative;max-width:none;margin:0;
+  padding:0 var(--gutter) 16px}
+.nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) + 4px);top:4px}
+
+.nav__drawer{display:flex;flex-direction:column;border-top:1px solid var(--border-subtle);
+  padding:8px var(--gutter) 16px}
+.nav__drawerlink{font-weight:500;font-size:16px;color:var(--text-primary);text-decoration:none;padding:14px 0}
+.nav__drawerlink + .nav__drawerlink{border-top:1px solid var(--border-subtle)}
+
+@media (min-width:1024px){
+  .nav__inner{height:80px;gap:20px}
+  .nav__burger,.nav__search--mobile,.nav__drawer{display:none !important}
+  .nav__links{display:flex;gap:18px}
+  .nav__link{font-size:14px}
+  .nav__search{display:block}
+  .nav__icons{margin-left:0;gap:14px}
+  .nav__icon--desktop{display:flex}
+  .nav__logomark{width:112px}
+}
+@media (min-width:1440px){
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
+  .nav__inner{gap:32px}
+  .nav__links{gap:28px}
+  .nav__link{font-size:15px}
+  .nav__icons{gap:20px}
+  .nav__logomark{width:132px}
+}
+@media (max-width:1023px){
+  .nav__icon--hide-mobile{display:none}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{background:var(--bg);padding-block:48px 64px}
+.hero__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+.hero__art{width:100%;max-width:560px;aspect-ratio:1/1;margin-inline:auto}
+.hero__art img{aspect-ratio:1/1}
+.hero__panel{display:flex;flex-direction:column;gap:16px;max-width:560px}
+.hero__eyebrow{color:var(--text-secondary)}
+.hero__meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero__artist{color:var(--text-secondary)}
+.hero__intro{color:var(--text-secondary);max-width:52ch}
+.rule{height:1px;background:var(--border-subtle);border:0;margin:8px 0}
+
+/* SPEC LIST */
+.specs{margin:0}
+.specs__row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding-block:12px;
+}
+/* dividers between rows only — the enclosing rules are the section's own hairlines */
+.specs__row + .specs__row{border-top:1px solid var(--border-subtle)}
+.specs dt{color:var(--text-secondary);flex:0 0 auto}
+.specs dd{margin:0;text-align:right;color:var(--text-primary)}
+
+/* ============================================================
+   ACTION BLOCKS
+   ============================================================ */
+.action{display:flex;flex-direction:column;gap:12px}
+.nl__field{display:flex;flex-direction:column;gap:8px}
+.nl__label{color:var(--text-secondary);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+/* secondary is 2.41:1 on the inverse close section; tertiary is 5.19:1 */
+.on-inverse .nl__label{color:var(--text-tertiary)}
+.input{
+  width:100%;height:48px;padding:0 16px;border-radius:4px;border:1px solid var(--border-strong);
+  background:#FFFFFF;color:var(--text-primary);font-family:var(--font-text);font-size:16px;
+  transition:border-color 120ms linear;
+}
+.input::placeholder{color:var(--text-secondary)}
+.input:focus{border:2px solid var(--border-focus);outline:none;padding:0 15px}
+.input[aria-invalid="true"]{border:2px solid var(--border-focus);padding:0 15px}
+.nl__error{color:var(--text-primary)}
+.nl__row{display:flex;flex-direction:column;gap:12px}
+.nl__consent{color:var(--text-secondary)}
+.nl__consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.nl__success{display:flex;flex-direction:column;gap:8px;transition:opacity 160ms linear}
+.fade-out{opacity:0}
+
+.action__micro{color:var(--text-secondary)}
+.action__from{margin-bottom:4px}
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+.on-inverse{background:var(--surface-inverse);color:var(--text-inverse)}
+
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section{padding-block:96px}
+.section--page{background:var(--surface-page)}
+.section--raised{background:var(--surface-raised)}
+.section--sunken{background:var(--surface-sunken)}
+.sec-head{display:flex;flex-direction:column;margin-bottom:40px;max-width:720px}
+.sec-head__eyebrow{color:var(--text-secondary);margin-bottom:8px}
+.sec-head__stand{color:var(--text-secondary);max-width:520px;margin-top:16px}
+
+
+/* QUOTE — the storytelling beat between the dates and the detail shots */
+.quote{padding-block:128px}
+.quote__inner{display:flex;justify-content:center}
+.quote__fig{margin:0;max-width:900px;text-align:center;display:flex;flex-direction:column;gap:24px}
+.quote__text{margin:0;font-weight:400;text-wrap:balance}
+.quote__by{color:var(--text-tertiary)}   /* 5.19:1 on inverse, passes AA */
+
+
+
+/* INSPIRATION — the namesake, one notch quieter than the artist's own quote */
+.inspiration__inner{max-width:1120px;margin-inline:auto;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:32px}
+.inspiration__eyebrow{color:var(--text-tertiary);margin:0}
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.inspiration__quote{margin:0;color:var(--text-inverse);text-wrap:balance;max-width:none}
+.inspiration__body{color:var(--text-tertiary);max-width:70ch}
+
+/* VOICE — quote + portrait, on inverse */
+.voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+/* the portrait is a 4:3 landscape; a 4:5 crop would cut the work behind her */
+.voice__portrait{aspect-ratio:4/3}
+.voice__text{display:flex;flex-direction:column;gap:32px}
+.voice__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.voice__lead{color:var(--text-tertiary);max-width:54ch;font-size:20px;line-height:1.6}
+
+/* OWN IT — authenticity block sits under the two executions */
+
+/* SCARCITY */
+.scarcity{width:100%;max-width:360px;display:flex;flex-direction:column;gap:8px}
+.scarcity__label{color:var(--text-inverse)}
+.scarcity__track{height:2px;width:100%;background:#5A5752}
+.scarcity__fill{display:block;height:2px;background:var(--text-inverse);width:0}
+/* the countdown is the loudest thing in the closing block */
+.close__head{margin:0}
+.close__cd{margin-block:8px}
+.close__cd .cd__num{font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0}
+.close__cd .cd__unit{font-size:14px;letter-spacing:.06em}
+.close__cd.cd{gap:24px}
+
+/* DETAILS — specs beside the dated process, FAQ below */
+
+/* PROOF — full-bleed room, the first screen is evidence */
+.proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
+.proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.proof__wrap{position:relative;height:100%;display:flex;align-items:flex-end;padding-bottom:48px}
+.proof__plate{background:var(--surface-inverse);color:var(--text-inverse);padding:32px 40px;max-width:520px}
+.proof__eyebrow{color:var(--text-tertiary);margin-bottom:16px}
+/* Title and artist were 88px display serif against 20px sans — a 4.4:1 jump
+   across two families, so they read as two unrelated things. Same family,
+   ratio pulled to ~2.7:1, so the plate reads as one lockup. */
+.proof__title{margin:0;font-size:clamp(52px,4.6vw,76px)}
+.proof__artist{font-family:var(--font-display);font-weight:400;
+  font-size:clamp(20px,1.9vw,28px);line-height:1.2;letter-spacing:0;
+  color:var(--text-tertiary);margin-top:6px}
+
+/* THE WORK — artwork isolated on charcoal, every essential beside it */
+.work-block{padding-block:96px}
+.work-block__grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center}
+.work-block__art{width:100%;max-width:560px;aspect-ratio:1/1;margin-inline:auto}
+.work-block__art img{aspect-ratio:1/1}
+.work-block__panel{display:flex;flex-direction:column;gap:24px;max-width:560px}
+
+/* countdown is the loudest thing in the panel after the work itself */
+.work-block__urgency{display:flex;flex-direction:column;gap:10px}
+.work-block__cdlabel{color:var(--text-tertiary);font-size:11px;letter-spacing:.1em}
+.work-block__urgency .cd{gap:20px}
+.work-block__urgency .cd__num{font-size:clamp(30px,2.8vw,40px);font-weight:400;letter-spacing:0}
+.work-block__urgency .cd__unit{font-size:13px;letter-spacing:.06em}
+
+.work-block__intro{color:var(--text-inverse);font-size:clamp(17px,1.5vw,20px);line-height:1.5;max-width:46ch}
+
+/* ONE detail treatment shared by the spec rows and the executions rows, so
+   every label/value pair on the panel reads at the same weight and size. */
+.work-block__panel .specs__row{padding-block:16px;gap:24px}
+.work-block__panel .specs dt{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary)}
+.work-block__panel .specs dd{font-size:16px;line-height:1.6;color:var(--text-inverse)}
+.work-block__panel .nl__label{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary)}
+
+/* email field and button are one unit, stacked flush: the German and English
+   button labels are both too long to sit beside the input at this width. */
+/* One outlined block. The border lives on the wrapper, not the input, so the
+   pair still reads as a single unit when the button has to wrap — which the
+   German label ("JETZT FÜR EARLY ACCESS ANMELDEN") forces at this width. */
+.nl__row{gap:0;flex-direction:row;flex-wrap:wrap;align-items:stretch;
+  border:1px solid var(--border-strong);border-radius:4px;overflow:hidden}
+.nl__field{gap:0;flex:1 1 190px;min-width:0}
+/* guard: the shell must only ever contain the field and the button. A label or
+   error placed inside it renders on top of the input. */
+.nl__row > .nl__label,.nl__row .nl__error{display:none}
+.work-block__panel .nl__label{margin-bottom:8px}
+.nl__row .input{height:56px;border:0;border-radius:0;width:100%}
+.nl__row .input:focus{outline:2px solid var(--text-inverse);outline-offset:-2px;padding:0 16px}
+/* .btn--full sets width:100%, which makes the flex base size the whole row and
+   forces a wrap. Inside the joined block the width comes from flex instead. */
+.nl__row .btn{flex:1 1 auto;width:auto;border-radius:0;min-height:56px;white-space:nowrap;padding-inline:20px}
+.nl__error{padding-top:8px}
+
+/* spec list inverts on charcoal: secondary would be 2.41:1 here */
+.on-inverse .specs dt{color:var(--text-tertiary)}
+.on-inverse .specs dd{color:var(--text-inverse)}
+.on-inverse .specs__row + .specs__row{border-top-color:#3A3835}
+.on-inverse .nl__consent{color:var(--text-tertiary)}
+.on-inverse .nl__consent a{color:var(--text-tertiary)}
+.on-inverse .action__micro{color:var(--text-tertiary)}
+.on-inverse .nl__error{color:var(--text-inverse)}
+.on-inverse .t-h4{color:var(--text-inverse)}
+
+
+/* STORY 02 */
+.story02__grid{display:grid;grid-template-columns:1fr;gap:40px}
+.story02__portrait{aspect-ratio:4/5}
+.story02__text{display:flex;flex-direction:column;gap:16px;max-width:640px}
+.story02__text p{color:var(--text-secondary)}
+
+/* ============================================================
+   CAROUSEL (rooms + more works)
+   ============================================================ */
+.carousel{position:relative}
+.carousel__track{
+  display:flex;gap:32px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:none;padding-bottom:4px;
+}
+.carousel__track::-webkit-scrollbar{display:none}
+.carousel__track:focus-visible{outline:2px solid var(--border-focus);outline-offset:4px}
+.carousel__slide{flex:0 0 100%;scroll-snap-align:start;margin:0;min-width:0}
+
+.carousel__bar{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  margin-top:24px;
+}
+.carousel__count{color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.carousel__nav{display:flex;gap:8px}
+.carousel__btn{
+  width:48px;height:48px;border:1px solid var(--border-strong);border-radius:0;
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background-color 120ms linear,border-color 120ms linear,transform 160ms var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .carousel__btn:hover:not(:disabled){background:var(--surface-inverse);border-color:var(--surface-inverse)}
+  .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-inverse)}
+}
+.carousel__btn:active:not(:disabled){transform:scale(.94)}
+.carousel__btn:disabled{border-color:var(--border-subtle);cursor:not-allowed}
+.carousel__btn:disabled .carousel__arrow{border-color:var(--text-disabled)}
+/* 1px chevron drawn in CSS — no icon font, no SVG */
+.carousel__arrow{
+  width:8px;height:8px;border-right:1px solid var(--text-primary);border-bottom:1px solid var(--text-primary);
+  transition:border-color 120ms linear;
+}
+.carousel__arrow--prev{transform:rotate(135deg);margin-left:3px}
+.carousel__arrow--next{transform:rotate(-45deg);margin-right:3px}
+
+/* ROOMS — one room at a time, full width, controls sitting on the image */
+.carousel--rooms{position:relative}
+.carousel--rooms .carousel__slide{flex-basis:100%}
+.carousel--rooms .room__media{aspect-ratio:16/9}
+/* full-bleed track, so the controls sit at the very edges of the screen */
+.carousel--works .carousel__track{padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+.carousel--works .carousel__nav{
+  position:absolute;top:0;left:0;right:0;height:var(--nav-h,0);gap:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding-inline:16px;pointer-events:none;z-index:2;
+}
+.carousel--rooms .carousel__nav{
+  position:absolute;top:0;left:0;right:0;height:var(--nav-h,0);gap:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding-inline:20px;pointer-events:none;z-index:2;
+}
+.carousel--rooms .carousel__btn{
+  pointer-events:auto;width:52px;height:52px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.94);color:var(--text-primary);
+}
+.carousel--rooms .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
+.carousel--rooms .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
+@media (hover:hover) and (pointer:fine){
+  .carousel--rooms .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
+  .carousel--rooms .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
+}
+.carousel--rooms .carousel__count{display:none}
+.carousel--rooms .carousel__bar{margin-top:0}
+
+/* CONTINUE — centred header, much larger works, controls on the images.
+   The nav overlay height is computed from the slide count so it always centres
+   on the artwork band rather than the whole card. */
+[data-sec="continue"] .sec-head{max-width:760px;margin-inline:auto;text-align:center;align-items:center}
+[data-sec="continue"] .sec-head__stand{max-width:680px;margin-inline:auto}
+.carousel--works{position:relative}
+.carousel--works .work{text-align:left;align-items:stretch}
+.work__imglink{display:block}
+.work__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.work__title{color:var(--text-primary);text-decoration:none}
+.work__fav{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto;
+  transition:transform 160ms var(--ease-out)}
+.work__fav svg{width:22px;height:22px;display:block}
+.work__fav:active{transform:scale(.9)}
+.carousel--works .carousel__btn{
+  pointer-events:auto;width:52px;height:52px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.94);color:var(--text-primary);
+}
+.carousel--works .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
+.carousel--works .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
+@media (hover:hover) and (pointer:fine){
+  .carousel--works .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
+  .carousel--works .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
+}
+.carousel--works .carousel__count{display:none}
+.carousel--works .carousel__bar{margin-top:0}
+
+/* WORK CARD (more works) */
+.work{display:flex;flex-direction:column;text-decoration:none;color:var(--text-primary)}
+.work__media{aspect-ratio:1/1;background:var(--surface-sunken);margin-bottom:8px;overflow:hidden}
+/* unframed motifs fill the square, so the row below lines up with the
+   artwork edges rather than with a padded frame */
+.work__media img{width:100%;height:100%;object-fit:cover}
+@media (hover:hover) and (pointer:fine){.work__title:hover{text-decoration:underline;text-underline-offset:3px}}
+
+/* ROOMS */
+.room__media{aspect-ratio:4/3}
+.room__note{color:var(--text-secondary)}
+
+/* EDITION */
+
+/* FINISH CARDS */
+.fcards{display:grid;grid-template-columns:1fr;gap:32px}
+.fcard{background:#FFFFFF;border:1px solid var(--border-default);border-radius:0;display:flex;flex-direction:column}
+.fcard__media{aspect-ratio:4/3}
+.fcard__body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.fcard__desc{color:var(--text-secondary)}
+.fcard__price{font-variant-numeric:tabular-nums}
+/* the footer pins to the bottom, so every card's CTA lands on the same line
+   whether or not the card carries a price */
+.fcard__foot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:16px}
+
+/* CLOSE */
+.close{padding-block:80px}
+.close__inner{max-width:560px;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center}
+.close__body{color:var(--text-tertiary)}
+.close .input{background:#FFFFFF}
+.close .nl__consent{color:var(--text-tertiary)}
+.close .action{width:100%;text-align:left}
+.close .nl__label,.close .nl__error{text-align:left}
+.close .nl__error{color:var(--text-inverse)}
+.close .nl__consent a{color:var(--text-tertiary)}
+
+/* TRUST ROW */
+.trust{display:grid;grid-template-columns:1fr;gap:40px;text-align:center}
+/* USPs: Subheading/H3 for the claim, Subline for the qualifier */
+.trust__head{font-size:clamp(20px,1.9vw,24px);line-height:1.3;margin:0}
+.trust__note{color:var(--text-secondary);margin-top:8px;font-size:14px;line-height:1.5}
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+.dev{position:fixed;left:8px;bottom:8px;z-index:80;display:none;gap:4px;flex-wrap:wrap;max-width:200px}
+.dev.is-on{display:flex}
+.dev button{
+  background:#FFFFFF;border:1px solid var(--border-strong);border-radius:0;
+  padding:4px 8px;font-size:11px;line-height:1.5;letter-spacing:.03em;cursor:pointer;
+}
+.dev button[aria-pressed="true"]{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.dev__meta{width:100%;margin:0;font-size:10px;line-height:1.4;color:var(--text-secondary);background:#FFFFFF;border:1px solid var(--border-strong);padding:4px 8px}
+
+/* ============================================================
+   BREAKPOINTS
+   ============================================================ */
+@media (min-width:768px){
+  :root{--gutter:40px}
+  .carousel__slide{flex-basis:calc((100% - 32px) / 2)}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+  .trust{grid-template-columns:repeat(3,1fr)}
+  }
+
+@media (min-width:1024px){
+  :root{--gutter:48px}
+  .section{padding-block:120px}
+  .close{padding-block:120px}
+  .hero{padding-block:80px 120px;min-height:92vh;display:flex;align-items:center}
+  .hero__grid{grid-template-columns:1fr 1fr;gap:80px}
+  .hero__art{margin-inline:0}
+  .hero__panel{gap:20px}
+  .sec-head{margin-bottom:56px}
+  .story02__grid{grid-template-columns:5fr 6fr;gap:64px;align-items:start}
+  .fcards{grid-template-columns:repeat(3,1fr)}
+  .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
+  .work-block{padding-block:120px}
+  .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
+  .work-block__art{margin-inline:0;max-width:none}
+  .work-block__panel{max-width:none}
+  .proof__wrap{padding-bottom:64px}
+  .proof__plate{padding:40px 48px}
+  .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+
+    }
+
+/* ============================================================
+   PHASE RULES
+   ============================================================ */
+[data-phase="ENDED"] .cd{display:none}
+
+/* Section order is plain source order — nothing is reordered in CSS, so the
+   reading order, the tab order and the visual order cannot drift apart.
+   data-sec is kept as a stable hook for testing and analytics. */
+
+
+/* ============================================================
+   SCROLL REVEAL
+   Content is visible by default. The hidden state is only applied once JS has
+   confirmed it can also remove it (.js), and a failsafe clears everything if the
+   observer never fires — hidden tabs and headless renderers pause transitions,
+   and a section that ships blank is far worse than one that never animated.
+   ============================================================ */
+.js .reveal{
+  opacity:0;transform:translateY(16px);
+  transition:opacity 560ms var(--ease-out),transform 560ms var(--ease-out);
+  transition-delay:var(--reveal-delay,0ms);
+}
+.js .reveal.is-in{opacity:1;transform:none}
+
+.rooms__cta{align-self:flex-start;margin-top:32px;min-width:280px}
+/* review-only: jump between the reveal and buy variations without ?dev=1 */
+.phase-switch{position:fixed;right:16px;bottom:16px;z-index:70;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 20px;
+  background:var(--surface-inverse);color:var(--text-inverse);text-decoration:none;
+  font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ============================================================
+   MOBILE PASS
+   ============================================================ */
+@media (max-width:767px){
+  /* --- touch targets: nothing interactive under 44px --------------------- */
+  .nav__icon{min-width:44px;min-height:44px;justify-content:center}
+  .nav__icons{gap:2px;margin-right:-10px}
+  .nav__burger{width:44px;height:44px;margin-left:-10px}
+  .nav__logo{min-height:44px;align-items:center}
+  .nav__searchinput{height:48px}
+  .nav__searchbtn{width:44px;height:44px;right:0;top:2px}
+  .nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) - 6px)}
+  .work__fav{width:44px;height:44px;margin-right:-11px}
+  .work__row{min-height:44px}
+  .work__title{padding-block:9px}
+  .carousel__btn{width:44px;height:44px}
+  .textlink{display:inline-block;padding-block:6px}
+
+  /* --- rooms: 16:9 on a 342px track was only 192px tall ------------------ */
+  [data-sec="rooms"] > .wrap{padding-inline:0}
+  [data-sec="rooms"] .sec-head{padding-inline:var(--gutter)}
+  .carousel--rooms .room__media{aspect-ratio:4/3}
+  .carousel--rooms .carousel__nav{padding-inline:12px}
+  .carousel--rooms .carousel__btn{width:44px;height:44px}
+
+  /* --- works: edge to edge, controls tucked in --------------------------- */
+  .carousel--works .carousel__nav{padding-inline:10px}
+
+  /* --- long display strings need to come down at this width -------------- */
+  .quote__text{font-size:26px;line-height:1.2}
+  .inspiration__quote{font-size:22px;line-height:1.25}
+  .inspiration__inner{gap:24px}
+  .voice__lead{font-size:17px}
+  .inspiration__body{font-size:17px}
+  .proof__plate{padding:20px 24px}
+
+  /* --- vertical rhythm: 96px between every section is a lot on a phone --- */
+  .section{padding-block:64px}
+  .work-block{padding-block:64px}
+  .close{padding-block:64px}
+  .trust{gap:32px}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .btn:active:not([aria-disabled="true"]),
+  .carousel__btn:active:not(:disabled){transform:none}
+  .nl__success{transition:none}
+  .carousel__track{scroll-behavior:auto}
+  *{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!-- ============================ TOPBAR ============================ -->
+<div class="topbar">
+  <div class="topbar__inner">
+    <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
+    <span class="t-ui" id="topbar-label">EARLY ACCESS IN</span>
+    <span class="cd tnum" id="cd-topbar" aria-live="off"></span>
+    <span class="sr-only">Verkauf bis 10. August 2026, 23:59 Uhr</span>
+  </div>
+</div>
+
+<!-- ============================ NAV ============================
+     LUMAS site chrome. Menu routes marked (?) below have no verified URL:
+     Top 20 points at /highlights/bestseller/ and Über uns at the homepage.
+     Confirm both before launch. Logo is the supplied LUMAS-Logo-Black.svg,
+     inlined with fill=currentColor so it inherits colour. -->
+<header class="nav">
+  <div class="wrap nav__inner">
+
+    <button class="nav__burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="nav-drawer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 6h20M2 12h20M2 18h20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></button>
+
+    <a class="nav__logo" href="https://www.lumas.de/" target="_self" aria-label="LUMAS — zur Startseite"><svg class="nav__logomark" viewBox="0 0 160 30" role="img" aria-label="LUMAS" focusable="false"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg></a>
+
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a class="nav__link" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+      <a class="nav__link" href="https://www.lumas.de/highlights/bestseller/" target="_self">Top 20</a>
+      <a class="nav__link" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+      <a class="nav__link" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+      <a class="nav__link" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+      <a class="nav__link" href="https://www.lumas.de/" target="_self">Über uns</a>
+    </nav>
+
+    <form class="nav__search" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+      <label class="sr-only" for="nav-q">Suche</label>
+      <input class="nav__searchinput" id="nav-q" name="q" type="search" placeholder="Suche" autocomplete="off">
+      <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+    </form>
+
+    <div class="nav__icons">
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.4 8.1c.3-.6.6-.6.9-.6h.6c.2 0 .5 0 .7.5l.8 1.9c.1.3 0 .5-.1.7l-.5.6c-.2.2-.3.4-.1.7.5.9 1.4 1.8 2.4 2.3.3.2.5.1.7-.1l.5-.6c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5v.7c0 .4-.3.9-.8 1.1-.4.2-1 .3-1.6.1-1.3-.4-2.7-1.2-3.9-2.4-1.2-1.2-2-2.6-2.4-3.9-.2-.6-.1-1.2 0-1.6z" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__icon--desktop" href="https://www.lumas.de/" target="_self" aria-label="Telefon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 3h3l1.5 4-2 1.4a13 13 0 0 0 6.6 6.6L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17.5 17.5 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/wishlist/" target="_self" aria-label="Wunschliste"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.3 3.9 12.2a4.9 4.9 0 0 1 0-6.9 4.9 4.9 0 0 1 6.9 0l1.2 1.2 1.2-1.2a4.9 4.9 0 0 1 6.9 0 4.9 4.9 0 0 1 0 6.9z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/login/" target="_self" aria-label="Konto"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.8" r="4.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3.6 21a8.4 8.4 0 0 1 16.8 0" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="Warenkorb"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 4h2.2l2.4 10.6h10l2.4-7.6H6.2" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9" cy="19.3" r="1.6" fill="currentColor"/><circle cx="16.6" cy="19.3" r="1.6" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__lang nav__icon--desktop" href="https://www.lumas.com/" target="_self" aria-label="Sprache: Deutsch"><span>DE</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+
+  <form class="nav__search nav__search--mobile" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+    <label class="sr-only" for="nav-q-m">Suche</label>
+    <input class="nav__searchinput" id="nav-q-m" name="q" type="search" placeholder="Suche" autocomplete="off">
+    <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+  </form>
+
+  <div class="nav__drawer" id="nav-drawer" hidden>
+      <a class="nav__drawerlink" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/highlights/bestseller/" target="_self">Top 20</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/" target="_self">Über uns</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ 1 · PROOF ============================
+     Opens on the work already living on a wall. No artwork-on-white, no specs:
+     the first screen is evidence, not a product shot. Type sits on a solid
+     charcoal plate rather than a gradient scrim, so it stays inside the system
+     and stays legible whatever the photograph is doing behind it. -->
+<section class="proof" data-sec="proof">
+  <img class="proof__img" src="CMO_Room1.jpg" width="7680" height="4320"
+       fetchpriority="high" decoding="async"
+       alt="Alice in der schwarzen LUMA Artbox über einem Sideboard im Wohnzimmer, seitlich einfallendes Tageslicht."
+       data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+  <div class="wrap proof__wrap">
+    <div class="proof__plate">
+      <p class="t-eyebrow proof__eyebrow">ART DROP · NUR DREI TAGE</p>
+      <h1 class="t-display-xl proof__title">Alice</h1>
+      <p class="t-body-l proof__artist">Carol Muthiga-Oyekunle</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 2 · THE WORK ============================
+     The artwork isolated on charcoal, where the collage reads at full strength,
+     with every essential beside it: urgency, the piece, both executions and
+     their prices, and the CTA. Everything needed to decide, in one screen. -->
+<section class="work-block on-inverse" data-sec="work">
+  <div class="wrap work-block__grid">
+
+    <div class="work-block__art media framed">
+      <!-- Production src: https://img-lumas.b-cdn.net/showimg_cmu43_full.jpg -->
+      <img src="showimg_cmu43_full.webp" width="1600" height="1600" decoding="async"
+           alt="Alice von Carol Muthiga-Oyekunle: Porträt einer Frau in Graustufen, umgeben von einer farbigen Collage aus Blüten- und Korallenformen."
+           data-fallback="ARTWORK · ALICE · 1:1">
+    </div>
+
+    <div class="work-block__panel" data-reveal-group>
+
+      <div class="work-block__urgency">
+        <p class="t-ui work-block__cdlabel" id="work-cd-label">EARLY ACCESS IN</p>
+        <span class="cd tnum" id="cd-work" aria-live="off"></span>
+      </div>
+
+      <p class="t-body work-block__intro">Eine Kriegerin zwischen Vergangenheit, Gegenwart und Zukunft.<br>Drei Tage sichtbar&nbsp;— dann nie wieder.</p>
+
+      <dl class="specs">
+        <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Limitiert auf 300 Exemplare</dd></div>
+        <div class="specs__row"><dt class="t-ui">FORMAT</dt><dd class="t-body-s tnum">60 × 60 cm</dd></div>
+        <div class="specs__row"><dt class="t-ui">AUSFÜHRUNGEN</dt><dd class="t-body-s">LUMASEC glossy / LUMA Artbox, schwarz</dd></div>
+        <div class="specs__row"><dt class="t-ui">ZERTIFIKAT</dt><dd class="t-body-s">Signiert und nummeriert</dd></div>
+        <div class="specs__row"><dt class="t-ui">VERKAUFSZEITRAUM</dt><dd class="t-body-s tnum">08. – 10. August 2026</dd></div>
+      </dl>
+
+      <!-- buy (EARLY_ACCESS / PUBLIC) -->
+      <div class="action" data-phases="EARLY_ACCESS PUBLIC">
+        <a class="btn btn--primary btn--full" href="#" target="_self"
+           data-buy="work" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+      </div>
+
+      <!-- newsletter (REVEAL / ENDED) -->
+      <div class="action" data-phases="REVEAL ENDED" id="hero-nl">
+        <div data-phases="ENDED" class="action" style="gap:8px">
+          <p class="t-h4">Die Edition ist beendet</p>
+          <p class="t-body work-block__intro">Alice war auf 300 Exemplare limitiert. Melde dich an, um den nächsten Art Drop nicht zu verpassen.</p>
+        </div>
+
+        <form class="action" novalidate data-nl="hero">
+          <label class="nl__label sr-only" for="email-hero">E-Mail-Adresse</label>
+          <div class="nl__row">
+            <div class="nl__field">
+              <input class="input" type="email" id="email-hero" name="email"
+                     autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-hero">
+            </div>
+            <button class="btn btn--primary btn--full" type="submit" data-phases="REVEAL"
+                    data-ablyft-goal="drop_submit_newsletter">JETZT FÜR EARLY ACCESS ANMELDEN</button>
+            <button class="btn btn--primary btn--full" type="submit" data-phases="ENDED"
+                    data-ablyft-goal="drop_submit_newsletter">ZUM NEWSLETTER ANMELDEN</button>
+          </div>
+          <p class="t-body-s nl__error" id="err-hero" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+          <p class="t-caption nl__consent" data-phases="REVEAL">Wir melden uns einmal — am 7. August, neun Uhr, bevor die Edition öffentlich verfügbar ist. LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+          <p class="t-caption nl__consent" data-phases="ENDED">LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+        </form>
+        <div class="nl__success" data-nl-success hidden>
+          <p class="t-h4">Du bist dabei.</p>
+          <p class="t-body work-block__intro" data-phases="REVEAL">Deine Einladung zum Early Access erreicht dich am 7. August um 09:00 Uhr.</p>
+          <p class="t-body work-block__intro" data-phases="ENDED">Wir melden uns, sobald der nächste Art Drop startet.</p>
+          <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/alice/" target="_self">Werk zur Wunschliste hinzufügen →</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3 · OWN IT ============================
+     Two executions with the price gap made explicit, then authenticity. Merged
+     from the former FINISHES and EDITION sections into one ownership block. -->
+<section class="section" data-sec="own">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Gefertigt in zwei exquisiten Ausführungen, handsigniert und limitiert.</h2>
+    </div>
+
+    <div class="fcards" data-reveal-group>
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="CMO_Room2_person2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+               alt="Alice in LUMASEC glossy, rahmenlos an einer hellen Wand."
+               data-fallback="FINISH PHOTO · LUMASEC GLOSSY · 4:3">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">LUMASEC glossy</h3>
+          <p class="t-body-s fcard__desc">Hochglänzende Oberfläche, die Farbtiefe und Kontrast trägt. Ohne Rahmen, damit die Farben bis an die Kante laufen.</p>
+          <div class="fcard__foot">
+            <p class="t-body fcard__price" data-phases="EARLY_ACCESS PUBLIC ENDED">299 €</p>
+            <a class="btn btn--primary btn--full fcard__cta" href="#" target="_self"
+               data-phases="EARLY_ACCESS PUBLIC" data-buy="card" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+            <span class="btn btn--primary btn--full fcard__cta" aria-disabled="true" role="button" tabindex="-1"
+                  data-phases="ENDED">NICHT MEHR VERFÜGBAR</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="CMO_Room1.jpg" width="7680" height="4320" loading="lazy" decoding="async"
+               alt="Alice in der schwarzen LUMA Artbox über einem Sideboard."
+               data-fallback="FINISH PHOTO · LUMA ARTBOX · 4:3">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">LUMA Artbox, schwarz</h3>
+          <p class="t-body-s fcard__desc">Acrylglas glossy im schwarzen Objektrahmen — das Werk steht frei im Rahmenkörper.</p>
+          <div class="fcard__foot">
+            <p class="t-body fcard__price" data-phases="EARLY_ACCESS PUBLIC ENDED">399 €</p>
+            <a class="btn btn--primary btn--full fcard__cta" href="#" target="_self"
+               data-phases="EARLY_ACCESS PUBLIC" data-buy="card" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+            <span class="btn btn--primary btn--full fcard__cta" aria-disabled="true" role="button" tabindex="-1"
+                  data-phases="ENDED">NICHT MEHR VERFÜGBAR</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="cmu-certificate.jpg" width="1400" height="1187" loading="lazy" decoding="async"
+               alt="Zertifikat der Edition Alice: Angaben zu Auflage, Format und C-Print, LUMAS Hologramm und die Signatur von Carol Muthiga-Oyekunle."
+               data-fallback="CERTIFICATE · ZERTIFIKAT · 4:3">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Signiert und nummeriert</h3>
+          <p class="t-body-s fcard__desc">Jedes Exemplar wird von Carol Muthiga-Oyekunle signiert und trägt ein nummeriertes Zertifikat. Nach 300 Exemplaren wird die Edition geschlossen.</p>
+          <div class="fcard__foot">
+            <a class="btn btn--secondary btn--full fcard__cta" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/alice/"
+               target="_self" data-phases="EARLY_ACCESS PUBLIC ENDED"
+               data-ablyft-goal="drop_click_details">MEHR DETAILS</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+</section>
+
+<!-- ============================ 4 · VOICE ============================
+     The quote and a condensed lead-in, merged with the portrait. The fuller
+     biography moves to CONTINUE so this stays lean. Lead-in is recombined from
+     the approved bio paragraphs, not newly written. -->
+<section class="section on-inverse voice" data-sec="voice">
+  <div class="wrap voice__grid">
+    <div class="voice__portrait media">
+      <img src="cmu-artist.jpg" width="1400" height="1050" loading="lazy" decoding="async"
+           alt="Carol Muthiga-Oyekunle vor einer ihrer großformatigen Collagen."
+           data-fallback="ARTIST PORTRAIT · CAROL MUTHIGA-OYEKUNLE · 4:3">
+    </div>
+
+    <div class="voice__text reveal">
+      <figure class="voice__fig">
+        <blockquote class="t-h2 quote__text">„Ich stelle Frauen in einer Position der Stärke, des Optimismus, der Freude und des Triumphs dar.“</blockquote>
+        <figcaption class="t-eyebrow quote__by">Carol Muthiga-Oyekunle</figcaption>
+      </figure>
+      <p class="t-body voice__lead">Carol Muthiga-Oyekunle ist kenianisch-amerikanische Künstlerin und Designerin, sie lebt und arbeitet in Paris. Bestimmend für ihre Arbeit ist der Afrofuturismus: die Geschichte der afrikanischen Diaspora, neu erzählt aus einer technologisierten Zukunft heraus.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5 · ENVISION ============================ -->
+<section class="section" data-sec="rooms">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Sie verwandelt jeden Raum, den sie betritt.</h2>
+      <p class="t-body-l sec-head__stand">Mit 60 × 60 cm passt sie wunderbar in eine Nische – und hat doch die Kraft, den ganzen Raum zu bestimmen.</p>
+      <a class="btn btn--primary rooms__cta" href="#" target="_self"
+         data-phases="EARLY_ACCESS PUBLIC" data-buy="rooms" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+    </div>
+
+    <!-- ROOMS CAROUSEL
+         To add a room shot: copy one <figure class="carousel__slide"> block and drop
+         the new file into this folder. Nothing else needs changing — the controls,
+         counter and keyboard handling read the slide count at runtime. -->
+    <div class="carousel carousel--rooms" data-carousel="rooms">
+      <div class="carousel__track" tabindex="0" role="group"
+           aria-label="Alice im Raum — Bildergalerie">
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="CMO_Room2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Alice in LUMASEC glossy über einem hellen Sofa in einem Wohnzimmer mit Meerblick."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 4:3">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="CMO_Room2_person.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Eine Frau sitzt auf einem Sofa, darüber hängt Alice in LUMASEC glossy."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 4:3">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="CMO_Room3_person.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Alice in der schwarzen LUMA Artbox über einem Schreibtisch in einem Arbeitszimmer."
+                 data-fallback="ROOM SHOT · ARBEITSZIMMER · 4:3">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="CMO_Room2_person2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Eine Frau blickt auf Alice in LUMASEC glossy an einer hellen Wohnzimmerwand."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 4:3">
+          </div>
+        </figure>
+
+      </div>
+
+      <div class="carousel__bar">
+        <p class="t-caption carousel__count" aria-hidden="true"></p>
+        <div class="carousel__nav">
+          <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorheriges Bild">
+            <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+          </button>
+          <button class="carousel__btn" type="button" data-dir="1" aria-label="Nächstes Bild">
+            <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 6 · INSPIRATION ============================
+     Why the work carries the name. Sits after the room images, once the piece
+     has been seen in place. The Walker quote is set one step below Carol's so
+     the two do not compete. Copy is new and needs sign-off; the German is a
+     translation of the supplied English. -->
+<section class="section on-inverse inspiration" data-sec="inspiration">
+  <div class="wrap inspiration__inner">
+    <h2 class="t-eyebrow inspiration__eyebrow">In den Worten von Alice Walker, der Inspiration hinter der Edition</h2>
+
+    <figure class="inspiration__fig">
+      <blockquote class="t-h3 inspiration__quote">„Auf einer spirituellen Ebene ist es, als sähe ich mit meinem sehenden Auge das, was vor mir liegt, und mit meinem blinden Auge das, was verborgen ist. Es hat das Leben mehr erhellt als verdunkelt.“</blockquote>
+    </figure>
+
+    <p class="t-body-l inspiration__body">Alice Walker, die mit dem Pulitzer-Preis ausgezeichnete amerikanische Autorin von „Die Farbe Lila“, ist eine der prägendsten Stimmen aus Carol Muthiga-Oyekunles Jugend. Ihr Zitat, entstanden nach dem Verlust des Augenlichts auf einem Auge bei einem Unfall in der Kindheit, wird für die Künstlerin zum Sinnbild für den Triumph über Widrigkeiten und für die Kraft, mit offenem Herzen und hoffnungsvollem Blick durch die Dunkelheit zu sehen. „Alice“ ist ihre Hommage an diese Haltung.</p>
+  </div>
+</section>
+
+<!-- ============================ 7 · REASSURE ============================
+     Risk-reducers sit directly above the closing CTA. -->
+<section class="section section--sunken" data-sec="trust" style="padding-block:88px">
+  <div class="wrap">
+    <div class="trust" data-reveal-group>
+      <div>
+        <p class="t-h4 trust__head">330.000 zufriedene Kunden</p>
+        <p class="t-body-s trust__note">seit 2004</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">19 Galerien weltweit</p>
+        <p class="t-body-s trust__note">Werke vor Ort ansehen</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">60 Tage Rückgaberecht</p>
+        <p class="t-body-s trust__note">ohne Angabe von Gründen</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 8 · ACT ============================ -->
+<section class="on-inverse close" id="close" data-sec="close">
+  <div class="wrap close__inner">
+
+    <!-- REVEAL -->
+    <div class="close__inner" data-phases="REVEAL" style="padding:0">
+      <h2 class="t-h2">Drei Tage. 300 Exemplare.</h2>
+      <p class="t-body close__body">Melde dich an und erhalte am 7. August um 09:00 Uhr Zugang,<br>bevor die Edition öffentlich verfügbar ist.</p>
+    </div>
+
+    <!-- EARLY_ACCESS / PUBLIC -->
+    <div class="close__inner" data-phases="EARLY_ACCESS PUBLIC" style="padding:0">
+      <h2 class="t-h3 close__head">Drei Tage. 300 Exemplare.</h2>
+
+      <!-- SCARCITY — driven by SOLD_COUNT. The whole block stays hidden until a
+           real stock figure is wired in; it must never show an invented number. -->
+      <div class="scarcity" id="scarcity" hidden>
+        <p class="t-body-s scarcity__label"><span class="tnum" id="scarcity-count"></span> von <span class="tnum">300</span> verkauft</p>
+        <div class="scarcity__track"><span class="scarcity__fill" id="scarcity-fill"></span></div>
+      </div>
+
+      <span class="cd tnum close__cd" id="cd-close" aria-live="off"></span>
+      <p class="t-body close__body">Die Edition ist bis zum 10. August, 23:59 Uhr verfügbar.</p>
+      <a class="btn btn--primary" href="#" target="_self" data-buy="close"
+         data-ablyft-goal="drop_click_buy" style="min-width:280px">JETZT KAUFEN</a>
+    </div>
+
+    <!-- ENDED -->
+    <div class="close__inner" data-phases="ENDED" style="padding:0">
+      <h2 class="t-h2">Die Edition ist beendet.</h2>
+      <p class="t-body close__body">Alice war auf 300 Exemplare limitiert. Melde dich an, um den nächsten Art Drop nicht zu verpassen.</p>
+    </div>
+
+    <!-- newsletter (REVEAL / ENDED) -->
+    <div class="action" data-phases="REVEAL ENDED" style="width:100%">
+      <form class="action" novalidate data-nl="close">
+        <label class="nl__label sr-only" for="email-close">E-Mail-Adresse</label>
+        <div class="nl__row">
+          <div class="nl__field">
+            <input class="input" type="email" id="email-close" name="email"
+                   autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-close">
+          </div>
+          <button class="btn btn--primary btn--full" type="submit"
+                  data-ablyft-goal="drop_submit_newsletter" data-close-cta>JETZT ANMELDEN</button>
+        </div>
+        <p class="t-body-s nl__error" id="err-close" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+        <p class="t-caption nl__consent">Wir melden uns einmal — am 7. August, neun Uhr, bevor die Edition öffentlich verfügbar ist. LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+      </form>
+
+      <div class="nl__success" data-nl-success hidden>
+        <p class="t-h4">Du bist dabei.</p>
+        <p class="t-body close__body">Deine Einladung zum Early Access erreicht dich am 7. August um 09:00 Uhr.</p>
+        <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/alice/" target="_self">Werk zur Wunschliste hinzufügen →</a></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ 9 · CONTINUE ============================
+     Live from the lumas.de catalogue feed (9 limited editions by the artist).
+     Unframed motifs from img.lumas.com. Note the image SKU is the MOTIF id, not
+     the feed's article SKU (Erzulie is article CMU06 but motif cmu05); each was
+     resolved from its own product page. Prices are deliberately omitted: the
+     feed price is per variant and would need confirming before it is shown. -->
+<section class="section" id="more-works" data-sec="continue">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Weitere Werke von Carol Muthiga-Oyekunle</h2>
+    </div>
+  </div>
+
+  <div class="carousel carousel--works" data-carousel="works">
+      <div class="carousel__track" tabindex="0" role="group"
+           aria-label="Weitere Werke von Carol Muthiga-Oyekunle">
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/erzulie/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU06" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu05_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Erzulie von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · ERZULIE · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/erzulie/" target="_self"
+               data-work="CMU06" data-ablyft-goal="drop_click_work">Erzulie</a>
+            <button class="work__fav" type="button" aria-label="Erzulie zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/iris-1/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU08" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu07_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Iris von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · IRIS · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/iris-1/" target="_self"
+               data-work="CMU08" data-ablyft-goal="drop_click_work">Iris</a>
+            <button class="work__fav" type="button" aria-label="Iris zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/serida/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU20" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu19_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Serida von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · SERIDA · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/serida/" target="_self"
+               data-work="CMU20" data-ablyft-goal="drop_click_work">Serida</a>
+            <button class="work__fav" type="button" aria-label="Serida zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/aset/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU23" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu22_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Aset von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · ASET · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/aset/" target="_self"
+               data-work="CMU23" data-ablyft-goal="drop_click_work">Aset</a>
+            <button class="work__fav" type="button" aria-label="Aset zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/good_hair/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU24" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu01_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Good Hair von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · GOOD HAIR · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/good_hair/" target="_self"
+               data-work="CMU24" data-ablyft-goal="drop_click_work">Good Hair</a>
+            <button class="work__fav" type="button" aria-label="Good Hair zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/idia/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU32" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu31_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Idia von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · IDIA · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/idia/" target="_self"
+               data-work="CMU32" data-ablyft-goal="drop_click_work">Idia</a>
+            <button class="work__fav" type="button" aria-label="Idia zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/satis/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU34" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu33_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Satis von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · SATIS · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/satis/" target="_self"
+               data-work="CMU34" data-ablyft-goal="drop_click_work">Satis</a>
+            <button class="work__fav" type="button" aria-label="Satis zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/toni/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU36" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu35_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Toni von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · TONI · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/toni/" target="_self"
+               data-work="CMU36" data-ablyft-goal="drop_click_work">Toni</a>
+            <button class="work__fav" type="button" aria-label="Toni zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <a class="work__imglink" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/osun/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="CMU40" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_cmu39_full.jpg"
+                 loading="lazy" decoding="async" width="1200" height="1200"
+                 alt="Osun von Carol Muthiga-Oyekunle, gerahmt."
+                 data-fallback="WERK · OSUN · 1:1"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/carol_muthiga_oyekunle/osun/" target="_self"
+               data-work="CMU40" data-ablyft-goal="drop_click_work">Osun</a>
+            <button class="work__fav" type="button" aria-label="Osun zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+      </div>
+
+      <div class="carousel__bar">
+        <p class="t-caption carousel__count" aria-hidden="true"></p>
+        <div class="carousel__nav">
+          <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorherige Werke">
+            <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+          </button>
+          <button class="carousel__btn" type="button" data-dir="1" aria-label="Weitere Werke">
+            <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ============================ DEV SWITCHER ============================ -->
+<div class="dev" id="dev" aria-label="Phase (dev)"></div>
+
+<script>
+/* ============================================================
+   PHASE
+   ============================================================ */
+let PHASE = 'REVEAL';   // 'REVEAL' | 'EARLY_ACCESS' | 'PUBLIC' | 'ENDED'
+
+/* ?phase=PUBLIC overrides the constant, so the buy variation has its own URL
+   and the review button below can simply link to it. */
+(() => {
+  const q = new URLSearchParams(location.search).get('phase');
+  if (q && ['REVEAL','EARLY_ACCESS','PUBLIC','ENDED'].includes(q.toUpperCase())) PHASE = q.toUpperCase();
+})();
+
+const SCHEDULE = {
+  reveal:      '2026-08-04T00:00:00+02:00',
+  earlyAccess: '2026-08-07T09:00:00+02:00',
+  publicSale:  '2026-08-08T09:00:00+02:00',
+  saleEnd:     '2026-08-10T23:59:00+02:00'
+};
+
+const PDP_URL = 'https://www.lumas.de/pictures/carol_muthiga_oyekunle/alice/';
+
+const FROM_PRICE = '299 €';
+const EDITION_SIZE = 300;
+
+/* Live sold count. MUST be wired to a real stock feed before launch.
+   Leave null and the scarcity block stays hidden — never show a made-up number.
+   Set to an integer (0-300) to display "<n> von 300 verkauft". */
+const SOLD_COUNT = null;
+
+/* Dev-only simulated clock. Production always reads the real system time; the
+   dev switcher sets this so previewing a phase also previews a plausible moment
+   INSIDE that phase. Without it, previewing PUBLIC in July counts down to a sale
+   end two weeks out and reads as a bug when the logic is correct. */
+let SIMULATED_NOW = null;
+const now = () => SIMULATED_NOW !== null ? SIMULATED_NOW : Date.now();
+
+const PHASE_PREVIEW_AT = {
+  REVEAL:       '2026-08-04T12:00:00+02:00',  // day of reveal
+  EARLY_ACCESS: '2026-08-07T11:00:00+02:00',  // 2h into early access
+  PUBLIC:       '2026-08-08T12:00:00+02:00',  // 3h into the public sale
+  ENDED:        '2026-08-11T01:00:00+02:00'   // 1h after close
+};
+
+/* ============================================================
+   TRACKING
+   ============================================================ */
+function track(event, params) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, phase: PHASE, ...params });
+  console.log('[GA4]', event, { phase: PHASE, ...params });
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const pad = n => String(n).padStart(2, '0');
+
+const TOPBAR_LABEL = {
+  REVEAL:       'EARLY ACCESS IN',
+  EARLY_ACCESS: 'VERKAUF ENDET IN',
+  PUBLIC:       'VERKAUF ENDET IN',
+  ENDED:        'EDITION BEENDET'
+};
+
+const COUNTDOWN_TARGET = {
+  REVEAL:       SCHEDULE.earlyAccess,
+  EARLY_ACCESS: SCHEDULE.saleEnd,
+  PUBLIC:       SCHEDULE.saleEnd,
+  ENDED:        null
+};
+
+/* ============================================================
+   IMAGE FALLBACK BLOCKS
+   ============================================================ */
+$$('img[data-fallback]').forEach(img => {
+  img.addEventListener('error', () => {
+    const box = document.createElement('div');
+    box.className = 'fallback';
+    box.textContent = img.dataset.fallback;
+    const w = img.getAttribute('width'), h = img.getAttribute('height');
+    const host = img.parentElement;
+    const cs = getComputedStyle(host).aspectRatio;
+    box.style.aspectRatio = (cs && cs !== 'auto') ? cs : (w && h ? w + '/' + h : '4/3');
+    box.style.height = '100%';
+    host.classList.remove('framed');
+    img.replaceWith(box);
+  }, { once: true });
+});
+
+/* ============================================================
+   PHASE VISIBILITY
+   ============================================================ */
+function applyPhaseVisibility() {
+  document.documentElement.dataset.phase = PHASE;
+  $$('[data-phases]').forEach(el => {
+    el.hidden = !el.dataset.phases.split(/\s+/).includes(PHASE);
+  });
+
+  $('#topbar-label').textContent = TOPBAR_LABEL[PHASE];
+  const wl = $('#work-cd-label');
+  if (wl) wl.textContent = TOPBAR_LABEL[PHASE];
+
+}
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+function renderCountdown(el, ms) {
+  if (ms <= 0) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+
+  const total = Math.floor(ms / 1000);
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+
+  const segs = [];
+  if (ms >= 3600000) segs.push([pad(d), 'TAGE']);   // day segment drops under 1 hour
+  segs.push([pad(h), 'STD'], [pad(m), 'MIN'], [pad(s), 'SEK']);
+
+  el.innerHTML = segs.map(([n, u]) =>
+    '<span class="cd__seg"><span class="cd__num">' + n + '</span><span class="cd__unit">' + u + '</span></span>'
+  ).join('');
+}
+
+let cdTimer = null;
+function startCountdown() {
+  if (cdTimer) clearInterval(cdTimer);
+  const targets = ['#cd-topbar', '#cd-work', '#cd-close'].map(s => $(s)).filter(Boolean);
+  const iso = COUNTDOWN_TARGET[PHASE];
+
+  if (!iso) {
+    targets.forEach(el => { el.hidden = true; el.innerHTML = ''; });
+      return;
+  }
+  const deadline = new Date(iso).getTime();
+
+  const tick = () => {
+    const ms = Math.max(0, deadline - now());
+    targets.forEach(el => renderCountdown(el, ms));
+    if (ms <= 0) {
+      // never negative: hide the countdown, keep the phase's label in place
+      clearInterval(cdTimer);
+      cdTimer = null;
+      $('#topbar-label').textContent = TOPBAR_LABEL[PHASE === 'REVEAL' ? 'EARLY_ACCESS' : 'ENDED'];
+    }
+  };
+  tick();
+  cdTimer = setInterval(tick, 1000);
+}
+
+/* ============================================================
+   SCARCITY
+   ============================================================ */
+function renderScarcity() {
+  const box = $('#scarcity');
+  if (!box) return;
+  const live = Number.isInteger(SOLD_COUNT) && SOLD_COUNT >= 0 && SOLD_COUNT <= EDITION_SIZE;
+  box.hidden = !live;
+  if (!live) return;
+  $('#scarcity-count').textContent = SOLD_COUNT;
+  $('#scarcity-fill').style.width = ((SOLD_COUNT / EDITION_SIZE) * 100).toFixed(1) + '%';
+}
+
+/* ============================================================
+   BUY LINKS
+   The finish is chosen on the PDP, so every CTA points at the plain
+   product URL — no variant parameter is carried across.
+   ============================================================ */
+function syncBuyLinks() {
+  $$('a[data-buy]').forEach(a => { a.href = PDP_URL; });
+  const from = $('.action__from');
+  if (from) from.textContent = 'ab ' + FROM_PRICE;
+}
+
+$$('a[data-buy]').forEach(a => {
+  a.addEventListener('click', () => {
+    track('drop_click_buy', { location: a.dataset.buy, finish: null, price: FROM_PRICE });
+  });
+});
+
+$$('a[data-work]').forEach(a => {
+  a.addEventListener('click', () => track('drop_click_work', { sku: a.dataset.work }));
+});
+
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+$$('form[data-nl]').forEach(form => {
+  const location = form.dataset.nl;
+  const input = $('input[type="email"]', form);
+  const err   = $('.nl__error', form);
+  const block = form.parentElement;
+  const success = $('[data-nl-success]', block);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();                       // validation on submit only, never on blur
+    const valid = EMAIL_RE.test(input.value.trim());
+    if (!valid) {
+      err.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+      return;
+    }
+    err.hidden = true;
+    input.removeAttribute('aria-invalid');
+    track('drop_submit_newsletter', { location });
+
+    form.classList.add('fade-out');
+    form.style.transition = 'opacity 160ms linear';
+    setTimeout(() => {
+      form.hidden = true;
+      success.hidden = false;
+      success.style.opacity = '0';
+      requestAnimationFrame(() => { success.style.opacity = '1'; });
+    }, 160);
+  });
+});
+
+/* ============================================================
+   SCROLL REVEAL
+   Each reveal is justified: the hero assembles the offer, the timeline staggers
+   because it IS a sequence and the order carries meaning, the rest are single
+   fades that stop sections from snapping in. Nothing loops, nothing parallaxes.
+   ============================================================ */
+(function initReveal() {
+  const groups = $$('[data-reveal-group]');
+  groups.forEach(g => {
+    $$(':scope > *', g).forEach((child, i) => {
+      child.classList.add('reveal');
+      child.style.setProperty('--reveal-delay', (i * 60) + 'ms');
+    });
+  });
+
+  const items = $$('.reveal');
+  if (!items.length) return;
+
+  const revealAll = () => items.forEach(el => el.classList.add('is-in'));
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) { revealAll(); return; }
+
+  document.documentElement.classList.add('js');
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+  items.forEach(el => io.observe(el));
+
+  // failsafe: never let a section stay invisible
+  setTimeout(revealAll, 1600);
+})();
+
+/* ============================================================
+   NAV DRAWER
+   The burger has to actually do something, so it discloses the same links
+   rather than being decorative chrome.
+   ============================================================ */
+(function initNavDrawer(){
+  const btn = $('.nav__burger');
+  const drawer = $('#nav-drawer');
+  if (!btn || !drawer) return;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    drawer.hidden = open;
+  });
+})();
+
+/* ============================================================
+   MORE-WORKS VIEW EVENT
+   Replaces drop_view_scale, which went with the scale section.
+   ============================================================ */
+let worksFired = false;
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !worksFired) { worksFired = true; track('drop_view_works', {}); }
+  });
+}, { threshold: 0.5 }).observe($('#more-works'));
+
+/* ============================================================
+   CAROUSELS
+   ============================================================ */
+$$('[data-carousel]').forEach(root => {
+  const track_ = $('.carousel__track', root);
+  const count  = $('.carousel__count', root);
+  const btns   = $$('.carousel__btn', root);
+  const slides = $$('.carousel__slide', track_);
+
+  const gap = () => parseFloat(getComputedStyle(track_).columnGap) || 0;
+  const perView = () => {
+    const first = slides[0];
+    if (!first) return 1;
+    const w = first.getBoundingClientRect().width, g = gap();
+    return Math.max(1, Math.round((track_.clientWidth + g) / (w + g)));
+  };
+  const index = () => {
+    const first = slides[0];
+    if (!first) return 0;
+    const step = first.getBoundingClientRect().width + gap();
+    return Math.round(track_.scrollLeft / step);
+  };
+
+  function sync() {
+    // publish the media height so the overlay controls can centre on the image
+    const firstMedia = slides[0] && slides[0].querySelector('.room__media, .work__media');
+    if (firstMedia) root.style.setProperty('--nav-h', firstMedia.getBoundingClientRect().height + 'px');
+
+    const n = slides.length, pv = perView(), i = index();
+    count.textContent = pv >= n ? '' : (i + 1) + ' / ' + Math.max(1, n - pv + 1);
+    btns[0].disabled = track_.scrollLeft <= 1;
+    btns[1].disabled = track_.scrollLeft >= track_.scrollWidth - track_.clientWidth - 1;
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    const first = slides[0];
+    if (!first) return;
+    track_.scrollBy({ left: (first.getBoundingClientRect().width + gap()) * Number(b.dataset.dir) });
+    // don't wait on the scroll event — the smooth scroll settles a few frames later
+    sync();
+    setTimeout(sync, 240);
+    setTimeout(sync, 600);
+  }));
+
+  // arrow keys when the track itself has focus
+  track_.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    btns[e.key === 'ArrowRight' ? 1 : 0].click();
+  });
+
+  track_.addEventListener('scroll', () => {
+    clearTimeout(track_._t);
+    track_._t = setTimeout(sync, 80);
+  });
+  new ResizeObserver(sync).observe(track_);
+  // the track keeps its width across breakpoints, so observe the slide too
+  if (slides[0]) new ResizeObserver(sync).observe(slides[0]);
+  window.addEventListener('resize', sync);
+  sync();
+});
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+const devEl = $('#dev');
+if (new URLSearchParams(location.search).has('dev')) {
+  devEl.classList.add('is-on');
+  ['REVEAL','EARLY_ACCESS','PUBLIC','ENDED'].forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = p;
+    b.addEventListener('click', () => {
+      PHASE = p;
+      SIMULATED_NOW = new Date(PHASE_PREVIEW_AT[p]).getTime();
+      render();
+    });
+    devEl.appendChild(b);
+  });
+
+  const meta = document.createElement('p');
+  meta.className = 'dev__meta';
+  devEl.appendChild(meta);
+
+  window.__devMeta = () => {
+    const d = new Date(now());
+    const stamp = SIMULATED_NOW === null ? 'echte Zeit' :
+      d.toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    const open = document.querySelectorAll('.fallback').length;
+    const notes = (document.body.innerText.match(/⚠︎/g) || []).length;
+    const stock = Number.isInteger(SOLD_COUNT) ? 'Stock ok' : 'kein Stock-Feed';
+    meta.textContent = 'now: ' + stamp + ' · ' + open + ' Bild-Platzhalter · ' + notes + ' offene Texte · ' + stock;
+  };
+}
+function syncDevMeta() { if (window.__devMeta) window.__devMeta(); }
+function syncDev() {
+  $$('#dev button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === PHASE)));
+}
+
+/* ============================================================
+   PHASE SWITCH (review aid)
+   A visible link between the reveal page and the buy variation. Delete this
+   block and the .phase-switch rule before launch.
+   ============================================================ */
+(function phaseSwitch(){
+  const a = document.createElement('a');
+  a.className = 'phase-switch';
+  const toBuy = PHASE !== 'PUBLIC';
+  a.href = '?phase=' + (toBuy ? 'PUBLIC' : 'REVEAL');
+  a.textContent = toBuy ? 'Kaufphase ansehen' : 'Reveal ansehen';
+  document.body.appendChild(a);
+})();
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  applyPhaseVisibility();
+  syncBuyLinks();
+  startCountdown();
+  renderScarcity();
+  syncDev();
+  syncDevMeta();
+}
+
+render();
+track('drop_view_page', { sku: 'CMU43' });
+</script>
+</body>
+</html>
