@@ -73,9 +73,9 @@ a{color:inherit}
 .flapcell span.locked{filter:none;opacity:1;}
 
 .banner-close{position:absolute;top:0;right:0;height:100%;width:46px;display:flex;align-items:center;justify-content:center;
-  background:none;border:0;color:rgba(244,237,226,.55);cursor:pointer;transition:color .2s var(--ease-out);z-index:3;}
-.banner-close:hover{color:var(--ivory);}
-.banner-close svg{width:12px;height:12px;stroke:currentColor;stroke-width:1.6;fill:none;}
+  background:none;border:0;color:var(--ivory);cursor:pointer;transition:color .2s var(--ease-out),transform .15s var(--ease-out);z-index:3;}
+.banner-close:hover{color:var(--ivory);transform:scale(1.15);}
+.banner-close svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;}
 
 .banner[data-mode="marquee"] .vp{display:flex;align-items:center;perspective:none;}
 .mq{display:inline-flex;align-items:center;white-space:nowrap;will-change:transform;animation:mq var(--mqdur,46s) linear infinite;}
