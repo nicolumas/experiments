@@ -92,7 +92,8 @@ a{color:inherit}
 /* mobile: message text left-aligned (wraps to 2 lines), CTA button pushed to the right — same elements + styling as desktop, nothing dropped */
 @container (max-width:600px){
   .banner .vp{min-height:64px;}
-  .slide{padding:9px 18px;}
+  .slide{padding:9px 46px 9px 18px;}
+  .banner-close{width:40px;}
   .slide .full{justify-content:space-between;gap:14px;}
   .slide .text{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;line-height:1.2;}
   .slide .text .sep{display:none;}
@@ -417,8 +418,8 @@ TREATMENTS.forEach(t=>{
   dev.appendChild(dD); dev.appendChild(dM); panel.appendChild(dev);
   compare.appendChild(panel);
 
-  all.push(new Banner(bD,{variation, treatment:t.id, dwell:4400}));
-  all.push(new Banner(bM,{variation, treatment:t.id, dwell:4400}));
+  all.push(new Banner(bD,{variation, treatment:t.id, dwell:4400, withClose:true}));
+  all.push(new Banner(bM,{variation, treatment:t.id, dwell:4400, withClose:true}));
 });
 
 /* ---------------- controls ---------------- */
