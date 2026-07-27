@@ -356,16 +356,21 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* PROOF — full-bleed room, the first screen is evidence */
 .proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
 .proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.proof__wrap{position:relative;height:100%;display:flex;align-items:flex-end;padding-bottom:48px}
-.proof__plate{background:var(--surface-inverse);color:var(--text-inverse);padding:32px 40px;max-width:520px}
-.proof__eyebrow{color:var(--text-tertiary);margin-bottom:16px}
+/* type sits on the photograph; the scrim only exists to guarantee legibility
+   over whatever the image is doing underneath */
+.proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;
+  background:linear-gradient(to top,rgba(20,19,17,.88) 0%,rgba(20,19,17,.62) 32%,rgba(20,19,17,0) 100%);
+  pointer-events:none}
+.proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
+.proof__plate{color:var(--text-inverse);max-width:640px}
+.proof__eyebrow{color:var(--text-inverse);opacity:.82;margin-bottom:16px}
 /* Title and artist were 88px display serif against 20px sans — a 4.4:1 jump
    across two families, so they read as two unrelated things. Same family,
    ratio pulled to ~2.7:1, so the plate reads as one lockup. */
 .proof__title{margin:0;font-size:clamp(52px,4.6vw,76px)}
 .proof__artist{font-family:var(--font-display);font-weight:400;
   font-size:clamp(20px,1.9vw,28px);line-height:1.2;letter-spacing:0;
-  color:var(--text-tertiary);margin-top:6px}
+  color:var(--text-inverse);opacity:.88;margin-top:8px}
 
 /* THE WORK — artwork isolated on charcoal, every essential beside it */
 .work-block{padding-block:96px}
@@ -674,7 +679,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .inspiration__inner{gap:24px}
   .voice__lead{font-size:17px}
   .inspiration__body{font-size:17px}
-  .proof__plate{padding:20px 24px}
 
   /* --- vertical rhythm: 96px between every section is a lot on a phone --- */
   .section{padding-block:64px}
@@ -705,7 +709,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   <div class="topbar__inner">
     <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
     <span class="t-ui" id="topbar-label">EARLY ACCESS IN</span>
-    <span class="cd tnum" id="cd-topbar" aria-live="off"></span>
     <span class="sr-only">Verkauf bis 10. August 2026, 23:59 Uhr</span>
   </div>
 </div>
@@ -779,7 +782,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <div class="proof__plate">
       <p class="t-eyebrow proof__eyebrow">ART DROP · NUR DREI TAGE</p>
       <h1 class="t-display-xl proof__title">Alice</h1>
-      <p class="t-body-l proof__artist">Carol Muthiga-Oyekunle</p>
+      <p class="t-body-l proof__artist">Carol Muthiga-Oyekunle · 08. – 10. August 2026</p>
     </div>
   </div>
 </section>
@@ -1341,10 +1344,20 @@ const $  = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
 const pad = n => String(n).padStart(2, '0');
 
+/* Countdown label, still used by the work block. */
 const TOPBAR_LABEL = {
   REVEAL:       'EARLY ACCESS IN',
   EARLY_ACCESS: 'VERKAUF ENDET IN',
   PUBLIC:       'VERKAUF ENDET IN',
+  ENDED:        'EDITION BEENDET'
+};
+
+/* Banner label. The countdown is gone from the banner, so these have to stand
+   alone rather than trail off into a number. */
+const BANNER_LABEL = {
+  REVEAL:       'EARLY ACCESS AM 7. AUGUST, 09:00 UHR',
+  EARLY_ACCESS: 'EARLY ACCESS · VERKAUF BIS 10. AUGUST',
+  PUBLIC:       'VERKAUF BIS 10. AUGUST, 23:59 UHR',
   ENDED:        'EDITION BEENDET'
 };
 
@@ -1382,7 +1395,7 @@ function applyPhaseVisibility() {
     el.hidden = !el.dataset.phases.split(/\s+/).includes(PHASE);
   });
 
-  $('#topbar-label').textContent = TOPBAR_LABEL[PHASE];
+  $('#topbar-label').textContent = BANNER_LABEL[PHASE];
   const wl = $('#work-cd-label');
   if (wl) wl.textContent = TOPBAR_LABEL[PHASE];
 
@@ -1413,7 +1426,7 @@ function renderCountdown(el, ms) {
 let cdTimer = null;
 function startCountdown() {
   if (cdTimer) clearInterval(cdTimer);
-  const targets = ['#cd-topbar', '#cd-work', '#cd-close'].map(s => $(s)).filter(Boolean);
+  const targets = ['#cd-work', '#cd-close'].map(s => $(s)).filter(Boolean);
   const iso = COUNTDOWN_TARGET[PHASE];
 
   if (!iso) {
@@ -1429,7 +1442,7 @@ function startCountdown() {
       // never negative: hide the countdown, keep the phase's label in place
       clearInterval(cdTimer);
       cdTimer = null;
-      $('#topbar-label').textContent = TOPBAR_LABEL[PHASE === 'REVEAL' ? 'EARLY_ACCESS' : 'ENDED'];
+      $('#topbar-label').textContent = BANNER_LABEL[PHASE === 'REVEAL' ? 'EARLY_ACCESS' : 'ENDED'];
     }
   };
   tick();
