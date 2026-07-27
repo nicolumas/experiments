@@ -47,7 +47,7 @@ a{color:inherit}
 .lab-dir{margin-left:auto;display:flex;align-items:center;gap:9px;}
 
 /* ---------- the banner (container-responsive) ---------- */
-.banner{position:relative;background:var(--charcoal);color:var(--ivory);overflow:hidden;container-type:inline-size;}
+.banner{position:relative;background:var(--charcoal);color:var(--ivory);overflow:hidden;container-type:inline-size;cursor:pointer;}
 .banner .vp{position:relative;min-height:48px;perspective:900px;}
 .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:14px;
   padding:8px 52px;text-align:center;will-change:transform,opacity,filter;backface-visibility:hidden;transform-origin:center;}
@@ -179,6 +179,14 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){
   .mq{animation:none!important;}
 }
+.note .rule code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;color:var(--text-primary);background:#fff;border:1px solid var(--bone-2);padding:1px 5px;}
+/* click-to-preview destination toast (lab only) */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--charcoal);color:var(--ivory);
+  padding:11px 18px;font-size:12px;letter-spacing:.03em;box-shadow:0 14px 44px -14px rgba(28,26,24,.55);
+  opacity:0;pointer-events:none;transition:opacity .22s var(--ease-out),transform .22s var(--ease-out);z-index:100;white-space:nowrap;max-width:90vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast .tk{font-weight:700;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,237,226,.55);margin-right:9px;}
+.toast .tv{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500;color:var(--ivory);}
 </style>
 </head>
 <body>
@@ -198,13 +206,7 @@ a{color:inherit}
       <button class="ctrl" id="btnPlay" title="Pause / play" aria-label="Pause or play">
         <svg viewBox="0 0 24 24" id="icoPlay"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
     </div>
-    <div class="lab-dir">
-      <span class="lab-lbl">Drift</span>
-      <div class="seg" id="segDir">
-        <button data-dir="left" aria-pressed="true">← Left</button>
-        <button data-dir="right" aria-pressed="false">Right →</button>
-      </div>
-    </div>
+    <div class="lab-lbl" style="margin-left:auto">Click any banner to preview its link →</div>
   </div>
 </div>
 
@@ -237,10 +239,10 @@ a{color:inherit}
 <div class="note">
   <div class="eb">Compare — desktop &amp; mobile</div>
   <h2>Every treatment, both devices, side by side.</h2>
-  <p>Each block below shows the same rotating banner as a full-width desktop bar and inside a phone frame — both running live.
-     Switch the variation and drift direction up top; every preview updates at once. The top of the page shows the winner in full site context.</p>
+  <p>Each block shows the same rotating banner as a full-width desktop bar and inside a phone frame — both live. Switch the variation up top.
+     Every message is its own link: the whole bar and its button open that topic’s page — click any banner to preview the destination.</p>
   <div class="rule">
-    <b>Art Week</b> → 20% off · Carol Muthiga drop · New releases <span>&nbsp;|&nbsp;</span> <b>First order</b> → 10% off · Carol Muthiga drop · New releases &nbsp;— the two promos never share a banner.
+    <b>Links per topic</b> · Art&nbsp;Week&nbsp;→&nbsp;<code>/art-week</code> · Carol&nbsp;Muthiga&nbsp;→&nbsp;<code>/artists/carol-muthiga</code> · New&nbsp;releases&nbsp;→&nbsp;<code>/new-releases</code> · First&nbsp;order&nbsp;→&nbsp;<code>/register</code> &nbsp;— placeholder slugs, swap for real URLs.
   </div>
 </div>
 
@@ -251,19 +253,18 @@ a{color:inherit}
 
 <script>
 /* ---------------- content model ---------------- */
-const DROP = {eyebrow:'Art drop', lead:'Carol Muthiga', tail:'3 days only', cta:{label:'See the drop', ghost:true}, mob:'Art drop · Carol Muthiga'};
-const NEWS = {eyebrow:'New releases', lead:'New additions to LUMAS', tail:'', cta:{label:'Discover', ghost:true}, mob:'New releases at LUMAS'};
+const DROP = {eyebrow:'Art drop', lead:'Carol Muthiga', tail:'3 days only', href:'/artists/carol-muthiga', cta:{label:'See the drop', ghost:true}, mob:'Art drop · Carol Muthiga'};
+const NEWS = {eyebrow:'New releases', lead:'New additions to LUMAS', tail:'', href:'/new-releases', cta:{label:'Discover', ghost:true}, mob:'New releases at LUMAS'};
 const VARIATIONS = {
   artweek:{ label:'Art Week', messages:[
-    {eyebrow:'Art week', fig:'20%', lead:'off all LUMAS editions', tail:'', cta:{label:'Order now', ghost:true}, mobFig:'20%', mob:'off all editions'},
+    {eyebrow:'Art week', fig:'20%', lead:'off all LUMAS editions', tail:'', href:'/art-week', cta:{label:'Order now', ghost:true}, mobFig:'20%', mob:'off all editions'},
     DROP, NEWS ]},
   firstorder:{ label:'First order', messages:[
-    {eyebrow:'Welcome offer', fig:'10%', lead:'off your first order', tail:'Only until 26 July 2026', cta:{label:'Register now'}, mobFig:'10%', mob:'off first order'},
+    {eyebrow:'Welcome offer', fig:'10%', lead:'off your first order', tail:'Only until 26 July 2026', href:'/register', cta:{label:'Register now'}, mobFig:'10%', mob:'off first order'},
     DROP, NEWS ]}
 };
 const TREATMENTS = [
   {id:'flip',     name:'Flip up',          mode:'sequential', rec:true,  desc:'Each message flips up on a 3D axis, like a departure board turning over. Your “slowly flips upwards” idea.'},
-  {id:'marquee',  name:'Continuous drift', mode:'marquee',    rec:false, desc:'One seamless line that drifts sideways, forever. Use the drift toggle to send it left or right.'},
   {id:'dissolve', name:'Quiet dissolve',   mode:'sequential', rec:true,  desc:'Messages cross-fade through a soft blur. The calmest, most on-brand option.'},
   {id:'slide',    name:'Editorial slide',  mode:'sequential', rec:false, desc:'Each line rises in on a short stagger, then lifts away. Kinetic but composed.'},
 ];
@@ -276,7 +277,7 @@ function messageInner(msg, kind){
   const fig=msg.fig?`<span class="fig">${msg.fig}</span>`:'';
   const lead=`<span class="lead">${fig}${msg.lead}</span>`;
   if(kind==='marquee'){ const t=msg.tail?`<span class="sep">·</span><span class="tail">${msg.tail}</span>`:''; return `${eyebrow}<span class="sep">·</span>${lead}${t}`; }
-  const cta=msg.cta?`<a class="cta${msg.cta.ghost?' ghost':''}" href="#" onclick="return false">${msg.cta.label}</a>`:'';
+  const cta=msg.cta?`<a class="cta${msg.cta.ghost?' ghost':''}" href="${msg.href||'#'}">${msg.cta.label}</a>`:'';
   const tail=msg.tail?`<span class="sep">·</span><span class="tail">${msg.tail}</span>`:'';
   return `<span class="full"><span class="text">${eyebrow}<span class="sep">·</span>${lead}${tail}</span>${cta}</span>`;
 }
@@ -286,9 +287,15 @@ class Banner{
   constructor(root, opts){
     this.el=root; this.variationKey=opts.variation; this.treatmentId=opts.treatment;
     this.dwell=opts.dwell||4600; this.withClose=!!opts.withClose; this.rev=false;
-    this.i=0; this.timer=null; this.paused=false;
+    this.i=0; this.timer=null; this.paused=false; this.currentHref=null;
     this.el.style.setProperty('--dwell', this.dwell+'ms');
+    this.el.addEventListener('click', (e)=>this.onClick(e));
     this.build();
+  }
+  onClick(e){
+    if(e.target.closest('.banner-close')) return;   // let the dismiss button do its thing
+    e.preventDefault();                              // lab: preview the destination instead of navigating
+    showToast(this.currentHref);
   }
   get messages(){return VARIATIONS[this.variationKey].messages;}
   get treatment(){return TREATMENTS.find(t=>t.id===this.treatmentId);}
@@ -309,7 +316,7 @@ class Banner{
   buildSequential(){
     this.vp=el('div','vp'); this.el.appendChild(this.vp);
     this.prog=el('div','progress'); this.prog.appendChild(el('i')); this.el.appendChild(this.prog);
-    this.i=0; this.current=this.makeSlide(this.messages[0]); this.vp.appendChild(this.current);
+    this.i=0; this.currentHref=(this.messages[0]||{}).href; this.current=this.makeSlide(this.messages[0]); this.vp.appendChild(this.current);
     if(this.treatmentId==='flap'){ this.current.style.opacity=1; this.runFlap(this.current); }
     else this.current.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:420,easing:'cubic-bezier(0.23,1,0.32,1)',fill:'both'});
     this.restartProgress();
@@ -373,7 +380,7 @@ class Banner{
     [...this.vp.querySelectorAll('.slide')].forEach(s=>{ if(s!==this.current) s.remove(); });
     const oldS=this.current, newS=this.makeSlide(this.messages[idx]);
     this.vp.appendChild(newS); this.transition(oldS,newS);
-    this.current=newS; this.i=idx; this.restartProgress();
+    this.current=newS; this.i=idx; this.currentHref=(this.messages[idx]||{}).href; this.restartProgress();
   }
   restartProgress(){ if(!this.prog)return; const bar=this.prog.querySelector('i'); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }
   buildMarquee(){
@@ -392,8 +399,17 @@ class Banner{
 }
 
 /* ---------------- build page ---------------- */
-let variation='artweek', dir='left';
+let variation='artweek';
 const all=[];
+
+/* lab-only: preview a topic's destination on click instead of navigating */
+let toastEl=null, toastTimer=null;
+function showToast(href){
+  if(!toastEl){ toastEl=el('div','toast'); document.body.appendChild(toastEl); }
+  toastEl.innerHTML=`<span class="tk">Links to</span><span class="tv">${href||'#'}</span>`;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.classList.remove('show'), 2000);
+}
 const stage=new Banner(document.getElementById('stageBanner'), {variation, treatment:'flip', dwell:4600, withClose:true});
 all.push(stage);
 
@@ -441,20 +457,11 @@ TREATMENTS.forEach(t=>{
 });
 
 /* ---------------- controls ---------------- */
-function applyDir(){ all.forEach(b=>{ if(b.treatmentId==='marquee') b.setDir(dir==='right'); }); }
-applyDir();
-
 document.getElementById('segVar').addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
   variation=b.dataset.var;
   document.querySelectorAll('#segVar button').forEach(x=>x.setAttribute('aria-pressed', x===b));
-  all.forEach(x=>x.setVariation(variation)); applyDir(); syncPlayIcon();
-});
-document.getElementById('segDir').addEventListener('click', e=>{
-  const b=e.target.closest('button'); if(!b) return;
-  dir=b.dataset.dir;
-  document.querySelectorAll('#segDir button').forEach(x=>x.setAttribute('aria-pressed', x===b));
-  applyDir();
+  all.forEach(x=>x.setVariation(variation)); syncPlayIcon();
 });
 const icoPlay=document.getElementById('icoPlay');
 function syncPlayIcon(){ icoPlay.innerHTML = all[0].paused ? '<path d="M8 5v14l11-7z"/>' : '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>'; }
