@@ -11,8 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
-<!-- Utile Display, base64-embedded so it renders on devices without the font
-     installed locally. Trial licence: fine for review, not for production. -->
+<!-- Utile Display, served as woff2 so it renders on devices without the font
+     installed locally. These are the licensed TypeNetwork files, byte-identical
+     to the ones in lumassprykerng frontend/themes/white/assets/fonts/utile. -->
 <link href="lumas-fonts.css" rel="stylesheet">
 <style>
 /* ============================================================
@@ -324,6 +325,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .section--page{background:var(--surface-page)}
 .section--raised{background:var(--surface-raised)}
 .section--sunken{background:var(--surface-sunken)}
+/* the only pure white on the page — the trust row needs to separate from the
+   bone quote sections now that those are no longer charcoal */
+.section--white{background:#FFFFFF}
 .sec-head{display:flex;flex-direction:column;margin-bottom:40px;max-width:720px}
 .sec-head__eyebrow{color:var(--text-secondary);margin-bottom:8px}
 .sec-head__stand{color:var(--text-secondary);max-width:520px;margin-top:16px}
@@ -1083,7 +1087,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
 <!-- ============================ 7 · REASSURE ============================
      Risk-reducers sit directly above the closing CTA. -->
-<section class="section section--sunken" data-sec="trust" style="padding-block:88px">
+<section class="section section--white" data-sec="trust" style="padding-block:88px">
   <div class="wrap">
     <div class="trust" data-reveal-group>
       <div>
