@@ -369,13 +369,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   pointer-events:none}
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
 .proof__plate{color:var(--text-inverse);max-width:640px}
-.proof__eyebrow{color:var(--text-inverse);opacity:.82;margin-bottom:16px}
+/* 11px against a 59px title was a 5.4:1 jump. Pulled to roughly 3.4:1 so the
+   three lines read as one lockup: 48 is also the V2 Display/H1 token. */
+.proof__eyebrow{color:var(--text-inverse);opacity:.86;margin-bottom:20px;
+  font-size:clamp(12px,1.15vw,14px);letter-spacing:.12em}
 /* Title and artist were 88px display serif against 20px sans — a 4.4:1 jump
    across two families, so they read as two unrelated things. Same family,
    ratio pulled to ~2.7:1, so the plate reads as one lockup. */
-.proof__title{margin:0;font-size:clamp(52px,4.6vw,76px)}
+.proof__title{margin:0;font-size:clamp(38px,3.7vw,48px)}
 .proof__artist{font-family:var(--font-display);font-weight:400;
-  font-size:clamp(20px,1.9vw,28px);line-height:1.2;letter-spacing:0;
+  font-size:clamp(17px,1.6vw,21px);line-height:1.3;letter-spacing:0;
   color:var(--text-inverse);opacity:.88;margin-top:8px}
 
 /* THE WORK — artwork isolated on charcoal, every essential beside it */
