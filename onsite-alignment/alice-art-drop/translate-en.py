@@ -3,18 +3,19 @@
 
     python3 translate-en.py
 
-Edit index.html (German) and re-run. Never hand-edit the English file:
+Edit alice-art-drop.html (German) and re-run. Never hand-edit the English file:
 it is a build artefact and will be overwritten. If a new German string appears,
 add it to T below; the script fails loudly if any German survives the pass.
 """
 import re, sys, pathlib
 
-SRC = pathlib.Path(__file__).with_name('index.html')
-OUT = pathlib.Path(__file__).with_name('en.html')
+SRC = pathlib.Path(__file__).with_name('alice-art-drop.html')
+OUT = pathlib.Path(__file__).with_name('alice-art-drop-en.html')
 
 T = {
 '<html lang="de">':'<html lang="en">',
 'Alice von Carol Muthiga-Oyekunle. Limitiert auf 300 Exemplare, 60 × 60 cm. LUMAS Art Drop, 08. – 10. August 2026.':'Alice by Carol Muthiga-Oyekunle. Limited to 300 copies, 60 × 60 cm. LUMAS Art Drop, 8 – 10 August 2026.',
+'„Alice“ von Carol Muthiga-Oyekunle':'“Alice” by Carol Muthiga-Oyekunle',
 'Zum Inhalt springen':'Skip to content',
 'In den Worten von Alice Walker, der Inspiration hinter der Edition':'In the words of Alice Walker, the inspiration behind the edition',
 '„Auf einer spirituellen Ebene ist es, als sähe ich mit meinem sehenden Auge das, was vor mir liegt, und mit meinem blinden Auge das, was verborgen ist. Es hat das Leben mehr erhellt als verdunkelt.“':'“On a spiritual level, it\'s as though with my sighted eye I see what\'s before me, and with my unsighted eye I see what\'s hidden. It illuminated life more than darkened it.”',
@@ -34,7 +35,7 @@ T = {
 'VERKAUF ENDET IN':'SALE ENDS IN',
 'EDITION BEENDET':'EDITION CLOSED',
 'Verkauf bis 10. August 2026, 23:59 Uhr':'Sale until 10 August 2026, 23:59',
-'ART DROP · NUR DREI TAGE':'ART DROP · THREE DAYS ONLY',
+'ART DROP&nbsp; ·&nbsp; 08.–10. AUGUST':'ART DROP&nbsp; ·&nbsp; 08–10 AUGUST',
 'Eine Kriegerin zwischen Vergangenheit, Gegenwart und Zukunft.<br>Drei Tage sichtbar&nbsp;— dann nie wieder.':'A warrior between past, present and future.<br>Visible for three days&nbsp;— then never again.',
 'Digitale Collage, in der Modefotografie auf ausdrucksstarke Farbflächen trifft. Das Haar ist Accessoire, die Kleidung ist Rüstung.':'A digital collage where fashion photography meets bold fields of colour. The hair is an accessory, the clothing is armour.',
 '[Detailaufnahme 02 — Bildunterschrift folgt]':'[Detail shot 02 — caption to follow]',
@@ -81,7 +82,6 @@ T = {
 'Limitiert auf 300 Exemplare':'Limited to 300 copies',
 'AUSFÜHRUNGEN':'FINISHES','AUSFÜHRUNG':'EXECUTION',
 'ZERTIFIKAT':'CERTIFICATE','VERKAUFSZEITRAUM':'SALE PERIOD',
-'Carol Muthiga-Oyekunle · 08. – 10. August 2026':'Carol Muthiga-Oyekunle · 8 – 10 August 2026',
 '08. – 10. August 2026':'8 – 10 August 2026','DER ABLAUF':'THE SCHEDULE',
 '04. AUGUST':'4 AUGUST','07. AUGUST · 09:00':'7 AUGUST · 09:00','08. – 10. AUGUST':'8 – 10 AUGUST',
 'Early Access für Newsletter-Abonnenten':'Early Access for newsletter subscribers',
@@ -110,12 +110,23 @@ T = {
 'Eine Frau blickt auf Alice in LUMASEC glossy an einer hellen Wohnzimmerwand.':'A woman looks at Alice in LUMASEC glossy on a pale living-room wall.',
 'Alice in LUMASEC glossy, rahmenlos an einer hellen Wand.':'Alice in LUMASEC glossy, frameless on a pale wall.',
 'Alice in der schwarzen LUMA Artbox über einem Sideboard.':'Alice in the black LUMA Artbox above a sideboard.',
+# the hero alt: the entry above ends in a period, so this longer variant never
+# matched and only its inner "Wohnzimmer" got swapped -> "im Living room, seitlich…"
+'Alice in der schwarzen LUMA Artbox über einem Sideboard im Wohnzimmer, seitlich einfallendes Tageslicht.':'Alice in the black LUMA Artbox above a sideboard in the living room, daylight falling from the side.',
+'Alice über einem Nussbaum-Sideboard in einem Esszimmer mit Kassettendecke und Holzvertäfelung.':'Alice above a walnut sideboard in a dining room with a coffered ceiling and wood panelling.',
+'Alice an einer hellen Wand in einer Küche mit olivgrünen Fronten und grüner Marmorinsel.':'Alice on a pale wall in a kitchen with olive-green cabinetry and a green marble island.',
+'Alice über einer Marmorkonsole in einem Wohnzimmer mit grünem Samtsofa und Terrazzoboden.':'Alice above a marble console in a living room with a green velvet sofa and terrazzo floor.',
+'Alice an einer olivgrünen Wand über einem Sideboard, daneben ein hohes Fenster mit Blick auf eine Häuserzeile.':'Alice on an olive-green wall above a sideboard, beside a tall window looking onto a row of houses.',
 'Alice im Detail':'Alice in detail','Alice im Raum — Bildergalerie':'Alice in the room — image gallery',
 'Vorheriges Detail':'Previous detail','Nächstes Detail':'Next detail',
 'Vorheriges Bild':'Previous image','Nächstes Bild':'Next image',
 'Vorherige Werke':'Previous works','Weitere Werke':'More works','Ausführung wählen':'Choose execution',
 'ROOM SHOT · WOHNZIMMER · 4:3':'ROOM SHOT · LIVING ROOM · 4:3',
 'ROOM SHOT · ARBEITSZIMMER · 4:3':'ROOM SHOT · STUDY · 4:3',
+'ROOM SHOT · ESSZIMMER · 16:9':'ROOM SHOT · DINING ROOM · 16:9',
+'ROOM SHOT · KÜCHE · 16:9':'ROOM SHOT · KITCHEN · 16:9',
+'ROOM SHOT · WOHNZIMMER · 16:9':'ROOM SHOT · LIVING ROOM · 16:9',
+'ROOM SHOT · SALON · 16:9':'ROOM SHOT · SALON · 16:9',
 'von Carol Muthiga-Oyekunle, gerahmt.':'by Carol Muthiga-Oyekunle, framed.',
 'WERK · ':'WORK · ',
 "segs.push([pad(d), 'TAGE']);":"segs.push([pad(d), 'DAYS']);",
@@ -128,7 +139,7 @@ T = {
 
 BANNER = """<!DOCTYPE html>
 <!-- ============================================================================
-     ENGLISH REVIEW COPY — generated by translate-en.py from index.html.
+     ENGLISH REVIEW COPY — generated by translate-en.py from alice-art-drop.html.
      Do not hand-edit: this file is overwritten on every regeneration.
      NOT a market build. Pricing stays EUR and links point at lumas.de.
 ============================================================================ -->"""
@@ -143,8 +154,13 @@ def main():
     OUT.write_text(s, encoding='utf-8')
 
     # fail loudly if any German survived
-    visible = re.sub(r'<script.*?</script>|<style.*?</style>|<!--.*?-->', '', s, flags=re.S)
-    visible = re.sub(r'<[^>]+>', ' ', visible)
+    body = re.sub(r'<script.*?</script>|<style.*?</style>|<!--.*?-->', '', s, flags=re.S)
+    # user-facing *attributes* count as copy too. Stripping tags wholesale used to
+    # hide alt/aria-label/placeholder from this check, which is how a half-translated
+    # "im Living room, seitlich einfallendes Tageslicht" shipped unnoticed.
+    attrs = ' '.join(m.group(2) for m in re.finditer(
+        r'\b(alt|aria-label|title|placeholder|data-fallback)="([^"]*)"', body))
+    visible = re.sub(r'<[^>]+>', ' ', body) + ' ' + attrs
     GERMAN = re.compile(
         r'[äöüßÄÖÜ]'                                  # umlauts
         r'|^(?:der|die|das|den|dem|des|und|oder|mit|von|vom|zum|zur|auf|aus|bei'

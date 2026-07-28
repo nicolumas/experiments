@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow">
 <script src="../assets/gate.js"></script>
 
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alice — Carol Muthiga-Oyekunle · LUMAS Art Drop</title>
 <meta name="description" content="Alice von Carol Muthiga-Oyekunle. Limitiert auf 300 Exemplare, 60 × 60 cm. LUMAS Art Drop, 08. – 10. August 2026.">
@@ -304,6 +304,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    ============================================================ */
 .on-inverse{background:var(--surface-inverse);color:var(--text-inverse)}
 
+/* Bone ground for the two quote sections — the inverse of on-inverse, since
+   --surface-sunken and --text-inverse are the same #F4EDE2.
+   The supporting copy has to step DOWN to --text-secondary here: tertiary
+   (#908C87) clears AA on charcoal at 5.19:1 but only manages 2.91:1 on bone. */
+.on-bone{background:var(--surface-sunken);color:var(--text-primary)}
+.on-bone .quote__by,
+.on-bone .inspiration__eyebrow,
+.on-bone .inspiration__body,
+.on-bone .voice__lead{color:var(--text-secondary)}
+.on-bone .inspiration__quote{color:var(--text-primary)}
+
 
 
 /* ============================================================
@@ -363,9 +374,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
 .proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* type sits on the photograph; the scrim only exists to guarantee legibility
-   over whatever the image is doing underneath */
+   over whatever the image is doing underneath.
+   Tuned to the lightest values the type survives, not to taste: the alpha the
+   eyebrow actually sits in is ~.39, giving 4.8:1 against the brightest pixels
+   under it (AA wants 4.5 at 14px/500). Measured by canvas-sampling this exact
+   photograph at 390/1280/1440 — so re-check these numbers if the hero image
+   is ever swapped for a lighter one. */
 .proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;
-  background:linear-gradient(to top,rgba(20,19,17,.88) 0%,rgba(20,19,17,.62) 32%,rgba(20,19,17,0) 100%);
+  background:linear-gradient(to top,rgba(20,19,17,.58) 0%,rgba(20,19,17,.41) 32%,rgba(20,19,17,0) 100%);
   pointer-events:none}
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
 .proof__plate{color:var(--text-inverse);max-width:920px}
@@ -939,7 +955,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      The quote and a condensed lead-in, merged with the portrait. The fuller
      biography moves to CONTINUE so this stays lean. Lead-in is recombined from
      the approved bio paragraphs, not newly written. -->
-<section class="section on-inverse voice" data-sec="voice">
+<section class="section on-bone voice" data-sec="voice">
   <div class="wrap voice__grid">
     <div class="voice__portrait media">
       <img src="cmu-artist.jpg" width="1400" height="1050" loading="lazy" decoding="async"
@@ -977,9 +993,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="CMO_Room2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
-                 alt="Alice in LUMASEC glossy über einem hellen Sofa in einem Wohnzimmer mit Meerblick."
-                 data-fallback="ROOM SHOT · WOHNZIMMER · 4:3">
+            <img src="CMU_dining.jpg" width="1920" height="1071" loading="lazy" decoding="async"
+                 alt="Alice über einem Nussbaum-Sideboard in einem Esszimmer mit Kassettendecke und Holzvertäfelung."
+                 data-fallback="ROOM SHOT · ESSZIMMER · 16:9">
           </div>
         </figure>
 
@@ -993,6 +1009,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
+            <img src="CMU_kitchen.jpg" width="1376" height="768" loading="lazy" decoding="async"
+                 alt="Alice an einer hellen Wand in einer Küche mit olivgrünen Fronten und grüner Marmorinsel."
+                 data-fallback="ROOM SHOT · KÜCHE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
             <img src="CMO_Room3_person.jpg" width="1920" height="1080" loading="lazy" decoding="async"
                  alt="Alice in der schwarzen LUMA Artbox über einem Schreibtisch in einem Arbeitszimmer."
                  data-fallback="ROOM SHOT · ARBEITSZIMMER · 4:3">
@@ -1001,9 +1025,25 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
+            <img src="CMU_liv_2.jpg" width="1376" height="768" loading="lazy" decoding="async"
+                 alt="Alice über einer Marmorkonsole in einem Wohnzimmer mit grünem Samtsofa und Terrazzoboden."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
             <img src="CMO_Room2_person2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
                  alt="Eine Frau blickt auf Alice in LUMASEC glossy an einer hellen Wohnzimmerwand."
                  data-fallback="ROOM SHOT · WOHNZIMMER · 4:3">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="CMU_nnn.jpg" width="1264" height="848" loading="lazy" decoding="async"
+                 alt="Alice an einer olivgrünen Wand über einem Sideboard, daneben ein hohes Fenster mit Blick auf eine Häuserzeile."
+                 data-fallback="ROOM SHOT · SALON · 16:9">
           </div>
         </figure>
 
@@ -1029,7 +1069,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      has been seen in place. The Walker quote is set one step below Carol's so
      the two do not compete. Copy is new and needs sign-off; the German is a
      translation of the supplied English. -->
-<section class="section on-inverse inspiration" data-sec="inspiration">
+<section class="section on-bone inspiration" data-sec="inspiration">
   <div class="wrap inspiration__inner">
     <h2 class="t-eyebrow inspiration__eyebrow">In den Worten von Alice Walker, der Inspiration hinter der Edition</h2>
 
