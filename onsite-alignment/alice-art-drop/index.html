@@ -368,7 +368,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   background:linear-gradient(to top,rgba(20,19,17,.88) 0%,rgba(20,19,17,.62) 32%,rgba(20,19,17,0) 100%);
   pointer-events:none}
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
-.proof__plate{color:var(--text-inverse);max-width:640px}
+.proof__plate{color:var(--text-inverse);max-width:920px}
 /* 11px against a 59px title was a 5.4:1 jump. Pulled to roughly 3.4:1 so the
    three lines read as one lockup: 48 is also the V2 Display/H1 token. */
 .proof__eyebrow{color:var(--text-inverse);opacity:.86;margin-bottom:20px;
@@ -376,7 +376,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* Title and artist were 88px display serif against 20px sans — a 4.4:1 jump
    across two families, so they read as two unrelated things. Same family,
    ratio pulled to ~2.7:1, so the plate reads as one lockup. */
-.proof__title{margin:0;font-size:clamp(38px,3.7vw,48px)}
+.proof__title{margin:0;font-size:clamp(30px,3.4vw,46px);text-wrap:balance}
 .proof__artist{font-family:var(--font-display);font-weight:400;
   font-size:clamp(17px,1.6vw,21px);line-height:1.3;letter-spacing:0;
   color:var(--text-inverse);opacity:.88;margin-top:8px}
@@ -790,8 +790,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   <div class="wrap proof__wrap">
     <div class="proof__plate">
       <p class="t-eyebrow proof__eyebrow">ART DROP&nbsp; ·&nbsp; 08.–10. AUGUST</p>
-      <h1 class="t-display-xl proof__title">Alice</h1>
-      <p class="t-body-l proof__artist">Carol Muthiga-Oyekunle</p>
+      <h1 class="t-display-xl proof__title">„Alice“ von Carol Muthiga-Oyekunle</h1>
     </div>
   </div>
 </section>
