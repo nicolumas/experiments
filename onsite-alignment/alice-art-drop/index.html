@@ -238,7 +238,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .nav__logomark{width:112px}
 }
 @media (min-width:1440px){
-  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
   .nav__inner{gap:32px}
   .nav__links{gap:28px}
   .nav__link{font-size:15px}
@@ -639,9 +638,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .proof__wrap{padding-bottom:64px}
   .proof__plate{padding:40px 48px}
   .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
-  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
 
     }
+
+/* Works carousel widens with the viewport: 3 across on tablet, 4 on laptop,
+   5 on wide desktop. This block MUST stay below @media(min-width:1024px) —
+   equal specificity, so above 1440 whichever comes last in the file wins.
+   The 5-across rule used to live 400 lines up and silently lost that race. */
+@media (min-width:1440px){
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 128px) / 5)}
+}
 
 /* ============================================================
    PHASE RULES
