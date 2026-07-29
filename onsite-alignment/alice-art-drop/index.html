@@ -885,12 +885,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      charcoal plate rather than a gradient scrim, so it stays inside the system
      and stays legible whatever the photograph is doing behind it. -->
 <section class="proof" data-sec="proof">
-  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall. The
-       mobile source is a 3:5 crop of the same room with the work centred, so
-       the phone gets a composed frame rather than a cropped one. -->
+  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall, so the
+       phone gets its own portrait render of the same room (supplied, 2555x4320)
+       rather than a crop of the landscape one. -->
   <picture>
     <source media="(max-width:767px)" srcset="CMO_Room1_mobile.jpg"
-            width="1200" height="2000">
+            width="1200" height="2029">
     <img class="proof__img" src="CMO_Room1.jpg" width="7680" height="4320"
          fetchpriority="high" decoding="async"
          alt="Alice in der schwarzen LUMA Artbox über einem Sideboard im Wohnzimmer, seitlich einfallendes Tageslicht."
