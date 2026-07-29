@@ -406,19 +406,18 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
 .proof__plate{color:var(--text-inverse);max-width:920px}
 /* Three lines, one lockup: ART DROP / artist / dates. The label and the dates
-   are deliberately the same size and tracking so they read as a matched pair
-   bracketing the name, rather than as two unrelated bits of small print.
-   Both sit at .92 rather than full strength — enough to recede behind the
-   name without dropping the 14px+ label under AA on the photograph. */
-.proof__eyebrow{color:var(--text-inverse);opacity:.92;margin:0 0 16px;
-  font-size:clamp(14px,1.35vw,17px);letter-spacing:.16em}
-/* Name carries the hero. Floor is 40px because V2 only allows the Light weight
-   at 40px and above — below that this would need to step up to 400. */
-.proof__title{margin:0;font-size:clamp(40px,5vw,72px);line-height:1.02;
-  letter-spacing:-0.01em;text-wrap:balance}
-.proof__dates{color:var(--text-inverse);opacity:.92;margin:16px 0 0;
-  font-family:var(--font-text);font-weight:500;
-  font-size:clamp(14px,1.35vw,17px);letter-spacing:.16em}
+   are the campaign message, not caption furniture, so they run at full strength
+   and roughly 1.4x their old size — they were being read as small print.
+   Matched size and tracking so they bracket the name as a pair. */
+.proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:400;
+  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+/* Regular, not Light: at Light the name went delicate against the photograph
+   and the whole lockup read as a whisper. */
+.proof__title{margin:0;font-weight:400;font-size:clamp(40px,5vw,72px);
+  line-height:1.02;letter-spacing:-0.01em;text-wrap:balance}
+.proof__dates{color:var(--text-inverse);margin:18px 0 0;
+  font-family:var(--font-text);font-weight:400;
+  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
 
 /* THE WORK — artwork isolated on charcoal, every essential beside it */
 .work-block{padding-block:96px}
