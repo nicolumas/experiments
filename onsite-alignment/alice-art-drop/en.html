@@ -759,6 +759,19 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .inspiration__inner{gap:24px}
   .voice__lead,.inspiration__body,.sec-head__stand{font-size:17px}
 
+  /* --- hero: land on the message, not just the photograph ----------------
+     92vh under a 181px header pushed the dates below the fold. Take only the
+     height that is left. svh (not vh) because vh on iOS Safari measures the
+     viewport with the toolbar retracted, which would put the text back under
+     the fold on load. The vh line is the fallback for browsers without svh. */
+  /* 440px here re-broke it: on a 568px-tall phone the floor beat the calc and
+     put the dates 17px under again. 320px stays below the calc on every
+     portrait phone (shortest is ~568 - 181 = 387). */
+  .proof{height:calc(100vh - var(--above-proof, 0px));
+         height:calc(100svh - var(--above-proof, 0px));
+         min-height:320px}
+  .proof__wrap{padding-bottom:36px}
+
   /* --- countdown: four segments will not fit a phone at desktop sizes ----
      40px numerals + 24px gaps needed 451px of a 390px screen, so the last
      segment ran off the right edge. Sized to fit 320px with room spare. */
@@ -1784,6 +1797,32 @@ $$('[data-carousel]').forEach(root => {
   window.addEventListener('resize', sync);
   sync();
 });
+
+/* ============================================================
+   HERO FIT — the lockup must be above the fold on landing
+   ============================================================
+   The header stack (banner + nav row + search row) is ~181px on a phone, and
+   a 92vh hero on top of that put the dates 57px below the fold: you landed on
+   a photograph with no message. Publish the header height so the hero takes
+   only the space actually left. Measured rather than hard-coded, because the
+   banner is phase-dependent and the search row wraps at some widths. */
+(() => {
+  const proof = document.querySelector('.proof');
+  if (!proof) return;
+  const setFit = () => {
+    // offsetTop, not getBoundingClientRect().top, so a mid-page resize is not
+    // measured against the current scroll position
+    document.documentElement.style.setProperty('--above-proof', proof.offsetTop + 'px');
+  };
+  setFit();
+  window.addEventListener('resize', setFit);
+  window.addEventListener('orientationchange', setFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setFit);
+  // the banner shows and hides with the phase, which moves .proof down or up;
+  // observing the header catches that without coupling this to render()
+  const header = proof.previousElementSibling;
+  if (header && window.ResizeObserver) new ResizeObserver(setFit).observe(header);
+})();
 
 /* ============================================================
    DEV SWITCHER
