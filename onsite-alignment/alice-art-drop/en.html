@@ -186,7 +186,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .cd{display:inline-flex;align-items:baseline;gap:12px}
 .cd__seg{display:inline-flex;align-items:baseline;gap:4px}
 .cd__num{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;letter-spacing:.06em}
-.cd__unit{font-size:11px;line-height:1.5;letter-spacing:.03em;color:var(--text-tertiary)}
+/* one size for the unit label in every countdown; the two display
+   countdowns used to render it at 14px and 13px respectively */
+.cd__unit{font-size:13px;font-weight:500;line-height:1.5;letter-spacing:.03em;
+  color:var(--text-tertiary)}
 
 /* ============================================================
    NAV — LUMAS site chrome
@@ -218,7 +221,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .nav__icons{display:flex;align-items:center;gap:18px;margin-left:auto;flex:0 0 auto}
 .nav__icon{display:flex;align-items:center;color:var(--text-primary);text-decoration:none}
 .nav__icon svg{width:24px;height:24px;display:block}
-.nav__lang{gap:2px;font-weight:500;font-size:14px}
+.nav__lang{gap:2px;font-weight:500;font-size:15px}
 .nav__lang svg{width:16px;height:16px}
 .nav__icon--desktop{display:none}
 
@@ -386,7 +389,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .close__cd .cd__num{font-family:var(--font-display);
   font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0;
   min-width:1.12em;text-align:center}
-.close__cd .cd__unit{font-size:14px;letter-spacing:.06em}
+.close__cd .cd__unit{letter-spacing:.06em}
 .close__cd.cd{gap:24px}
 
 /* DETAILS — specs beside the dated process, FAQ below */
@@ -436,9 +439,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .work-block__urgency .cd__num{font-family:var(--font-display);
   font-size:clamp(30px,2.8vw,40px);font-weight:400;letter-spacing:0;
   min-width:1.12em;text-align:center}
-.work-block__urgency .cd__unit{font-size:13px;letter-spacing:.06em}
+.work-block__urgency .cd__unit{letter-spacing:.06em}
 
-.work-block__intro{color:var(--text-inverse);font-size:clamp(17px,1.5vw,20px);line-height:1.5;max-width:46ch}
+/* balance, not pretty: the first sentence is long enough to wrap and was
+   leaving a two-word tail ("and future.") on its own line. The nbsp keeps
+   the article with its noun so the break lands after "Kriegerin". */
+.work-block__intro{color:var(--text-inverse);font-size:clamp(17px,1.5vw,20px);
+  line-height:1.5;max-width:46ch;text-wrap:balance}
 
 /* ONE detail treatment shared by the spec rows and the executions rows, so
    every label/value pair on the panel reads at the same weight and size. */
@@ -598,7 +605,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .fcard{background:#FFFFFF;border:1px solid var(--border-default);border-radius:0;display:flex;flex-direction:column}
 .fcard__media{aspect-ratio:4/3}
 .fcard__body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
-.fcard__desc{color:var(--text-secondary)}
+.fcard__desc{color:var(--text-secondary);font-size:14px}
 .fcard__price{font-variant-numeric:tabular-nums}
 /* the footer pins to the bottom, so every card's CTA lands on the same line
    whether or not the card carries a price */
@@ -619,6 +626,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .trust{display:grid;grid-template-columns:1fr;gap:40px;text-align:center}
 /* USPs: Subheading/H3 for the claim, Subline for the qualifier */
 .trust__head{font-size:clamp(20px,1.9vw,24px);line-height:1.3;margin:0}
+/* Only the galleries stat is a link. Underlined on rest rather than hover-only,
+   so it is discoverable without a pointer — the other two stats are plain text
+   at the same size, and nothing else would mark this one as clickable. */
+.trust__link{color:inherit;text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px;text-decoration-color:var(--border-strong)}
+@media (hover:hover) and (pointer:fine){
+  .trust__link:hover{text-decoration-color:var(--text-primary)}
+}
 .trust__note{color:var(--text-secondary);margin-top:8px;font-size:14px;line-height:1.5}
 
 /* ============================================================
@@ -711,7 +726,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 @media (max-width:767px){
   /* --- touch targets: nothing interactive under 44px --------------------- */
   .nav__icon{min-width:44px;min-height:44px;justify-content:center}
-  .nav__icons{gap:2px;margin-right:-10px}
+  /* The top row is burger + logo + four 44px icons. At 132px the logo pushed
+     that past 390px and the whole page gained a horizontal scrollbar, which
+     is what clipped the hero and the countdown on the right. The icons keep
+     their 44px targets; the logo gives up the width instead. */
+  .nav__logomark{width:clamp(84px,26vw,120px)}
+  .nav__inner{gap:8px}
+  .nav__icons{gap:0;margin-right:-12px;min-width:0}
   .nav__burger{width:44px;height:44px;margin-left:-10px}
   .nav__logo{min-height:44px;align-items:center}
   .nav__searchinput{height:48px}
@@ -737,14 +758,37 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .quote__text{font-size:26px;line-height:1.2}
   .inspiration__quote{font-size:22px;line-height:1.25}
   .inspiration__inner{gap:24px}
-  .voice__lead{font-size:17px}
-  .inspiration__body{font-size:17px}
+  .voice__lead,.inspiration__body,.sec-head__stand{font-size:17px}
+
+  /* --- countdown: four segments will not fit a phone at desktop sizes ----
+     40px numerals + 24px gaps needed 451px of a 390px screen, so the last
+     segment ran off the right edge. Sized to fit 320px with room spare. */
+  .close__cd .cd__num,
+  .work-block__urgency .cd__num{font-size:30px}
+  .close__cd .cd__unit,
+  .work-block__urgency .cd__unit{font-size:11px;letter-spacing:.04em}
+  .close__cd.cd,
+  .work-block__urgency .cd{gap:10px}
+  .cd__seg{gap:3px}
 
   /* --- vertical rhythm: 96px between every section is a lot on a phone --- */
   .section{padding-block:64px}
   .work-block{padding-block:64px}
   .close{padding-block:64px}
   .trust{gap:32px}
+}
+
+/* Small phones (iPhone SE and the 320px floor). Four 44px icons plus a burger
+   plus the logo cannot also afford a 24px gutter on each side of the nav row,
+   so that row alone tightens up. Touch targets stay 44px. */
+@media (max-width:400px){
+  .nav__inner{padding-inline:12px}
+  /* the optical inset must not exceed the padding, or the row lands outside
+     the viewport and the whole page gets a horizontal scrollbar */
+  .nav__icons{margin-right:-12px}
+  .nav__burger{margin-left:-12px}
+  .nav__searchbtn,.nav__search--mobile .nav__searchbtn{right:calc(12px - 6px)}
+  .nav__search--mobile{padding-inline:12px}
 }
 
 /* ============================================================
@@ -868,7 +912,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         <span class="cd tnum" id="cd-work" aria-live="off"></span>
       </div>
 
-      <p class="t-body work-block__intro">Carol Muthiga-Oyekunle's “Alice”; a warrior between past, present and future.<br>Visible for three days&nbsp;— then never again.</p>
+      <p class="t-body work-block__intro">Carol Muthiga-Oyekunle’s “Alice”; a&nbsp;warrior between past, present and future.<br>Visible for three days&nbsp;— then never again.</p>
 
       <dl class="specs">
         <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Limited to 300 copies</dd></div>
@@ -1127,7 +1171,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         <p class="t-body-s trust__note">since 2004</p>
       </div>
       <div>
-        <p class="t-h4 trust__head">19 galleries worldwide</p>
+        <p class="t-h4 trust__head">
+          <a class="trust__link" href="https://www.lumas.de/galerien/" target="_self"
+             data-ablyft-goal="drop_click_galleries">19 galleries worldwide</a>
+        </p>
         <p class="t-body-s trust__note">See works in person</p>
       </div>
       <div>
