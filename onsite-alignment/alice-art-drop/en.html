@@ -877,10 +877,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      charcoal plate rather than a gradient scrim, so it stays inside the system
      and stays legible whatever the photograph is doing behind it. -->
 <section class="proof" data-sec="proof">
-  <img class="proof__img" src="CMO_Room1.jpg" width="7680" height="4320"
-       fetchpriority="high" decoding="async"
-       alt="Alice in the black LUMA Artbox above a sideboard in the living room, daylight falling from the side."
-       data-fallback="ROOM SHOT · LIVING ROOM · 16:9">
+  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall. The
+       mobile source is a 3:5 crop of the same room with the work centred, so
+       the phone gets a composed frame rather than a cropped one. -->
+  <picture>
+    <source media="(max-width:767px)" srcset="CMO_Room1_mobile.jpg"
+            width="1200" height="2000">
+    <img class="proof__img" src="CMO_Room1.jpg" width="7680" height="4320"
+         fetchpriority="high" decoding="async"
+         alt="Alice in the black LUMA Artbox above a sideboard in the living room, daylight falling from the side."
+         data-fallback="ROOM SHOT · LIVING ROOM · 16:9">
+  </picture>
   <div class="wrap proof__wrap">
     <div class="proof__plate">
       <p class="t-eyebrow proof__eyebrow">ART DROP</p>
