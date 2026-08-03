@@ -149,7 +149,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0728", kicker: "Next session · today", weekday: "Tuesday",  date: "28 July",  year: "2026", short: "28 Jul", upcoming: true },
+      { id: "s0803", kicker: "Latest · today",        weekday: "Monday",   date: "3 August", year: "2026", short: "3 Aug", upcoming: true },
+      { id: "s0728", kicker: "Previous",              weekday: "Tuesday",  date: "28 July",  year: "2026", short: "28 Jul" },
       { id: "s0724", kicker: "Previous",                 weekday: "Friday",   date: "24 July",  year: "2026", short: "24 Jul" },
       { id: "s0723", kicker: "Previous",                 weekday: "Thursday", date: "23 July",  year: "2026", short: "23 Jul" },
       { id: "s0713", kicker: "Previous",                 weekday: "Monday",   date: "13 July",  year: "2026", short: "13 Jul" },
@@ -159,6 +160,9 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Monday 3 August ────────────────────────────────────────
+      { s: "s0803", feature: true, title: "Art Advisory & Trade", href: "art-advisory/", desc: "LUMAS’s advisory and B2B services made discoverable — personal Art Consultants, a real-homes “living with art” carousel and a collector story, a rotating client-logo wall, and a Trade page whose “Start an enquiry” buttons open the B2B partner form. Real gallery data, licensed Utile Display, charcoal/ivory/bone, full-width and responsive." },
+
       // ── Tuesday 28 July — next session ─────────────────────────
       { s: "s0728", feature: true, title: "Alice — Art Drop", href: "alice-art-drop/", desc: "The 72-hour drop for Carol Muthiga-Oyekunle’s “Alice”, limited to 300 — a full-bleed room opens it, the work is then isolated on charcoal with every essential beside it, and the whole page is driven by one PHASE constant (Reveal / Early Access / Public / Ended). Real LUMAS nav, unframed catalogue works, V2 type. German canonical, English review build." },
 
