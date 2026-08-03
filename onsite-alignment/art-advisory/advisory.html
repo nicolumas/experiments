@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!-- ═══════════════════════════════════════════════════════════
+  PROTO:       PROTO-2026-ADV-01  ·  Art Advisory
+  Hypothesis:  A dedicated, human-led advisory page (Art Consultants + gallery
+               appointments made prominent) increases qualified consultation
+               and gallery-appointment requests vs the current thin /kontakt/ page.
+  Goals:       primary  advisory_consultation_submit · gallery_appointment_request
+               secondary advisor_booking_click · cta_click
+  Status:      exploration
+═══════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Art advisory · LUMAS</title>
+  <meta name="description" content="Personal art advice from LUMAS Art Consultants, in a gallery or online. Free and without obligation.">
+  <script>document.documentElement.className += ' js';</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=4">
+  <style>
+    /* sticky-nav offset so smooth-scrolled in-page anchors don't tuck under the nav */
+    #contact, #gallery { scroll-margin-top: 84px; }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAV ══ -->
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="nav__logo" href="advisory.html"><img src="assets/logos/lumas.svg" alt="LUMAS" width="160" height="30"></a>
+      <nav class="nav__links" aria-label="Advisory">
+        <a class="nav__link" href="advisory.html" aria-current="page">Art advisory</a>
+        <a class="nav__link" href="trade.html">Trade &amp; business</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══ HERO — asymmetric split ══ -->
+    <section class="wrap hero">
+      <div class="hero__grid">
+        <div class="hero__text">
+          <p class="eyebrow hero__eyebrow reveal">Personal art advisory</p>
+          <h1 class="display-h1 hero__title reveal">Advice from the people who hang the work</h1>
+          <p class="body-large hero__lede measure reveal">Our Art Consultants place signed editions in nineteen galleries, and in collectors' homes, every day. Tell them your space and your taste, and they will help you find the work that belongs there.</p>
+          <div class="hero__actions reveal">
+            <a class="btn btn--primary" href="#contact" data-goal="cta_click" data-cta="hero_speak_consultant">Speak to an Art Consultant</a>
+            <a class="btn btn--ghost" href="#gallery" data-goal="cta_click" data-cta="hero_visit_gallery">Visit a gallery</a>
+          </div>
+        </div>
+        <div class="hero__art reveal">
+          <img src="assets/scenes/hanging-the-work.jpg" width="1600" height="1600"
+               alt="Two LUMAS gallery specialists hanging a large contemporary painting" loading="eager">
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VALUE ROW ══ -->
+    <section class="wrap section--tight">
+      <div class="divided">
+        <div class="divided__item reveal">
+          <p class="ui-label">01</p>
+          <h2 class="display-h4">Free and personal</h2>
+          <p>An Art Consultant, not a chatbot. One conversation, no obligation to buy.</p>
+        </div>
+        <div class="divided__item reveal">
+          <p class="ui-label">02</p>
+          <h2 class="display-h4">In a gallery or online</h2>
+          <p>Meet an Art Consultant in one of our galleries, or talk it through from home.</p>
+        </div>
+        <div class="divided__item reveal">
+          <p class="ui-label">03</p>
+          <h2 class="display-h4">Chosen, not sorted</h2>
+          <p>A short, considered selection with formats and framing. Not endless search results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LIVING WITH ART ══ -->
+    <section class="section surface-raised">
+      <div class="wrap band">
+        <div class="reveal">
+          <p class="eyebrow">Living with art</p>
+          <h2 class="display-h2 mt-s">The work you come home to</h2>
+          <p class="body-large txt-secondary measure mt-m">A great edition isn't the loudest thing in a room. It's the one you keep returning to, quietly, for years. Our Art Consultants help you find the piece that fits your space and your life, not only your wall.</p>
+        </div>
+        <div class="figure-carousel carousel reveal" data-carousel="homes">
+          <div class="carousel__viewport">
+            <div class="carousel__track">
+              <div class="slide"><img class="slide__img" src="assets/homes/home-1.webp" width="820" height="820" alt="A LUMAS edition in a collector's home" loading="lazy"></div>
+              <div class="slide"><img class="slide__img" src="assets/homes/home-2.webp" width="820" height="820" alt="A LUMAS edition in a collector's home" loading="lazy"></div>
+              <div class="slide"><img class="slide__img" src="assets/homes/home-3.webp" width="820" height="820" alt="A LUMAS edition in a collector's home" loading="lazy"></div>
+              <div class="slide"><img class="slide__img" src="assets/homes/home-4.webp" width="820" height="820" alt="A LUMAS edition in a collector's home" loading="lazy"></div>
+              <div class="slide"><img class="slide__img" src="assets/homes/home-5.webp" width="820" height="820" alt="A LUMAS edition in a collector's home" loading="lazy"></div>
+            </div>
+          </div>
+          <button class="carousel__btn carousel__btn--prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="carousel__btn carousel__btn--next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ HOW IT WORKS ══ -->
+    <section class="wrap section hairline-top">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2 class="display-h2">Three steps to the right work</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step__n">01</div>
+          <div class="step__b"><h3 class="display-h4">Tell us the space</h3><p>The room, the wall, the light, and what moves you. A few photos help.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step__n">02</div>
+          <div class="step__b"><h3 class="display-h4">We curate a selection</h3><p>A handful of editions, with the right formats and framing, and the reasoning behind each.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step__n">03</div>
+          <div class="step__b"><h3 class="display-h4">Decide together</h3><p>In a gallery or on a call. We advise, you choose, and we handle framing and delivery.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ COLLECTOR STORY ══ -->
+    <section class="section surface-raised">
+      <div class="wrap collector">
+        <figure class="collector__media reveal" style="margin:0">
+          <img src="assets/collector/story.webp" width="820" height="820" alt="A collector at home with a LUMAS portrait edition" loading="lazy">
+        </figure>
+        <div class="collector__text reveal">
+          <p class="eyebrow">Collector story</p>
+          <p class="story-lead mt-m">“I didn’t want a piece you eventually stop noticing — I wanted something I enjoy every single day.”</p>
+          <p class="body-copy mt-m">What began as a renovation became the moment to fulfil that wish. Natacha from Mannheim had long been drawn to the works of Erin Cone. The question her daughter asked — <em>“Why a faceless woman in the living room?”</em> — was answered not in words, but in the space itself. A visualisation made visible what the artwork could become, and ultimately convinced everyone. Today, the piece is part of her everyday life: not something in the background, but something she returns to, every day. A piece of gallery feeling, at home.</p>
+          <p class="body-copy mt-m">“I can only encourage anyone considering bringing art into their home to do it. It’s not just an aesthetic upgrade — it’s an investment in quality of life.”<span class="story-attr">Natacha Waller, Mannheim, 2026</span></p>
+          <a class="btn btn--ghost" href="#contact" data-goal="cta_click" data-cta="collector_get_in_touch" style="margin-top:clamp(2rem,3vw,3.2rem)">Get in touch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ GALLERY CONSULTATION — real channels as icon tiles ══ -->
+    <section id="contact" class="section surface-sunken">
+      <div class="wrap guidance">
+        <p class="eyebrow reveal">Gallery consultation</p>
+        <h2 class="display-h2 guidance__title reveal">Need guidance?</h2>
+        <p class="body-large txt-secondary guidance__lede reveal">Our Art Consultants choose the right size, frame and placement of your chosen artwork — complimentary and no pressure.</p>
+        <div class="guidance__tiles reveal">
+          <a class="tile" href="https://wa.me/493030306969" target="_blank" rel="noopener" data-goal="contact_whatsapp" data-cta="contact_whatsapp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><span>WhatsApp</span></a>
+          <a class="tile" href="https://lumas.atlassian.net/servicedesk/customer/portal/2" target="_blank" rel="noopener" data-goal="contact_email" data-cta="contact_email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span>Email</span></a>
+          <a class="tile" href="tel:+493030306969" data-goal="contact_phone" data-cta="contact_phone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Phone</span></a>
+          <a class="tile" href="#gallery" data-goal="gallery_open" data-cta="visit_gallery"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Visit a gallery</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ WHAT WE HELP WITH ══ -->
+    <section class="wrap section hairline-top">
+      <div class="section-head reveal">
+        <p class="eyebrow">What we help with</p>
+        <h2 class="display-h2">More than choosing a picture</h2>
+      </div>
+      <ul class="benefits">
+        <li class="benefit reveal"><span class="benefit__t">Choosing the work</span><span class="benefit__d">A considered selection matched to your taste, your room and the mood you want to live with.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">Sizing &amp; format</span><span class="benefit__d">The right scale for the wall — from petite editions to museum format — so the work sits as it should.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">Framing &amp; finishing</span><span class="benefit__d">Frame, mount and special finishing advice, seen against your interior, not guessed from a thumbnail.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">Delivery &amp; hanging</span><span class="benefit__d">We handle framing, delivery and the practicalities, so the work arrives ready for the wall.</span></li>
+      </ul>
+    </section>
+
+    <!-- ══ VISIT A GALLERY ══ -->
+    <section id="gallery" class="section surface-raised">
+      <div class="wrap band">
+        <div class="reveal">
+          <p class="eyebrow">Visit a gallery</p>
+          <h2 class="display-h2 mt-s">There is no substitute for standing in front of the work</h2>
+          <p class="body-large txt-secondary measure mt-m">See editions at full scale, meet an Art Consultant, and take the time you need. To arrange a visit, call or message the team, or open your nearest gallery below.</p>
+        </div>
+        <figure class="room-figure reveal">
+          <img src="assets/scenes/gallery-event.jpg" width="1800" height="1200" alt="A live artist event at a LUMAS gallery" loading="lazy">
+          <figcaption class="caption">A live artist event at a LUMAS gallery.</figcaption>
+        </figure>
+      </div>
+      <div class="wrap mt-l">
+        <div class="gallery-list reveal">
+          <a href="https://www.lumas.de/galerien/berlin-mitte/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="berlin-mitte"><span class="city">Berlin, Mitte</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/berlin-kurfuerstendamm/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="berlin-kudamm"><span class="city">Berlin, Kurfürstendamm</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/hamburg/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="hamburg"><span class="city">Hamburg</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/muenchen/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="muenchen"><span class="city">Munich</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/duesseldorf/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="duesseldorf"><span class="city">Düsseldorf</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/koeln/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="koeln"><span class="city">Cologne</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/frankfurt/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="frankfurt"><span class="city">Frankfurt</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/stuttgart/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="stuttgart"><span class="city">Stuttgart</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/hannover/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="hannover"><span class="city">Hannover</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/dortmund/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="dortmund"><span class="city">Dortmund</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/mannheim/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="mannheim"><span class="city">Mannheim</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/wien/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="wien"><span class="city">Vienna</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/zuerich/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="zuerich"><span class="city">Zürich</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/paris-saint-germain/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="paris"><span class="city">Paris, Saint-Germain</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/london/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="london"><span class="city">London</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/new-york-soho/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="new-york"><span class="city">New York, SoHo</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/budapest/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="budapest"><span class="city">Budapest</span><span class="go">Open →</span></a>
+          <a href="https://www.lumas.de/galerien/fraport/" target="_blank" rel="noopener" data-goal="gallery_open" data-cta="fraport"><span class="city">Frankfurt Airport</span><span class="go">Open →</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MEET THE ART CONSULTANTS — people carousel ══ -->
+    <section class="wrap section hairline-top">
+      <div class="section-head reveal">
+        <p class="eyebrow">The team</p>
+        <h2 class="display-h2 mt-s">Meet the Art Consultants</h2>
+      </div>
+
+      <div class="carousel carousel--people" data-carousel="team">
+        <div class="carousel__viewport">
+          <div class="carousel__track">
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/berlin.webp" width="168" height="168" alt="LUMAS Art Consultant, Berlin Mitte" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Berlin, Mitte</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="berlin-mitte">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/berlin-kudamm.webp" width="168" height="168" alt="LUMAS Art Consultant, Berlin Kurfürstendamm" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Berlin, Kurfürstendamm</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="berlin-kudamm">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/munich.webp" width="168" height="168" alt="LUMAS Art Consultant, Munich" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Munich</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="munich">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/hamburg.webp" width="168" height="168" alt="LUMAS Art Consultant, Hamburg" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Hamburg</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="hamburg">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/frankfurt.webp" width="168" height="168" alt="LUMAS Art Consultant, Frankfurt" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Frankfurt</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="frankfurt">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/frankfurt-airport.webp" width="168" height="168" alt="LUMAS Art Consultant, Frankfurt Airport" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Frankfurt Airport</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="fraport">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/stuttgart.webp" width="168" height="168" alt="LUMAS Art Consultant, Stuttgart" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Stuttgart</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="stuttgart">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/hannover.webp" width="168" height="168" alt="LUMAS Art Consultant, Hannover" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Hannover</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="hannover">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/dortmund.webp" width="168" height="168" alt="LUMAS Art Consultant, Dortmund" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Dortmund</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="dortmund">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/mannheim.webp" width="168" height="168" alt="LUMAS Art Consultant, Mannheim" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Mannheim</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="mannheim">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/vienna.webp" width="168" height="168" alt="LUMAS Art Consultant, Vienna" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Vienna</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="vienna">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/zurich.webp" width="168" height="168" alt="LUMAS Art Consultant, Zürich" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Zürich</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="zurich">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/budapest.webp" width="168" height="168" alt="LUMAS Art Consultant, Budapest" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Budapest</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="budapest">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/new-york.webp" width="168" height="168" alt="LUMAS Art Consultant, New York SoHo" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">New York, SoHo</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="new-york">Get in touch <span class="arrow">→</span></a></article>
+            <article class="slide reveal"><div class="person__portrait"><img src="assets/team/miami.webp" width="168" height="168" alt="LUMAS Art Consultant, Miami" loading="lazy"></div><p class="person__name">Art Consultant</p><p class="caption person__role">Miami</p><a class="link-underline" href="#contact" data-goal="advisor_booking_click" data-advisor="miami">Get in touch <span class="arrow">→</span></a></article>
+          </div>
+        </div>
+        <button class="carousel__btn carousel__btn--prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="carousel__btn carousel__btn--next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
+        <p class="carousel__count" data-count>01 / 15</p>
+      </div>
+    </section>
+
+    <!-- ══ TRUST STATS ══ -->
+    <section class="wrap section--tight">
+      <div class="stats reveal">
+        <div><div class="stat__n">2004</div><div class="stat__l body-small">Collecting since</div></div>
+        <div><div class="stat__n">500</div><div class="stat__l body-small">Curated artists</div></div>
+        <div><div class="stat__n">19</div><div class="stat__l body-small">Galleries</div></div>
+        <div><div class="stat__n">350,000+</div><div class="stat__l body-small">Collectors</div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div>
+        <h4>Speak to an Art Consultant</h4>
+        <p>Free, personal advice on choosing, sizing and framing the right edition.</p>
+        <a class="btn btn--inverse" href="#contact" data-goal="cta_click" data-cta="footer_speak_consultant">Speak to an Art Consultant</a>
+      </div>
+      <div>
+        <h4>Visit a gallery</h4>
+        <p>See editions at full scale in one of nineteen galleries across Europe and the US.</p>
+        <a class="link-underline" style="border-color:rgba(244,237,226,0.4);color:var(--ivory-100)" href="#gallery" data-goal="cta_click" data-cta="footer_find_gallery">Find your nearest gallery <span class="arrow">→</span></a>
+      </div>
+      <div>
+        <h4>Since 2004</h4>
+        <p class="footer__trust">500 curated artists<br>19 galleries<br>350,000+ collectors<br>Hand-signed, limited editions</p>
+      </div>
+    </div>
+    <div class="wrap footer__bar">
+      <span>© LUMAS. Art advisory.</span>
+      <span>Prototype</span>
+    </div>
+  </footer>
+
+  <script src="assets/site.js?v=4"></script>
+</body>
+</html>
