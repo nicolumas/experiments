@@ -276,7 +276,7 @@ h1,h2,h3,h4,p { margin:0; }
 .logo-set { display:flex; align-items:center; gap:clamp(4rem,7vw,9rem); padding-right:clamp(4rem,7vw,9rem); }
 @keyframes marquee { from { transform:translateX(-50%); } to { transform:translateX(0); } }
 .logo-marquee:hover .logo-marquee__track { animation-play-state:paused; }
-.logo { height:clamp(2.2rem,3vw,3.2rem); width:auto; flex:0 0 auto; opacity:0.9; transition:opacity 200ms var(--ease-out); }
+.logo { height:clamp(2.8rem,3.8vw,4.2rem); width:auto; flex:0 0 auto; opacity:0.9; transition:opacity 200ms var(--ease-out); }
 .logo-marquee:hover .logo { opacity:1; }
 @media (prefers-reduced-motion:reduce){
   .logo-marquee { mask-image:none; -webkit-mask-image:none; }
