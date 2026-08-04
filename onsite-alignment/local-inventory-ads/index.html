@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<!-- ═══ PROTO HEADER ═══════════════════════════════════════════════════════════
+  ID:          PROTO-2026-001  (local inventory ads · alternative PDP)
+  Hypothesis:  For PDP visitors within ~10 km of a LUMAS gallery that physically holds
+               the piece, replacing the online-only buy rail with a local-availability
+               group plus a "Reserve for gallery visit" primary will raise
+               gallery-attributed leads per session without reducing revenue per
+               session — because the local promise is confirmed at the decision point
+               and a free 48h hold is a lower-commitment step than a €1.990 online
+               purchase.                                              [ASSUMPTION]
+  Prior:       ledger NOT consulted — run lumas-07-ledger READ before ticketing.
+  Goals:       primary Lead-Gallery [ASSUMPTION: confirm name in the 16-goal library]
+               secondary ATC · Checkout-Start · Reserve-Start [ASSUMPTION]
+  Variants:    control (current live PDP) | b (this tool's output)
+  Status:      exploration — next gates: lumas-05-red-team, then ticket
+  Switcher:    ?v=control | ?v=b   ·  press "v" to toggle
+═══════════════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUMAS · Local Inventory Ads PDP + Lead-Gen Playground</title>
+<style>
+  :root{
+    /* playground chrome */
+    --bg:#131211;
+    --bg-2:#1b1a18;
+    --bg-3:#232120;
+    --line:#312e2c;
+    --ink:#eae6df;
+    --ink-2:#9d968c;
+    --ink-3:#6f6963;
+    --accent:#d8cbb6;
+    --warn:#c9a227;
+    --risk:#c9584c;
+    --ok:#6f9a78;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+
+    /* LUMAS V2 tokens (used inside preview) */
+    --l-charcoal:#1C1A18;
+    --l-charcoal-700:#5A5752;
+    --l-charcoal-500:#908C87;
+    --l-charcoal-300:#C7C3BE;
+    --l-ivory-100:#F4EDE2;
+    --l-ivory-200:#F7F1E9;
+    --l-ivory-300:#FAF6F1;
+    --l-bone-100:#E2D8CC;
+    --l-bone-200:#EAE2D8;
+    --l-bone-300:#F0EBE3;
+    --l-success:#3A6B4A;
+    --l-success-bg:#E8F2EB;
+    --l-warning:#9B6D1E;
+    --l-warning-bg:#FDF5E6;
+    --l-error:#B5352A;
+    --l-error-bg:#FDECEA;
+    --l-display:"Utile Display","Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --l-body:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:13px;
+    display:grid;grid-template-columns:344px 1fr;height:100vh;overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- sidebar ---------- */
+  aside{border-right:1px solid var(--line);overflow-y:auto;background:var(--bg-2)}
+  aside::-webkit-scrollbar,main::-webkit-scrollbar{width:9px}
+  aside::-webkit-scrollbar-thumb,main::-webkit-scrollbar-thumb{background:#37332f;border-radius:9px}
+  .brand{padding:16px 18px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg-2);z-index:5}
+  .brand h1{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+  .brand p{margin:6px 0 0;color:var(--ink-2);font-size:11.5px;line-height:1.5}
+  .grp{border-bottom:1px solid var(--line);padding:14px 18px 18px}
+  .grp>h2{
+    margin:0 0 12px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-2);font-weight:700;display:flex;justify-content:space-between;align-items:center;
+  }
+  .grp>h2 span{color:var(--ink-3);letter-spacing:.04em;text-transform:none;font-weight:400;font-size:10.5px}
+  .ctl{margin-bottom:14px}
+  .ctl:last-child{margin-bottom:0}
+  .ctl>label{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--ink);margin-bottom:6px;align-items:baseline}
+  .ctl>label b{font-weight:500}
+  .ctl>label var{font-family:var(--mono);font-style:normal;color:var(--accent);font-size:11px}
+  .hint{color:var(--ink-3);font-size:10.5px;line-height:1.45;margin-top:6px}
+
+  /* segmented */
+  .seg{display:flex;gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .seg button{
+    flex:1;background:transparent;border:0;border-right:1px solid var(--line);color:var(--ink-2);
+    padding:7px 4px;font:inherit;font-size:11px;cursor:pointer;letter-spacing:.03em;
+  }
+  .seg button:last-child{border-right:0}
+  .seg button:hover{background:var(--bg-3);color:var(--ink)}
+  .seg button[aria-pressed=true]{background:var(--ink);color:#151311;font-weight:600}
+
+  /* option cards */
+  .cards{display:grid;gap:6px}
+  .cards.two{grid-template-columns:1fr 1fr}
+  .cards button{
+    text-align:left;background:var(--bg-3);border:1px solid var(--line);border-radius:3px;
+    padding:8px 9px;cursor:pointer;color:var(--ink-2);font:inherit;line-height:1.35;
+  }
+  .cards button:hover{border-color:#4a453f;color:var(--ink)}
+  .cards button[aria-pressed=true]{border-color:var(--accent);background:#2a2723;color:var(--ink)}
+  .cards button strong{display:block;font-size:11.5px;font-weight:600;margin-bottom:2px;color:var(--ink)}
+  .cards button em{font-style:normal;font-size:10px;color:var(--ink-3);display:block}
+
+  /* range */
+  input[type=range]{width:100%;-webkit-appearance:none;background:transparent;margin:2px 0}
+  input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--line)}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--accent);margin-top:-6px;cursor:pointer;
+  }
+  select,textarea,input[type=text]{
+    width:100%;background:var(--bg-3);color:var(--ink);border:1px solid var(--line);border-radius:3px;
+    padding:7px 8px;font:inherit;font-size:11.5px;
+  }
+  /* toggles */
+  .toggles{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+  .tg{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;color:var(--ink-2);user-select:none}
+  .tg:hover{color:var(--ink)}
+  .tg i{
+    width:26px;height:15px;border-radius:9px;background:#3a352f;position:relative;flex:0 0 auto;transition:background .15s;
+  }
+  .tg i::after{
+    content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#8b847b;transition:.15s;
+  }
+  .tg[data-on=true]{color:var(--ink)}
+  .tg[data-on=true] i{background:var(--accent)}
+  .tg[data-on=true] i::after{left:13px;background:#1a1815}
+  .tg.locked{opacity:.42;pointer-events:none}
+  .grp.armlocked{opacity:.34;pointer-events:none}
+  .bar button.act:disabled{opacity:.35;cursor:not-allowed}
+
+  .presets{display:grid;gap:6px}
+  .presets button{
+    display:flex;gap:9px;align-items:flex-start;text-align:left;background:transparent;border:1px solid var(--line);
+    border-radius:3px;padding:9px 10px;cursor:pointer;color:var(--ink);font:inherit
+  }
+  .presets button:hover{background:var(--bg-3);border-color:#4a453f}
+  .presets button b{font-size:11.5px;font-weight:600;display:block}
+  .presets button em{font-style:normal;font-size:10px;color:var(--ink-3);display:block;margin-top:2px;line-height:1.4}
+  .presets button kbd{
+    font-family:var(--mono);font-size:9px;border:1px solid var(--line);border-radius:2px;padding:2px 4px;color:var(--ink-3);flex:0 0 auto
+  }
+
+  /* ---------- main ---------- */
+  main{display:flex;flex-direction:column;overflow:hidden}
+  .bar{
+    display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);
+    background:var(--bg-2);flex:0 0 auto;flex-wrap:wrap
+  }
+  .bar .sp{flex:1}
+  .bar .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+  .bar button.act{
+    background:var(--bg-3);border:1px solid var(--line);color:var(--ink);border-radius:3px;padding:6px 11px;
+    font:inherit;font-size:11px;cursor:pointer;letter-spacing:.03em
+  }
+  .bar button.act:hover{border-color:var(--accent)}
+  .bar button.act[aria-pressed=true]{background:var(--ink);color:#151311;border-color:var(--ink);font-weight:600}
+  #toast{
+    position:fixed;left:50%;bottom:224px;transform:translate(-50%,10px);background:#0d0c0b;color:var(--accent);
+    border:1px solid var(--line);border-radius:3px;padding:7px 13px;font-family:var(--mono);font-size:11px;
+    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:40
+  }
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+  .stage{flex:1;overflow:auto;padding:22px;background:
+     linear-gradient(0deg,rgba(255,255,255,.015) 1px,transparent 1px) 0 0/100% 24px,var(--bg)}
+  .stagegrid{display:flex;gap:22px;align-items:flex-start;justify-content:center;min-height:100%}
+  .framewrap{flex:0 0 auto}
+  .framewrap>figcaption{
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+    margin:0 0 8px;font-weight:700;display:flex;gap:8px;align-items:center
+  }
+  .framewrap>figcaption i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block}
+
+  /* ---------- bottom dock ---------- */
+  .dock{flex:0 0 auto;border-top:1px solid var(--line);background:var(--bg-2);display:grid;grid-template-columns:1fr 340px}
+  .dock .prompt{padding:12px 16px 14px;min-width:0}
+  .dock h3{margin:0 0 8px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:700;display:flex;align-items:center;gap:10px}
+  .dock h3 button{
+    margin-left:auto;background:var(--ink);color:#151311;border:0;border-radius:3px;padding:5px 12px;
+    font:inherit;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer
+  }
+  .dock h3 button:hover{background:#fff}
+  #promptOut{
+    font-family:var(--mono);font-size:11px;line-height:1.6;color:#cfc8bd;background:#100f0e;border:1px solid var(--line);
+    border-radius:3px;padding:11px 12px;max-height:132px;overflow:auto;white-space:pre-wrap;margin:0
+  }
+  .flags{border-left:1px solid var(--line);padding:12px 16px 14px;overflow:auto;max-height:200px}
+  .flag{display:flex;gap:8px;font-size:11px;line-height:1.45;margin-bottom:8px;color:var(--ink-2)}
+  .flag:last-child{margin-bottom:0}
+  .flag i{width:6px;height:6px;border-radius:50%;flex:0 0 auto;margin-top:5px}
+  .flag.risk i{background:var(--risk)} .flag.warn i{background:var(--warn)} .flag.ok i{background:var(--ok)}
+  .flag b{color:var(--ink);font-weight:600}
+  .flag a.law{
+    font-family:var(--mono);font-size:9px;letter-spacing:.02em;color:var(--accent);text-decoration:none;
+    border:1px solid var(--line);border-radius:2px;padding:1px 4px;white-space:nowrap;display:inline-block;
+    margin-left:2px;vertical-align:1px
+  }
+  .flag a.law:hover{border-color:var(--accent)}
+
+  /* ============ PREVIEW (LUMAS) ============ */
+  .device{background:var(--l-ivory-300);color:var(--l-charcoal);font-family:var(--l-body);
+    border:1px solid #2c2926;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);position:relative;overflow:hidden}
+  .device.mob{width:390px;height:812px;border-radius:26px}
+  .device.desk{width:1280px;height:860px;border-radius:4px}
+  .device .scroll{position:absolute;inset:0;overflow:auto;scrollbar-width:none}
+  .device .scroll::-webkit-scrollbar{display:none}
+
+  .p-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+  .p-uilabel{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+
+  /* header */
+  /* ---------- production navigation ---------- */
+  .p-hdr{
+    display:flex;align-items:center;gap:24px;padding:0 26px;height:74px;
+    border-bottom:1px solid var(--l-bone-200);background:#fff
+  }
+  .p-logo{display:block;color:var(--l-charcoal);flex:0 0 auto}
+  .p-logo svg{display:block;width:124px;height:23px;fill:currentColor}
+  .p-nav{display:flex;gap:21px;align-items:center}
+  .p-nav a{
+    font-size:14px;font-weight:600;color:var(--l-charcoal);letter-spacing:0;cursor:pointer;
+    white-space:nowrap;padding:4px 0;border-bottom:1.5px solid transparent
+  }
+  .p-nav a:hover{border-bottom-color:var(--l-charcoal)}
+  .p-hdr .sp{flex:1}
+  .p-search{
+    display:flex;align-items:center;gap:10px;background:var(--l-ivory-100);border:0;border-radius:22px;
+    height:42px;padding:0 15px 0 19px;width:272px;flex:0 0 auto;margin-right:12px
+  }
+  .p-search input{
+    border:0;background:transparent;font-family:var(--l-body);font-size:14px;color:var(--l-charcoal);
+    width:100%;outline:none
+  }
+  .p-search input::placeholder{color:var(--l-charcoal-500)}
+  .p-search .mag{flex:0 0 auto;color:var(--l-charcoal)}
+  .p-hdr .icons{display:flex;align-items:center;gap:15px;color:var(--l-charcoal);flex:0 0 auto}
+  .p-hdr .icons a{display:block;cursor:pointer;color:inherit}
+  .p-hdr .icons svg{display:block}
+  .p-lang{
+    display:flex;align-items:center;gap:3px;font-size:13.5px;font-weight:700;color:var(--l-charcoal);
+    cursor:pointer;margin-left:1px
+  }
+  .p-burger{display:none}
+
+  /* mobile: burger + logo + icons, search on its own row */
+  .p-hdr.mob{
+    display:grid;grid-template-columns:auto auto 1fr;grid-template-rows:auto 1px auto;
+    align-items:center;height:auto;padding:0;gap:0;border-bottom:1px solid var(--l-bone-200)
+  }
+  .p-hdr.mob .p-burger{
+    display:flex;flex-direction:column;justify-content:center;gap:5px;width:24px;height:44px;
+    grid-row:1;margin-left:16px;cursor:pointer
+  }
+  .p-hdr.mob .p-burger i{display:block;height:1.6px;background:var(--l-charcoal);border-radius:2px}
+  .p-hdr.mob .p-logo{grid-row:1;margin-left:12px}
+  .p-hdr.mob .p-logo svg{width:112px;height:21px}
+  .p-hdr.mob .icons{grid-row:1;justify-self:end;gap:19px;margin-right:16px}
+  .p-hdr.mob .p-hairline{grid-row:2;grid-column:1/-1;background:var(--l-bone-200);align-self:stretch}
+  .p-hdr.mob .p-search{
+    grid-row:3;grid-column:1/-1;width:auto;margin:12px 16px 14px;height:46px;border-radius:24px;flex:1 1 auto
+  }
+  .p-geo{
+    background:var(--l-charcoal);color:var(--l-ivory-100);padding:7px 28px;display:flex;gap:10px;align-items:center;
+    font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase
+  }
+  .p-geo span{opacity:.55;letter-spacing:.08em;font-weight:400;text-transform:none;font-size:11px}
+  .p-geo.mob{padding:7px 18px;gap:8px}
+  .av-strip.mob{padding:10px 18px}
+
+  /* layout shells */
+  .p-split{display:grid;grid-template-columns:1fr 480px;gap:56px;padding:36px 40px 60px;align-items:start}
+  .p-split.wide{grid-template-columns:1fr 420px;gap:72px}
+  .p-stack{padding:28px 40px 60px;max-width:1000px;margin:0 auto}
+  .p-mobwrap{padding-bottom:26px}
+
+  .p-stagebox{background:var(--l-ivory-100);position:relative;display:flex;align-items:center;justify-content:center;padding:44px}
+  .p-stagebox.mob{padding:26px 30px;min-height:0}
+  .p-art{max-width:100%;display:block}
+  .p-art.framed{border:11px solid #17150f;box-shadow:0 18px 60px -16px rgba(28,26,24,.45)}
+  .p-art.plain{box-shadow:0 18px 60px -16px rgba(28,26,24,.35)}
+  .p-artfallback{width:220px;height:275px;background:
+    linear-gradient(150deg,#8f9d8e,#c4674d 60%,#4c4a42);}
+  .p-tools{position:absolute;bottom:16px;right:16px;display:flex;gap:8px}
+  .p-tools button,.p-iconbtn{
+    background:#fff;border:1px solid var(--l-bone-100);padding:8px 12px;font-family:var(--l-body);
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--l-charcoal)
+  }
+  .p-topicons{position:absolute;top:16px;right:16px;display:flex;gap:8px}
+  .p-topicons span{
+    width:32px;height:32px;background:#fff;border:1px solid var(--l-bone-100);display:grid;place-items:center;font-size:13px;color:var(--l-charcoal-700)
+  }
+  .p-thumbs{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .p-thumbs i{width:56px;height:56px;background:var(--l-bone-300);border:1px solid var(--l-bone-100);display:block}
+  .p-thumbs i.on{border-color:var(--l-charcoal);background:var(--l-ivory-100)}
+
+  /* rail */
+  .p-rail>*+*{margin-top:0}
+  .p-artist{font-family:var(--l-display);font-weight:400;font-size:42px;line-height:1.04;margin:0 0 8px}
+  .p-title{color:var(--l-charcoal-700);margin:0 0 14px}
+  .p-meta{font-size:13.5px;color:var(--l-charcoal-700);margin:0 0 22px}
+  .p-meta a{color:var(--l-charcoal);text-decoration:underline;text-underline-offset:3px}
+  .p-price{font-family:var(--l-display);font-size:36px;font-weight:400;line-height:1;display:flex;align-items:baseline;gap:12px;margin:0 0 4px}
+  .p-price small{font-family:var(--l-body);font-size:11.5px;color:var(--l-charcoal-500);font-weight:400}
+  .p-strike{font-size:12.5px;color:var(--l-charcoal-500);margin:0 0 18px}
+  .p-strike s{margin-right:6px}
+
+  /* selection rows */
+  .p-selrow{display:flex;align-items:baseline;gap:14px;padding:12px 0;border-top:1px solid var(--l-bone-200);font-size:13px}
+  .p-selrow .k{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--l-charcoal-500);flex:0 0 auto}
+  .p-selrow .v{flex:1;color:var(--l-charcoal)}
+  .p-selrow a{font-size:12.5px;color:var(--l-charcoal);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .p-sizes{display:flex;gap:0;border:1px solid var(--l-charcoal-300);margin:0 0 14px}
+  .p-sizes button{
+    flex:1;background:transparent;border:0;border-right:1px solid var(--l-bone-100);padding:11px 4px;font-family:var(--l-body);
+    font-size:12.5px;cursor:pointer;color:var(--l-charcoal-700)
+  }
+  .p-sizes button:last-child{border-right:0}
+  .p-sizes button[aria-pressed=true]{outline:1.5px solid var(--l-charcoal);outline-offset:-1.5px;color:var(--l-charcoal);font-weight:600;background:#fff}
+  .p-select{
+    width:100%;border:1px solid var(--l-bone-100);background:#fff;padding:13px 14px;font-family:var(--l-body);font-size:13.5px;
+    color:var(--l-charcoal);margin:0 0 18px;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--l-charcoal) 50%),linear-gradient(135deg,var(--l-charcoal) 50%,transparent 50%);
+    background-position:calc(100% - 19px) 20px,calc(100% - 14px) 20px;background-size:5px 5px;background-repeat:no-repeat
+  }
+  .p-fieldlab{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--l-charcoal-500);display:block;margin:0 0 7px}
+
+  /* demand meter */
+  .p-demand{border:1px solid var(--l-bone-100);background:#fff;padding:16px 18px;margin:0 0 22px}
+  .p-demand.flat{border:0;background:var(--l-bone-300);padding:14px 16px}
+  .p-demand p{margin:0 0 12px;font-size:13px;line-height:1.45}
+  .p-demand p b{color:var(--l-error)}
+  .p-track{height:2px;background:var(--l-bone-100);position:relative;margin:0 0 9px}
+  .p-track i{position:absolute;left:0;top:0;bottom:0;background:var(--l-charcoal);width:62%}
+  .p-track u{position:absolute;left:62%;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--l-charcoal);transform:translateX(-50%)}
+  .p-steps{display:flex;justify-content:space-between;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--l-charcoal-500)}
+  .p-steps b:nth-child(3){color:var(--l-charcoal)}
+  .p-demand .note{font-size:11.5px;font-style:italic;color:var(--l-charcoal-500);margin:11px 0 0}
+
+  /* availability treatments */
+  .av-pill{display:flex;align-items:center;gap:9px;margin:0 0 20px;font-size:12.5px}
+  .av-pill i{width:7px;height:7px;border-radius:50%;background:var(--l-success);flex:0 0 auto}
+  .av-pill a{text-transform:uppercase;letter-spacing:.1em;font-size:11.5px;font-weight:700;text-decoration:underline;text-underline-offset:3px;color:var(--l-charcoal)}
+
+  .av-card{border:1px solid var(--l-bone-100);background:#fff;margin:0 0 18px}
+  .av-card .row{display:flex;gap:12px;padding:15px 17px;align-items:flex-start}
+  .av-card .pin{width:20px;height:20px;flex:0 0 auto;margin-top:1px}
+  .av-card .body{flex:1;min-width:0}
+  .av-card .name{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin:0 0 5px}
+  .av-card .sub{font-size:12.5px;color:var(--l-charcoal-700);display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:0}
+  .av-card .sub .dot{width:5px;height:5px;border-radius:50%;background:var(--l-charcoal-300)}
+  .av-card .sub .open{color:var(--l-success);display:flex;align-items:center;gap:5px}
+  .av-card .sub .open i{width:6px;height:6px;border-radius:50%;background:var(--l-success)}
+  /* scarcity is a fact, not an error — charcoal, not red (V2: status colours stay functional) */
+  .av-card .sub .scarce{color:var(--l-charcoal);font-weight:600}
+  .av-card.tonal{border:0;background:var(--l-bone-300)}
+  /* skeleton: same height as the resolved block, so the CTA never shifts */
+  .av-state .sk{display:block;background:var(--l-bone-200);border-radius:2px;animation:sk 1.4s ease-in-out infinite}
+  .av-state .sk-pin{width:20px;height:20px;border-radius:50%;flex:0 0 auto;margin-top:1px}
+  .av-state .sk-l1{width:58%;height:11px;margin:2px 0 8px}
+  .av-state .sk-l2{width:80%;height:10px}
+  @keyframes sk{0%,100%{opacity:1}50%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){.av-state .sk{animation:none}}
+  .av-card.tonal .map{border-top:1px solid var(--l-bone-100);background:transparent}
+  .p-alt{margin:14px 0 0;text-align:center;font-size:12.5px;color:var(--l-charcoal-700)}
+  .p-alt.quiet a{color:var(--l-charcoal);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .p-alt .p-btn.ghost{margin:0 auto}
+  /* sentence case: the rail already spends its uppercase budget on the eyebrow,
+     the field labels and the primary button */
+  .av-card .more{font-size:12.5px;font-weight:400;letter-spacing:0;color:var(--l-charcoal-700);flex:0 0 auto;
+    cursor:pointer;display:flex;gap:6px;align-items:center;text-decoration:underline;text-underline-offset:3px}
+  .av-card .map{border-top:1px solid var(--l-bone-200);padding:0;background:var(--l-ivory-100)}
+  .av-card .maprow{display:flex;gap:14px;padding:14px 17px;align-items:center}
+  .av-card .maprow address{font-style:normal;font-size:12.5px;color:var(--l-charcoal-700);line-height:1.5;flex:1}
+  .av-banner{
+    background:var(--l-success-bg);border-left:2px solid var(--l-success);padding:12px 16px;margin:0 0 20px;
+    display:flex;gap:10px;align-items:baseline;font-size:12.5px;line-height:1.45
+  }
+  .av-banner b{font-weight:600}
+  .av-strip{
+    background:var(--l-bone-300);padding:11px 28px;display:flex;gap:10px;align-items:center;font-size:12.5px;
+    border-bottom:1px solid var(--l-bone-100)
+  }
+  .av-strip i{width:7px;height:7px;border-radius:50%;background:var(--l-success)}
+  .av-strip a{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px}
+
+  /* buttons */
+  .p-btn{
+    width:100%;border:0;padding:17px 28px;font-family:var(--l-body);font-size:13px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px
+  }
+  .p-btn.primary{background:var(--l-charcoal);color:var(--l-ivory-100)}
+  .p-btn.secondary{background:transparent;color:var(--l-charcoal);border:1px solid var(--l-charcoal)}
+  .p-btn.ghost{background:transparent;border:0;border-bottom:1px solid var(--l-charcoal);padding:5px 0 6px;width:auto;font-weight:400;letter-spacing:.1em}
+  .p-reassure{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin:12px 0 0;font-size:11.5px;color:var(--l-charcoal-500)}
+  .p-reassure span{display:flex;gap:6px;align-items:center}
+  .p-or{display:flex;align-items:center;gap:14px;margin:26px 0 20px;color:var(--l-charcoal-500)}
+  .p-or::before,.p-or::after{content:"";height:1px;background:var(--l-bone-100);flex:1}
+  .p-or b{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+  .p-legal{font-size:11.5px;color:var(--l-charcoal-500);line-height:1.6;margin:16px 0 0}
+  .p-trust{display:flex;align-items:center;gap:14px;margin:22px 0 0;padding:16px 0 0;border-top:1px solid var(--l-bone-200);font-size:12px;color:var(--l-charcoal-700)}
+  .p-trust b{font-size:15px;font-family:var(--l-display)}
+  .p-stars{color:#00b67a;letter-spacing:1px}
+  .p-acc{border-top:1px solid var(--l-bone-200);padding:15px 0;display:flex;justify-content:space-between;font-size:13px;color:var(--l-charcoal)}
+  .p-acc span{color:var(--l-charcoal-500)}
+
+  /* mobile bits */
+  .m-pad{padding:0 20px}
+  .m-artist{font-family:var(--l-display);font-size:28px;line-height:1.08;margin:20px 0 6px}
+  .m-price{font-family:var(--l-display);font-size:27px;margin:14px 0 2px;display:flex;align-items:baseline;gap:10px}
+  .m-price small{font-family:var(--l-body);font-size:11px;color:var(--l-charcoal-500)}
+  .m-sticky{
+    position:absolute;left:0;right:0;bottom:0;background:rgba(250,246,241,.97);backdrop-filter:blur(8px);
+    border-top:1px solid var(--l-bone-100);padding:11px 16px 15px;display:flex;gap:12px;align-items:center;z-index:6
+  }
+  .m-sticky .info{flex:1;min-width:0}
+  .m-sticky .info b{font-family:var(--l-display);font-size:17px;display:block;line-height:1.1}
+  .m-sticky .info em{font-style:normal;font-size:10.5px;color:var(--l-success);display:flex;gap:5px;align-items:center;margin-top:3px}
+  .m-sticky .info em i{width:5px;height:5px;border-radius:50%;background:var(--l-success)}
+  .m-sticky .p-btn{width:auto;flex:0 0 auto;padding:14px 20px;font-size:11.5px}
+
+  /* popup */
+  .p-scrim{position:absolute;inset:0;background:rgba(28,26,24,.52);z-index:20;display:flex}
+  .p-scrim.center{align-items:center;justify-content:center;padding:32px}
+  .p-scrim.bottom{align-items:flex-end}
+  .p-scrim.right{justify-content:flex-end}
+  .p-modal{background:var(--l-ivory-300);width:100%;max-width:436px;padding:30px 32px 28px;position:relative;max-height:100%;overflow:auto}
+  .p-scrim.bottom .p-modal{max-width:none;border-radius:14px 14px 0 0;padding:24px 20px 22px}
+  .p-scrim.right .p-modal{max-width:428px;height:100%;padding:34px 34px 28px}
+  .p-modal.inline{background:var(--l-bone-300);border:1px solid var(--l-bone-100);max-width:none;padding:22px;margin:0 0 18px}
+  .p-modal .x{position:absolute;top:14px;right:14px;width:30px;height:30px;border:0;background:transparent;font-size:17px;cursor:pointer;color:var(--l-charcoal-700)}
+  .p-modal .grab{width:38px;height:4px;border-radius:4px;background:var(--l-charcoal-300);margin:0 auto 16px}
+  .p-modal h4{font-family:var(--l-display);font-weight:400;font-size:25px;line-height:1.15;margin:9px 0 9px}
+  .p-modal .lead{font-size:13px;line-height:1.55;color:var(--l-charcoal-700);margin:0 0 18px}
+  .p-modal .lead b{color:var(--l-charcoal);font-weight:600}
+  .p-fields{display:grid;gap:11px;margin:0 0 14px}
+  .p-fields.two{grid-template-columns:1fr 1fr}
+  .p-f label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--l-charcoal-500);display:block;margin:0 0 5px}
+  .p-f div.inp{border:1px solid var(--l-bone-100);border-radius:4px;background:#fff;padding:12px 13px;font-size:13px;color:var(--l-charcoal-500)}
+  .p-f div.inp.focus{border:2px solid var(--l-charcoal);padding:11px 12px;color:var(--l-charcoal)}
+  .p-consent{display:flex;gap:9px;font-size:11px;line-height:1.5;color:var(--l-charcoal-700);margin:0 0 16px}
+  .p-consent i{width:15px;height:15px;border:1px solid var(--l-charcoal-300);border-radius:2px;flex:0 0 auto;margin-top:1px;background:#fff}
+  .p-modal .foot{font-size:11px;color:var(--l-charcoal-500);text-align:center;margin:12px 0 0;line-height:1.5}
+  .p-slots{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 4px}
+  .p-slots b{
+    border:1px solid var(--l-bone-100);background:#fff;padding:8px 11px;font-size:11.5px;font-weight:400;cursor:pointer
+  }
+  .p-slots b.on{border-color:var(--l-charcoal);font-weight:600}
+  .p-gallerychip{display:flex;gap:9px;align-items:center;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--l-charcoal-700)}
+  .p-gallerychip i{width:7px;height:7px;border-radius:50%;background:var(--l-success)}
+  .p-confirm .tick{
+    display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--l-success-bg);
+    color:var(--l-success);font-size:17px;margin:0 0 14px
+  }
+  .p-confirm h4{margin:0 0 10px}
+
+  /* law annotation overlay — verdict-coded: green works with the grain, red fights it,
+     grey is a genuine trade-off. Never colour alone: each badge carries a glyph. */
+  .laws [data-law]{--ann:#5A5752;outline:1px dashed var(--ann);outline-offset:4px;position:relative}
+  .laws [data-verdict=good]{--ann:#3A6B4A}
+  .laws [data-verdict=bad]{--ann:#B5352A}
+  .laws [data-verdict=info]{--ann:#7A736B}
+  .laws [data-law]::before{
+    content:attr(data-glyph) " " attr(data-law);position:absolute;left:0;top:-6px;transform:translateY(-100%);
+    background:var(--ann);color:#fff;font-family:var(--mono);font-size:8.5px;letter-spacing:.02em;
+    padding:2px 5px;white-space:nowrap;z-index:9;pointer-events:none;border-radius:2px;text-transform:none
+  }
+  .laws [data-verdict=bad]{outline-style:solid}
+  .laws .m-sticky[data-law]::before{top:auto;bottom:100%;transform:none}
+  #annKey{
+    position:fixed;left:360px;bottom:222px;display:none;gap:14px;background:#0d0c0b;border:1px solid var(--line);
+    border-radius:3px;padding:8px 12px;font-size:10.5px;color:var(--ink-2);z-index:40
+  }
+  #annKey.on{display:flex}
+  #annKey span{display:flex;align-items:center;gap:6px}
+  #annKey i{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .ann{
+    position:absolute;z-index:30;background:var(--risk);color:#fff;font-family:var(--mono);font-size:9px;
+    padding:2px 5px;border-radius:2px;letter-spacing:.04em
+  }
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <h1>Local Inventory Ads · PDP + Lead-Gen</h1>
+    <p>An <b>alternative PDP</b> — not a campaign landing page. It keeps every catalogue obligation and adds the local layer. Dial the complexity between the two stakeholder positions, preview mobile &amp; desktop, then copy the spec.</p>
+  </div>
+  <div class="grp">
+    <h2>Presets <span>start here</span></h2>
+    <div class="presets" id="presets"></div>
+  </div>
+  <div id="controls"></div>
+</aside>
+
+<main>
+  <div class="bar">
+    <span class="lbl">Arm</span>
+    <div class="seg" style="width:196px" id="armSeg">
+      <button data-v="control">Control · live PDP</button>
+      <button data-v="b">Variant B</button>
+    </div>
+    <span class="lbl">Device</span>
+    <div class="seg" style="width:186px" id="deviceSeg">
+      <button data-v="mobile">Mobile 390</button>
+      <button data-v="desktop">Desktop 1280</button>
+    </div>
+    <span class="lbl">Zoom</span>
+    <input type="range" id="zoom" min="30" max="100" step="5" style="width:96px">
+    <span class="sp"></span>
+    <button class="act" id="btnPopup">Show lead form</button>
+    <button class="act" id="btnConfirm">Confirmation</button>
+    <button class="act" id="btnLaws">UX laws</button>
+    <button class="act" id="btnCompare">Compare vs…</button>
+    <select id="cmpPick" style="width:158px;display:none"></select>
+  </div>
+  <div class="stage"><div class="stagegrid" id="stagegrid"></div><div id="toast"></div>
+    <div id="annKey">
+      <span><i style="background:#3A6B4A"></i>✓ works with the grain</span>
+      <span><i style="background:#B5352A"></i>✕ fights it</span>
+      <span><i style="background:#7A736B"></i>~ real trade-off</span>
+    </div>
+  </div>
+  <div class="dock">
+    <div class="prompt">
+      <h3>Prompt / spec output <button id="copyBtn">Copy prompt</button></h3>
+      <pre id="promptOut"></pre>
+    </div>
+    <div class="flags">
+      <h3>Best-practice check</h3>
+      <div id="flagList"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const ART = "https://img.lumas.com/showimg_dpe09_search.jpg";
+
+const GALLERIES = {
+  "berlin-mitte":{name:"LUMAS Galerie Berlin–Mitte",city:"Berlin",addr:"Hackescher Markt 2–3, 10178 Berlin",until:"19:00"},
+  "hamburg":     {name:"LUMAS Galerie Hamburg",     city:"Hamburg",addr:"Neuer Wall 43, 20354 Hamburg",until:"19:00"},
+  "muenchen":    {name:"LUMAS Galerie München",     city:"München",addr:"Theatinerstraße 7, 80333 München",until:"18:30"},
+  "wien":        {name:"LUMAS Galerie Wien",        city:"Wien",   addr:"Tuchlauben 11, 1010 Wien",until:"18:00"},
+  "zuerich":     {name:"LUMAS Galerie Zürich",      city:"Zürich", addr:"Bahnhofstrasse 46, 8001 Zürich",until:"18:30"}
+};
+
+const COPY = {
+  /* control wording, exactly as the live PDP says it today */
+  reserveLink:(g,s) => `Available to reserve in ${g.name}`,
+  neutral:   (g,s) => `Available in ${g.name}`,
+  proximity: (g,s) => `In stock at your gallery · ${g.city}`,
+  scarcity:  (g,s) => `Only ${s.stock} in ${g.city} — reserve to view`,
+  invite:    (g,s) => `See it in person in ${g.city}`
+};
+
+const MODULE_LABELS = {
+  geoEyebrow:"Geo eyebrow bar", thumbs:"Thumbnails", arTools:"AR / 3D view",
+  edition:"Edition + signature line", demand:"Demand / price-step meter",
+  sizes:"Size selector", framing:"Framing selector", selSummary:"“Your selection” summary",
+  strike:"Was-price / discount", onlinePath:"Secondary “buy online” path",
+  reassure:"Reserve reassurance line", trust:"Trustpilot badge",
+  legal:"Shipping / VAT fine print", accordions:"Detail accordions", roomHint:"“View in your space” hint"
+};
+
+const FIELD_LABELS = {
+  name:"First + last name", email:"Email", phone:"Phone",
+  slot:"Preferred day / time", size:"Size interest", message:"Message to the gallery"
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  device:"desktop",
+  zoom:65,
+  compareWith:null,
+
+  gallery:"berlin-mitte",
+  distance:2.3,
+  stock:1,
+  copyTone:"neutral",
+
+  complexity:3,                       // 1 minimal … 4 maximal
+  deskLayout:"split",                 // split | stacked
+  mobLayout:"sticky",                 // sticky | inline
+  availability:"card",                // pill | tonal | card | cardmap | banner
+  secondary:"link",                   // link | ghost | outline | none
+  showControl:false,                  // render the control arm instead of variant B
+  availState:"resolved",              // resolved | loading | none | error
+  availStrip:false,                   // duplicate as full-width strip
+  cta:"reserve-primary",              // reserve-primary | cart-primary | reserve-only | cart-only | equal
+
+  modules:{
+    geoEyebrow:true, thumbs:true, arTools:true, edition:true, demand:false,
+    sizes:true, framing:true, selSummary:false, strike:false, onlinePath:true,
+    reassure:true, trust:false, legal:true, accordions:false, roomHint:false
+  },
+
+  popupOpen:false,
+  confirmed:false,                    // show the post-submit state instead of the form
+  showLaws:false,                     // overlay the Laws-of-UX annotations
+  trigger:"cta",                      // cta | scroll | exit | delay | load
+  format:"auto",                      // auto | modal | sheet | drawer | inline
+  fields:{name:true,email:true,phone:false,slot:false,size:false,message:false},
+  consent:"checkbox",                 // none | checkbox | checkbox-legal
+  intent:"reserve",                   // reserve | consult | availability | notify
+  holdCopy:true
+};
+
+const DEFAULTS = JSON.parse(JSON.stringify(state));
+
+/* complexity cascade — what each stop turns on */
+const COMPLEXITY = {
+  1:{availability:"pill", cta:"reserve-primary", modules:{geoEyebrow:true,thumbs:false,arTools:false,edition:true,demand:false,sizes:false,framing:false,selSummary:true,strike:false,onlinePath:false,reassure:true,trust:false,legal:true,accordions:false,roomHint:false}},
+  2:{availability:"tonal", cta:"reserve-primary", modules:{geoEyebrow:true,thumbs:false,arTools:true,edition:true,demand:false,sizes:true,framing:false,selSummary:true,strike:false,onlinePath:true,reassure:true,trust:false,legal:true,accordions:false,roomHint:false}},
+  3:{availability:"card", cta:"reserve-primary", modules:{geoEyebrow:true,thumbs:true,arTools:true,edition:true,demand:false,sizes:true,framing:true,selSummary:false,strike:false,onlinePath:true,reassure:true,trust:true,legal:true,accordions:true,roomHint:true}},
+  4:{availability:"cardmap",cta:"equal", modules:{geoEyebrow:true,thumbs:true,arTools:true,edition:true,demand:true,sizes:true,framing:true,selSummary:true,strike:true,onlinePath:true,reassure:true,trust:true,legal:true,accordions:true,roomHint:true}}
+};
+
+/* ============================================================
+   CONTROL — the current live PDP, expressed as a configuration of this same
+   renderer so the comparison is honest: online-only buy rail, availability as a
+   caps underline under the price, demand meter and Trustpilot in, no geo bar,
+   no reserve route, no lead form. Nothing here is a recommendation; it is what
+   the experiment measures against.
+   ============================================================ */
+const CONTROL_PATCH = {
+  complexity:4, availability:"pill", availStrip:false, cta:"cart-only", secondary:"none",
+  copyTone:"reserveLink", deskLayout:"split", mobLayout:"inline", availState:"resolved",
+  popupOpen:false, confirmed:false,
+  modules:{geoEyebrow:false,thumbs:true,arTools:true,edition:true,demand:true,sizes:true,
+    framing:true,selSummary:false,strike:false,onlinePath:false,reassure:false,trust:true,
+    legal:true,accordions:false,roomHint:false}
+};
+
+/* ============================================================
+   PRESETS
+   ============================================================ */
+/* 1–4 are all shippable. They differ in strategy, not in rigour: same single-filled-button
+   rule, same one-region rule, same consent depth. A and B are the two stakeholder positions,
+   kept only as reference points for the debate — neither is a recommendation. */
+const PRESETS = {
+  "1 · Quiet":{
+    key:"1", note:"Nothing boxed but the choices. Availability is a line, second route is a sentence.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:1,availability:"pill",availStrip:false,
+      cta:"reserve-primary",secondary:"link",
+      trigger:"cta",format:"drawer",fields:{name:true,email:true,phone:false,slot:false,size:false,message:false},
+      consent:"checkbox-legal",intent:"reserve",copyTone:"neutral",
+      modules:{...COMPLEXITY[1].modules,sizes:true,framing:true,accordions:true,legal:true}}
+  },
+  "2 · Confident ✳ recommended":{
+    key:"2", note:"One tonal availability group above one filled CTA. Cart stays a quiet link.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:3,availability:"tonal",availStrip:false,
+      cta:"reserve-primary",secondary:"link",
+      trigger:"cta",format:"drawer",fields:{name:true,email:true,phone:true,slot:false,size:false,message:false},
+      consent:"checkbox-legal",intent:"reserve",copyTone:"proximity",
+      modules:{...COMPLEXITY[3].modules,demand:false,strike:false,trust:false,geoEyebrow:true}}
+  },
+  "3 · Assisted":{
+    key:"3", note:"For €2k+ decisions: the form is inline in the rail, with a slot to pick.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:3,availability:"tonal",availStrip:false,
+      cta:"reserve-primary",secondary:"ghost",
+      trigger:"cta",format:"inline",fields:{name:true,email:true,phone:true,slot:true,size:false,message:false},
+      consent:"checkbox-legal",intent:"consult",copyTone:"invite",
+      modules:{...COMPLEXITY[3].modules,demand:false,strike:false,trust:true}}
+  },
+  "4 · Informed":{
+    key:"4", note:"Address, hours and map expanded — for visitors who are deciding whether to travel.",
+    patch:{device:"mobile",deskLayout:"split",mobLayout:"sticky",complexity:3,availability:"cardmap",availStrip:false,
+      cta:"reserve-primary",secondary:"link",
+      trigger:"cta",format:"sheet",fields:{name:true,phone:true,email:true,slot:false,size:false,message:false},
+      consent:"checkbox-legal",intent:"reserve",copyTone:"proximity",
+      modules:{...COMPLEXITY[3].modules,demand:false,strike:false,trust:false,roomHint:false}}
+  },
+  "A · Stakeholder A (reference)":{
+    key:"A", note:"The simple position, unedited: reserve only, no online route, nothing collapsed.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:1,availability:"pill",availStrip:false,
+      cta:"reserve-only",secondary:"none",
+      trigger:"cta",format:"modal",fields:{name:true,email:true,phone:false,slot:false,size:false,message:false},
+      consent:"checkbox",intent:"reserve",copyTone:"neutral",modules:COMPLEXITY[1].modules}
+  },
+  "B · Stakeholder B (reference)":{
+    key:"B", note:"The complex position, unedited: every module, both buttons, meter and map.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:4,availability:"cardmap",availStrip:true,
+      cta:"equal",secondary:"outline",
+      trigger:"scroll",format:"modal",fields:{name:true,email:true,phone:true,slot:true,size:true,message:true},
+      consent:"checkbox",intent:"consult",copyTone:"scarcity",modules:COMPLEXITY[4].modules}
+  },
+  "E · Lead-max (pressure-tested)":{
+    key:"E", note:"Deliberately aggressive — read the flags before defending it.",
+    patch:{device:"desktop",deskLayout:"split",mobLayout:"sticky",complexity:4,availability:"banner",availStrip:true,
+      cta:"equal",secondary:"outline",
+      trigger:"load",format:"modal",fields:{name:true,email:true,phone:true,slot:true,size:true,message:true},
+      consent:"none",intent:"availability",copyTone:"scarcity",modules:COMPLEXITY[4].modules}
+  }
+};
+
+/* ============================================================
+   CONTROL SCHEMA
+   ============================================================ */
+const GROUPS = [
+  {title:"Geo context", note:"from the ad", items:[
+    {id:"gallery",type:"select",label:"Nearest gallery",options:Object.keys(GALLERIES).map(k=>[k,GALLERIES[k].name])},
+    {id:"distance",type:"range",label:"Distance",min:.3,max:12,step:.1,unit:" km"},
+    {id:"stock",type:"range",label:"Pieces in that gallery",min:1,max:6,step:1},
+    {id:"availState",type:"seg",label:"Stock-lookup state",options:[
+      ["resolved","Resolved"],["loading","Loading"],["none","No gallery"],["error","Error"]],
+      hint:"The block depends on a geo + stock lookup, so all four states ship. Loading holds the same height so the CTA never jumps; “no gallery” and “error” drop the reserve promise and hand the primary slot back to Add to cart."},
+    {id:"copyTone",type:"cards",label:"Availability wording",options:[
+      ["neutral","Neutral","“Available in LUMAS Berlin–Mitte”"],
+      ["proximity","Proximity","“In stock at your gallery · Berlin”"],
+      ["scarcity","Scarcity","“Only 1 in Berlin — reserve to view”"],
+      ["invite","Invitation","“See it in person in Berlin”"]
+    ]}
+  ]},
+
+  {title:"Complexity", note:"the actual argument", items:[
+    {id:"complexity",type:"range",label:"PDP density",min:1,max:4,step:1,
+      ticks:["Minimal","Focused","Standard","Maximal"],
+      hint:"Moves every module toggle below at once. Touch a toggle afterwards to fine-tune."},
+    {id:"availability",type:"cards",label:"Availability treatment",options:[
+      ["pill","Inline line","One line above the CTA — today’s live pattern"],
+      ["tonal","Tonal block","Grouped on bone, no stroke — one less rectangle"],
+      ["card","Bordered card","Gallery, hours, distance in a stroked block"],
+      ["cardmap","Card + map","Adds address, mini-map, directions"],
+      ["banner","Tinted banner","Status-tinted strip, loudest option"]
+    ]},
+    {id:"secondary",type:"cards",label:"Second route (online / in-store)",options:[
+      ["link","Quiet inline link","One sentence under the CTA — keeps a single button in the rail"],
+      ["ghost","Ghost underline","Reads as an action, still clearly subordinate"],
+      ["outline","Outline button","Same mass as the primary — the rail becomes a fork"],
+      ["none","Omitted","Only valid when the other route exists elsewhere on the page"]
+    ]},
+    {id:"availStrip",type:"toggle",label:"Repeat as full-width strip under the header",
+      hint:"Confirms ad-to-page scent before any scroll. Costs one strip of vertical space."},
+    {id:"cta",type:"cards",label:"CTA hierarchy",options:[
+      ["reserve-primary","Reserve primary","Add-to-cart demoted — weight set below"],
+      ["cart-primary","Cart primary","Reserve becomes the secondary route"],
+      ["reserve-only","Reserve only","No online purchase on this landing page"],
+      ["cart-only","Cart only","Add to cart is the only action — reserve hidden"],
+      ["equal","Both equal weight","Two filled buttons of the same weight"]
+    ]}
+  ]},
+
+  {title:"Layout", items:[
+    {id:"deskLayout",type:"seg",label:"Desktop",options:[["split","Image + rail"],["stacked","Centred stack"]]},
+    {id:"mobLayout",type:"seg",label:"Mobile",options:[["sticky","Sticky action bar"],["inline","Inline CTA only"]]}
+  ]},
+
+  {title:"PDP modules", note:"fine-tune", items:[
+    {id:"modules",type:"toggles",labels:MODULE_LABELS}
+  ]},
+
+  {title:"Lead-gen form", items:[
+    {id:"intent",type:"cards",label:"What we ask for",options:[
+      ["reserve","Reserve for a viewing","Highest intent, clearest value exchange"],
+      ["consult","Book a consultation","Softer, good for high price points"],
+      ["availability","Check availability","Lowest friction, weakest signal to the gallery"],
+      ["notify","Notify me","For when the piece is not in that gallery"]
+    ]},
+    {id:"trigger",type:"cards",label:"Trigger",options:[
+      ["cta","On CTA click","User asked for it. Safest."],
+      ["scroll","At 60% scroll","Interest shown, still interrupts"],
+      ["exit","Exit intent","Desktop only — no reliable mobile equivalent"],
+      ["delay","After 15s","Time ≠ intent"],
+      ["load","Immediately on load","Interstitial — hurts trust and mobile ranking"]
+    ]},
+    {id:"format",type:"cards",label:"Format",options:[
+      ["auto","Auto per device","Sheet on mobile, drawer on desktop"],
+      ["modal","Centred modal","Familiar, blocks the page"],
+      ["sheet","Bottom sheet","Thumb-reachable, native on mobile"],
+      ["drawer","Side drawer","Artwork stays visible next to the form"],
+      ["inline","Inline in the rail","No overlay at all — highest trust, lowest reach"]
+    ]},
+    {id:"fields",type:"toggles",labels:FIELD_LABELS},
+    {id:"consent",type:"seg",label:"Consent (DE/AT/CH)",options:[["none","None"],["checkbox","Checkbox"],["checkbox-legal","+ legal text"]]},
+    {id:"holdCopy",type:"toggle",label:"Show hold terms (“held 48h · no obligation”)"}
+  ]}
+];
+
+/* ============================================================
+   SIDEBAR RENDER
+   ============================================================ */
+function el(html){const t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild}
+
+function buildPresets(){
+  const wrap=document.getElementById("presets");
+  wrap.innerHTML="";
+  Object.entries(PRESETS).forEach(([label,p])=>{
+    const b=el(`<button><kbd>${p.key}</kbd><span><b>${label.replace(/^[A-E] · /,"")}</b><em>${p.note}</em></span></button>`);
+    b.onclick=()=>{applyPatch(p.patch);updateAll();};
+    wrap.appendChild(b);
+  });
+}
+
+function buildControls(){
+  const root=document.getElementById("controls");
+  root.innerHTML="";
+  GROUPS.forEach(g=>{
+    const grp=el(`<div class="grp"><h2>${g.title}${g.note?`<span>${g.note}</span>`:""}</h2></div>`);
+    g.items.forEach(item=>grp.appendChild(buildControl(item)));
+    root.appendChild(grp);
+  });
+}
+
+function buildControl(c){
+  const box=el(`<div class="ctl" data-for="${c.id}"></div>`);
+  const val=state[c.id];
+
+  if(c.type==="range"){
+    const shown=c.ticks?c.ticks[val-1]:val+(c.unit||"");
+    box.appendChild(el(`<label><b>${c.label}</b><var>${shown}</var></label>`));
+    const r=el(`<input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${val}">`);
+    r.oninput=e=>{
+      state[c.id]=parseFloat(e.target.value);
+      if(c.id==="complexity")applyComplexity(state.complexity);
+      updateAll();
+    };
+    box.appendChild(r);
+  }
+
+  if(c.type==="select"){
+    box.appendChild(el(`<label><b>${c.label}</b></label>`));
+    const s=el(`<select>${c.options.map(([v,t])=>`<option value="${v}"${v===val?" selected":""}>${t}</option>`).join("")}</select>`);
+    s.onchange=e=>{state[c.id]=e.target.value;updateAll();};
+    box.appendChild(s);
+  }
+
+  if(c.type==="seg"){
+    box.appendChild(el(`<label><b>${c.label}</b></label>`));
+    const s=el(`<div class="seg">${c.options.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===val}">${t}</button>`).join("")}</div>`);
+    s.querySelectorAll("button").forEach(b=>b.onclick=()=>{state[c.id]=b.dataset.v;updateAll();});
+    box.appendChild(s);
+  }
+
+  if(c.type==="cards"){
+    box.appendChild(el(`<label><b>${c.label}</b></label>`));
+    const s=el(`<div class="cards">${c.options.map(([v,t,d])=>
+      `<button data-v="${v}" aria-pressed="${v===val}"><strong>${t}</strong><em>${d}</em></button>`).join("")}</div>`);
+    s.querySelectorAll("button").forEach(b=>b.onclick=()=>{state[c.id]=b.dataset.v;updateAll();});
+    box.appendChild(s);
+  }
+
+  if(c.type==="toggle"){
+    const t=el(`<span class="tg" data-on="${!!val}"><i></i>${c.label}</span>`);
+    t.onclick=()=>{state[c.id]=!state[c.id];updateAll();};
+    box.appendChild(t);
+  }
+
+  if(c.type==="toggles"){
+    const s=el(`<div class="toggles"></div>`);
+    Object.entries(c.labels).forEach(([k,lab])=>{
+      const t=el(`<span class="tg" data-on="${!!state[c.id][k]}"><i></i>${lab}</span>`);
+      t.onclick=()=>{state[c.id][k]=!state[c.id][k];updateAll();};
+      s.appendChild(t);
+    });
+    box.appendChild(s);
+  }
+
+  if(c.hint)box.appendChild(el(`<p class="hint">${c.hint}</p>`));
+  return box;
+}
+
+function applyComplexity(n){
+  const c=COMPLEXITY[n];
+  state.availability=c.availability;
+  state.cta=c.cta;
+  state.modules={...c.modules};
+}
+function applyPatch(p){
+  Object.entries(p).forEach(([k,v])=>{
+    state[k]=(v&&typeof v==="object"&&!Array.isArray(v))?{...state[k],...v}:v;
+  });
+}
+
+/* ============================================================
+   PREVIEW HELPERS
+   ============================================================ */
+/* Brand mark — the production LUMAS-Logo-Black.svg, verbatim geometry, fill switched to
+   currentColor so it inherits the surface it sits on. Wordmark + corner bracket are one path set. */
+const LOGO=`<svg viewBox="0 0 160 30" role="img" aria-label="LUMAS"><path d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg>`;
+
+/* Header icon set — 1.6px outline, 22px box, matching the production nav */
+const I={
+  whatsapp:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5a9.5 9.5 0 1 0-8.2-4.7L2.6 21.4l4.7-1.2c1.4.8 3 1.3 4.7 1.3Z"/><path d="M9.1 8.4c.3-.6.6-.6 1-.6h.5c.2 0 .4 0 .6.5l.7 1.7c.1.3 0 .5-.1.7l-.4.5c-.2.2-.3.4-.1.7a7 7 0 0 0 3.1 2.7c.3.1.5.1.7-.1l.6-.7c.2-.2.4-.2.6-.1l1.7.8c.3.1.4.3.4.6a2 2 0 0 1-1.4 1.9c-.8.3-2.5.2-5.1-2-2-1.8-2.9-3.7-3-4.6-.1-1 .2-1.7.5-2.1Z" fill="currentColor" stroke="none"/></svg>`,
+  phone:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 3.5h2.2l1.7 4-2 1.4a12.4 12.4 0 0 0 6.9 6.9l1.4-2 4 1.7v2.2c0 1.2-1 2.1-2.2 2C10.6 19.9 4.1 13.4 3.4 5.7c-.1-1.2.8-2.2 2-2.2Z"/></svg>`,
+  heart:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-9.7a4.3 4.3 0 0 1 7.6-2.8 4.3 4.3 0 0 1 7.6 2.8c0 5.1-7.6 9.7-7.6 9.7Z"/></svg>`,
+  account:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.4c.6-3.6 3.6-6 7.2-6s6.6 2.4 7.2 6"/></svg>`,
+  cart:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h2.1l2.4 9.9h9.1l2.3-7.2H7"/><circle cx="10" cy="19.4" r="1.4"/><circle cx="17.4" cy="19.4" r="1.4"/></svg>`,
+  mag:`<svg class="mag" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.6"/><path d="m15.6 15.6 4 4"/></svg>`,
+  chev:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg>`
+};
+
+const PIN=`<svg class="pin" viewBox="0 0 24 24" fill="none" stroke="#3A6B4A" stroke-width="1.5"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>`;
+const PIN_MUTED=`<svg class="pin" viewBox="0 0 24 24" fill="none" stroke="#908C87" stroke-width="1.5"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>`;
+const CAL=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>`;
+const MAP=`<svg width="104" height="66" viewBox="0 0 104 66"><rect width="104" height="66" fill="#EAE2D8"/><g stroke="#DCD2C4" stroke-width="6"><path d="M-4 22h112M-4 50h112M26 -4v74M70 -4v74"/></g><g stroke="#CFC4B4" stroke-width="2"><path d="M-4 36h112M48 -4v74"/></g><path d="M0 66 104 0" stroke="#DCD2C4" stroke-width="7"/><circle cx="52" cy="33" r="6" fill="#3A6B4A"/><circle cx="52" cy="33" r="12" fill="#3A6B4A" opacity=".16"/></svg>`;
+
+/* Annotation helper. verdict: good = works with the grain, bad = fights it,
+   info = a real trade-off with no free answer. Glyph carries the meaning too, so the
+   overlay still reads without colour. */
+function ann(verdict,text){
+  const glyph={good:"✓",bad:"✕",info:"~"}[verdict];
+  return ` data-verdict="${verdict}" data-glyph="${glyph}" data-law="${text}"`;
+}
+
+function g(){return GALLERIES[state.gallery]}
+function availText(s){return COPY[s.copyTone](GALLERIES[s.gallery],s)}
+function fieldCount(s){return Object.values(s.fields).filter(Boolean).length}
+function resolvedFormat(s){
+  if(s.format!=="auto")return s.format;
+  return s.device==="mobile"?"sheet":"drawer";
+}
+function intentCopy(s){
+  const gg=GALLERIES[s.gallery];
+  return({
+    reserve:{h:"Reserve this piece for your visit",cta:"Reserve for gallery visit",
+      lead:`We hold <b>Ibis in Volo</b> at <b>${gg.name}</b> for 48 hours. No payment, no obligation.`},
+    consult:{h:"Talk it through with our gallery team",cta:"Book a consultation",
+      lead:`A consultant at <b>${gg.name}</b> will get back to you within one working day.`},
+    availability:{h:`Check availability in ${gg.city}`,cta:"Check availability",
+      lead:`We’ll confirm what is physically hanging at <b>${gg.name}</b> right now.`},
+    notify:{h:"Get notified when it arrives",cta:"Notify me",
+      lead:`We’ll write to you as soon as this edition is available at <b>${gg.name}</b>.`}
+  })[s.intent];
+}
+
+/* ============================================================
+   PDP MARKUP
+   ============================================================ */
+function availabilityBlock(s,compact){
+  const gg=GALLERIES[s.gallery];
+  const txt=availText(s);
+  const dist=`~${s.distance.toFixed(1)} km`;
+  const tonal=s.availability==="tonal"?" tonal":"";
+
+  /* Non-resolved states reserve the same vertical box so the CTA never jumps once the
+     stock lookup returns. Never guess a gallery: say what is unknown. */
+  if(s.availState==="loading")
+    return `<div class="av-card${tonal} av-state" aria-busy="true"${ann("good","Reserved height · the CTA cannot jump when the stock lookup returns")}>
+      <div class="row"><span class="sk sk-pin"></span><div class="body">
+        <span class="sk sk-l1"></span><span class="sk sk-l2"></span></div></div></div>`;
+
+  if(s.availState==="none")
+    return `<div class="av-card${tonal} av-state">
+      <div class="row">${PIN_MUTED}<div class="body">
+        <p class="name">Not in a gallery near you</p>
+        <p class="sub"><span>This edition is held in 3 other galleries · delivery in 4–9 days</span></p>
+      </div><span class="more">See galleries</span></div></div>`;
+
+  if(s.availState==="error")
+    return `<div class="av-card${tonal} av-state">
+      <div class="row">${PIN_MUTED}<div class="body">
+        <p class="name">Gallery stock unavailable</p>
+        <p class="sub"><span>We couldn’t check gallery availability just now.</span></p>
+      </div><span class="more">Try again</span></div></div>`;
+  const scarce=s.stock<=2?`<span class="scarce">Only ${s.stock} in ${gg.city}</span><span class="dot"></span>`:"";
+
+  if(s.availability==="pill")
+    return `<div class="av-pill"${ann("info","Proximity · next to the CTA, but forms no group of its own")}>
+      <i></i><a>${txt}</a></div>`;
+
+  if(s.availability==="banner")
+    return `<div class="av-banner"${ann("bad","Selective Attention · tinted strips read as ads and get skipped")}><span style="color:var(--l-success);font-size:15px;line-height:1">●</span>
+      <span><b>${txt}</b><br><span style="color:var(--l-charcoal-700)">Open until ${gg.until} · ${dist} away</span></span></div>`;
+
+  const map=s.availability==="cardmap"?`<div class="map"><div class="maprow">${MAP}
+      <address>${gg.addr}<br><span style="color:var(--l-charcoal-500)">Open until ${gg.until} · ${dist}</span></address>
+      <button class="p-iconbtn">Directions</button></div></div>`:"";
+
+  /* Tonal: the same grouping without a border. V2 asks for tonal separation before a
+     stroke, and it keeps the rail from becoming a stack of equal-weight rectangles. */
+  const surface=s.availability==="tonal"?" tonal":"";
+
+  return `<div class="av-card${surface}"${ann("good",surface
+    ?"Common Region · grouped by surface, without adding a stroke to the rail"
+    :"Common Region + Chunking · gallery, hours, distance as one bounded group")}>
+    <div class="row">${PIN}
+      <div class="body">
+        <p class="name">${gg.name}</p>
+        <p class="sub">${scarce}<span class="open"><i></i>Open until ${gg.until}</span><span class="dot"></span><span>${dist}</span></p>
+      </div>
+      ${compact?"":`<span class="more" data-track="gallery_availability_expand">Details &amp; map</span>`}
+    </div>${map}</div>`;
+}
+
+/* One filled button per rail. The alternative route is rendered at the weight set by
+   state.secondary: a quiet inline link (default), a ghost underline, or a full outline
+   button — the last one is what makes the rail read as a fork, so it is flagged. */
+function secondaryRoute(s,label,icon){
+  if(s.secondary==="none")return "";
+  if(s.secondary==="outline")
+    return `<div class="p-or"><b>or buy online</b></div>
+      <button class="p-btn secondary"${ann("bad","Von Restorff · equal mass to the primary, so neither reads as the default")}>${icon||""}${label}</button>`;
+  if(s.secondary==="ghost")
+    return `<p class="p-alt"><button class="p-btn ghost">${label}</button></p>`;
+  return `<p class="p-alt quiet">Prefer it delivered? <a>${label}</a></p>`;
+}
+
+function ctaBlock(s){
+  const ic=intentCopy(s);
+  const solo=s.cta==="equal"
+    ? ann("bad","Von Restorff · two identical buttons cancel each other’s emphasis")
+    : ann("good","Von Restorff + Serial Position · one distinct action, last in the sequence");
+  const reserve=`<!-- ABLYFT-GOAL: Reserve-Start [ASSUMPTION] -->
+    <button class="p-btn primary" data-track="reserve_cta_click"${solo}>${CAL}${ic.cta}</button>`;
+  const cart=`<!-- ABLYFT-GOAL: ATC -->
+    <button class="p-btn primary" data-track="add_to_cart"${s.cta==="equal"
+      ?ann("bad","Hick’s Law · a second primary adds a decision the page never framed")
+      :(s.cta==="cart-only"?ann("good","Von Restorff · single action, nothing competing"):"")}>Add to cart</button>`;
+
+  /* No verified local stock → no reserve promise. The online route takes the primary
+     slot and the gallery route degrades to a question, never to a broken promise. */
+  if(s.availState!=="resolved"&&s.cta!=="cart-only"&&s.cta!=="cart-primary"){
+    const ask=s.availState==="none"
+      ? `<p class="p-alt quiet">Want it in a gallery? <a>Ask about a gallery viewing</a></p>`
+      : ``;
+    return cart+(s.modules.legal?`<p class="p-legal">Delivery in 4–9 days · €6.90 shipping</p>`:"")+ask;
+  }
+  /* Two items, not three: the third is noise next to a full-width button. */
+  const reassure=s.modules.reassure&&s.holdCopy
+    ? `<p class="p-reassure"${ann("good","Goal-Gradient · shows how little stands between here and done")}><span>Held 48 hours</span><span>·</span><span>No obligation to buy</span></p>`:"";
+  const legal=s.modules.legal?`<p class="p-legal">Delivery in 4–9 days · €6.90 shipping</p>`:"";
+
+  if(s.cta==="reserve-only")   return reserve+reassure;
+  /* cart-only: a single add-to-cart and nothing else — no reserve, no hold reassurance,
+     no secondary escape hatch. The clean online-commerce control arm. */
+  if(s.cta==="cart-only")      return cart+legal;
+  if(s.cta==="equal")          return reserve+reassure+`<div style="height:10px"></div>`+cart+legal;
+  if(s.cta==="cart-primary")   return cart+legal+(s.modules.onlinePath?secondaryRoute(s,ic.cta,CAL):"");
+  return reserve+reassure+(s.modules.onlinePath?secondaryRoute(s,"Add to cart")+legal:"");
+}
+
+function demandBlock(s){
+  if(!s.modules.demand)return "";
+  return `<div class="p-demand"${ann("bad","Speculative urgency · a claim about a future price, competing with real availability")}>
+    <p>In high demand — <b>only 4 pieces</b> left at this price</p>
+    <div class="p-track"><i></i><u></u></div>
+    <div class="p-steps"><b>Discovery</b><b>Popular</b><b>High demand</b><b>Last prints</b></div>
+    <p class="note">Approaching the 75% threshold — the next edition-wide price increase is near.</p></div>`;
+}
+
+function railHTML(s){
+  const m=s.modules;
+  let h="";
+  h+=`<h1 class="p-artist">Daria Petrilli</h1>`;
+  h+=`<p class="p-title p-eyebrow">Ibis in Volo</p>`;
+  if(m.edition)h+=`<p class="p-meta">Limited edition of 150 · Signed · <a>More details</a></p>`;
+  h+=demandBlock(s);
+  h+=`<p class="p-price">€ 1.990 <small>VAT incl.</small></p>`;
+  if(m.strike)h+=`<p class="p-strike"><s>€ 2.490</s> Save €500 · gallery price</p>`;
+  else h+=`<div style="height:14px"></div>`;
+
+  if(m.sizes){
+    h+=`<span class="p-fieldlab">Size in cm</span>
+      <div class="p-sizes"${ann("info","Hick’s Law vs Tesler’s Law · a real choice that cannot be deleted, only moved")}>${["60 × 48","100 × 80","140 × 112","200 × 160"]
+      .map((x,i)=>`<button aria-pressed="${i===0}">${x}</button>`).join("")}</div>`;
+  }
+  if(m.framing){
+    h+=`<span class="p-fieldlab">Select mounting / framing</span>
+      <select class="p-select"><option>Mounted under acrylic glass</option></select>`;
+  }
+  if(m.selSummary&&!m.sizes){
+    h+=`<div class="p-selrow"><span class="k">Your selection</span><span class="v">60 × 48 cm · Mounted under acrylic glass</span><a>Change</a></div><div style="height:14px"></div>`;
+  }
+  h+=availabilityBlock(s,false);
+  if(resolvedFormat(s)==="inline"&&s.popupOpen)h+=formHTML(s,"inline");
+  h+=ctaBlock(s);
+  if(m.trust){
+    h+=`<div class="p-trust"><b>4.7</b><span class="p-stars">★★★★★</span><span>5K reviews on Trustpilot</span></div>`;
+  }
+  if(m.accordions){
+    h+=`<div style="height:10px"></div>`+["About the artwork","Framing &amp; materials","Gallery pickup &amp; delivery"]
+      .map(t=>`<div class="p-acc">${t}<span>+</span></div>`).join("");
+  }
+  return h;
+}
+
+function stageHTML(s,mobile){
+  const m=s.modules;
+  const tools=m.arTools?`<div class="p-tools"><button>▣ View in your space</button><button>3D view</button></div>`:"";
+  return `<div class="p-stagebox ${mobile?"mob":""}">
+      <img class="p-art ${mobile?"plain":"framed"}" src="${ART}" alt="Ibis in Volo"
+        style="max-height:${mobile?"330px":"520px"}" onerror="this.outerHTML='<div class=&quot;p-artfallback&quot;></div>'">
+      <div class="p-topicons"><span>⤢</span><span>♡</span></div>${tools}
+    </div>${m.thumbs?`<div class="p-thumbs">${[1,2,3,4,5].map((x,i)=>`<i class="${i===0?"on":""}"></i>`).join("")}</div>`:""}
+    ${m.roomHint&&!mobile?`<p style="font-size:11.5px;color:var(--l-charcoal-500);margin:12px 0 0">Shown in a Berlin apartment · scale accurate to 60 × 48 cm</p>`:""}`;
+}
+
+function formHTML(s,mode){
+  const ic=intentCopy(s), gg=GALLERIES[s.gallery];
+  const fields=Object.entries(s.fields).filter(([,v])=>v).map(([k])=>k);
+  const two=fields.length>=4?"two":"";
+  const inp=(k,i)=>{
+    if(k==="slot")return `<div class="p-f" style="grid-column:1/-1"><label>${FIELD_LABELS[k]}</label><div class="p-slots">
+      <b class="on">Today 17:00</b><b>Tomorrow 11:00</b><b>Sat 15:00</b></div></div>`;
+    if(k==="message")return `<div class="p-f" style="grid-column:1/-1"><label>${FIELD_LABELS[k]}</label>
+      <div class="inp" style="height:64px">Anything we should prepare?</div></div>`;
+    return `<div class="p-f"><label>${FIELD_LABELS[k]}</label><div class="inp${i===0?" focus":""}">${
+      k==="email"?"you@example.com":k==="phone"?"+49 …":k==="size"?"60 × 48 cm":"Your name"}</div></div>`;
+  };
+  const fieldsAnn=ann(fields.length>=5?"bad":fields.length===4?"info":"good",
+    `Miller’s Law · ${fields.length} field${fields.length===1?"":"s"}`);
+  const consent=s.consent==="none"?"":
+    `<div class="p-consent"><i></i><span>${s.consent==="checkbox-legal"
+      ?`Yes, ${gg.name} may contact me about this artwork. I have read the <u>privacy notice</u>; consent can be withdrawn at any time.`
+      :`Yes, the gallery may contact me about this artwork.`}</span></div>`;
+
+  const inner=s.confirmed?`
+    ${mode==="sheet"?`<div class="grab"></div>`:""}
+    ${mode!=="inline"?`<button class="x">✕</button>`:""}
+    <div class="p-confirm"${ann("good","Peak-End Rule · the last screen is what the visit is remembered by")}>
+      <span class="tick">✓</span>
+      <h4>Held for you until Thursday, ${gg.until}</h4>
+      <p class="lead">Ask for <b>Anna</b> at the desk — she has <b>Ibis in Volo</b>, 60 × 48 cm, put aside.
+        We’ve sent the details to your email. No payment, cancel any time.</p>
+      <div class="av-card" style="margin:0 0 16px">
+        <div class="row">${PIN}<div class="body"><p class="name">${gg.name}</p>
+          <p class="sub"><span>${gg.addr}</span></p></div></div>
+        <div class="map"><div class="maprow">${MAP}
+          <address>Open until ${gg.until} today<br><span style="color:var(--l-charcoal-500)">~${s.distance.toFixed(1)} km from you</span></address>
+          <button class="p-iconbtn">Directions</button></div></div></div>
+      <button class="p-btn secondary" data-track="add_to_calendar">Add to calendar</button>
+      <p class="foot">Changed your mind? Release the hold in one tap from the email.</p>
+    </div>`
+  :`
+    ${mode==="sheet"?`<div class="grab"></div>`:""}
+    ${mode!=="inline"?`<button class="x">✕</button>`:""}
+    <div class="p-gallerychip"><i></i>${gg.name} · ~${s.distance.toFixed(1)} km</div>
+    <h4>${ic.h}</h4>
+    <p class="lead">${ic.lead}</p>
+    <div class="p-fields ${two}"${fieldsAnn}>${fields.map(inp).join("")}</div>
+    ${consent}
+    <!-- ABLYFT-GOAL: Lead-Gallery [ASSUMPTION] -->
+    <button class="p-btn primary" data-track="generate_lead">${ic.cta}</button>
+    ${s.holdCopy?`<p class="foot">The gallery replies within one working day · no payment now</p>`:""}`;
+
+  if(mode==="inline")return `<div class="p-modal inline">${inner}</div>`;
+  const pos=mode==="sheet"?"bottom":mode==="drawer"?"right":"center";
+  return `<div class="p-scrim ${pos}"><div class="p-modal">${inner}</div></div>`;
+}
+
+function headerHTML(s){
+  const gg=GALLERIES[s.gallery], mob=s.device==="mobile";
+  const NAV=["Artworks","Top 20","Artfinder","Inspiration","Galleries","About us"];
+  const search=`<form class="p-search" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search" aria-label="Search">${I.mag}</form>`;
+
+  /* Mobile: burger + wordmark + account icons, search on its own row.
+     Desktop: wordmark, nav, search, icons, language. Same markup, one class apart. */
+  return `<div class="p-hdr${mob?" mob":""}">
+      ${mob?`<span class="p-burger" aria-label="Menu"><i></i><i></i><i></i></span>`:""}
+      <a class="p-logo" aria-label="LUMAS home">${LOGO}</a>
+      ${mob?"":`<nav class="p-nav">${NAV.map(x=>`<a>${x}</a>`).join("")}</nav><span class="sp"></span>${search}`}
+      <span class="icons">
+        <a aria-label="WhatsApp">${I.whatsapp}</a>
+        ${mob?"":`<a aria-label="Call us">${I.phone}</a>`}
+        <a aria-label="Wishlist">${I.heart}</a>
+        <a aria-label="Account">${I.account}</a>
+        <a aria-label="Cart">${I.cart}</a>
+        ${mob?"":`<span class="p-lang">EN${I.chev}</span>`}
+      </span>
+      ${mob?`<span class="p-hairline"></span>${search}`:""}</div>
+    ${s.modules.geoEyebrow?`<div class="p-geo${mob?" mob":""}"${ann(s.availStrip?"bad":"good",s.availStrip?"Serial Position · the first slot spent twice — this and the strip say the same thing":"Serial Position · first thing seen, and it is the ad’s promise")}>${mob
+      ?`<span style="opacity:1;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:10px">${gg.city}</span><span>~${s.distance.toFixed(1)} km · open until ${gg.until}</span>`
+      :`Your gallery <span>${gg.name} · ~${s.distance.toFixed(1)} km · open until ${gg.until}</span>`}</div>`:""}
+    ${s.availStrip?`<div class="av-strip${mob?" mob":""}"><i></i><span>${availText(s)}</span>${mob?"":`<a>Details &amp; opening hours</a>`}</div>`:""}`;
+}
+
+function renderDesktop(s){
+  const body=s.deskLayout==="split"
+    ? `<div class="p-split"><div>${stageHTML(s,false)}</div><div class="p-rail">${railHTML(s)}</div></div>`
+    : `<div class="p-stack">${stageHTML(s,false)}<div style="max-width:560px;margin:34px auto 0" class="p-rail">${railHTML(s)}</div></div>`;
+  const pop=s.popupOpen&&resolvedFormat(s)!=="inline"?formHTML(s,resolvedFormat(s)):"";
+  return `<div class="device desk"><div class="scroll">${headerHTML(s)}${body}</div>${pop}</div>`;
+}
+
+function renderMobile(s){
+  const m=s.modules, ic=intentCopy(s);
+  let h=headerHTML(s)+`<div class="p-mobwrap">`+stageHTML(s,true);
+  h+=`<div class="m-pad">`;
+  if(m.thumbs)h+=``;
+  h+=`<h1 class="m-artist">Daria Petrilli</h1><p class="p-title p-eyebrow">Ibis in Volo</p>`;
+  if(m.edition)h+=`<p class="p-meta" style="margin-bottom:12px">Limited edition of 150 · Signed · <a>More details</a></p>`;
+  h+=demandBlock(s);
+  h+=`<p class="m-price">€ 1.990 <small>VAT incl.</small></p>`;
+  if(m.strike)h+=`<p class="p-strike"><s>€ 2.490</s> gallery price</p>`;
+  if(m.sizes)h+=`<div style="height:12px"></div><span class="p-fieldlab">Size in cm</span>
+    <div class="p-sizes"${ann("info","Hick’s Law vs Tesler’s Law · a real choice that cannot be deleted, only moved")}>${["60 × 48","100 × 80","140 × 112"].map((x,i)=>`<button aria-pressed="${i===0}">${x}</button>`).join("")}</div>`;
+  if(m.framing)h+=`<span class="p-fieldlab">Framing</span><select class="p-select"><option>Mounted under acrylic glass</option></select>`;
+  if(m.selSummary&&!m.sizes)h+=`<div class="p-selrow"><span class="k">Selection</span><span class="v">60 × 48 cm</span><a>Change</a></div><div style="height:14px"></div>`;
+  h+=availabilityBlock(s,true);
+  if(resolvedFormat(s)==="inline"&&s.popupOpen)h+=formHTML(s,"inline");
+  if(s.mobLayout==="inline")h+=ctaBlock(s);
+  else{
+    /* primary lives in the sticky bar — keep only the reassurance + the online escape hatch inline.
+       cart-only suppresses both: the hold copy is reserve language, and a second "Add to cart"
+       here would duplicate the sticky primary. */
+    if(m.reassure&&s.holdCopy&&s.cta!=="cart-only")h+=`<p class="p-reassure" style="justify-content:flex-start"><span>Held 48h</span><span>·</span><span>No obligation</span><span>·</span><span>Consultant available</span></p>`;
+    if(m.onlinePath&&s.cta!=="reserve-only"&&s.cta!=="cart-only")h+=`<div class="p-or"><b>or buy online</b></div><button class="p-btn secondary">Add to cart</button>`;
+  }
+  if(m.trust)h+=`<div class="p-trust"><b>4.7</b><span class="p-stars">★★★★★</span><span>5K reviews</span></div>`;
+  if(m.accordions)h+=["About the artwork","Framing &amp; materials","Gallery pickup"]
+    .map(t=>`<div class="p-acc">${t}<span>+</span></div>`).join("");
+  if(m.legal)h+=`<p class="p-legal">Shipping in 4–9 days · VAT incl. · €6.90 shipping · 2024/2025 · DPE09</p>`;
+  h+=`</div></div>`;
+
+  const sticky=s.mobLayout==="sticky"?`<div class="m-sticky"${ann("good","Fitts’s Law · large target inside the thumb arc, always reachable")}>
+      <div class="info"><b>€ 1.990</b><em><i></i>${s.stock<=2?`Only ${s.stock} in ${GALLERIES[s.gallery].city}`:`In stock in ${GALLERIES[s.gallery].city}`}</em></div>
+      <button class="p-btn primary">${s.cta==="cart-only"?"Add to cart":ic.cta}</button></div>`:"";
+  const pop=s.popupOpen&&resolvedFormat(s)!=="inline"?formHTML(s,resolvedFormat(s)):"";
+  return `<div class="device mob"><div class="scroll" style="padding-bottom:${s.mobLayout==="sticky"?"92px":"0"}">${h}</div>${sticky}${pop}</div>`;
+}
+
+function renderFrame(s){return s.device==="mobile"?renderMobile(s):renderDesktop(s)}
+
+/* ============================================================
+   STAGE
+   ============================================================ */
+/* the control arm as a state object, derived from variant B so device/zoom stay aligned */
+function controlState(){
+  const c=JSON.parse(JSON.stringify(state));
+  applyTo(c,CONTROL_PATCH);
+  c.device=state.device;
+  return c;
+}
+
+function renderStage(){
+  const grid=document.getElementById("stagegrid");
+  const z=state.zoom/100;
+  const frames=state.showControl
+    ? [["Control · current live PDP",controlState()]]
+    : [["Variant B · current configuration",state]];
+  if(state.compareWith){
+    let cmp;
+    if(state.compareWith==="__control__"){cmp=controlState();cmp.popupOpen=false;cmp.confirmed=false;}
+    else{
+      cmp=JSON.parse(JSON.stringify(state));
+      applyTo(cmp,PRESETS[state.compareWith].patch);
+      cmp.device=state.device;cmp.popupOpen=state.popupOpen;
+    }
+    frames.push([state.compareWith==="__control__"?"Control · current live PDP":state.compareWith,cmp]);
+  }
+  grid.style.justifyContent=frames.length>1?"flex-start":"center";
+  grid.innerHTML=frames.map(([cap,s])=>
+    `<figure class="framewrap" style="margin:0"><figcaption><i></i>${cap} · ${s.device}</figcaption>
+     <div class="${state.showLaws?"laws":""}" style="zoom:${z}">${renderFrame(s)}</div></figure>`).join("");
+  grid.querySelectorAll(".p-scrim,.p-modal .x").forEach(n=>n.addEventListener("click",e=>{
+    if(e.target===n){state.popupOpen=false;updateAll();}
+  }));
+}
+function applyTo(obj,p){
+  Object.entries(p).forEach(([k,v])=>{
+    obj[k]=(v&&typeof v==="object"&&!Array.isArray(v))?{...obj[k],...v}:v;
+  });
+}
+
+/* ============================================================
+   BEST-PRACTICE FLAGS
+   ============================================================ */
+function flags(){
+  const f=[],s=state,n=fieldCount(s),fmt=resolvedFormat(s);
+
+  if(s.trigger==="load")f.push(["risk","Popup on load","An interstitial before any content is seen. Google treats intrusive interstitials as a mobile-usability problem, and it burns the trust the local ad just bought.","Paradox of the Active User"]);
+  if(s.trigger==="delay")f.push(["warn","Time-based trigger","15s of dwell is not intent. Prefer the CTA click, or scroll depth as a fallback."]);
+  if(s.trigger==="exit"&&s.device==="mobile")f.push(["risk","Exit intent on mobile","There is no reliable mobile exit-intent signal — this will either never fire or fire on scroll-up."]);
+  if(s.trigger==="cta")f.push(["ok","User-initiated form","The form answers an action the visitor took. Highest completion, no interruption cost.","Zeigarnik Effect"]);
+
+  if(s.cta==="equal")f.push(["risk","Two equal primary CTAs","Reserve and Add-to-cart at the same weight force a decision the page hasn’t framed, and two identical buttons cancel each other’s emphasis. Local-ad traffic came for the gallery — make one the default and demote the other.","Hick’s Law · Von Restorff"]);
+  if(s.cta==="cart-primary")f.push(["warn","Cart primary on a local landing page","The ad promised local availability; the page’s loudest action is online checkout. Expect the lead volume the gallery wants to drop.","Von Restorff"]);
+  if(s.cta==="reserve-only")f.push(["risk","No online path on a PDP","On a campaign page this would be focus. On a product page it breaks the contract: organic, PLP and newsletter visitors land here too, and a PDP with no way to buy is a dead end for all of them. Keep add-to-cart, even demoted to a text link.","Tesler’s Law · Jakob’s Law"]);
+  if(s.cta==="cart-only"){
+    f.push(["ok","Clean online control arm","One action, no competing save or reserve. This is the baseline that tells you what Reserve actually costs in online orders — without it you can only rank Reserve treatments, never price them.","Occam’s Razor"]);
+    f.push(["warn","The ad promise goes unanswered","Local inventory ads sell “available near you”. A page with no reserve route answers a question the visitor didn’t ask and drops the gallery lead entirely. Strongest as a measurement arm, weakest as a default for this traffic."]);
+    if(s.modules.sizes||s.modules.selSummary)f.push(["ok","Size is stated before the cart","Add-to-cart is safe here because the size decision is visible on the page."]);
+    else f.push(["risk","Cart with no size decision","The button commits the visitor to a size they were never shown. On multi-size editions this converts into returns, not revenue — state the size and price on the button, or add a size step.","Tesler’s Law"]);
+  }
+
+  if(n===0)f.push(["risk","No fields","Nothing to hand the gallery."]);
+  if(n>=5)f.push(["risk",`${n} form fields`,"Every extra field costs completions, and past ~4 you are asking for more than one comfortable load of working memory. Name + one contact channel is enough for a gallery to follow up; ask the rest on the phone.","Miller’s Law · Choice Overload"]);
+  else if(n===4)f.push(["warn","4 form fields","At the edge of what still reads as a quick task. Check each one is something the gallery genuinely cannot ask later.","Miller’s Law"]);
+  else f.push(["ok",`${n} form fields`,"Lean enough for a mobile ad click.","Miller’s Law"]);
+  if(s.fields.phone&&!s.fields.email)f.push(["warn","Phone only","Phone is the highest-friction field and the gallery loses the email follow-up channel. Consider both, phone optional.","Postel’s Law"]);
+  if(n>=4)f.push(["warn","Long form in one block","Chunk it — contact details, then visit details — or split it into two steps with the progress visible. A finish line in sight pulls people through the second half.","Chunking · Goal-Gradient Effect"]);
+
+  if(s.consent==="none")f.push(["risk","No consent checkbox","Leads from DE/AT/CH go to a gallery for direct follow-up — that needs documented opt-in under GDPR. Also record source, timestamp and consent text with the lead."]);
+  if(s.consent==="checkbox")f.push(["warn","Bare checkbox","Name the gallery as recipient and link the privacy notice, or the consent is thin."]);
+
+  if(s.availability==="pill"&&!s.availStrip)f.push(["warn","Availability is a single line","The ad’s whole promise is “it’s near you”. An unbounded line under the price forms no group of its own and is easy to skip — this is the cheapest thing on the page to make louder.","Law of Common Region"]);
+  if(s.availability==="tonal")f.push(["ok","Availability as a tonal group","Grouped without adding another stroke to the rail — the shift in surface is enough to read as one unit, which is exactly what V2 asks for before reaching for a border.","Common Region · Chunking"]);
+  if(s.availability==="card"||s.availability==="cardmap")f.push(["ok","Availability as a bounded card","Gallery, hours and distance read as one fact instead of three, and sitting directly above the CTA is what ties the two together.","Common Region · Proximity · Chunking"]);
+  if(s.availability==="banner")f.push(["warn","Tinted banner treatment","A full-width tinted strip has the shape of an ad, so trained eyes skip it. A bordered card inside the buy rail gets read; a coloured band above it often does not.","Selective Attention"]);
+  if(s.availability==="banner"&&s.modules.demand)f.push(["warn","Two competing tinted blocks","A status-tinted banner plus the demand meter fight for the same attention above the CTA.","Von Restorff"]);
+  if(s.availability==="cardmap"&&s.device==="mobile")f.push(["warn","Map inside the mobile rail","Collapse the map behind “Details” on mobile — it pushes the CTA below the fold.","Fitts’s Law"]);
+  if(s.availStrip&&s.modules.geoEyebrow)f.push(["warn","Geo bar + availability strip","Two stacked bars saying the same thing. Keep one — the first position is the most remembered, don’t spend it twice.","Serial Position Effect"]);
+
+  if(s.modules.demand)f.push(["risk","Demand / price-step meter","“Only 4 left at this price” is a claim about a future price change, not verifiable stock. In DE this is the kind of urgency claim that draws UWG complaints — keep urgency to real gallery inventory (“only 1 in Berlin”)."]);
+  if(s.copyTone==="scarcity"&&s.stock>2)f.push(["warn","Scarcity wording with comfortable stock",`Copy says “only ${s.stock}” — at ${s.stock} pieces the pressure reads as manufactured.`]);
+
+  const heavy=Object.values(s.modules).filter(Boolean).length;
+  if(heavy>=12)f.push(["warn",`${heavy} modules above the fold`,"Density itself is not the problem on a PDP — this page owes a shopper the full product story. The problem is ordering: everything between the artwork and the CTA is processed before acting. Push edition detail, materials and delivery into accordions below rather than deleting them.","Cognitive Load · Serial Position"]);
+  if(heavy<=7)f.push(["warn","Thin for a product page","On a campaign landing page this would be discipline; on a PDP it is missing product information. Anyone arriving from search or a PLP still needs sizes, materials, framing and delivery — collapse them, don’t drop them.","Tesler’s Law"]);
+  if(s.complexity===1&&!s.modules.sizes)f.push(["warn","Size choice removed, not resolved","Stripping the selector doesn’t delete the decision, it moves it — to the gallery staff, or to a step after the lead. Decide deliberately who absorbs it, and make sure the lead carries a size interest if the page won’t ask.","Tesler’s Law"]);
+  if(s.device==="mobile"&&s.mobLayout==="inline"&&heavy>=9)f.push(["warn","Deep page, no sticky bar","With this much content the CTA scrolls away, so the target only exists after a hunt for it.","Fitts’s Law"]);
+  if(s.device==="mobile"&&s.mobLayout==="sticky")f.push(["ok","Sticky action bar","A large target permanently inside the thumb arc, and it keeps the unfinished action in view.","Fitts’s Law · Zeigarnik Effect"]);
+  if(s.device==="mobile"&&fmt==="modal")f.push(["warn","Centred modal on mobile","A bottom sheet keeps the submit button in the thumb zone and matches what every native app has already taught this visitor.","Fitts’s Law · Jakob’s Law"]);
+  if(s.device==="desktop"&&s.deskLayout==="stacked")f.push(["warn","Centred stack on desktop","Every art-commerce PDP this visitor has used puts the image left and the buy rail right. Deviating costs orientation and buys nothing here.","Jakob’s Law"]);
+  if(fmt==="drawer"&&s.device==="desktop")f.push(["ok","Side drawer","The artwork stays visible while the form is filled — good for high-consideration purchases.","Selective Attention"]);
+  if(fmt==="inline")f.push(["ok","Inline form","No overlay to dismiss, fully accessible, indexable. Lower reach than an overlay — pair it with the sticky CTA.","Jakob’s Law"]);
+
+  if(!s.holdCopy)f.push(["warn","No hold terms shown","“Held 48h · no obligation · no payment” is what makes a reservation feel safe. Without it, Reserve reads like Buy.","Goal-Gradient Effect"]);
+  /* ---- rail composition: counted off the markup, not inferred from the toggles ----
+     A rail reads as overloaded when stroked rectangles stack. Budget: at most two
+     bordered regions above the CTA (the size row and one availability block), and
+     exactly one filled button. */
+  const rail=railHTML(s);
+  const boxes=(rail.match(/class="(av-card(?! tonal)|p-sizes|p-select|p-demand)/g)||[]).length;
+  const filled=(rail.match(/p-btn primary/g)||[]).length;
+  if(boxes>=4)f.push(["risk",`${boxes} stroked boxes stacked in the rail`,"Sizes, framing, availability, demand and the buttons all carry the same 1px stroke, so nothing is dominant and the eye has to parse each one. Drop the availability block to a tonal surface, or make the framing selector inherit the size row instead of standing alone.","Law of Prägnanz · Von Restorff"]);
+  else if(boxes===3)f.push(["warn",`${boxes} stroked boxes in the rail`,"At the edge. One of them should become tonal or borderless — the availability block is the cheapest to convert.","Law of Prägnanz"]);
+  else f.push(["ok",`${boxes} stroked boxes in the rail`,"Enough contrast left for the primary action to dominate.","Law of Prägnanz"]);
+  if(filled>1)f.push(["risk",`${filled} filled buttons in the rail`,"Two solid charcoal buttons is not a hierarchy, it is a fork. One filled button per rail; everything else is outline, ghost or link.","Von Restorff"]);
+  if(s.secondary==="outline"&&s.cta!=="equal")f.push(["warn","Outline button as the second route","A full-width outline button has nearly the mass of the filled one, so “demoted” only holds on paper. A sentence-case link keeps the rail single-actioned and still gets found by people looking for it.","Von Restorff · Selective Attention"]);
+  const caps=(rail.match(/p-eyebrow|p-fieldlab|p-uilabel|p-btn primary|p-btn secondary|p-or/g)||[]).length;
+  if(caps>=6)f.push(["warn",`${caps} all-caps clusters in the rail`,"Uppercase is the emphasis of last resort and it stops working when everything has it. Keep it for the eyebrow, the field labels and the primary button; make “details & map” and the second route sentence case.","Von Restorff"]);
+
+  /* ---- experiment validity: this ships as Variant B against the live PDP ---- */
+  if(s.showControl)f.push(["ok","Control arm — production as-is","Nothing to build here. It exists so the comparison is honest and so reviewers can see what the variant is actually beating. Editing it would make the test measure two changes at once."]);
+  f.push(["risk","Flicker will eat the result","This variant rewrites the buy rail. Applied client-side, visitors see the control rail repaint into the variant — that alone moves bounce and CLS, in the variant only. Render it server-side, or make an anti-flicker snippet a launch blocker."]);
+  f.push(["risk","Bucket after resolving stock, not on the ad click","Eligibility is “near a gallery that holds this piece”. If the control arm includes visitors who were never eligible, the arms hold different populations and any lift is a segment artefact. Resolve gallery + stock first, then assign — and log the excluded sessions."]);
+  f.push(["warn","One variant at a time on this traffic","A €1.990 product does not produce enough leads to split four ways. Test B against control, keep the other options as the next round, and pick the primary metric with enough volume to actually reach significance."]);
+  if(s.availState!=="resolved")f.push(["ok","Fallback arm renders without the promise","With no verified local stock the reserve primary is withdrawn and Add to cart takes the slot — so the page never promises a hold it cannot honour. These sessions belong outside the test population."]);
+  if(fieldCount(s)>=4)f.push(["warn","Form length will confound the read","A longer form changes completion independently of the local-availability idea. Keep the field set identical to whatever you intend to ship, or you will not know which change moved the metric."]);
+
+  /* ---- obligations that come from this being a PDP, not a campaign page ---- */
+  f.push(["risk","Decide the URL strategy before the design","One PDP per gallery is ~30 near-identical pages per artwork competing with the master PDP. Prefer a single indexable PDP URL with the availability block personalised per region (cached by region, server-rendered); if separate URLs are unavoidable, canonicalise them to the master and keep them out of the sitemap."]);
+  f.push(["risk","Design the no-gallery fallback","A PDP receives traffic from everywhere, so the geo case is the exception, not the rule. Specify what this block shows when the visitor is far from every gallery, denies location, or the nearest gallery has no stock — a nearest-gallery list, or “check availability” — and make sure it never renders an empty or wrong city."]);
+  f.push(["warn","Feed and page must agree","Local inventory ads are disapproved when the landing page’s price or in-store availability contradicts the local inventory feed. Verify current Merchant Center requirements for the local storefront, and drive the availability text from the same stock source as the feed — not from a separate CMS field."]);
+  f.push(["warn","Keep the availability text server-rendered","If the gallery name is injected client-side after a geo lookup, crawlers see an empty slot and the first paint shows the wrong city. Render it on the server from the IP/region hint, then refine — and add Product + Offer structured data with the store-level availability."]);
+  f.push(["warn","Measure it as a PDP variant, not a lead page","Because this replaces the PDP for a segment, gallery leads alone can’t tell you whether it won. Pair leads with online orders and revenue per session against the control PDP, or a lead lift that simply cannibalised checkouts will read as a success."]);
+
+  f.push(["ok","Design the confirmation, not just the form","The final screen is what the whole errand is remembered by, and it is what actually gets someone through the door: hold deadline, who to ask for, address, directions, calendar. Toggle “Confirmation” to see it.","Peak-End Rule"]);
+  f.push(["ok","Always ship with the form","Dialog role + focus trap, Esc to close, 44px targets, tel/email input types, phone accepted in any format, submit acknowledged inside ~400ms with an optimistic state, one visible error per field, and the gallery + consent text stored with every lead.","Postel’s Law · Doherty Threshold"]);
+  return f;
+}
+
+function renderFlags(){
+  document.getElementById("flagList").innerHTML=flags().map(([lvl,t,d,law])=>
+    `<div class="flag ${lvl}"><i></i><span><b>${t}</b> — ${d}${
+      law?` <a class="law" href="https://lawsofux.com/" target="_blank" rel="noreferrer">${law}</a>`:""}</span></div>`).join("");
+}
+
+/* ============================================================
+   PROMPT
+   ============================================================ */
+function promptText(){
+  const s=state,gg=g(),fmt=resolvedFormat(s),fields=Object.entries(s.fields).filter(([,v])=>v).map(([k])=>FIELD_LABELS[k].toLowerCase());
+  const on=Object.entries(s.modules).filter(([,v])=>v).map(([k])=>MODULE_LABELS[k]);
+  const off=Object.entries(s.modules).filter(([,v])=>!v).map(([k])=>MODULE_LABELS[k]);
+  const density=["minimal","focused","standard","maximal"][s.complexity-1];
+
+  const avail={
+    pill:"a single inline availability line directly above the CTA (today’s live pattern)",
+    card:"a bordered availability card above the CTA holding gallery name, opening hours and distance",
+    cardmap:"an expanded availability card above the CTA with gallery name, hours, distance, street address, a static mini-map and a directions link",
+    banner:"a status-tinted availability banner above the CTA"
+  }[s.availability];
+
+  const cta={
+    "reserve-primary":`“${intentCopy(s).cta}” as the single filled primary CTA, with the online route demoted to ${
+      {link:"a quiet sentence-case link under the button (“Prefer it delivered? Add to cart”) — no second box in the rail",
+       ghost:"a centred ghost button with a 1px underline",
+       outline:"a full-width outline button under an “or buy online” divider",
+       none:"nothing on this page"}[s.secondary]}`,
+    "cart-primary":`Add to cart as the filled primary CTA and “${intentCopy(s).cta}” as the outline secondary`,
+    "reserve-only":`“${intentCopy(s).cta}” as the only action — no online purchase path on this page`,
+    "cart-only":`Add to cart as the only action — no reserve route, no secondary save, nothing competing for the click`,
+    "equal":`“${intentCopy(s).cta}” and Add to cart as two equal-weight filled buttons`
+  }[s.cta];
+
+  const trig={cta:"when the visitor taps the primary CTA",scroll:"at 60% scroll depth",
+    exit:"on exit intent",delay:"15 seconds after load",load:"immediately on page load"}[s.trigger];
+  const form={modal:"a centred modal",sheet:"a bottom sheet",drawer:"a right-hand side drawer",inline:"an inline block in the buy rail (no overlay)"}[fmt];
+  const consent={none:"no consent checkbox",checkbox:"a consent checkbox naming the gallery as recipient",
+    "checkbox-legal":"a consent checkbox naming the gallery as recipient plus a linked privacy notice and a withdrawal note"}[s.consent];
+
+  const risks=flags().filter(f=>f[0]!=="ok").map(f=>`  - ${f[1]}: ${f[2]}`);
+
+  const arm=s.showControl?"CONTROL":"VARIANT B";
+  const events=["view_item","select_size","select_framing","gallery_availability_view",
+    "gallery_availability_expand","reserve_cta_click","reserve_form_open","generate_lead",
+    "add_to_calendar","gallery_directions_click","add_to_cart","begin_checkout"];
+
+  return `PROTO-2026-001 · A/B test spec — ${arm} arm, ${s.device}
+
+HYPOTHESIS (strict form)
+  Segment:   PDP visitors whose resolved location is within ~10 km of a LUMAS gallery that
+             physically holds this artwork. Identical segment in both arms.
+  Change:    Replace the online-only buy rail with a local-availability group plus a
+             "${intentCopy(s).cta}" primary action and a gallery lead form.
+  Metric:    Gallery-attributed leads per session (primary), with revenue per session as a
+             guardrail. [ASSUMPTION — confirm primary against the ABlyft 16-goal library]
+  Mechanism: The local promise is confirmed at the decision point, and a free 48-hour hold is
+             a lower-commitment next step than a €1.990 online purchase.
+
+CONTROL ARM (unchanged production PDP — do not rebuild it, route traffic to it as-is)
+  Online-only rail: price, size row, framing select, "Available to reserve in <gallery>" as a
+  caps underline under the price, Add to cart as the only action, demand/price-step meter,
+  Trustpilot badge, shipping and VAT fine print. No geo bar, no reserve route, no lead form.
+
+VARIANT B (build this)
+  Everything below. The only intended differences from control are the local-availability
+  group, the reserve primary + lead form, and the module/emphasis changes listed under
+  Include/Omit. Anything else that differs is a confound — check it before launch.
+
+AUDIENCE & TARGETING
+  - Eligibility must be evaluated identically for both arms: resolve gallery + stock first,
+    then bucket. Never bucket on the ad click, or the arms hold different populations.
+  - Exclude sessions where the stock lookup fails or returns no nearby gallery — those see the
+    fallback in both arms and only add noise. Log them; don't test them.
+  - Assign at visitor level and keep it sticky across sessions, since a €1.990 decision spans
+    several visits and a visitor who flips arms invalidates both.
+  - Same URL in both arms, no redirect: a URL change breaks the comparison and the canonical.
+
+INSTRUMENTATION (stubs are wired in this prototype — console-logged via track())
+  ${events.join(", ")}.
+  ABlyft goals: primary Lead-Gallery [ASSUMPTION]; secondary Reserve-Start [ASSUMPTION], ATC,
+  Checkout-Start. Confirm every name against the 16-goal library before wiring — do not invent.
+
+METRICS
+  Primary:    gallery leads / session (generate_lead).
+  Secondary:  reserve_cta_click / session, reserve form completion rate, add_to_cart / session.
+  Guardrail:  revenue per session and online order rate — a lead lift that merely cannibalised
+              checkouts is a loss. Also watch PDP bounce and Core Web Vitals (CLS on the
+              availability block, LCP on the artwork).
+  Read:       do not call it before the guardrail has the volume to move. Leads are cheap to
+              generate and expensive to misread on a €2k product.
+
+QA BEFORE LAUNCH
+  - No flicker: the availability block and the CTA must not repaint after first paint. If the
+    variant is applied client-side, an anti-flicker snippet is mandatory; server-side is better.
+  - Availability text agrees with the local inventory feed in every arm (same stock source).
+  - All four lookup states verified: resolved, loading, no gallery, error.
+  - Keyboard + screen reader pass on the form; Esc closes; focus returns to the CTA.
+  - Consent text, gallery ID, ad source and timestamp captured on every lead.
+
+────────────────────────────────────────────────────────────────────────────
+
+DESIGN SPEC — ${arm}, ${s.device}${s.showControl?"\n\n(Control is production as-is. The spec below describes the variant configuration currently set in the tool; switch to Variant B to read it.)":""}
+
+Build the ${s.device} view of the LUMAS alternative PDP for local inventory ads.
+
+This is an alternative product detail page, NOT a campaign landing page. It is the catalogue PDP for this artwork, served in a local-availability variant to visitors near a gallery that physically holds the piece. Consequences that constrain every decision below: it must be indexable and server-rendered, it must carry the full product information a PDP owes a shopper, it must still work for visitors who arrive from search, a PLP, a newsletter or a shared link rather than the ad, and it must degrade sensibly when there is no nearby gallery or geo consent. Nothing here may be justified by "it’s just a campaign page".
+
+Context: a visitor near ${gg.name} lands here — from the local inventory ad, or organically. The page confirms local availability ("${availText(s)}"), then hands a qualified lead to that gallery without losing the online sale. Assume ${gg.city}, ${s.distance.toFixed(1)} km away, ${s.stock} piece${s.stock>1?"s":""} physically in that gallery. Artwork: Daria Petrilli, "Ibis in Volo", €1.990, limited edition of 150 (DPE09).
+
+Density: ${density}. ${s.device==="desktop"
+  ? (s.deskLayout==="split"?"Two-column layout — artwork on an ivory wall left, buy rail right (~480px)." : "Single centred column — artwork on top, buy rail beneath at ~560px.")
+  : (s.mobLayout==="sticky"?"Image-first single column with a sticky bottom action bar carrying price + primary CTA." : "Image-first single column with the CTA inline in flow, no sticky bar.")}
+
+Local availability: ${avail}.${s.availStrip?" Repeat it as a full-width strip directly under the header so the ad-to-page match is visible before any scroll.":""}${s.modules.geoEyebrow?" Keep the charcoal geo eyebrow bar naming the visitor’s gallery.":""}
+
+Actions: ${cta}.${s.holdCopy?" Under the primary CTA show the hold terms: held 48h · no obligation to buy · consultant available.":""}
+
+Include: ${on.join(", ")||"nothing beyond the core"}.
+Omit: ${off.join(", ")||"nothing"}.
+
+Lead capture: open ${form} ${trig}. Headline "${intentCopy(s).h}", submit label "${intentCopy(s).cta}". Fields: ${fields.join(", ")||"none yet"}. Include ${consent}. Store gallery ID, ad source/campaign, consent text and timestamp with the lead and route it to ${gg.name}. Ship it as a proper dialog: role="dialog" + aria-modal, focus moved in and trapped, Esc and backdrop close, 44px minimum targets, type="email"/type="tel" inputs, inline field-level errors.
+
+Visual system: LUMAS V2 — charcoal #1C1A18 on ivory #FAF6F1, bone borders #E2D8CC, Utile Display for the artist name and price, Archivo for everything else, all-caps only on eyebrows and button labels, base-4 spacing, no shadows except the gallery-lift under the artwork. Status green #3A6B4A only for the functional availability signal, never decoratively.
+
+Confirmation state (do not skip it — it is the screen that actually gets someone through the door): confirm the hold deadline in words ("held for you until Thursday, ${gg.until}"), name the person to ask for at the desk, restate artwork + size, repeat the address with a directions link and an add-to-calendar action, and give a one-tap way to release the hold. Send the same content by email.
+
+${risks.length?`Known trade-offs in this configuration:\n${risks.join("\n")}`:"No best-practice flags on this configuration."}
+
+Design rationale — the laws behind the above (lawsofux.com):
+${[...new Set(flags().map(f=>f[3]).filter(Boolean).flatMap(l=>l.split(" · ")))].map(l=>`  - ${l}`).join("\n")}`;
+}
+
+/* ============================================================
+   WIRE-UP
+   ============================================================ */
+function syncChrome(){
+  document.querySelectorAll("#armSeg button").forEach(b=>
+    b.setAttribute("aria-pressed",(b.dataset.v==="control")===state.showControl));
+  /* the control arm is not editable — it is what it is on production today */
+  document.querySelectorAll("#controls .grp").forEach(gp=>gp.classList.toggle("armlocked",state.showControl));
+  document.getElementById("btnPopup").disabled=state.showControl;
+  document.getElementById("btnConfirm").disabled=state.showControl;
+  document.querySelectorAll("#deviceSeg button").forEach(b=>
+    b.setAttribute("aria-pressed",b.dataset.v===state.device));
+  document.getElementById("zoom").value=state.zoom;
+  document.getElementById("btnPopup").setAttribute("aria-pressed",state.popupOpen);
+  document.getElementById("btnPopup").textContent=state.popupOpen?"Hide lead form":"Show lead form";
+  document.getElementById("btnConfirm").setAttribute("aria-pressed",state.confirmed);
+  document.getElementById("btnLaws").setAttribute("aria-pressed",state.showLaws);
+  document.getElementById("annKey").classList.toggle("on",state.showLaws);
+  document.getElementById("btnCompare").setAttribute("aria-pressed",!!state.compareWith);
+  document.getElementById("cmpPick").style.display=state.compareWith?"block":"none";
+}
+
+function updateAll(){
+  buildControls();
+  syncChrome();
+  renderStage();
+  renderFlags();
+  document.getElementById("promptOut").textContent=promptText();
+}
+
+/* ---- event stub layer: every call site is named after the GA4 event it becomes ----
+   In the prototype this logs; at handoff each line maps 1:1 to a dataLayer push. */
+function track(eventName,params){
+  const payload={event:eventName,arm:state.showControl?"control":"variant_b",
+    item_id:"DPE09",item_name:"Ibis in Volo",gallery:state.gallery,...params};
+  console.log("[track]",payload);
+  const t=document.getElementById("toast");
+  t.textContent=`track("${eventName}") · arm: ${payload.arm}`;
+  t.classList.add("on");clearTimeout(track._t);
+  track._t=setTimeout(()=>t.classList.remove("on"),1800);
+}
+document.getElementById("stagegrid").addEventListener("click",e=>{
+  const n=e.target.closest("[data-track]");
+  if(n)track(n.dataset.track);
+});
+
+document.querySelectorAll("#armSeg button").forEach(b=>b.onclick=()=>{
+  state.showControl=b.dataset.v==="control";
+  if(state.showControl){state.popupOpen=false;state.confirmed=false;}
+  history.replaceState(null,"",`?v=${state.showControl?"control":"b"}`);
+  updateAll();
+});
+
+document.querySelectorAll("#deviceSeg button").forEach(b=>b.onclick=()=>{
+  state.device=b.dataset.v;
+  const mob=state.device==="mobile";
+  state.zoom=state.compareWith?(mob?70:45):(mob?90:65);
+  updateAll();
+});
+document.getElementById("zoom").oninput=e=>{state.zoom=+e.target.value;renderStage();};
+document.getElementById("btnPopup").onclick=()=>{
+  state.popupOpen=!state.popupOpen;
+  if(!state.popupOpen)state.confirmed=false;
+  updateAll();
+};
+document.getElementById("btnConfirm").onclick=()=>{
+  state.confirmed=!state.confirmed;
+  if(state.confirmed)state.popupOpen=true;   /* the confirmation lives in the same surface */
+  updateAll();
+};
+document.getElementById("btnLaws").onclick=()=>{state.showLaws=!state.showLaws;updateAll();};
+const pick=document.getElementById("cmpPick");
+pick.innerHTML=`<option value="__control__">Control · current live PDP</option>`
+  +Object.keys(PRESETS).map(k=>`<option value="${k}">${k}</option>`).join("");
+document.getElementById("btnCompare").onclick=()=>{
+  state.compareWith=state.compareWith?null:pick.value;
+  state.zoom=state.compareWith
+    ? (state.device==="mobile"?70:45)
+    : (state.device==="mobile"?90:65);
+  updateAll();
+};
+pick.onchange=()=>{state.compareWith=pick.value;updateAll();};
+document.getElementById("copyBtn").onclick=async e=>{
+  await navigator.clipboard.writeText(promptText());
+  const b=e.target,t=b.textContent;b.textContent="Copied!";setTimeout(()=>b.textContent=t,1200);
+};
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&state.popupOpen){state.popupOpen=false;updateAll();}
+  const k=e.key.toUpperCase();
+  const hit=Object.entries(PRESETS).find(([,p])=>p.key===k);
+  if(hit&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){applyPatch(hit[1].patch);updateAll();}
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key.toLowerCase()==="v"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){
+    state.showControl=!state.showControl;
+    if(state.showControl){state.popupOpen=false;state.confirmed=false;}
+    history.replaceState(null,"",`?v=${state.showControl?"control":"b"}`);
+    updateAll();
+  }
+});
+
+buildPresets();
+applyPatch(PRESETS["2 · Confident ✳ recommended"].patch);
+/* ?v=control | ?v=b — stakeholder review is a link, not a folder */
+state.showControl=new URLSearchParams(location.search).get("v")==="control";
+state.compareWith=null;
+updateAll();
+</script>
+</body>
+</html>
