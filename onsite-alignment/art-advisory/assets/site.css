@@ -317,6 +317,17 @@ form.enquiry { display:grid; gap:1.6rem; }
 .modal__success { text-align:center; padding:1.6rem 0 0.8rem; }
 .modal__success .btn { margin-top:2rem; }
 
+/* ── FAQ accordion (native <details>) ───────────────────── */
+.faq { max-width:840px; margin-inline:auto; }
+.faq__q { border-top:1px solid var(--border-subtle); }
+.faq__q:last-of-type { border-bottom:1px solid var(--border-subtle); }
+.faq__q summary { list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:2.4rem; padding:2.2rem 0; font-size:1.7rem; font-weight:500; color:var(--text-primary); }
+.faq__q summary::-webkit-details-marker { display:none; }
+.faq__q summary::after { content:"+"; font-family:var(--font-body); font-size:2.4rem; font-weight:300; line-height:1; color:var(--text-secondary); transition:color 160ms var(--ease-out); }
+.faq__q[open] summary::after { content:"–"; }
+.faq__q summary:hover { color:var(--text-secondary); }
+.faq__a { padding:0 0 2.4rem; color:var(--text-secondary); line-height:1.7; max-width:66ch; }
+
 /* ── Reveal-on-scroll (gated behind .js so no-JS shows all) ─ */
 .js .reveal { opacity:0; transform:translateY(16px); transition:opacity 620ms var(--ease-out),transform 620ms var(--ease-out); }
 .js .reveal.in { opacity:1; transform:none; }
