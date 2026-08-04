@@ -165,6 +165,10 @@
         <button data-m="sway" aria-pressed="false">Sway</button>
         <button data-m="tour" aria-pressed="false">Tour</button>
         <button data-m="snap" aria-pressed="false">Snap</button>
+        <button data-m="current" aria-pressed="false">Current</button>
+        <button data-m="tide" aria-pressed="false">Tide</button>
+        <button data-m="orbit" aria-pressed="false">Orbit</button>
+        <button data-m="follow" aria-pressed="false">Follow</button>
       </div>
     </div>
     <span class="modebar-desc"></span>
@@ -210,7 +214,11 @@
     reise:  "Click anywhere to glide there · click a work to view",
     sway:   "The view leans toward your cursor and springs back. A gentle peek around · scroll wheel zooms",
     tour:   "A guided walk. The view moves from work to work on its own · hover or click a work",
-    snap:   "Drag to move; on release the view settles onto the nearest work · scroll wheel zooms"
+    snap:   "Drag to move; on release the view settles onto the nearest work · scroll wheel zooms",
+    current:"Drift on a slow, wandering current. Hands-free and always alive · hover a work, click to view",
+    tide:   "The view breathes slowly in and out, like a tide. Sit back · hover a work, click to view",
+    orbit:  "The view drifts in a slow, endless circle. Cinematic and hands-free · hover a work, click to view",
+    follow: "The nearest work eases to the centre as you point. The art comes to you · click to view"
   };
   function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0);}
 
@@ -387,6 +395,29 @@
         cam.x+=(nx-swayOff.x); cam.y+=(ny-swayOff.y); swayOff.x=nx; swayOff.y=ny;
         if(Math.abs(tx-swayOff.x)>0.4||Math.abs(ty-swayOff.y)>0.4) active=true;
       }
+      // CURRENT mode: hands-free drift on an organic, wandering flow (meandering direction)
+      if(mouseMode==='current' && !down && !tween && !moving){
+        flowT+=0.006;
+        const ang = flowT*0.6 + 1.6*Math.sin(flowT*0.37) + 1.0*Math.cos(flowT*0.19);
+        cam.x+=Math.cos(ang)*0.85/cam.s; cam.y+=Math.sin(ang)*0.85/cam.s; active=true;
+      }
+      // TIDE mode: slow breathing sway back and forth, axis rotating gently
+      if(mouseMode==='tide' && !down && !tween && !moving){
+        tideT+=0.008; tideAng+=0.0009;
+        const v=Math.cos(tideT)*1.7;
+        cam.x+=Math.cos(tideAng)*v/cam.s; cam.y+=Math.sin(tideAng)*v/cam.s; active=true;
+      }
+      // ORBIT mode: slow endless circle
+      if(mouseMode==='orbit' && !down && !tween && !moving){
+        orbitT+=0.004;
+        const tx=orbitCx+Math.cos(orbitT)*orbitR, ty=orbitCy+Math.sin(orbitT)*orbitR;
+        cam.x+=(tx-cam.x)*0.1; cam.y+=(ty-cam.y)*0.1; active=true;
+      }
+      // FOLLOW mode: the work you point at glides to the centre and settles (the art comes to you)
+      if(mouseMode==='follow' && followTarget && !down && !tween && !moving){
+        const dx=followTarget.wx-cam.x, dy=followTarget.wy-cam.y;
+        if(Math.abs(dx)>0.5||Math.abs(dy)>0.5){ cam.x+=dx*0.06; cam.y+=dy*0.06; active=true; }
+      }
       // GLIDE mode: mouse position steers, with a calm dead-zone in the centre
       if(mouseMode==='glide' && mouse.inside && !down && !tween && !moving && drift<=0.001){
         const nx=(mouse.x-W/2)/(W/2), ny=(mouse.y-H/2)/(H/2), mag=Math.hypot(nx,ny), dz=0.14;
@@ -457,6 +488,12 @@
     const mouse={x:0,y:0,inside:false};
     let down=false, last={x:0,y:0}, moved=0, downT=0, hovered=null, panning=false;
     let swayOff={x:0,y:0}, tourSeq=null, tourIdx=-1, tourNext=0;
+    let flowT=0, tideT=0, tideAng=0.5, orbitT=0, orbitR=0, orbitCx=0, orbitCy=0, followTarget=null;
+    function nearestScreen(mx,my){
+      let best=null,bd=Infinity;
+      for(const a of arts){ if(a.dim<0.5)continue; const sx=toScreenX(a.wx),sy=toScreenY(a.wy),d=(sx-mx)**2+(sy-my)**2; if(d<bd){bd=d;best=a;} }
+      return best;
+    }
     function tourStep(){
       if(!tourSeq) tourSeq=arts.filter((_,i)=>i%7===0);
       tourIdx=(tourIdx+1)%tourSeq.length; const a=tourSeq[tourIdx];
@@ -496,7 +533,11 @@
         cam.x-=dx/cam.s; cam.y-=dy/cam.s; vel.x=-dx/cam.s; vel.y=-dy/cam.s;
         last={x:e.clientX,y:e.clientY};
         requestRender();
-      } else { updateHover(); if(mouseMode==='glide') requestRender(); }
+      } else {
+        updateHover();
+        if(mouseMode==='follow') followTarget = hovered || nearestScreen(mouse.x,mouse.y);
+        if(mouseMode==='glide'||mouseMode==='follow') requestRender();
+      }
     });
     window.addEventListener('pointerup',e=>{
       if(!down) return;
@@ -570,8 +611,9 @@
       mouseMode=m;
       root.querySelectorAll('.seg [data-m]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.m===m?'true':'false'));
       descEl.textContent=DESC[m];
-      vel.x=vel.y=0; drift=0; swayOff.x=swayOff.y=0;
+      vel.x=vel.y=0; drift=0; swayOff.x=swayOff.y=0; followTarget=null;
       if(m==='tour'){ tween=null; tourNext=1; }
+      if(m==='orbit'){ orbitR=320/cam.s; orbitCx=cam.x-orbitR; orbitCy=cam.y; orbitT=0; }
       setCursor(); requestRender();
     }
     root.querySelectorAll('.seg [data-m]').forEach(b=>b.addEventListener('click',()=>applyMode(b.dataset.m)));
