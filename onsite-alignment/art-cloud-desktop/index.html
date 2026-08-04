@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
@@ -162,35 +162,35 @@
 
   <label class="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <input type="search" placeholder="Kunstwerke oder Künstler suchen…" autocomplete="off" spellcheck="false">
-    <button class="clear" aria-label="Suche löschen" type="button">×</button>
+    <input type="search" placeholder="Search artworks or artists…" autocomplete="off" spellcheck="false">
+    <button class="clear" aria-label="Clear search" type="button">×</button>
   </label>
   <div class="matchpill"></div>
 
-  <button class="close-btn" aria-label="Art Cloud verlassen">
+  <button class="close-btn" aria-label="Leave the Art Cloud">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
 
-  <div class="hint">Fahre über ein Werk, klicke zum Ansehen</div>
+  <div class="hint">Hover a work, click to view</div>
 
   <div class="tools">
-    <button class="tool zoom zoom-in" aria-label="Vergrößern">+</button>
-    <button class="tool zoom zoom-out" aria-label="Verkleinern">−</button>
-    <button class="tool recenter-btn" aria-label="Zurück zur Übersicht">
+    <button class="tool zoom zoom-in" aria-label="Zoom in">+</button>
+    <button class="tool zoom zoom-out" aria-label="Zoom out">−</button>
+    <button class="tool recenter-btn" aria-label="Back to overview">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4.5"/></svg>
     </button>
   </div>
 
   <div class="modebar">
     <div class="modebar-row">
-      <span class="modebar-label">Maussteuerung</span>
-      <div class="seg" role="group" aria-label="Maussteuerung">
-        <button data-m="drag" aria-pressed="true">Ziehen</button>
-        <button data-m="glide" aria-pressed="false">Gleiten</button>
-        <button data-m="scroll" aria-pressed="false">Scrollen</button>
-        <button data-m="schwung" aria-pressed="false">Schwung</button>
+      <span class="modebar-label">Mouse control</span>
+      <div class="seg" role="group" aria-label="Mouse control">
+        <button data-m="drag" aria-pressed="true">Drag</button>
+        <button data-m="glide" aria-pressed="false">Glide</button>
+        <button data-m="scroll" aria-pressed="false">Scroll</button>
+        <button data-m="schwung" aria-pressed="false">Momentum</button>
         <button data-m="ambient" aria-pressed="false">Ambient</button>
-        <button data-m="reise" aria-pressed="false">Reise</button>
+        <button data-m="reise" aria-pressed="false">Travel</button>
       </div>
     </div>
     <span class="modebar-desc"></span>
@@ -198,31 +198,31 @@
 
   <div class="scrim"></div>
 
-  <div class="sheet" role="dialog" aria-label="Kunstwerk">
+  <div class="sheet" role="dialog" aria-label="Artwork">
     <div class="sheet-hero"><img alt=""></div>
-    <a class="sheet-caption" target="_blank" rel="noopener" aria-label="Kunstwerk ansehen">
+    <a class="sheet-caption" target="_blank" rel="noopener" aria-label="View artwork">
       <span class="sheet-artist"></span>
       <span class="sheet-title"></span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>
     </a>
-    <button class="btn-similar similar-btn-sheet">Mehr in diesem Stil ansehen</button>
+    <button class="btn-similar similar-btn-sheet">More in this style</button>
   </div>
 
   <div class="detail-top">
-    <button class="btn-ghost like-btn" aria-label="Zur Wunschliste hinzufügen">
+    <button class="btn-ghost like-btn" aria-label="Add to wishlist">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
     </button>
-    <button class="detail-close" aria-label="Detail schließen">
+    <button class="detail-close" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
 
   <div class="enter">
     <div class="ec"><canvas class="enter-canvas"></canvas></div>
-    <span class="eyebrow">Immersives visuelles Universum</span>
+    <span class="eyebrow">An immersive visual universe</span>
     <h1>Art Cloud</h1>
-    <p>Tausende Editionen, frei im Raum. Wandere hindurch und finde das eine Werk, das dich anhält.</p>
-    <button class="enter-btn">Art Cloud betreten</button>
+    <p>Thousands of editions, free in space. Wander through and find the one work that stops you.</p>
+    <button class="enter-btn">Enter the Art Cloud</button>
   </div>
 </div>
 
@@ -235,12 +235,12 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const DESC = {
-    drag:   "Klicken und ziehen zum Bewegen · Mausrad zoomt",
-    glide:  "Die Maus führt sanft. Zum Rand für mehr Tempo, die Mitte ruht · Mausrad zoomt",
-    scroll: "Scrollen bewegt die Fläche · ⌘ / Strg + Scrollen zoomt",
-    schwung:"Ziehen und loslassen. Die Fläche gleitet mit Schwung weiter aus · Mausrad zoomt",
-    ambient:"Lehn dich zurück. Die Sammlung treibt langsam vorbei · über ein Werk fahren, klicken zum Ansehen",
-    reise:  "Klicke irgendwohin, um sanft dorthin zu reisen · klicke ein Werk zum Ansehen"
+    drag:   "Click and drag to move · scroll wheel zooms",
+    glide:  "The mouse gently steers. Toward the edges for speed, the centre rests · scroll wheel zooms",
+    scroll: "Scrolling moves the plane · ⌘ / Ctrl + scroll zooms",
+    schwung:"Drag and let go. The plane keeps gliding with momentum · scroll wheel zooms",
+    ambient:"Sit back. The collection drifts slowly past · hover a work, click to view",
+    reise:  "Click anywhere to glide there · click a work to view"
   };
   function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0);}
 
@@ -409,7 +409,7 @@
         if(mag>dz){ const k=Math.min((mag-dz)/(0.92-dz),1), sp=6.2*Math.pow(k,1.7);
           cam.x+=(nx/mag)*sp/cam.s; cam.y+=(ny/mag)*sp/cam.s; active=true; }
       }
-      // momentum — quick stop for Ziehen/Scrollen, long floaty glide for Schwung
+      // momentum: quick stop for Drag/Scroll, long floaty glide for Momentum mode
       if(!down && (Math.abs(vel.x)>0.02||Math.abs(vel.y)>0.02)){
         const dcy = (mouseMode==='schwung')?0.975:0.9;
         cam.x+=vel.x; cam.y+=vel.y; vel.x*=dcy; vel.y*=dcy; active=true;
