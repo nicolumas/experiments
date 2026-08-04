@@ -58,6 +58,9 @@ h1,h2,h3,h4,p { margin:0; }
 .display-h2 { font-family:var(--font-display); font-weight:400; font-size:clamp(3.0rem,3.8vw,4.2rem); line-height:1.12; }
 .display-h3 { font-family:var(--font-display); font-weight:400; font-size:clamp(2.4rem,3vw,3.2rem); line-height:1.14; }
 .display-h4 { font-family:var(--font-display); font-weight:400; font-size:clamp(2.0rem,2.4vw,2.4rem); line-height:1.25; }
+/* No orphans / widows: balance headline line lengths, tidy last lines of body copy */
+.display-h1,.display-h2,.display-h3,.display-h4 { text-wrap:balance; }
+.body-large,.body-small,.hero__lede,.guidance__lede,.body-copy,.benefit__d,.faq__a,.quad__cell p,.step__b p,p { text-wrap:pretty; }
 .body-large { font-size:clamp(1.7rem,1.4vw,2.0rem); font-weight:300; line-height:1.6; }
 .body-small { font-size:1.3rem; line-height:1.65; }
 .caption { font-size:1.1rem; line-height:1.5; letter-spacing:0.02em; }
@@ -309,6 +312,11 @@ form.enquiry { display:grid; gap:1.6rem; }
 .field input:focus, .field select:focus { outline:none; border:2px solid var(--border-focus); padding:calc(1.4rem - 1px); }
 .field input::placeholder { color:var(--text-tertiary); }
 .field input:user-invalid, .field select:user-invalid { border-color:var(--status-error,#B5352A); }
+.field textarea { font-family:var(--font-body); font-size:1.5rem; line-height:1.5; padding:1.4rem; border:1px solid var(--border-default); border-radius:4px; background:#fff; color:var(--text-primary); width:100%; resize:vertical; }
+.field textarea:focus { outline:none; border:2px solid var(--charcoal-900); padding:calc(1.4rem - 1px); }
+.field textarea::placeholder { color:var(--text-tertiary); }
+.field input[type="file"] { padding:1.1rem 1.4rem; font-size:1.3rem; color:var(--text-secondary); }
+.field input[type="file"]::file-selector-button { font-family:var(--font-body); font-weight:700; font-size:1.1rem; letter-spacing:0.06em; text-transform:uppercase; margin-right:1.4rem; padding:0.9rem 1.4rem; border:1px solid var(--border-strong); background:#fff; color:var(--charcoal-900); border-radius:2px; cursor:pointer; }
 .phone-row { display:grid; grid-template-columns:minmax(0,auto) 1fr; gap:0.8rem; }
 .phone-row select { width:auto; }
 .consent { display:flex; gap:1rem; align-items:flex-start; font-size:1.3rem; line-height:1.5; color:var(--text-secondary); cursor:pointer; }

@@ -89,6 +89,30 @@
       });
     }
 
+    // ── Visualisation modal (advisory) ───────────────────
+    var vis = document.getElementById('visualisation');
+    if (vis) {
+      document.querySelectorAll('[data-open-visualisation]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (typeof vis.showModal === 'function') vis.showModal(); else vis.setAttribute('open', '');
+          track('visualisation_open', { cta: b.getAttribute('data-cta') || null, variant: variant });
+        });
+      });
+      vis.querySelectorAll('[data-close-visualisation]').forEach(function (b) { b.addEventListener('click', function () { vis.close(); }); });
+      vis.addEventListener('click', function (e) { if (e.target === vis) vis.close(); });
+      var vform = vis.querySelector('[data-visualisation-form]');
+      var vsucc = vis.querySelector('.modal__success');
+      if (vform) {
+        vform.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!vform.checkValidity()) { vform.reportValidity(); return; }
+          track('visualisation_submit', { variant: variant });
+          vform.hidden = true; if (vsucc) vsucc.hidden = false;
+        });
+      }
+      vis.addEventListener('close', function () { if (vform && vsucc && vsucc.hidden === false) { vform.reset(); vform.hidden = false; vsucc.hidden = true; } });
+    }
+
     // ── Reveal on scroll (reveal in-view immediately) ─────
     var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
     var vh = window.innerHeight || document.documentElement.clientHeight;

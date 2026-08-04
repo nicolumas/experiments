@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=6">
+  <link rel="stylesheet" href="assets/site.css?v=8">
   <style>
     /* sticky-nav offset so smooth-scrolled in-page anchors don't tuck under the nav */
     #contact, #gallery { scroll-margin-top: 84px; }
@@ -137,7 +137,7 @@
           <p class="story-lead mt-m">“I didn’t want a piece you eventually stop noticing — I wanted something I enjoy every single day.”</p>
           <p class="body-copy mt-m">What began as a renovation became the moment to fulfil that wish. Natacha from Mannheim had long been drawn to the works of Erin Cone. The question her daughter asked — <em>“Why a faceless woman in the living room?”</em> — was answered not in words, but in the space itself. A visualisation made visible what the artwork could become, and ultimately convinced everyone. Today, the piece is part of her everyday life: not something in the background, but something she returns to, every day. A piece of gallery feeling, at home.</p>
           <p class="body-copy mt-m">“I can only encourage anyone considering bringing art into their home to do it. It’s not just an aesthetic upgrade — it’s an investment in quality of life.”<span class="story-attr">Natacha Waller, Mannheim, 2026</span></p>
-          <a class="btn btn--ghost" href="#contact" data-goal="cta_click" data-cta="collector_get_in_touch" style="margin-top:clamp(2rem,3vw,3.2rem)">Get in touch</a>
+          <button class="btn btn--ghost" type="button" data-open-visualisation data-goal="cta_click" data-cta="collector_visualisation" style="margin-top:clamp(2rem,3vw,3.2rem)">Request a visualisation</button>
         </div>
       </div>
     </section>
@@ -277,6 +277,38 @@
     </div>
   </footer>
 
-  <script src="assets/site.js?v=6"></script>
+  <!-- ══ VISUALISATION MODAL ══ -->
+  <dialog class="modal" id="visualisation" aria-labelledby="vis-title">
+    <div class="modal__inner">
+      <div class="modal__head">
+        <div>
+          <p class="eyebrow">See it in your space</p>
+          <h2 class="display-h2 mt-s" id="vis-title">Request a visualisation</h2>
+        </div>
+        <button class="modal__x" type="button" data-close-visualisation aria-label="Close"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <form class="enquiry" data-visualisation-form novalidate>
+        <p class="body-small txt-secondary" style="margin-bottom:0.4rem">Tell us the work you’re considering and a little about your wall — an Art Consultant will show you how it looks, and help with size and framing. Free and without obligation.</p>
+        <div class="field-row">
+          <div class="field"><label for="v-first">First name</label><input id="v-first" name="first" required autocomplete="given-name" placeholder="Please fill in"></div>
+          <div class="field"><label for="v-last">Surname</label><input id="v-last" name="last" required autocomplete="family-name" placeholder="Please fill in"></div>
+        </div>
+        <div class="field"><label for="v-email">Email address</label><input id="v-email" name="email" type="email" required autocomplete="email" placeholder="Please fill in"></div>
+        <div class="field"><label for="v-artwork">The artwork you’re considering</label><input id="v-artwork" name="artwork" placeholder="Artist or title — optional"></div>
+        <div class="field"><label for="v-space">Your space</label><textarea id="v-space" name="space" rows="3" placeholder="The room, the wall, the light — a few words"></textarea></div>
+        <div class="field"><label for="v-photo">A photo of your wall <span style="font-weight:400;color:var(--text-tertiary)">(optional)</span></label><input id="v-photo" name="photo" type="file" accept="image/*"></div>
+        <label class="consent"><input type="checkbox" name="consent" required><span>By submitting this form you agree to our <a class="link-underline" href="https://www.lumas.de/datenschutz/" target="_blank" rel="noopener">privacy policy</a>.</span></label>
+        <button class="btn btn--primary" type="submit" data-goal="visualisation_submit" data-cta="visualisation_submit">Request my visualisation</button>
+      </form>
+      <div class="modal__success" hidden>
+        <p class="eyebrow">Thank you</p>
+        <h2 class="display-h3 mt-s">Your request is on its way</h2>
+        <p class="body-large txt-secondary mt-m">An Art Consultant will be in touch shortly to arrange your visualisation.</p>
+        <button class="btn btn--ghost" type="button" data-close-visualisation>Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="assets/site.js?v=8"></script>
 </body>
 </html>
