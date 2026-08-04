@@ -68,12 +68,12 @@
   /* ---- mouse-mode switcher (stakeholder testing) ---- */
   .modebar{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:var(--z-controls);
     display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none;}
-  .modebar-row{display:flex;align-items:center;gap:14px;pointer-events:auto;
+  .modebar-row{display:flex;align-items:center;gap:12px;pointer-events:auto;max-width:94vw;
     background:rgba(14,13,11,.66);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border:1px solid rgba(244,237,226,.12);border-radius:999px;padding:7px 8px 7px 18px;box-shadow:0 12px 40px -18px rgba(0,0,0,.8);}
   .modebar-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,226,.5);white-space:nowrap;}
   .seg{display:inline-flex;background:rgba(244,237,226,.06);border-radius:999px;padding:3px;gap:2px;}
-  .seg button{padding:8px 18px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.04em;
+  .seg button{padding:8px 15px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.03em;
     color:rgba(244,237,226,.62);transition:color .2s,background .2s;white-space:nowrap;}
   .seg button:hover{color:var(--ivory);}
   .seg button[aria-pressed="true"]{background:var(--ivory);color:var(--charcoal);}
@@ -104,39 +104,41 @@
   .enter-btn:active{transform:scale(.97);}
 
   /* ---- detail (centered, floats on dimmed cloud) ---- */
-  .scrim{position:fixed;inset:0;z-index:var(--z-scrim);background:rgba(7,6,5,0);
+  .scrim{position:fixed;inset:0;z-index:var(--z-scrim);background:rgba(6,5,4,0);
     opacity:0;visibility:hidden;transition:opacity .45s var(--ease-out),visibility .45s;pointer-events:none;}
-  .scrim.show{opacity:1;visibility:visible;background:rgba(7,6,5,.66);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);pointer-events:auto;}
+  .scrim.show{opacity:1;visibility:visible;background:rgba(6,5,4,.82);pointer-events:auto;}
 
-  .sheet{position:fixed;z-index:var(--z-sheet);left:50%;top:50%;transform:translate(-50%,-46%) scale(.985);
-    display:flex;flex-direction:column;align-items:center;gap:22px;width:min(90vw,780px);
+  .sheet{position:fixed;z-index:var(--z-sheet);left:50%;top:50%;transform:translate(-50%,-47%);
+    display:flex;flex-direction:column;align-items:center;gap:22px;width:min(92vw,880px);
     opacity:0;visibility:hidden;pointer-events:none;
     transition:opacity .42s var(--ease-out),transform .5s var(--ease-out),visibility .42s;}
-  .sheet.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1);pointer-events:auto;}
+  .sheet.show{opacity:1;visibility:visible;transform:translate(-50%,-50%);pointer-events:auto;}
   .sheet-hero{display:flex;align-items:center;justify-content:center;}
-  .sheet-hero img{max-width:min(86vw,640px);max-height:56vh;width:auto;height:auto;object-fit:contain;display:block;
-    box-shadow:0 46px 120px -36px rgba(0,0,0,.92);}
-  .sheet-meta{text-align:center;}
-  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:31px;line-height:1.06;margin:0 0 6px;color:var(--ivory);text-wrap:balance;}
-  .sheet-artist{font-size:17px;color:rgba(244,237,226,.72);}
-  .sheet-cta{display:flex;gap:12px;align-items:center;}
-  .btn-primary{height:54px;padding:0 30px;border-radius:8px;background:var(--ivory);color:var(--charcoal);
-    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .16s var(--ease-out),background .2s;text-decoration:none;}
-  .btn-primary:hover{background:#fff;}
-  .btn-primary:active{transform:scale(.98);}
-  .btn-primary svg{width:14px;height:14px;}
-  .btn-similar{height:54px;padding:0 24px;border-radius:8px;border:1px solid rgba(244,237,226,.26);background:transparent;
-    color:var(--ivory);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .16s var(--ease-out),background .2s,border-color .2s;}
-  .btn-similar:hover{background:rgba(244,237,226,.08);border-color:rgba(244,237,226,.45);}
+  .sheet-hero img{max-width:min(88vw,760px);max-height:64vh;width:auto;height:auto;object-fit:contain;display:block;
+    box-shadow:0 48px 120px -38px rgba(0,0,0,.92);}
+  /* minimal caption line: ARTIST  Title ↗ (links to the PDP) */
+  .sheet-caption{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ivory);}
+  .sheet-artist{font-size:12px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--ivory);}
+  .sheet-title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:18px;color:rgba(244,237,226,.82);transition:color .2s;}
+  .sheet-caption svg{width:13px;height:13px;opacity:.6;transition:transform .2s var(--ease-out),opacity .2s;}
+  .sheet-caption:hover .sheet-title{color:var(--ivory);}
+  .sheet-caption:hover svg{opacity:1;transform:translate(2px,-2px);}
+  .btn-similar{height:48px;padding:0 28px;border-radius:6px;border:1px solid rgba(244,237,226,.28);background:transparent;
+    color:var(--ivory);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    display:inline-flex;align-items:center;justify-content:center;transition:transform .16s var(--ease-out),background .2s,border-color .2s;}
+  .btn-similar:hover{background:rgba(244,237,226,.09);border-color:rgba(244,237,226,.5);}
   .btn-similar:active{transform:scale(.98);}
-  .btn-similar svg{width:16px;height:16px;}
-  .btn-ghost{width:54px;height:54px;border-radius:8px;border:1px solid rgba(244,237,226,.26);background:transparent;
-    display:inline-flex;align-items:center;justify-content:center;color:var(--ivory);transition:transform .16s var(--ease-out),color .2s,border-color .2s,background .2s;}
-  .btn-ghost:hover{background:rgba(244,237,226,.08);}
-  .btn-ghost:active{transform:scale(.95);}
-  .btn-ghost svg{width:21px;height:21px;}
+  /* wishlist + close, top-right while a work is open */
+  .detail-top{position:fixed;top:22px;right:28px;z-index:calc(var(--z-sheet) + 1);display:flex;gap:10px;
+    opacity:0;visibility:hidden;transition:opacity .3s var(--ease-out),visibility .3s;}
+  .exp.detail-open .detail-top{opacity:1;visibility:visible;}
+  .exp.detail-open .close-btn,.exp.detail-open .modebar,.exp.detail-open .tools{opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
+  .btn-ghost,.detail-close{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:rgba(16,15,14,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(244,237,226,.16);color:var(--ivory);transition:transform .16s var(--ease-out),background .2s;}
+  .btn-ghost:hover,.detail-close:hover{background:rgba(30,27,23,.85);}
+  .btn-ghost:active,.detail-close:active{transform:scale(.92);}
+  .btn-ghost svg{width:19px;height:19px;} .detail-close svg{width:16px;height:16px;}
   .btn-ghost.liked svg{fill:var(--ivory);}
 
   @media (prefers-reduced-motion: reduce){ *{transition-duration:.01ms !important;} }
@@ -186,6 +188,9 @@
         <button data-m="drag" aria-pressed="true">Ziehen</button>
         <button data-m="glide" aria-pressed="false">Gleiten</button>
         <button data-m="scroll" aria-pressed="false">Scrollen</button>
+        <button data-m="schwung" aria-pressed="false">Schwung</button>
+        <button data-m="ambient" aria-pressed="false">Ambient</button>
+        <button data-m="reise" aria-pressed="false">Reise</button>
       </div>
     </div>
     <span class="modebar-desc"></span>
@@ -195,22 +200,21 @@
 
   <div class="sheet" role="dialog" aria-label="Kunstwerk">
     <div class="sheet-hero"><img alt=""></div>
-    <div class="sheet-meta">
-      <div class="sheet-title"></div>
-      <div class="sheet-artist"></div>
-    </div>
-    <div class="sheet-cta">
-      <a class="btn-primary" target="_blank" rel="noopener">Kunstwerk ansehen
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>
-      </a>
-      <button class="btn-similar similar-btn-sheet">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.4L12 17l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>
-        Mehr in diesem Stil
-      </button>
-      <button class="btn-ghost like-btn" aria-label="Zur Wunschliste hinzufügen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-      </button>
-    </div>
+    <a class="sheet-caption" target="_blank" rel="noopener" aria-label="Kunstwerk ansehen">
+      <span class="sheet-artist"></span>
+      <span class="sheet-title"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>
+    </a>
+    <button class="btn-similar similar-btn-sheet">Mehr in diesem Stil ansehen</button>
+  </div>
+
+  <div class="detail-top">
+    <button class="btn-ghost like-btn" aria-label="Zur Wunschliste hinzufügen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+    </button>
+    <button class="detail-close" aria-label="Detail schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
   </div>
 
   <div class="enter">
@@ -232,8 +236,11 @@
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const DESC = {
     drag:   "Klicken und ziehen zum Bewegen · Mausrad zoomt",
-    glide:  "Die Maus führt sanft — zum Rand für mehr Tempo, Mitte ruht · Mausrad zoomt",
-    scroll: "Scrollen bewegt die Fläche · ⌘ / Strg + Scrollen zoomt"
+    glide:  "Die Maus führt sanft. Zum Rand für mehr Tempo, die Mitte ruht · Mausrad zoomt",
+    scroll: "Scrollen bewegt die Fläche · ⌘ / Strg + Scrollen zoomt",
+    schwung:"Ziehen und loslassen. Die Fläche gleitet mit Schwung weiter aus · Mausrad zoomt",
+    ambient:"Lehn dich zurück. Die Sammlung treibt langsam vorbei · über ein Werk fahren, klicken zum Ansehen",
+    reise:  "Klicke irgendwohin, um sanft dorthin zu reisen · klicke ein Werk zum Ansehen"
   };
   function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0);}
 
@@ -262,7 +269,7 @@
       return {d, wx:Math.cos(ang)*r+jx*0.6, wy:Math.sin(ang)*r+jy*0.6, size, img:null, state:'idle', aspect:1, dim:1, targetDim:1, hoverT:0};
     });
     (function relax(){
-      const half = arts.map(a=>a.size*1.16/2);
+      const half = arts.map(a=>a.size*2.3/2);   // airy desktop spacing — big gaps between works
       for(let pass=0; pass<220; pass++){
         let moved=false;
         for(let i=0;i<arts.length;i++){
@@ -289,7 +296,7 @@
     const HOME_S=0.6;
 
     const cam = {x:homeCx, y:homeCy, s:HOME_S};
-    let tween=null, vel={x:0,y:0}, drift=0, moving=false, similarSeed=null, driftAng=0.6;
+    let tween=null, vel={x:0,y:0}, drift=0, moving=false, similarSeed=null, driftAng=0.6, ambientAng=0.4;
     const S_MIN=0.28, S_MAX=2.8;
 
     function resize(){
@@ -390,16 +397,23 @@
       frameTick++;
       let active=false;
 
-      // ambient drift (until first interaction)
-      if(drift>0.001 && !down){ cam.x+=Math.cos(driftAng)*drift/cam.s; cam.y+=Math.sin(driftAng)*drift/cam.s; driftAng+=0.0009; active=true; }
+      // intro drift (until first interaction; not in Ambient, which has its own)
+      if(drift>0.001 && !down && mouseMode!=='ambient'){ cam.x+=Math.cos(driftAng)*drift/cam.s; cam.y+=Math.sin(driftAng)*drift/cam.s; driftAng+=0.0009; active=true; }
+      // AMBIENT mode: slow, continuous cinematic drift on a gently curving path
+      if(mouseMode==='ambient' && !down && !tween && !moving){
+        cam.x+=Math.cos(ambientAng)*0.8/cam.s; cam.y+=Math.sin(ambientAng)*0.8/cam.s; ambientAng+=0.0016; active=true;
+      }
       // GLIDE mode: mouse position steers, with a calm dead-zone in the centre
       if(mouseMode==='glide' && mouse.inside && !down && !tween && !moving && drift<=0.001){
         const nx=(mouse.x-W/2)/(W/2), ny=(mouse.y-H/2)/(H/2), mag=Math.hypot(nx,ny), dz=0.14;
         if(mag>dz){ const k=Math.min((mag-dz)/(0.92-dz),1), sp=6.2*Math.pow(k,1.7);
           cam.x+=(nx/mag)*sp/cam.s; cam.y+=(ny/mag)*sp/cam.s; active=true; }
       }
-      // momentum (drag throw / scroll inertia)
-      if(!down && (Math.abs(vel.x)>0.02||Math.abs(vel.y)>0.02)){ cam.x+=vel.x; cam.y+=vel.y; vel.x*=0.92; vel.y*=0.92; active=true; }
+      // momentum — quick stop for Ziehen/Scrollen, long floaty glide for Schwung
+      if(!down && (Math.abs(vel.x)>0.02||Math.abs(vel.y)>0.02)){
+        const dcy = (mouseMode==='schwung')?0.975:0.9;
+        cam.x+=vel.x; cam.y+=vel.y; vel.x*=dcy; vel.y*=dcy; active=true;
+      }
       // eased fly (zoom buttons, search, recenter, similar)
       if(tween){
         cam.x+=(tween.x-cam.x)*0.14; cam.y+=(tween.y-cam.y)*0.14; cam.s+=(tween.s-cam.s)*0.14;
@@ -470,7 +484,7 @@
     function setCursor(){
       if(down&&panning){ canvas.style.cursor='grabbing'; return; }
       if(hovered){ canvas.style.cursor='pointer'; return; }
-      canvas.style.cursor = mouseMode==='drag' ? 'grab' : 'default';
+      canvas.style.cursor = (mouseMode==='drag'||mouseMode==='schwung') ? 'grab' : (mouseMode==='reise' ? 'crosshair' : 'default');
     }
     function updateHover(){ const a = (down&&panning)?hovered:hitLocal(mouse.x,mouse.y); if(a!==hovered){ hovered=a; requestRender(); } setCursor(); }
 
@@ -478,7 +492,7 @@
       if(e.button!==0) return;
       firstInteraction(); tween=null; vel.x=vel.y=0;
       down=true; downT=performance.now(); moved=0; last={x:e.clientX,y:e.clientY};
-      panning = (mouseMode==='drag'||mouseMode==='scroll');
+      panning = (mouseMode==='drag'||mouseMode==='scroll'||mouseMode==='schwung');
       if(panning){ try{canvas.setPointerCapture(e.pointerId);}catch(_){} }
       setCursor(); requestRender();
     });
@@ -497,7 +511,11 @@
     window.addEventListener('pointerup',e=>{
       if(!down) return;
       const dt=performance.now()-downT;
-      if(moved<8 && dt<400){ const a=hitLocal(mouse.x,mouse.y); if(a) select(a); }
+      if(moved<8 && dt<400){
+        const a=hitLocal(mouse.x,mouse.y);
+        if(a) select(a);
+        else if(mouseMode==='reise'){ flyTo(toWorldX(mouse.x), toWorldY(mouse.y), Math.min(S_MAX, cam.s*1.25)); }  // travel to the click
+      } else if(mouseMode==='schwung' && panning){ vel.x*=1.7; vel.y*=1.7; }   // extra floaty fling
       down=false; panning=false; updateHover(); requestRender();
     });
     canvas.addEventListener('pointerleave',()=>{ mouse.inside=false; if(hovered){hovered=null;requestRender();} canvas.style.cursor=''; });
@@ -528,13 +546,15 @@
       im.src=a.d.img.replace('_mobile.jpg','_desktop.jpg'); im.alt=a.d.t;
       sheet.querySelector('.sheet-title').textContent=a.d.t;
       sheet.querySelector('.sheet-artist').textContent=a.d.a;
-      sheet.querySelector('.btn-primary').href=PDP_BASE+a.d.u;
-      sheet.querySelector('.like-btn').classList.remove('liked');
+      sheet.querySelector('.sheet-caption').href=PDP_BASE+a.d.u;
+      root.querySelector('.like-btn').classList.remove('liked');
+      root.classList.add('detail-open');
       scrim.classList.add('show'); sheet.classList.add('show');
       requestRender();
     }
-    function deselect(){ if(!selected) return; scrim.classList.remove('show'); sheet.classList.remove('show'); selected=null; prevCam=null; requestRender(); }
+    function deselect(){ if(!selected) return; root.classList.remove('detail-open'); scrim.classList.remove('show'); sheet.classList.remove('show'); selected=null; prevCam=null; requestRender(); }
     scrim.addEventListener('click',deselect);
+    root.querySelector('.detail-close').addEventListener('click',deselect);
     document.addEventListener('keydown',e=>{ if(e.key==='Escape') deselect(); });
 
     // ----- controls -----
