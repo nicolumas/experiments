@@ -56,8 +56,8 @@ T = {
 'EDITION BEENDET': 'EDITION CLOSED',
 
 # --- 1 proof ---------------------------------------------------------------
-'Baroque Pools II im Rahmen Barcelona mit Schattenfuge, aufgestellt auf einem langen Nussbaum-Sideboard in einem hellen Wohnzimmer; seitlich einfallendes Nachmittagslicht, links ein weißer Ledersessel.':
-  'Baroque Pools II in the Floater frame Barcelona, standing on a long walnut sideboard in a bright living room; afternoon light falling from the side, a white leather chair on the left.',
+'Baroque Pools II im Rahmen Barcelona mit Schattenfuge an einer dunklen Holzvertäfelung, von einer Bilderleuchte angestrahlt; darunter ein schwarz-goldener Schreibtisch mit Messinglampe, links Blütenzweige am Fenster.':
+  'Baroque Pools II in the Floater frame Barcelona on dark wood panelling, lit by a picture light; below it a black-and-brass desk with a brass lamp, blossom branches at the window on the left.',
 '>15.–17. AUGUST<': '>15–17 AUGUST<',
 
 # --- 2 the work ------------------------------------------------------------
@@ -153,8 +153,8 @@ T = {
   'A man in white gloves hangs Baroque Pools II above a dark walnut sideboard, daylight falling through a curtain behind him.',
 'Baroque Pools II in einer taupefarbenen Wandnische über einer Marmorkonsole, flankiert von zwei Stoffleuchten, davor weiße Hortensien.':
   'Baroque Pools II in a taupe alcove above a marble console, flanked by two fabric wall lights, white hydrangeas in front.',
-'Baroque Pools II an einer dunklen Holzvertäfelung, von einer Bilderleuchte angestrahlt; darunter ein Schreibtisch mit Messinglampe und Kunstbänden.':
-  'Baroque Pools II on dark wood panelling, lit by a picture light; below it a desk with a brass lamp and art books.',
+'Baroque Pools II aufgestellt auf einem langen Nussbaum-Sideboard in einem hellen Wohnzimmer, seitlich einfallendes Nachmittagslicht, links ein weißer Ledersessel.':
+  'Baroque Pools II standing on a long walnut sideboard in a bright living room, afternoon light falling from the side, a white leather chair on the left.',
 'Baroque Pools II an einer hellen Wand in einer Küche mit burgunderrotem Marmor-Kochblock und Messinghockern, davor rosa Blütenzweige.':
   'Baroque Pools II on a pale wall in a kitchen with a burgundy marble island and brass stools, pink blossom branches in front.',
 'Eine Frau im schwarzen Kleid richtet Baroque Pools II an einer Kalkputzwand aus, darunter ein Sideboard aus Wurzelholz mit Messingvasen.':

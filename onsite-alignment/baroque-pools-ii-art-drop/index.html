@@ -435,7 +435,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    Verify with scripts/audit.js -> await __hero() after any change to the
    photograph, the lockup, or these numbers. */
 .proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:420px;
-  background:linear-gradient(to top,rgba(20,19,17,.70) 0%,rgba(20,19,17,.62) 62%,rgba(20,19,17,0) 100%);
+  background:linear-gradient(to top,rgba(20,19,17,.56) 0%,rgba(20,19,17,.50) 75%,rgba(20,19,17,0) 100%);
   pointer-events:none}
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
 .proof__plate{color:var(--text-inverse);max-width:920px}
@@ -761,8 +761,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      so 340px is enough — and it has to be, because the shortest portrait hero
      is 387px tall and a 420px band would be clipped by the section and leave
      the top of the photograph sitting at ~13% scrim instead of clean.
-     Same stops as the base rule; only the band length changes. */
-  .proof::after{height:340px}
+     The stops differ from the base rule as a CONSEQUENCE of that: alpha at the
+     lockup is a function of (distance from the bottom / band length), so the
+     same stops over a shorter band land lighter exactly where the type is —
+     measured 5.03:1 against 4.5:1 at 390, only 12% clear. Nudged up so the
+     alpha at the lockup matches the desktop rule instead. */
+  .proof::after{height:340px;
+    background:linear-gradient(to top,rgba(20,19,17,.62) 0%,rgba(20,19,17,.56) 75%,rgba(20,19,17,0) 100%)}
 
   /* --- countdown: four segments will not fit a phone at desktop sizes ----
      40px numerals + 24px gaps needed 451px of a 390px screen, so the last
@@ -884,17 +889,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      the first screen is evidence, not a product shot. -->
 <section class="proof" data-sec="proof">
   <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall, so the
-       phone gets its own portrait asset: TMR_Header cropped to 1200x2029 around
-       the work (source box 852,0 - 1491,1080 of the 1920x1080 master), which
-       keeps the whole framed edition in view and puts the lockup on the
-       sideboard rather than across the waves. -->
+       phone gets its own portrait asset: TMR_Room6 cropped to 1200x2029 around
+       the work (source box 761,0 - 1400,1080 of the 1920x1080 master), which
+       keeps the whole framed edition and its picture light in view and puts the
+       lockup on the dark desk rather than across the waves. -->
   <picture>
-    <source media="(max-width:767px)" srcset="TMR_Header_mobile.jpg"
+    <source media="(max-width:767px)" srcset="TMR_Room6_mobile.jpg"
             width="1200" height="2029">
-    <img class="proof__img" src="TMR_Header.jpg" width="1920" height="1080"
+    <img class="proof__img" src="TMR_Room6.jpg" width="1920" height="1080"
          fetchpriority="high" decoding="async"
-         alt="Baroque Pools II im Rahmen Barcelona mit Schattenfuge, aufgestellt auf einem langen Nussbaum-Sideboard in einem hellen Wohnzimmer; seitlich einfallendes Nachmittagslicht, links ein weißer Ledersessel."
-         data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+         alt="Baroque Pools II im Rahmen Barcelona mit Schattenfuge an einer dunklen Holzvertäfelung, von einer Bilderleuchte angestrahlt; darunter ein schwarz-goldener Schreibtisch mit Messinglampe, links Blütenzweige am Fenster."
+         data-fallback="ROOM SHOT · ARBEITSZIMMER · 16:9">
   </picture>
   <div class="wrap proof__wrap">
     <div class="proof__plate">
@@ -1155,11 +1160,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
           </div>
         </figure>
 
+        <!-- TMR_Room6 is the hero now, so the sideboard shot it replaced takes
+             its slot here rather than being dropped. -->
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="TMR_Room6.jpg" width="1920" height="1080" loading="lazy" decoding="async"
-                 alt="Baroque Pools II an einer dunklen Holzvertäfelung, von einer Bilderleuchte angestrahlt; darunter ein Schreibtisch mit Messinglampe und Kunstbänden."
-                 data-fallback="ROOM SHOT · ARBEITSZIMMER · 16:9">
+            <img src="TMR_Header.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II aufgestellt auf einem langen Nussbaum-Sideboard in einem hellen Wohnzimmer, seitlich einfallendes Nachmittagslicht, links ein weißer Ledersessel."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
           </div>
         </figure>
 
