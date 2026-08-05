@@ -113,7 +113,7 @@ h1,h2,h3,h4,p { margin:0; }
 /* ── Hero ───────────────────────────────────────────────── */
 .hero { padding-block:clamp(4.8rem,7vw,8.8rem); }
 .hero__eyebrow { margin-bottom:1.6rem; }
-.hero__title { max-width:16ch; }
+.hero__title { max-width:24ch; }
 .hero__lede { margin-top:2.0rem; color:var(--text-secondary); }
 .hero__actions { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:2.8rem; }
 .hero__grid { display:grid; gap:clamp(3.2rem,5vw,6.4rem); align-items:center; }
@@ -225,6 +225,21 @@ h1,h2,h3,h4,p { margin:0; }
 .carousel__btn svg { width:18px; height:18px; }
 .carousel__count { margin-top:2.0rem; font-size:1.2rem; letter-spacing:0.06em; color:var(--text-secondary); }  /* AA */
 @media (max-width:639px){ .carousel__btn { width:40px; height:40px; } }
+
+/* Dot pagination (used by the one-per-view figure carousel instead of arrows) */
+.carousel__dots { display:flex; justify-content:center; gap:1.0rem; margin-top:2.0rem; }
+.carousel__dot { width:9px; height:9px; padding:0; border-radius:50%; border:1px solid var(--border-strong); background:transparent; cursor:pointer; transition:background-color 200ms var(--ease-out),border-color 200ms var(--ease-out),transform 200ms var(--ease-out); }
+.carousel__dot:hover { border-color:var(--charcoal-900); }
+.carousel__dot[aria-current="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); transform:scale(1.15); }
+
+/* Gallery slide (linked image tile in the galleries filmstrip) */
+.gallery-slide { display:flex; flex-direction:column; color:inherit; }
+.gallery-slide .slide__img { transition:opacity 220ms var(--ease-out); }
+.gallery-slide:hover .slide__img { opacity:0.9; }
+.gallery-slide .slide__cap { display:flex; justify-content:space-between; align-items:baseline; gap:1.2rem; }
+.gallery-slide .city { font-size:1.6rem; }
+.gallery-slide .go { color:var(--text-secondary); font-size:1.3rem; white-space:nowrap; transition:transform 160ms var(--ease-out); }
+.gallery-slide:hover .go { transform:translateX(3px); }
 
 /* One-image-per-view media carousel (living-with-art, collector) */
 .figure-carousel .carousel__track { gap:0; }

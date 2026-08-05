@@ -32,8 +32,26 @@
       var prev = root.querySelector('.carousel__btn--prev');
       var next = root.querySelector('.carousel__btn--next');
       var count = root.querySelector('[data-count]');
+      var dots = root.querySelector('[data-dots]');
       if (!track_) return;
       var slides = Array.prototype.slice.call(track_.querySelectorAll('.slide'));
+
+      // Build dot pagination when a [data-dots] container is present
+      var dotEls = [];
+      if (dots) {
+        slides.forEach(function (_, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'carousel__dot';
+          b.setAttribute('aria-label', 'Go to image ' + (i + 1));
+          b.addEventListener('click', function () {
+            track_.scrollTo({ left: step() * i, behavior: 'smooth' });
+            track('carousel_dot', { id: root.getAttribute('data-carousel'), index: i });
+          });
+          dots.appendChild(b);
+          dotEls.push(b);
+        });
+      }
 
       function step() {
         var s = slides[0];
@@ -50,6 +68,7 @@
         if (prev) prev.disabled = i <= 0;
         if (next) next.disabled = atEnd;
         if (count) count.textContent = String(Math.min(i + 1, slides.length)).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+        if (dotEls.length) dotEls.forEach(function (d, di) { d.setAttribute('aria-current', di === i ? 'true' : 'false'); });
       }
       if (prev) prev.addEventListener('click', function () { track_.scrollBy({ left: -step(), behavior: 'smooth' }); track('carousel_prev', { id: root.getAttribute('data-carousel') }); });
       if (next) next.addEventListener('click', function () { track_.scrollBy({ left: step(), behavior: 'smooth' }); track('carousel_next', { id: root.getAttribute('data-carousel') }); });
