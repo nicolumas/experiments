@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <!-- ═══════════════════════════════════════════════════════════
   PROTO:       PROTO-2026-ADV-02  ·  Trade / Business
-  Hypothesis:  A content-rich trade page (clear audiences, what's included,
-               process, proof) increases qualified trade enquiries vs the
-               current thin /b2b/ page.
+  Hypothesis:  A content-rich trade page (clear proposition, full
+               specification, proof) increases qualified trade enquiries
+               vs the current thin /b2b/ page.
   Goals:       primary trade_enquiry_submit · secondary cta_click, carousel_next/prev
   Status:      exploration · project photos © Bence Bakonyi and named photographers.
+  Merge note:  copy + Specification panel + editorial strip + case study adapted
+               from the "LUMAS B2B — Hotels Reference & Module Library" artifact;
+               "curator" → "Art Consultant"; unverified figures (300 artists,
+               220+ projects) dropped in favour of verified house facts.
 ═══════════════════════════════════════════════════════════ -->
 <html lang="en">
 <head>
@@ -13,12 +17,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Trade &amp; business · LUMAS</title>
-  <meta name="description" content="LUMAS for interior designers, architects, hospitality and corporate. Source, frame and install signed editions with a dedicated Art Consultant.">
+  <meta name="description" content="LUMAS curates, produces and installs signed, limited editions for commercial interiors — one Art Consultant, one framing standard, one delivery date.">
   <script>document.documentElement.className += ' js';</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=8">
+  <link rel="stylesheet" href="assets/site.css?v=9">
   <style>#contact { scroll-margin-top: 84px; }</style>
 </head>
 <body>
@@ -41,8 +45,8 @@
       <div class="hero__grid">
         <div class="hero__text">
           <p class="eyebrow hero__eyebrow reveal">Trade &amp; business</p>
-          <h1 class="display-h1 hero__title reveal">Art for the spaces people remember</h1>
-          <p class="body-large hero__lede measure reveal">For interior designers, architects, hospitality and corporate. Source, frame and install signed editions — with a dedicated Art Consultant, trade terms, and production made in Germany.</p>
+          <h1 class="display-h1 hero__title reveal">Art that gives a space its reason to be remembered</h1>
+          <p class="body-large hero__lede measure reveal">LUMAS curates, produces and installs signed, limited editions for commercial interiors — from a single reception wall to a 340-room newbuild. One Art Consultant, one framing standard, one delivery date.</p>
           <div class="hero__actions reveal">
             <button class="btn btn--primary" type="button" data-open-enquiry data-goal="cta_click" data-cta="hero_enquiry">Start an enquiry</button>
             <a class="btn btn--ghost" href="#projects" data-goal="cta_click" data-cta="hero_see_projects">See selected projects</a>
@@ -54,24 +58,37 @@
       </div>
     </section>
 
-    <!-- ══ TRANSFORMATIVE ══ -->
+    <!-- ══ PROPOSITION ══ -->
     <section class="section surface-raised">
       <div class="wrap">
         <div class="section-head reveal">
-          <p class="eyebrow">Why art</p>
-          <h2 class="display-h2 mt-s">Art turns a space into an experience</h2>
+          <p class="eyebrow">Why LUMAS</p>
+          <h2 class="display-h2 mt-s">We are the gallery, not a supplier to one</h2>
         </div>
         <div class="value-split">
           <div class="value-col reveal">
-            <p class="eyebrow">In the space</p>
-            <h3 class="display-h3">A deeper connection</h3>
-            <p class="mt-s">The right work slows people down. It gives a room a point of view, a reason to linger, and something to remember it by — for guests, residents and staff alike.</p>
+            <p class="eyebrow">The problem</p>
+            <h3 class="display-h3">Most commercial art is bought like furniture</h3>
+            <p class="mt-s">Volume art packages solve a procurement problem and create a brand one. People do not photograph a print run. They remember a work they have never seen before, in a room that was composed around it.</p>
           </div>
           <div class="value-col reveal">
-            <p class="eyebrow">For the brand</p>
-            <h3 class="display-h3">A sharper identity</h3>
-            <p class="mt-s">Considered art signals care and confidence. It tells people who you are before a word is spoken, and separates a space from every other one like it.</p>
+            <p class="eyebrow">Our way</p>
+            <h3 class="display-h3">We start from the space</h3>
+            <p class="mt-s">Every work on a LUMAS wall is a signed, numbered, limited edition from an artist we represent — the same work a private collector buys in one of our galleries. We start with your positioning and the architecture of each space, then curate from there.</p>
           </div>
+        </div>
+
+        <div class="divided reveal" style="margin-top:clamp(3.2rem,4vw,5.6rem)">
+          <div class="divided__item"><p class="ui-label">Curation</p><h3 class="display-h4">One Art Consultant</h3><p>A single point of contact across the whole project, briefed on your brand and your audience.</p></div>
+          <div class="divided__item"><p class="ui-label">Production</p><h3 class="display-h4">Made in Germany</h3><p>Museum-grade printing, mounting and framing in-house, produced to one standard.</p></div>
+          <div class="divided__item"><p class="ui-label">Installation</p><h3 class="display-h4">Hung and signed off</h3><p>Delivered and installed room by room, out of hours, with a handover sheet for each space.</p></div>
+        </div>
+
+        <div class="stats reveal" style="margin-top:clamp(3.6rem,5vw,6.4rem)">
+          <div class="stat"><div class="stat__n">2004</div><div class="stat__l">Founded in Berlin</div></div>
+          <div class="stat"><div class="stat__n">19</div><div class="stat__l">Galleries across Europe &amp; the US</div></div>
+          <div class="stat"><div class="stat__n">500</div><div class="stat__l">Curated artists</div></div>
+          <div class="stat"><div class="stat__n">70+</div><div class="stat__l">Countries delivered to</div></div>
         </div>
       </div>
     </section>
@@ -96,21 +113,49 @@
       </div>
     </section>
 
-    <!-- ══ WHAT PARTNERS GET ══ -->
+    <!-- ══ EDITORIAL STRIP — why editions (dark) ══ -->
+    <section class="section editorial">
+      <div class="wrap">
+        <div class="editorial__inner reveal">
+          <p class="eyebrow">Why editions</p>
+          <h2 class="display-h2">A limited edition is a promise that the space next door is not the same</h2>
+          <p>Every LUMAS work is signed, numbered and capped. That is what separates a collection from a print order — and what anyone standing in front of it can feel without being told.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SPECIFICATION ══ -->
     <section class="section surface-sunken">
       <div class="wrap">
         <div class="section-head reveal">
-          <p class="eyebrow">What's included</p>
-          <h2 class="display-h2">Everything from brief to wall</h2>
+          <p class="eyebrow">Specification</p>
+          <h2 class="display-h2 mt-s">The specification, in full</h2>
+          <p class="body-large txt-secondary mt-m measure">Editions, production, framing, safety, lead time and reordering — as they stand in the contract, before you ask for them.</p>
         </div>
-        <ul class="benefits">
-          <li class="benefit reveal"><span class="benefit__t">A dedicated Art Consultant</span><span class="benefit__d">One point of contact who learns the project and stays with it from first brief to final install.</span></li>
-          <li class="benefit reveal"><span class="benefit__t">Custom curation &amp; visualisation</span><span class="benefit__d">A considered selection with concepts and renderings — so you can see the work in your space before you commit.</span></li>
-          <li class="benefit reveal"><span class="benefit__t">Trade terms</span><span class="benefit__d">Project pricing and terms for the trade, with clear quotes and lead times.</span></li>
-          <li class="benefit reveal"><span class="benefit__t">Made in Germany</span><span class="benefit__d">Signed, limited editions, printed and finished to gallery standard in our own production.</span></li>
-          <li class="benefit reveal"><span class="benefit__t">Framing &amp; special finishing</span><span class="benefit__d">Frame, mount and finishing options — including museum formats and diasec — matched to the interior.</span></li>
-          <li class="benefit reveal"><span class="benefit__t">Delivery &amp; installation</span><span class="benefit__d">Logistics and professional hanging across Europe, coordinated to your programme.</span></li>
-        </ul>
+        <div class="spec reveal">
+          <div class="spec__row"><div class="spec__k">Editions</div><div class="spec__v"><strong>Signed, numbered, limited.</strong> Certificate of authenticity per work — the same edition a private collector buys.</div></div>
+          <div class="spec__row"><div class="spec__k">Formats</div><div class="spec__v">30 × 40 cm to 200 × 300 cm. Custom sizing on request for statement and lobby works.</div></div>
+          <div class="spec__row"><div class="spec__k">Materials</div><div class="spec__v">Diasec® face-mount, museum-grade pigment print, or hand-varnished canvas.</div></div>
+          <div class="spec__row"><div class="spec__k">Framing</div><div class="spec__v">Solid wood or aluminium, a single standard across the property. Anti-reflective glazing for daylight-facing walls.</div></div>
+          <div class="spec__row"><div class="spec__k">Safety</div><div class="spec__v">Security fixings for public areas. Fire-classification documentation on request — normally required for newbuild sign-off.</div></div>
+          <div class="spec__row"><div class="spec__k">Lead time</div><div class="spec__v">Typically six to ten weeks from curation sign-off, including installation scheduling.</div></div>
+          <div class="spec__row"><div class="spec__k">Installation</div><div class="spec__v">LUMAS-managed, out of hours, room by room, with a signed handover sheet per space.</div></div>
+          <div class="spec__row"><div class="spec__k">Reordering</div><div class="spec__v">Your specification held on file — replacements and phase two match exactly.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ DISTINCTIVE OFFER — in-room acquisition ══ -->
+    <section class="wrap section hairline-top">
+      <div class="offer reveal">
+        <div>
+          <p class="eyebrow">Distinctive to LUMAS</p>
+          <h3 class="display-h3 mt-s">Guests can acquire the edition from the room it hangs in</h3>
+        </div>
+        <div>
+          <p>A discreet in-room card links each edition to its page on lumas.com. Guests acquire it at gallery terms, and the property earns a referral share.</p>
+          <p>Because LUMAS represents the edition itself, nothing passes through a reseller — the work on the wall and the work for sale are one and the same.</p>
+        </div>
       </div>
     </section>
 
@@ -133,6 +178,28 @@
       </div>
     </section>
 
+    <!-- ══ CASE STUDY — Four Seasons Gresham Palace ══ -->
+    <section class="wrap section hairline-top">
+      <div class="section-head reveal">
+        <p class="eyebrow">Case study · Budapest</p>
+        <h2 class="display-h2">A listed building where nothing generic survives</h2>
+      </div>
+      <div class="case">
+        <figure class="case__media reveal">
+          <img src="assets/projects/four-seasons-lobby.jpg" width="1350" height="1800" alt="A Bert Stern edition in the lobby of the Four Seasons Hotel Gresham Palace, Budapest" loading="lazy">
+          <figcaption class="caption">Four Seasons Hotel Gresham Palace, Budapest — lobby, Bert Stern edition.</figcaption>
+        </figure>
+        <div class="case__text reveal">
+          <p class="body-large">The Four Seasons Gresham Palace is a listed Art Nouveau building where nothing generic survives contact with the architecture. We curated per room type rather than per floor, and matched the edition palette to the original Zsolnay tilework.</p>
+          <div class="case__facts">
+            <div class="case__fact"><span class="ui-label">Approach</span><p>Curated by room type, not by floor — a consistent visual family across the property.</p></div>
+            <div class="case__fact"><span class="ui-label">Palette</span><p>Edition colours matched to the building's original Zsolnay ceramic tilework.</p></div>
+            <div class="case__fact"><span class="ui-label">Delivery</span><p>Produced to one framing standard and installed out of guest hours, room by room.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ══ SELECTED PROJECTS ══ -->
     <section id="projects" class="wrap section hairline-top">
       <div class="section-head reveal">
@@ -143,7 +210,6 @@
       <div class="carousel" data-carousel="projects">
         <div class="carousel__viewport">
           <div class="carousel__track">
-            <article class="slide reveal"><img class="slide__img" src="assets/projects/four-seasons-lobby.jpg" width="1350" height="1800" alt="A Bert Stern edition in the lobby of the Four Seasons Hotel Gresham Palace, Budapest" loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Hospitality</p><p>Four Seasons Hotel Gresham Palace, Budapest — Bert Stern</p></div></article>
             <article class="slide reveal"><img class="slide__img" src="assets/projects/four-seasons-dining.jpg" width="1200" height="1600" alt="An Ysabel LeMay edition in a restaurant at the Four Seasons, Budapest" loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Hospitality</p><p>Four Seasons Hotel Gresham Palace, Budapest — Ysabel LeMay</p></div></article>
             <article class="slide reveal"><img class="slide__img" src="assets/projects/four-seasons-corridor.jpg" width="1200" height="1600" alt="LUMAS editions along a corridor at the Four Seasons, Budapest" loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Hospitality</p><p>Four Seasons Hotel Gresham Palace, Budapest</p></div></article>
             <article class="slide reveal"><img class="slide__img" src="assets/projects/club-green.jpg" width="1200" height="1600" alt="A framed edition on a green wall at The Club, Budapest" loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Private club</p><p>The Club, Budapest</p></div></article>
@@ -156,7 +222,7 @@
         </div>
         <button class="carousel__btn carousel__btn--prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
         <button class="carousel__btn carousel__btn--next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
-        <p class="carousel__count" data-count>01 / 09</p>
+        <p class="carousel__count" data-count>01 / 07</p>
       </div>
       <p class="caption txt-secondary mt-l">Residential photography: Bence Bakonyi.</p>
     </section>
@@ -188,12 +254,12 @@
       </div>
     </section>
 
-    <!-- ══ TRADE CONSULTATION — real channels as icon tiles ══ -->
+    <!-- ══ TRADE CONSULTATION ══ -->
     <section id="contact" class="section surface-sunken">
       <div class="wrap guidance">
         <p class="eyebrow reveal">Trade consultation</p>
         <h2 class="display-h2 guidance__title reveal">Need guidance?</h2>
-        <p class="body-large txt-secondary guidance__lede reveal">A dedicated Art Consultant helps you source, frame and install the right editions for your project — talk to us however suits you.</p>
+        <p class="body-large txt-secondary guidance__lede reveal">A dedicated Art Consultant helps you source, frame and install the right editions for your project. A named consultant responds within two working days with an initial direction — no meeting needed first.</p>
         <div class="reveal" style="margin-top:2.8rem"><button class="btn btn--primary" type="button" data-open-enquiry data-goal="cta_click" data-cta="guidance_enquiry">Start an enquiry</button></div>
       </div>
     </section>
@@ -202,15 +268,15 @@
     <section class="wrap section hairline-top">
       <div class="section-head reveal">
         <p class="eyebrow">We are here to help</p>
-        <h2 class="display-h2">Frequently asked questions</h2>
+        <h2 class="display-h2">The questions we are asked most often</h2>
       </div>
       <div class="faq reveal">
-        <details class="faq__q"><summary>Is LUMAS right for my business?</summary><p class="faq__a">If you place art in spaces people spend time in — hotels, offices, clinics, residences or retail — we can help. From a single statement wall to a rolling art programme across sites, we scale to the brief.</p></details>
-        <details class="faq__q"><summary>How does the process work?</summary><p class="faq__a">A dedicated Art Consultant learns the space and the intent, proposes a considered selection with formats and framing, and — once you decide — handles production, delivery and installation. One point of contact from brief to wall.</p></details>
-        <details class="faq__q"><summary>How long does a project take?</summary><p class="faq__a">It depends on scale and framing. A handful of pieces can be ready in a few weeks; a multi-site programme is planned to your timeline. We confirm lead times with every quote.</p></details>
-        <details class="faq__q"><summary>Do business clients get special terms?</summary><p class="faq__a">Yes — trade partners work with dedicated project pricing and terms, with clear quotes and no surprises.</p></details>
-        <details class="faq__q"><summary>Do you offer leasing or rotating art?</summary><p class="faq__a">We can arrange rotating and rental programmes for spaces that like to refresh their art regularly — ask your Art Consultant about the options for your project.</p></details>
-        <details class="faq__q"><summary>Can you deliver across multiple locations?</summary><p class="faq__a">Yes. We coordinate production, logistics and professional installation across Europe and beyond, so a rollout across several sites stays consistent and on schedule.</p></details>
+        <details class="faq__q"><summary>Do you work to our brief, or impose a LUMAS look?</summary><p class="faq__a">Yours. Your Art Consultant is briefed on your positioning, your audience and your interior scheme before any work is proposed. LUMAS has no house style to protect — we represent hundreds of artists precisely so that the answer can be different every time.</p></details>
+        <details class="faq__q"><summary>What is the minimum project size?</summary><p class="faq__a">There isn't one that matters. We work from a single statement wall to a rolling programme across sites. The process is the same; only the scale of the brief changes.</p></details>
+        <details class="faq__q"><summary>Can we reorder the same works in a few years?</summary><p class="faq__a">Your specification is held on file, so format, framing and glazing match exactly. Editions are limited and capped, so a specific work can sell out — we flag which of your placements are at risk at handover and hold reserve numbers where you ask us to.</p></details>
+        <details class="faq__q"><summary>Who handles installation, and when?</summary><p class="faq__a">LUMAS-managed teams, scheduled around your operation — typically out of hours, room by room. You receive a signed handover sheet for each space.</p></details>
+        <details class="faq__q"><summary>How do you handle framing, safety and compliance?</summary><p class="faq__a">One framing and glazing standard across the property, with anti-reflective glazing for daylight-facing walls. Security fixings are standard in public areas, and fire-classification documentation is issued on request — ask for it early rather than at handover.</p></details>
+        <details class="faq__q"><summary>Do you sell, lease or rotate?</summary><p class="faq__a">Sale is standard, and the works become a documented asset on your register. Rental, rotating and phased-purchase structures are available for spaces that prefer the spend off the capital budget or like to refresh regularly.</p></details>
       </div>
     </section>
 
@@ -240,13 +306,14 @@
     </div>
   </footer>
 
-  <!-- ══ ENQUIRY MODAL (mirrors the real LUMAS B2B partner form) ══ -->
+  <!-- ══ ENQUIRY MODAL (mirrors the real LUMAS B2B partner form + qualifying fields) ══ -->
   <dialog class="modal" id="enquiry" aria-labelledby="enquiry-title">
     <div class="modal__inner">
       <div class="modal__head">
         <div>
           <p class="eyebrow">Trade &amp; business</p>
           <h2 class="display-h2 mt-s" id="enquiry-title">Become a LUMAS trade partner</h2>
+          <p class="body-large txt-secondary mt-m">A named Art Consultant responds within two working days with an initial direction and an indicative budget range. No meeting is needed first.</p>
         </div>
         <button class="modal__x" type="button" data-close-enquiry aria-label="Close enquiry form"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
@@ -256,7 +323,7 @@
           <div class="field"><label for="f-first">First name</label><input id="f-first" name="first" required autocomplete="given-name" placeholder="Please fill in"></div>
           <div class="field"><label for="f-last">Surname</label><input id="f-last" name="last" required autocomplete="family-name" placeholder="Please fill in"></div>
         </div>
-        <div class="field"><label for="f-email">Email address</label><input id="f-email" name="email" type="email" required autocomplete="email" placeholder="Please fill in"></div>
+        <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" required autocomplete="email" placeholder="Please fill in"></div>
         <div class="field">
           <label for="f-phone">Phone number</label>
           <div class="phone-row">
@@ -266,7 +333,7 @@
             <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="Please fill in">
           </div>
         </div>
-        <div class="field"><label for="f-company">Company</label><input id="f-company" name="company" required autocomplete="organization" placeholder="Please fill in"></div>
+        <div class="field"><label for="f-company">Company or group</label><input id="f-company" name="company" required autocomplete="organization" placeholder="Please fill in"></div>
         <div class="field">
           <label for="f-type">Type of business</label>
           <select id="f-type" name="type" required>
@@ -274,9 +341,42 @@
             <option>Interior design / architecture</option>
             <option>Hospitality &amp; leisure</option>
             <option>Corporate / workplace</option>
+            <option>Healthcare &amp; wellness</option>
             <option>Developer / residences</option>
             <option>Gallery / reseller</option>
             <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-project">Project type</label>
+          <select id="f-project" name="project">
+            <option value="" disabled selected>Choose an option…</option>
+            <option>Newbuild</option>
+            <option>Full refurbishment</option>
+            <option>Partial refresh</option>
+            <option>Public areas only</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-window">Installation window</label>
+          <select id="f-window" name="window">
+            <option value="" disabled selected>Choose an option…</option>
+            <option>Within 3 months</option>
+            <option>3–6 months</option>
+            <option>6–12 months</option>
+            <option>Later, or not yet fixed</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-budget">Indicative budget</label>
+          <select id="f-budget" name="budget">
+            <option value="" disabled selected>Choose an option…</option>
+            <option>Prefer not to say</option>
+            <option>Under €25,000</option>
+            <option>€25,000 – €75,000</option>
+            <option>€75,000 – €200,000</option>
+            <option>Above €200,000</option>
           </select>
         </div>
         <label class="consent"><input type="checkbox" name="consent" required><span>By submitting this form you agree to our <a class="link-underline" href="https://www.lumas.de/datenschutz/" target="_blank" rel="noopener">privacy policy</a>.</span></label>
@@ -286,12 +386,12 @@
       <div class="modal__success" hidden>
         <p class="eyebrow">Thank you</p>
         <h2 class="display-h3 mt-s">Your enquiry is on its way</h2>
-        <p class="body-large txt-secondary mt-m">A dedicated Art Consultant will be in touch shortly. In the meantime, you're welcome to reach us directly by phone or WhatsApp.</p>
+        <p class="body-large txt-secondary mt-m">A named Art Consultant will be in touch within two working days. In the meantime, you're welcome to reach us directly by phone or WhatsApp.</p>
         <button class="btn btn--ghost" type="button" data-close-enquiry>Close</button>
       </div>
     </div>
   </dialog>
 
-  <script src="assets/site.js?v=8"></script>
+  <script src="assets/site.js?v=9"></script>
 </body>
 </html>

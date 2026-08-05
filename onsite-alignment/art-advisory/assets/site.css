@@ -35,6 +35,8 @@
   --border-default:var(--bone-100);
   --border-subtle:var(--bone-200);
   --border-strong:var(--charcoal-300);
+  --border-focus:var(--charcoal-900);
+  --status-error:#B5352A;
 
   --font-display:'Utile Display','Hanken Grotesk','Archivo',sans-serif;
   --font-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -335,6 +337,40 @@ form.enquiry { display:grid; gap:1.6rem; }
 .faq__q[open] summary::after { content:"–"; }
 .faq__q summary:hover { color:var(--text-secondary); }
 .faq__a { padding:0 0 2.4rem; color:var(--text-secondary); line-height:1.7; max-width:66ch; }
+
+/* ── Editorial strip (dark, centered) — V2 EditorialStrip pattern ─ */
+.editorial { background:var(--surface-inverse); color:var(--text-inverse); }
+.editorial__inner { max-width:74ch; margin-inline:auto; text-align:center; display:grid; gap:2.4rem; }
+.editorial .eyebrow { color:rgba(244,237,226,0.55); }
+.editorial h2 { color:#fff; }
+.editorial p { color:rgba(244,237,226,0.80); font-weight:300; font-size:clamp(1.7rem,1.6vw,2.0rem); line-height:1.6; max-width:64ch; margin-inline:auto; }
+
+/* ── Specification panel — label / value rows ───────────── */
+.spec { border-top:1px solid var(--border-strong); }
+.spec__row { display:grid; gap:0.6rem 3.2rem; padding:2.2rem 0; border-bottom:1px solid var(--border-subtle); }
+.spec__k { font-family:var(--font-body); font-weight:700; font-size:1.1rem; line-height:1.6; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-secondary); }
+.spec__v { color:var(--text-secondary); line-height:1.6; }
+.spec__v strong { color:var(--text-primary); font-weight:500; }
+@media (min-width:760px){ .spec__row { grid-template-columns:0.8fr 2.2fr; align-items:baseline; } }
+
+/* ── Distinctive offer callout (editorial two-column) ───── */
+.offer { background:var(--surface-muted); padding:clamp(3.2rem,5vw,6.4rem); display:grid; gap:2.0rem; }
+.offer .eyebrow { color:var(--text-secondary); }
+.offer h3 { max-width:20ch; }
+.offer p { color:var(--text-secondary); max-width:60ch; }
+.offer p + p { margin-top:1.4rem; }
+@media (min-width:900px){ .offer { grid-template-columns:0.9fr 1.1fr; column-gap:clamp(4rem,6vw,8rem); align-items:start; } }
+
+/* ── Case study spotlight ───────────────────────────────── */
+.case { display:grid; gap:clamp(2.8rem,4vw,5.6rem); align-items:center; }
+@media (min-width:900px){ .case { grid-template-columns:1fr 1fr; } }
+.case__media { margin:0; }
+.case__media img { width:100%; height:auto; display:block; }
+.case__media figcaption { padding-top:1.2rem; color:var(--text-secondary); }
+.case__facts { display:grid; gap:0; margin-top:2.8rem; border-top:1px solid var(--border-subtle); }
+.case__fact { padding:1.6rem 0; border-bottom:1px solid var(--border-subtle); }
+.case__fact .ui-label { color:var(--text-secondary); display:block; margin-bottom:0.4rem; }
+.case__fact p { color:var(--text-secondary); }
 
 /* ── Reveal-on-scroll (gated behind .js so no-JS shows all) ─ */
 .js .reveal { opacity:0; transform:translateY(16px); transition:opacity 620ms var(--ease-out),transform 620ms var(--ease-out); }
