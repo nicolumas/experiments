@@ -344,6 +344,11 @@ form.enquiry { display:grid; gap:1.6rem; }
 
 /* ── FAQ accordion (native <details>) ───────────────────── */
 .faq { max-width:840px; margin-inline:auto; }
+/* Two-column FAQ: heading left, questions right (aligned, not centre-floated) */
+.faq-grid { display:grid; gap:clamp(2.4rem,3vw,4rem); }
+.faq-grid .section-head { margin-bottom:0; }
+.faq-grid .faq { max-width:none; margin-inline:0; }
+@media (min-width:900px){ .faq-grid { grid-template-columns:0.85fr 1.15fr; column-gap:clamp(4rem,6vw,9.6rem); align-items:start; } }
 .faq__q { border-top:1px solid var(--border-subtle); }
 .faq__q:last-of-type { border-bottom:1px solid var(--border-subtle); }
 .faq__q summary { list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:2.4rem; padding:2.2rem 0; font-size:1.7rem; font-weight:500; color:var(--text-primary); }
