@@ -1,0 +1,1253 @@
+<!doctype html>
+<!-- ═══ PROTO HEADER ═══════════════════════════════════════════════════
+  ID:          PROTO-2026-015
+  Source:      Figma · Cart-Overlay-Optimization_May26 (fr7nxOy9s1wf1hYl3iHvxq)
+               node 79:2 — "Page 2": live-shop screens (DE), not wireframes.
+               6 surfaces: mobile PDP + overlay (5 total-disclosure variants),
+               mobile page + overlay, desktop PDP + right drawer,
+               desktop PDP + compact panel, mobile cart page, desktop checkout.
+  Task:        Convert every surface to the LUMAS V2 (2026) brand system.
+  Hypothesis:  [ASSUMPTION — the five overlay variants on this page are all
+               about ONE question, so that is the hypothesis]
+               For DE mobile visitors who have just added an edition, making
+               the shipping cost and insured-delivery promise explicit in the
+               cart overlay (rather than the vague "Der Betrag beinhaltet
+               lokale Versandkosten") reduces cart abandonment, because the
+               current wording leaves shoppers unsure whether €2.163,90 is
+               the final amount.
+  Prior:       ledger silent (run lumas-07-ledger READ before ticketing)
+  Goals:       primary   Begin-Checkout
+               secondary Express-PayPal · Express-AmazonPay · Express-ApplePay ·
+                         Coupon-applied · Cart-item-removed · Overlay-close ·
+                         Size-selected · Framing-selected
+               [closest-match names — NOT verified against the ABlyft 16-goal library]
+  Variants:    disclosure A local-note | B insured-text | C trust-box |
+                          D collapsed-total | E full-breakdown
+  States:      default | loading | empty | error
+  Status:      exploration — V2 brand conversion. Copy carried over 1:1 apart
+               from V2 casing rules and du-form (LUMAS house style).
+  URL params:  ?s=<surface>&d=<disclosure>&st=<state>
+  Keys:        s = cycle surface · d = cycle disclosure · n = notes
+  Assets:      art/ — the two artworks, cropped from the
+               Figma render. Placeholder-free so real aspect ratios stress
+               the layout.
+═══════════════════════════════════════════════════════════════════════ -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- shared fonts live one level up, under onsite-alignment/assets -->
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart overlay page 2 — V2 branding conversion</title>
+<style>
+
+:root{
+  --charcoal-900:#1C1A18; --charcoal-800:#3A3835; --charcoal-700:#5A5752;
+  --charcoal-500:#908C87; --charcoal-300:#C7C3BE; --charcoal-100:#E3E0DB;
+  --ivory-100:#F4EDE2;   --ivory-200:#F7F1E9;   --ivory-300:#FAF6F1;
+  --bone-100:#E2D8CC;    --bone-200:#EAE2D8;    --bone-300:#F0EBE3;
+  --success-600:#3A6B4A; --success-50:#E8F2EB;
+  --warning-600:#9B6D1E; --warning-50:#FDF5E6;
+  --error-600:#B5352A;   --error-50:#FDECEA;
+
+  --color-text-primary:var(--charcoal-900);
+  --color-text-secondary:var(--charcoal-700);
+  --color-text-tertiary:var(--charcoal-500);
+  --color-text-disabled:var(--charcoal-300);
+  --color-text-inverse:var(--ivory-100);
+  --color-surface-page:var(--ivory-300);
+  --color-surface-card:#FFFFFF;
+  --color-surface-raised:var(--ivory-200);
+  --color-surface-sunken:var(--ivory-100);
+  --color-surface-inverse:var(--charcoal-900);
+  --color-surface-muted:var(--bone-300);
+  --color-border-default:var(--bone-100);
+  --color-border-subtle:var(--bone-200);
+  --color-border-strong:var(--charcoal-300);
+  --color-border-focus:var(--charcoal-900);
+  --color-border-inverse:var(--ivory-100);
+  --color-status-success:var(--success-600);
+  --color-status-success-bg:var(--success-50);
+  --color-status-warning:var(--warning-600);
+  --color-status-warning-bg:var(--warning-50);
+  --color-status-error:var(--error-600);
+  --color-status-error-bg:var(--error-50);
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px; --sp-20:80px; --sp-24:96px;
+  --radius-xs:2px; --radius-sm:4px;
+  --shadow-sm:0 1px 2px rgba(28,26,24,.06);
+  --shadow-md:0 2px 8px rgba(28,26,24,.08);
+  --shadow-lg:0 8px 32px rgba(28,26,24,.12);
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.28);
+  --font-display:'UtileDisplay',Georgia,serif;
+  --font-ui:'Archivo',-apple-system,sans-serif;
+  --zoom:1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--color-surface-page);color:var(--color-text-primary);
+  font-family:var(--font-ui);font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font:inherit}
+
+/* ── type tiers ────────────────────────────────────────────────── */
+.d-h1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,6vw,62px);line-height:1.04}
+.d-h2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.12}
+.d-h3{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12}
+.d-h4{font-family:var(--font-display);font-weight:400;font-size:22px;line-height:1.25}
+.b-lg{font-weight:300;font-size:20px;line-height:1.6}
+.b{font-weight:400;font-size:16px;line-height:1.5}
+.b-sm{font-weight:400;font-size:13px;line-height:1.65}
+.cap{font-weight:400;font-size:11px;line-height:1.5;letter-spacing:.33px}
+.micro{font-weight:400;font-size:10px;line-height:1.5}
+.eyebrow{font-weight:700;font-size:11px;line-height:1.5;letter-spacing:1.98px;text-transform:uppercase}
+.uilabel{font-weight:700;font-size:10px;line-height:1.5;letter-spacing:1.8px;text-transform:uppercase}
+.t-sec{color:var(--color-text-secondary)} .t-ter{color:var(--color-text-tertiary)}
+.bold{font-weight:700} .italic{font-style:italic}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── components ────────────────────────────────────────────────── */
+.btn{display:block;width:100%;border:0;cursor:pointer;text-align:center;font-family:var(--font-ui);
+  font-weight:700;font-size:13px;line-height:1.5;letter-spacing:1.82px;text-transform:uppercase;
+  border-radius:var(--radius-xs);padding:var(--sp-4) 28px;transition:background .18s,color .18s}
+.btn-primary{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+.btn-primary:hover{background:var(--charcoal-800)}
+.btn-secondary{background:transparent;color:var(--color-text-primary);border:1px solid var(--color-border-focus)}
+.btn-secondary:hover{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+.btn-ghost{display:inline-block;width:auto;background:none;border:0;
+  border-bottom:1px solid var(--color-border-focus);padding:var(--sp-1) 0 6px;
+  font-weight:400;letter-spacing:1.3px;color:var(--color-text-primary)}
+.btn-ghost--inverse{color:var(--color-text-inverse);border-bottom-color:var(--color-border-inverse)}
+.btn:disabled{background:var(--color-surface-muted);color:var(--color-text-disabled);cursor:not-allowed}
+.btn-sm{padding:var(--sp-3) var(--sp-5);font-size:12px;letter-spacing:1.4px}
+
+.chip{display:inline-block;padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-xs);
+  border:1px solid var(--color-border-strong);background:transparent;font-weight:700;font-size:12px;
+  line-height:1.5;letter-spacing:.96px;text-transform:uppercase;color:var(--color-text-primary)}
+.chip--active{background:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse)}
+.chip--sm{padding:var(--sp-1) var(--sp-2);font-size:10px;letter-spacing:1.2px}
+
+.field{display:flex;align-items:center;gap:var(--sp-2);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-sm);padding:13px 14px;background:var(--color-surface-card)}
+.field input{border:0;outline:0;flex:1;min-width:0;font-family:var(--font-ui);font-size:14px;
+  color:var(--color-text-primary);background:transparent}
+.field input::placeholder{color:var(--color-text-tertiary)}
+.field:focus-within{border-width:2px;border-color:var(--color-border-focus);padding:12px 13px}
+.field--error{border-color:var(--color-status-error)}
+.helper{font-size:11px;line-height:1.5;color:var(--color-text-tertiary);margin-top:var(--sp-2)}
+.helper--error{color:var(--color-status-error)}
+
+.icon-btn{background:none;border:0;cursor:pointer;color:var(--color-text-primary);
+  display:inline-flex;align-items:center;position:relative;padding:var(--sp-1)}
+.badge{position:absolute;top:-3px;right:-5px;min-width:16px;height:16px;border-radius:8px;
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);font-size:9px;font-weight:700;
+  display:grid;place-items:center;padding:0 4px}
+.remove{position:absolute;top:0;right:0;width:22px;height:22px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);display:grid;place-items:center}
+
+/* ── shop chrome ───────────────────────────────────────────────── */
+.promo-dark{background:var(--color-surface-inverse);padding:var(--sp-3) var(--sp-6);
+  display:flex;align-items:center;justify-content:center;gap:var(--sp-6)}
+.promo-dark .eyebrow{color:var(--color-text-inverse)}
+.promo-light{background:var(--color-surface-page);padding:var(--sp-3) var(--sp-10);text-align:center;position:relative}
+.promo-light .ovc{position:absolute;top:50%;right:var(--sp-4);transform:translateY(-50%)}
+.site-head{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-4) var(--sp-6);
+  background:var(--color-surface-card);border-bottom:1px solid var(--color-border-subtle)}
+.logo{font-family:var(--font-display);font-weight:400;font-size:24px;line-height:1;
+  letter-spacing:.5px;display:inline-flex;align-items:flex-start;gap:2px}
+.logo sup{font-size:9px;line-height:1}
+.nav{display:flex;gap:var(--sp-5)}
+.nav a{font-size:14px;color:var(--color-text-primary);text-decoration:none;cursor:pointer}
+.nav a:hover{border-bottom:1px solid var(--color-border-focus)}
+
+.trust-row{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp-4);
+  padding:var(--sp-6);background:var(--color-surface-card);
+  border-bottom:1px solid var(--color-border-subtle);text-align:center}
+.trust-row .ic{display:grid;place-items:center;margin-bottom:var(--sp-2);color:var(--color-text-primary)}
+
+/* ── PDP ───────────────────────────────────────────────────────── */
+.size-row{display:flex;gap:var(--sp-2)}
+.size-chip{flex:1;border:1px solid var(--color-border-strong);background:transparent;cursor:pointer;
+  border-radius:var(--radius-xs);padding:var(--sp-2) var(--sp-1);text-align:center;
+  font-family:var(--font-ui);color:var(--color-text-primary)}
+.size-chip b{display:block;font-size:13px;font-weight:700;letter-spacing:.4px}
+.size-chip span{display:block;font-size:10px;line-height:1.4;color:var(--color-text-tertiary);margin-top:2px}
+.size-chip[aria-pressed="true"]{background:var(--color-surface-inverse);border-color:var(--color-surface-inverse);color:var(--color-text-inverse)}
+.size-chip[aria-pressed="true"] span{color:rgba(244,237,226,.55)}
+.select-row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);
+  border:1px solid var(--color-border-default);border-radius:var(--radius-sm);padding:14px;
+  background:var(--color-surface-card);cursor:pointer;width:100%;text-align:left}
+.select-row:hover{border-color:var(--color-border-strong)}
+.gallery .main{background:var(--color-surface-page);position:relative;aspect-ratio:4/3;
+  display:grid;place-items:center;overflow:hidden}
+.gallery .main img{width:74%;box-shadow:var(--shadow-frame)}
+.gallery .tool{position:absolute;background:var(--color-surface-card);border:1px solid var(--color-border-subtle);
+  padding:var(--sp-2) var(--sp-3);display:flex;align-items:center;gap:var(--sp-2);border-radius:var(--radius-xs)}
+.thumbs{display:flex;gap:var(--sp-2);margin-top:var(--sp-3)}
+.thumbs div{width:60px;aspect-ratio:1;background:var(--color-surface-page);border:1px solid var(--color-border-subtle);overflow:hidden}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+
+/* ── cart / overlay ───────────────────────────────────────────── */
+.ov-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-4);
+  padding:var(--sp-6) var(--sp-6) var(--sp-5)}
+.ov-body{padding:0 var(--sp-6) var(--sp-5)}
+.ov-foot{padding:var(--sp-6);border-top:1px solid var(--color-border-subtle)}
+/* The page ground is ivory/300, so the money block goes WHITE — at the bottom
+   edge of the frame an ivory footer dissolved straight into the page behind it.
+   Separation is the 1px hairline; the card stays lighter than its ground. */
+.ov-foot--sunken{background:var(--color-surface-card)}
+/* Green by decision: the returns promise keeps status/success as a conversion
+   device, so this is a logged exception to "status colour is functional only". */
+.reassure{display:flex;gap:var(--sp-3);align-items:flex-start;
+  background:var(--color-status-success-bg);color:var(--color-status-success);
+  padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4)}
+.item{display:grid;grid-template-columns:96px 1fr;gap:var(--sp-4);padding:var(--sp-5) 0;
+  border-bottom:1px solid var(--color-border-subtle);position:relative}
+.item:last-of-type{border-bottom:0}
+.item--lg{grid-template-columns:132px 1fr}
+.thumb{background:var(--color-surface-page);border:1px solid var(--color-border-subtle);overflow:hidden;align-self:start}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item-meta{display:flex;flex-direction:column;gap:var(--sp-1);min-width:0;padding-right:var(--sp-6)}
+.trustbox{display:flex;gap:var(--sp-3);border:1px solid var(--color-border-default);
+  background:var(--color-surface-page);padding:var(--sp-3);margin-top:var(--sp-3)}
+.sum{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-4);padding:var(--sp-1) 0}
+.sum--total{border-top:1px solid var(--color-border-subtle);margin-top:var(--sp-2);
+  padding-top:var(--sp-3);align-items:flex-end}
+.sum .grand{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12;flex:none}
+.total-toggle{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-3);
+  width:100%;background:none;border:0;cursor:pointer;color:var(--color-text-primary);text-align:left;
+  border-top:1px solid var(--color-border-subtle);margin-top:var(--sp-2);padding:var(--sp-3) 0 0}
+.total-toggle .lbl{flex:1;min-width:0}
+.total-toggle svg{flex:none;margin-bottom:4px;color:var(--color-text-tertiary)}
+.link{border-bottom:1px solid currentColor;cursor:pointer}
+.foot-trust{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  margin-top:var(--sp-2);color:var(--color-text-tertiary)}
+
+/* ── checkout ─────────────────────────────────────────────────── */
+.pay-row{display:flex;gap:var(--sp-4)}
+.pay{flex:1;display:grid;place-items:center;padding:14px var(--sp-3);border-radius:var(--radius-xs);
+  border:1px solid transparent;cursor:pointer;font-family:var(--font-ui);font-weight:700;font-size:13px;
+  letter-spacing:.4px;white-space:nowrap}
+.pay:hover{filter:brightness(.94)}
+/* provider marks keep their own branding — V2 governs LUMAS surfaces only */
+.pay-paypal{background:#FFC439;color:#003087}
+.pay-amazon{background:linear-gradient(#F9D262,#F0A93B);color:#111}
+.pay-apple{background:#000;color:#fff}
+.divider{display:flex;align-items:center;gap:var(--sp-4);margin:var(--sp-8) 0}
+.divider::before,.divider::after{content:"";height:1px;background:var(--color-border-default);flex:1}
+.tp{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:var(--sp-6);align-items:start;
+  border-top:1px solid var(--color-border-subtle);margin-top:var(--sp-8);padding-top:var(--sp-8)}
+.stars{display:flex;gap:2px;margin:var(--sp-2) 0}
+.stars i{width:15px;height:15px;background:#00B67A;display:block}
+.stars i::before{content:"★";color:#fff;font-size:11px;display:grid;place-items:center;height:100%}
+.tp-verified{display:flex;align-items:center;gap:var(--sp-1);color:var(--color-text-secondary)}
+.sum-line{display:flex;align-items:center;gap:var(--sp-2);color:var(--color-text-secondary);padding:var(--sp-1) 0}
+
+/* ── skeletons / states ───────────────────────────────────────── */
+.skel{position:relative;overflow:hidden;background:var(--color-surface-page)}
+.skel::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);animation:sweep 1.35s infinite}
+@keyframes sweep{to{transform:translateX(100%)}}
+.skel-line{height:12px;border-radius:var(--radius-xs)}
+.empty{padding:var(--sp-16) var(--sp-6);text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--sp-6)}
+.band-error{display:flex;gap:var(--sp-3);background:var(--color-status-error-bg);color:var(--color-status-error);padding:var(--sp-4) var(--sp-6)}
+
+/* ── frames: real device viewports ────────────────────────────────
+   --vw / --vh are the VISIBLE viewport (device CSS px minus browser
+   chrome). Surfaces are clipped to it, so anything that would need a
+   scroll is immediately obvious instead of hidden by an infinite page. */
+.mob{width:var(--vw,390px);height:var(--vh,auto);background:var(--color-surface-card);
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.mob > *{flex:none}
+.exit-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
+  padding:var(--sp-3) var(--sp-6);border-bottom:1px solid var(--color-border-subtle)}
+.mob[data-tight] .exit-bar,.desk[data-tight] .exit-bar{padding:var(--sp-2) var(--sp-5)}
+.mob[data-tight] .ov-head{padding-top:var(--sp-3)}
+.mob .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.desk{width:1440px;height:var(--dvh,auto);background:var(--color-surface-page);
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.desk > *{flex:none}
+.desk .scroll{flex:1 1 auto;min-height:0;overflow-y:auto}
+.desk .pdp{flex:1 1 auto;min-height:0;overflow:hidden}
+.deskwrap{zoom:var(--zoom)}
+.fitbar{display:flex;align-items:center;gap:var(--sp-3);justify-content:center;font-family:var(--font-ui);
+  font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--color-text-tertiary)}
+.fitbar b{color:var(--color-text-primary)}
+.fitbar .ok{color:var(--color-status-success)}
+.fitbar .warn{color:var(--color-status-warning)}
+/* the overlay's decision layer must survive the smallest viewport */
+.mob .ov-body,.panel .ov-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.mob[data-tight] .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.mob[data-tight] .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.mob[data-tight] .ov-foot{padding:var(--sp-4) var(--sp-5)}
+.mob[data-tight] .item{padding:var(--sp-3) 0;grid-template-columns:72px 1fr}
+.mob[data-tight] .item--lg{grid-template-columns:88px 1fr}
+.mob[data-tight] .reassure{padding:var(--sp-2) var(--sp-4);margin-bottom:var(--sp-3)}
+.mob[data-tight] .sum .grand{font-size:22px}
+/* the PDP behind the sheet clips; the sheet never exceeds 82% of the viewport */
+.peek{flex:1 1 auto;min-height:0;overflow:hidden;border-bottom:1px solid var(--color-border-subtle)}
+/* the sheet takes what it needs; the page behind it gets the remainder */
+.sheet{flex:none;max-height:98%;display:flex;flex-direction:column;min-height:0;
+  background:var(--color-surface-card);box-shadow:0 -8px 32px rgba(28,26,24,.10)}
+.mob[data-compact] .sheet{max-height:98%}
+.sheet--only{max-height:100%;flex:1 1 auto;box-shadow:none}
+/* two lines of spec is enough on a phone; the full string lives on the PDP */
+.mob[data-tight] .item-meta .b-sm,.panel .item-meta .b-sm{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mob[data-tight] .reassure .b-sm{font-size:12px;line-height:1.5}
+.panel .item{grid-template-columns:72px 1fr;padding:var(--sp-3) 0}
+/* the drawer pays for its exit bar out of row rhythm, not out of content */
+.drawer .item{padding:var(--sp-2) 0}
+.drawer .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.drawer .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.drawer .ov-foot{padding:var(--sp-4) var(--sp-5)}
+/* the compact panel drops the returns promise — the footer trust line carries
+   reassurance, and 48px is the difference between fitting and not */
+.panel .reassure{display:none}
+/* last 40px: shave the rhythm, never the CTA */
+.mob[data-tight] .item{padding:var(--sp-2) 0}
+.mob[data-tight] .reassure{margin-bottom:var(--sp-2)}
+.mob[data-tight] .trustbox{padding:var(--sp-2);margin-top:var(--sp-2)}
+.mob[data-tight] .btn-primary{margin-top:var(--sp-5) !important}
+.mob[data-tight] .ov-foot{padding:var(--sp-3) var(--sp-5)}
+/* 1280×689 laptops: the drawer and panel get the same treatment */
+.desk[data-tight] .drawer .item,.desk[data-tight] .panel .item{padding:var(--sp-1) 0}
+.desk[data-tight] .drawer .ov-head,.desk[data-tight] .panel .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.desk[data-tight] .drawer .ov-body,.desk[data-tight] .panel .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.desk[data-tight] .drawer .ov-foot,.desk[data-tight] .panel .ov-foot{padding:var(--sp-3) var(--sp-5)}
+.desk[data-tight] .reassure{padding:var(--sp-2) var(--sp-4);margin-bottom:var(--sp-2)}
+.desk[data-tight] .item-meta .b-sm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.desk[data-tight] .btn-primary{margin-top:var(--sp-5) !important}
+.desk[data-tight] .sum .grand{font-size:22px}
+.panel .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.panel .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.panel .ov-foot{padding:var(--sp-4) var(--sp-5)}
+.mob[data-compact] .item{grid-template-columns:64px 1fr}
+.mob[data-compact] .d-h3{font-size:22px}
+.mob[data-compact] .trust-row{padding:var(--sp-3) var(--sp-2)}
+.drawer{position:absolute;top:0;right:0;width:420px;height:100%;background:var(--color-surface-card);
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column}
+.drawer .ov-body{flex:1;overflow:auto}
+.panel{position:absolute;top:104px;right:var(--sp-6);width:390px;background:var(--color-surface-card);
+  box-shadow:var(--shadow-md);border:1px solid var(--color-border-subtle);
+  max-height:calc(100% - 96px);display:flex;flex-direction:column;min-height:0}
+.scrim{position:absolute;inset:0;background:rgba(28,26,24,.28)}
+.pdp{display:grid;grid-template-columns:1.35fr 1fr;gap:var(--sp-12);padding:var(--sp-8) var(--sp-12) var(--sp-16)}
+.pdp-info{display:flex;flex-direction:column;gap:var(--sp-4)}
+.checkout{display:grid;grid-template-columns:1.25fr .85fr;gap:var(--sp-16);padding:var(--sp-12)}
+
+/* ── prototype chrome ─────────────────────────────────────────── */
+.chrome{position:sticky;top:0;z-index:30;background:var(--color-surface-inverse);color:var(--color-text-inverse);
+  padding:var(--sp-4) var(--sp-6);display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:center}
+.chrome h1{font-family:var(--font-display);font-weight:400;font-size:18px;line-height:1.2;margin-right:auto}
+.chrome h1 span{display:block;color:rgba(244,237,226,.55);font-family:var(--font-ui);font-weight:700;
+  font-size:10px;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2px}
+.seg{display:flex;gap:var(--sp-1);background:rgba(244,237,226,.08);padding:var(--sp-1);border-radius:var(--radius-xs)}
+.seg button{background:none;border:0;cursor:pointer;color:rgba(244,237,226,.75);font-family:var(--font-ui);
+  font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs)}
+.seg button[aria-pressed="true"]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
+.seg button[disabled]{opacity:.35;cursor:not-allowed}
+.stage{padding:var(--sp-10) var(--sp-6) var(--sp-24);display:flex;justify-content:center}
+/* ?chrome=0 — embedded as a tile on the board page */
+body.bare{background:transparent}
+body.bare .chrome{display:none}
+body.bare .stage{padding:0}
+body.bare .notes{display:none}
+body.bare .fitbar{display:none}
+.notes{max-width:900px;margin:0 auto var(--sp-24);background:var(--color-surface-card);
+  border:1px solid var(--color-border-default);padding:var(--sp-10)}
+.notes[hidden]{display:none}
+.notes h2{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12;margin-bottom:var(--sp-2)}
+.notes h3{font-weight:700;font-size:11px;letter-spacing:1.98px;text-transform:uppercase;
+  color:var(--color-text-tertiary);margin:var(--sp-8) 0 var(--sp-3)}
+.notes table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.65}
+.notes td,.notes th{text-align:left;padding:var(--sp-2) var(--sp-3);
+  border-bottom:1px solid var(--color-border-subtle);vertical-align:top}
+.notes th{font-weight:700;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--color-text-tertiary)}
+.notes ul{margin:0 0 0 var(--sp-5);font-size:13px;line-height:1.75;color:var(--color-text-secondary)}
+.notes code{font-family:ui-monospace,monospace;font-size:12px;background:var(--color-surface-sunken);padding:1px 4px}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <h1><span>PROTO-2026-015 · V2 conversion · page 2</span>Cart overlay — live-shop surfaces (DE)</h1>
+  <div class="seg" id="seg-surface" role="group" aria-label="Surface"></div>
+  <div class="seg" id="seg-device" role="group" aria-label="Device viewport"></div>
+  <div class="seg" id="seg-disclosure" role="group" aria-label="Total disclosure"></div>
+  <div class="seg" id="seg-state" role="group" aria-label="State"></div>
+  <div class="seg" id="seg-notes" role="group" aria-label="Notes"></div>
+</header>
+
+<main class="stage" id="stage"></main>
+<section class="notes" id="notes" hidden></section>
+
+<script>
+/* ── instrumentation stubs — each named after its real GA4 event ── */
+function track(eventName, params = {}) { console.log('[track]', eventName, params); }
+
+const ART = {
+  niki: 'art/niki-hare-what-could-possibly-go-wrong.png',
+  wave: 'art/puccinelli-intersection-44.png'
+};
+
+/* ── icons: 1.5px stroke, rounded caps (V2 default is Lucide) ──── */
+const I = (p, s = 20) =>
+  `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+/* raw paths for the trust icons, so the same glyph can render at any size */
+const TRUST_PATH = {
+  returns: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
+  card:    '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  users:   '<path d="M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9.5" cy="7" r="3"/><path d="M21 19v-1a4 4 0 0 0-3-3.9"/>',
+  frame:   '<rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="1.5"/><path d="m21 16-5-5-9 9"/>',
+  shield:  '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>'
+};
+const ICON = {
+  x:        I('<path d="M18 6 6 18M6 6l12 12"/>', 18),
+  chevR:    I('<path d="m9 18 6-6-6-6"/>', 18),
+  chevD:    I('<path d="m6 9 6 6 6-6"/>', 18),
+  chevU:    I('<path d="m18 15-6-6-6 6"/>', 18),
+  chevL:    I('<path d="m15 18-6-6 6-6"/>', 16),
+  shield:   I('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>', 18),
+  heart60:  I('<path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9Z"/>', 22),
+  returns:  I('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>', 22),
+  card:     I('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>', 22),
+  users:    I('<path d="M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9.5" cy="7" r="3"/><path d="M21 19v-1a4 4 0 0 0-3-3.9"/>', 22),
+  frame:    I('<rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="1.5"/><path d="m21 16-5-5-9 9"/>', 22),
+  truck:    I('<path d="M2 16V7h11v9"/><path d="M13 10h4l4 3v3h-3"/><circle cx="6" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>', 18),
+  lock:     I('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>', 18),
+  cart:     I('<path d="M2 3h3l2.4 11.2A2 2 0 0 0 9.4 16h8.7a2 2 0 0 0 2-1.6L22 7H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>', 20),
+  wish:     I('<path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9Z"/>', 20),
+  user:     I('<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>', 20),
+  chat:     I('<path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12Z"/>', 20),
+  search:   I('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 18),
+  burger:   I('<path d="M3 6h18M3 12h18M3 18h18"/>', 22),
+  expand:   I('<path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/>', 18),
+  cube:     I('<path d="M12 2 3 7v10l9 5 9-5V7Z"/><path d="M3 7l9 5 9-5M12 12v10"/>', 16),
+  cert:     I('<circle cx="12" cy="10" r="6"/><path d="M9 16l-1 6 4-2 4 2-1-6"/>', 18)
+};
+
+/* ── copy, carried from the page-2 frames (du-form, V2 casing) ─── */
+const T = {
+  promoDark: 'Zehn Prozent Rabatt auf deine erste Bestellung — nur bis 22.03.2026',
+  promoDarkCta: 'Jetzt anmelden & sichern',
+  promoLight: 'Ein Sommer — drei Art Drops: nur vom 8.–28. Juli',
+  nav: ['Kunstwerke','Top 20','ArtFinder','Inspiration','Galerien','Über uns'],
+  search: 'Suche',
+  cartHead: 'Warenkorb',
+  continueShopping: 'Weiter einkaufen',
+  reassureBold: 'Liebe auf den ersten Blick',
+  reassureRest: 'oder 60 Tage Rückgaberecht.',
+  sizeLabel: 'Wähle Grösse (cm) und Kaschierung/Rahmung aus',
+  frameLabel: 'Wähle deinen Rahmen',
+  sizes: [
+    { size:'60 × 80',  note:'Letzte Exemplare', active:true },
+    { size:'90 × 120', note:'Gallery only' },
+    { size:'120 × 160', note:'' }
+  ],
+  mounting: 'Kaschierung unter Acrylglas',
+  price: '€ 899',
+  klarna: 'Zahle in 30 Tagen oder in bis zu 36 zinsfreien Raten mit Klarna.',
+  items: [
+    { key:'niki', img:ART.niki, title:'What could possibly go wrong', artist:'Niki Hare',
+      spec:'Grösse: 60 × 80 cm · Kaschierung unter Acrylglas, Stärke 2 mm glänzend',
+      size:'60 × 80 cm', mount:'Kaschierung unter Acrylglas, Stärke 2 mm glänzend',
+      price:'€ 899,00', ratio:'4/3' },
+    { key:'wave', img:ART.wave, title:'Intersection 44', artist:'Alessandro Puccinelli',
+      spec:'Grösse: 80 × 120 cm · Kaschierung unter Acrylglas, Stärke 2 mm matt',
+      size:'80 × 120 cm', mount:'Kaschierung unter Acrylglas, Stärke 2 mm matt',
+      price:'€ 1.250,00', ratio:'7/5' }
+  ],
+  totalPlain: 'Gesamtpreis inkl. MwSt.',
+  totalWithShipping: 'Gesamtpreis inkl. MwSt. & Versandkosten',
+  localShippingNote: 'Der Betrag beinhaltet lokale Versandkosten.',
+  insuredBold: 'Versicherte Lieferung',
+  insuredRest: 'im Gesamtpreis enthalten. Verpackt in einer Art Security Box.',
+  trustBoxBold: 'Versicherte Lieferung in einer Art Security Box',
+  trustBoxRest: ', im Gesamtpreis enthalten.',
+  shippingDetails: 'Details zu Versandgebühren',
+  subtotalLabel: 'Zwischensumme',
+  shippingLabel: 'Versand',
+  shippingCostsLabel: 'Versandkosten',
+  subtotal: '€ 2.149,00',
+  shipping: '€ 14,90',
+  total: '€ 2.163,90',
+  vatNote: '(inkl. MwSt.) € 345,50',
+  cta: 'Jetzt sicher zur Kasse',
+  ctaAdd: 'In den Warenkorb',
+  ctaGallery: 'In der Galerie ansehen',
+  footTrust: 'Versicherte Lieferung in einer Art Security Box',
+  editionEyebrow: 'Limited Edition 150 · Signiert',
+  artist: 'Niki Hare',
+  artTitle: 'What could possibly go wrong',
+  artDesc: 'Just take a chance with things because you use what could possibly go wrong.',
+  lastFew: 'Letzte Exemplare',
+  insiderTip: 'Geheimtipp',
+  deliveryNote: 'Versand in 5 Tagen · inkl. MwSt.',
+  artNo: '2021 / 2022 / NHA13',
+  certificate: 'Zertifikat inklusive',
+  view3d: '3D-Ansicht',
+  trust: [
+    { icon:'returns', a:'60 Tage Rückgaberecht', b:'Liebe es — oder sende es zurück.' },
+    { icon:'card',    a:'Zahle nach Lieferung', b:'oder in bis zu 36 zinsfreien Raten' },
+    { icon:'users',   a:'330.000 Kunden', b:'in über 20 Jahren' },
+    { icon:'frame',   a:'Fertig zum Aufhängen', b:'in deinem Zuhause' },
+    { icon:'shield',  a:'Art Security Box', b:'versichert und risikofrei' }
+  ],
+  orderSummaryToggle: 'Bestellübersicht ausblenden',
+  couponQuestion: 'Gutschein einlösen?',
+  couponPlaceholder: 'Gutscheincode',
+  couponCta: 'Einlösen',
+  couponError: 'Dieser Code ist nicht mehr gültig.',
+  checkoutHead: 'Checkout',
+  expressLabel: 'Express Checkout',
+  or: 'oder',
+  checkoutLabel: 'Checkout',
+  emailHint: 'E-Mail als Gast, für Log-In oder neues Konto',
+  emailPlaceholder: 'E-Mail*',
+  next: 'Weiter',
+  tpRating: 'Hervorragend',
+  tpBasis: 'Basierend auf 5.557 Bewertungen',
+  tpReviews: [
+    { name:'Jörg R.', date:'1. Juli', title:'Wunderschöne Kunstwerke',
+      body:'Wunderschöne Kunstwerke! Hervorragende Qualität. Es ist…' },
+    { name:'Sandra', date:'1. Juli', title:'Tolle Beratung',
+      body:'Tolle Beratung, wunderschöne Bilder mit sehr guter Qualität.' }
+  ],
+  tpFooter: 'Unsere Lieblingsbewertungen',
+  verified: 'Verifiziert',
+  shipDate: 'Voraussichtlicher Versand am 19.07.2026',
+  secureCheckout: 'Sicherer Checkout',
+  returns60: '60 Tage Rückgaberecht',
+  emptyTitle: 'Dein Warenkorb ist leer',
+  emptyBody: 'Entdecke limitierte Editionen von über 250 Künstlerinnen und Künstlern.',
+  emptyCta: 'Editionen entdecken',
+  errorTitle: 'Diese Edition ist nicht mehr verfügbar',
+  errorBody: 'Deine Reservierung ist abgelaufen. Wir zeigen dir vergleichbare Werke.',
+  errorCta: 'Ähnliche Editionen ansehen',
+  unavailable: 'Nicht mehr verfügbar'
+};
+
+/* ── partials ──────────────────────────────────────────────────── */
+const close = () =>
+  `<!-- ABLYFT-GOAL: Overlay-close -->
+   <button class="icon-btn" aria-label="Schliessen" onclick="track('cart_overlay_close')">${ICON.x}</button>`;
+
+/* placeholder wordmark — swap in the official LUMAS SVG before this leaves the team */
+/* Both exits, always in view: "continue shopping" and the close control sit in
+   a fixed bar above everything else, so neither can be scrolled away. */
+const exitBar = () => `
+  <div class="exit-bar">
+    <!-- ABLYFT-GOAL: Continue-shopping -->
+    <button class="btn btn-ghost" onclick="track('cart_overlay_continue_shopping')">‹ ${T.continueShopping}</button>
+    ${close()}
+  </div>`;
+
+const logo = () => `
+  <span class="logo">LUMAS<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"
+    style="margin-top:3px"><path d="M0 0h10L10 10z" fill="currentColor"/></svg></span>`;
+
+const promoDark = () => `
+  <div class="promo-dark">
+    <span class="eyebrow">${T.promoDark}</span>
+    <button class="btn btn-ghost btn-ghost--inverse" onclick="track('select_promotion',{promotion_name:'first_order_10'})">${T.promoDarkCta}</button>
+  </div>`;
+
+const promoLight = () => `
+  <div class="promo-light">
+    <span class="b-sm bold">${T.promoLight}</span>
+    <span class="ovc">${close()}</span>
+  </div>`;
+
+const searchField = () => `
+  <div class="field" style="flex:1">
+    ${ICON.search}<input placeholder="${T.search}" aria-label="${T.search}">
+  </div>`;
+
+const mobHeader = () => `
+  <div class="site-head" style="gap:var(--sp-3)">
+    <button class="icon-btn" aria-label="Menü">${ICON.burger}</button>
+    ${logo()}
+    <span style="flex:1"></span>
+    <button class="icon-btn" aria-label="WhatsApp">${ICON.chat}</button>
+    <button class="icon-btn" aria-label="Merkliste">${ICON.wish}</button>
+    <button class="icon-btn" aria-label="Konto">${ICON.user}</button>
+    <button class="icon-btn" aria-label="Warenkorb">${ICON.cart}<span class="badge">2</span></button>
+  </div>
+  <div style="padding:var(--sp-4) var(--sp-6);background:var(--color-surface-card)">${searchField()}</div>`;
+
+const deskHeader = () => `
+  ${promoDark()}
+  <div class="site-head">
+    ${logo()}
+    <nav class="nav" style="margin-left:var(--sp-8)">${T.nav.map(n => `<a>${n}</a>`).join('')}</nav>
+    <span style="flex:1"></span>
+    <div style="width:280px">${searchField()}</div>
+    <button class="icon-btn" style="margin-left:var(--sp-4)" aria-label="Merkliste">${ICON.wish}</button>
+    <button class="icon-btn" aria-label="Konto">${ICON.user}</button>
+    <button class="icon-btn" aria-label="Warenkorb">${ICON.cart}<span class="badge">2</span></button>
+  </div>`;
+
+const trustRow = () => `
+  <div class="trust-row">
+    ${T.trust.map(t => `
+      <div>
+        <div class="ic">${ICON[t.icon]}</div>
+        <p class="b-sm bold">${t.a}</p>
+        <p class="cap t-sec">${t.b}</p>
+      </div>`).join('')}
+  </div>`;
+
+const reassure = () => `
+  <div class="reassure">
+    <span style="flex:none">${ICON.heart60}</span>
+    <p class="b-sm"><span class="bold">${T.reassureBold}</span> ${T.reassureRest}</p>
+  </div>`;
+
+const itemRow = (it, opts = {}) => `
+  <article class="item${opts.lg ? ' item--lg' : ''}">
+    <div class="thumb" style="aspect-ratio:${it.ratio}"><img src="${it.img}" alt="${it.title}"></div>
+    <div class="item-meta">
+      <p class="b">${it.title}</p>
+      <p class="eyebrow t-ter">${it.artist}</p>
+      <p class="b-sm t-sec" style="margin-top:var(--sp-1)">${it.spec}</p>
+      <p class="b num" style="margin-top:var(--sp-2)">${it.price}</p>
+    </div>
+    <!-- ABLYFT-GOAL: Cart-item-removed -->
+    <button class="remove" aria-label="Entfernen"
+      onclick="track('remove_from_cart',{item_name:'${it.title}'})">${I('<path d="M18 6 6 18M6 6l12 12"/>',12)}</button>
+  </article>`;
+
+const skeletonItems = (n = 2) => `
+  ${Array.from({length:n}, () => `
+  <article class="item item--lg">
+    <div class="thumb skel" style="aspect-ratio:4/3"></div>
+    <div class="item-meta" style="gap:var(--sp-2);padding-top:var(--sp-1)">
+      <div class="skel skel-line" style="width:85%"></div>
+      <div class="skel skel-line" style="width:45%;height:9px"></div>
+      <div class="skel skel-line" style="width:70%;height:9px"></div>
+      <div class="skel skel-line" style="width:35%;margin-top:var(--sp-2)"></div>
+    </div>
+  </article>`).join('')}`;
+
+/* the five total-disclosure treatments — the actual subject of page 2 */
+function disclosure(kind, total = T.total) {
+  const grand = (label, value) => `
+    <div class="sum sum--total">
+      <p class="b-sm bold">${label}</p>
+      <p class="grand num">${value}</p>
+    </div>`;
+
+  if (kind === 'A') return `
+    ${grand(T.totalPlain, total)}
+    <p class="cap t-ter">${T.localShippingNote}</p>`;
+
+  if (kind === 'B') return `
+    ${grand(T.totalPlain, total)}
+    <p class="b-sm t-sec" style="display:flex;gap:var(--sp-2);margin-top:var(--sp-2)">
+      <span style="flex:none;color:var(--color-text-primary)">${ICON.shield}</span>
+      <span><span class="bold" style="color:var(--color-text-primary)">${T.insuredBold}</span> ${T.insuredRest}</span>
+    </p>`;
+
+  if (kind === 'C') return `
+    ${grand(T.totalPlain, total)}
+    <div class="trustbox">
+      <span style="flex:none">${ICON.shield}</span>
+      <p class="b-sm t-sec">
+        <span class="bold" style="color:var(--color-text-primary)">${T.trustBoxBold}</span>${T.trustBoxRest}
+        <span class="link" onclick="track('select_content',{content_type:'shipping_details'})">${T.shippingDetails}</span>
+      </p>
+    </div>`;
+
+  if (kind === 'D') return `
+    <button class="total-toggle" onclick="track('select_content',{content_type:'total_breakdown_expand'})">
+      <span class="b-sm bold lbl">${T.totalWithShipping}</span>
+      <span class="grand num">${total}</span>${ICON.chevD}
+    </button>`;
+
+  return `
+    <div class="sum"><p class="b-sm">${T.subtotalLabel}</p><p class="b-sm num">${T.subtotal}</p></div>
+    <div class="sum">
+      <p class="b-sm">${T.shippingLabel}
+        <span class="cap link" onclick="track('select_content',{content_type:'shipping_details'})">${T.shippingDetails}</span>
+      </p>
+      <p class="b-sm num">${T.shipping}</p>
+    </div>
+    <button class="total-toggle" onclick="track('select_content',{content_type:'total_breakdown_collapse'})">
+      <span class="b-sm bold lbl">${T.totalWithShipping}</span>
+      <span class="grand num">${total}</span>${ICON.chevU}
+    </button>`;
+}
+
+const primaryCta = (label = T.cta) => `
+  <!-- ABLYFT-GOAL: Begin-Checkout -->
+  <button class="btn btn-primary" style="margin-top:var(--sp-6)"
+    onclick="track('begin_checkout',{express:false})">${label}</button>`;
+
+const footTrust = () => `
+  <p class="foot-trust cap">${ICON.shield}<span>${T.footTrust}</span></p>`;
+
+/* ── the cart overlay itself, shared by every surface ──────────── */
+function overlayInner(d, state, opts = {}) {
+  if (state === 'empty') return `
+    ${exitBar()}
+    <div class="ov-head"><h2 class="d-h3">${T.cartHead}</h2></div>
+    <div class="empty" style="border-top:1px solid var(--color-border-subtle)">
+      <div style="width:120px;aspect-ratio:4/5;background:var(--color-surface-page);border:1px solid var(--color-border-subtle)"></div>
+      <div>
+        <p class="d-h4">${T.emptyTitle}</p>
+        <p class="b-sm t-sec" style="margin-top:var(--sp-2)">${T.emptyBody}</p>
+      </div>
+      <button class="btn btn-secondary" style="width:auto"
+        onclick="track('view_item_list',{item_list_name:'cart_empty_state'})">${T.emptyCta}</button>
+    </div>`;
+
+  if (state === 'loading') return `
+    ${exitBar()}
+    <div class="ov-head"><h2 class="d-h3">${T.cartHead}</h2></div>
+    <div class="ov-body" aria-busy="true">${reassure()}${skeletonItems()}</div>
+    <div class="ov-foot ov-foot--sunken">
+      <div class="sum sum--total">
+        <div class="skel skel-line" style="width:150px"></div>
+        <div class="skel skel-line" style="width:110px;height:22px"></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:var(--sp-5)" disabled>${T.cta}</button>
+    </div>`;
+
+  if (state === 'error') return `
+    ${exitBar()}
+    <div class="band-error">
+      <span aria-hidden="true">!</span>
+      <div style="flex:1">
+        <p class="b-sm bold">${T.errorTitle}</p>
+        <p class="b-sm">${T.errorBody}</p>
+      </div>
+      ${close()}
+    </div>
+    <div class="ov-body">
+      <article class="item item--lg" style="opacity:.55">
+        <div class="thumb" style="aspect-ratio:4/3"><img src="${T.items[0].img}" alt=""></div>
+        <div class="item-meta">
+          <p class="b" style="text-decoration:line-through">${T.items[0].title}</p>
+          <p class="eyebrow t-ter">${T.items[0].artist}</p>
+          <p class="b-sm" style="color:var(--color-status-error);margin-top:var(--sp-1)">${T.unavailable}</p>
+        </div>
+      </article>
+      ${itemRow(T.items[1], {lg:true})}
+    </div>
+    <div class="ov-foot ov-foot--sunken">
+      ${disclosure(d, T.items[1].price)}
+      ${primaryCta()}
+      <p style="margin-top:var(--sp-5);text-align:center">
+        <button class="btn btn-ghost" onclick="track('view_item_list',{item_list_name:'cart_error_recovery'})">${T.errorCta}</button>
+      </p>
+    </div>`;
+
+  return `
+    ${exitBar()}
+    <div class="ov-head"><h2 class="d-h3">${T.cartHead}</h2></div>
+    <div class="ov-body">
+      ${reassure()}
+      ${T.items.map(it => itemRow(it, {lg:opts.lg})).join('')}
+    </div>
+    <div class="ov-foot ov-foot--sunken">
+      ${disclosure(d)}
+      ${primaryCta()}
+      ${(d === 'D' || d === 'E') ? footTrust() : ''}
+    </div>`;
+}
+
+/* ── PDP fragment above the mobile overlay ─────────────────────── */
+const pdpFragment = () => `
+  <div style="padding:var(--sp-5) var(--sp-6);background:var(--color-surface-page)">
+    <p class="uilabel t-sec">${T.sizeLabel}</p>
+    <div class="size-row" style="margin:var(--sp-3) 0 var(--sp-4)">
+      ${T.sizes.map(s => `
+        <!-- ABLYFT-GOAL: Size-selected -->
+        <button class="size-chip" aria-pressed="${!!s.active}"
+          onclick="track('select_item',{variant:'${s.size}'})">
+          <b>${s.size}</b>${s.note ? `<span>${s.note}</span>` : '<span>&nbsp;</span>'}
+        </button>`).join('')}
+    </div>
+    <!-- ABLYFT-GOAL: Framing-selected -->
+    <button class="select-row" onclick="track('select_promotion',{promotion_name:'framing_selector'})">
+      <span class="b">${T.mounting}</span>${ICON.chevR}
+    </button>
+    <p class="d-h3 num" style="margin:var(--sp-4) 0 var(--sp-1)">${T.price}</p>
+    <p class="b-sm t-sec">${T.klarna}</p>
+  </div>`;
+
+/* ── surfaces ─────────────────────────────────────────────────── */
+/* The cart layer on its own — no page behind it. This is the view for
+   comparing overlay variants side by side, where the PDP is just noise. */
+function mobileSheetOnly(d, st) {
+  return `
+  <div class="mob"${frameAttrs()}>
+    <div class="sheet sheet--only">${overlayInner(d, st)}</div>
+  </div>`;
+}
+
+/* The PDP behind the sheet is the part allowed to clip — the sheet
+   itself is capped so header, total and CTA always sit in-viewport. */
+function mobilePdpOverlay(d, st) {
+  return `
+  <div class="mob"${frameAttrs()}>
+    <div class="peek">${pdpFragment()}</div>
+    <div class="sheet">${overlayInner(d, st)}</div>
+  </div>`;
+}
+
+function mobilePageOverlay(d, st) {
+  return `
+  <div class="mob"${frameAttrs()}>
+    <div class="peek">
+      ${promoLight()}
+      ${mobHeader()}
+      <div style="height:200px;overflow:hidden;background:var(--color-surface-page)">
+        <img src="${ART.niki}" alt="${T.artTitle}" style="width:100%;height:100%;object-fit:cover">
+      </div>
+    </div>
+    <div class="sheet">${overlayInner(d, st)}</div>
+  </div>`;
+}
+
+const pdpDesktopInfo = () => `
+  <div class="pdp-info">
+    <p class="eyebrow t-ter">${T.editionEyebrow}</p>
+    <h1 class="d-h2">${T.artist}</h1>
+    <p class="b-lg">${T.artTitle}</p>
+    <p class="b-sm t-sec">${T.artDesc}</p>
+    <p style="display:flex;gap:var(--sp-2)">
+      <span class="chip chip--sm chip--active">${T.lastFew}</span>
+      <span class="chip chip--sm">${T.insiderTip}</span>
+    </p>
+    <div>
+      <p class="uilabel t-sec" style="margin-bottom:var(--sp-3)">${T.sizeLabel}</p>
+      <div class="size-row">
+        ${T.sizes.map(s => `
+          <button class="size-chip" aria-pressed="${!!s.active}"
+            onclick="track('select_item',{variant:'${s.size}'})">
+            <b>${s.size}</b>${s.note ? `<span>${s.note}</span>` : '<span>&nbsp;</span>'}
+          </button>`).join('')}
+      </div>
+    </div>
+    <div>
+      <p class="uilabel t-sec" style="margin-bottom:var(--sp-3)">${T.frameLabel}</p>
+      <button class="select-row" onclick="track('select_promotion',{promotion_name:'framing_selector'})">
+        <span class="b">${T.mounting}</span>${ICON.chevR}
+      </button>
+    </div>
+    <p class="d-h2 num">${T.price}</p>
+    <p class="cap t-sec">${T.klarna}</p>
+    <div style="display:flex;gap:var(--sp-2)">
+      <button class="icon-btn" style="border:1px solid var(--color-border-focus);padding:var(--sp-4);border-radius:var(--radius-xs)"
+        aria-label="Merken" onclick="track('add_to_wishlist')">${ICON.wish}</button>
+      <button class="btn btn-primary" onclick="track('add_to_cart',{item_name:'${T.artTitle}'})">${T.ctaAdd}</button>
+    </div>
+    <button class="btn btn-secondary" onclick="track('select_content',{content_type:'gallery_view'})">${T.ctaGallery}</button>
+    <p class="cap t-sec">${T.deliveryNote}</p>
+    <p class="cap t-ter">${T.artNo}</p>
+    <p class="b-sm t-sec" style="display:flex;align-items:center;gap:var(--sp-2);
+      border-top:1px solid var(--color-border-subtle);padding-top:var(--sp-4)">
+      ${ICON.cert}<span>${T.certificate}</span>
+    </p>
+  </div>`;
+
+const pdpDesktopBody = () => `
+  <div class="pdp">
+    <div class="gallery">
+      <div class="main">
+        <img src="${ART.niki}" alt="${T.artTitle}">
+        <span class="tool" style="top:var(--sp-4);right:var(--sp-4)">${ICON.expand}</span>
+        <span class="tool" style="bottom:var(--sp-4);right:var(--sp-4)">${ICON.cube}<span class="uilabel">${T.view3d}</span></span>
+      </div>
+      <div class="thumbs">
+        <div><img src="${ART.niki}" alt=""></div>
+        <div><img src="${ART.wave}" alt=""></div>
+        ${'<div></div>'.repeat(5)}
+      </div>
+    </div>
+    ${pdpDesktopInfo()}
+  </div>`;
+
+function desktopDrawer(d, st) {
+  return `
+  <div class="deskwrap"><div class="desk"${deskAttrs()}>
+    ${deskHeader()}
+    ${pdpDesktopBody()}
+    <div class="scrim"></div>
+    <div class="drawer">${overlayInner(d, st, {lg:false})}</div>
+  </div></div>`;
+}
+
+function desktopPanel(d, st) {
+  return `
+  <div class="deskwrap"><div class="desk"${deskAttrs()}>
+    ${deskHeader()}
+    ${pdpDesktopBody()}
+    <div class="panel">${overlayInner(d, st)}</div>
+  </div></div>`;
+}
+
+function couponBlock(state) {
+  const err = state === 'error';
+  return `
+  <div style="border-top:1px solid var(--color-border-subtle);padding-top:var(--sp-5);margin-top:var(--sp-5)">
+    <p class="uilabel t-sec" style="margin-bottom:var(--sp-3)">${T.couponQuestion}</p>
+    <div style="display:flex;gap:var(--sp-2)">
+      <div class="field${err ? ' field--error' : ''}" style="flex:1">
+        <input placeholder="${T.couponPlaceholder}" ${err ? 'value="SOMMER26"' : ''} aria-label="${T.couponPlaceholder}">
+      </div>
+      <!-- ABLYFT-GOAL: Coupon-applied -->
+      <button class="btn btn-secondary btn-sm" style="width:auto"
+        onclick="track('select_promotion',{promotion_name:'coupon_redeem'})">${T.couponCta}</button>
+    </div>
+    ${err ? `<p class="helper helper--error">${T.couponError}</p>` : ''}
+  </div>`;
+}
+
+function mobileCart(d, state) {
+  /* a cart PAGE may scroll — but the total and CTA are pinned so the
+     decision never leaves the viewport */
+  const body = state === 'empty' ? `
+    <div class="empty">
+      <div style="width:120px;aspect-ratio:4/5;background:var(--color-surface-page);border:1px solid var(--color-border-subtle)"></div>
+      <div>
+        <p class="d-h4">${T.emptyTitle}</p>
+        <p class="b-sm t-sec" style="margin-top:var(--sp-2)">${T.emptyBody}</p>
+      </div>
+      <button class="btn btn-secondary" style="width:auto"
+        onclick="track('view_item_list',{item_list_name:'cart_empty_state'})">${T.emptyCta}</button>
+    </div>`
+  : state === 'loading' ? `<div class="ov-body scroll" aria-busy="true">${skeletonItems()}</div>`
+  : `
+    <div class="ov-body scroll">
+      ${T.items.map(it => itemRow(it, {lg:true})).join('')}
+      ${couponBlock(state)}
+    </div>
+    <div class="ov-foot ov-foot--sunken">
+      ${disclosure(d)}
+      ${primaryCta()}
+      ${footTrust()}
+    </div>`;
+
+  return `
+  <div class="mob"${frameAttrs()}>
+    ${promoLight()}
+    <div class="site-head" style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center">
+      <button class="btn btn-ghost" style="justify-self:start;font-size:11px;letter-spacing:1px"
+        onclick="track('cart_continue_shopping')">${T.continueShopping}</button>
+      ${logo()}
+    </div>
+    <div class="trust-row" style="gap:var(--sp-2);padding:var(--sp-5) var(--sp-3)">
+      ${T.trust.map(t => `
+        <div style="min-width:0">
+          <div class="ic">${I(TRUST_PATH[t.icon], 18)}</div>
+          <p class="micro bold">${t.a}</p>
+          <p class="micro t-sec">${t.b}</p>
+        </div>`).join('')}
+    </div>
+    <button class="select-row" style="border:0;border-bottom:1px solid var(--color-border-subtle);
+      background:var(--color-surface-page);border-radius:0;padding:var(--sp-4) var(--sp-6)"
+      onclick="track('select_content',{content_type:'order_summary_toggle'})">
+      <span style="display:flex;align-items:center;gap:var(--sp-3)">${ICON.cart}<span class="b">${T.orderSummaryToggle}</span></span>
+      ${ICON.chevU}
+    </button>
+    ${body}
+  </div>`;
+}
+
+function desktopCheckout(d, state) {
+  const items = state === 'loading' ? skeletonItems() : T.items.map(it => itemRow(it, {lg:false})).join('');
+  return `
+  <div class="deskwrap"><div class="desk"${deskAttrs()}>
+    ${promoLight()}
+    <div class="site-head" style="justify-content:center;position:relative">
+      <button class="btn btn-ghost" style="position:absolute;left:var(--sp-12);top:50%;transform:translateY(-50%);
+        display:inline-flex;align-items:center;gap:var(--sp-2)"
+        onclick="track('cart_continue_shopping')">${ICON.chevL}${T.continueShopping}</button>
+      ${logo()}
+    </div>
+    ${trustRow()}
+    <div class="checkout scroll">
+      <div>
+        <h1 class="d-h2" style="margin-bottom:var(--sp-8)">${T.checkoutHead}</h1>
+        <p class="uilabel t-sec" style="margin-bottom:var(--sp-4)">${T.expressLabel}</p>
+        <div class="pay-row">
+          <!-- ABLYFT-GOAL: Express-PayPal -->
+          <button class="pay pay-paypal" onclick="track('begin_checkout',{payment_type:'PayPal',express:true})">PayPal — Jetzt kaufen</button>
+          <!-- ABLYFT-GOAL: Express-AmazonPay -->
+          <button class="pay pay-amazon" onclick="track('begin_checkout',{payment_type:'AmazonPay',express:true})">amazon pay</button>
+          <!-- ABLYFT-GOAL: Express-ApplePay -->
+          <button class="pay pay-apple" onclick="track('begin_checkout',{payment_type:'ApplePay',express:true})">&#63743; Pay</button>
+        </div>
+        <p class="divider"><span class="uilabel t-ter">${T.or}</span></p>
+        <p class="uilabel t-sec">${T.checkoutLabel}</p>
+        <p class="b-sm t-sec" style="margin:var(--sp-3) 0 var(--sp-4)">${T.emailHint}</p>
+        <div class="field"><input type="email" placeholder="${T.emailPlaceholder}" aria-label="${T.emailPlaceholder}"></div>
+        <button class="btn btn-primary" style="margin-top:var(--sp-5)"
+          onclick="track('add_shipping_info',{step:'email'})">${T.next}</button>
+
+        <div class="tp">
+          <div>
+            <p class="d-h4">${T.tpRating}</p>
+            <div class="stars">${'<i></i>'.repeat(5)}</div>
+            <p class="cap t-sec">${T.tpBasis}</p>
+            <p class="b-sm bold" style="margin-top:var(--sp-2)">&#9733; Trustpilot</p>
+          </div>
+          ${T.tpReviews.map(r => `
+            <div>
+              <div class="stars">${'<i></i>'.repeat(5)}</div>
+              <p class="cap tp-verified">${ICON.shield}${T.verified}</p>
+              <p class="b-sm" style="margin-top:var(--sp-2)"><span class="bold">${r.name}</span>, ${r.date}</p>
+              <p class="b-sm bold">${r.title}</p>
+              <p class="b-sm t-sec">${r.body}</p>
+            </div>`).join('')}
+          <button class="icon-btn" style="border:1px solid var(--color-border-default);border-radius:50%;padding:var(--sp-2)"
+            aria-label="Weiter">${ICON.chevR}</button>
+        </div>
+        <p class="cap t-ter" style="margin-top:var(--sp-3)">${T.tpFooter}</p>
+      </div>
+
+      <aside>
+        ${items}
+        ${couponBlock(state)}
+        <div style="border-top:1px solid var(--color-border-subtle);margin-top:var(--sp-5);padding-top:var(--sp-4)">
+          <div class="sum"><p class="b-sm">${T.subtotalLabel}</p><p class="b-sm num">${T.subtotal}</p></div>
+          <div class="sum"><p class="b-sm">${T.shippingCostsLabel}</p><p class="b-sm num">${T.shipping}</p></div>
+          <div class="sum sum--total">
+            <p class="b bold">Gesamtpreis</p>
+            <p class="grand num">${T.total}</p>
+          </div>
+          <p class="cap t-ter">${T.vatNote}</p>
+        </div>
+        <div style="margin-top:var(--sp-5);display:flex;flex-direction:column;gap:var(--sp-1)">
+          <p class="sum-line b-sm">${ICON.truck}<span>${T.shipDate}</span></p>
+          <p class="sum-line b-sm">${ICON.lock}<span>${T.secureCheckout}</span></p>
+          <p class="sum-line b-sm">${ICON.returns}<span>${T.returns60}</span></p>
+        </div>
+      </aside>
+    </div>
+  </div></div>`;
+}
+
+/* ── controller ───────────────────────────────────────────────── */
+const SURFACES = [
+  ['mob-sheet', 'Cart layer',      mobileSheetOnly,   true],
+  ['mob-pdp',   'Mobile PDP',      mobilePdpOverlay,  true],
+  ['mob-page',  'Mobile page',     mobilePageOverlay, true],
+  ['desk-draw', 'Desktop drawer',  desktopDrawer,     true],
+  ['desk-panel','Desktop panel',   desktopPanel,      true],
+  ['mob-cart',  'Mobile cart',     mobileCart,        true],
+  ['desk-check','Desktop checkout',desktopCheckout,   false]
+];
+const DISCLOSURES = [
+  ['A','A local note'], ['B','B insured'], ['C','C trust box'],
+  ['D','D collapsed'],  ['E','E breakdown']
+];
+const STATES = [['default','Default'],['loading','Loading'],['empty','Empty'],['error','Error']];
+
+/* ── real device viewports ───────────────────────────────────────
+   vh = visible viewport: device CSS height minus browser chrome. */
+const DEVICES = {
+  mobile: [
+    { id:'se',   label:'iPhone SE',   w:375,  h:667,  vh:553 },
+    { id:'i15',  label:'iPhone 15',   w:390,  h:844,  vh:734 },
+    { id:'px7',  label:'Pixel 7',     w:412,  h:915,  vh:787 },
+    { id:'mfull',label:'Full height', w:390,  h:844,  vh:0   }
+  ],
+  desktop: [
+    { id:'mba13',label:'MacBook 13"', w:1440, h:900,  vh:789 },
+    { id:'lap',  label:'1280×800',    w:1280, h:800,  vh:689 },
+    { id:'wide', label:'1920×1080',   w:1920, h:1080, vh:969 },
+    { id:'dfull',label:'Full height', w:1440, h:900,  vh:0   }
+  ]
+};
+const isDesktop = s => s.startsWith('desk');
+const deviceList = () => DEVICES[isDesktop(state.s) ? 'desktop' : 'mobile'];
+const device = () => deviceList().find(d => d.id === state.dev) || deviceList()[0];
+
+/* attributes for a mobile frame: viewport size + compaction tier */
+function frameAttrs() {
+  const d = device();
+  const tier = !d.vh ? '' : d.vh < 620 ? ' data-compact data-tight' : d.vh < 800 ? ' data-tight' : '';
+  return `${tier} style="--vw:${d.w}px;--vh:${d.vh ? d.vh + 'px' : 'auto'}"`;
+}
+
+/* same idea for the 1440/1280 desktop frames */
+function deskAttrs() {
+  const d = device();
+  const tier = d.vh && d.vh < 760 ? ' data-tight' : '';
+  return `${tier} style="--dvh:${d.vh ? d.vh + 'px' : 'auto'}"`;
+}
+
+const p = new URLSearchParams(location.search);
+const state = {
+  s:  SURFACES.some(x => x[0] === p.get('s'))    ? p.get('s')  : 'mob-pdp',
+  d:  DISCLOSURES.some(x => x[0] === p.get('d')) ? p.get('d')  : 'E',
+  st: STATES.some(x => x[0] === p.get('st'))     ? p.get('st') : 'default',
+  dev: p.get('dev') || 'i15',
+  notes: p.get('notes') === '1'
+};
+
+let renderToken = 0;
+if (p.get('chrome') === '0') document.body.classList.add('bare');
+
+/* How much of the DECISION layer is out of view. The page behind a sheet
+   (.peek) is meant to clip, so it is reported separately, not as a failure. */
+function fitBar(root, label) {
+  const d = device();
+  if (!d.vh) return `<p class="fitbar">${label} · ${d.w}×${d.h} — unclipped</p>`;
+  const regions = [...root.querySelectorAll('.ov-body,.scroll')];
+  const over = regions.reduce((m, el) => Math.max(m, el.scrollHeight - el.clientHeight), 0);
+  const isSheet = !!root.querySelector('.sheet,.drawer,.panel');
+  const peekEl = root.querySelector('.peek');
+  const peek = peekEl ? Math.max(0, peekEl.scrollHeight - peekEl.clientHeight) : 0;
+  const verdict = over <= 2
+    ? '<span class="ok">fits — no scrolling</span>'
+    : `<span class="warn">${over}px ${isSheet ? 'scrolls in the item list' : 'below the fold · total + CTA pinned'}</span>`;
+  const behind = peek ? ` · page behind clipped ${peek}px (by design)` : '';
+  return `<p class="fitbar">${label} · <b>${d.w}×${d.vh}</b> visible — ${verdict}${behind}</p>`;
+}
+
+function seg(id, options, key) {
+  document.getElementById(id).innerHTML = options.map(([val, label]) =>
+    `<button aria-pressed="${state[key] === val}" data-key="${key}" data-val="${val}">${label}</button>`).join('');
+}
+
+function render() {
+  const surface = SURFACES.find(x => x[0] === state.s);
+  const stage = document.getElementById('stage');
+  /* keep the device selection valid when switching between mobile and desktop */
+  if (!deviceList().some(x => x.id === state.dev)) state.dev = deviceList()[0].id;
+
+  stage.innerHTML = `<div class="cmp">${surface[2](state.d, state.st)}</div>`;
+
+  /* fit the desktop frame's own width to the browser window */
+  const wrap = stage.querySelector('.deskwrap');
+  if (wrap) wrap.style.setProperty('--zoom', Math.min(1, (window.innerWidth - 96) / device().w).toFixed(3));
+
+  const token = ++renderToken;
+  /* setTimeout, not requestAnimationFrame: rAF is throttled to a standstill
+     in offscreen iframes, which is exactly how the board page embeds this. */
+  setTimeout(() => {
+    if (token !== renderToken) return;
+    const cmp = stage.querySelector('.cmp');
+    const frame = cmp && cmp.querySelector('.mob,.desk');
+    if (!cmp || !frame) return;
+    cmp.querySelectorAll('.fitbar').forEach(el => el.remove());
+    cmp.insertAdjacentHTML('beforeend', fitBar(frame, `${surface[1]} · ${device().label}`));
+  });
+
+  seg('seg-surface', SURFACES.map(s => [s[0], s[1]]), 's');
+  seg('seg-device', deviceList().map(d => [d.id, d.label]), 'dev');
+  seg('seg-disclosure', DISCLOSURES, 'd');
+  seg('seg-state', STATES, 'st');
+  document.getElementById('seg-notes').innerHTML =
+    `<button aria-pressed="${state.notes}" data-key="notes" data-val="toggle">V2 notes</button>`;
+  /* the checkout surface has its own fixed summary — disclosure does not apply */
+  if (!surface[3]) document.querySelectorAll('#seg-disclosure button').forEach(b => b.disabled = true);
+
+  document.getElementById('notes').hidden = !state.notes;
+  const q = new URLSearchParams({ s: state.s, d: state.d, st: state.st, dev: state.dev });
+  if (state.notes) q.set('notes', '1');
+  history.replaceState(null, '', '?' + q);
+  track('view_cart', { surface: state.s, disclosure: state.d, ui_state: state.st });
+}
+
+document.querySelector('.chrome').addEventListener('click', e => {
+  const b = e.target.closest('button[data-key]');
+  if (!b || b.disabled) return;
+  if (b.dataset.key === 'notes') state.notes = !state.notes;
+  else state[b.dataset.key] = b.dataset.val;
+  render();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea')) return;
+  if (e.key === 's') { const i = SURFACES.findIndex(x => x[0] === state.s); state.s = SURFACES[(i+1) % SURFACES.length][0]; render(); }
+  if (e.key === 'd') { const i = DISCLOSURES.findIndex(x => x[0] === state.d); state.d = DISCLOSURES[(i+1) % DISCLOSURES.length][0]; render(); }
+  if (e.key === 'n') { state.notes = !state.notes; render(); }
+});
+window.addEventListener('resize', () => {
+  const wrap = document.querySelector('.deskwrap');
+  if (wrap) wrap.style.setProperty('--zoom', Math.min(1, (window.innerWidth - 96) / 1440).toFixed(3));
+});
+
+document.getElementById('notes').innerHTML = `
+  <h2>Page 2 — what changed in the V2 conversion</h2>
+  <p class="b-sm t-sec">Source: node 79:2, the live-shop screens. Copy carried over 1:1 apart from V2 casing rules and du-form. The five disclosure treatments (A–E) are the actual subject of this page — they are preserved as variants, not merged.</p>
+
+  <h3>Token mapping</h3>
+  <table>
+    <tr><th>Live shop (V1)</th><th>V2 token</th><th>Value</th></tr>
+    <tr><td>Black promo bar</td><td><code>surface/inverse</code>, eyebrow at 0.55 alpha, ghost-inverse CTA</td><td>#1C1A18</td></tr>
+    <tr><td>Beige promo band (Art Drops)</td><td><code>surface/sunken</code></td><td>#F4EDE2</td></tr>
+    <tr><td>Grey PDP configurator ground</td><td><code>surface/raised</code></td><td>#F7F1E9</td></tr>
+    <tr><td>Green "Liebe auf den ersten Blick" band</td><td><code>surface/muted</code> — see the decision below</td><td>#F0EBE3</td></tr>
+    <tr><td>Black CTA</td><td><code>surface/inverse</code> + V2 Primary button</td><td>#1C1A18</td></tr>
+    <tr><td>Pill-shaped size selectors</td><td>V2 Chip at <code>radius/xs</code>, active = <code>surface/inverse</code></td><td>2px</td></tr>
+    <tr><td>Hairlines / input borders</td><td><code>border/subtle</code> · <code>border/default</code> · focus <code>border/focus</code> 2px</td><td>#EAE2D8 / #E2D8CC</td></tr>
+    <tr><td>Body / caption greys</td><td><code>text/secondary</code> · <code>text/tertiary</code></td><td>#5A5752 / #908C87</td></tr>
+    <tr><td>Cart badge, remove buttons</td><td><code>surface/inverse</code> + <code>text/inverse</code></td><td>#1C1A18</td></tr>
+    <tr><td>Coupon error</td><td><code>status/error</code> border + helper — functional, the one legitimate colour use here</td><td>#B5352A</td></tr>
+  </table>
+
+  <h3>Type</h3>
+  <ul>
+    <li><em>WARENKORB</em> → <strong>Warenkorb</strong> in <code>display/h3</code>. <em>GESAMTPREIS</em> → sentence case. All-caps headlines are a V2 violation.</li>
+    <li>The all-caps spec dump (<em>GRÖSSE:60 X 80 CM | KASCHIERUNG: KASCHIERUNG UNTER ACRYLGLAS, STÄRKE 2 MM GLÄNZEND</em>) → <code>body/small</code> sentence case, <code>×</code> for the multiplication sign and <code>·</code> for the separator. This one change does most of the work of making the overlay stop reading like a warehouse label.</li>
+    <li>Artist names → <code>eyebrow</code>. Artwork titles → <code>body/default</code> in rows, <code>display/h2</code> on the PDP.</li>
+    <li><em>JETZT SICHER ZUR KASSE</em> vs <em>Jetzt sicher zur Kasse</em> — page 2 tested both casings. In V2 the question disappears: button labels are always uppercase (Archivo Bold 13px / 1.82px tracking), so both frames converge on one treatment.</li>
+    <li>Duplicate "Kaschierung: Kaschierung unter…" collapsed to one mention. It was a data-template artefact, not a design decision.</li>
+  </ul>
+
+  <h3>Viewports — measured, not eyeballed</h3>
+  <p class="b-sm t-sec">Every frame is clipped to a real visible viewport (device CSS height minus browser chrome), and the bar under each frame reports actual overflow. Three compaction tiers kick in by available height: default (≥800px), <code>tight</code> (620–799), <code>compact</code> (&lt;620).</p>
+  <table>
+    <tr><th>Surface</th><th>1440×789</th><th>1280×689</th><th>Pixel 7 412×787</th><th>iPhone 15 390×734</th><th>iPhone SE 375×553</th></tr>
+    <tr><td>Desktop PDP + drawer</td><td>fits</td><td>fits</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>Desktop PDP + panel</td><td>fits</td><td>11px in list</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>Mobile PDP + sheet</td><td>—</td><td>—</td><td>fits</td><td>2px</td><td>141px in list</td></tr>
+    <tr><td>Mobile page + sheet</td><td>—</td><td>—</td><td>fits</td><td>2px</td><td>141px in list</td></tr>
+    <tr><td>Mobile cart (a page)</td><td>—</td><td>—</td><td>175px below fold</td><td>245px</td><td>408px</td></tr>
+    <tr><td>Desktop checkout (a page)</td><td>265px below fold</td><td>361px</td><td>—</td><td>—</td><td>—</td></tr>
+  </table>
+  <ul>
+    <li><strong>Overlays, drawers and panels fit with no scrolling</strong> on every desktop viewport, on Pixel 7 and (within 2px) on iPhone 15. The structural rule that makes it hold: header, bands, total and CTA are <code>flex:none</code> and the item list is the only scrollable region, so the CTA can never be pushed out of view.</li>
+    <li><strong>Cart and checkout are pages, and pages scroll.</strong> What matters is that the total and CTA are pinned — what falls below the fold is Trustpilot and the coupon field, not the checkout button.</li>
+    <li><strong>iPhone SE (553px visible) cannot show everything.</strong> Two artworks with specs, a reservation notice, trust bullets, a price breakdown, a CTA and an express row do not fit in 553px at legible sizes; 141px scrolls inside the list. Cutting further would mean deleting trust content.</li>
+    <li>What the tiers shave: padding down the base-4 ladder, thumbnails 88 → 72 → 64px, spec text clamped to two lines, the tertiary link hidden, the confirmation's secondary line dropped on the smallest tier. The CTA, total and trust bullets are never touched.</li>
+    <li>The compact desktop panel drops the returns-promise band (−48px); its footer trust line carries reassurance instead.</li>
+    <li>These visible heights assume iOS Safari with both bars shown and Chrome with one toolbar. Installed-PWA or hidden-toolbar contexts gain 60–90px.</li>
+  </ul>
+
+  <h3>Decisions worth your sign-off</h3>
+  <ul>
+    <li><strong>The green reassurance band is now bone, not green.</strong> "Liebe auf den ersten Blick oder 60 Tage Rückgaberecht" is a brand promise, not a system status — and V2 is explicit that status colours are functional UI only, never decorative. It now sits on <code>surface/muted</code> with charcoal type. Status green is still used where it belongs (the added-to-cart confirmation on page 1). If you want the green kept as a conversion device, that is a deliberate exception to log, not an oversight.</li>
+    <li><strong>Payment marks keep provider branding</strong> — PayPal gold, Amazon Pay gold, Apple Pay black, per your call on page 1. Same caveat: implement with each provider's own SDK button, not a styled lookalike. Trustpilot green and its stars are likewise a third-party mark left intact.</li>
+    <li><strong>Remove buttons on every item.</strong> Page 2 had them on some frames and not others; V2 has no opinion, but a cart without a remove control is a dead end. Shown everywhere here.</li>
+  </ul>
+
+  <h3>Known gaps</h3>
+  <ul>
+    <li><strong>The LUMAS wordmark is typeset, not the real asset</strong> — set in Utile Display with a placeholder corner glyph. Swap in the official SVG from <code>frontend/themes/white/assets/img/logos/</code> before this is shown outside the team.</li>
+    <li><strong>Icons are hand-drawn Lucide-style</strong> (1.5px stroke, rounded caps) because V2 prescribes Lucide but the shop ships icomoon. In the repo, prefer the existing icomoon glyph where one fits.</li>
+    <li><strong>Artwork is cropped from the Figma render</strong> (<code>art/</code>) — low resolution, and the Puccinelli crop is only 182px wide, so it softens above thumbnail size. Wire real catalogue imagery before usability testing.</li>
+    <li>Desktop frames are 1440px scaled with CSS <code>zoom</code> to fit the viewport. Text metrics are true; only the on-screen scale changes.</li>
+    <li>Goal names are closest-match, not verified against the ABlyft 16-goal library. Shadow tint alphas are still the 6/8/12/28% placeholders.</li>
+    <li>Values are px for 1:1 Figma fidelity; porting into <code>frontend/themes/white/</code> converts to rem (1rem = 10px).</li>
+  </ul>`;
+
+render();
+</script>
+</body>
+</html>

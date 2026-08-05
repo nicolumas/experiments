@@ -1,0 +1,277 @@
+<!doctype html>
+<!-- ═══ PROTO BOARD ════════════════════════════════════════════════════
+  Every V2-converted cart-overlay option from both rounds, on one page.
+
+  Round 1 — PROTO-2026-014 · variants.html
+            Figma page 1: concept variants, DE + US × baseline /
+            conservative / recommended / aggressive.
+  Round 2 — PROTO-2026-015 · disclosure.html
+            Figma node 79:2: live-shop surfaces — the five total-disclosure
+            treatments plus the other five surfaces.
+
+  Tiles are live iframes of those two files at ?chrome=0, so this board can
+  never drift out of sync with them. Each tile renders inside the real
+  device viewport and reports its own overflow. Click any tile to open it
+  full-size with its controls.
+
+  Published at /experiments/onsite-alignment/cart-overlay/
+  Tiles are iframes of variants.html and disclosure.html in this folder.
+═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- shared fonts live one level up, under onsite-alignment/assets -->
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart overlay — every V2 option, both rounds</title>
+<style>
+
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87; --charcoal-300:#C7C3BE;
+  --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+  --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+  --color-text-primary:var(--charcoal-900);
+  --color-text-secondary:var(--charcoal-700);
+  --color-text-tertiary:var(--charcoal-500);
+  --color-text-inverse:var(--ivory-100);
+  /* ivory/300 ground so the white cart frames read as cards on it */
+  --color-surface-page:#FAF6F1;
+  --color-surface-card:#FFFFFF;
+  --color-surface-sunken:var(--ivory-100);
+  --color-surface-inverse:var(--charcoal-900);
+  --color-surface-muted:var(--bone-300);
+  --color-border-default:var(--bone-100);
+  --color-border-subtle:var(--bone-200);
+  --color-border-focus:var(--charcoal-900);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px; --sp-20:80px; --sp-24:96px;
+  --radius-xs:2px;
+  --shadow-md:0 2px 8px rgba(28,26,24,.08);
+  --shadow-lg:0 8px 32px rgba(28,26,24,.12);
+  --font-display:'UtileDisplay',Georgia,serif;
+  --font-ui:'Archivo',-apple-system,sans-serif;
+  --scale:.62;
+  --dscale:.30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--color-surface-page);color:var(--color-text-primary);
+  font-family:var(--font-ui);font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+
+.b-sm{font-weight:400;font-size:13px;line-height:1.65}
+.t-sec{color:var(--color-text-secondary)} .t-ter{color:var(--color-text-tertiary)}
+
+/* ── board chrome ─────────────────────────────────────────────── */
+.chrome{position:sticky;top:0;z-index:20;background:var(--color-surface-inverse);
+  color:var(--color-text-inverse);padding:var(--sp-4) var(--sp-8);
+  display:flex;flex-wrap:wrap;gap:var(--sp-6);align-items:center}
+.chrome h1{font-family:var(--font-display);font-weight:400;font-size:18px;line-height:1.2;margin-right:auto}
+.chrome h1 span{display:block;color:rgba(244,237,226,.55);font-family:var(--font-ui);font-weight:700;
+  font-size:10px;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2px}
+.seg{display:flex;gap:var(--sp-1);background:rgba(244,237,226,.08);padding:var(--sp-1);border-radius:var(--radius-xs)}
+.seg button{background:none;border:0;cursor:pointer;color:rgba(244,237,226,.75);font-family:var(--font-ui);
+  font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs)}
+.seg button[aria-pressed="true"]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
+
+/* ── layout ───────────────────────────────────────────────────── */
+/* one centred measure: two 390px frames + the 64px gap between them */
+section{max-width:892px;margin:0 auto;padding:var(--sp-16) var(--sp-6)}
+/* three sets, one comparison each — a pair per row, at full size */
+.set{margin-bottom:var(--sp-24)}
+.set:last-child{margin-bottom:var(--sp-16)}
+.set-head{border-top:1px solid var(--color-border-default);padding-top:var(--sp-5);
+  margin-bottom:var(--sp-10);display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:var(--sp-2)}
+.set-head .line{display:flex;align-items:baseline;gap:var(--sp-3)}
+.set-head h2{font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1.12}
+.set-head .n{font-family:var(--font-display);font-size:20px;color:var(--color-text-tertiary)}
+.set-head .q{max-width:52ch}
+.strip{display:flex;flex-wrap:nowrap;gap:var(--sp-16);align-items:flex-start;
+  justify-content:center;overflow-x:auto;padding-bottom:var(--sp-5)}
+.strip .tile{flex:none}
+
+/* ── tile: one label above the screen, with air between them ───── */
+.tile{display:flex;flex-direction:column;gap:var(--sp-4);text-decoration:none;color:inherit}
+.tile .tag{font-weight:700;font-size:12px;line-height:1.5;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--color-text-primary)}
+.tile .viewport{
+  width:var(--tw);height:var(--th);overflow:hidden;position:relative;
+  background:transparent;box-shadow:var(--shadow-md);
+  transition:box-shadow .22s cubic-bezier(.2,.8,.2,1),transform .22s cubic-bezier(.2,.8,.2,1);
+}
+.tile:hover .viewport{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.tile iframe{border:0;position:absolute;top:0;left:0;transform-origin:top left;display:block}
+.tile .open{opacity:0;transition:opacity .22s;position:absolute;bottom:var(--sp-2);right:var(--sp-2);
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);
+  padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-xs);
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:1.8px;text-transform:uppercase}
+.tile:hover .open{opacity:1}
+
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <h1><span>PROTO-2026-014 + 015 · V2 conversion</span>Every option, both rounds</h1>
+  <div class="seg" id="seg-device" role="group" aria-label="Mobile viewport"></div>
+  <div class="seg" id="seg-state" role="group" aria-label="State"></div>
+  <div class="seg" id="seg-zoom" role="group" aria-label="Tile size"></div>
+</header>
+
+<section id="sets"></section>
+
+
+
+<script>
+/* ── options ──────────────────────────────────────────────────── */
+const MOBILE_DEVICES = [
+  { id:'i15', label:'iPhone 15', w:390, vh:734 },
+  { id:'px7', label:'Pixel 7',   w:412, vh:787 },
+  { id:'se',  label:'iPhone SE', w:375, vh:553 }
+];
+const STATES = [['default','Default'],['loading','Loading'],['empty','Empty'],['error','Error']];
+const ZOOMS  = [['fit','Fit row'],['m','Medium'],['l','Large'],['s','Small']];
+/* Medium keeps five phone frames on one 1600px row and still reads at arm's length. */
+const ZOOM_MAP = { s:{ m:.52 }, m:{ m:.72 }, l:{ m:1 } };
+
+/* Round 1 — page 1. Baseline (the current invoice-style cart) and aggressive
+   (needs ~1.15× the tallest phone viewport) are out of the running. Both are
+   still selectable in the prototype file if you want to look back at them. */
+const R1_VARIANTS = [
+  ['conservative', 'Conservative refinement',  'tidier hierarchy, trust bullets'],
+  ['recommended',  'Recommended — confidence', 'reservation framing, dominant CTA']
+];
+const R1_MARKETS = [['de','DE'],['us','US']];
+
+/* Round 2 — page 2. Five disclosure treatments plus the other surfaces. */
+/* C (bordered trust box), D (collapsed total) and E (full breakdown) are out.
+   They remain selectable in the page-2 prototype via ?d=C|D|E. */
+const R2_DISCLOSURE = [
+  ['A','A — local-shipping note',  '"Der Betrag beinhaltet lokale Versandkosten."'],
+  ['B','B — insured-delivery text','shield line under the total']
+];
+/* The other surfaces — mobile page, cart page, desktop drawer / panel /
+   checkout — deliberately live in the page-2 file rather than on this board.
+   Mixing a 1440px page into a row of phone frames made both unreadable. */
+
+const params = new URLSearchParams(location.search);
+const state = {
+  dev:  MOBILE_DEVICES.some(d => d.id === params.get('dev')) ? params.get('dev') : 'i15',
+  st:   STATES.some(x => x[0] === params.get('st')) ? params.get('st') : 'default',
+  zoom: ZOOMS.some(x => x[0] === params.get('zoom')) ? params.get('zoom') : 'fit'
+};
+
+/* The tiles are iframes of files that change often — without this, the browser
+   serves a cached copy and edits to the prototypes appear to do nothing. */
+const BUST = Date.now().toString(36);
+const dev = () => MOBILE_DEVICES.find(d => d.id === state.dev);
+
+/* ── tile builder ─────────────────────────────────────────────── */
+let counter = 0;
+/* The prototypes' own fit readout is hidden in embedded mode, so tiles reserve
+   no room for it — the fit numbers live in the full-size prototypes. */
+const FIT_BAR = 0;
+
+/* One word per frame. Everything else the reader needs is in the set header. */
+function tile({ href, w, vh, scale, label }) {
+  const tw = Math.round(w * scale);
+  const th = Math.round((vh + FIT_BAR) * scale);
+  return `
+  <a class="tile" href="${href}" target="_blank" rel="noopener"
+     style="--tw:${tw}px;--th:${th}px">
+    <span class="tag">${label}</span>
+    <span class="viewport">
+      <iframe src="${href}&chrome=0&b=${BUST}" width="${w}" height="${vh + FIT_BAR}"
+        style="transform:scale(${scale})" loading="lazy" title="${label}"></iframe>
+      <span class="uilabel open">Open</span>
+    </span>
+  </a>`;
+}
+
+function render() {
+  const d = dev();
+  counter = 0;
+
+  /* Three sets, one comparison each: conservative DE vs US, recommended DE vs US,
+     then the two disclosure treatments. A pair per row is the most a reader can
+     hold at once — six frames side by side was too much at a glance. */
+  const SETS = [
+    { title: 'Conservative refinement',
+      q: 'Tidier hierarchy and trust bullets — does a cleaner cart carry the decision on its own?',
+      tiles: R1_MARKETS.map(([m, label]) => ({
+        href: `variants.html?m=${m}&v=conservative&s=${state.st}&dev=${d.id}&pay=brand`,
+        label })) },
+    { title: 'Recommended — confidence',
+      q: 'Reservation framing and a dominant CTA — does reassurance beat tidiness?',
+      tiles: R1_MARKETS.map(([m, label]) => ({
+        href: `variants.html?m=${m}&v=recommended&s=${state.st}&dev=${d.id}&pay=brand`,
+        label })) },
+    { title: 'Total disclosure',
+      q: 'A states that the total includes local shipping · B adds the insured-delivery promise under it.',
+      tiles: R2_DISCLOSURE.map(([code]) => ({
+        href: `disclosure.html?s=mob-sheet&d=${code}&st=${state.st}&dev=${d.id}`,
+        label: code })) }
+  ];
+
+  /* Fit a PAIR to the window, so each frame lands at or near full size.
+     Measure a probe row rather than the window — it accounts for page padding
+     and survives contexts where innerWidth reads 0. */
+  const host = document.getElementById('sets');
+  host.innerHTML = '<div class="strip" id="probe"></div>';
+  const avail = document.getElementById('probe').clientWidth || document.documentElement.clientWidth || 1440;
+  const gap = 64;
+  const perRow = 2;
+  const fit = (avail - gap * (perRow - 1)) / (perRow * d.w);
+  const scale = state.zoom === 'fit' ? Math.min(1, Math.max(.4, fit)) : ZOOM_MAP[state.zoom].m;
+
+  host.innerHTML = SETS.map((set, i) => `
+    <div class="set">
+      <div class="set-head">
+        <span class="line"><span class="n">${String(i + 1).padStart(2, '0')}</span><h2>${set.title}</h2></span>
+        <p class="b-sm t-sec q">${set.q}</p>
+      </div>
+      <div class="strip">
+        ${set.tiles.map(s => tile({ href: s.href, w: d.w, vh: d.vh, scale, label: s.label })).join('')}
+      </div>
+    </div>`).join('');
+
+  segments();
+  const q = new URLSearchParams({ dev: state.dev, st: state.st, zoom: state.zoom });
+  history.replaceState(null, '', '?' + q);
+}
+
+function seg(id, options, key) {
+  document.getElementById(id).innerHTML = options.map(([val, label]) =>
+    `<button aria-pressed="${state[key] === val}" data-key="${key}" data-val="${val}">${label}</button>`).join('');
+}
+function segments() {
+  seg('seg-device', MOBILE_DEVICES.map(d => [d.id, d.label]), 'dev');
+  seg('seg-state', STATES, 'st');
+  seg('seg-zoom', ZOOMS, 'zoom');
+}
+
+document.querySelector('.chrome').addEventListener('click', e => {
+  const b = e.target.closest('button[data-key]');
+  if (!b) return;
+  state[b.dataset.key] = b.dataset.val;
+  render();
+});
+
+/* re-fit the row when the window changes width */
+let resizeTimer;
+window.addEventListener('resize', () => {
+  if (state.zoom !== 'fit') return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(render, 150);
+});
+
+render();
+</script>
+</body>
+</html>

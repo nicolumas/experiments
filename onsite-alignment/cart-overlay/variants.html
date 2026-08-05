@@ -1,0 +1,1096 @@
+<!doctype html>
+<!-- ═══ PROTO HEADER ═══════════════════════════════════════════════════
+  ID:          PROTO-2026-014
+  Source:      Figma · Cart-Overlay-Optimization_May26 (fr7nxOy9s1wf1hYl3iHvxq)
+               8 mobile frames · DE + US × baseline / conservative / recommended / aggressive
+  Task:        Convert every frame to the LUMAS V2 (2026) brand system.
+  Hypothesis:  [ASSUMPTION — carried from the source file's own annotations]
+               For mobile visitors who have just added an edition (DE + US),
+               replacing the invoice-style cart overlay with a confidence-first
+               overlay (reservation framing, trust bullets, precise delivery
+               window, dominant primary CTA above demoted express pay)
+               increases begin_checkout rate, because the current overlay
+               reads as a receipt and gives no reassurance at the moment of
+               highest doubt.
+  Prior:       ledger silent (lumas-07-ledger not consulted in this session —
+               run its READ procedure before this becomes a ticket)
+  Goals:       primary   Begin-Checkout
+               secondary Express-ApplePay · Express-PayPal · Express-ShopPay ·
+                         Cross-sell-click · Framing-upsell-click · Overlay-close
+               [goal names are closest-match, NOT verified against the ABlyft
+                16-goal library — confirm before wiring the test]
+  Variants:    baseline | conservative | recommended | aggressive  (× market de|us)
+  States:      default | loading | empty | error
+  Status:      exploration — V2 brand conversion only, copy carried over 1:1
+               except casing (V2 casing rules applied)
+  URL params:  ?m=de|us  &v=baseline|conservative|recommended|aggressive|compare
+               &s=default|loading|empty|error  &pay=mono|brand
+  Keys:        v = cycle variant · m = toggle market · c = compare all · n = notes
+═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- shared fonts live one level up, under onsite-alignment/assets -->
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart Overlay — V2 branding conversion (DE + US)</title>
+<style>
+/* ── V2 primitives ─────────────────────────────────────────────── */
+:root{
+  --charcoal-900:#1C1A18; --charcoal-800:#3A3835; --charcoal-700:#5A5752;
+  --charcoal-500:#908C87; --charcoal-300:#C7C3BE; --charcoal-100:#E3E0DB;
+  --ivory-100:#F4EDE2;    --ivory-200:#F7F1E9;    --ivory-300:#FAF6F1;
+  --bone-100:#E2D8CC;     --bone-200:#EAE2D8;     --bone-300:#F0EBE3;
+  --success-600:#3A6B4A;  --success-50:#E8F2EB;
+  --warning-600:#9B6D1E;  --warning-50:#FDF5E6;
+  --error-600:#B5352A;    --error-50:#FDECEA;
+
+  /* ── semantic aliases (components consume these) ─────────────── */
+  --color-text-primary:var(--charcoal-900);
+  --color-text-secondary:var(--charcoal-700);
+  --color-text-tertiary:var(--charcoal-500);
+  --color-text-disabled:var(--charcoal-300);
+  --color-text-inverse:var(--ivory-100);
+  --color-surface-page:var(--ivory-300);
+  --color-surface-card:#FFFFFF;
+  --color-surface-raised:var(--ivory-200);
+  --color-surface-sunken:var(--ivory-100);
+  --color-surface-inverse:var(--charcoal-900);
+  --color-surface-muted:var(--bone-300);
+  --color-border-default:var(--bone-100);
+  --color-border-subtle:var(--bone-200);
+  --color-border-strong:var(--charcoal-300);
+  --color-border-focus:var(--charcoal-900);
+  --color-border-inverse:var(--ivory-100);
+  --color-status-success:var(--success-600);
+  --color-status-success-bg:var(--success-50);
+  --color-status-warning:var(--warning-600);
+  --color-status-warning-bg:var(--warning-50);
+  --color-status-error:var(--error-600);
+  --color-status-error-bg:var(--error-50);
+
+  /* ── base-4 spacing ladder ───────────────────────────────────── */
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px;--sp-12:48px;--sp-16:64px;
+  --sp-20:80px;--sp-24:96px;
+
+  --radius-xs:2px; --radius-sm:4px;
+
+  /* shadow tint alpha unconfirmed in the Figma file — flagged in notes */
+  --shadow-sm:0 1px 2px rgba(28,26,24,.06);
+  --shadow-md:0 2px 8px rgba(28,26,24,.08);
+  --shadow-lg:0 8px 32px rgba(28,26,24,.12);
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.28);
+
+  --font-display:'UtileDisplay',Georgia,serif;
+  --font-ui:'Archivo',-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--color-surface-page);
+  color:var(--color-text-primary);
+  font-family:var(--font-ui);
+  font-variation-settings:"wdth" 100;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── V2 type tiers ─────────────────────────────────────────────── */
+.d-h1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,6vw,62px);line-height:1.04}
+.d-h2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5vw,46px);line-height:1.12}
+.d-h3{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12}
+.d-h4{font-family:var(--font-display);font-weight:400;font-size:22px;line-height:1.25}
+.b-lg{font-weight:300;font-size:20px;line-height:1.6}
+.b{font-weight:400;font-size:16px;line-height:1.5}
+.b-sm{font-weight:400;font-size:13px;line-height:1.65}
+.cap{font-weight:400;font-size:11px;line-height:1.5;letter-spacing:.33px}
+.micro{font-weight:400;font-size:10px;line-height:1.5}
+.eyebrow{font-weight:700;font-size:11px;line-height:1.5;letter-spacing:1.98px;text-transform:uppercase}
+.uilabel{font-weight:700;font-size:10px;line-height:1.5;letter-spacing:1.8px;text-transform:uppercase}
+.t-sec{color:var(--color-text-secondary)}
+.t-ter{color:var(--color-text-tertiary)}
+.italic{font-style:italic}
+
+/* ── V2 components ─────────────────────────────────────────────── */
+.btn{
+  display:block;width:100%;border:0;cursor:pointer;text-align:center;
+  font-family:var(--font-ui);font-weight:700;font-size:13px;line-height:1.5;
+  letter-spacing:1.82px;text-transform:uppercase;border-radius:var(--radius-xs);
+  padding:var(--sp-4) 28px;transition:background .18s,color .18s,border-color .18s;
+}
+.btn-primary{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+.btn-primary:hover{background:var(--charcoal-800)}
+.btn-secondary{background:transparent;color:var(--color-text-primary);border:1px solid var(--color-border-focus)}
+.btn-secondary:hover{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+.btn-ghost{
+  display:inline-block;width:auto;background:none;border:0;
+  border-bottom:1px solid var(--color-border-focus);
+  padding:var(--sp-1) 0 6px 0;font-weight:400;letter-spacing:1.3px;
+  color:var(--color-text-primary);
+}
+.btn-ghost--inverse{color:var(--color-text-inverse);border-bottom-color:var(--color-border-inverse)}
+.btn:disabled{background:var(--color-surface-muted);color:var(--color-text-disabled);cursor:not-allowed}
+
+.chip{
+  display:inline-block;padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-xs);
+  border:1px solid var(--color-border-strong);background:transparent;
+  font-weight:700;font-size:12px;line-height:1.5;letter-spacing:.96px;text-transform:uppercase;
+  color:var(--color-text-primary);
+}
+.chip--active{background:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse)}
+.chip--sm{padding:var(--sp-1) var(--sp-2);font-size:10px;letter-spacing:1.2px}
+
+/* ── overlay shell ─────────────────────────────────────────────── */
+/* ── accurate device viewport ────────────────────────────────────
+   .frame is the real visible viewport (device CSS px minus browser
+   chrome). Nothing inside may push the CTA out of it: the item list
+   is the only scrollable region, header/bands/footer stay fixed. */
+.frame{
+  width:var(--vw);height:var(--vh);position:relative;overflow:hidden;
+  background:var(--color-surface-card);box-shadow:var(--shadow-lg);
+  display:flex;flex-direction:column;
+}
+.phone{
+  width:100%;height:100%;background:var(--color-surface-card);
+  position:relative;display:flex;flex-direction:column;min-height:0;
+}
+.fitbar{
+  display:flex;align-items:center;gap:var(--sp-3);justify-content:center;
+  font-family:var(--font-ui);font-weight:700;font-size:10px;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--color-text-tertiary);
+}
+.fitbar b{color:var(--color-text-primary)}
+.fitbar .ok{color:var(--color-status-success)}
+.fitbar .warn{color:var(--color-status-warning)}
+/* ── viewport budget ─────────────────────────────────────────────
+   Every value below was set by measuring against the real visible
+   heights (553 / 734 / 787), not by eye. The overlay's decision layer
+   — header, items, total, CTA — must land inside the smallest one. */
+.frame .ov-head{padding:var(--sp-5) var(--sp-6) var(--sp-4)}
+.frame .ov-foot{padding:var(--sp-4) var(--sp-6)}
+.frame .item{padding:var(--sp-3) 0;grid-template-columns:80px 1fr}
+.frame .item--lg{grid-template-columns:88px 1fr}
+.frame .totals{margin:var(--sp-3) 0}
+/* air between the price and the CTA — the button should not touch the total */
+.frame .ov-foot .btn-primary{margin-top:var(--sp-6)}
+.frame[data-tight] .ov-foot .btn-primary{margin-top:var(--sp-5)}
+.frame .trust{gap:var(--sp-1)}
+.frame .trust li{font-size:12px;line-height:1.5}
+.frame .hero{aspect-ratio:auto;height:180px}
+.frame .xsell .art{aspect-ratio:1}
+.frame .sec-head{margin:var(--sp-5) 0 var(--sp-2)}
+
+/* tier 2 — iPhone-15-class viewports (620–759px visible) */
+.frame[data-tight] .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.frame[data-tight] .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.frame[data-tight] .ov-foot{padding:var(--sp-3) var(--sp-5)}
+.frame[data-tight] .item{padding:var(--sp-3) 0}
+.frame[data-tight] .totals{margin:var(--sp-2) 0}
+.frame[data-tight] .trust{gap:2px}
+/* "Continue shopping" and the close control are never hidden at any tier —
+   they are the two exits, and an overlay without a visible way out is a trap */
+
+/* tighter rhythm on short viewports (iPhone SE and friends) */
+.frame[data-compact] .ov-head{padding:var(--sp-4) var(--sp-5) var(--sp-3)}
+.frame[data-compact] .ov-body{padding:0 var(--sp-5) var(--sp-3)}
+.frame[data-compact] .ov-foot{padding:var(--sp-4) var(--sp-5)}
+.frame[data-compact] .item{padding:var(--sp-3) 0;grid-template-columns:64px 1fr}
+.frame[data-compact] .item--lg{grid-template-columns:72px 1fr}
+.frame[data-compact] .trust li{font-size:11px;line-height:1.45}
+.frame[data-compact] .totals{margin:var(--sp-3) 0}
+.frame[data-compact] .totals .grand{font-size:22px}
+.frame[data-compact] .band{padding:var(--sp-3) var(--sp-5)}
+.frame[data-compact] .hero{height:130px;margin-bottom:var(--sp-3)}
+.frame[data-compact] .sec-head{margin:var(--sp-4) 0 var(--sp-2)}
+.frame[data-compact] .d-h3{font-size:22px}
+.frame[data-compact] .express{margin-top:var(--sp-2)}
+.frame[data-compact] .pay{padding:var(--sp-2)}
+/* on a 553px viewport the confirmation flourish goes; the confirmation itself stays */
+.frame[data-compact] .band-sub{display:none}
+.ov-close{
+  background:none;border:0;cursor:pointer;color:var(--color-text-primary);
+  font-size:20px;line-height:1;padding:var(--sp-1);
+}
+.ov-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-4);
+  padding:var(--sp-6) var(--sp-6) var(--sp-5);
+  border-bottom:1px solid var(--color-border-subtle);
+}
+.ov-body{padding:0 var(--sp-6) var(--sp-5);flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.ov-head,.ov-foot,.band,.ribbon,.pill,.exit-bar{flex:none}
+.exit-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
+  padding:var(--sp-3) var(--sp-6);border-bottom:1px solid var(--color-border-subtle);
+}
+.frame[data-tight] .exit-bar{padding:var(--sp-2) var(--sp-5)}
+.ov-foot{padding:var(--sp-6);border-top:1px solid var(--color-border-subtle)}
+/* The page ground is ivory/300, so the money block goes WHITE — at the bottom
+   edge of the frame an ivory footer dissolved straight into the page behind it.
+   Separation is the 1px hairline; the card stays lighter than its ground. */
+.ov-foot--sunken{background:var(--color-surface-card)}
+.ov-trust{
+  flex:none;padding:var(--sp-4) var(--sp-6);background:var(--color-surface-card);
+  border-top:1px solid var(--color-border-subtle);
+}
+.frame[data-tight] .ov-trust{padding:var(--sp-3) var(--sp-5)}
+
+.band{display:flex;gap:var(--sp-3);align-items:flex-start;padding:var(--sp-4) var(--sp-6)}
+.band-success{background:var(--color-status-success-bg);color:var(--color-status-success)}
+.band-warning{background:var(--color-status-warning-bg);color:var(--color-status-warning)}
+.band-error{background:var(--color-status-error-bg);color:var(--color-status-error)}
+.band-body{flex:1}
+.pill{
+  display:inline-flex;align-items:center;gap:var(--sp-2);
+  background:var(--color-status-success-bg);color:var(--color-status-success);
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs);
+}
+.ribbon{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
+  background:var(--color-surface-inverse);padding:var(--sp-3) var(--sp-6);
+}
+.ribbon .eyebrow{color:rgba(244,237,226,.55);font-size:10px;letter-spacing:1.4px}
+.ribbon .ov-close{color:var(--color-text-inverse)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+
+/* items */
+.item{
+  display:grid;grid-template-columns:88px 1fr;gap:var(--sp-4);
+  padding:var(--sp-5) 0;border-bottom:1px solid var(--color-border-subtle);
+}
+.item--lg{grid-template-columns:96px 1fr}
+.item:last-of-type{border-bottom:0}
+.thumb{
+  aspect-ratio:1;background:var(--color-surface-page);
+  border:1px solid var(--color-border-subtle);
+}
+.item-meta{display:flex;flex-direction:column;gap:var(--sp-1);min-width:0}
+.item-row{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);margin-top:var(--sp-1)}
+.item-row .b-sm{font-size:12px}
+.item-row .price{flex:none}
+.price{font-weight:400;font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* hero artwork */
+.hero{
+  width:100%;aspect-ratio:342/220;background:var(--color-surface-page);
+  border:1px solid var(--color-border-subtle);box-shadow:var(--shadow-frame);
+  margin-bottom:var(--sp-5);
+}
+
+/* trust */
+.trust{list-style:none;display:flex;flex-direction:column;gap:var(--sp-2)}
+.trust li{display:flex;gap:var(--sp-2);color:var(--color-text-secondary);font-size:13px;line-height:1.65}
+.trust .tick{color:var(--color-status-success);flex:none}
+
+/* totals */
+.totals{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-4);margin:var(--sp-5) 0}
+.totals>div{min-width:0}
+.totals .grand{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+
+/* express pay */
+.express{display:flex;gap:var(--sp-2);margin-top:var(--sp-3)}
+/* Payment marks follow the PROVIDERS' own branding, not the V2 palette —
+   Apple, PayPal and Shopify all mandate their button appearance, and the
+   recognition is load-bearing for conversion. V2 governs LUMAS surfaces only.
+   Colours below approximate the specs; implementation must use each
+   provider's own SDK button component. */
+.pay{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:var(--sp-1);
+  padding:var(--sp-3) var(--sp-2);border-radius:var(--radius-xs);cursor:pointer;
+  border:1px solid transparent;font-family:var(--font-ui);font-weight:700;
+  font-size:11px;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;
+}
+.pay:hover{filter:brightness(.94)}
+.pay-apple{background:#000;border-color:#000;color:#fff}
+.pay-paypal{background:#FFC439;border-color:#FFC439;color:#003087}
+.pay-shop{background:#5A31F4;border-color:#5A31F4;color:#fff}
+/* ?pay=mono — charcoal-only study, kept for comparison, not the default */
+body[data-pay="mono"] .pay{
+  background:var(--color-surface-card);border-color:var(--color-border-strong);
+  color:var(--color-text-primary);
+}
+body[data-pay="mono"] .pay:hover{filter:none;background:var(--color-surface-raised)}
+
+/* upsell + cross-sell */
+.upsell{
+  display:grid;grid-template-columns:44px 1fr 12px;gap:var(--sp-4);align-items:center;
+  background:var(--color-surface-page);padding:var(--sp-4);margin:var(--sp-5) 0;
+  border-radius:var(--radius-xs);cursor:pointer;
+}
+.upsell:hover{background:var(--bone-200)}
+.upsell-swatch{aspect-ratio:1;background:var(--bone-100);border:1px solid var(--color-border-default)}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);margin:var(--sp-6) 0 var(--sp-3)}
+.xsell{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3)}
+.xsell figure{cursor:pointer}
+.xsell .art{aspect-ratio:4/5;background:var(--color-surface-page);border:1px solid var(--color-border-subtle);margin-bottom:var(--sp-2)}
+.xsell figcaption{display:flex;flex-direction:column;gap:2px}
+.chev{color:var(--color-text-tertiary);flex:none}
+
+/* affirm-style financing chip (functional, not decorative) */
+.fin{display:inline-flex;align-items:center;gap:var(--sp-2);margin-top:var(--sp-1)}
+.fin .mark{
+  padding:2px var(--sp-2);border-radius:var(--radius-xs);
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);
+  font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+}
+
+/* loading / empty / error states */
+.skel{position:relative;overflow:hidden;background:var(--color-surface-page)}
+.skel::after{
+  content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+  animation:sweep 1.35s infinite;
+}
+@keyframes sweep{to{transform:translateX(100%)}}
+.skel-line{height:12px;border-radius:var(--radius-xs)}
+.empty{padding:var(--sp-16) var(--sp-6);text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--sp-6)}
+
+/* ── prototype chrome (not part of the brand surface) ──────────── */
+.chrome{
+  position:sticky;top:0;z-index:20;background:var(--color-surface-inverse);
+  color:var(--color-text-inverse);padding:var(--sp-4) var(--sp-6);
+  display:flex;flex-wrap:wrap;gap:var(--sp-6);align-items:center;
+}
+.chrome h1{font-family:var(--font-display);font-weight:400;font-size:18px;line-height:1.2;margin-right:auto}
+.chrome h1 span{display:block;color:rgba(244,237,226,.55);font-family:var(--font-ui);font-weight:700;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2px}
+.seg{display:flex;gap:var(--sp-1);background:rgba(244,237,226,.08);padding:var(--sp-1);border-radius:var(--radius-xs)}
+.seg button{
+  background:none;border:0;cursor:pointer;color:rgba(244,237,226,.75);
+  font-family:var(--font-ui);font-weight:700;font-size:10px;letter-spacing:1.4px;
+  text-transform:uppercase;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs);
+}
+.seg button[aria-pressed="true"]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
+.stage{padding:var(--sp-12) var(--sp-6) var(--sp-24);display:flex;justify-content:center}
+/* ?chrome=0 — embedded as a tile on the board page */
+body.bare{background:transparent}
+body.bare .chrome{display:none}
+body.bare .stage{padding:0}
+body.bare .notes{display:none}
+body.bare .fitbar{display:none}
+.stage[data-view="compare"]{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--sp-8);align-items:start;max-width:1560px;margin:0 auto}
+.cmp{display:flex;flex-direction:column;gap:var(--sp-3);align-items:center}
+.cmp-label{text-align:center}
+.notes{
+  max-width:900px;margin:0 auto var(--sp-24);background:var(--color-surface-card);
+  border:1px solid var(--color-border-default);padding:var(--sp-10);
+}
+.notes[hidden]{display:none}
+.notes h2{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.12;margin-bottom:var(--sp-2)}
+.notes h3{font-weight:700;font-size:11px;letter-spacing:1.98px;text-transform:uppercase;color:var(--color-text-tertiary);margin:var(--sp-8) 0 var(--sp-3)}
+.notes table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.65}
+.notes td,.notes th{text-align:left;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--color-border-subtle);vertical-align:top}
+.notes th{font-weight:700;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--color-text-tertiary)}
+.notes ul{margin:0 0 0 var(--sp-5);font-size:13px;line-height:1.75;color:var(--color-text-secondary)}
+.notes code{font-family:ui-monospace,monospace;font-size:12px;background:var(--color-surface-sunken);padding:1px 4px}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <h1><span>PROTO-2026-014 · V2 conversion</span>Cart overlay — DE + US</h1>
+  <div class="seg" id="seg-market" role="group" aria-label="Market"></div>
+  <div class="seg" id="seg-variant" role="group" aria-label="Variant"></div>
+  <div class="seg" id="seg-device" role="group" aria-label="Device viewport"></div>
+  <div class="seg" id="seg-state" role="group" aria-label="State"></div>
+  <div class="seg" id="seg-pay" role="group" aria-label="Payment marks"></div>
+  <div class="seg" id="seg-notes" role="group" aria-label="Notes"></div>
+</header>
+
+<main class="stage" id="stage"></main>
+<section class="notes" id="notes" hidden></section>
+
+<script>
+/* ── instrumentation stubs ─────────────────────────────────────────
+   Each call site is named after the real GA4 event it becomes.
+   Dev handoff maps these 1:1 to dataLayer pushes. */
+function track(eventName, params = {}) {
+  console.log('[track]', eventName, params);
+}
+
+/* ── copy (carried 1:1 from the Figma frames; casing per V2 rules) ── */
+const T = {
+  de: {
+    market:'DE', locale:'de',
+    headBaseline:'Warenkorb', headV1:'Dein Warenkorb',
+    continueShopping:'Weiter einkaufen', discoverMore:'Weitere Werke entdecken',
+    addedPill:'Hinzugefügt',
+    successTitle:'Zu deinem Warenkorb hinzugefügt',
+    successBody:'Deine Auswahl sieht großartig aus.',
+    reserveTitle:'Edition wird für dich reserviert',
+    reserveBody:'Nur noch wenige Exemplare verfügbar',
+    ribbon:'Edition reserviert · Letzte Exemplare',
+    heroTitle:'Exklusive Edition reserviert',
+    heroSub:'Eine unserer meistgefragten Editionen.',
+    socialProof:'Besonders beliebt in großen Formaten',
+    chipLast:'Letzte Exemplare', chipSigned:'Signiert',
+    expressLabel:'Express Checkout',
+    expressSub:'100 % sicher. Sofortige Reservierung.',
+    trust:[
+      'Versandfertig in 2–3 Wochen — voraussichtl. 4.–11. Juni',
+      'Sicher verpackt & vollständig versichert',
+      'Signierte limitierte Edition · Museumsqualität'
+    ],
+    totalLabelBaseline:'Gesamtpreis inkl. MwSt.',
+    totalSubBaseline:'Der Betrag beinhaltet lokale Versandkosten.',
+    totalLabel:'Gesamt inkl. MwSt.',
+    totalSubV1:'inkl. Versand DE', totalSubV2:'Lieferung 4.–11. Juni',
+    total:'€ 2.163,90',
+    ctaBaseline:'Zum Warenkorb', cta:'Sicher zur Kasse', ctaV2:'Sicher zur Kasse',
+    upsellTitle:'Rahmung hinzufügen', upsellSub:'Meistgewählt: Schweberahmen', upsellPrice:'+€ 149',
+    xsellHead:'Kuratiert passend zu deiner Auswahl',
+    financing:null,
+    items:[
+      { title:'What Could Possibly go Wrong', artist:'Niki Hare',
+        specSize:'Größe: 60 × 80 cm',
+        specMount:'Kaschierung: Kaschierung unter Acrylglas, Stärke 2 mm glänzend',
+        specShort:'60 × 80 cm · Acrylglas 2 mm', price:'€ 899,00', last:true },
+      { title:'Intersections 44', artist:'Alessandro Puccinelli',
+        specSize:'Größe: 80 × 120 cm',
+        specMount:'Kaschierung: Kaschierung unter Acrylglas, Stärke 2 mm matt',
+        specShort:'80 × 120 cm · Acrylglas matt', price:'€ 1.250,00', last:false }
+    ],
+    xsell:[
+      { title:'Untitled (Blue)', artist:'M. Lange', price:'ab € 599' },
+      { title:'Color Field 7',   artist:'R. Voss',  price:'ab € 729' }
+    ],
+    emptyTitle:'Dein Warenkorb ist leer',
+    emptyBody:'Entdecke limitierte Editionen von über 250 Künstlerinnen und Künstlern.',
+    emptyCta:'Editionen entdecken',
+    errorTitle:'Diese Edition ist nicht mehr verfügbar',
+    errorBody:'Deine Reservierung ist abgelaufen. Wir zeigen dir vergleichbare Werke.',
+    errorCta:'Ähnliche Editionen ansehen'
+  },
+  us: {
+    market:'US', locale:'en',
+    headBaseline:'Cart', headV1:'Your cart',
+    continueShopping:'Continue shopping', discoverMore:'Discover more works',
+    addedPill:'Added to cart',
+    successTitle:'Excellent choice',
+    successBody:'Your edition is reserved for the next few minutes.',
+    reserveTitle:'Your edition is being reserved',
+    reserveBody:'Only a few examples remain',
+    ribbon:'Your edition is reserved · Last few',
+    heroTitle:'Excellent choice',
+    heroSub:'One of our most collected contemporary editions.',
+    socialProof:'Popular with collectors in New York and LA',
+    chipLast:'Last editions', chipSigned:'Signed',
+    expressLabel:'Express Checkout',
+    expressSub:'100 % secure. Instant reservation.',
+    trust:[
+      'Museum-quality production',
+      'Free insured shipping across the continental US',
+      'Estimated delivery: June 4–10 · 60-day returns'
+    ],
+    totalLabelBaseline:'Total',
+    totalSubBaseline:'Includes US shipping.',
+    totalLabel:'Total',
+    totalSubV1:'Tax at checkout', totalSubV2:'Tax calculated at checkout',
+    total:'$ 2,389.00',
+    ctaBaseline:'View cart', cta:'Secure checkout', ctaV2:'Secure your artwork',
+    upsellTitle:'Complete the look', upsellSub:'Most chosen: Floating frame', upsellPrice:'+$169',
+    xsellHead:'Pairs beautifully with',
+    financing:{ mark:'Affirm', text:'From $215/mo' },
+    items:[
+      { title:'What Could Possibly go Wrong', artist:'Niki Hare',
+        specSize:'Size: 24 × 32 in',
+        specMount:'Mounting: Acrylic glass, 0.08" glossy',
+        specShort:'24 × 32 in · Acrylic glass', price:'$ 999.00', last:true },
+      { title:'Intersections 44', artist:'Alessandro Puccinelli',
+        specSize:'Size: 32 × 48 in',
+        specMount:'Mounting: Acrylic glass, 0.08" matte',
+        specShort:'32 × 48 in · Acrylic glass matte', price:'$ 1,390.00', last:false }
+    ],
+    xsell:[
+      { title:'Untitled (Blue)', artist:'M. Lange', price:'from $720' },
+      { title:'Color Field 7',   artist:'R. Voss',  price:'from $850' }
+    ],
+    emptyTitle:'Your cart is empty',
+    emptyBody:'Explore limited editions from more than 250 artists.',
+    emptyCta:'Explore editions',
+    errorTitle:'This edition is no longer available',
+    errorBody:'Your reservation expired. Here are comparable works.',
+    errorCta:'See similar editions'
+  }
+};
+
+const heroPrice = m => m === 'de' ? '€ 899,00' : '$ 999';
+const compactPrice = m => m === 'de' ? '€ 1.250,00' : '$ 1,390';
+
+/* ── partials ──────────────────────────────────────────────────── */
+const close = () =>
+  `<!-- ABLYFT-GOAL: Overlay-close -->
+   <button class="ov-close" aria-label="Close" onclick="track('cart_overlay_close',{surface:'overlay'})">×</button>`;
+
+/* Both exits, always in view: "continue shopping" and the close control sit in
+   a fixed bar above everything else, so neither can be scrolled away. */
+const exitBar = (t) => `
+  <div class="exit-bar">
+    <!-- ABLYFT-GOAL: Continue-shopping -->
+    <button class="btn btn-ghost" onclick="track('cart_overlay_continue_shopping')">‹ ${t.continueShopping}</button>
+    ${close()}
+  </div>`;
+
+const payButton = (provider, label) =>
+  `<!-- ABLYFT-GOAL: Express-${provider} -->
+   <button class="pay pay-${provider.toLowerCase()}"
+     onclick="track('begin_checkout',{payment_type:'${provider}',express:true})">${label}</button>`;
+
+const expressRow = (m, providers) =>
+  `<div class="express">${providers.map(p => payButton(p[0], p[1])).join('')}</div>`;
+
+const applePay = ['Apple','Apple&nbsp;Pay'];
+const payPal   = ['PayPal','PayPal'];
+const shopPay  = ['Shop','Shop&nbsp;Pay'];
+
+/* full spec item row — baseline density */
+const itemBaseline = (it) => `
+  <article class="item">
+    <div class="thumb" role="img" aria-label="${it.title}"></div>
+    <div class="item-meta">
+      <p class="b">${it.title}</p>
+      <p class="eyebrow t-ter">${it.artist}</p>
+      <p class="b-sm t-sec">${it.specSize}</p>
+      <p class="b-sm t-sec">${it.specMount}</p>
+      <p class="price" style="margin-top:var(--sp-2)">${it.price}</p>
+    </div>
+  </article>`;
+
+/* condensed item row — refined variants */
+const itemRefined = (it, t, lg) => `
+  <article class="item${lg ? ' item--lg' : ''}">
+    <div class="thumb" role="img" aria-label="${it.title}"></div>
+    <div class="item-meta">
+      <p class="b">${it.title}</p>
+      <p class="eyebrow t-ter">${it.artist}</p>
+      <div class="item-row">
+        <span class="b-sm t-sec">${it.specShort}</span>
+        <span class="price">${it.price}</span>
+      </div>
+    </div>
+  </article>`;
+
+const trust = (t) => `
+  <ul class="trust">
+    ${t.trust.map(x => `<li><span class="tick" aria-hidden="true">✓</span><span>${x}</span></li>`).join('')}
+  </ul>`;
+
+const totals = (label, sub, value, fin) => `
+  <div class="totals">
+    <div>
+      <p class="b-sm">${label}</p>
+      <p class="cap t-ter">${sub}</p>
+      ${fin ? `<p class="fin"><span class="mark">${fin.mark}</span><span class="b-sm t-sec">${fin.text}</span></p>` : ''}
+    </div>
+    <p class="grand">${value}</p>
+  </div>`;
+
+const primaryCta = (label) => `
+  <!-- ABLYFT-GOAL: Begin-Checkout -->
+  <button class="btn btn-primary" onclick="track('begin_checkout',{express:false})">${label}</button>`;
+
+const upsell = (t) => `
+  <!-- ABLYFT-GOAL: Framing-upsell-click -->
+  <div class="upsell" role="button" tabindex="0"
+       onclick="track('select_promotion',{promotion_name:'framing_upsell',item_name:'Floating frame'})">
+    <div class="upsell-swatch"></div>
+    <div>
+      <p class="b">+ ${t.upsellTitle}</p>
+      <p class="b-sm t-sec">${t.upsellSub} <span style="white-space:nowrap">${t.upsellPrice}</span></p>
+    </div>
+    <span class="chev" aria-hidden="true">›</span>
+  </div>`;
+
+const crossSell = (t, loading) => `
+  <div class="sec-head">
+    <p class="b">${t.xsellHead}</p>
+    <span class="chev" aria-hidden="true">›</span>
+  </div>
+  ${loading ? `
+  <!-- loading state: cross-sell shelf -->
+  <div class="xsell" aria-busy="true">
+    ${[0,1,2].map(() => `
+      <figure>
+        <div class="art skel"></div>
+        <div class="skel skel-line" style="width:70%;margin-bottom:6px"></div>
+        <div class="skel skel-line" style="width:45%"></div>
+      </figure>`).join('')}
+  </div>` : `
+  <!-- ABLYFT-GOAL: Cross-sell-click -->
+  <div class="xsell" onclick="track('select_item',{item_list_name:'cart_overlay_cross_sell'})">
+    ${t.xsell.map(x => `
+      <figure>
+        <div class="art" role="img" aria-label="${x.title}"></div>
+        <figcaption>
+          <span class="b-sm" style="font-weight:700">${x.title}</span>
+          <span class="cap t-ter">${x.artist} · ${x.price}</span>
+        </figcaption>
+      </figure>`).join('')}
+    <figure aria-hidden="true"><div class="art"></div></figure>
+  </div>`}`;
+
+/* ── variants ──────────────────────────────────────────────────── */
+
+/* BASELINE — current, transactional. V2 conversion: black → charcoal,
+   all-caps display → sentence case, spec caps → sentence case body/small,
+   express pay demoted to neutral tiles, ivory/bone tonal separation. */
+function baseline(m, t) {
+  return `
+  <div class="phone">
+    <div class="ov-head">
+      <h2 class="d-h3">${t.headBaseline}</h2>
+      <div style="display:flex;align-items:center;gap:var(--sp-4)">
+        <!-- ABLYFT-GOAL: Continue-shopping -->
+        <button class="btn btn-ghost" onclick="track('cart_overlay_continue_shopping')">‹ ${t.continueShopping}</button>
+        ${close()}
+      </div>
+    </div>
+    <div class="ov-body">
+      ${t.items.map(itemBaseline).join('')}
+    </div>
+    <div class="ov-foot ov-foot--sunken" style="text-align:center">
+      <p class="eyebrow">${t.expressLabel}</p>
+      <p class="b-sm t-ter" style="margin-top:var(--sp-1)">${t.expressSub}</p>
+      ${expressRow(m, [applePay, payPal])}
+    </div>
+    <div class="ov-foot">
+      ${totals(t.totalLabelBaseline, t.totalSubBaseline, t.total, null)}
+      ${primaryCta(t.ctaBaseline)}
+    </div>
+  </div>`;
+}
+
+/* OPTION 1 — conservative refinement. Added-to-cart pill, softer headline,
+   title-led hierarchy, trust bullets, primary CTA dominant. */
+function conservative(m, t) {
+  return `
+  <div class="phone">
+    ${exitBar(t)}
+    <div class="ov-head" style="align-items:flex-start;flex-direction:column;gap:var(--sp-3);border-bottom:0;padding-top:var(--sp-4)">
+      <span class="pill"><span aria-hidden="true">✓</span><span class="eyebrow">${t.addedPill}</span></span>
+      <h2 class="d-h3">${t.headV1}</h2>
+    </div>
+    <div class="ov-body" style="border-top:1px solid var(--color-border-subtle)">
+      ${t.items.map(it => itemRefined(it, t, false)).join('')}
+    </div>
+    <div class="ov-foot">
+      ${trust(t)}
+      ${totals(t.totalLabel, t.totalSubV1, t.total, null)}
+      ${primaryCta(t.cta)}
+      ${expressRow(m, m === 'us' ? [applePay, shopPay, payPal] : [applePay, payPal])}
+    </div>
+  </div>`;
+}
+
+/* OPTION 2 — recommended, confidence-first. Emotional confirmation band,
+   reservation band, larger thumbs, precise delivery, sticky-feel footer. */
+/* Every edition in the cart is the same size — no hero row, no compact row.
+   A cart is a list of equals; scaling one artwork up implies a hierarchy the
+   shopper did not choose, and it made the US and DE carts read differently. */
+function recommended(m, t, opts = {}) {
+  return `
+  <div class="phone">
+    ${exitBar(t)}
+    <div class="band band-success">
+      <span aria-hidden="true">✓</span>
+      <div class="band-body">
+        <p class="b" style="font-weight:700;font-size:15px">${t.successTitle}</p>
+        <p class="b-sm band-sub">${t.successBody}</p>
+      </div>
+    </div>
+    <!-- one line, not two: the stacked bands cost 146px of a 734px viewport -->
+    <div class="band band-warning" style="align-items:center">
+      <span class="dot" aria-hidden="true"></span>
+      <p class="b-sm"><span style="font-weight:700">${t.reserveTitle}</span> · ${t.reserveBody}</p>
+    </div>
+    <div class="ov-body" style="padding-top:0">
+      ${t.items.map(it => itemRefined(it, t, true)).join('')}
+    </div>
+    <div class="ov-trust">${trust(t)}</div>
+    <div class="ov-foot ov-foot--sunken">
+      ${totals(t.totalLabel, t.totalSubV2, t.total, null)}
+      ${primaryCta(t.ctaV2)}
+      ${expressRow(m, m === 'us' ? [shopPay, applePay, payPal] : [applePay, payPal])}
+    </div>
+  </div>`;
+}
+
+/* OPTION 3 — aggressive, gallery holding area. Dark scarcity ribbon,
+   dominant hero (shadow/frame), framing upsell, curated cross-sell,
+   express checkout demoted to a small inline row. */
+function aggressive(m, t, opts = {}) {
+  return `
+  <div class="phone">
+    <div class="ribbon">
+      <span style="display:flex;align-items:center;gap:var(--sp-2);color:var(--color-text-inverse)">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="eyebrow">${t.ribbon}</span>
+      </span>
+      ${close()}
+    </div>
+    <div class="ov-body" style="padding-top:var(--sp-6)">
+      <h2 class="d-h3">${t.heroTitle}</h2>
+      <p class="b-sm t-sec italic" style="margin:var(--sp-2) 0 var(--sp-5)">${t.heroSub}</p>
+      <div class="hero" role="img" aria-label="${t.items[0].title}"></div>
+      <p style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <span class="chip chip--sm chip--active">${t.chipLast}</span>
+        <span class="chip chip--sm" style="border-color:var(--color-border-default);color:var(--color-text-secondary)">${t.chipSigned}</span>
+      </p>
+      <div class="item-row" style="margin:0">
+        <div>
+          <p class="d-h4">${t.items[0].title}</p>
+          <p class="b-sm t-sec">${t.items[0].artist} · ${t.items[0].specShort.split(' · ')[0]}</p>
+        </div>
+        <p class="price">${heroPrice(m)}</p>
+      </div>
+      <p class="b-sm t-ter italic" style="margin-top:var(--sp-2)">✦ ${t.socialProof}</p>
+      <article class="item" style="margin-top:var(--sp-5);grid-template-columns:72px 1fr;border-bottom:0">
+        <div class="thumb" role="img" aria-label="${t.items[1].title}"></div>
+        <div class="item-row" style="margin:0;align-items:center">
+          <div>
+            <p class="b">${t.items[1].title}</p>
+            <p class="b-sm t-sec">${t.items[1].artist} · ${t.items[1].specShort.split(' · ')[0]}</p>
+          </div>
+          <p class="price">${compactPrice(m)}</p>
+        </div>
+      </article>
+      ${upsell(t)}
+      ${crossSell(t, opts.loading)}
+    </div>
+    <div class="ov-trust">${trust(t)}</div>
+    <div class="ov-foot ov-foot--sunken">
+      ${totals(t.totalLabel, t.totalSubV2, t.total, t.financing)}
+      ${primaryCta(t.cta)}
+      ${expressRow(m, m === 'us' ? [shopPay, applePay, payPal] : [applePay, payPal])}
+    </div>
+  </div>`;
+}
+
+/* ── non-default states ────────────────────────────────────────── */
+function emptyState(m, t) {
+  return `
+  <div class="phone">
+    ${exitBar(t)}
+    <div class="ov-head" style="border-bottom:0">
+      <h2 class="d-h3">${t.headV1}</h2>
+    </div>
+    <div class="empty" style="border-top:1px solid var(--color-border-subtle)">
+      <div style="width:120px;aspect-ratio:4/5;background:var(--color-surface-page);border:1px solid var(--color-border-subtle)"></div>
+      <div>
+        <p class="d-h4">${t.emptyTitle}</p>
+        <p class="b-sm t-sec" style="margin-top:var(--sp-2)">${t.emptyBody}</p>
+      </div>
+      <button class="btn btn-secondary" style="width:auto" onclick="track('view_item_list',{item_list_name:'cart_empty_state'})">${t.emptyCta}</button>
+    </div>
+  </div>`;
+}
+
+function loadingState(m, t) {
+  return `
+  <div class="phone" aria-busy="true">
+    ${exitBar(t)}
+    <div class="ov-head" style="border-bottom:0">
+      <h2 class="d-h3">${t.headV1}</h2>
+    </div>
+    <div class="ov-body" style="border-top:1px solid var(--color-border-subtle)">
+      ${[0,1].map(() => `
+      <article class="item item--lg">
+        <div class="thumb skel"></div>
+        <div class="item-meta" style="gap:var(--sp-2);padding-top:var(--sp-1)">
+          <div class="skel skel-line" style="width:85%"></div>
+          <div class="skel skel-line" style="width:45%;height:9px"></div>
+          <div class="skel skel-line" style="width:60%;height:9px;margin-top:var(--sp-2)"></div>
+        </div>
+      </article>`).join('')}
+    </div>
+    <div class="ov-foot ov-foot--sunken">
+      <div class="skel skel-line" style="width:70%;margin-bottom:var(--sp-3)"></div>
+      <div class="skel skel-line" style="width:55%;margin-bottom:var(--sp-3)"></div>
+      <div class="skel skel-line" style="width:62%"></div>
+      <div class="totals"><div class="skel skel-line" style="width:120px"></div><div class="skel skel-line" style="width:110px;height:22px"></div></div>
+      <button class="btn btn-primary" disabled>${t.cta}</button>
+    </div>
+  </div>`;
+}
+
+function errorState(m, t) {
+  return `
+  <div class="phone">
+    ${exitBar(t)}
+    <div class="band band-error">
+      <span aria-hidden="true">!</span>
+      <div class="band-body">
+        <p class="b" style="font-weight:700;font-size:15px">${t.errorTitle}</p>
+        <p class="b-sm">${t.errorBody}</p>
+      </div>
+      ${close()}
+    </div>
+    <div class="ov-body">
+      <article class="item item--lg" style="opacity:.55">
+        <div class="thumb" role="img" aria-label="${t.items[0].title}"></div>
+        <div class="item-meta">
+          <p class="b" style="text-decoration:line-through">${t.items[0].title}</p>
+          <p class="eyebrow t-ter">${t.items[0].artist}</p>
+          <div class="item-row">
+            <span class="b-sm" style="color:var(--color-status-error)">${t.market === 'DE' ? 'Nicht mehr verfügbar' : 'No longer available'}</span>
+            <span class="price t-ter">${t.items[0].price}</span>
+          </div>
+        </div>
+      </article>
+      ${itemRefined(t.items[1], t, true)}
+    </div>
+    <div class="ov-trust">${trust(t)}</div>
+    <div class="ov-foot ov-foot--sunken">
+      ${totals(t.totalLabel, t.totalSubV2, t.items[1].price, null)}
+      ${primaryCta(t.cta)}
+      <p style="margin-top:var(--sp-5)">
+        <button class="btn btn-ghost" onclick="track('view_item_list',{item_list_name:'cart_error_recovery'})">${t.errorCta}</button>
+      </p>
+    </div>
+  </div>`;
+}
+
+/* ── controller ────────────────────────────────────────────────── */
+/* Baseline and aggressive are out of the running: baseline is the current
+   invoice-style cart, aggressive needs ~1.15× the tallest phone viewport.
+   Their render functions are left in the file so either can be restored by
+   adding one line back here. */
+const VARIANTS = [
+  ['conservative','Conservative'],
+  ['recommended','Recommended'],
+  ['compare','Compare both']
+];
+const STATES  = [['default','Default'],['loading','Loading'],['empty','Empty'],['error','Error']];
+const MARKETS = [['de','DE'],['us','US']];
+const PAYS    = [['brand','Brand pay'],['mono','Mono pay']];
+
+/* ── real device viewports ───────────────────────────────────────
+   vh = the VISIBLE viewport, i.e. device CSS height minus browser
+   chrome (iOS Safari top + bottom bars, Chrome Android top bar).
+   These are the heights the design actually has to live inside. */
+const DEVICES = [
+  { id:'se',  label:'iPhone SE',  w:375, h:667, vh:553, note:'Safari, bars shown' },
+  { id:'i15', label:'iPhone 15',  w:390, h:844, vh:734, note:'Safari, bars shown' },
+  { id:'px7', label:'Pixel 7',    w:412, h:915, vh:787, note:'Chrome Android' },
+  { id:'full',label:'Full height',w:390, h:844, vh:0,   note:'unclipped, for reference' }
+];
+const device = () => DEVICES.find(d => d.id === state.dev) || DEVICES[0];
+
+const params = new URLSearchParams(location.search);
+const state = {
+  m: MARKETS.some(x => x[0] === params.get('m')) ? params.get('m') : 'de',
+  v: VARIANTS.some(x => x[0] === params.get('v')) ? params.get('v') : 'recommended',
+  s: STATES.some(x => x[0] === params.get('s')) ? params.get('s') : 'default',
+  dev: DEVICES.some(x => x.id === params.get('dev')) ? params.get('dev') : 'i15',
+  pay: params.get('pay') === 'mono' ? 'mono' : 'brand',
+  notes: params.get('notes') === '1'
+};
+
+let renderToken = 0;
+if (params.get('chrome') === '0') document.body.classList.add('bare');
+
+/* wrap an overlay in the current device viewport */
+function inFrame(html) {
+  const d = device();
+  const h = d.vh ? `${d.vh}px` : 'auto';
+  const tier = !d.vh ? '' : d.vh < 620 ? ' data-compact data-tight' : d.vh < 760 ? ' data-tight' : '';
+  return `<div class="frame"${tier} style="--vw:${d.w}px;--vh:${h}">${html}</div>`;
+}
+
+/* measure: does everything fit, or does the list have to scroll? */
+function fitReport(frame) {
+  const body = frame.querySelector('.ov-body');
+  if (!body) return null;
+  const over = Math.max(0, body.scrollHeight - body.clientHeight);
+  return { over, needed: frame.scrollHeight + over, avail: frame.clientHeight };
+}
+
+function fitBar(frame, label) {
+  const d = device();
+  const r = fitReport(frame);
+  if (!d.vh || !r) return `<p class="fitbar">${label} · ${d.w}×${d.h} — unclipped</p>`;
+  const verdict = r.over === 0
+    ? `<span class="ok">fits</span>`
+    : `<span class="warn">${r.over}px scrolls in the list</span>`;
+  return `<p class="fitbar">${label} · <b>${d.w}×${d.vh}</b> visible — ${verdict}</p>`;
+}
+
+function renderOverlay(m, v, s) {
+  const t = T[m];
+  if (s === 'empty')   return emptyState(m, t);
+  if (s === 'error')   return errorState(m, t);
+  if (s === 'loading' && v !== 'recommended' && v !== 'aggressive') return loadingState(m, t);
+  const opts = { loading: s === 'loading' };
+  if (v === 'baseline')     return baseline(m, t);
+  if (v === 'conservative') return conservative(m, t);
+  if (v === 'aggressive')   return aggressive(m, t, opts);
+  return recommended(m, t, opts);
+}
+
+function render() {
+  const stage = document.getElementById('stage');
+  document.body.dataset.pay = state.pay;
+
+  if (state.v === 'compare') {
+    stage.dataset.view = 'compare';
+    stage.innerHTML = VARIANTS.filter(([key]) => key !== 'compare').map(([key, label]) => `
+      <div class="cmp" data-label="${T[state.m].market} · ${label}">
+        <div class="cmp-label">
+          <p class="eyebrow t-ter">${T[state.m].market} · ${label}</p>
+        </div>
+        ${inFrame(renderOverlay(state.m, key, state.s))}
+      </div>`).join('');
+  } else {
+    stage.dataset.view = 'single';
+    stage.innerHTML = `<div class="cmp">${inFrame(renderOverlay(state.m, state.v, state.s))}</div>`;
+  }
+
+  /* report fit for every frame on screen, after layout.
+     The token guards against stale callbacks from rapid re-renders. */
+  const token = ++renderToken;
+  /* setTimeout, not requestAnimationFrame: rAF is throttled to a standstill
+     in offscreen iframes, which is exactly how the board page embeds this. */
+  setTimeout(() => {
+    if (token !== renderToken) return;
+    document.querySelectorAll('.stage .cmp').forEach(cmp => {
+      cmp.querySelectorAll('.fitbar').forEach(el => el.remove());
+      const frame = cmp.querySelector('.frame');
+      if (!frame) return;
+      const label = cmp.dataset.label || device().label;
+      cmp.insertAdjacentHTML('beforeend', fitBar(frame, label));
+    });
+  });
+
+  segments();
+  document.getElementById('notes').hidden = !state.notes;
+  const q = new URLSearchParams({ m: state.m, v: state.v, s: state.s, dev: state.dev, pay: state.pay });
+  if (state.notes) q.set('notes', '1');
+  history.replaceState(null, '', '?' + q);
+  track('view_cart', { market: state.m, variant: state.v, ui_state: state.s });
+}
+
+function seg(id, options, key) {
+  document.getElementById(id).innerHTML = options.map(([val, label]) =>
+    `<button aria-pressed="${state[key] === val}" data-key="${key}" data-val="${val}">${label}</button>`
+  ).join('');
+}
+function segments() {
+  seg('seg-market', MARKETS, 'm');
+  seg('seg-variant', VARIANTS, 'v');
+  seg('seg-device', DEVICES.map(d => [d.id, d.label]), 'dev');
+  seg('seg-state', STATES, 's');
+  seg('seg-pay', PAYS, 'pay');
+  document.getElementById('seg-notes').innerHTML =
+    `<button aria-pressed="${state.notes}" data-key="notes" data-val="toggle">V2 notes</button>`;
+}
+
+document.querySelector('.chrome').addEventListener('click', e => {
+  const b = e.target.closest('button[data-key]');
+  if (!b) return;
+  if (b.dataset.key === 'notes') state.notes = !state.notes;
+  else state[b.dataset.key] = b.dataset.val;
+  render();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea')) return;
+  if (e.key === 'v') {
+    const i = VARIANTS.findIndex(x => x[0] === state.v);
+    state.v = VARIANTS[(i + 1) % VARIANTS.length][0];
+    render();
+  }
+  if (e.key === 'm') { state.m = state.m === 'de' ? 'us' : 'de'; render(); }
+  if (e.key === 'c') { state.v = 'compare'; render(); }
+  if (e.key === 'n') { state.notes = !state.notes; render(); }
+});
+
+/* ── conversion notes panel ────────────────────────────────────── */
+document.getElementById('notes').innerHTML = `
+  <h2>What changed in the V2 conversion</h2>
+  <p class="b-sm t-sec">Source: Cart-Overlay-Optimization_May26 · 8 mobile frames. Copy carried over 1:1; only casing changed where V2 casing rules require it.</p>
+
+  <h3>Token mapping</h3>
+  <table>
+    <tr><th>V1 in the Figma frames</th><th>V2 token</th><th>Value</th></tr>
+    <tr><td>Pure black CTA / ribbon (#000)</td><td><code>surface/inverse</code></td><td>#1C1A18</td></tr>
+    <tr><td>Pure white page ground</td><td><code>surface/page</code> behind, <code>surface/card</code> on the overlay</td><td>#FAF6F1 / #FFFFFF</td></tr>
+    <tr><td>Grey footer / express block</td><td><code>surface/sunken</code> (tonal separation, no shadow)</td><td>#F4EDE2</td></tr>
+    <tr><td>Grey image placeholders (#D9D9D9)</td><td><code>surface/sunken</code> + <code>border/subtle</code>; cross-sell on <code>surface/muted</code></td><td>#F4EDE2 / #F0EBE3</td></tr>
+    <tr><td>Hairline dividers</td><td><code>border/subtle</code></td><td>#EAE2D8</td></tr>
+    <tr><td>Green "added" band</td><td><code>status/success</code> on <code>status/success-bg</code> — functional confirmation only</td><td>#3A6B4A / #E8F2EB</td></tr>
+    <tr><td>Amber reservation band</td><td><code>status/warning</code> on <code>status/warning-bg</code> — functional</td><td>#9B6D1E / #FDF5E6</td></tr>
+    <tr><td>Framing upsell band (beige)</td><td><code>surface/muted</code></td><td>#F0EBE3</td></tr>
+    <tr><td>Body / caption greys</td><td><code>text/secondary</code>, <code>text/tertiary</code></td><td>#5A5752 / #908C87</td></tr>
+  </table>
+
+  <h3>Type</h3>
+  <ul>
+    <li>Heavy all-caps <em>WARENKORB</em> / <em>CART</em> → <code>display/h3</code> in Utile Display, <strong>sentence case</strong>.</li>
+    <li>Artwork titles → <code>body/default</code> in rows, <code>display/h4</code> when hero-led. Never all-caps.</li>
+    <li>Artist names → <code>eyebrow</code> (Archivo Bold 11px, 18% tracking, uppercase) — a legitimate utility label.</li>
+    <li>Spec blocks (<em>GRÖSSE: … / MOUNTING: …</em>) → <code>body/small</code> sentence case; the all-caps spec dump was the main V1 "invoice" tell.</li>
+    <li>Grand total → <code>display/h3</code> with tabular numerals; label pair stays <code>body/small</code> + <code>caption</code>.</li>
+    <li>Button labels stay UPPERCASE (Archivo Bold 13px / 1.82px tracking) — allowed and required by V2.</li>
+    <li>Editorial taglines keep italic (<code>display</code> italic is reserved for exactly this).</li>
+  </ul>
+
+  <h3>Spacing, radii, shadow</h3>
+  <ul>
+    <li>Every gap and pad snapped to the base-4 ladder (<code>sp/2</code>–<code>sp/24</code>); overlay padding is <code>sp/6</code> (24px), section rhythm <code>sp/5</code>–<code>sp/6</code>.</li>
+    <li>Radii limited to the two confirmed tokens: <code>radius/xs</code> 2px (chips, buttons, bands) and <code>radius/sm</code> 4px (inputs — none in this surface). No invented radii.</li>
+    <li>Overlay elevation uses <code>shadow/lg</code> (utility surface). <code>shadow/frame</code> appears only under the featured artwork in the hero-led variants. Everything else separates tonally.</li>
+  </ul>
+
+  <h3>Components</h3>
+  <ul>
+    <li>Primary CTA → V2 Primary button. "Weiter einkaufen" / "Continue shopping" → Ghost button (1px underline), which also fixes the V1 problem of a link competing with the CTA.</li>
+    <li>Scarcity tags (<em>Letzte Exemplare</em> / <em>Last editions</em>, <em>Signiert</em>) → V2 Chip: 2px radius, Archivo Bold 12px, 0.96px tracking. Active chip = <code>surface/inverse</code>.</li>
+    <li>Dark scarcity ribbon follows the on-dark alpha rhythm — eyebrow at 0.55, body 0.75, headline 1.0 — rather than a second grey.</li>
+  </ul>
+
+  <h3>Viewports — measured, not eyeballed</h3>
+  <p class="b-sm t-sec">Each frame is clipped to a real visible viewport (device CSS height minus browser chrome) and reports its own overflow underneath. Header, bands, total and CTA are <code>flex:none</code>; the item list is the only scrollable region, so the CTA is never pushed out of view.</p>
+  <table>
+    <tr><th>Variant</th><th>Pixel 7 412×787</th><th>iPhone 15 390×734</th><th>iPhone SE 375×553</th></tr>
+    <tr><td>DE baseline (control)</td><td>fits</td><td>fits</td><td>138px in list</td></tr>
+    <tr><td>DE conservative</td><td>fits</td><td>fits</td><td>32px in list</td></tr>
+    <tr><td>DE recommended</td><td>fits</td><td>fits</td><td>46px in list</td></tr>
+    <tr><td>US baseline / conservative</td><td>fits</td><td>fits</td><td>78 / 32px</td></tr>
+    <tr><td>US recommended (hero + cross-sell)</td><td>185px</td><td>205px</td><td>310px</td></tr>
+    <tr><td>Aggressive (both markets)</td><td>386–412px</td><td>406–432px</td><td>560–567px</td></tr>
+  </table>
+  <ul>
+    <li><strong>The three shippable DE variants and both US non-hero variants now fit with zero scrolling</strong> on iPhone 15 and Pixel 7. That needed real cuts: the two stacked confirmation bands became one line plus a single-line reservation notice (−58px), thumbnails went square, and padding came down the base-4 ladder. Three tiers apply by available height — default (≥760px), <code>tight</code> (620–759), <code>compact</code> (&lt;620).</li>
+    <li><strong>The aggressive variant cannot fit and should not pretend to.</strong> A hero artwork, a framing upsell, a three-up cross-sell, trust bullets, a price block and three CTAs need roughly 1.15 × the tallest phone viewport. If no-scroll is a hard requirement, that variant has to lose either the cross-sell shelf or the framing upsell — that is a scope decision, not a styling one.</li>
+    <li><strong>US recommended is hero-led</strong>, so its cross-sell sits below the fold by ~200px. The decision layer (hero, price, total, CTA) is fully visible; the shelf is discovery content and scrolling to it is the intended behaviour.</li>
+    <li><strong>The baseline overflowing on iPhone SE is a finding, not a bug.</strong> I did not compact the control beyond the shared tiers — it has to stay faithful to the current shop, or the comparison is dishonest.</li>
+    <li>These visible heights assume iOS Safari with both bars shown and Chrome Android with one toolbar. Verify against your own analytics before treating them as targets.</li>
+  </ul>
+
+  <h3>Payment marks sit outside V2</h3>
+  <ul>
+    <li>Apple Pay, PayPal and Shop Pay keep <strong>their own branding</strong> — black, gold #FFC439, purple #5A31F4 — and this is the default view. V2's "three colours, forever" governs LUMAS surfaces; provider marks are third-party assets whose appearance the providers mandate, and their recognisability is load-bearing at checkout.</li>
+    <li>The colours here approximate the specs for layout purposes only. Implementation must render each provider's own SDK button (Apple Pay JS, PayPal Buttons, Shopify Shop Pay) rather than a LUMAS-styled lookalike.</li>
+    <li><code>?pay=mono</code> keeps the charcoal-only study for reference. It is not the recommendation.</li>
+  </ul>
+
+  <h3>One thing still worth confirming</h3>
+  <ul>
+    <li><strong>Shadow tint alpha.</strong> The Figma file exposes shadow offsets but not the charcoal alpha values. Placeholders in use: 6% / 8% / 12% / 28% for <code>sm</code>/<code>md</code>/<code>lg</code>/<code>frame</code>. Confirm against Figma before this becomes repo SCSS.</li>
+  </ul>
+
+  <h3>Known gaps</h3>
+  <ul>
+    <li><strong>Fonts come from the site's shared stylesheet</strong> — <code>onsite-alignment/assets/lumas-fonts.css</code> (Utile Display) plus Archivo from Google Fonts. Never substitute Fraunces for Utile Display.</li>
+    <li>Goal names (<em>Begin-Checkout</em>, <em>Express-ApplePay</em>, …) are closest-match, not verified against the ABlyft 16-goal library.</li>
+    <li>Artwork imagery is placeholder; wire real LUMAS assets before usability testing so extreme aspect ratios stress the layout.</li>
+    <li>Values here are px for 1:1 Figma fidelity. Porting into <code>frontend/themes/white/</code> converts to rem (1rem = 10px) per the repo SCSS convention.</li>
+  </ul>`;
+
+render();
+</script>
+</body>
+</html>
