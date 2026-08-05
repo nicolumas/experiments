@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baroque Pools II — Tomislav Marcijuš · LUMAS Art Drop</title>
+<meta name="description" content="Baroque Pools II von Tomislav Marcijuš. Limitiert auf 100 Exemplare, 80 × 66 cm. LUMAS Art Drop, 15. – 17. August 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- Utile Display, served as woff2 so it renders on devices without the font
+     installed locally. These are the licensed TypeNetwork files (name table
+     checked: no "Trial" string), byte-identical to the ones in
+     lumassprykerng frontend/themes/white/assets/fonts/utile. -->
+<link href="lumas-fonts.css" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — LUMAS V2
+   ============================================================ */
+:root{
+  --bg:#FFFFFF;
+  --surface-page:#FAF6F1;
+  --surface-raised:#F7F1E9;
+  --surface-sunken:#F4EDE2;
+  --surface-inverse:#1C1A18;
+
+  --text-primary:#1C1A18;
+  --text-secondary:#5A5752;
+  --text-tertiary:#908C87;
+  --text-disabled:#C7C3BE;
+  --text-inverse:#F4EDE2;
+
+  --border-default:#E2D8CC;
+  --border-subtle:#EAE2D8;
+  --border-strong:#C7C3BE;
+  --border-focus:#1C1A18;
+
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.28);
+
+  /* Built-in CSS easings are too weak to read as intentional. */
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+
+  --font-display:'UtileDisplay','Utile Display','Archivo',Georgia,serif;
+  --font-text:'Helvetica Now Display','Archivo',Helvetica,Arial,sans-serif;
+
+  --gutter:24px;
+  --maxw:1440px;
+
+  /* True aspect ratio of the edition: 66 cm wide × 80 cm high.
+     The artwork is NEVER cover-cropped — every box that holds it either
+     matches this ratio exactly or contains it on a bone ground. */
+  --art-ratio:33/40;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:var(--font-text);
+  font-weight:400;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+.t-display-xl{font-family:var(--font-display);font-weight:300;font-size:clamp(64px,5vw,88px);line-height:1.0;letter-spacing:0;margin:0}
+.t-h1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,4vw,62px);line-height:1.04;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h3{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h4{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25;letter-spacing:0;margin:0;text-wrap:balance}
+.t-body-l{font-weight:400;font-size:20px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body{font-weight:400;font-size:16px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body-s{font-weight:400;font-size:13px;line-height:1.65;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-caption{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.03em;margin:0}
+.t-eyebrow{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.t-ui{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none !important}
+
+.skip-link{
+  position:absolute;left:8px;top:-64px;z-index:100;
+  background:var(--surface-inverse);color:var(--text-inverse);
+  padding:12px 16px;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+}
+.skip-link:focus{top:8px}
+
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--border-focus);outline-offset:2px;
+}
+.on-inverse a:focus-visible,.on-inverse button:focus-visible,.on-inverse input:focus-visible{
+  outline-color:var(--text-inverse);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-text);font-weight:700;font-size:13px;line-height:1.5;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  padding:16px 28px;min-height:48px;border-radius:0;border:1px solid transparent;
+  cursor:pointer;text-align:center;
+  transition:background-color 120ms linear,border-color 120ms linear,color 120ms linear,
+             transform 160ms var(--ease-out);
+}
+.btn--primary{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.btn--secondary{background:transparent;color:var(--text-primary);border-color:var(--text-primary)}
+/* Touch devices fire :hover on tap, which sticks. Gate it. */
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:#3A3835;border-color:#3A3835}
+  .btn--secondary:hover{background:var(--surface-inverse);color:var(--text-inverse)}
+}
+/* On inverse surfaces the primary button was charcoal-on-charcoal: the label
+   read but the button itself was invisible. Invert it. */
+.on-inverse .btn--primary{background:var(--text-inverse);color:var(--surface-inverse);border-color:var(--text-inverse)}
+@media (hover:hover) and (pointer:fine){
+  .on-inverse .btn--primary:hover{background:#FFFFFF;border-color:#FFFFFF}
+}
+.on-inverse .btn--secondary{color:var(--text-inverse);border-color:var(--text-inverse)}
+
+/* the interface should feel like it heard the press */
+.btn:active:not([aria-disabled="true"]){transform:scale(.97)}
+/* "NICHT MEHR VERFÜGBAR" is the ENDED phase's answer to the whole page — it has
+   to be readable. Tertiary on bone measured 2.87:1 at 13px/700, which needs
+   4.5:1. WCAG exempts inactive controls, but a state the visitor must read is
+   not incidental text, so it steps to --text-secondary: 6.18:1. The grey border,
+   the missing hover and cursor:not-allowed still mark it as inert. */
+.btn[aria-disabled="true"],.btn:disabled{
+  background:var(--surface-sunken);color:var(--text-secondary);border-color:var(--border-strong);
+  cursor:not-allowed;pointer-events:none;
+}
+.btn--full{width:100%}
+
+.textlink{
+  color:var(--text-primary);text-decoration:underline;text-underline-offset:3px;
+}
+.on-inverse .textlink{color:var(--text-inverse)}
+
+/* ============================================================
+   IMAGE + FALLBACK BLOCK
+   ============================================================ */
+.media{position:relative;width:100%;background:var(--surface-sunken);overflow:hidden}
+/* absolute, because height:100% resolves to auto when the parent's height is
+   auto — a portrait asset would otherwise stretch past the aspect-ratio */
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fallback{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  width:100%;background:var(--surface-sunken);border:1px solid var(--border-default);
+  padding:16px;color:var(--text-secondary);
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+}
+.framed{box-shadow:var(--shadow-frame)}
+/* shadow/frame is charcoal at 28%: on an inverse surface it renders as nothing.
+   A hairline gives the work a defined edge without shifting layout. */
+.on-inverse .framed{box-shadow:0 0 0 1px #3A3835}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar{
+  min-height:44px;background:var(--surface-inverse);color:var(--text-inverse);
+  display:flex;align-items:center;justify-content:center;padding:8px var(--gutter);
+}
+.topbar__inner{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.chip{
+  display:inline-block;border:1px solid #5A5752;border-radius:2px;padding:4px 8px;
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-inverse);
+}
+.chip--light{border-color:var(--border-strong);color:var(--text-primary)}
+
+/* COUNTDOWN */
+.cd{display:inline-flex;align-items:baseline;gap:12px}
+.cd__seg{display:inline-flex;align-items:baseline;gap:4px}
+.cd__num{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;letter-spacing:.06em}
+/* ONE size for the unit label in every countdown at every breakpoint. It used to
+   be 13px here and 11px in the mobile pass, which is two combinations for one
+   role; 11px/500 is the t-ui step the rest of the page's labels already use. */
+.cd__unit{font-size:11px;font-weight:500;line-height:1.5;letter-spacing:.03em;
+  color:var(--text-tertiary)}
+
+/* ============================================================
+   NAV — LUMAS site chrome
+   ============================================================ */
+.nav{background:#FFFFFF;border-bottom:1px solid var(--border-default);position:relative;z-index:40}
+.nav__inner{display:flex;align-items:center;gap:16px;height:72px}
+
+.nav__logo{display:flex;align-items:center;color:var(--text-primary);flex:0 0 auto}
+.nav__logomark{width:132px;height:auto;display:block}
+
+.nav__burger{display:flex;align-items:center;justify-content:center;width:40px;height:40px;
+  margin-left:-8px;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto}
+.nav__burger svg{width:24px;height:24px}
+
+.nav__links{display:none;align-items:center;gap:28px;flex:0 0 auto}
+.nav__link{font-weight:500;font-size:15px;line-height:1;letter-spacing:0;color:var(--text-primary);
+  text-decoration:none;white-space:nowrap}
+@media (hover:hover) and (pointer:fine){.nav__link:hover{text-decoration:underline;text-underline-offset:4px}}
+
+.nav__search{display:none;position:relative;flex:1 1 200px;min-width:0;max-width:520px;margin-left:auto}
+.nav__searchinput{width:100%;height:40px;border:0;border-radius:4px;background:var(--surface-sunken);
+  padding:0 44px 0 16px;font-family:var(--font-text);font-size:15px;color:var(--text-primary)}
+.nav__searchinput::placeholder{color:var(--text-secondary)}
+.nav__searchinput:focus{outline:2px solid var(--border-focus);outline-offset:2px}
+.nav__searchbtn{position:absolute;right:4px;top:4px;width:32px;height:32px;display:flex;align-items:center;
+  justify-content:center;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary)}
+.nav__searchbtn svg{width:20px;height:20px}
+
+.nav__icons{display:flex;align-items:center;gap:18px;margin-left:auto;flex:0 0 auto}
+.nav__icon{display:flex;align-items:center;color:var(--text-primary);text-decoration:none}
+.nav__icon svg{width:24px;height:24px;display:block}
+.nav__lang{gap:2px;font-weight:500;font-size:15px}
+.nav__lang svg{width:16px;height:16px}
+.nav__icon--desktop{display:none}
+
+/* mobile search sits on its own row, as on the live site */
+.nav__search--mobile{display:block;position:relative;max-width:none;margin:0;
+  padding:0 var(--gutter) 16px}
+.nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) + 4px);top:4px}
+
+.nav__drawer{display:flex;flex-direction:column;border-top:1px solid var(--border-subtle);
+  padding:8px var(--gutter) 16px}
+.nav__drawerlink{font-weight:500;font-size:16px;color:var(--text-primary);text-decoration:none;padding:14px 0}
+.nav__drawerlink + .nav__drawerlink{border-top:1px solid var(--border-subtle)}
+
+@media (min-width:1024px){
+  .nav__inner{height:80px;gap:20px}
+  .nav__burger,.nav__search--mobile,.nav__drawer{display:none !important}
+  .nav__links{display:flex;gap:18px}
+  .nav__link{font-size:14px}
+  .nav__search{display:block}
+  .nav__icons{margin-left:0;gap:14px}
+  .nav__icon--desktop{display:flex}
+  .nav__logomark{width:112px}
+}
+@media (min-width:1440px){
+  .nav__inner{gap:32px}
+  .nav__links{gap:28px}
+  .nav__link{font-size:15px}
+  .nav__icons{gap:20px}
+  .nav__logomark{width:132px}
+}
+@media (max-width:1023px){
+  .nav__icon--hide-mobile{display:none}
+}
+
+/* SPEC LIST */
+.specs{margin:0}
+.specs__row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding-block:12px;
+}
+/* dividers between rows only — the enclosing rules are the section's own hairlines */
+.specs__row + .specs__row{border-top:1px solid var(--border-subtle)}
+.specs dt{color:var(--text-secondary);flex:0 0 auto}
+.specs dd{margin:0;text-align:right;color:var(--text-primary)}
+
+/* ============================================================
+   ACTION BLOCKS
+   ============================================================ */
+.action{display:flex;flex-direction:column;gap:12px}
+.nl__field{display:flex;flex-direction:column;gap:8px}
+.nl__label{color:var(--text-secondary);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+/* secondary is 2.41:1 on the inverse close section; tertiary is 5.19:1 */
+.on-inverse .nl__label{color:var(--text-tertiary)}
+.input{
+  width:100%;height:48px;padding:0 16px;border-radius:4px;border:1px solid var(--border-strong);
+  background:#FFFFFF;color:var(--text-primary);font-family:var(--font-text);font-size:16px;
+  transition:border-color 120ms linear;
+}
+.input::placeholder{color:var(--text-secondary)}
+.input:focus{border:2px solid var(--border-focus);outline:none;padding:0 15px}
+.input[aria-invalid="true"]{border:2px solid var(--border-focus);padding:0 15px}
+.nl__error{color:var(--text-primary)}
+.nl__consent{color:var(--text-secondary)}
+.nl__consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.nl__success{display:flex;flex-direction:column;gap:8px;transition:opacity 160ms linear}
+.fade-out{opacity:0}
+
+/* email field and button are one outlined block. The border lives on the
+   wrapper, not the input, so the pair still reads as a single unit when the
+   button has to wrap — which the German label forces at this width. */
+/* display:flex is load-bearing — without it flex-flow, align-items and the
+   children's flex values are all inert, the field and the button stack as
+   blocks, and the icon button drops onto its own line. */
+.nl__row{display:flex;gap:0;flex-direction:row;flex-wrap:nowrap;align-items:stretch;
+  border:1px solid var(--border-strong);border-radius:4px;overflow:hidden}
+.nl__field{gap:0;flex:1 1 190px;min-width:0}
+/* guard: the shell must only ever contain the field and the button. A label or
+   error placed inside it renders on top of the input. */
+.nl__row > .nl__label,.nl__row .nl__error{display:none}
+.nl__row .input{height:56px;border:0;border-radius:0;width:100%}
+.nl__row .input:focus{outline:2px solid var(--text-inverse);outline-offset:-2px;padding:0 16px}
+
+/* SUBMIT — an envelope, not a sentence.
+   The label used to be the CTA: "JETZT FÜR EARLY ACCESS ANMELDEN" is ~325px at
+   13px/700/.14em, which made nowrap its min-content width and pushed the whole
+   work block 43px past a 320px viewport. An icon has no min-content width to
+   overflow, so that failure mode is gone rather than worked around.
+   Bone on white inside the same outlined block: the pair still reads as one
+   unit, and the field — not the button — is where the eye starts.
+   The accessible name lives on aria-label and is set per phase in JS. */
+.nl__submit{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:64px;min-height:56px;padding:0 18px;
+  background:var(--surface-sunken);color:var(--text-primary);
+  border:0;border-radius:0;cursor:pointer;
+  /* Bone against the white field is only 1.16:1, so the tonal step alone is not
+     a boundary. The hairline matches the block's own outer border and gives the
+     seam a visible edge. WCAG 1.4.11 is satisfied by the envelope itself —
+     charcoal on bone is 14.92:1 — not by this divider. */
+  border-left:1px solid var(--border-strong);
+  transition:background-color 120ms linear,transform 160ms var(--ease-out);
+}
+.nl__submit svg{width:26px;height:20px;display:block}
+@media (hover:hover) and (pointer:fine){
+  .nl__submit:hover{background:var(--border-subtle)}
+}
+.nl__submit:active{transform:scale(.96)}
+/* the block is overflow:hidden, so an offset ring would be clipped — inset it */
+.nl__submit:focus-visible{outline:2px solid var(--border-focus);outline-offset:-2px}
+.nl__error{padding-top:8px}
+
+/* ============================================================
+   GROUNDS
+   ============================================================ */
+.on-inverse{background:var(--surface-inverse);color:var(--text-inverse)}
+
+/* Bone ground for the two quote sections — the inverse of on-inverse, since
+   --surface-sunken and --text-inverse are the same #F4EDE2.
+   The supporting copy has to step DOWN to --text-secondary here: tertiary
+   (#908C87) clears AA on charcoal at 5.19:1 but only manages 2.91:1 on bone. */
+.on-bone{background:var(--surface-sunken);color:var(--text-primary)}
+.on-bone .quote__by,
+.on-bone .inspiration__eyebrow,
+.on-bone .inspiration__body,
+.on-bone .voice__lead{color:var(--text-secondary)}
+.on-bone .inspiration__quote{color:var(--text-primary)}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section{padding-block:96px}
+/* the only pure white on the page — the trust row needs to separate from the
+   bone quote sections */
+.section--white{background:#FFFFFF}
+.sec-head{display:flex;flex-direction:column;margin-bottom:40px;max-width:720px}
+.sec-head__stand{color:var(--text-secondary);max-width:520px;margin-top:16px}
+
+/* QUOTE */
+.quote__text{margin:0;font-weight:400;text-wrap:balance}
+.quote__by{color:var(--text-tertiary)}   /* 5.19:1 on inverse, passes AA */
+
+/* INSPIRATION — where the series comes from, one notch quieter than the
+   artist's own quote */
+.inspiration__inner{max-width:1120px;margin-inline:auto;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:32px}
+.inspiration__eyebrow{color:var(--text-tertiary);margin:0}
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.inspiration__quote{margin:0;color:var(--text-inverse);text-wrap:balance;max-width:none}
+.inspiration__body{color:var(--text-tertiary);max-width:70ch}
+
+/* VOICE — quote + portrait */
+.voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+/* The supplied portrait is 2:3. A 4:3 box would cover-crop it to a band across
+   the chest, so the box is 3:4 and anchored to the top: the crop comes off the
+   shirt at the bottom, never off the cap. */
+.voice__portrait{aspect-ratio:3/4}
+.voice__portrait img{object-position:50% 0}
+.voice__text{display:flex;flex-direction:column;gap:32px}
+.voice__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.voice__lead{color:var(--text-tertiary);max-width:54ch;font-size:20px;line-height:1.6}
+
+/* SCARCITY */
+.scarcity{width:100%;max-width:360px;display:flex;flex-direction:column;gap:8px}
+.scarcity__label{color:var(--text-inverse)}
+.scarcity__track{height:2px;width:100%;background:#5A5752}
+.scarcity__fill{display:block;height:2px;background:var(--text-inverse);width:0}
+
+/* the countdown is the loudest thing in the closing block */
+.close__head{margin:0}
+.close__cd{margin-block:8px}
+/* Display-scale numerals go in Utile. Its default figures are PROPORTIONAL —
+   "1" is 366 units against 528 for "6" — so a live countdown would reflow on
+   every tick. The font ships a tnum feature with real .tnum glyphs at 550
+   units, but neither font-variant-numeric:tabular-nums nor
+   font-feature-settings:'tnum' actually applies it in the browser (verified by
+   measuring: identical widths with and without). So the width is reserved in
+   layout instead. Every segment is zero-padded to two digits by pad(). Measured
+   worst-case pair is 1.102em (wider than the raw .528em x 2 advance), so 1.12em
+   binds on every combination.
+   The small banner countdown stays in the text face: it is 700, Utile has no bold. */
+.close__cd .cd__num{font-family:var(--font-display);
+  font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0;
+  min-width:1.12em;text-align:center}
+.close__cd .cd__unit{letter-spacing:.06em}
+.close__cd.cd{gap:24px}
+
+/* ============================================================
+   PROOF — full-bleed room, the first screen is evidence
+   ============================================================ */
+.proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
+.proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* Type sits on the photograph; the scrim only exists to guarantee legibility
+   over whatever the image is doing underneath.
+   TUNED BY MEASUREMENT, NOT TASTE — this room is a bright, sunlit interior and
+   the brightest patch behind the lockup runs up to rgb(238,229,220).
+
+   The band is anchored in PIXELS, not the inherited 62%. The lockup hangs off
+   the bottom edge, so its distance from that edge is roughly constant while a
+   percentage band shrinks with the hero — which made the scrim weakest exactly
+   where the viewport was smallest. Measured with the percentage band: 2.87:1 at
+   320x568 and 4.77:1 at 768x1024, both against a 4.5:1 requirement.
+   420px covers the tallest lockup (desktop: ~264px from the bottom edge to the
+   middle of ART DROP) with the ramp still ≥.60 there. Mobile drops to 340px
+   below, because 420px would exceed a 387px hero and haze the whole photograph.
+
+   Verify with scripts/audit.js -> await __hero() after any change to the
+   photograph, the lockup, or these numbers. */
+.proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:420px;
+  background:linear-gradient(to top,rgba(20,19,17,.70) 0%,rgba(20,19,17,.62) 62%,rgba(20,19,17,0) 100%);
+  pointer-events:none}
+.proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
+.proof__plate{color:var(--text-inverse);max-width:920px}
+/* Three lines, one lockup: ART DROP / artist / dates. The label and the dates
+   are the campaign message, not caption furniture, so they run at full strength.
+   Matched size and tracking so they bracket the name as a pair. */
+.proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:400;
+  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+/* Regular, not Light: at Light the name went delicate against the photograph
+   and the whole lockup read as a whisper. */
+.proof__title{margin:0;font-weight:400;font-size:clamp(40px,5vw,72px);
+  line-height:1.02;letter-spacing:-0.01em;text-wrap:balance}
+.proof__dates{color:var(--text-inverse);margin:18px 0 0;
+  font-family:var(--font-text);font-weight:400;
+  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+
+/* ============================================================
+   THE WORK — artwork isolated on charcoal, every essential beside it
+   ============================================================ */
+.work-block{padding-block:96px}
+.work-block__grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center}
+/* the edition is UPRIGHT (66 × 80 cm). Box ratio equals image ratio, so
+   object-fit:cover shows the whole work — nothing is cropped. */
+.work-block__art{width:100%;max-width:440px;aspect-ratio:var(--art-ratio);margin-inline:auto}
+.work-block__panel{display:flex;flex-direction:column;gap:24px;max-width:560px}
+
+/* countdown is the loudest thing in the panel after the work itself */
+.work-block__urgency{display:flex;flex-direction:column;gap:10px}
+.work-block__cdlabel{color:var(--text-tertiary);font-size:11px;letter-spacing:.1em}
+.work-block__urgency .cd{gap:20px}
+/* the t-h3 step, not a bespoke 40px: at 1440 the old clamp resolved to 40px and
+   added a display size the scale did not otherwise use */
+.work-block__urgency .cd__num{font-family:var(--font-display);
+  font-size:clamp(30px,2.5vw,34px);font-weight:400;letter-spacing:0;
+  min-width:1.12em;text-align:center}
+.work-block__urgency .cd__unit{letter-spacing:.06em}
+
+.work-block__intro{color:var(--text-inverse);font-size:clamp(17px,1.5vw,20px);
+  line-height:1.5;max-width:46ch;text-wrap:balance}
+
+/* ONE detail treatment shared by the spec rows, so every label/value pair on
+   the panel reads at the same weight and size. */
+.work-block__panel .specs__row{padding-block:16px;gap:24px}
+.work-block__panel .specs dt{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary)}
+.work-block__panel .specs dd{font-size:16px;line-height:1.6;color:var(--text-inverse)}
+.work-block__panel .nl__label{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary);margin-bottom:8px}
+
+/* spec list inverts on charcoal: secondary would be 2.41:1 here */
+.on-inverse .specs dt{color:var(--text-tertiary)}
+.on-inverse .specs dd{color:var(--text-inverse)}
+.on-inverse .specs__row + .specs__row{border-top-color:#3A3835}
+.on-inverse .nl__consent{color:var(--text-tertiary)}
+.on-inverse .nl__consent a{color:var(--text-tertiary)}
+.on-inverse .nl__error{color:var(--text-inverse)}
+.on-inverse .t-h4{color:var(--text-inverse)}
+
+/* ============================================================
+   CAROUSEL (rooms + series)
+   ============================================================ */
+.carousel{position:relative}
+.carousel__track{
+  display:flex;gap:32px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:none;padding-bottom:4px;
+}
+.carousel__track::-webkit-scrollbar{display:none}
+.carousel__track:focus-visible{outline:2px solid var(--border-focus);outline-offset:4px}
+.carousel__slide{flex:0 0 100%;scroll-snap-align:start;margin:0;min-width:0}
+
+.carousel__bar{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  margin-top:24px;
+}
+.carousel__count{color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.carousel__nav{display:flex;gap:8px}
+.carousel__btn{
+  width:48px;height:48px;border:1px solid var(--border-strong);border-radius:0;
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background-color 120ms linear,border-color 120ms linear,transform 160ms var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .carousel__btn:hover:not(:disabled){background:var(--surface-inverse);border-color:var(--surface-inverse)}
+  .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-inverse)}
+}
+.carousel__btn:active:not(:disabled){transform:scale(.94)}
+.carousel__btn:disabled{border-color:var(--border-subtle);cursor:not-allowed}
+.carousel__btn:disabled .carousel__arrow{border-color:var(--text-disabled)}
+/* 1px chevron drawn in CSS — no icon font, no SVG */
+.carousel__arrow{
+  width:8px;height:8px;border-right:1px solid var(--text-primary);border-bottom:1px solid var(--text-primary);
+  transition:border-color 120ms linear;
+}
+.carousel__arrow--prev{transform:rotate(135deg);margin-left:3px}
+.carousel__arrow--next{transform:rotate(-45deg);margin-right:3px}
+
+/* ROOMS — one room at a time, full width, controls sitting on the image */
+.carousel--rooms{position:relative}
+.carousel--rooms .carousel__slide{flex-basis:100%}
+.carousel--rooms .room__media{aspect-ratio:16/9}
+/* full-bleed track, so the controls sit at the very edges of the screen */
+.carousel--works .carousel__track{padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+.carousel--works .carousel__nav,
+.carousel--rooms .carousel__nav{
+  position:absolute;top:0;left:0;right:0;height:var(--nav-h,0);gap:0;
+  display:flex;align-items:center;justify-content:space-between;
+  pointer-events:none;z-index:2;
+}
+.carousel--rooms .carousel__nav{padding-inline:20px}
+.carousel--works .carousel__nav{padding-inline:16px}
+.carousel--rooms .carousel__btn,
+.carousel--works .carousel__btn{
+  pointer-events:auto;width:52px;height:52px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.94);color:var(--text-primary);
+}
+.carousel--rooms .carousel__btn:disabled,
+.carousel--works .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
+.carousel--rooms .carousel__btn:disabled .carousel__arrow,
+.carousel--works .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
+@media (hover:hover) and (pointer:fine){
+  .carousel--rooms .carousel__btn:hover:not(:disabled),
+  .carousel--works .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
+  .carousel--rooms .carousel__btn:hover:not(:disabled) .carousel__arrow,
+  .carousel--works .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
+}
+.carousel--rooms .carousel__count,
+.carousel--works .carousel__count{display:none}
+.carousel--rooms .carousel__bar,
+.carousel--works .carousel__bar{margin-top:0}
+
+/* CONTINUE — centred header, controls on the images. The nav overlay height is
+   computed from the slide count so it always centres on the artwork band
+   rather than the whole card. */
+[data-sec="continue"] .sec-head{max-width:760px;margin-inline:auto;text-align:center;align-items:center}
+[data-sec="continue"] .sec-head__stand{max-width:680px;margin-inline:auto}
+.carousel--works{position:relative}
+.carousel--works .work{text-align:left;align-items:stretch}
+.work__imglink{display:block}
+.work__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.work__title{color:var(--text-primary);text-decoration:none}
+.work__fav{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto;
+  transition:transform 160ms var(--ease-out)}
+.work__fav svg{width:22px;height:22px;display:block}
+.work__fav:active{transform:scale(.9)}
+
+/* WORK CARD — the siblings are the same upright format as the edition */
+.work{display:flex;flex-direction:column;text-decoration:none;color:var(--text-primary)}
+.work__media{aspect-ratio:var(--art-ratio);background:var(--surface-sunken);margin-bottom:8px;overflow:hidden}
+.work__media img{width:100%;height:100%;object-fit:cover}
+@media (hover:hover) and (pointer:fine){.work__title:hover{text-decoration:underline;text-underline-offset:3px}}
+
+/* ROOMS */
+.room__media{aspect-ratio:4/3}
+
+/* FINISH CARDS */
+.fcards{display:grid;grid-template-columns:1fr;gap:32px}
+.fcard{background:#FFFFFF;border:1px solid var(--border-default);border-radius:0;display:flex;flex-direction:column}
+.fcard__media{aspect-ratio:4/3}
+.fcard__body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.fcard__desc{color:var(--text-secondary);font-size:14px}
+.fcard__price{font-variant-numeric:tabular-nums}
+/* the footer pins to the bottom, so every card's CTA lands on the same line
+   whether or not the card carries a price */
+.fcard__foot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:16px}
+
+/* CLOSE */
+.close{padding-block:80px}
+.close__inner{max-width:560px;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center}
+.close__body{color:var(--text-tertiary)}
+.close .input{background:#FFFFFF}
+.close .nl__consent{color:var(--text-tertiary)}
+.close .action{width:100%;text-align:left}
+.close .nl__label,.close .nl__error{text-align:left}
+.close .nl__error{color:var(--text-inverse)}
+.close .nl__consent a{color:var(--text-tertiary)}
+
+/* TRUST ROW */
+.trust{display:grid;grid-template-columns:1fr;gap:40px;text-align:center}
+/* USPs: the claim runs at the t-h4 step the markup already asks for. The old
+   bespoke clamp landed on 24px at 1440 — a display size 2px off t-h4 and used
+   nowhere else, which is exactly the kind of sprawl the type audit looks for. */
+.trust__head{line-height:1.3;margin:0}
+/* Only the galleries stat is a link. Underlined at rest rather than hover-only,
+   so it is discoverable without a pointer — the other two stats are plain text
+   at the same size, and nothing else would mark this one as clickable. */
+.trust__link{color:inherit;text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px;text-decoration-color:var(--border-strong)}
+@media (hover:hover) and (pointer:fine){
+  .trust__link:hover{text-decoration-color:var(--text-primary)}
+}
+.trust__note{color:var(--text-secondary);margin-top:8px;font-size:14px;line-height:1.5}
+
+.rooms__cta{align-self:flex-start;margin-top:32px;min-width:280px}
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+.dev{position:fixed;left:8px;bottom:8px;z-index:80;display:none;gap:4px;flex-wrap:wrap;max-width:200px}
+.dev.is-on{display:flex}
+.dev button{
+  background:#FFFFFF;border:1px solid var(--border-strong);border-radius:0;
+  padding:4px 8px;font-size:11px;line-height:1.5;letter-spacing:.03em;cursor:pointer;
+}
+.dev button[aria-pressed="true"]{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.dev__meta{width:100%;margin:0;font-size:10px;line-height:1.4;color:var(--text-secondary);background:#FFFFFF;border:1px solid var(--border-strong);padding:4px 8px}
+/* review-only: jump between the reveal and buy variations without ?dev=1 */
+.phase-switch{position:fixed;right:16px;bottom:16px;z-index:70;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 20px;
+  background:var(--surface-inverse);color:var(--text-inverse);text-decoration:none;
+  font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ============================================================
+   BREAKPOINTS
+   ============================================================ */
+@media (min-width:768px){
+  :root{--gutter:40px}
+  .carousel__slide{flex-basis:calc((100% - 32px) / 2)}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 32px) / 2)}
+  .trust{grid-template-columns:repeat(3,1fr)}
+}
+
+@media (min-width:1024px){
+  :root{--gutter:48px}
+  .section{padding-block:120px}
+  .close{padding-block:120px}
+  .sec-head{margin-bottom:56px}
+  .fcards{grid-template-columns:repeat(3,1fr)}
+  .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
+  .work-block{padding-block:120px}
+  .work-block__grid{grid-template-columns:1fr 1fr;gap:64px}
+  .work-block__art{margin-inline:0;max-width:560px}
+  .work-block__panel{max-width:none}
+  .proof__wrap{padding-bottom:64px}
+  .proof__plate{padding:40px 48px}
+  .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+}
+
+/* The series carousel widens with the viewport: 2 across on tablet, 3 on
+   laptop, 4 on wide desktop — which is the whole series, so the controls
+   disable themselves there. This block MUST stay below @media(min-width:1024px):
+   equal specificity, so above 1440 whichever comes last in the file wins. */
+@media (min-width:1440px){
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
+}
+
+/* ============================================================
+   PHASE RULES
+   ============================================================ */
+[data-phase="ENDED"] .cd{display:none}
+
+/* Section order is plain source order — nothing is reordered in CSS, so the
+   reading order, the tab order and the visual order cannot drift apart.
+   data-sec is kept as a stable hook for testing and analytics. */
+
+/* ============================================================
+   SCROLL REVEAL
+   Content is visible by default. The hidden state is only applied once JS has
+   confirmed it can also remove it (.js), and a failsafe clears everything if the
+   observer never fires — hidden tabs and headless renderers pause transitions,
+   and a section that ships blank is far worse than one that never animated.
+   ============================================================ */
+.js .reveal{
+  opacity:0;transform:translateY(16px);
+  transition:opacity 560ms var(--ease-out),transform 560ms var(--ease-out);
+  transition-delay:var(--reveal-delay,0ms);
+}
+.js .reveal.is-in{opacity:1;transform:none}
+
+/* ============================================================
+   MOBILE PASS
+   ============================================================ */
+@media (max-width:767px){
+  /* --- touch targets: nothing interactive under 44px --------------------- */
+  .nav__icon{min-width:44px;min-height:44px;justify-content:center}
+  /* The top row is burger + logo + four 44px icons. At 132px the logo pushed
+     that past 390px and the whole page gained a horizontal scrollbar, which
+     is what clipped the hero and the countdown on the right. The icons keep
+     their 44px targets; the logo gives up the width instead. */
+  .nav__logomark{width:clamp(84px,26vw,120px)}
+  .nav__inner{gap:8px}
+  .nav__icons{gap:0;margin-right:-12px;min-width:0}
+  .nav__burger{width:44px;height:44px;margin-left:-10px}
+  .nav__logo{min-height:44px;align-items:center}
+  .nav__searchinput{height:48px}
+  .nav__searchbtn{width:44px;height:44px;right:0;top:2px}
+  .nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) - 6px)}
+  .work__fav{width:44px;height:44px;margin-right:-11px}
+  .work__row{min-height:44px}
+  .work__title{padding-block:9px}
+  .carousel__btn{width:44px;height:44px}
+  .textlink{display:inline-block;padding-block:6px}
+
+  /* --- rooms: 16:9 on a 342px track was only 192px tall ------------------ */
+  [data-sec="rooms"] > .wrap{padding-inline:0}
+  [data-sec="rooms"] .sec-head{padding-inline:var(--gutter)}
+  .carousel--rooms .room__media{aspect-ratio:4/3}
+  .carousel--rooms .carousel__nav{padding-inline:12px}
+  .carousel--rooms .carousel__btn{width:44px;height:44px}
+
+  /* --- series: edge to edge, controls tucked in -------------------------- */
+  .carousel--works .carousel__nav{padding-inline:10px}
+
+  /* --- long display strings need to come down at this width -------------- */
+  .quote__text{font-size:26px;line-height:1.2}
+  .inspiration__quote{font-size:22px;line-height:1.25}
+  .inspiration__inner{gap:24px}
+  .voice__lead,.inspiration__body,.sec-head__stand{font-size:17px}
+
+  /* --- hero: land on the message, not just the photograph ----------------
+     92vh under a 181px header pushed the dates below the fold. Take only the
+     height that is left. svh (not vh) because vh on iOS Safari measures the
+     viewport with the toolbar retracted, which would put the text back under
+     the fold on load. The vh line is the fallback for browsers without svh.
+     320px floor stays below the calc on every portrait phone (shortest is
+     ~568 - 181 = 387); a 440px floor re-broke the fold on the Alice build. */
+  .proof{height:calc(100vh - var(--above-proof, 0px));
+         height:calc(100svh - var(--above-proof, 0px));
+         min-height:320px}
+  .proof__wrap{padding-bottom:36px}
+
+  /* The mobile lockup is shorter (40px title, 36px padding, no plate padding),
+     so 340px is enough — and it has to be, because the shortest portrait hero
+     is 387px tall and a 420px band would be clipped by the section and leave
+     the top of the photograph sitting at ~13% scrim instead of clean.
+     Same stops as the base rule; only the band length changes. */
+  .proof::after{height:340px}
+
+  /* --- countdown: four segments will not fit a phone at desktop sizes ----
+     40px numerals + 24px gaps needed 451px of a 390px screen, so the last
+     segment ran off the right edge. Sized to fit 320px with room spare. */
+  .close__cd .cd__num,
+  .work-block__urgency .cd__num{font-size:30px}
+  .close__cd .cd__unit,
+  .work-block__urgency .cd__unit{letter-spacing:.04em}
+  .close__cd.cd,
+  .work-block__urgency .cd{gap:10px}
+  .cd__seg{gap:3px}
+
+  /* --- vertical rhythm: 96px between every section is a lot on a phone --- */
+  .section{padding-block:64px}
+  .work-block{padding-block:64px}
+  .close{padding-block:64px}
+  .trust{gap:32px}
+}
+
+/* Small phones (iPhone SE and the 320px floor). Four 44px icons plus a burger
+   plus the logo cannot also afford a 24px gutter on each side of the nav row,
+   so that row alone tightens up. Touch targets stay 44px. */
+@media (max-width:400px){
+  .nav__inner{padding-inline:12px}
+  /* the optical inset must not exceed the padding, or the row lands outside
+     the viewport and the whole page gets a horizontal scrollbar */
+  .nav__icons{margin-right:-12px}
+  .nav__burger{margin-left:-12px}
+  .nav__searchbtn,.nav__search--mobile .nav__searchbtn{right:calc(12px - 6px)}
+  .nav__search--mobile{padding-inline:12px}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .btn:active:not([aria-disabled="true"]),
+  .carousel__btn:active:not(:disabled){transform:none}
+  .nl__success{transition:none}
+  .carousel__track{scroll-behavior:auto}
+  *{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!-- ============================ TOPBAR ============================
+     This edition is NON-DISCOUNTABLE. There is deliberately no price-advantage
+     or percentage language anywhere on this page. -->
+<div class="topbar">
+  <div class="topbar__inner">
+    <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
+    <span class="t-ui" id="topbar-label">EARLY ACCESS IN</span>
+    <span class="sr-only">Verkauf bis 17. August 2026, 23:59 Uhr</span>
+  </div>
+</div>
+
+<!-- ============================ NAV ============================
+     LUMAS site chrome. Every route below was resolved from the live lumas.de
+     navigation and returns 200: Top 20 -> /alle-kuenstler/, Über uns ->
+     /warum-lumas/ (both were unverified guesses on the previous drop page).
+     Logo is the supplied LUMAS-Logo-Black.svg, inlined with fill=currentColor
+     so it inherits colour. -->
+<header class="nav">
+  <div class="wrap nav__inner">
+
+    <button class="nav__burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="nav-drawer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 6h20M2 12h20M2 18h20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></button>
+
+    <a class="nav__logo" href="https://www.lumas.de/" target="_self" aria-label="LUMAS — zur Startseite"><svg class="nav__logomark" viewBox="0 0 160 30" role="img" aria-label="LUMAS" focusable="false"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg></a>
+
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a class="nav__link" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+      <a class="nav__link" href="https://www.lumas.de/alle-kuenstler/" target="_self">Top 20</a>
+      <a class="nav__link" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+      <a class="nav__link" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+      <a class="nav__link" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+      <a class="nav__link" href="https://www.lumas.de/warum-lumas/" target="_self">Über uns</a>
+    </nav>
+
+    <form class="nav__search" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+      <label class="sr-only" for="nav-q">Suche</label>
+      <input class="nav__searchinput" id="nav-q" name="q" type="search" placeholder="Suche" autocomplete="off">
+      <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+    </form>
+
+    <div class="nav__icons">
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.4 8.1c.3-.6.6-.6.9-.6h.6c.2 0 .5 0 .7.5l.8 1.9c.1.3 0 .5-.1.7l-.5.6c-.2.2-.3.4-.1.7.5.9 1.4 1.8 2.4 2.3.3.2.5.1.7-.1l.5-.6c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5v.7c0 .4-.3.9-.8 1.1-.4.2-1 .3-1.6.1-1.3-.4-2.7-1.2-3.9-2.4-1.2-1.2-2-2.6-2.4-3.9-.2-.6-.1-1.2 0-1.6z" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__icon--desktop" href="https://www.lumas.de/" target="_self" aria-label="Telefon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 3h3l1.5 4-2 1.4a13 13 0 0 0 6.6 6.6L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17.5 17.5 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/wishlist/" target="_self" aria-label="Wunschliste"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.3 3.9 12.2a4.9 4.9 0 0 1 0-6.9 4.9 4.9 0 0 1 6.9 0l1.2 1.2 1.2-1.2a4.9 4.9 0 0 1 6.9 0 4.9 4.9 0 0 1 0 6.9z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/login/" target="_self" aria-label="Konto"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.8" r="4.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3.6 21a8.4 8.4 0 0 1 16.8 0" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="Warenkorb"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 4h2.2l2.4 10.6h10l2.4-7.6H6.2" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9" cy="19.3" r="1.6" fill="currentColor"/><circle cx="16.6" cy="19.3" r="1.6" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__lang nav__icon--desktop" href="https://www.lumas.com/" target="_self" aria-label="Sprache: Deutsch"><span>DE</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+
+  <form class="nav__search nav__search--mobile" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+    <label class="sr-only" for="nav-q-m">Suche</label>
+    <input class="nav__searchinput" id="nav-q-m" name="q" type="search" placeholder="Suche" autocomplete="off">
+    <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+  </form>
+
+  <div class="nav__drawer" id="nav-drawer" hidden>
+      <a class="nav__drawerlink" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/alle-kuenstler/" target="_self">Top 20</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+      <a class="nav__drawerlink" href="https://www.lumas.de/warum-lumas/" target="_self">Über uns</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ 1 · PROOF ============================
+     Opens on the work already living on a wall. No artwork-on-white, no specs:
+     the first screen is evidence, not a product shot. -->
+<section class="proof" data-sec="proof">
+  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall, so the
+       phone gets its own portrait asset: TMR_Header cropped to 1200x2029 around
+       the work (source box 852,0 - 1491,1080 of the 1920x1080 master), which
+       keeps the whole framed edition in view and puts the lockup on the
+       sideboard rather than across the waves. -->
+  <picture>
+    <source media="(max-width:767px)" srcset="TMR_Header_mobile.jpg"
+            width="1200" height="2029">
+    <img class="proof__img" src="TMR_Header.jpg" width="1920" height="1080"
+         fetchpriority="high" decoding="async"
+         alt="Baroque Pools II im Rahmen Barcelona mit Schattenfuge, aufgestellt auf einem langen Nussbaum-Sideboard in einem hellen Wohnzimmer; seitlich einfallendes Nachmittagslicht, links ein weißer Ledersessel."
+         data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+  </picture>
+  <div class="wrap proof__wrap">
+    <div class="proof__plate">
+      <p class="t-eyebrow proof__eyebrow">ART DROP</p>
+      <h1 class="t-display-xl proof__title">Tomislav Marcijuš</h1>
+      <p class="proof__dates">15.–17. AUGUST</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 2 · THE WORK ============================
+     The artwork isolated on charcoal, where the gold and the turquoise read at
+     full strength, with every essential beside it: urgency, the piece, both
+     executions and the CTA. Everything needed to decide, in one screen. -->
+<section class="work-block on-inverse" data-sec="work">
+  <div class="wrap work-block__grid">
+
+    <div class="work-block__art media framed">
+      <!-- Production src: https://img.lumas.com/showimg_tmr04_full.jpg
+           The motif code is tmr04, NOT the article number TMR05 — the trio
+           TMR04/05/06 (40x33 / 80x66 / 120x99) all render from motif tmr04,
+           the same pattern as tmr01/tmr07/tmr10/tmr13 for the other chapters. -->
+      <img src="showimg_tmr04_full.jpg" width="1200" height="1454" decoding="async"
+           alt="Baroque Pools II von Tomislav Marcijuš: ein barocker Festsaal mit vergoldeter Stuckdecke und Deckenfresken, durch den sich türkisfarbene Brandungswellen wälzen; darin schwimmen winzige Badende."
+           data-fallback="ARTWORK · BAROQUE POOLS II · 66:80">
+    </div>
+
+    <div class="work-block__panel" data-reveal-group>
+
+      <div class="work-block__urgency">
+        <p class="t-ui work-block__cdlabel" id="work-cd-label">EARLY ACCESS IN</p>
+        <span class="cd tnum" id="cd-work" aria-live="off"></span>
+      </div>
+
+      <p class="t-body work-block__intro">Tomislav Marcijuš’ „Baroque Pools II“; ein barocker Saal, den die&nbsp;Brandung erobert.<br>Drei Tage verfügbar&nbsp;— dann schließt die Edition.</p>
+
+      <dl class="specs">
+        <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Limitiert auf 100 Exemplare</dd></div>
+        <div class="specs__row"><dt class="t-ui">FORMAT</dt><dd class="t-body-s tnum">80 × 66 cm</dd></div>
+        <!-- Technique read off the supplied certificate; the brief did not state a medium. -->
+        <div class="specs__row"><dt class="t-ui">TECHNIK</dt><dd class="t-body-s">Lambda Color Print</dd></div>
+        <div class="specs__row"><dt class="t-ui">AUSFÜHRUNGEN</dt><dd class="t-body-s">Kaschierung unter Acrylglas / Rahmen Barcelona mit Schattenfuge, Schwarz-Gold</dd></div>
+        <div class="specs__row"><dt class="t-ui">ZERTIFIKAT</dt><dd class="t-body-s">Signiert und nummeriert</dd></div>
+        <div class="specs__row"><dt class="t-ui">VERKAUFSZEITRAUM</dt><dd class="t-body-s tnum">15. – 17. August 2026</dd></div>
+      </dl>
+
+      <!-- buy (EARLY_ACCESS / PUBLIC) -->
+      <div class="action" data-phases="EARLY_ACCESS PUBLIC">
+        <!-- ABLYFT-GOAL: drop_click_buy -->
+        <a class="btn btn--primary btn--full" href="#" target="_self"
+           data-buy="work" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+      </div>
+
+      <!-- newsletter (REVEAL / ENDED) -->
+      <div class="action" data-phases="REVEAL ENDED" id="hero-nl">
+        <div data-phases="ENDED" class="action" style="gap:8px">
+          <p class="t-h4">Die Edition ist beendet</p>
+          <p class="t-body work-block__intro">Baroque Pools II war auf 100 Exemplare limitiert. Melde dich an, um den nächsten Art Drop nicht zu verpassen.</p>
+        </div>
+
+        <form class="action" novalidate data-nl="hero">
+          <label class="nl__label sr-only" for="email-hero">E-Mail-Adresse</label>
+          <div class="nl__row">
+            <div class="nl__field">
+              <input class="input" type="email" id="email-hero" name="email"
+                     autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-hero">
+            </div>
+            <!-- ABLYFT-GOAL: drop_submit_newsletter -->
+            <button class="nl__submit" type="submit" data-nl-submit
+                    data-ablyft-goal="drop_submit_newsletter"
+                    aria-label="Für Early Access anmelden"><svg viewBox="0 0 26 20" aria-hidden="true" focusable="false"><rect x=".9" y=".9" width="24.2" height="18.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M.9.9 13 10 25.1.9M.9 19.1 13 10l12.1 9.1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+          </div>
+          <p class="t-body-s nl__error" id="err-hero" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+          <p class="t-caption nl__consent" data-phases="REVEAL">Wir melden uns einmal — am 14. August, neun Uhr, bevor die Edition öffentlich verfügbar ist. LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+          <p class="t-caption nl__consent" data-phases="ENDED">LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+        </form>
+        <div class="nl__success" data-nl-success hidden>
+          <p class="t-h4">Du bist dabei.</p>
+          <p class="t-body work-block__intro" data-phases="REVEAL">Deine Einladung zum Early Access erreicht dich am 14. August um 09:00 Uhr.</p>
+          <p class="t-body work-block__intro" data-phases="ENDED">Wir melden uns, sobald der nächste Art Drop startet.</p>
+          <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_ii/" target="_self">Werk zur Wunschliste hinzufügen →</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3 · OWN IT ============================
+     Two executions with the price gap made explicit, then authenticity.
+     Choosing the execution happens on the PDP, not here — these cards describe,
+     they do not select. Finish names and the technical descriptors are the
+     canonical German labels from the live PDP variant data ("Kaschierung unter
+     Acrylglas, Stärke 2 mm glänzend" / "Rahmen Barcelona mit Schattenfuge,
+     Profilbreite 12 mm mit Acrylglas glänzend"). -->
+<section class="section" data-sec="own">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Gefertigt in zwei exquisiten Ausführungen, handsigniert und limitiert.</h2>
+    </div>
+
+    <div class="fcards" data-reveal-group>
+      <article class="fcard">
+        <!-- Corner detail of the frameless execution: the laminated acrylic edge
+             running out to the image edge is the whole point of this finish, so
+             the card shows that rather than the motif again. Cropping a
+             photograph of the edge is fine — it is not the work itself. -->
+        <div class="fcard__media media">
+          <img src="tmr05-corner-unframed.jpg" width="1400" height="998" loading="lazy" decoding="async"
+               alt="Ecke von Baroque Pools II ohne Rahmen: die Kaschierung unter Acrylglas läuft ohne Fassung bis an die Bildkante, das Werk steht wenige Millimeter von der Wand ab."
+               data-fallback="FINISH DETAIL · KASCHIERUNG UNTER ACRYLGLAS · 4:3">
+        </div>
+        <div class="fcard__body">
+          <!-- Both card titles are the customer-facing labels from the live PDP
+               variant data, not internal names: "Kaschierung unter Acrylglas"
+               (en: Mounted under acrylic glass) and "Rahmen Barcelona mit
+               Schattenfuge" (en: Floater frame Barcelona). -->
+          <h3 class="t-h4">Kaschierung unter Acrylglas</h3>
+          <p class="t-body-s fcard__desc">Stärke 2 mm glänzend, rahmenlos — die hochglänzende Oberfläche trägt Farbtiefe und Kontrast bis an die Bildkante.</p>
+          <div class="fcard__foot">
+            <p class="t-body fcard__price" data-phases="EARLY_ACCESS PUBLIC ENDED">499 €</p>
+            <!-- ABLYFT-GOAL: drop_click_buy -->
+            <a class="btn btn--primary btn--full fcard__cta" href="#" target="_self"
+               data-phases="EARLY_ACCESS PUBLIC" data-buy="card" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+            <span class="btn btn--primary btn--full fcard__cta" aria-disabled="true" role="button" tabindex="-1"
+                  data-phases="ENDED">NICHT MEHR VERFÜGBAR</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <!-- Corner detail rather than a room shot: the shadow gap is what the
+             copy describes and a 16:9 room render cannot show it. The room views
+             of this finish live in the ENVISION carousel below. -->
+        <div class="fcard__media media">
+          <img src="tmr05-corner-framed.jpg" width="1400" height="998" loading="lazy" decoding="async"
+               alt="Ecke des Rahmens Barcelona in Schwarz-Gold: vergoldete Innenfläche, schwarze Außenkante und die Schattenfuge, in der Baroque Pools II frei steht."
+               data-fallback="FINISH DETAIL · RAHMEN BARCELONA · 4:3">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Rahmen Barcelona mit Schattenfuge</h3>
+          <p class="t-body-s fcard__desc">Schwarz-Gold, Profilbreite 12 mm, mit Acrylglas glänzend. Das Werk steht frei in der Schattenfuge. Außenmaß 83,8 × 69,8 cm.</p>
+          <div class="fcard__foot">
+            <p class="t-body fcard__price" data-phases="EARLY_ACCESS PUBLIC ENDED">599 €</p>
+            <!-- ABLYFT-GOAL: drop_click_buy -->
+            <a class="btn btn--primary btn--full fcard__cta" href="#" target="_self"
+               data-phases="EARLY_ACCESS PUBLIC" data-buy="card" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+            <span class="btn btn--primary btn--full fcard__cta" aria-disabled="true" role="button" tabindex="-1"
+                  data-phases="ENDED">NICHT MEHR VERFÜGBAR</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <!-- The supplied certificate render states the edition size twice and the
+             two figures disagree. The alt text quotes only the correct one and
+             stops before the piece number; the wrong figure is reproduced nowhere
+             on this page, not even here. Launch blocker — see the README. -->
+        <div class="fcard__media media">
+          <img src="tmr-certificate.jpg" width="1400" height="1115" loading="lazy" decoding="async"
+               alt="Zertifikat der Edition: Lambda Color Print, Motiv 80 × 66 cm, Limited Edition of 100 Pieces, TMR05 — mit LUMAS Hologramm und der handschriftlichen Signatur von Tomislav Marcijuš."
+               data-fallback="CERTIFICATE · ZERTIFIKAT · 4:3">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Signiert und nummeriert</h3>
+          <p class="t-body-s fcard__desc">Jedes Exemplar wird von Tomislav Marcijuš signiert und trägt ein nummeriertes Zertifikat. Nach 100 Exemplaren wird die Edition geschlossen.</p>
+          <div class="fcard__foot">
+            <!-- ABLYFT-GOAL: drop_click_details -->
+            <a class="btn btn--secondary btn--full fcard__cta" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_ii/"
+               target="_self" data-phases="EARLY_ACCESS PUBLIC ENDED"
+               data-ablyft-goal="drop_click_details">MEHR DETAILS</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4 · VOICE ============================
+     The artist's own words plus a condensed lead-in. Both are verbatim from the
+     approved lumas.de artist text — nothing here is newly written. -->
+<section class="section on-bone voice" data-sec="voice">
+  <div class="wrap voice__grid">
+    <h2 class="sr-only">Über den Künstler</h2>
+    <div class="voice__portrait media">
+      <img src="tmr-artist.jpg" width="1000" height="1500" loading="lazy" decoding="async"
+           alt="Tomislav Marcijuš, Schwarzweiß-Porträt vor dunklem Grund: dunkle Cap, kurzer Bart, weißes Hemd."
+           data-fallback="ARTIST PORTRAIT · TOMISLAV MARCIJUŠ · 3:4">
+    </div>
+
+    <div class="voice__text reveal">
+      <figure class="voice__fig">
+        <blockquote class="t-h2 quote__text">„Ich finde meine Kunst in alltäglichen Dingen, in Details, die oft unbemerkt bleiben – in Gesprächen und Kindheitserinnerungen.“</blockquote>
+        <figcaption class="t-eyebrow quote__by">Tomislav Marcijuš</figcaption>
+      </figure>
+      <p class="t-body voice__lead">Tomislav Marcijuš ist ein kroatischer bildender Künstler und Fotograf, bekannt für seine poetische und emotional vielschichtige Bildsprache. Seine Praxis kreist um Erinnerung, Zugehörigkeit, Familie und Zeit — und verwebt persönliche Erfahrungen mit kulturellen und historischen Schichten.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5 · ENVISION ============================ -->
+<section class="section" data-sec="rooms">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Ein Bildraum, der jede Wand zur Bühne macht.</h2>
+      <p class="t-body-l sec-head__stand">Mit 80 × 66 cm findet er über einem Sideboard genauso seinen Platz wie an einer freien Wand — und zieht den Blick in die Tiefe.</p>
+      <!-- ABLYFT-GOAL: drop_click_buy -->
+      <a class="btn btn--primary rooms__cta" href="#" target="_self"
+         data-phases="EARLY_ACCESS PUBLIC" data-buy="rooms" data-ablyft-goal="drop_click_buy">JETZT KAUFEN</a>
+    </div>
+
+    <!-- ROOMS CAROUSEL
+         To add a room shot: copy one <figure class="carousel__slide"> block and drop
+         the new file into this folder. Nothing else needs changing — the controls,
+         counter and keyboard handling read the slide count at runtime. -->
+    <div class="carousel carousel--rooms" data-carousel="rooms">
+      <div class="carousel__track" tabindex="0" role="group"
+           aria-label="Baroque Pools II im Raum — Bildergalerie">
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_room1.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II in einem Wohnzimmer mit Rundbogenfenster, gerahmt über einer niedrigen Nussbaum-Konsole; davor ein Bouclé-Sofa mit grüner Decke und ein cognacfarbener Ledersessel."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room2.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II in einem Salon mit Marmorkamin und goldgerahmtem Spiegel, daneben ein Bouclé-Sessel und eine Messing-Stehleuchte."
+                 data-fallback="ROOM SHOT · SALON · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room5.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II im schwarz-goldenen Rahmen Barcelona in einem Entree mit Marmorkonsole und weißen Lilien; im Hintergrund öffnet sich eine Flügeltür zum Wohnraum."
+                 data-fallback="ROOM SHOT · ENTREE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room3.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Ein Mann mit weißen Handschuhen hängt Baroque Pools II über einem dunklen Nussbaum-Sideboard auf, hinter ihm fällt Tageslicht durch einen Vorhang."
+                 data-fallback="ROOM SHOT · WOHNZIMMER · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room11.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II in einer taupefarbenen Wandnische über einer Marmorkonsole, flankiert von zwei Stoffleuchten, davor weiße Hortensien."
+                 data-fallback="ROOM SHOT · WANDNISCHE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room6.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II an einer dunklen Holzvertäfelung, von einer Bilderleuchte angestrahlt; darunter ein Schreibtisch mit Messinglampe und Kunstbänden."
+                 data-fallback="ROOM SHOT · ARBEITSZIMMER · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room8.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II an einer hellen Wand in einer Küche mit burgunderrotem Marmor-Kochblock und Messinghockern, davor rosa Blütenzweige."
+                 data-fallback="ROOM SHOT · KÜCHE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room9.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Eine Frau im schwarzen Kleid richtet Baroque Pools II an einer Kalkputzwand aus, darunter ein Sideboard aus Wurzelholz mit Messingvasen."
+                 data-fallback="ROOM SHOT · WOHNRAUM · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room7.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II auf einer Holzvertäfelung über einem dunklen Schreibtisch mit Messing-Kuppelleuchte, links und rechts Blütenzweige."
+                 data-fallback="ROOM SHOT · BIBLIOTHEK · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room4.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Baroque Pools II in einem cremefarbenen Flur mit Kassettenwänden, flankiert von zwei Messing-Wandleuchten, rechts weiße Rosen."
+                 data-fallback="ROOM SHOT · FLUR · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="TMR_Room10.jpg" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Eine Frau in Weiß richtet Baroque Pools II an einer Kalkputzwand aus, dahinter dunkle Holzregale und ein blauer Sessel."
+                 data-fallback="ROOM SHOT · WOHNRAUM · 16:9">
+          </div>
+        </figure>
+
+      </div>
+
+      <div class="carousel__bar">
+        <p class="t-caption carousel__count" aria-hidden="true"></p>
+        <div class="carousel__nav">
+          <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorheriges Bild">
+            <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+          </button>
+          <button class="carousel__btn" type="button" data-dir="1" aria-label="Nächstes Bild">
+            <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 6 · INSPIRATION ============================
+     Where the series comes from. Sits after the room images, once the piece has
+     been seen in place. Both paragraphs are verbatim from the approved lumas.de
+     series text — this is not a person's quote, so it carries no quotation
+     marks and no attribution to a speaker. -->
+<section class="section on-bone inspiration" data-sec="inspiration">
+  <div class="wrap inspiration__inner">
+    <h2 class="t-eyebrow inspiration__eyebrow">Woher Baroque Pools kommt</h2>
+
+    <figure class="inspiration__fig">
+      <blockquote class="t-h3 inspiration__quote">Zwischen barocker Theatralik, stiller Intimität und digitaler Illusion entstehen Szenen, die vertraut wirken und doch nie existiert haben.</blockquote>
+    </figure>
+
+    <p class="t-body-l inspiration__body">Die Arbeiten greifen Marcijuš’ langjährige fotografische Auseinandersetzung mit Badehäusern, Kirchen und Villeninterieurs auf, insbesondere in Italien, und verdichten diese Begegnungen zu spekulativen Szenarien. Wasser fungiert dabei zugleich als ordnende wie als auflösende Kraft: Es mildert die Strenge barocker Formen, verleiht ihnen Leichtigkeit und eröffnet neue Möglichkeiten der Bewegung.</p>
+  </div>
+</section>
+
+<!-- ============================ 7 · REASSURE ============================
+     Risk-reducers sit directly above the closing CTA. -->
+<section class="section section--white" data-sec="trust" style="padding-block:88px">
+  <div class="wrap">
+    <h2 class="sr-only">Kauf bei LUMAS</h2>
+    <div class="trust" data-reveal-group>
+      <div>
+        <p class="t-h4 trust__head">330.000 zufriedene Kunden</p>
+        <p class="t-body-s trust__note">seit 2004</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">
+          <!-- ABLYFT-GOAL: drop_click_galleries -->
+          <a class="trust__link" href="https://www.lumas.de/galerien/" target="_self"
+             data-ablyft-goal="drop_click_galleries">19 Galerien weltweit</a>
+        </p>
+        <p class="t-body-s trust__note">Werke vor Ort ansehen</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">60 Tage Rückgaberecht</p>
+        <p class="t-body-s trust__note">ohne Angabe von Gründen</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 8 · ACT ============================ -->
+<section class="on-inverse close" id="close" data-sec="close">
+  <div class="wrap close__inner">
+
+    <!-- REVEAL -->
+    <div class="close__inner" data-phases="REVEAL" style="padding:0">
+      <h2 class="t-h2">Drei Tage. 100 Exemplare.</h2>
+      <p class="t-body close__body">Melde dich an und erhalte am 14. August um 09:00 Uhr Zugang,<br>bevor die Edition öffentlich verfügbar ist.</p>
+    </div>
+
+    <!-- EARLY_ACCESS / PUBLIC -->
+    <div class="close__inner" data-phases="EARLY_ACCESS PUBLIC" style="padding:0">
+      <h2 class="t-h3 close__head">Drei Tage. 100 Exemplare.</h2>
+
+      <!-- SCARCITY — driven by SOLD_COUNT. The whole block stays hidden until a
+           real stock figure is wired in; it must never show an invented number. -->
+      <div class="scarcity" id="scarcity" hidden>
+        <p class="t-body-s scarcity__label"><span class="tnum" id="scarcity-count"></span> von <span class="tnum">100</span> verkauft</p>
+        <div class="scarcity__track"><span class="scarcity__fill" id="scarcity-fill"></span></div>
+      </div>
+
+      <span class="cd tnum close__cd" id="cd-close" aria-live="off"></span>
+      <p class="t-body close__body">Die Edition ist bis zum 17. August, 23:59 Uhr verfügbar.</p>
+      <!-- ABLYFT-GOAL: drop_click_buy -->
+      <a class="btn btn--primary" href="#" target="_self" data-buy="close"
+         data-ablyft-goal="drop_click_buy" style="min-width:280px">JETZT KAUFEN</a>
+    </div>
+
+    <!-- ENDED -->
+    <div class="close__inner" data-phases="ENDED" style="padding:0">
+      <h2 class="t-h2">Die Edition ist beendet.</h2>
+      <p class="t-body close__body">Baroque Pools II war auf 100 Exemplare limitiert. Melde dich an, um den nächsten Art Drop nicht zu verpassen.</p>
+    </div>
+
+    <!-- newsletter (REVEAL / ENDED) -->
+    <div class="action" data-phases="REVEAL ENDED" style="width:100%">
+      <form class="action" novalidate data-nl="close">
+        <label class="nl__label sr-only" for="email-close">E-Mail-Adresse</label>
+        <div class="nl__row">
+          <div class="nl__field">
+            <input class="input" type="email" id="email-close" name="email"
+                   autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-close">
+          </div>
+          <!-- ABLYFT-GOAL: drop_submit_newsletter -->
+          <button class="nl__submit" type="submit" data-nl-submit
+                  data-ablyft-goal="drop_submit_newsletter"
+                  aria-label="Für Early Access anmelden"><svg viewBox="0 0 26 20" aria-hidden="true" focusable="false"><rect x=".9" y=".9" width="24.2" height="18.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M.9.9 13 10 25.1.9M.9 19.1 13 10l12.1 9.1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        </div>
+        <p class="t-body-s nl__error" id="err-close" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+        <p class="t-caption nl__consent">Wir melden uns einmal — am 14. August, neun Uhr, bevor die Edition öffentlich verfügbar ist. LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+      </form>
+
+      <div class="nl__success" data-nl-success hidden>
+        <p class="t-h4">Du bist dabei.</p>
+        <p class="t-body close__body">Deine Einladung zum Early Access erreicht dich am 14. August um 09:00 Uhr.</p>
+        <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_ii/" target="_self">Werk zur Wunschliste hinzufügen →</a></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ 9 · CONTINUE ============================
+     The artist's complete LUMAS catalogue as of 05.08.2026: four chapters of
+     the same series, each a Limited Edition of 100 in the same three formats
+     (40 × 33 / 80 × 66 / 120 × 99 cm). Baroque Pools II is the fifth chapter to
+     be released and is deliberately absent from this row.
+     Slugs and motif codes were read from /artist/tomislav_marcijus/ — the image
+     code is the MOTIF id (tmr01/07/10/13), not the article SKU. Prices are
+     omitted: the catalogue price is per format and would need confirming before
+     it is shown next to a drop price. -->
+<section class="section" id="more-works" data-sec="continue">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Die Serie Baroque Pools</h2>
+      <p class="t-body-l sec-head__stand">Vier weitere Kapitel, jedes limitiert auf 100 Exemplare.</p>
+    </div>
+  </div>
+
+  <div class="carousel carousel--works" data-carousel="works">
+      <div class="carousel__track" tabindex="0" role="group"
+           aria-label="Weitere Werke von Tomislav Marcijuš">
+
+        <article class="carousel__slide work">
+          <!-- ABLYFT-GOAL: drop_click_work -->
+          <a class="work__imglink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_i/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="TMR02" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_tmr01_full.jpg"
+                 loading="lazy" decoding="async" width="1600" height="1939"
+                 alt="Baroque Pools I von Tomislav Marcijuš: Blick von oben in ein steinernes Beckenrund in einem barocken Innenhof, zwei Schwimmende im blassgrünen Wasser."
+                 data-fallback="WERK · BAROQUE POOLS I · 66:80"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_i/" target="_self"
+               data-work="TMR02" data-ablyft-goal="drop_click_work">Baroque Pools I</a>
+            <button class="work__fav" type="button" aria-label="Baroque Pools I zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <!-- ABLYFT-GOAL: drop_click_work -->
+          <a class="work__imglink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_iii/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="TMR08" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_tmr07_full.jpg"
+                 loading="lazy" decoding="async" width="1600" height="1939"
+                 alt="Baroque Pools III von Tomislav Marcijuš: ein vergoldeter Saal unter einer Glaskuppel, dessen Parkett von türkisfarbenem Wasser gefüllt ist, darin viele Badende."
+                 data-fallback="WERK · BAROQUE POOLS III · 66:80"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_iii/" target="_self"
+               data-work="TMR08" data-ablyft-goal="drop_click_work">Baroque Pools III</a>
+            <button class="work__fav" type="button" aria-label="Baroque Pools III zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <!-- ABLYFT-GOAL: drop_click_work -->
+          <a class="work__imglink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_iv/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="TMR11" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_tmr10_full.jpg"
+                 loading="lazy" decoding="async" width="1600" height="1939"
+                 alt="Baroque Pools IV von Tomislav Marcijuš: ein hell freskierter Saal mit Rundbogenfenstern, durch den eine Welle bricht, davor Badende."
+                 data-fallback="WERK · BAROQUE POOLS IV · 66:80"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_iv/" target="_self"
+               data-work="TMR11" data-ablyft-goal="drop_click_work">Baroque Pools IV</a>
+            <button class="work__fav" type="button" aria-label="Baroque Pools IV zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+
+        <article class="carousel__slide work">
+          <!-- ABLYFT-GOAL: drop_click_work -->
+          <a class="work__imglink" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_v/" target="_self" tabindex="-1" aria-hidden="true"
+             data-work="TMR14" data-ablyft-goal="drop_click_work">
+            <div class="work__media"><img src="https://img.lumas.com/showimg_tmr13_full.jpg"
+                 loading="lazy" decoding="async" width="1600" height="1939"
+                 alt="Baroque Pools V von Tomislav Marcijuš: ein weißer Stucksaal, über dessen Boden schäumendes Wasser läuft, darin Badende."
+                 data-fallback="WERK · BAROQUE POOLS V · 66:80"></div>
+          </a>
+          <div class="work__row">
+            <a class="work__title t-body" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_v/" target="_self"
+               data-work="TMR14" data-ablyft-goal="drop_click_work">Baroque Pools V</a>
+            <button class="work__fav" type="button" aria-label="Baroque Pools V zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          </div>
+        </article>
+      </div>
+
+      <div class="carousel__bar">
+        <p class="t-caption carousel__count" aria-hidden="true"></p>
+        <div class="carousel__nav">
+          <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorherige Werke">
+            <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+          </button>
+          <button class="carousel__btn" type="button" data-dir="1" aria-label="Weitere Werke">
+            <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ============================ DEV SWITCHER ============================ -->
+<div class="dev" id="dev" aria-label="Phase (dev)"></div>
+
+<script>
+/* ============================================================
+   PHASE
+   ============================================================ */
+let PHASE = 'REVEAL';   // 'REVEAL' | 'EARLY_ACCESS' | 'PUBLIC' | 'ENDED'
+
+/* ?phase=PUBLIC overrides the constant, so the buy variation has its own URL
+   and the review button below can simply link to it. */
+(() => {
+  const q = new URLSearchParams(location.search).get('phase');
+  if (q && ['REVEAL','EARLY_ACCESS','PUBLIC','ENDED'].includes(q.toUpperCase())) PHASE = q.toUpperCase();
+})();
+
+/* Campaign schedule. The brief specifies CET; August is CEST, so every stamp is
+   +02:00 — using +01:00 would shift the whole page by an hour.
+
+   SILENT_LIVE (14.08., 17:00) is an operational milestone, not a page phase:
+   the product becomes publicly reachable but unannounced. The page renders
+   EARLY_ACCESS from 09:00 that morning straight through to the public sale, so
+   nothing on it changes at 17:00. Kept here as documentation.
+   ARTICLES_LIVE (13.08., 15:00, all channels/countries) is likewise back-office
+   only — it must be done before this page can link anywhere useful. */
+const SCHEDULE = {
+  reveal:      '2026-08-11T00:00:00+02:00',
+  earlyAccess: '2026-08-14T09:00:00+02:00',
+  publicSale:  '2026-08-15T09:00:00+02:00',
+  saleEnd:     '2026-08-17T23:59:00+02:00'
+};
+const SILENT_LIVE   = '2026-08-14T17:00:00+02:00';   // not a phase — see above
+const ARTICLES_LIVE = '2026-08-13T15:00:00+02:00';   // back office
+
+const PDP_URL = 'https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_ii/';
+
+const FROM_PRICE = '499 €';
+const EDITION_SIZE = 100;
+
+/* Live sold count. MUST be wired to a real stock feed before launch.
+   Leave null and the scarcity block stays hidden — never show a made-up number.
+   Set to an integer (0-100) to display "<n> von 100 verkauft". */
+const SOLD_COUNT = null;
+
+/* Dev-only simulated clock. Production always reads the real system time; the
+   dev switcher sets this so previewing a phase also previews a plausible moment
+   INSIDE that phase. Without it, previewing PUBLIC before the drop counts down
+   to a sale end weeks out and reads as a bug when the logic is correct. */
+let SIMULATED_NOW = null;
+const now = () => SIMULATED_NOW !== null ? SIMULATED_NOW : Date.now();
+
+const PHASE_PREVIEW_AT = {
+  REVEAL:       '2026-08-11T12:00:00+02:00',  // day of reveal
+  EARLY_ACCESS: '2026-08-14T11:00:00+02:00',  // 2h into early access
+  PUBLIC:       '2026-08-15T12:00:00+02:00',  // 3h into the public sale
+  ENDED:        '2026-08-18T01:00:00+02:00'   // 1h after close
+};
+
+/* ============================================================
+   TRACKING
+   Every call site is named after the real GA4 event it becomes, so the dev
+   handoff is a 1:1 mapping to dataLayer pushes rather than a reverse-engineering
+   exercise. The matching ABlyft goal is annotated in the markup.
+   ============================================================ */
+function track(event, params) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, phase: PHASE, ...params });
+  console.log('[GA4]', event, { phase: PHASE, ...params });
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const pad = n => String(n).padStart(2, '0');
+
+/* Countdown label, used by the work block. */
+const TOPBAR_LABEL = {
+  REVEAL:       'EARLY ACCESS IN',
+  EARLY_ACCESS: 'VERKAUF ENDET IN',
+  PUBLIC:       'VERKAUF ENDET IN',
+  ENDED:        'EDITION BEENDET'
+};
+
+/* Banner label. The countdown is not in the banner, so these have to stand
+   alone rather than trail off into a number. */
+const BANNER_LABEL = {
+  REVEAL:       'EARLY ACCESS AM 14. AUGUST, 09:00 UHR',
+  EARLY_ACCESS: 'EARLY ACCESS · VERKAUF BIS 17. AUGUST',
+  PUBLIC:       'VERKAUF BIS 17. AUGUST, 23:59 UHR',
+  ENDED:        'EDITION BEENDET'
+};
+
+/* The submit button is an envelope icon, so its accessible name is the only name
+   it has. It carries what the old button label used to say, and it changes with
+   the phase for the same reason the label did. */
+const NL_SUBMIT_LABEL = {
+  REVEAL:       'Für Early Access anmelden',
+  EARLY_ACCESS: 'Zum Newsletter anmelden',
+  PUBLIC:       'Zum Newsletter anmelden',
+  ENDED:        'Zum Newsletter anmelden'
+};
+
+const COUNTDOWN_TARGET = {
+  REVEAL:       SCHEDULE.earlyAccess,
+  EARLY_ACCESS: SCHEDULE.saleEnd,
+  PUBLIC:       SCHEDULE.saleEnd,
+  ENDED:        null
+};
+
+/* ============================================================
+   IMAGE FALLBACK BLOCKS
+   ============================================================ */
+$$('img[data-fallback]').forEach(img => {
+  img.addEventListener('error', () => {
+    const box = document.createElement('div');
+    box.className = 'fallback';
+    box.textContent = img.dataset.fallback;
+    const w = img.getAttribute('width'), h = img.getAttribute('height');
+    const host = img.parentElement;
+    const cs = getComputedStyle(host).aspectRatio;
+    box.style.aspectRatio = (cs && cs !== 'auto') ? cs : (w && h ? w + '/' + h : '4/3');
+    box.style.height = '100%';
+    host.classList.remove('framed');
+    img.replaceWith(box);
+  }, { once: true });
+});
+
+/* ============================================================
+   PHASE VISIBILITY
+   ============================================================ */
+function applyPhaseVisibility() {
+  document.documentElement.dataset.phase = PHASE;
+  $$('[data-phases]').forEach(el => {
+    el.hidden = !el.dataset.phases.split(/\s+/).includes(PHASE);
+  });
+
+  $('#topbar-label').textContent = BANNER_LABEL[PHASE];
+  const wl = $('#work-cd-label');
+  if (wl) wl.textContent = TOPBAR_LABEL[PHASE];
+
+  $$('[data-nl-submit]').forEach(b => b.setAttribute('aria-label', NL_SUBMIT_LABEL[PHASE]));
+}
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+function renderCountdown(el, ms) {
+  if (ms <= 0) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+
+  const total = Math.floor(ms / 1000);
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+
+  const segs = [];
+  if (ms >= 3600000) segs.push([pad(d), 'TAGE']);   // day segment drops under 1 hour
+  segs.push([pad(h), 'STD'], [pad(m), 'MIN'], [pad(s), 'SEK']);
+
+  el.innerHTML = segs.map(([n, u]) =>
+    '<span class="cd__seg"><span class="cd__num">' + n + '</span><span class="cd__unit">' + u + '</span></span>'
+  ).join('');
+}
+
+let cdTimer = null;
+function startCountdown() {
+  if (cdTimer) clearInterval(cdTimer);
+  const targets = ['#cd-work', '#cd-close'].map(s => $(s)).filter(Boolean);
+  const iso = COUNTDOWN_TARGET[PHASE];
+
+  if (!iso) {
+    targets.forEach(el => { el.hidden = true; el.innerHTML = ''; });
+    return;
+  }
+  const deadline = new Date(iso).getTime();
+
+  const tick = () => {
+    const ms = Math.max(0, deadline - now());
+    targets.forEach(el => renderCountdown(el, ms));
+    if (ms <= 0) {
+      // never negative: hide the countdown, keep the phase's label in place
+      clearInterval(cdTimer);
+      cdTimer = null;
+      $('#topbar-label').textContent = BANNER_LABEL[PHASE === 'REVEAL' ? 'EARLY_ACCESS' : 'ENDED'];
+    }
+  };
+  tick();
+  cdTimer = setInterval(tick, 1000);
+}
+
+/* ============================================================
+   SCARCITY
+   ============================================================ */
+function renderScarcity() {
+  const box = $('#scarcity');
+  if (!box) return;
+  const live = Number.isInteger(SOLD_COUNT) && SOLD_COUNT >= 0 && SOLD_COUNT <= EDITION_SIZE;
+  box.hidden = !live;
+  if (!live) return;
+  $('#scarcity-count').textContent = SOLD_COUNT;
+  $('#scarcity-fill').style.width = ((SOLD_COUNT / EDITION_SIZE) * 100).toFixed(1) + '%';
+}
+
+/* ============================================================
+   BUY LINKS
+   The execution is chosen on the PDP, so every CTA points at the plain
+   product URL — no variant parameter is carried across.
+   ============================================================ */
+function syncBuyLinks() {
+  $$('a[data-buy]').forEach(a => { a.href = PDP_URL; });
+}
+
+$$('a[data-buy]').forEach(a => {
+  a.addEventListener('click', () => {
+    track('drop_click_buy', { location: a.dataset.buy, finish: null, price: FROM_PRICE });
+  });
+});
+
+$$('a[data-work]').forEach(a => {
+  a.addEventListener('click', () => track('drop_click_work', { sku: a.dataset.work }));
+});
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+$$('form[data-nl]').forEach(form => {
+  const location = form.dataset.nl;
+  const input = $('input[type="email"]', form);
+  const err   = $('.nl__error', form);
+  const block = form.parentElement;
+  const success = $('[data-nl-success]', block);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();                       // validation on submit only, never on blur
+    const valid = EMAIL_RE.test(input.value.trim());
+    if (!valid) {
+      err.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+      return;
+    }
+    err.hidden = true;
+    input.removeAttribute('aria-invalid');
+    track('drop_submit_newsletter', { location });
+
+    form.classList.add('fade-out');
+    form.style.transition = 'opacity 160ms linear';
+    setTimeout(() => {
+      form.hidden = true;
+      success.hidden = false;
+      success.style.opacity = '0';
+      requestAnimationFrame(() => { success.style.opacity = '1'; });
+    }, 160);
+  });
+});
+
+/* ============================================================
+   SCROLL REVEAL
+   Single fades that stop sections from snapping in. Nothing loops, nothing
+   parallaxes. Respects prefers-reduced-motion.
+   ============================================================ */
+(function initReveal() {
+  const groups = $$('[data-reveal-group]');
+  groups.forEach(g => {
+    $$(':scope > *', g).forEach((child, i) => {
+      child.classList.add('reveal');
+      child.style.setProperty('--reveal-delay', (i * 60) + 'ms');
+    });
+  });
+
+  const items = $$('.reveal');
+  if (!items.length) return;
+
+  const revealAll = () => items.forEach(el => el.classList.add('is-in'));
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) { revealAll(); return; }
+
+  document.documentElement.classList.add('js');
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+  items.forEach(el => io.observe(el));
+
+  // failsafe: never let a section stay invisible
+  setTimeout(revealAll, 1600);
+})();
+
+/* ============================================================
+   NAV DRAWER
+   The burger has to actually do something, so it discloses the same links
+   rather than being decorative chrome.
+   ============================================================ */
+(function initNavDrawer(){
+  const btn = $('.nav__burger');
+  const drawer = $('#nav-drawer');
+  if (!btn || !drawer) return;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    drawer.hidden = open;
+  });
+})();
+
+/* ============================================================
+   SERIES VIEW EVENT
+   ============================================================ */
+let worksFired = false;
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !worksFired) { worksFired = true; track('drop_view_works', {}); }
+  });
+}, { threshold: 0.5 }).observe($('#more-works'));
+
+/* ============================================================
+   CAROUSELS
+   ============================================================ */
+$$('[data-carousel]').forEach(root => {
+  const track_ = $('.carousel__track', root);
+  const count  = $('.carousel__count', root);
+  const btns   = $$('.carousel__btn', root);
+  const slides = $$('.carousel__slide', track_);
+
+  const gap = () => parseFloat(getComputedStyle(track_).columnGap) || 0;
+  const perView = () => {
+    const first = slides[0];
+    if (!first) return 1;
+    const w = first.getBoundingClientRect().width, g = gap();
+    return Math.max(1, Math.round((track_.clientWidth + g) / (w + g)));
+  };
+  const index = () => {
+    const first = slides[0];
+    if (!first) return 0;
+    const step = first.getBoundingClientRect().width + gap();
+    return Math.round(track_.scrollLeft / step);
+  };
+
+  function sync() {
+    // publish the media height so the overlay controls can centre on the image
+    const firstMedia = slides[0] && slides[0].querySelector('.room__media, .work__media');
+    if (firstMedia) root.style.setProperty('--nav-h', firstMedia.getBoundingClientRect().height + 'px');
+
+    const n = slides.length, pv = perView(), i = index();
+    count.textContent = pv >= n ? '' : (i + 1) + ' / ' + Math.max(1, n - pv + 1);
+    btns[0].disabled = track_.scrollLeft <= 1;
+    btns[1].disabled = track_.scrollLeft >= track_.scrollWidth - track_.clientWidth - 1;
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    const first = slides[0];
+    if (!first) return;
+    track_.scrollBy({ left: (first.getBoundingClientRect().width + gap()) * Number(b.dataset.dir) });
+    // don't wait on the scroll event — the smooth scroll settles a few frames later
+    sync();
+    setTimeout(sync, 240);
+    setTimeout(sync, 600);
+  }));
+
+  // arrow keys when the track itself has focus
+  track_.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    btns[e.key === 'ArrowRight' ? 1 : 0].click();
+  });
+
+  track_.addEventListener('scroll', () => {
+    clearTimeout(track_._t);
+    track_._t = setTimeout(sync, 80);
+  });
+  new ResizeObserver(sync).observe(track_);
+  // the track keeps its width across breakpoints, so observe the slide too
+  if (slides[0]) new ResizeObserver(sync).observe(slides[0]);
+  window.addEventListener('resize', sync);
+  sync();
+});
+
+/* ============================================================
+   HERO FIT — the lockup must be above the fold on landing
+   ============================================================
+   The header stack (banner + nav row + search row) is ~181px on a phone, and a
+   92vh hero on top of that put the dates below the fold: you landed on a
+   photograph with no message. Publish the header height so the hero takes only
+   the space actually left. Measured rather than hard-coded, because the banner
+   is phase-dependent and the search row wraps at some widths. */
+let setHeroFit = () => {};
+(() => {
+  const proof = document.querySelector('.proof');
+  if (!proof) return;
+  setHeroFit = () => {
+    // offsetTop, not getBoundingClientRect().top, so a mid-page resize is not
+    // measured against the current scroll position
+    document.documentElement.style.setProperty('--above-proof', proof.offsetTop + 'px');
+  };
+  setHeroFit();
+  window.addEventListener('resize', setHeroFit);
+  window.addEventListener('orientationchange', setHeroFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeroFit);
+
+  /* Observe EVERY sibling above .proof, not just the immediately preceding one.
+     The banner is phase-dependent: in EARLY_ACCESS it gains an EARLY ACCESS chip
+     beside the label, the pair wraps at phone widths and the .topbar grows from
+     44px to 68.4px. Observing only .proof.previousElementSibling watches the
+     <header>, which does NOT resize when the topbar above it does — so
+     --above-proof stayed at its REVEAL value of 181px and the hero rendered
+     24.4px taller than the space actually left. It still cleared the fold at 390
+     and 320, but by exactly the size of the error. A three-line banner or a
+     shorter phone would have pushed the dates under.
+     render() also calls setHeroFit() directly, because toggling [hidden] does
+     not always fire the observer in the same frame. */
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(setHeroFit);
+    for (let el = proof.previousElementSibling; el; el = el.previousElementSibling) ro.observe(el);
+  }
+})();
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+const devEl = $('#dev');
+if (new URLSearchParams(location.search).has('dev')) {
+  devEl.classList.add('is-on');
+  ['REVEAL','EARLY_ACCESS','PUBLIC','ENDED'].forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = p;
+    b.addEventListener('click', () => {
+      PHASE = p;
+      SIMULATED_NOW = new Date(PHASE_PREVIEW_AT[p]).getTime();
+      render();
+    });
+    devEl.appendChild(b);
+  });
+
+  const meta = document.createElement('p');
+  meta.className = 'dev__meta';
+  devEl.appendChild(meta);
+
+  window.__devMeta = () => {
+    const d = new Date(now());
+    const stamp = SIMULATED_NOW === null ? 'echte Zeit' :
+      d.toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    const open = document.querySelectorAll('.fallback').length;
+    const stock = Number.isInteger(SOLD_COUNT) ? 'Stock ok' : 'kein Stock-Feed';
+    meta.textContent = 'now: ' + stamp + ' · ' + open + ' Bild-Platzhalter · ' + stock;
+  };
+}
+function syncDevMeta() { if (window.__devMeta) window.__devMeta(); }
+function syncDev() {
+  $$('#dev button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === PHASE)));
+}
+
+/* ============================================================
+   PHASE SWITCH (review aid)
+   A visible link between the reveal page and the buy variation. Delete this
+   block and the .phase-switch rule before launch.
+   ============================================================ */
+(function phaseSwitch(){
+  const a = document.createElement('a');
+  a.className = 'phase-switch';
+  const toBuy = PHASE !== 'PUBLIC';
+  a.href = '?phase=' + (toBuy ? 'PUBLIC' : 'REVEAL');
+  a.textContent = toBuy ? 'Kaufphase ansehen' : 'Reveal ansehen';
+  document.body.appendChild(a);
+})();
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  applyPhaseVisibility();
+  syncBuyLinks();
+  startCountdown();
+  renderScarcity();
+  // the phase changes the banner height, which changes how much room the hero
+  // has left — re-measure rather than trusting the observer to have fired
+  setHeroFit();
+  syncDev();
+  syncDevMeta();
+}
+
+render();
+track('drop_view_page', { sku: 'TMR05' });
+</script>
+</body>
+</html>
