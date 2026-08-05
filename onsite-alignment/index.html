@@ -149,7 +149,7 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0803", kicker: "Latest · today",        weekday: "Monday",   date: "3 August", year: "2026", short: "3 Aug", upcoming: true },
+      { id: "s0803", kicker: "Latest · today",        weekday: "Wednesday", date: "5 August", year: "2026", short: "5 Aug", upcoming: true },
       { id: "s0728", kicker: "Previous",              weekday: "Tuesday",  date: "28 July",  year: "2026", short: "28 Jul" },
       { id: "s0724", kicker: "Previous",                 weekday: "Friday",   date: "24 July",  year: "2026", short: "24 Jul" },
       { id: "s0723", kicker: "Previous",                 weekday: "Thursday", date: "23 July",  year: "2026", short: "23 Jul" },
@@ -160,10 +160,11 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
-      // ── Monday 3 August ────────────────────────────────────────
+      // ── Wednesday 5 August ─────────────────────────────────────
       { s: "s0803", feature: true, title: "Art Cloud · Desktop", href: "art-cloud-desktop/", desc: "The Art Cloud adapted for desktop, with a live switcher of mouse-movement styles to test with stakeholders." },
       { s: "s0803", feature: true, title: "Local Inventory Ads — Alternative PDP", href: "local-inventory-ads/", desc: "The Variant B PDP for the local inventory ads test, with a local-availability group above a single reserve CTA, the gallery lead form, and a copyable A/B spec." },
       { s: "s0803", feature: true, title: "Art Advisory & Trade", href: "art-advisory/", desc: "LUMAS’s advisory and B2B services made discoverable — Art Consultants, a real-homes carousel, and a Trade enquiry form." },
+      { s: "s0803", feature: true, title: "Contact", href: "contact/", desc: "The contact page reworked as a contact-first layout: WhatsApp, phone, live chat and email up top, then discovery tools, a gallery-visit block and a newsletter. White, full-width, Utile Display + Archivo." },
 
       // ── Tuesday 28 July — next session ─────────────────────────
       { s: "s0728", feature: true, title: "Alice — Art Drop", href: "alice-art-drop/", desc: "The 72-hour drop for Carol Muthiga-Oyekunle’s “Alice”, limited to 300 — a full-bleed room opens it, the work is then isolated on charcoal with every essential beside it, and the whole page is driven by one PHASE constant (Reveal / Early Access / Public / Ended). Real LUMAS nav, unframed catalogue works, V2 type. German canonical, English review build." },
