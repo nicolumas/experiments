@@ -1,0 +1,83 @@
+/* Shared layout for the cart-overlay boards — board, recommended, disclosure. */
+
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87; --charcoal-300:#C7C3BE;
+  --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+  --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+  --color-text-primary:var(--charcoal-900);
+  --color-text-secondary:var(--charcoal-700);
+  --color-text-tertiary:var(--charcoal-500);
+  --color-text-inverse:var(--ivory-100);
+  /* ivory/300 ground so the white cart frames read as cards on it */
+  --color-surface-page:#FAF6F1;
+  --color-surface-card:#FFFFFF;
+  --color-surface-sunken:var(--ivory-100);
+  --color-surface-inverse:var(--charcoal-900);
+  --color-surface-muted:var(--bone-300);
+  --color-border-default:var(--bone-100);
+  --color-border-subtle:var(--bone-200);
+  --color-border-focus:var(--charcoal-900);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px; --sp-20:80px; --sp-24:96px;
+  --radius-xs:2px;
+  --shadow-md:0 2px 8px rgba(28,26,24,.08);
+  --shadow-lg:0 8px 32px rgba(28,26,24,.12);
+  --font-display:'UtileDisplay',Georgia,serif;
+  --font-ui:'Archivo',-apple-system,sans-serif;
+  --scale:.62;
+  --dscale:.30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--color-surface-page);color:var(--color-text-primary);
+  font-family:var(--font-ui);font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+
+.b-sm{font-weight:400;font-size:13px;line-height:1.65}
+.t-sec{color:var(--color-text-secondary)} .t-ter{color:var(--color-text-tertiary)}
+
+/* ── board chrome ─────────────────────────────────────────────── */
+.chrome{position:sticky;top:0;z-index:20;background:var(--color-surface-inverse);
+  color:var(--color-text-inverse);padding:var(--sp-4) var(--sp-8);
+  display:flex;flex-wrap:wrap;gap:var(--sp-6);align-items:center}
+.chrome h1{font-family:var(--font-display);font-weight:400;font-size:18px;line-height:1.2;margin-right:auto}
+.chrome h1 span{display:block;color:rgba(244,237,226,.55);font-family:var(--font-ui);font-weight:700;
+  font-size:10px;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2px}
+.seg{display:flex;gap:var(--sp-1);background:rgba(244,237,226,.08);padding:var(--sp-1);border-radius:var(--radius-xs)}
+.seg button{background:none;border:0;cursor:pointer;color:rgba(244,237,226,.75);font-family:var(--font-ui);
+  font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs)}
+.seg button[aria-pressed="true"]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
+
+/* ── layout ───────────────────────────────────────────────────── */
+/* one centred measure: two 390px frames + the 64px gap between them */
+section{max-width:892px;margin:0 auto;padding:var(--sp-16) var(--sp-6)}
+/* three sets, one comparison each — a pair per row, at full size */
+.set{margin-bottom:var(--sp-24)}
+.set:last-child{margin-bottom:var(--sp-16)}
+.set-head{border-top:1px solid var(--color-border-default);padding-top:var(--sp-5);
+  margin-bottom:var(--sp-10);display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:var(--sp-2)}
+.set-head .line{display:flex;align-items:baseline;gap:var(--sp-3)}
+.set-head h2{font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1.12}
+.set-head .n{font-family:var(--font-display);font-size:20px;color:var(--color-text-tertiary)}
+.set-head .q{max-width:52ch}
+.strip{display:flex;flex-wrap:nowrap;gap:var(--sp-16);align-items:flex-start;
+  justify-content:center;overflow-x:auto;padding-bottom:var(--sp-5)}
+.strip .tile{flex:none}
+
+/* ── tile: one label above the screen, with air between them ───── */
+.tile{display:flex;flex-direction:column;gap:var(--sp-4);text-decoration:none;color:inherit}
+.tile .tag{font-weight:700;font-size:12px;line-height:1.5;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--color-text-primary)}
+.tile .viewport{
+  width:var(--tw);height:var(--th);overflow:hidden;position:relative;
+  background:transparent;box-shadow:var(--shadow-md);
+  transition:box-shadow .22s cubic-bezier(.2,.8,.2,1),transform .22s cubic-bezier(.2,.8,.2,1);
+}
+.tile:hover .viewport{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.tile iframe{border:0;position:absolute;top:0;left:0;transform-origin:top left;display:block}
+.tile .open{opacity:0;transition:opacity .22s;position:absolute;bottom:var(--sp-2);right:var(--sp-2);
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);
+  padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-xs);
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:1.8px;text-transform:uppercase}
+.tile:hover .open{opacity:1}
+
