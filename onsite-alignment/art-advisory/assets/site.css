@@ -448,3 +448,6 @@ form.enquiry { display:grid; gap:1.6rem; }
 .reference .ui-label { color:var(--text-secondary); }
 .reference h3 { margin:1.0rem 0 0.6rem; }
 .reference p { color:var(--text-secondary); max-width:60ch; }
+
+/* ── Capped full-bleed image band (trim height, keep the artwork) ─ */
+.image-band--short img { width:100%; max-height:clamp(340px,52vh,600px); object-fit:cover; object-position:50% 18%; }
