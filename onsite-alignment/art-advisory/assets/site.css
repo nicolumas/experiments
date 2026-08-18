@@ -421,3 +421,30 @@ form.enquiry { display:grid; gap:1.6rem; }
 .sector-card__name { display:block; font-family:var(--font-display); font-weight:400; font-size:clamp(2.0rem,2.4vw,2.6rem); line-height:1.15; }
 .sector-card__line { display:flex; align-items:center; gap:0.6rem; color:rgba(244,237,226,0.82); font-size:1.4rem; margin-top:0.6rem; }
 .sector-card:hover .sector-card__line .arrow { transform:translateX(3px); }
+
+/* ── Sticky mobile enquiry bar (B2B: always-available action) ─ */
+.sticky-cta { display:none; }
+@media (max-width:759px){
+  .sticky-cta { position:fixed; inset:auto 0 0 0; z-index:30; display:block; padding:1.0rem 1.6rem calc(1.0rem + env(safe-area-inset-bottom)); background:rgba(255,255,255,0.92); backdrop-filter:saturate(1.4) blur(10px); border-top:1px solid var(--border-default); }
+  .sticky-cta .btn { width:100%; }
+  body:has(.sticky-cta) { padding-bottom:7.2rem; }   /* clear the bar */
+}
+@media (prefers-reduced-motion:reduce){ .sticky-cta { backdrop-filter:none; background:#fff; } }
+
+/* ── Two-up static pair (for sectors with few photos) ──────── */
+.pair { display:grid; gap:clamp(1.6rem,2vw,2.4rem); }
+@media (min-width:760px){ .pair { grid-template-columns:1fr 1fr; align-items:start; } }
+.pair figure { margin:0; }
+.pair img { width:100%; height:auto; display:block; }
+.pair figcaption { padding-top:1.2rem; color:var(--text-secondary); }
+
+/* ── Breadcrumb (sector wayfinding) ────────────────────────── */
+.breadcrumb { display:flex; align-items:center; gap:0.8rem; font-size:1.3rem; color:var(--text-secondary); margin-bottom:1.6rem; }
+.breadcrumb a { border-bottom:1px solid transparent; transition:border-color 160ms var(--ease-out); }
+.breadcrumb a:hover { border-color:var(--charcoal-900); color:var(--text-primary); }
+
+/* ── Reference / outcome block (sector proof) ──────────────── */
+.reference { border-top:1px solid var(--charcoal-900); padding-top:1.8rem; }
+.reference .ui-label { color:var(--text-secondary); }
+.reference h3 { margin:1.0rem 0 0.6rem; }
+.reference p { color:var(--text-secondary); max-width:60ch; }
