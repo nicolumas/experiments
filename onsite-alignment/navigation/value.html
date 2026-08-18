@@ -1,0 +1,310 @@
+<!doctype html>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMAS · Navigation, value per visitor</title>
+<meta name="description" content="A companion to the click-based navigation dashboard: the same header nav re-ranked by conversion and value per visitor, grounded in DWH and GA4.">
+<style>
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#4E4A45; --charcoal-500:#847F79; --charcoal-300:#BEB9B2;
+  --ivory:#FAF6F1; --ivory-2:#F5EEE4; --bone:#EAE2D8; --bone-2:#E2D8CC;
+  --card:#FFFFFF; --card-2:#FBF7F2;
+  --ink:#1C1A18; --ink-2:#5A5752; --ink-3:#908C87;
+  --line:#E7DED2; --line-strong:#D8CCBC;
+  --accent:#9B6D1E; --accent-bg:#FBF3E2; --accent-line:#E7D3A9;
+  --keep:#4C6B52; --keep-bg:#EAF0EA; --promote:#1C1A18; --promote-fg:#FAF6F1;
+  --neutral-chip:#6C665F; --neutral-bg:#F0EAE1; --demote:#9B6D1E; --demote-bg:#FBF3E2;
+  --remove:#8A4433; --remove-bg:#F6E9E4; --good:#4C6B52; --warn:#9B6D1E; --crit:#8A4433;
+  --maxw:1120px; --readw:72ch;
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --charcoal-900:#F2ECE3; --charcoal-700:#C8C2B9; --charcoal-500:#948E85; --charcoal-300:#5E5952;
+    --ivory:#171512; --ivory-2:#1E1B17; --bone:#2A261F; --bone-2:#322D25;
+    --card:#201D19; --card-2:#25211C;
+    --ink:#F2ECE3; --ink-2:#B9B2A8; --ink-3:#8A847B;
+    --line:#302B24; --line-strong:#3D372E;
+    --accent:#D9A94E; --accent-bg:#2A2317; --accent-line:#4A3D22;
+    --keep:#8FB396; --keep-bg:#1E271F; --promote:#F2ECE3; --promote-fg:#171512;
+    --neutral-chip:#B9B2A8; --neutral-bg:#2A261F; --demote:#D9A94E; --demote-bg:#2A2317;
+    --remove:#D08A73; --remove-bg:#2C1F1A; --good:#8FB396; --warn:#D9A94E; --crit:#D08A73;
+  }
+}
+:root[data-theme="dark"]{
+  --charcoal-900:#F2ECE3; --charcoal-700:#C8C2B9; --charcoal-500:#948E85; --charcoal-300:#5E5952;
+  --ivory:#171512; --ivory-2:#1E1B17; --bone:#2A261F; --bone-2:#322D25;
+  --card:#201D19; --card-2:#25211C;
+  --ink:#F2ECE3; --ink-2:#B9B2A8; --ink-3:#8A847B;
+  --line:#302B24; --line-strong:#3D372E;
+  --accent:#D9A94E; --accent-bg:#2A2317; --accent-line:#4A3D22;
+  --keep:#8FB396; --keep-bg:#1E271F; --promote:#F2ECE3; --promote-fg:#171512;
+  --neutral-chip:#B9B2A8; --neutral-bg:#2A261F; --demote:#D9A94E; --demote-bg:#2A2317;
+  --remove:#D08A73; --remove-bg:#2C1F1A; --good:#8FB396; --warn:#D9A94E; --crit:#D08A73;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ivory);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"kern" 1;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:56px 24px 96px;}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);}
+h1{font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin-top:14px;text-wrap:balance;}
+.lede{color:var(--ink-2);font-weight:400;font-size:clamp(16px,2vw,19px);max-width:66ch;margin-top:18px;}
+.byline{color:var(--ink-3);font-size:12.5px;margin-top:16px;line-height:1.7;}
+.byline b{color:var(--ink-2);font-weight:600;}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.015em;line-height:1.12;text-wrap:balance;}
+h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;}
+p{max-width:var(--readw);}
+.section p+p{margin-top:12px;}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-line);}
+a:hover{border-bottom-color:var(--accent);}
+.section{margin-top:64px;scroll-margin-top:24px;}
+.part-head{display:flex;align-items:baseline;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:8px;}
+.part-num{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent);white-space:nowrap;padding-top:4px;}
+.part-head h2{flex:1;}
+.section-intro{color:var(--ink-2);font-size:15.5px;margin:18px 0 26px;max-width:var(--readw);}
+
+/* thesis strip */
+.thesis{background:#1C1A18;color:#FAF6F1;border-radius:8px;padding:44px 40px;margin-top:44px;}
+.thesis .eyebrow{color:#D9A94E;}
+.thesis h2{color:#FAF6F1;margin:14px 0 6px;max-width:26ch;}
+.thesis .lead{color:rgba(244,237,226,.74);font-size:16px;max-width:70ch;margin-top:14px;}
+.thesis .twin{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:32px;}
+.thesis .truth{border-top:2px solid #D9A94E;padding-top:16px;}
+.thesis .truth .t-label{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#D9A94E;}
+.thesis .truth h3{color:#FAF6F1;font-size:17px;margin:8px 0;}
+.thesis .truth p{color:rgba(244,237,226,.74);font-size:14px;max-width:none;}
+.thesis .stat{font-size:13px;color:rgba(244,237,226,.55);margin-top:10px;font-variant-numeric:tabular-nums;}
+.thesis .stat b{color:#FAF6F1;font-weight:600;}
+
+/* KPI row */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0;}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 18px;}
+.kpi .n{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;}
+.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:8px;line-height:1.4;}
+.kpi .s{font-size:11px;color:var(--ink-3);margin-top:3px;}
+
+/* bar charts */
+.chartcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:24px 24px 20px;margin:22px 0;}
+.chartcard .ct{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);}
+.chartcard .cs{font-size:12px;color:var(--ink-3);margin:4px 0 20px;}
+.bars{display:flex;flex-direction:column;gap:14px;}
+.bar-row{display:grid;grid-template-columns:150px 1fr 92px;align-items:center;gap:14px;}
+.bar-row .bl{font-size:13px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track{height:16px;background:var(--bone);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;width:var(--w,0%);background:var(--charcoal-700);border-radius:2px;}
+.bar-fill.hl{background:var(--accent);}
+.bar-fill.mut{background:var(--charcoal-300);}
+.bar-val{font-size:12.5px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.bar-row .bl .sub{display:block;font-weight:400;font-size:11px;color:var(--ink-3);}
+
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin:22px 0;background:var(--card);}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:13.5px;}
+thead th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:14px 16px;border-bottom:1px solid var(--line-strong);white-space:nowrap;vertical-align:bottom;}
+thead th.num{text-align:right;}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--card-2);}
+tbody tr.hl td{background:var(--accent-bg);}
+td.name{color:var(--ink);font-weight:600;white-space:nowrap;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+td .sub{display:block;color:var(--ink-3);font-weight:400;font-size:11.5px;margin-top:2px;white-space:normal;}
+.data-note{font-size:12px;color:var(--ink-3);margin:-8px 0 22px;}
+
+/* verdict chips */
+.chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;line-height:1.5;}
+.chip.keep{background:var(--keep-bg);color:var(--keep);}
+.chip.promote{background:var(--promote);color:var(--promote-fg);}
+.chip.neutral{background:var(--neutral-bg);color:var(--neutral-chip);border:1px solid var(--line-strong);}
+.chip.add{background:var(--keep-bg);color:var(--keep);border:1px solid var(--keep);}
+.chip.reverse{background:var(--remove-bg);color:var(--remove);}
+
+/* callout */
+.callout{background:var(--accent-bg);border:1px solid var(--accent-line);border-left:3px solid var(--accent);border-radius:6px;padding:20px 22px;margin:24px 0;}
+.callout h3{color:var(--accent);font-size:13px;letter-spacing:.04em;text-transform:uppercase;}
+.callout p{font-size:14px;color:var(--ink-2);max-width:88ch;}
+.callout p+p{margin-top:10px;}
+
+/* findings grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px;}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px 22px;}
+.pcard h3{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.pcard .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);}
+.pcard p{font-size:13.5px;color:var(--ink-2);margin-top:8px;max-width:none;}
+.pcard .ev{font-size:12px;color:var(--ink-3);margin-top:12px;border-top:1px dashed var(--line-strong);padding-top:10px;}
+.pcard .ev b{color:var(--ink-2);font-weight:600;}
+
+/* appendix */
+.appendix{background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:24px 26px;margin-top:26px;}
+.appendix h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px;}
+.appendix ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.appendix li{font-size:12.5px;color:var(--ink-2);padding-left:16px;position:relative;line-height:1.5;}
+.appendix li:before{content:"›";position:absolute;left:0;color:var(--accent);font-weight:700;}
+.tag{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink-3);}
+
+.foot{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.foot a{color:var(--ink-2);}
+
+@media (max-width:720px){
+  .kpis{grid-template-columns:1fr 1fr;}
+  .thesis .twin,.grid2{grid-template-columns:1fr;}
+  .bar-row{grid-template-columns:112px 1fr 74px;gap:10px;}
+  .bar-row .bl{font-size:12px;}
+}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Navigation · addendum to the click dashboard</div>
+    <h1>The same nav, re-ranked by value per visitor</h1>
+    <p class="lede">The first dashboard ranked the header by clicks and click-weighted revenue. That measures demand, not conversion or the value a visitor carries when they use a destination. On a value lens, three low-click destinations turn out to be the most important surfaces LUMAS has, and one item we cut is doing more work than its clicks let on.</p>
+    <p class="byline"><b>Scope:</b> lumas.de. Revenue and order facts from <b>DWH</b> (last 12 months, canonical). On-site behaviour from <b>GA4</b> (last 90 days, directional). Read alongside the <a href="analysis.html">click dashboard</a> and the <a href="report.html">strategy report</a>.</p>
+  </header>
+
+  <!-- THESIS -->
+  <div class="thesis">
+    <div class="eyebrow">The reframe</div>
+    <h2>Clicks told us what people touch. Value tells us what pays the rent.</h2>
+    <p class="lead">Both are true. A funnel that only optimises for clicks quietly demotes the destinations that carry the money, because the highest-value channels are, by nature, lower in volume.</p>
+    <div class="twin">
+      <div class="truth">
+        <div class="t-label">What clicks said</div>
+        <h3>Product browsing dominates; galleries, advisory and B2B look marginal</h3>
+        <p>Ranked by volume, the physical galleries, art consultation and B2B sit near the bottom, and the Art Finder reads as a niche tool worth cutting.</p>
+        <div class="stat">Home + search + product pages take the top of every click chart.</div>
+      </div>
+      <div class="truth">
+        <div class="t-label">What value says</div>
+        <h3>The gallery network out-earns the entire online shop; B2B is the highest-AOV visitor there is</h3>
+        <p>Ranked by revenue and value per visitor, galleries, editions, advisory and B2B are the assets the nav should be protecting and surfacing, not trimming.</p>
+        <div class="stat">Physical galleries <b>≈55%</b> of revenue · B2B AOV <b>€1,529</b> · Limited Edition <b>77%</b> of revenue.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi"><div class="n">77%</div><div class="l">of revenue is Limited Edition</div><div class="s">€18.4M · €1,121 AOV</div></div>
+    <div class="kpi"><div class="n">≈55%</div><div class="l">of revenue is physical galleries</div><div class="s">€13.2M vs €9.1M online</div></div>
+    <div class="kpi"><div class="n">2.3×</div><div class="l">B2B order value vs B2C</div><div class="s">€1,529 vs €663 AOV</div></div>
+    <div class="kpi"><div class="n">9.7%</div><div class="l">search bounce, the site's most engaged surface</div><div class="s">248s · 1.56 key events/session</div></div>
+  </div>
+
+  <!-- SECTION 1: backend value -->
+  <section class="section" id="value">
+    <div class="part-head"><div class="part-num">01</div><h2>Where the value actually sits</h2></div>
+    <p class="section-intro">DWH is canonical for money. Two cuts reframe the whole nav: revenue by channel, and revenue by edition tier. Both point the same way, toward the destinations a click chart underweights.</p>
+
+    <div class="chartcard">
+      <div class="ct">Revenue by channel</div>
+      <div class="cs">DWH · order value · last 12 months · lumas.de group. B2B is a cross-cut of both channels, shown for scale.</div>
+      <div class="bars">
+        <div class="bar-row"><div class="bl">Physical galleries<span class="sub">19 locations</span></div><div class="bar-track"><div class="bar-fill hl" style="--w:100%"></div></div><div class="bar-val">€13.2M · 55%</div></div>
+        <div class="bar-row"><div class="bl">Online shop</div><div class="bar-track"><div class="bar-fill" style="--w:69%"></div></div><div class="bar-val">€9.1M · 38%</div></div>
+        <div class="bar-row"><div class="bl">of which B2B<span class="sub">cross-channel</span></div><div class="bar-track"><div class="bar-fill mut" style="--w:16%"></div></div><div class="bar-val">€2.15M · 9%</div></div>
+      </div>
+    </div>
+
+    <div class="chartcard">
+      <div class="ct">Revenue by edition tier</div>
+      <div class="cs">DWH · order value · last 12 months. Limited Edition is the business; every other tier is a fraction of it, at a fraction of the AOV.</div>
+      <div class="bars">
+        <div class="bar-row"><div class="bl">Limited Edition<span class="sub">€1,121 AOV</span></div><div class="bar-track"><div class="bar-fill hl" style="--w:100%"></div></div><div class="bar-val">€18.4M</div></div>
+        <div class="bar-row"><div class="bl">Open Edition<span class="sub">€271 AOV</span></div><div class="bar-track"><div class="bar-fill" style="--w:9.5%"></div></div><div class="bar-val">€1.75M</div></div>
+        <div class="bar-row"><div class="bl">Darlings<span class="sub">€296 AOV</span></div><div class="bar-track"><div class="bar-fill" style="--w:6.7%"></div></div><div class="bar-val">€1.23M</div></div>
+        <div class="bar-row"><div class="bl">Petites<span class="sub">€189 AOV</span></div><div class="bar-track"><div class="bar-fill" style="--w:4.7%"></div></div><div class="bar-val">€0.87M</div></div>
+      </div>
+    </div>
+    <p class="data-note">Read: putting <b>Editionen &amp; Highlights</b> first, and giving <b>Galerien</b> a full, prominent surface, are the two most value-defensible calls in the redesign, independent of click volume.</p>
+  </section>
+
+  <!-- SECTION 2: engagement -->
+  <section class="section" id="engagement">
+    <div class="part-head"><div class="part-num">02</div><h2>On-site value signal: the engaged surfaces</h2></div>
+    <p class="section-intro">GA4 revenue is consent-lossy and last-touch, so treat it as a directional ranking, not a ledger. But depth of engagement per session is a reliable read of intent, and it puts search and the Art Finder near the top, well above campaign pages.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Surface (90d)</th><th class="num">Sessions</th><th class="num">Avg. duration</th><th class="num">Bounce</th><th class="num">Key events / session</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Search</td><td class="num">51,815</td><td class="num">248s</td><td class="num">9.7%</td><td class="num">1.56</td></tr>
+          <tr><td class="name">Collections (Akt)</td><td class="num">7,030</td><td class="num">99s</td><td class="num">9.8%</td><td class="num">1.29</td></tr>
+          <tr><td class="name">Alle Künstler</td><td class="num">16,186</td><td class="num">125s</td><td class="num">7.2%</td><td class="num">0.79</td></tr>
+          <tr><td class="name">Home<span class="sub">baseline</span></td><td class="num">222,917</td><td class="num">84s</td><td class="num">36.2%</td><td class="num">0.72</td></tr>
+          <tr class="hl"><td class="name">Art Finder</td><td class="num">14,082</td><td class="num">210s</td><td class="num">12.5%</td><td class="num">0.71</td></tr>
+          <tr><td class="name">Galerien</td><td class="num">6,976</td><td class="num">128s</td><td class="num">10.5%</td><td class="num">0.98</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="data-note">Read: the <b>Art Finder</b> is a deep, high-intent surface (210s, 12.5% bounce) sitting on ~14k sessions a quarter, its room-upload mode lands ~€40 revenue per session (small-n). That is not a "cut on low clicks" candidate. Entry-point revenue per session backs this up: <b>/galerien €3.08</b> and <b>/inspired-art-magazine €3.12</b> both beat the <b>home baseline of €2.00</b> [GA4, directional].</p>
+  </section>
+
+  <!-- SECTION 3: verdict -->
+  <section class="section" id="verdict">
+    <div class="part-head"><div class="part-num">03</div><h2>Each change, judged on value</h2></div>
+    <p class="section-intro">The redesign holds up well. Five calls are validated by conversion or value, one is a marginal call, and one, removing the Art Finder, the data pushes back on.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Change</th><th>Verdict</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Editionen &amp; Highlights first</td><td><span class="chip promote">Validated</span></td><td>Limited Edition = 77% of revenue at €1,121 AOV; the tier that pays for everything <span class="sub">DWH · LTM · high</span></td></tr>
+          <tr><td class="name">Search made prominent</td><td><span class="chip keep">Validated</span></td><td>Most engaged surface on the site: 9.7% bounce, 248s, 1.56 key events/session <span class="sub">GA4 · 90d · high</span></td></tr>
+          <tr><td class="name">All 19 galleries + booking CTA</td><td><span class="chip promote">Validated</span></td><td>Galleries ≈55% of revenue (€13.2M); /galerien converts at €3.08/session vs €2.00 home <span class="sub">DWH + GA4 · high/med</span></td></tr>
+          <tr><td class="name">Gutscheine surfaced</td><td><span class="chip keep">Validated</span></td><td>Gift-voucher entry lands ~€27/session, the highest of any content entry <span class="sub">GA4 · 90d · med, small-n</span></td></tr>
+          <tr><td class="name">"Alle Künstler" door kept, duplicate removed</td><td><span class="chip keep">Validated</span></td><td>16,186 sessions at 7.2% bounce, a high-intent door <span class="sub">GA4 · 90d · high</span></td></tr>
+          <tr><td class="name">Motif before technique</td><td><span class="chip neutral">Marginal</span></td><td>Motif edges technique on engagement density (Akt 1.29 vs technik 0.64), but both strong. Keep both; order is a weak call <span class="sub">GA4 · 90d · med</span></td></tr>
+          <tr class="hl"><td class="name">Removing the Art Finder</td><td><span class="chip reverse">Reversed</span></td><td>14,082 sessions/90d, 210s, 12.5% bounce, a top-tier engaged surface. Re-nested in Inspiration; removal should be A/B tested, not assumed <span class="sub">GA4 · 90d · high</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <h3>The one to watch: the Art Finder</h3>
+      <p>It is the clearest "clicks are not value" case in the whole exercise, and it landed on our own edit. On click volume the Art Finder looks trimmable; on engagement it behaves like the homepage, on 14k sessions a quarter and 210 seconds a visit. We have re-nested it as a featured gateway inside Inspiration. If it is ever removed, that should be a measured A/B decision, not an inference from a click chart.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 4: new items -->
+  <section class="section" id="new">
+    <div class="part-head"><div class="part-num">04</div><h2>Two additions the value lens justifies</h2></div>
+    <p class="section-intro">You asked about testing new items like Art Consultation and B2B. Both are justified by value, not by existing clicks, and both are effectively invisible online today: a regex sweep of lumas.de found no trafficked front door for beratung, b2b, business, firmenkunden or trade.</p>
+    <div class="grid2">
+      <div class="pcard">
+        <h3>Business / B2B <span class="k"><span class="chip add">Add</span></span></h3>
+        <p>B2B is €2.15M a year at €1,529 AOV, 2.3× the B2C order. Yet it has no discoverable online entry point. A €2.15M segment with no front door is a gap, not a low-priority item. A dedicated B2B landing, surfaced in the nav or the top utility bar, gives that visitor somewhere to land.</p>
+        <p class="ev"><b>Evidence:</b> B2B €2.15M / 1,407 orders / €1,529 AOV vs B2C €663 <span class="tag">[DWH · LTM · high]</span>. Zero trafficked b2b/business/trade path <span class="tag">[GA4 · 90d · high]</span>.</p>
+      </div>
+      <div class="pcard">
+        <h3>Art Consultation <span class="k"><span class="chip neutral">Test</span></span></h3>
+        <p>No consultation page draws traffic today, but the channel it feeds is the €13.2M gallery book, at premium AOVs (Zurich €1,470, New York €1,235, Miami €857 per order). A nav door that routes online browsers to book a consultation or gallery appointment is a bridge to the highest-value channel LUMAS has. The "Beratungstermin buchen" button already in Galerien is the seed.</p>
+        <p class="ev"><b>Evidence:</b> Gallery revenue €13.2M, premium per-order values <span class="tag">[DWH · LTM · high]</span>. Both now prototyped in a "Beratung" nav item housing private advisory + B2B.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPENDIX -->
+  <section class="section" id="appendix">
+    <div class="part-head"><div class="part-num">05</div><h2>Evidence appendix</h2></div>
+    <div class="appendix">
+      <h3>Sources &amp; caveats</h3>
+      <ul>
+        <li><span class="tag">[DWH · order value by b2b_b2c · LTM · high]</span> B2B €2.15M / 1,407 ord / €1,529 AOV; B2C €20.1M / €663 AOV.</li>
+        <li><span class="tag">[DWH · order value by category · LTM · high]</span> Limited Edition €18.4M / €1,121 AOV (~77% of total); Open €271, Darlings €296, Petites €189 AOV.</li>
+        <li><span class="tag">[DWH · order value by gallery · LTM · high]</span> Physical galleries ≈€13.2M (55%); Online €9.1M (38%); top AOVs Zurich €1,470, NY SoHo €1,235, Miami €857.</li>
+        <li><span class="tag">[GA4 · /search · 90d · high]</span> 51,815 sessions, 9.7% bounce, 248s, 1.56 key events/session.</li>
+        <li><span class="tag">[GA4 · /artfinder · 90d · high]</span> 14,082 sessions, 210s, 12.5% bounce; /room-upload ~€40/session (small-n).</li>
+        <li><span class="tag">[GA4 · landingPage revenue · 90d · med, directional]</span> home €2.00/session, /galerien €3.08, /inspired-art-magazine €3.12, /geschenke/gutscheine €27 (small-n).</li>
+        <li><span class="tag">[GA4 · pagePath regex berat|b2b|business|trade… · 90d · high]</span> 0 trafficked rows: no consultation or B2B front door.</li>
+        <li><span class="tag">[ASSUMPTION]</span> GA4 revenue is last-touch and consent-lossy (~44% of sessions in the <span class="tag">(not set)</span> bucket); home is over-credited. Per-session revenue is a directional ranking only; DWH is canonical for absolute value. Figures are lumas.de; other locales may differ.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>LUMAS · Navigation value analysis · internal</span>
+    <span><a href="analysis.html">Click dashboard</a> · <a href="report.html">Strategy report</a> · <a href="prototype.html">Prototype</a></span>
+  </div>
+
+</div>
