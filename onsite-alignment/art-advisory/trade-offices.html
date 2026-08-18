@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/site.css?v=15">
+  <link rel="stylesheet" href="assets/site.css?v=16">
   <style>#contact { scroll-margin-top: 84px; }</style>
 </head>
 <body>
@@ -27,7 +27,7 @@
         <p class="body-large hero__lede measure reveal">Reception walls, boardrooms and floors: collections that carry the brand and lift the everyday. Curated, produced and installed to one standard and coordinated to your fit-out.</p>
         <div class="hero__actions reveal"><button class="btn btn--primary" type="button" data-open-enquiry data-goal="cta_click" data-cta="hero_enquiry">Request a curation brief</button><a class="btn btn--ghost" href="#projects" data-goal="cta_click" data-cta="hero_projects">See selected work</a></div>
       </div>
-      <div class="hero__art reveal"><img src="assets/projects/office-desk.jpg" width="960" height="540" alt="A LUMAS edition above a desk in a workplace setting" loading="eager"></div>
+      <div class="hero__art reveal"><img src="assets/projects/office-lounge.jpg" width="500" height="489" alt="A LUMAS edition in a workplace lounge with a framed skyline" loading="eager"></div>
     </div></section>
     <section class="section surface-raised"><div class="wrap"><div class="section-head reveal"><p class="eyebrow">Why LUMAS</p><h2 class="display-h2 mt-s">Considered art signals care and confidence</h2></div><p class="body-large txt-secondary measure reveal">Art tells people who you are before a word is spoken, and it lifts the everyday for the people who work there. We curate signed editions to the brand and the space, from the artists we represent, and install to one standard across floors and sites.</p></div></section>
     <section class="wrap section hairline-top"><div class="section-head reveal"><p class="eyebrow">What we cover</p><h2 class="display-h2">Where the work goes</h2></div>
@@ -45,10 +45,20 @@
       <div class="step reveal"><div class="step__n">04</div><div class="step__b"><h3 class="display-h4">Delivery and install</h3><p>Delivered and professionally hung, ready for opening day.</p></div></div>
     </div></div></section>
     <section id="projects" class="wrap section hairline-top"><div class="section-head reveal"><p class="eyebrow">Selected work</p><h2 class="display-h2">In place</h2></div>
-      <div class="pair reveal">
-        <figure><img src="assets/projects/office-desk.jpg" width="960" height="540" alt="A LUMAS edition in a workplace setting." loading="lazy"><figcaption class="caption">A LUMAS edition in a workplace setting.</figcaption></figure>
-        <figure><img src="assets/projects/office-boardroom.jpg" width="1600" height="967" alt="A boardroom ready for a statement work." loading="lazy"><figcaption class="caption">A boardroom ready for a statement work.</figcaption></figure>
+      <div class="carousel" data-carousel="offices">
+        <div class="carousel__viewport">
+          <div class="carousel__track">
+            <article class="slide reveal"><img class="slide__img" src="assets/projects/office-lounge.jpg" width="500" height="489" alt="A LUMAS edition in a workplace lounge." loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Offices & workplace</p><p>A LUMAS edition in a workplace lounge.</p></div></article>
+            <article class="slide reveal"><img class="slide__img" src="assets/projects/office-console.jpg" width="500" height="648" alt="A LUMAS edition at a reception console." loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Offices & workplace</p><p>A LUMAS edition at a reception console.</p></div></article>
+            <article class="slide reveal"><img class="slide__img" src="assets/projects/office-boardroom.jpg" width="1600" height="967" alt="A boardroom ready for a statement work." loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Offices & workplace</p><p>A boardroom ready for a statement work.</p></div></article>
+            <article class="slide reveal"><img class="slide__img" src="assets/projects/office-desk.jpg" width="960" height="540" alt="A LUMAS edition above a workplace desk." loading="lazy"><div class="slide__cap"><p class="ui-label txt-secondary slide__sector">Offices & workplace</p><p>A LUMAS edition above a workplace desk.</p></div></article>
+          </div>
+        </div>
+        <button class="carousel__btn carousel__btn--prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="carousel__btn carousel__btn--next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
+        <p class="carousel__count" data-count>01 / 04</p>
       </div>
+      <p class="caption txt-secondary mt-l">Workplace settings: LUMAS Corporate Art Service.</p>
     </section>
     <section class="section surface-raised"><div class="wrap"><div class="reference reveal"><p class="ui-label">Trusted by</p><h3 class="display-h3">Chosen by leading firms</h3><p class="body-large">SAP, McKinsey & Company, EY and Kirkland & Ellis are among the businesses we work with. Named references are available on request.</p></div></div></section>
     <!-- trusted-by (real corporate clients) -->
@@ -198,6 +208,6 @@
     </div>
   </dialog>
   <div class="sticky-cta"><button class="btn btn--primary" type="button" data-open-enquiry data-goal="cta_click" data-cta="sticky_enquiry">Request a curation brief</button></div>
-  <script src="assets/site.js?v=15"></script>
+  <script src="assets/site.js?v=16"></script>
 </body>
 </html>
