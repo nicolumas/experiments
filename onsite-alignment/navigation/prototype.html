@@ -334,6 +334,12 @@ h1,h2,h3.disp,.disp{font-family:var(--display);font-weight:400;}
       <div class="acc-item">
         <button class="acc-head" aria-expanded="false">Inspiration<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="acc-body"><div><div class="acc-links">
+          <div class="sub-h">Art Finder</div>
+          <button class="af" data-artfinder>Art Finder starten</button>
+          <button data-artfinder>Raum hochladen</button>
+          <button data-artfinder>Kunstwerk hochladen</button>
+          <button data-artfinder>Kunst liken</button>
+          <button data-artfinder>Art Cloud</button>
           <div class="sub-h">Editorial</div>
           <button data-nav="LUMAS Art Magazine" data-filter="all">LUMAS Art Magazine</button>
           <button data-nav="Favoriten unserer Kuratoren" data-filter="all">Favoriten unserer Kuratoren</button>
@@ -369,6 +375,22 @@ h1,h2,h3.disp,.disp{font-family:var(--display);font-weight:400;}
           <button data-link="Alle Galerien">Alle 19 Galerien</button>
           <button data-link="Events">Events &amp; Vernissagen</button>
           <button data-link="Beratungstermin">Beratungstermin buchen</button>
+        </div></div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">Beratung<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="acc-body"><div><div class="acc-links">
+          <div class="sub-h">Private Beratung</div>
+          <button data-link="Kunstberatung">Persönliche Kunstberatung</button>
+          <button data-link="Beratungstermin">Beratungstermin buchen</button>
+          <button data-link="Art Advisory zu Hause">Art Advisory bei Ihnen zu Hause</button>
+          <button data-link="Interior-Beratung">Interior-Beratung</button>
+          <div class="sub-h">Business / B2B</div>
+          <button data-link="Firmenkunden">Firmenkunden</button>
+          <button data-link="Hotellerie & Hospitality">Hotellerie &amp; Hospitality</button>
+          <button data-link="Büro & Praxis">Büro &amp; Praxis</button>
+          <button data-link="Objektkunst & Contract">Objektkunst &amp; Contract</button>
+          <button class="af" data-link="Beratung anfragen">Beratung anfragen</button>
         </div></div></div>
       </div>
       <div class="acc-item">
@@ -472,7 +494,7 @@ h1,h2,h3.disp,.disp{font-family:var(--display);font-weight:400;}
 
         <div class="nav-item" data-menu="inspiration">
           <button class="nav-link" aria-haspopup="true">Inspiration</button>
-          <div class="mega"><div class="mega-grid" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="mega"><div class="mega-grid" style="grid-template-columns:1fr 1fr .8fr 1.15fr">
             <div class="mega-col">
               <div class="ch">Editorial</div>
               <button class="mlink" data-nav="LUMAS Art Magazine" data-filter="all">LUMAS Art Magazine</button>
@@ -493,6 +515,17 @@ h1,h2,h3.disp,.disp{font-family:var(--display);font-weight:400;}
               <button class="mlink" data-nav="Darlings" data-filter="all">Darlings</button>
               <button class="mlink" data-nav="Cut-Outs" data-filter="all">Cut-Outs</button>
               <button class="mlink" data-nav="String Art" data-filter="all">String Art</button>
+            </div>
+            <div class="mega-col af-gate">
+              <div class="aft">Art Finder</div>
+              <button class="af-start" data-artfinder>Art Finder starten</button>
+              <div class="af-modes">
+                <button class="af-mode" data-artfinder><span class="m-l">Raum hochladen</span><span class="m-d">Ein Werk im eigenen Raum sehen</span></button>
+                <button class="af-mode" data-artfinder><span class="m-l">Kunstwerk hochladen</span><span class="m-d">Ähnliche Werke aus dem Bild finden</span></button>
+                <button class="af-mode" data-artfinder><span class="m-l">Vorlieben teilen</span><span class="m-d">Empfehlungen aus Ihrem Geschmack</span></button>
+                <button class="af-mode" data-artfinder><span class="m-l">Kunst liken</span><span class="m-d">Durch Swipen den Vorschlag schärfen</span></button>
+                <button class="af-mode" data-artfinder><span class="m-l">Art Cloud</span><span class="m-d">Die Sammlung visuell erkunden</span></button>
+              </div>
             </div>
           </div></div>
         </div>
@@ -535,6 +568,34 @@ h1,h2,h3.disp,.disp{font-family:var(--display);font-weight:400;}
                 <button class="svc" data-link="Events">Events &amp; Vernissagen</button>
                 <button class="svc" data-link="Kontakt">Kontakt</button>
               </div>            </div>
+          </div></div>
+        </div>
+
+        <div class="nav-item" data-menu="beratung">
+          <button class="nav-link" aria-haspopup="true">Beratung</button>
+          <div class="mega"><div class="mega-grid" style="grid-template-columns:1fr 1fr 1.1fr">
+            <div class="mega-col">
+              <div class="ch">Private Beratung</div>
+              <button class="mlink" data-link="Kunstberatung">Persönliche Kunstberatung</button>
+              <button class="mlink" data-link="Beratungstermin">Beratungstermin buchen</button>
+              <button class="mlink" data-link="Art Advisory zu Hause">Art Advisory bei Ihnen zu Hause</button>
+              <button class="mlink" data-link="Interior-Beratung">Interior-Beratung</button>
+              <button class="mlink" data-link="Kauf auf Raten">Kauf auf Raten</button>
+            </div>
+            <div class="mega-col">
+              <div class="ch">Business / B2B</div>
+              <button class="mlink" data-link="Firmenkunden">Firmenkunden</button>
+              <button class="mlink" data-link="Hotellerie & Hospitality">Hotellerie &amp; Hospitality</button>
+              <button class="mlink" data-link="Büro & Praxis">Büro &amp; Praxis</button>
+              <button class="mlink" data-link="Objektkunst & Contract">Objektkunst &amp; Contract</button>
+              <button class="mlink" data-link="Steuervorteil für Unternehmen">Steuervorteil für Unternehmen</button>
+            </div>
+            <div class="mega-col af-gate">
+              <div class="eyebrow" style="color:var(--text-3)">Persönlich beraten</div>
+              <div class="aft" style="margin-top:8px">Sprechen wir über Ihre Wände</div>
+              <div class="g-copy">Ob ein einzelnes Werk oder ein ganzes Objekt: unsere Kunstberater begleiten Sie, in der Galerie, bei Ihnen vor Ort oder digital.</div>
+              <button class="af-start" data-link="Beratung anfragen">Beratung anfragen</button>
+            </div>
           </div></div>
         </div>
 
