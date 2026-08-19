@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <!-- ═══════════════════════════════════════════════════════════════════════════
   PROTO HEADER
-  ID:          PROTO-2026-014 rev C  ·  LUMAS Event System
+  ID:          PROTO-2026-014 rev F  ·  LUMAS Event System
   Hypothesis:  [ASSUMPTION] The visitor's only question is "is this on near me,
                and where is that gallery". Naming every participating gallery as
-               a plain link on the card answers it with no controls to operate,
-               and will beat both today's one-tile-per-gallery feed and rev B's
-               locator/filter/expand machinery on gallery-CTA clicks per session.
+               a plain link answers it with no controls to operate, and will
+               beat today's one-tile-per-gallery feed on gallery-CTA clicks.
 
-  Rev C:       Rev B was still an event browser. Removed: the "your gallery"
-               locator, the filter, resolved/unresolved states, inline expansion
-               regions, scope badges, the charcoal network card, the separate
-               works rail. 18 gallery names is two lines of text; rev B turned
-               two lines of text into a state machine.
+  THE WHOLE SYSTEM, in three rules:
+    1. Every participating gallery is a link.
+    2. A Register button appears only where registration is required.
+    3. Dates all the same -> one line of links.
+       Dates differ       -> one column per evening.
 
-               THE ENTIRE RULE SET:
-                 1. Every participating gallery is a link, with its date if
-                    dates differ between galleries.
-                 2. Add a Register button when registration is required.
-               Nothing else. No detail pages.
+  Rule 3 replaced an earlier count threshold plus a full-width breakout band.
+  The band was the mistake: it opened a third region with its own left edge, so
+  the card had four different text alignments, and it repeated the date on all
+  eighteen rows. Now the list sits in the copy column like every other element,
+  fills the void that used to sit under the copy, and states each date once.
+  Golden Hour gets three columns because it runs on three evenings, not because
+  it has eighteen galleries: the layout follows the event's shape, not its size.
 
-  Rev D:       Images are now real LUMAS EVENT PHOTOGRAPHY (guests, a packed
-               artist talk, live music, people discussing one work). Rev C used
-               bare artworks, which described the catalogue; rev A/B used empty
-               gallery interiors, which described the property. An events page
-               has to show events. Photographs may be cropped, so they share one
-               editorial frame.
+  Images are real LUMAS event photography at 5:4 (4:3 on mobile). Earlier passes
+  used empty gallery interiors, which described the property, then bare
+  artworks, which described the catalogue. An events page has to show events.
 
-               Also fixed against the skill set: Archivo 700 now loaded so
-               eyebrows and buttons render at the specified weight; every token
-               bound to a real V2 primitive instead of an invented near-value;
-               hover gated behind (hover: hover); small copy moved off
-               text/tertiary, which is 3.3:1 on white and fails WCAG AA.
+  V2 compliance: tokens bound to real primitives, Archivo 700 loaded so
+  eyebrows and buttons carry the specified weight, hover gated behind
+  (hover: hover), and all small copy kept off text/tertiary, which measures
+  3.3:1 on white and fails WCAG AA.
   Goals:       primary [ASSUMPTION: Gallery-CTA click] ·
                secondary [ASSUMPTION: RSVP outbound click, Newsletter signup]
   Variants:    ?v=control (one tile per gallery, today) · ?v=system (default)
@@ -144,10 +141,8 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .month { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); padding: 56px 0 0; }
 
 /* ── One card. No variants. No states. ──────────────────────────── */
-.ev-wrap { border-bottom: 1px solid var(--hair); }
-.ev { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 56px; padding: 48px 0; }
-.ev-wrap:first-child .ev { padding-top: 32px; }
-.ev-wrap.has-band .ev { padding-bottom: 32px; }
+.ev { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 56px; padding: 48px 0; border-bottom: 1px solid var(--hair); }
+.ev:first-of-type { padding-top: 32px; }
 
 /* Event photography. Unlike artworks these MAY be cropped, so one editorial
    frame gives the feed a steady rhythm and the pictures carry the feeling. */
@@ -177,47 +172,31 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-links .sep { padding: 0 8px; color: var(--ink-3); }
 .ev-links .street { color: var(--ink-2); font-size: 14px; }
 
-/* ── 6+ galleries: the list gets its own full-width band below the card ──
-   Forced through the copy column it wraps into ragged rows with separators
-   dangling at the line ends. Given the full width it becomes a directory. */
-/* Grouped by evening, so the date is stated once per column instead of once
-   per gallery. Eighteen rows of name-over-date was the space it was eating.
-   The lead line becomes the label column so the band fills its width instead
-   of hugging the left edge. */
-.ev-band { padding: 4px 0 44px; display: flex; flex-wrap: wrap; gap: 28px 64px; }
-.ev-band-lead { flex: 0 0 190px; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
-.ev-groups { display: flex; flex-wrap: wrap; gap: 28px 64px; }
-.ev-group { min-width: 152px; }
-.ev-group h3 { margin: 0 0 10px; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
-.ev-group a { display: block; font-size: 15.5px; line-height: 1.92; color: var(--ink); }
-.ev-group a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
+/* One column per evening, INSIDE the copy column. No breakout band: the list
+   shares the card's grid, so every text element has the same left edge and the
+   list fills the void under the copy instead of opening a new region. */
+.ev-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 22px 28px; }
+.ev-col h4 { margin: 0 0 8px; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
+.ev-col a { display: block; font-size: 15.5px; line-height: 1.9; color: var(--ink); }
+.ev-col a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
 
 /* Hover only where a real pointer exists, so it does not stick on touch. */
 @media (hover: hover) and (pointer: fine) {
   .ev-shot:hover img { transform: scale(1.03); }
   .ev-register:hover { background: var(--charcoal-800); }
-  .ev-group a:hover span { border-bottom-color: var(--ink); }
+  .ev-col a:hover span { border-bottom-color: var(--ink); }
 }
-@media (max-width: 760px) {
-  .ev-band { padding: 0 0 32px; gap: 16px; }
-  .ev-band-lead { flex: 1 1 100%; }
-  .ev-groups { gap: 24px 40px; }
-  /* Each evening takes the full width and splits its galleries into two
-     columns, rather than one narrow column leaving half the row empty. */
-  .ev-group { flex: 1 1 100%; min-width: 0; }
-  .ev-group-list { columns: 2; column-gap: 28px; }
-  /* Comfortable tap targets once the columns narrow. */
-  .ev-group a { line-height: 1.5; padding: 12px 0; }
-}
-
 @media (max-width: 1000px) { .ev { grid-template-columns: 320px minmax(0, 1fr); gap: 40px; } }
 @media (max-width: 760px) {
   .ev { grid-template-columns: 1fr; gap: 24px; padding: 32px 0 40px; }
   .ev:first-of-type { padding-top: 24px; }
   .ev-shot { aspect-ratio: 4 / 3; }
   .ev-register { width: 100%; justify-content: center; }
-  /* On mobile the gallery links are the primary action, so they become a
-     properly tappable list instead of inline text. */
+  /* One evening per row, its galleries in two columns. */
+  .ev-cols { grid-template-columns: 1fr; gap: 18px; }
+  .ev-col-list { columns: 2; column-gap: 24px; }
+  .ev-col a { line-height: 1.5; padding: 12px 0; }
+  /* The one-line shape becomes a tappable list once the column narrows. */
   .ev-links { line-height: 1.5; }
   .ev-links .sep { display: none; }
   .ev-links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; width: 100%; white-space: normal; padding: 13px 0; border-bottom: 1px solid var(--hair); }
@@ -564,13 +543,20 @@ const shortDate = (iso) => { const d = new Date(iso); return `${d.getDate()} ${M
 const first = (ev) => [...ev.dates].sort((a, b) => a.start.localeCompare(b.start))[0];
 const last  = (ev) => [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).pop();
 
-/* THE ONE NUMBER. Up to 5 galleries read as prose in the copy column.
-   6 or more get their own full-width band below the card. Nobody authors
-   this: it is counted. */
-const BAND_MIN = 6;
-
 /* Only show what varies: per-gallery dates appear only when they differ. */
 const datesVary = (ev) => new Set(ev.dates.map(o => o.start.slice(0, 10))).size > 1;
+
+/* One entry per evening, in date order. This is the only shape the gallery
+   list ever needs, whether the event runs in one room or eighteen. */
+function evenings(ev) {
+  const m = new Map();
+  [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).forEach(o => {
+    const k = o.start.slice(0, 10);
+    if (!m.has(k)) m.set(k, []);
+    m.get(k).push(o);
+  });
+  return [...m.values()];
+}
 
 /* The one line of facts: when · how many rooms · whether to register. */
 function facts(ev) {
@@ -616,51 +602,36 @@ document.addEventListener('click', (e) => {
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 const prm = (o) => esc(JSON.stringify(o));
 
-/* RULE 1 - every participating gallery is a link. */
+/* RULE 1 - every participating gallery is a link.
+   ONE SHAPE RULE decides the layout, and it is about the event, not the count:
+     dates all the same  -> one line of links
+     dates differ        -> one column per evening
+   Golden Hour gets three columns because it runs on three evenings, not
+   because it has eighteen galleries. Both shapes live in the copy column, so
+   there is a single left edge for every text element on the card. */
 function whereHtml(ev) {
-  const vary = datesVary(ev);
+  const days = evenings(ev);
   const single = ev.dates.length === 1;
 
-  const links = [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).map(o => {
+  const link = (o, withStreet) => {
     if (o.online) return `<span>Online, link sent after registering</span>`;
     const g = G[o.gallery];
-    const date = vary ? ` <span class="d">${shortDate(o.start)}</span>` : '';
-    const street = single ? ` <span class="street">${esc(g.street)}</span>` : '';
-    return `<a href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${prm({ event_id: ev.id, gallery: g.id })}">${esc(g.short)}${date}${street}</a>`;
-  }).join('<span class="sep">·</span>');
-
-  // The dates on the links already say the evenings differ. No need to say it.
-  const lead = single ? '' : `<div class="ev-where-lead">Pick the gallery nearest you.</div>`;
-
-  return `<div class="ev-where">${lead}<div class="ev-links">${links}</div></div>`;
-}
-
-/* The band. Grouped by evening: one date heading per column instead of the
-   same date repeated beside every gallery. Compact, and it shows the shape of
-   the week for free. */
-function bandHtml(ev) {
-  const byDay = new Map();
-  [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).forEach(o => {
-    const key = o.start.slice(0, 10);
-    if (!byDay.has(key)) byDay.set(key, []);
-    byDay.get(key).push(o);
-  });
-
-  const link = (o) => {
-    const g = G[o.gallery];
-    return `<a href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${prm({ event_id: ev.id, gallery: g.id })}"><span>${esc(g.short)}</span></a>`;
+    const street = withStreet ? ` <span class="street">${esc(g.street)}</span>` : '';
+    return `<a href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${prm({ event_id: ev.id, gallery: g.id })}"><span>${esc(g.short)}</span>${street}</a>`;
   };
 
-  // A single group means the dates do not vary, so it needs no heading.
-  const groups = [...byDay.entries()].map(([day, list]) => `<div class="ev-group">
-    ${byDay.size > 1 ? `<h3>${esc(longDate(list[0].start).replace(/^\w+ /, ''))}</h3>` : ''}
-    <div class="ev-group-list">${list.map(link).join('')}</div>
-  </div>`).join('');
+  let body;
+  if (days.length === 1) {
+    body = `<div class="ev-links">${days[0].map(o => link(o, single)).join('<span class="sep">·</span>')}</div>`;
+  } else {
+    body = `<div class="ev-cols">${days.map(list => `<div class="ev-col">
+      <h4>${esc(longDate(list[0].start).replace(/^\w+ /, ''))}</h4>
+      <div class="ev-col-list">${list.map(o => link(o, false)).join('')}</div>
+    </div>`).join('')}</div>`;
+  }
 
-  return `<section class="ev-band">
-    <div class="ev-band-lead">Pick the gallery nearest you.</div>
-    <div class="ev-groups">${groups}</div>
-  </section>`;
+  const lead = single ? '' : `<div class="ev-where-lead">Pick the gallery nearest you.</div>`;
+  return `<div class="ev-where">${lead}${body}</div>`;
 }
 
 function evHtml(ev) {
@@ -670,23 +641,18 @@ function evHtml(ev) {
     ? `<a class="ev-register" href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">Register<iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
     : '';
 
-  const band = ev.dates.length >= BAND_MIN;
-
-  return `<div class="ev-wrap rv${band ? ' has-band' : ''}">
-    <article class="ev">
-      <div class="ev-shot">
-        <img src="${shot(ev.photo)}" alt="${esc(ev.alt)}" ${ev.first ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
-      </div>
-      <div class="ev-body">
-        <h2 class="ev-title">${esc(ev.title)}</h2>
-        <div class="ev-facts">${facts(ev)}</div>
-        <p class="ev-text">${esc(ev.text)}</p>
-        ${register}
-        ${band ? '' : whereHtml(ev)}
-      </div>
-    </article>
-    ${band ? bandHtml(ev) : ''}
-  </div>`;
+  return `<article class="ev rv">
+    <div class="ev-shot">
+      <img src="${shot(ev.photo)}" alt="${esc(ev.alt)}" ${ev.first ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
+    </div>
+    <div class="ev-body">
+      <h2 class="ev-title">${esc(ev.title)}</h2>
+      <div class="ev-facts">${facts(ev)}</div>
+      <p class="ev-text">${esc(ev.text)}</p>
+      ${register}
+      ${whereHtml(ev)}
+    </div>
+  </article>`;
 }
 
 function renderFeed() {
