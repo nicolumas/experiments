@@ -275,51 +275,6 @@ a{color:inherit;text-decoration:none}
   .trust__row{grid-template-columns:1fr}
   .footer{padding:56px 0}
 }
-
-/* on-this-page index */
-.toc{border-bottom:1px solid var(--b-default);background:var(--raised)}
-.toc__inner{display:flex;align-items:baseline;gap:clamp(16px,2vw,32px);padding:18px 0;flex-wrap:wrap}
-.toc__label{font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t-tertiary);white-space:nowrap}
-.toc__list{display:flex;gap:clamp(14px,1.6vw,28px);flex-wrap:wrap;list-style:none;margin:0;padding:0}
-.toc__list a{font-family:var(--body);font-size:14px;color:var(--t-secondary);border-bottom:1px solid transparent;padding-bottom:2px;transition:color .22s ease,border-color .22s ease}
-.toc__list a:hover{color:var(--t-primary);border-bottom-color:var(--t-primary)}
-@media (max-width:760px){
-  .toc__inner{gap:10px;padding:14px 0}
-  .toc__list{gap:12px}
-  .toc__list a{font-size:13px}
-}
-html{scroll-behavior:smooth}
-:target{scroll-margin-top:96px}
-
-.footer__cols{grid-template-columns:repeat(5,1fr)}
-.footer__base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline}
-.footer__meta a{border-bottom:1px solid currentColor}
-@media (max-width:1100px){.footer__cols{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:760px){.footer__cols{grid-template-columns:repeat(2,1fr)}}
-
-/* product grid — mirrors the live lumas.de masonry (4 cols, 20px gutter) */
-.edit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:36px}
-.edit-grid__col{display:flex;flex-direction:column;gap:20px;min-width:0}
-.pcard{display:block;color:var(--t-primary)}
-.pcard__media{position:relative;display:block;background:var(--sunken)}
-.pcard__media img{display:block;width:100%;height:auto}
-.pcard__flag{position:absolute;top:0;left:0;background:var(--b-default);color:var(--t-primary);
-  font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:8px 20px}
-.pcard__row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:12px}
-.pcard__name{font-family:var(--display);font-weight:400;font-size:16px;line-height:1.35;letter-spacing:-.01em}
-.pcard__icons{display:flex;gap:8px;flex:0 0 auto;color:var(--t-tertiary);pointer-events:none}
-.pcard__icons svg{width:17px;height:17px;display:block}
-.pcard__artist{display:block;font-family:var(--body);font-size:10px;line-height:1.5;letter-spacing:.088em;
-  text-transform:uppercase;color:var(--t-secondary);margin-top:3px}
-.pcard__price{display:block;font-family:var(--body);font-size:15px;margin-top:6px}
-.pcard:hover .pcard__name{opacity:.65}
-@media (max-width:1100px){.edit-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:760px){
-  .edit-grid{grid-template-columns:repeat(2,1fr);gap:14px}
-  .edit-grid__col{gap:14px}
-  .pcard__name{font-size:15px}
-  .pcard__flag{padding:6px 12px;font-size:10px}
-}
 </style>
 </head>
 <body>
@@ -363,7 +318,7 @@ html{scroll-behavior:smooth}
 
 <!-- ====================== 1 · HERO ====================== -->
 <section class="hero">
-  <img class="hero__img" src="img/living-room-wall-art-hero.jpg" alt="Living room with a single large framed artwork above a low leather sofa in natural light">
+  <img class="hero__img" src="img/hero.jpg?v=3" alt="Living room with a single large framed artwork above a low leather sofa in natural light">
   <div class="hero__overlay"></div>
   <div class="hero__inner">
     <p class="eyebrow">Living Room</p>
@@ -375,24 +330,6 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 </section>
-
-<!-- ====================== ON THIS PAGE (index / jumpmarks) ====================== -->
-<nav class="toc" aria-label="On this page">
-  <div class="wrap">
-    <div class="toc__inner">
-      <p class="toc__label">On this page</p>
-      <ul class="toc__list">
-        <li><a href="#approach">Four ways to hang</a></li>
-        <li><a href="#match">Match art to your room</a></li>
-        <li><a href="#hanging">How to hang art</a></li>
-        <li><a href="#sizes">What size, where</a></li>
-        <li><a href="#edit">Living room edits</a></li>
-        <li><a href="#consult">Free visualisation</a></li>
-        <li><a href="#faq">Questions answered</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
 <!-- ====================== 2 · WHY THE LIVING ROOM IS DIFFERENT ====================== -->
 <section class="section">
@@ -473,7 +410,7 @@ html{scroll-behavior:smooth}
 
     <div class="match-row">
       <div class="match-row__head">
-        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/living-room-wall-art-minimalist-interior.jpg" alt="Minimalist living room with a single restrained artwork"></div>
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-minimal.jpg?v=2" alt="Minimalist living room with a single restrained artwork"></div>
         <div class="match-row__text">
           <h3 class="h3">Minimalist, pared-back interiors</h3>
           <p>Let the art do something the room won't: a single strong colour, a textured monochrome, an abstract with movement. Restraint on the wall reads as flat.</p>
@@ -481,17 +418,17 @@ html{scroll-behavior:smooth}
         </div>
       </div>
       <div class="match-carousel">
-        <a class="card" href="https://www.lumas.de/pictures/massimo_colonna/swan/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_mcn55_desktop.jpg" alt="Massimo Colonna – Swan"><p class="card__artist">Massimo Colonna</p><p class="card__title">Swan</p><p class="card__price">from €470</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/wolfgang_uhlig/cordoama/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wuh73_desktop.jpg" alt="Wolfgang Uhlig – CORDOAMA"><p class="card__artist">Wolfgang Uhlig</p><p class="card__title">CORDOAMA</p><p class="card__price">from €1,310</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/soo_burnell/day_dreaming_at_the_summer_pool/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_sbn01_desktop.jpg" alt="Soo Burnell – Day Dreaming at the Summer Pool"><p class="card__artist">Soo Burnell</p><p class="card__title">Day Dreaming at the Summer Pool</p><p class="card__price">from €740</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/chiron_duong/portrait_no209/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cdu01_desktop.jpg" alt="Chiron Duong – Portrait no.209"><p class="card__artist">Chiron Duong</p><p class="card__title">Portrait no.209</p><p class="card__price">from €300</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_kkr22_desktop.jpg" alt="Kevin Krautgartner – Salt Shapes II"><p class="card__artist">Kevin Krautgartner</p><p class="card__title">Salt Shapes II</p><p class="card__price">from €250</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/cosmic_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu100_desktop.jpg" alt="Beatrice Hug – Cosmic Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Cosmic Sphaera</p><p class="card__price">from €2,690</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/sphaera_topaz/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu106_desktop.jpg" alt="Beatrice Hug – Sphaera Topaz"><p class="card__artist">Beatrice Hug</p><p class="card__title">Sphaera Topaz</p><p class="card__price">from €2,690</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/red_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Red Sphaera</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_kkr22_desktop.jpg" alt="Kevin Krautgartner – Salt Shapes II"><p class="card__artist">Kevin Krautgartner</p><p class="card__title">Salt Shapes II</p><p class="card__price">from €1,990</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/pedro_blas/ecliipse_cromatico/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl01_desktop.jpg" alt="Pedro Blas – Gravitational Chromatic Eclipse"><p class="card__artist">Pedro Blas</p><p class="card__title">Gravitational Chromatic Eclipse</p><p class="card__price">from €999</p></a>
       </div>
     </div>
 
     <div class="match-row match-row--flip">
       <div class="match-row__head">
-        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/living-room-wall-art-warm-earthy-interior.jpg" alt="Warm, earthy living room with natural tones"></div>
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-gemuetlich.jpg?v=2" alt="Warm, earthy living room with natural tones"></div>
         <div class="match-row__text">
           <h3 class="h3">Warm, earthy interiors</h3>
           <p>Echo the palette, don't match it. Ochres, terracottas, deep greens and natural photography sit beautifully against wood, linen and stone.</p>
@@ -499,16 +436,16 @@ html{scroll-behavior:smooth}
         </div>
       </div>
       <div class="match-carousel">
-        <a class="card" href="https://www.lumas.de/pictures/guachinarte/hollywood_hills/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gua53_desktop.jpg" alt="Guachinarte – Hollywood Hills"><p class="card__artist">Guachinarte</p><p class="card__title">Hollywood Hills</p><p class="card__price">from €660</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/marta_contreras_simo/winda/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_mcs41_desktop.jpg" alt="Marta Contreras Simó – WINDA"><p class="card__artist">Marta Contreras Simó</p><p class="card__title">WINDA</p><p class="card__price">from €240</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/david_burton_trunk_archive/italian_wedding-2/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_trn403_desktop.jpg" alt="David Burton | Trunk Archive – Italian Wedding"><p class="card__artist">David Burton | Trunk Archive</p><p class="card__title">Italian Wedding</p><p class="card__price">€110</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/edward_b_gordon/der_blick-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_ebg400_desktop.jpg" alt="Edward B. Gordon – Der Blick"><p class="card__artist">Edward B. Gordon</p><p class="card__title">Der Blick</p><p class="card__price">€145</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/werner_pawlok/house_of_chino_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wpa87_desktop.jpg" alt="Werner Pawlok – House of Chino I"><p class="card__artist">Werner Pawlok</p><p class="card__title">House of Chino I</p><p class="card__price">from €899</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/golden_light/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse31_desktop.jpg" alt="Christiane Steinicke – Golden Light"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Golden Light</p><p class="card__price">from €239</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/the_autumnal_whisper/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse18_desktop.jpg" alt="Christiane Steinicke – The Autumnal Whisper"><p class="card__artist">Christiane Steinicke</p><p class="card__title">The Autumnal Whisper</p><p class="card__price">from €239</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/mysterious_wood/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse30_desktop.jpg" alt="Christiane Steinicke – Mysterious Wood"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Mysterious Wood</p><p class="card__price">from €351</p></a>
       </div>
     </div>
 
     <div class="match-row">
       <div class="match-row__head">
-        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/living-room-wall-art-bold-colourful-interior.jpg" alt="Bold, colourful living room with a vivid artwork"></div>
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-farbig.jpg?v=2" alt="Bold, colourful living room with a vivid artwork"></div>
         <div class="match-row__text">
           <h3 class="h3">Bold, colourful interiors</h3>
           <p>Counter-intuitively, go quieter on the wall — or commit fully to one statement work that joins the conversation rather than competing.</p>
@@ -516,17 +453,17 @@ html{scroll-behavior:smooth}
         </div>
       </div>
       <div class="match-carousel">
-        <a class="card" href="https://www.lumas.de/pictures/daniel_picard/wash_your_hand/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_dpi14_desktop.jpg" alt="Daniel Picard – Wash Your Hand"><p class="card__artist">Daniel Picard</p><p class="card__title">Wash Your Hand</p><p class="card__price">from €880</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/manu_grinspan/gun/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_mgi46_desktop.jpg" alt="Manu Grinspan – Gun"><p class="card__artist">Manu Grinspan</p><p class="card__title">Gun</p><p class="card__price">from €240</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/robert_jahns/nyc_penguins_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_rja05_desktop.jpg" alt="Robert Jahns – NYC Penguins - Part II"><p class="card__artist">Robert Jahns</p><p class="card__title">NYC Penguins - Part II</p><p class="card__price">from €150</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/werner_pawlok/solar_luz_y_compostela/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wpa260_desktop.jpg" alt="Werner Pawlok – Solar Luz y Compostela"><p class="card__artist">Werner Pawlok</p><p class="card__title">Solar Luz y Compostela</p><p class="card__price">from €1,130</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/isabelle_menin/only_in_your_heart_03/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_ime97_desktop.jpg" alt="Isabelle Menin – Only In Your Heart 03"><p class="card__artist">Isabelle Menin</p><p class="card__title">Only In Your Heart 03</p><p class="card__price">from €680</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/pedro_blas/chromatic_bars_01/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl31_desktop.jpg" alt="Pedro Blas – Chromatic Bars 01"><p class="card__artist">Pedro Blas</p><p class="card__title">Chromatic Bars 01</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andrea_b_stone/shades_of_purple/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_abs14_desktop.jpg" alt="Andrea B. Stone – Shades Of Purple"><p class="card__artist">Andrea B. Stone</p><p class="card__title">Shades Of Purple</p><p class="card__price">from €799</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/juno/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri02_desktop.jpg" alt="Gerhard Richter – Juno"><p class="card__artist">Gerhard Richter</p><p class="card__title">Juno</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/holger_lippmann/rose_cherry_object_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_hli63_desktop.jpg" alt="Holger Lippmann – Rose Cherry Object I"><p class="card__artist">Holger Lippmann</p><p class="card__title">Rose Cherry Object I</p><p class="card__price">from €2,390</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/serge_hamad/temporal_perception_101/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_shm15_desktop.jpg" alt="Serge Hamad – Temporal Perception #101"><p class="card__artist">Serge Hamad</p><p class="card__title">Temporal Perception #101</p><p class="card__price">from €1,290</p></a>
       </div>
     </div>
 
     <div class="match-row match-row--flip">
       <div class="match-row__head">
-        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/living-room-wall-art-classic-interior.jpg" alt="Classic, traditional living room with framed photography"></div>
+        <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/style-klassisch.jpg?v=2" alt="Classic, traditional living room with framed photography"></div>
         <div class="match-row__text">
           <h3 class="h3">Classic, traditional interiors</h3>
           <p>Black-and-white photography, fine-art figuration and architectural studies add depth without fighting the room.</p>
@@ -534,10 +471,10 @@ html{scroll-behavior:smooth}
         </div>
       </div>
       <div class="match-carousel">
-        <a class="card" href="https://www.lumas.de/pictures/andrey_yakovlev_lili_aleeva/girl_with_a_fish/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_ala01_desktop.jpg" alt="Andrey Yakovlev & Lili Aleeva – Girl with a Fish"><p class="card__artist">Andrey Yakovlev & Lili Aleeva</p><p class="card__title">Girl with a Fish</p><p class="card__price">from €250</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_tmr01_desktop.jpg" alt="Tomislav Marcijuš – BAROQUE POOLS I"><p class="card__artist">Tomislav Marcijuš</p><p class="card__title">BAROQUE POOLS I</p><p class="card__price">from €180</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/greg_kadel_trunk_archive/headturner-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_trn400_desktop.jpg" alt="Greg Kadel | Trunk Archive – Headturner"><p class="card__artist">Greg Kadel | Trunk Archive</p><p class="card__title">Headturner</p><p class="card__price">€110</p></a>
-        <a class="card" href="https://www.lumas.de/pictures/gavin_evans/david_bowie_oe2/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gve07_desktop.jpg" alt="Gavin Evans – David Bowie OE2"><p class="card__artist">Gavin Evans</p><p class="card__title">David Bowie OE2</p><p class="card__price">from €55</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/adam_moerk/prada_marfa_836pm-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amr400_desktop.jpg" alt="Adam Mørk – Prada Marfa 8:36PM"><p class="card__artist">Adam Mørk</p><p class="card__title">Prada Marfa 8:36PM</p><p class="card__price">€119</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andre_monet/kate-5/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn401_desktop.jpg" alt="André Monet – Kate"><p class="card__artist">André Monet</p><p class="card__title">Kate</p><p class="card__price">€219</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/landschaft_mit_wolke/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri04_desktop.jpg" alt="Gerhard Richter – Landschaft mit Wolke"><p class="card__artist">Gerhard Richter</p><p class="card__title">Landschaft mit Wolke</p><p class="card__price">from €1,490</p></a>
+        <a class="card" href="https://www.lumas.de/pictures/andre_monet/david-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn400_desktop.jpg" alt="André Monet – David"><p class="card__artist">André Monet</p><p class="card__title">David</p><p class="card__price">€175</p></a>
       </div>
     </div>
   </div>
@@ -582,7 +519,7 @@ html{scroll-behavior:smooth}
 </section>
 
 <!-- ====================== 6 · SIZING BY WALL ====================== -->
-<section class="section" id="sizes">
+<section class="section">
   <div class="wrap">
     <div class="section-head">
       <h2 class="h2">What size, where</h2>
@@ -613,104 +550,21 @@ html{scroll-behavior:smooth}
       <button class="chip">Style</button>
     </div>
     <div class="edit-grid">
-      <div class="edit-grid__col">
-        <a class="pcard" href="https://www.lumas.de/pictures/daniel_picard/wash_your_hand/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_dpi14_desktop.jpg" alt="Daniel Picard – Wash Your Hand"></span>
-          <span class="pcard__row"><span class="pcard__name">Wash Your Hand</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Daniel Picard</span>
-          <span class="pcard__price">from €880</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/guachinarte/hollywood_hills/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_gua53_desktop.jpg" alt="Guachinarte – Hollywood Hills"></span>
-          <span class="pcard__row"><span class="pcard__name">Hollywood Hills</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Guachinarte</span>
-          <span class="pcard__price">from €660</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/soo_burnell/day_dreaming_at_the_summer_pool/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_sbn01_desktop.jpg" alt="Soo Burnell – Day Dreaming at the Summer Pool"></span>
-          <span class="pcard__row"><span class="pcard__name">Day Dreaming at the Summer Pool</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Soo Burnell</span>
-          <span class="pcard__price">from €740</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/tom_baker/work_break/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_tba01_desktop.jpg" alt="Tom Baker – Work Break"></span>
-          <span class="pcard__row"><span class="pcard__name">Work Break</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Tom Baker</span>
-          <span class="pcard__price">from €150</span>
-        </a>
-      </div>
-      <div class="edit-grid__col">
-        <a class="pcard" href="https://www.lumas.de/pictures/massimo_colonna/swan/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_mcn55_desktop.jpg" alt="Massimo Colonna – Swan"></span>
-          <span class="pcard__row"><span class="pcard__name">Swan</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Massimo Colonna</span>
-          <span class="pcard__price">from €470</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/robert_jahns/nyc_penguins_ii/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_rja05_desktop.jpg" alt="Robert Jahns – NYC Penguins - Part II"></span>
-          <span class="pcard__row"><span class="pcard__name">NYC Penguins - Part II</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Robert Jahns</span>
-          <span class="pcard__price">from €150</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/tomislav_marcijus/baroque_pools_i/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_tmr01_desktop.jpg" alt="Tomislav Marcijuš – BAROQUE POOLS I"></span>
-          <span class="pcard__row"><span class="pcard__name">BAROQUE POOLS I</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Tomislav Marcijuš</span>
-          <span class="pcard__price">from €180</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/greg_kadel_trunk_archive/headturner-1/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_trn400_desktop.jpg" alt="Greg Kadel | Trunk Archive – Headturner"></span>
-          <span class="pcard__row"><span class="pcard__name">Headturner</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Greg Kadel | Trunk Archive</span>
-          <span class="pcard__price">€110</span>
-        </a>
-      </div>
-      <div class="edit-grid__col">
-        <a class="pcard" href="https://www.lumas.de/pictures/manu_grinspan/gun/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_mgi46_desktop.jpg" alt="Manu Grinspan – Gun"></span>
-          <span class="pcard__row"><span class="pcard__name">Gun</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Manu Grinspan</span>
-          <span class="pcard__price">from €240</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/wolfgang_uhlig/cordoama/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_wuh73_desktop.jpg" alt="Wolfgang Uhlig – CORDOAMA"></span>
-          <span class="pcard__row"><span class="pcard__name">CORDOAMA</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Wolfgang Uhlig</span>
-          <span class="pcard__price">from €1,310</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/marta_contreras_simo/winda/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_mcs41_desktop.jpg" alt="Marta Contreras Simó – WINDA"></span>
-          <span class="pcard__row"><span class="pcard__name">WINDA</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Marta Contreras Simó</span>
-          <span class="pcard__price">from €240</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/david_burton_trunk_archive/italian_wedding-2/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_trn403_desktop.jpg" alt="David Burton | Trunk Archive – Italian Wedding"></span>
-          <span class="pcard__row"><span class="pcard__name">Italian Wedding</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">David Burton | Trunk Archive</span>
-          <span class="pcard__price">€110</span>
-        </a>
-      </div>
-      <div class="edit-grid__col">
-        <a class="pcard" href="https://www.lumas.de/pictures/andrey_yakovlev_lili_aleeva/girl_with_a_fish/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_ala01_desktop.jpg" alt="Andrey Yakovlev & Lili Aleeva – Girl with a Fish"></span>
-          <span class="pcard__row"><span class="pcard__name">Girl with a Fish</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Andrey Yakovlev & Lili Aleeva</span>
-          <span class="pcard__price">from €250</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/werner_pawlok/solar_luz_y_compostela/" target="_blank" rel="noopener">
-          <span class="pcard__media"><span class="pcard__flag">Bestseller</span><img loading="lazy" src="https://img.lumas.com/showimg_wpa260_desktop.jpg" alt="Werner Pawlok – Solar Luz y Compostela"></span>
-          <span class="pcard__row"><span class="pcard__name">Solar Luz y Compostela</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Werner Pawlok</span>
-          <span class="pcard__price">from €1,130</span>
-        </a>
-        <a class="pcard" href="https://www.lumas.de/pictures/chiron_duong/portrait_no209/" target="_blank" rel="noopener">
-          <span class="pcard__media"><img loading="lazy" src="https://img.lumas.com/showimg_cdu01_desktop.jpg" alt="Chiron Duong – Portrait no.209"></span>
-          <span class="pcard__row"><span class="pcard__name">Portrait no.209</span><span class="pcard__icons" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h18M7 9v6M17 9v6"/><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg></span></span>
-          <span class="pcard__artist">Chiron Duong</span>
-          <span class="pcard__price">from €300</span>
-        </a>
-      </div>
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/cosmic_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu100_desktop.jpg" alt="Beatrice Hug – Cosmic Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Cosmic Sphaera</p><p class="card__price">from €2,690</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/gerhard_richter/juno/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_gri02_desktop.jpg" alt="Gerhard Richter – Juno"><p class="card__artist">Gerhard Richter</p><p class="card__title">Juno</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_kkr22_desktop.jpg" alt="Kevin Krautgartner – Salt Shapes II"><p class="card__artist">Kevin Krautgartner</p><p class="card__title">Salt Shapes II</p><p class="card__price">from €1,990</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/pedro_blas/chromatic_bars_01/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl31_desktop.jpg" alt="Pedro Blas – Chromatic Bars 01"><p class="card__artist">Pedro Blas</p><p class="card__title">Chromatic Bars 01</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/serge_hamad/temporal_perception_101/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_shm15_desktop.jpg" alt="Serge Hamad – Temporal Perception #101"><p class="card__artist">Serge Hamad</p><p class="card__title">Temporal Perception #101</p><p class="card__price">from €1,290</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/holger_lippmann/rose_cherry_object_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_hli63_desktop.jpg" alt="Holger Lippmann – Rose Cherry Object I"><p class="card__artist">Holger Lippmann</p><p class="card__title">Rose Cherry Object I</p><p class="card__price">from €2,390</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/werner_pawlok/house_of_chino_i/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_wpa87_desktop.jpg" alt="Werner Pawlok – House of Chino I"><p class="card__artist">Werner Pawlok</p><p class="card__title">House of Chino I</p><p class="card__price">from €899</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/pedro_blas/ecliipse_cromatico/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_pbl01_desktop.jpg" alt="Pedro Blas – Gravitational Chromatic Eclipse"><p class="card__artist">Pedro Blas</p><p class="card__title">Gravitational Chromatic Eclipse</p><p class="card__price">from €999</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/sphaera_topaz/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu106_desktop.jpg" alt="Beatrice Hug – Sphaera Topaz"><p class="card__artist">Beatrice Hug</p><p class="card__title">Sphaera Topaz</p><p class="card__price">from €2,690</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/golden_light/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse31_desktop.jpg" alt="Christiane Steinicke – Golden Light"><p class="card__artist">Christiane Steinicke</p><p class="card__title">Golden Light</p><p class="card__price">from €239</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/andre_monet/kate-5/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amn401_desktop.jpg" alt="André Monet – Kate"><p class="card__artist">André Monet</p><p class="card__title">Kate</p><p class="card__price">€219</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/andrea_b_stone/shades_of_purple/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_abs14_desktop.jpg" alt="Andrea B. Stone – Shades Of Purple"><p class="card__artist">Andrea B. Stone</p><p class="card__title">Shades Of Purple</p><p class="card__price">from €799</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/adam_moerk/prada_marfa_836pm-1/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_amr400_desktop.jpg" alt="Adam Mørk – Prada Marfa 8:36PM"><p class="card__artist">Adam Mørk</p><p class="card__title">Prada Marfa 8:36PM</p><p class="card__price">€119</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/beatrice_hug/red_sphaera/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera"><p class="card__artist">Beatrice Hug</p><p class="card__title">Red Sphaera</p><p class="card__price">from €1,490</p></a>
+      <a class="card" href="https://www.lumas.de/pictures/christiane_steinicke/the_autumnal_whisper/" target="_blank" rel="noopener"><img class="card__img" loading="lazy" src="https://img.lumas.com/showimg_cse18_desktop.jpg" alt="Christiane Steinicke – The Autumnal Whisper"><p class="card__artist">Christiane Steinicke</p><p class="card__title">The Autumnal Whisper</p><p class="card__price">from €239</p></a>
     </div>
     <a class="btn btn--ghost" href="#">Shop all living room art →</a>
   </div>
@@ -718,7 +572,7 @@ html{scroll-behavior:smooth}
 
 <!-- ====================== 8 · CONSULTATION / VISUALISATION ====================== -->
 <section class="section consult" id="consult">
-  <img class="consult__bg" src="img/living-room-wall-art-visualisation-service.jpg" alt="">
+  <img class="consult__bg" src="img/consult.jpg" alt="">
   <div class="wrap consult__inner">
     <div class="consult__col">
       <p class="eyebrow">Visualisation</p>
@@ -738,8 +592,8 @@ html{scroll-behavior:smooth}
     <div class="consult__col">
       <!-- IMAGE TODO: ideal asset is a true before/after of one customer's wall. Shown here as bare wall → visualised. -->
       <div class="beforeafter">
-        <figure><img loading="lazy" src="img/living-room-wall-art-minimalist-interior.jpg" alt="A living room wall before art"><figcaption>Your wall</figcaption></figure>
-        <figure><img loading="lazy" src="img/living-room-wall-art-above-sofa-1.jpg" alt="The same wall visualised with a LUMAS edition"><figcaption>Visualised</figcaption></figure>
+        <figure><img loading="lazy" src="img/style-minimal.jpg?v=2" alt="A living room wall before art"><figcaption>Your wall</figcaption></figure>
+        <figure><img loading="lazy" src="img/room-1.jpg" alt="The same wall visualised with a LUMAS edition"><figcaption>Visualised</figcaption></figure>
       </div>
     </div>
   </div>
@@ -792,7 +646,7 @@ html{scroll-behavior:smooth}
 
 <!-- ====================== 10 · CLOSING CTA ====================== -->
 <section class="closing">
-  <img class="closing__img" src="img/living-room-wall-art-hanging-guide-1.jpg" alt="A warm living room with art fully integrated above the sofa">
+  <img class="closing__img" src="img/guide-1.jpg?v=2" alt="A warm living room with art fully integrated above the sofa">
   <div class="closing__overlay"></div>
   <div class="closing__inner">
     <h2 class="h2">Start with the wall you look at most</h2>
@@ -808,59 +662,31 @@ html{scroll-behavior:smooth}
 <footer class="footer">
   <div class="wrap">
     <div class="footer__cols">
+      <!-- INTEGRATION TODO: replace # with live room-cluster, category and service URLs -->
       <div class="footer__col">
-        <h4>About LUMAS</h4>
-        <a href="https://www.lumas.com/about-lumas/">About LUMAS</a>
-        <a href="https://www.lumas.com/why-lumas/">The LUMAS concept</a>
-        <a href="https://www.lumas.com/quality/">Top quality art</a>
-        <a href="https://www.lumas.com/magazine/">Order the art magazine</a>
-        <a href="https://www.lumas.com/gifts/gift-voucher/">LUMAS gift vouchers</a>
-        <a href="https://www.lumas.com/gifts/">Gifts</a>
-        <a href="https://www.lumas.com/events/">Events</a>
+        <h4>Rooms</h4>
+        <a href="#">Bedroom Art</a>
+        <a href="#">Office Art</a>
+        <a href="#">Kitchen Art</a>
+        <a href="#">Hallway Art</a>
+        <a href="#">Large Formats</a>
       </div>
       <div class="footer__col">
-        <h4>Help</h4>
-        <a href="https://www.lumas.com/faq/">FAQ</a>
-        <a href="https://www.lumas.com/contact/">Contact</a>
-        <a href="https://www.lumas.com/shipping/">Shipping</a>
-        <a href="https://www.lumas.com/inspirations/tips-for-hanging-art/">Hanging tips</a>
+        <h4>Categories</h4>
+        <a href="#">Abstract</a>
+        <a href="#">Photography</a>
+        <a href="#">Black &amp; White</a>
+        <a href="#">Large Format</a>
       </div>
       <div class="footer__col">
-        <h4>Business</h4>
-        <a href="https://www.lumas.com/b2b/">B2B</a>
-        <a href="https://www.lumas.com/franchise/">Franchise</a>
-        <a href="https://www.lumas.com/jobs/">Careers</a>
-        <a href="https://www.lumas.com/press/">Press</a>
-        <a href="https://www.lumas.com/legal-info/">Legal info</a>
-        <a href="https://www.lumas.com/privacy-policy/">Privacy policy</a>
-        <a href="https://www.lumas.com/tandc/">Terms & conditions</a>
-      </div>
-      <div class="footer__col">
-        <h4>Top LUMAS artists</h4>
-        <a href="https://www.lumas.com/artist/isabelle_menin/">Isabelle Menin</a>
-        <a href="https://www.lumas.com/artist/gavin_evans/">Gavin Evans</a>
-        <a href="https://www.lumas.com/artist/wolfgang_uhlig/">Wolfgang Uhlig</a>
-        <a href="https://www.lumas.com/artist/carol_muthiga_oyekunle/">Carol Muthiga-Oyekunle</a>
-        <a href="https://www.lumas.com/artist/massimo_colonna/">Massimo Colonna</a>
-        <a href="https://www.lumas.com/artist/werner_pawlok/">Werner Pawlok</a>
-        <a href="https://www.lumas.com/artist/claudio_gotsch/">Claudio Gotsch</a>
-        <a href="https://www.lumas.com/artists/">All LUMAS artists</a>
-      </div>
-      <div class="footer__col">
-        <h4>Famous artists</h4>
-        <a href="https://www.lumas.com/artist/marina_abramovic/">Marina Abramović</a>
-        <a href="https://www.lumas.com/artist/damien_hirst/">Damien Hirst</a>
-        <a href="https://www.lumas.com/artist/takashi_murakami/">Takashi Murakami</a>
-        <a href="https://www.lumas.com/artist/andy_warhol-2/">Andy Warhol</a>
-        <a href="https://www.lumas.com/artist/jean_michel_basquiat/">Jean-Michel Basquiat</a>
-        <a href="https://www.lumas.com/artist/candida_hoefer/">Candida Höfer</a>
-        <a href="https://www.lumas.com/artist/gerhard_richter/">Gerhard Richter</a>
+        <h4>Service</h4>
+        <a href="#consult">Consultation</a>
+        <a href="#consult">Visualisation</a>
+        <a href="#">Framing</a>
+        <a href="#">Galleries</a>
       </div>
     </div>
-    <div class="footer__base">
-      <span>&copy; LUMAS. Limited and open editions, hand-signed by the artist.</span>
-      <span class="footer__meta">Secure payment &middot; Free shipping and returns &middot; <a href="https://www.lumas.com/contact/">Contact</a></span>
-    </div>
+    <div class="footer__base">© LUMAS. Limited, hand-signed editions.</div>
   </div>
 </footer>
 
@@ -873,6 +699,13 @@ html{scroll-behavior:smooth}
     {"@type":"BreadcrumbList","itemListElement":[
       {"@type":"ListItem","position":1,"name":"Home","item":"https://www.lumas.com/"},
       {"@type":"ListItem","position":2,"name":"Living Room Wall Art","item":"https://www.lumas.com/living-room-wall-art/"}
+    ]},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What size art should I hang in a living room?","acceptedAnswer":{"@type":"Answer","text":"As a rule, art above a sofa or console should span two-thirds to three-quarters of the furniture's width. For a standard three-seat sofa, that's a single piece around 100–140 cm wide, or a pair or triptych spanning a similar width."}},
+      {"@type":"Question","name":"How high should I hang art above the sofa?","acceptedAnswer":{"@type":"Answer","text":"Hang it 15–25 cm above the top of the sofa back, with the centre of the work around 145–150 cm from the floor. This keeps the art connected to the furniture while clearing the heads of anyone seated."}},
+      {"@type":"Question","name":"Statement piece or gallery wall — which is better?","acceptedAnswer":{"@type":"Answer","text":"A statement piece suits minimalist rooms and high walls and is the easiest to get right. A gallery wall suits characterful, personal spaces but needs consistent spacing and a unifying thread. Neither is better — it depends on your room and how hands-on you want to be."}},
+      {"@type":"Question","name":"What kind of art works best in a living room?","acceptedAnswer":{"@type":"Answer","text":"The art that best matches your room's scale, light and palette. Minimalist rooms benefit from one bold work; warm interiors from echoed earthy tones; bold rooms from a single confident statement. Photography and abstracts are the most versatile starting points."}},
+      {"@type":"Question","name":"Can you help me choose art for my room?","acceptedAnswer":{"@type":"Answer","text":"Yes — send us a photo of your space and our advisors will return a personal selection visualised on your actual wall, to scale, with framing recommendations. It's free and comes with no obligation."}}
     ]}
   ]
 }
