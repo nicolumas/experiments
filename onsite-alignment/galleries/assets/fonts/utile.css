@@ -1,0 +1,16 @@
+/* Utile Display — real licensed woff2 fonts (V2 brand display) */
+@font-face {
+  font-family: 'Utile Display';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('utile-display-light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Utile Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('utile-display-regular.woff2') format('woff2');
+}

@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="robots" content="noindex,nofollow">
-<script src="../assets/gate.js"></script>
-
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -62,7 +59,7 @@
 <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 
 <!-- Utile Display (V2 brand display) via locally-embedded fonts -->
-<link rel="stylesheet" href="../private-view/fonts-utile.css">
+<link rel="stylesheet" href="assets/fonts/utile.css">
 
 <!-- Archivo (V2 brand body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -601,6 +598,33 @@
   }
 
   /* ── FAQ ─────────────────────────────────────────── */
+  /* Guidance / free consultation block */
+  .guidance-section { background: var(--surface-page); padding: 112px 0; border-top: 1px solid var(--border-default); }
+  .guidance-inner { max-width: 900px; margin: 0 auto; padding: 0 32px; text-align: center; }
+  .guidance-eyebrow { display: block; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 24px; }
+  .guidance-title { color: var(--text-primary); margin-bottom: 20px; }
+  .guidance-lede { color: var(--text-secondary); font-size: 16px; line-height: 1.6; max-width: 560px; margin: 0 auto 44px; }
+  .guidance-lede strong { color: var(--text-primary); font-weight: 500; }
+  .guidance-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .guidance-action {
+    display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+    padding: 22px 28px;
+    background: var(--surface-page);
+    border-radius: 4px;
+    font-family: var(--font-body); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-primary); text-decoration: none;
+    box-shadow: inset 0 0 0 1px var(--border-default);
+    transition: transform 300ms var(--ease-glide), box-shadow 300ms var(--ease-glide), background 300ms var(--ease-glide);
+  }
+  .guidance-action:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--text-primary); background: var(--surface-raised); }
+  .guidance-action iconify-icon { font-size: 20px; color: var(--text-primary); }
+  @media (max-width: 640px) {
+    .guidance-section { padding: 80px 0; }
+    .guidance-actions { grid-template-columns: 1fr; }
+    .guidance-action { padding: 18px 24px; }
+  }
+
   .faq-section { background: var(--surface-page); padding: 128px 0; border-top: 1px solid var(--border-default); }
   .faq-head { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: start; margin-bottom: 56px; }
   .faq-head h2 { color: var(--text-primary); }
@@ -737,7 +761,7 @@
   }
   .footer-brand button[type="submit"]:hover { background: var(--border-default); }
 
-  .footer-col h4 {
+  .footer-col h3 {
     font-family: var(--font-body); font-weight: 700; font-size: 11px;
     letter-spacing: 0.18em; text-transform: uppercase;
     color: var(--on-dark-55); margin-bottom: 20px;
@@ -831,7 +855,7 @@
     <div class="hero-grid">
       <div class="hero-copy reveal">
         <span class="breadcrumb"><span>LUMAS</span><span class="sep">/</span><span>Galleries</span></span>
-        <h1 class="display-xl">Nineteen Rooms. Nine Cities. One World of Art.</h1>
+        <h1 class="display-xl">Nineteen Galleries. Nine Cities. One World of Art.</h1>
         <p class="body-large">Each LUMAS gallery is staffed by a local team and dedicated to limited and open editions. Walk in for an unhurried look at the work in person, ask the kind of questions that don't fit in an email, and try a piece on your own wall before it ships.</p>
         <p class="body" style="color: rgba(244, 241, 234, 0.62); max-width: 540px; margin-top: 18px; font-size: 14px; line-height: 1.65;">Coffee at the counter, expert framing on site, hand delivery to most of Europe, sixty days to return. Talks, drops, and Art After Work evenings every week.</p>
       </div>
@@ -868,7 +892,7 @@
     <div class="section-head with-link reveal">
       <div>
         <h2 class="display-h1">What's on this week.</h2>
-        <p class="body-large" style="max-width: 640px; margin-top: 16px;">Exhibitions, new releases, and Art After Work evenings across the nineteen rooms. Most are free, all are walk-in.</p>
+        <p class="body-large" style="max-width: 640px; margin-top: 16px;">Exhibitions, new releases, and Art After Work evenings across our nineteen galleries. Most are free, all are walk-in.</p>
       </div>
       <a href="#" class="btn-link">Full programme</a>
     </div>
@@ -918,13 +942,13 @@
   <div class="container">
     <div class="section-head reveal">
       <h2 class="display-h1">From Berlin to New York.</h2>
-      <p class="body-large">A small network of rooms, each curated by a local team. Walk in by the day, or write ahead to arrange a private viewing.</p>
+      <p class="body-large">A small network of galleries, each curated by a local team. Walk in by the day, or write ahead to arrange a private viewing.</p>
     </div>
   </div>
 
   <div class="carousel reveal">
     <div class="carousel-rail" id="carouselRail">
-      <a href="berlin-mitte.html" class="carousel-card">
+      <a href="berlin-mitte.html" class="carousel-card" aria-label="LUMAS Gallery Berlin Mitte, Hackeschen Höfe">
         <div class="carousel-card-image" style="background-image: url('assets/berlin-mitte/exterior.jpg');">
           <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–19</span>
         </div>
@@ -938,13 +962,13 @@
         <span class="btn-link">Visit</span>
       </a>
 
-      <a href="#" class="carousel-card">
+      <a href="new-york.html" class="carousel-card" aria-label="LUMAS Gallery New York, Soho">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-new-york.webp');">
           <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–18</span>
         </div>
         <span class="eyebrow carousel-card-meta">Soho, Greene Street</span>
         <h3 class="display-h3 carousel-card-title">New York</h3>
-        <p class="body carousel-card-desc">Print room and viewing space at the centre of Soho.</p>
+        <p class="body carousel-card-desc">A print archive and viewing gallery at the centre of Soho.</p>
         <div class="carousel-card-foot">
           <div class="row"><span class="label">Address</span><span class="value">419 Greene St, NY</span></div>
           <div class="row"><span class="label">Director</span><span class="value">Sofia Ortiz</span></div>
@@ -952,7 +976,7 @@
         <span class="btn-link">Visit</span>
       </a>
 
-      <a href="#" class="carousel-card">
+      <a href="paris.html" class="carousel-card" aria-label="LUMAS Gallery Paris, Saint-Germain-des-Prés">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-paris.webp');">
           <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–19</span>
         </div>
@@ -966,13 +990,13 @@
         <span class="btn-link">Visit</span>
       </a>
 
-      <a href="#" class="carousel-card">
+      <a href="london.html" class="carousel-card" aria-label="LUMAS Gallery London, Mayfair">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-london.webp');">
           <span class="carousel-card-status is-closed"><span class="dot"></span>By appointment</span>
         </div>
         <span class="eyebrow carousel-card-meta">Mayfair</span>
         <h3 class="display-h3 carousel-card-title">London</h3>
-        <p class="body carousel-card-desc">Editorial showroom presenting a curated rotation of contemporary photography.</p>
+        <p class="body carousel-card-desc">Editorial gallery presenting a curated rotation of contemporary photography.</p>
         <div class="carousel-card-foot">
           <div class="row"><span class="label">Address</span><span class="value">18 Bruton Place, London</span></div>
           <div class="row"><span class="label">Director</span><span class="value">Henry Whitmore</span></div>
@@ -980,7 +1004,7 @@
         <span class="btn-link">Visit</span>
       </a>
 
-      <a href="#" class="carousel-card">
+      <a href="wien.html" class="carousel-card" aria-label="LUMAS Gallery Vienna, Innere Stadt">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-vienna.webp');">
           <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–18</span>
         </div>
@@ -994,7 +1018,7 @@
         <span class="btn-link">Visit</span>
       </a>
 
-      <a href="#" class="carousel-card">
+      <a href="miami.html" class="carousel-card" aria-label="LUMAS Gallery Miami Beach, Lincoln Road">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-miami.webp');">
           <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 12–20</span>
         </div>
@@ -1022,6 +1046,7 @@
             <iconify-icon icon="ph:arrow-left-light"></iconify-icon>
           </button>
           <button class="carousel-arrow" id="nextBtn" aria-label="Next gallery">
+            <iconify-icon icon="ph:arrow-right-light"></iconify-icon>
           </button>
         </div>
       </div>
@@ -1112,6 +1137,21 @@
   </div>
 </section>
 
+<!-- ── Guidance / free consultation ───────────────── -->
+<section class="guidance-section" id="guidance">
+  <div class="guidance-inner reveal">
+    <span class="guidance-eyebrow">Gallery consultation &middot; complimentary</span>
+    <h2 class="display-h1 guidance-title">Need guidance?</h2>
+    <p class="body-large guidance-lede">Not sure where to start, which artist speaks to you, or how a piece will look on your wall? Our team helps you find the <strong>right work, right size, right frame</strong>. Free, unhurried, no pressure.</p>
+    <div class="guidance-actions">
+      <a href="https://wa.me/493028040373?text=Hi%2C%20I%27d%20love%20some%20guidance%20on%20a%20LUMAS%20piece." target="_blank" rel="noopener" class="guidance-action"><iconify-icon icon="ph:whatsapp-logo-light"></iconify-icon><span>WhatsApp</span></a>
+      <a href="mailto:info@lumas.de?subject=Gallery%20consultation" class="guidance-action"><iconify-icon icon="ph:envelope-simple-light"></iconify-icon><span>Email</span></a>
+      <a href="tel:+493028040373" class="guidance-action"><iconify-icon icon="ph:phone-light"></iconify-icon><span>Phone</span></a>
+      <a href="#galleries" class="guidance-action"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Find a gallery</span></a>
+    </div>
+  </div>
+</section>
+
 <!-- ── FAQ ─────────────────────────────────────────── -->
 <section class="faq-section" id="faq">
   <div class="container">
@@ -1134,7 +1174,7 @@
       </details>
       <details class="faq-item">
         <summary>How do I find the closest LUMAS to me?</summary>
-        <p>The directory above lists every gallery with its neighbourhood and hours. The map shows pins clustered by city. If you'd rather we suggest one based on the work you like, write a quick line and we'll point you to the right room.</p>
+        <p>The directory above lists every gallery with its neighbourhood and hours. The map shows pins clustered by city. If you'd rather we suggest one based on the work you like, write a quick line and we'll point you to the right gallery.</p>
       </details>
       <details class="faq-item">
         <summary>Can I see a specific edition in person?</summary>
@@ -1172,7 +1212,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Visit</h4>
+        <h3>Visit</h3>
         <a href="index.html">All galleries</a>
         <a href="#galleries">Plan your visit</a>
         <a href="#">Private viewings</a>
@@ -1180,7 +1220,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Explore</h4>
+        <h3>Explore</h3>
         <a href="#exhibitions">Exhibitions</a>
         <a href="#">Artists</a>
         <a href="#">Magazine</a>
@@ -1188,7 +1228,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Company</h4>
+        <h3>Company</h3>
         <a href="#">About</a>
         <a href="#">Contact</a>
         <a href="#">Press</a>
