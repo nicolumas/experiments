@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMAS × Bang & Olufsen — The Art of Listening (concept)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/fonts-utile.css">
+<style>
+  :root{
+    /* V2 primitives */
+    --charcoal:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87; --charcoal-300:#C7C3BE; --charcoal-100:#E3E0DB;
+    --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+    --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+    /* V2 semantic */
+    --text:#1C1A18; --text-2:#5A5752; --text-3:#908C87; --text-inv:#F4EDE2;
+    --page:#FAF6F1; --card:#fff; --raised:#F7F1E9; --sunken:#F4EDE2; --inverse:#1C1A18; --muted:#F0EBE3;
+    --border:#E2D8CC; --border-sub:#EAE2D8; --border-strong:#C7C3BE;
+    --stage:#1C1A18;
+    --shadow-frame:0 18px 60px -18px rgba(28,26,24,.5);
+    /* type */
+    --disp:"Utile Display","Archivo",-apple-system,sans-serif;
+    --sans:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    /* easing (Emil) */
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-io:cubic-bezier(0.77,0,0.175,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--page);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:64px}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-2);font-weight:700}
+  h1,h2,h3{font-family:var(--disp);letter-spacing:0;color:var(--text)}
+
+  /* ---------- top bar / mode toggle ---------- */
+  header.top{position:sticky;top:0;z-index:40;background:rgba(250,246,241,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-sub)}
+  .top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brandmark{font-family:var(--disp);font-weight:400;font-size:15px;letter-spacing:.01em}
+  .brandmark span{color:var(--text-3);margin:0 .4em}
+  .modes{display:flex;gap:4px;background:var(--muted);border-radius:999px;padding:4px}
+  .modes button{font-family:var(--sans);font-size:12.5px;font-weight:600;border:0;background:transparent;color:var(--text-2);padding:8px 18px;border-radius:999px;cursor:pointer;transition:color .2s,background .2s}
+  .modes button[aria-pressed="true"]{background:var(--inverse);color:var(--text-inv)}
+
+  /* ---------- buttons (V2) ---------- */
+  .btn{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;
+    padding:15px 28px;cursor:pointer;border:1px solid var(--charcoal);transition:transform 160ms var(--ease-out),background .2s,color .2s}
+  .btn.solid{background:var(--inverse);color:var(--text-inv)}
+  .btn.ghost{background:transparent;color:var(--text)}
+  .btn.ghost:hover{background:var(--inverse);color:var(--text-inv)}
+  .btn:active{transform:scale(.97)}
+  .cta-mini{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--charcoal);
+    background:transparent;color:var(--text);padding:10px 18px;border-radius:999px;cursor:pointer;transition:transform 160ms var(--ease-out),background .2s,color .2s}
+  .cta-mini:hover{background:var(--inverse);color:var(--text-inv)}
+  .cta-mini:active{transform:scale(.97)}
+
+  /* ---------- compact hero ---------- */
+  .hero{border-bottom:1px solid var(--border-sub)}
+  .hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:48px;align-items:center;padding:44px 40px 48px}
+  .hero h1{font-family:var(--disp);font-weight:300;font-size:clamp(38px,5.2vw,64px);line-height:1.02;margin-top:14px}
+  .hero p.lead{margin-top:20px;font-size:20px;font-weight:300;line-height:1.6;color:var(--text-2);max-width:40ch}
+  .hero .actions{margin-top:28px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .hero-side{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+  .sound-note{font-size:12px;color:var(--text-2);margin-top:18px;display:flex;align-items:center;gap:9px;letter-spacing:.01em}
+  .eq{display:inline-flex;gap:2px;align-items:flex-end;height:13px;color:var(--text-3)}
+  .eq i{width:2.5px;background:currentColor;height:40%;border-radius:2px;animation:eq 1s ease-in-out infinite}
+  .eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}.eq i:nth-child(4){animation-delay:.15s}
+  body.muted .eq i{animation-play-state:paused;height:30%}
+  @keyframes eq{0%,100%{height:30%}50%{height:100%}}
+
+  /* ---------- the A9 device ---------- */
+  .a9{position:relative;width:min(76%,380px);aspect-ratio:1/1;color:var(--border-strong)}
+  .a9 .disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#111;
+    box-shadow:var(--shadow-frame), inset 0 0 0 7px rgba(255,255,255,.05), inset 0 0 0 8px rgba(20,19,16,.25)}
+  .a9 .disc img{width:100%;height:100%;object-fit:cover}
+  .a9 .rim{position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 2px 5px rgba(255,255,255,.22),inset 0 -8px 26px rgba(0,0,0,.4);pointer-events:none}
+  .a9 .stand{position:absolute;left:50%;bottom:-11%;transform:translateX(-50%);width:56%;height:20%}
+  .a9 .stand svg{width:100%;height:100%}
+  .a9 .bo{position:absolute;left:50%;bottom:-19%;transform:translateX(-50%);font-family:var(--disp);font-weight:400;font-size:9.5px;letter-spacing:.24em;color:var(--text-3);white-space:nowrap;text-transform:uppercase}
+
+  /* ---------- MODE A · Listening Room ---------- */
+  #roomMode{display:block}
+  .track{border-bottom:1px solid var(--border-sub);padding:84px 0}
+  .track .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:center}
+  .track:nth-child(even) .wrap{grid-template-columns:1.05fr .95fr}
+  .track:nth-child(even) .stagecol{order:2}
+  .stagecol{display:flex;align-items:center;justify-content:center;min-height:380px}
+  .track .num{font-family:var(--disp);font-size:13px;color:var(--text-3);letter-spacing:.04em}
+  .track h2{font-family:var(--disp);font-weight:400;font-size:clamp(30px,3.4vw,46px);line-height:1.12;margin:10px 0 4px}
+  .track .artist{font-size:15px;color:var(--text-2);margin-bottom:22px}
+  .track .story{font-size:16px;line-height:1.6;max-width:46ch;color:var(--text-2)}
+  .playrow{display:flex;align-items:center;gap:16px;margin-top:28px;flex-wrap:wrap}
+  .play{display:inline-flex;align-items:center;gap:11px;border:1px solid var(--charcoal);background:transparent;color:var(--text);
+    border-radius:999px;padding:11px 20px 11px 13px;font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    cursor:pointer;transition:transform 160ms var(--ease-out),background .2s,color .2s}
+  .play:hover{background:var(--inverse);color:var(--text-inv)}
+  .play:active{transform:scale(.97)}
+  .play .ic{width:26px;height:26px;border-radius:50%;background:var(--inverse);color:var(--text-inv);display:grid;place-items:center;font-size:10px;transition:background .2s,color .2s}
+  .play:hover .ic{background:var(--text-inv);color:var(--inverse)}
+  .play[data-on="true"]{background:var(--inverse);color:var(--text-inv)}
+  .play[data-on="true"] .ic{background:var(--text-inv);color:var(--inverse)}
+  .mood-tag{font-size:12px;color:var(--text-3);letter-spacing:.01em}
+  .reveal-full{margin-top:24px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text);
+    background:none;border:0;border-bottom:1px solid var(--charcoal);padding:0 0 5px;cursor:pointer}
+  .fullart{margin-top:22px;max-width:340px;background:var(--card);padding:16px;border:1px solid var(--border);display:none}
+  .fullart.show{display:block;animation:fadeUp .5s var(--ease-out)}
+  .fullart img{width:100%;height:auto;object-fit:contain}
+  .fullart .cap{font-size:11px;color:var(--text-3);margin-top:10px;letter-spacing:.01em}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* scroll reveal (enhances an already-visible default; gated on .js) */
+  .js .track .stagecol,.js .track .txtcol{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+  .js .track .txtcol{transition-delay:.08s}
+  .track.in .stagecol,.track.in .txtcol{opacity:1;transform:none}
+
+  /* ---------- MODE B · The Dial ---------- */
+  #dialMode{display:none;background:var(--stage);color:var(--text-inv);min-height:calc(100vh - 64px)}
+  #dialMode.on{display:block}
+  #dialMode .eyebrow{color:rgba(244,237,226,.55)}
+  .dial-wrap{max-width:1200px;margin:0 auto;padding:64px 40px 88px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;min-height:calc(100vh - 64px)}
+  .dial-stage{display:flex;flex-direction:column;align-items:center;gap:44px}
+  .dial-stage .a9{width:min(88%,440px);color:rgba(244,237,226,.4)}
+  .dial-stage .a9 .disc{box-shadow:0 40px 90px -30px rgba(0,0,0,.85), inset 0 0 0 8px rgba(255,255,255,.04)}
+  .dial-stage .a9 .disc img{transition:opacity .45s var(--ease-out),filter .45s var(--ease-out),transform .45s var(--ease-out)}
+  .dial-stage .a9 .disc img.swapping{opacity:0;filter:blur(8px);transform:scale(1.03)}
+  .dial-stage .a9 .bo{color:rgba(244,237,226,.4)}
+  .selector{display:flex;gap:16px;align-items:center}
+  .thumb{width:60px;height:60px;border-radius:50%;overflow:hidden;cursor:pointer;border:2px solid transparent;opacity:.5;
+    transition:opacity .3s var(--ease-out),transform .3s var(--ease-out),border-color .3s;background:#222}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb[aria-selected="true"]{opacity:1;border-color:var(--text-inv);transform:scale(1.1)}
+  .thumb:hover{opacity:.85}
+  .dial-info .num{font-family:var(--disp);font-size:13px;letter-spacing:.06em;color:rgba(244,237,226,.55)}
+  .dial-info h2{font-family:var(--disp);font-weight:400;font-size:clamp(32px,3.8vw,52px);line-height:1.1;margin:12px 0 6px;color:var(--text-inv)}
+  .dial-info .artist{color:rgba(244,237,226,.75);font-size:16px;margin-bottom:24px}
+  .dial-info .story{color:rgba(244,237,226,.75);font-size:16px;line-height:1.6;max-width:46ch}
+  .dial-info .playrow{margin-top:32px}
+  #dialMode .play{border-color:var(--text-inv);color:var(--text-inv)}
+  #dialMode .play .ic{background:var(--text-inv);color:var(--stage)}
+  #dialMode .play:hover{background:var(--text-inv);color:var(--stage)}
+  #dialMode .play:hover .ic{background:var(--stage);color:var(--text-inv)}
+  #dialMode .play[data-on="true"]{background:var(--text-inv);color:var(--stage)}
+  #dialMode .play[data-on="true"] .ic{background:var(--stage);color:var(--text-inv)}
+  #dialMode .mood-tag{color:rgba(244,237,226,.55)}
+  .dial-full{margin-top:28px}
+  .dial-full summary{cursor:pointer;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,237,226,.75);list-style:none}
+  .dial-full summary::-webkit-details-marker{display:none}
+  .dial-full .box{margin-top:16px;background:#111;padding:16px;max-width:320px;border:1px solid rgba(255,255,255,.08);animation:fadeUp .5s var(--ease-out)}
+  .dial-full .box img{width:100%;object-fit:contain}
+  .dial-full .box .cap{font-size:11px;color:rgba(244,237,226,.55);margin-top:10px}
+
+  /* ---------- waitlist ---------- */
+  .waitlist{padding:96px 0;background:var(--muted);border-top:1px solid var(--border-sub)}
+  .waitlist .wrap{max-width:720px;text-align:center}
+  .waitlist h2{font-family:var(--disp);font-weight:400;font-size:clamp(30px,3.4vw,46px);line-height:1.12}
+  .waitlist p{margin:18px auto 0;max-width:52ch;color:var(--text-2);font-size:16px;line-height:1.6}
+  .prefs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:32px 0 8px;align-items:center}
+  .prefs .lbl{font-size:12px;color:var(--text-2);margin-right:4px}
+  .prefs .chip{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid var(--border-strong);background:transparent;color:var(--text-2);border-radius:2px;padding:8px 16px;cursor:pointer;
+    transition:background .2s,color .2s,border-color .2s,transform 160ms var(--ease-out)}
+  .prefs .chip:hover{background:var(--raised);border-color:var(--raised)}
+  .prefs .chip[aria-pressed="true"]{background:var(--inverse);color:var(--text-inv);border-color:var(--inverse)}
+  .prefs .chip:active{transform:scale(.97)}
+  .form{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+  .form input{font-family:var(--sans);font-size:14px;padding:14px 18px;border:1px solid var(--border);border-radius:4px;background:var(--card);min-width:280px;color:var(--text)}
+  .form input:focus{outline:none;border:2px solid var(--charcoal);padding:13px 17px}
+  .fineprint{font-size:11px;color:var(--text-3);margin-top:20px;letter-spacing:.01em}
+  .secondary{margin-top:32px;font-size:14px;color:var(--text-2)}
+  .secondary a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+
+  /* ---------- sticky now-playing ---------- */
+  .nowbar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(28,26,24,.95);backdrop-filter:blur(12px);color:var(--text-inv);
+    transform:translateY(100%);transition:transform .4s var(--ease-out);border-top:1px solid rgba(255,255,255,.08)}
+  .nowbar.show{transform:translateY(0)}
+  .nowbar .wrap{display:flex;align-items:center;gap:16px;height:64px;max-width:1200px}
+  .nowbar .np-thumb{width:40px;height:40px;border-radius:50%;overflow:hidden;flex:0 0 auto;background:#333}
+  .nowbar .np-thumb img{width:100%;height:100%;object-fit:cover}
+  .nowbar .np-txt{flex:1;min-width:0}
+  .nowbar .np-txt .t{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nowbar .np-txt .s{font-size:11px;color:rgba(244,237,226,.55)}
+  .nowbar .np-eq{margin-right:4px;color:var(--text-inv)}
+  .nowbar button{background:none;border:1px solid rgba(244,237,226,.35);color:var(--text-inv);border-radius:999px;padding:8px 18px;
+    font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+  .nowbar button:hover{background:rgba(244,237,226,.1)}
+
+  @media(max-width:860px){
+    .wrap{padding:0 22px}
+    .hero .wrap{grid-template-columns:1fr;gap:8px;padding:32px 22px 38px}
+    .hero-side{order:-1;max-width:300px;margin:0 auto 8px}
+    .hero p.lead{font-size:18px}
+    .track .wrap,.dial-wrap{grid-template-columns:1fr!important;gap:36px}
+    .track:nth-child(even) .stagecol{order:0}
+    .stagecol{min-height:300px}
+    .dial-stage{order:2}
+    .modes button{padding:7px 13px;font-size:11.5px}.cta-mini{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+    .js .track .stagecol,.js .track .txtcol{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body class="muted">
+<h2 class="sr-only">Concept prototype: a LUMAS and Bang &amp; Olufsen landing page where each Art Cover for the Beosound A9 can be seen on the speaker, read about, and heard. Two layout directions toggle at the top.</h2>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brandmark">LUMAS<span>×</span>Bang &amp; Olufsen</div>
+    <div class="modes" role="tablist" aria-label="Layout direction">
+      <button id="mRoom" aria-pressed="true" onclick="setMode('room')">The Listening Room</button>
+      <button id="mDial" aria-pressed="false" onclick="setMode('dial')">The Dial</button>
+    </div>
+    <button class="cta-mini" onclick="document.getElementById('waitlist').scrollIntoView()">Join the waitlist</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Art Cover Edition · Beosound A9 5th Gen</div>
+      <h1>The art<br>of listening</h1>
+      <p class="lead">LUMAS artist covers for the Beosound A9. A speaker that becomes a canvas, and a canvas you can hear.</p>
+      <div class="actions">
+        <button class="btn solid" onclick="unlockAndEnter()">Enter the listening room ♪</button>
+        <button class="btn ghost" onclick="document.getElementById('waitlist').scrollIntoView()">Join the waitlist</button>
+      </div>
+      <div class="sound-note"><span class="eq"><i></i><i></i><i></i><i></i></span> <span id="soundHint">Sound off. Press play on any cover to listen.</span></div>
+    </div>
+    <div class="hero-side">
+      <div class="a9" id="heroA9">
+        <div class="disc"><img src="https://img.lumas.com/showimg_gza05_desktop.jpg" alt="Art cover on the Beosound A9"></div>
+        <div class="rim"></div>
+        <div class="stand"><svg viewBox="0 0 100 30"><line x1="34" y1="0" x2="26" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="66" y1="0" x2="74" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="27" x2="80" y2="27" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="bo">Bang &amp; Olufsen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODE A · LISTENING ROOM -->
+<div id="roomMode"></div>
+
+<!-- MODE B · THE DIAL -->
+<div id="dialMode">
+  <div class="dial-wrap">
+    <div class="dial-stage">
+      <div class="a9" id="dialA9">
+        <div class="disc"><img id="dialImg" src="https://img.lumas.com/showimg_gza05_desktop.jpg" alt="Selected art cover on the Beosound A9"></div>
+        <div class="rim"></div>
+        <div class="stand"><svg viewBox="0 0 100 30"><line x1="34" y1="0" x2="26" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="66" y1="0" x2="74" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="27" x2="80" y2="27" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="bo">Bang &amp; Olufsen</div>
+      </div>
+      <div class="selector" id="dialSelector" role="listbox" aria-label="Choose an art cover"></div>
+    </div>
+    <div class="dial-info">
+      <div class="num" id="dNum">01 / 04</div>
+      <div class="eyebrow" id="dCat" style="margin-top:8px"></div>
+      <h2 id="dTitle"></h2>
+      <div class="artist" id="dArtist"></div>
+      <p class="story" id="dStory"></p>
+      <div class="playrow">
+        <button class="play" id="dPlay" data-on="false" onclick="dialPlay()"><span class="ic">▶</span> <span id="dPlayTxt">Listen to this cover</span></button>
+        <span class="mood-tag" id="dMood"></span>
+      </div>
+      <details class="dial-full">
+        <summary>See the full artwork, uncropped</summary>
+        <div class="box"><img id="dFull" src="" alt=""><div class="cap" id="dFullCap"></div></div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<section class="waitlist" id="waitlist">
+  <div class="wrap">
+    <div class="eyebrow">First access</div>
+    <h2 style="margin-top:12px">Join the Edition waitlist</h2>
+    <p>The Art Cover Edition is limited. Waitlist members get first access to reserve, and an invitation to the launch evening in Hanover on September 12.</p>
+    <div class="prefs" id="prefs" aria-label="What draws your eye?">
+      <span class="lbl">What draws your eye?</span>
+      <button class="chip" aria-pressed="false">Abstract</button>
+      <button class="chip" aria-pressed="false">Nature</button>
+      <button class="chip" aria-pressed="false">Portrait</button>
+      <button class="chip" aria-pressed="false">Pop &amp; Colour</button>
+    </div>
+    <div class="form">
+      <input type="email" placeholder="your@email.com" aria-label="Email address">
+      <button class="btn solid" onclick="fakeSubmit(this)">Request first access</button>
+    </div>
+    <div class="fineprint">We’ll only write about this edition and the launch. No noise.</div>
+    <div class="secondary">Prefer to see it in person? <a href="#">Request an invitation to the Hanover launch.</a></div>
+  </div>
+</section>
+
+<!-- NOW PLAYING -->
+<div class="nowbar" id="nowbar">
+  <div class="wrap">
+    <div class="np-thumb"><img id="npImg" src="" alt=""></div>
+    <div class="np-txt"><div class="t" id="npT">—</div><div class="s" id="npS"></div></div>
+    <span class="eq np-eq"><i></i><i></i><i></i><i></i></span>
+    <button onclick="stopAll()">Pause</button>
+  </div>
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+/* ---------------- data ---------------- */
+const ART = [
+  {code:'gza05',sku:'GZA05',title:'Blue Portrait',artist:'Gazi Sansoy',cat:'Portrait',
+   mood:'Chamber strings · adagio', synth:'strings',
+   story:'A fractured, jewel-toned face built from layered paint and pattern. On the A9 it reads as a single glowing presence, so we scored it with slow chamber strings: the tempo of a portrait that holds your gaze.'},
+  {code:'cts36',sku:'CTS36',title:'Neon Symphony',artist:'Charis Tsevis',cat:'Pop & Colour',
+   mood:'Electronic · pulse', synth:'electronic',
+   story:'A mosaic city rebuilt from thousands of shards of colour. Kinetic, electric, alive after dark. We met it with a pulsing electronic bed that moves the way the image does.'},
+  {code:'oha03',sku:'OHA03',title:'Flowers',artist:'Olaf Hajek',cat:'Nature',
+   mood:'Warm folk · pentatonic', synth:'folk',
+   story:'Botanical, mythic, hand-painted. A garden that feels grown rather than photographed, paired with a warm, plucked pentatonic that drifts like pollen in afternoon light.'},
+  {code:'ash15',sku:'ASH15',title:'Atlantic Ocean',artist:'Alison Shaw',cat:'Nature',
+   mood:'Ambient drone · tide', synth:'ocean',
+   story:'A long horizon of water and weather. Nothing hurries. On the A9 it becomes a window, and the soundscape is a low drone and the slow arrival of waves.'}
+];
+const bare = c => `https://img.lumas.com/showimg_${c}_desktop.jpg`;
+const full = c => `https://img.lumas.com/showimg_${c}_full.jpg`;
+
+/* ---------------- audio engine ---------------- */
+let AC=null, unlocked=false;
+const patches={};
+function ctx(){ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); } return AC; }
+function unlock(){ if(unlocked) return; ctx().resume(); unlocked=true; }
+
+function buildPatch(a){
+  const c=ctx(); const master=c.createGain(); master.gain.value=0; master.connect(c.destination);
+  const nodes=[]; let timers=[];
+  if(a.synth==='strings'){
+    [220,277.18,329.63].forEach((f,i)=>{ const o=c.createOscillator();o.type='triangle';o.frequency.value=f;
+      const g=c.createGain();g.gain.value=0.16; const lfo=c.createOscillator();lfo.frequency.value=0.15+i*.05;
+      const lg=c.createGain();lg.gain.value=2.2; lfo.connect(lg);lg.connect(o.frequency); o.connect(g);g.connect(master);
+      o.start();lfo.start(); nodes.push(o,lfo); });
+  } else if(a.synth==='ocean'){
+    const o=c.createOscillator();o.type='sine';o.frequency.value=70;const g=c.createGain();g.gain.value=0.25;o.connect(g);g.connect(master);o.start();nodes.push(o);
+    const buf=c.createBuffer(1,c.sampleRate*2,c.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const src=c.createBufferSource();src.buffer=buf;src.loop=true;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=420;
+    const ng=c.createGain();ng.gain.value=0.12;src.connect(lp);lp.connect(ng);ng.connect(master);
+    const wl=c.createOscillator();wl.frequency.value=0.09;const wg=c.createGain();wg.gain.value=0.09;wl.connect(wg);wg.connect(ng.gain);
+    src.start();wl.start();nodes.push(src,wl);
+  } else if(a.synth==='electronic'){
+    const bass=c.createOscillator();bass.type='sawtooth';bass.frequency.value=55;const bf=c.createBiquadFilter();bf.type='lowpass';bf.frequency.value=300;
+    const bg=c.createGain();bg.gain.value=0.14;bass.connect(bf);bf.connect(bg);bg.connect(master);bass.start();nodes.push(bass);
+    const notes=[329.63,415.30,493.88,415.30];let step=0;
+    const t=setInterval(()=>{ if(c.state!=='running')return; const o=c.createOscillator();o.type='square';o.frequency.value=notes[step%notes.length];
+      const g=c.createGain();g.gain.value=0;o.connect(g);g.connect(master);const t0=c.currentTime;
+      g.gain.linearRampToValueAtTime(0.09,t0+0.02);g.gain.exponentialRampToValueAtTime(0.001,t0+0.28);o.start(t0);o.stop(t0+0.3);step++;},260);
+    timers.push(t);
+  } else if(a.synth==='folk'){
+    const scale=[261.63,293.66,329.63,392.00,440.00];
+    const t=setInterval(()=>{ if(c.state!=='running')return; const o=c.createOscillator();o.type='triangle';o.frequency.value=scale[Math.floor(Math.random()*scale.length)];
+      const g=c.createGain();g.gain.value=0;o.connect(g);g.connect(master);const t0=c.currentTime;
+      g.gain.linearRampToValueAtTime(0.12,t0+0.03);g.gain.exponentialRampToValueAtTime(0.001,t0+1.1);o.start(t0);o.stop(t0+1.2);},520);
+    timers.push(t);
+  }
+  return {master, stop(){ const t=c.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(0,t+0.4);
+    timers.forEach(clearInterval); setTimeout(()=>{nodes.forEach(n=>{try{n.stop()}catch(e){}}); master.disconnect();},450); }};
+}
+let currentCode=null;
+function playCover(code){
+  unlock();
+  const a=ART.find(x=>x.code===code);
+  if(currentCode && currentCode!==code){ patches[currentCode]&&patches[currentCode].stop(); delete patches[currentCode]; }
+  if(currentCode===code){ stopAll(); return; }
+  const p=buildPatch(a); patches[code]=p; const c=ctx(); const t=c.currentTime;
+  p.master.gain.linearRampToValueAtTime(0.9,t+0.8);
+  currentCode=code; document.body.classList.remove('muted');
+  showNow(a); syncButtons();
+}
+function stopAll(){ Object.keys(patches).forEach(k=>{patches[k].stop();delete patches[k];}); currentCode=null; document.body.classList.add('muted');
+  document.getElementById('nowbar').classList.remove('show'); document.getElementById('soundHint').textContent='Sound off. Press play on any cover to listen.'; syncButtons(); }
+function showNow(a){ const nb=document.getElementById('nowbar'); nb.classList.add('show');
+  document.getElementById('npImg').src=bare(a.code); document.getElementById('npT').textContent=a.title+' — '+a.artist;
+  document.getElementById('npS').textContent=a.mood; document.getElementById('soundHint').textContent='Now playing: '+a.title+' · '+a.mood; }
+function syncButtons(){
+  document.querySelectorAll('.play[data-code]').forEach(b=>{ const on=b.dataset.code===currentCode; b.dataset.on=on;
+    b.querySelector('.ic').textContent=on?'❚❚':'▶'; b.querySelector('.txt').textContent=on?'Playing':'Listen to this cover'; });
+  const d=document.getElementById('dPlay'); if(d){ const on=ART[dialIdx].code===currentCode; d.dataset.on=on; d.querySelector('.ic').textContent=on?'❚❚':'▶'; document.getElementById('dPlayTxt').textContent=on?'Playing':'Listen to this cover'; }
+}
+
+/* ---------------- build Listening Room ---------------- */
+const room=document.getElementById('roomMode');
+ART.forEach((a,i)=>{
+  const s=document.createElement('section'); s.className='track'; s.dataset.code=a.code;
+  s.innerHTML=`<div class="wrap">
+    <div class="stagecol">
+      <div class="a9"><div class="disc"><img src="${bare(a.code)}" alt="${a.title} art cover on the Beosound A9"></div>
+      <div class="rim"></div>
+      <div class="stand"><svg viewBox="0 0 100 30"><line x1="34" y1="0" x2="26" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="66" y1="0" x2="74" y2="26" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="27" x2="80" y2="27" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="bo">Bang &amp; Olufsen</div></div>
+    </div>
+    <div class="txtcol">
+      <div class="num">0${i+1} / 0${ART.length}</div>
+      <div class="eyebrow" style="margin-top:10px">${a.cat}</div>
+      <h2>${a.title}</h2>
+      <div class="artist">${a.artist}</div>
+      <p class="story">${a.story}</p>
+      <div class="playrow">
+        <button class="play" data-code="${a.code}" data-on="false" onclick="playCover('${a.code}')"><span class="ic">▶</span> <span class="txt">Listen to this cover</span></button>
+        <span class="mood-tag">${a.mood}</span>
+      </div>
+      <button class="reveal-full" onclick="toggleFull(this,'${a.title.replace(/'/g,'')}','${a.artist}')">See the full artwork, uncropped</button>
+      <div class="fullart"><img src="" data-src="${full(a.code)}" alt=""><div class="cap"></div></div>
+    </div>
+  </div>`;
+  room.appendChild(s);
+});
+function toggleFull(btn,title,artist){
+  const box=btn.nextElementSibling; const img=box.querySelector('img');
+  if(!img.getAttribute('src')){ img.src=img.dataset.src; box.querySelector('.cap').textContent=title+' — '+artist+' · shown in full, as the artist made it'; }
+  box.classList.toggle('show');
+  btn.textContent=box.classList.contains('show')?'Hide the full artwork':'See the full artwork, uncropped';
+}
+
+/* scroll-driven crossfade + reveal */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('in');
+    if(!unlocked||document.body.dataset.mode==='dial') return;
+    if(e.isIntersecting && e.intersectionRatio>0.6){ const code=e.target.dataset.code; if(code!==currentCode) playCover(code); }
+  });
+},{threshold:[0,0.35,0.6,1]});
+document.querySelectorAll('.track').forEach(t=>io.observe(t));
+
+/* ---------------- build Dial ---------------- */
+let dialIdx=0;
+const sel=document.getElementById('dialSelector');
+ART.forEach((a,i)=>{ const t=document.createElement('div'); t.className='thumb'; t.setAttribute('role','option'); t.setAttribute('aria-selected',i===0);
+  t.innerHTML=`<img src="${bare(a.code)}" alt="${a.title}">`; t.onclick=()=>selectDial(i); sel.appendChild(t); });
+function selectDial(i){ dialIdx=i; const a=ART[i];
+  const img=document.getElementById('dialImg'); img.classList.add('swapping');
+  setTimeout(()=>{ img.src=bare(a.code); img.classList.remove('swapping'); },300);
+  document.getElementById('dNum').textContent='0'+(i+1)+' / 0'+ART.length;
+  document.getElementById('dCat').textContent=a.cat;
+  document.getElementById('dTitle').textContent=a.title;
+  document.getElementById('dArtist').textContent=a.artist;
+  document.getElementById('dStory').textContent=a.story;
+  document.getElementById('dMood').textContent=a.mood;
+  const df=document.getElementById('dFull'); df.src=full(a.code); df.alt=a.title;
+  document.getElementById('dFullCap').textContent=a.title+' — '+a.artist+' · shown in full, as the artist made it';
+  document.querySelectorAll('#dialSelector .thumb').forEach((t,j)=>t.setAttribute('aria-selected',j===i));
+  if(unlocked && currentCode) playCover(a.code); else syncButtons();
+}
+function dialPlay(){ playCover(ART[dialIdx].code); }
+selectDial(0);
+
+/* ---------------- mode switch ---------------- */
+function setMode(m){
+  document.body.dataset.mode=m;
+  document.getElementById('mRoom').setAttribute('aria-pressed',m==='room');
+  document.getElementById('mDial').setAttribute('aria-pressed',m==='dial');
+  document.getElementById('roomMode').style.display = m==='room'?'block':'none';
+  document.querySelector('.hero').style.display = m==='dial'?'none':'block';
+  document.getElementById('dialMode').classList.toggle('on',m==='dial');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.body.dataset.mode='room';
+function unlockAndEnter(){ unlock(); playCover(ART[0].code); document.querySelector('#roomMode .track').scrollIntoView({behavior:'smooth'}); }
+
+/* ---------------- waitlist chips ---------------- */
+document.querySelectorAll('#prefs .chip').forEach(c=>c.onclick=()=>c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')!=='true'));
+function fakeSubmit(b){ b.textContent='You’re on the list ✓'; b.disabled=true; }
+</script>
+</body>
+</html>

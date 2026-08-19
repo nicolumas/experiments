@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LUMAS Checkout — Shopify Style (Entwurf)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Assistant:wght@400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000;
+    --ink80:rgba(0,0,0,.8);
+    --ink75:rgba(0,0,0,.75);
+    --ink66:rgba(0,0,0,.66);
+    --ink60:rgba(0,0,0,.6);
+    --ink50:rgba(0,0,0,.5);
+    --line:#e7e7e6;
+    --inputBorder:#dedede;
+    --wk:#e7e7e6;
+    --cream:#fbf6e8;
+    --tpGreen:#007a52;
+    --reviewBg:#faf8f4;
+    --tpStar:#00b67a;
+    --radius:8px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Archivo',system-ui,Arial,sans-serif;
+    color:var(--ink);
+    background:#f2f2f2;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;}
+  img{display:block;max-width:100%;}
+  p{margin:0;}
+
+  /* ---------- Prototype switcher (not part of the design) ---------- */
+  .switcher{
+    position:sticky;top:0;z-index:100;
+    display:flex;gap:6px;align-items:center;
+    padding:10px 16px;background:#141414;color:#fff;
+    font-size:13px;flex-wrap:wrap;
+  }
+  .switcher .brand{font-weight:700;letter-spacing:.02em;margin-right:14px;opacity:.9;}
+  .switcher button{
+    font:inherit;font-weight:600;color:#cfcfcf;background:#262626;border:1px solid #3a3a3a;
+    padding:7px 14px;border-radius:999px;cursor:pointer;transition:.15s;
+  }
+  .switcher button:hover{color:#fff;border-color:#555;}
+  .switcher button.active{background:#fff;color:#111;border-color:#fff;}
+  .switcher .note{margin-left:auto;opacity:.55;font-size:12px;}
+
+  .stage{padding:0;}
+  .stage.mobileStage{padding:28px 16px;display:flex;justify-content:center;background:#ececec;}
+
+  /* ---------- Announcement bar ---------- */
+  .promo{
+    background:#000;color:#fff;display:flex;align-items:center;justify-content:center;gap:16px;
+    padding:11px 20px;position:relative;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    text-align:center;
+  }
+  .promo .promoText{max-width:640px;}
+  .promo .promoBtn{
+    background:#fff;color:#000;border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;
+    letter-spacing:.04em;white-space:nowrap;text-transform:uppercase;cursor:pointer;
+  }
+  .promo .promoClose{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:.9;cursor:pointer;font-size:15px;}
+
+  /* ---------- Header / logo ---------- */
+  .siteHead{background:#fff;border-bottom:1px solid var(--line);}
+  .siteHead .inner{display:flex;align-items:center;justify-content:center;min-height:119px;position:relative;padding:0 24px;}
+  .siteHead .logo{width:176px;height:33px;}
+  .siteHead .logo svg{width:100%;height:100%;fill:#000;}
+  /* v2 header: logo left, trustpilot compact right */
+  .siteHead.v2 .inner{justify-content:flex-start;padding:0 40px;}
+  .siteHead.v2 .headTp{position:absolute;right:40px;top:50%;transform:translateY(-50%);}
+
+  /* ---------- Trustpilot compact card (green bordered) ---------- */
+  .tpCard{
+    border:1px solid var(--tpGreen);background:rgba(231,231,230,.33);
+    border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;align-items:center;gap:7px;width:100%;
+  }
+  .tpRow{display:flex;align-items:center;gap:10px;}
+  .tpRow .lbl{font-weight:600;font-size:16px;letter-spacing:-.16px;color:var(--ink80);}
+  .tpStars{display:flex;gap:2px;}
+  .tpStars .sq{width:17px;height:17px;background:var(--tpStar);display:flex;align-items:center;justify-content:center;border-radius:1px;}
+  .tpStars .sq.half{background:linear-gradient(90deg,var(--tpStar) 55%,#dcdce6 55%);}
+  .tpStars .sq svg{width:13px;height:13px;fill:#fff;}
+  .tpRow2 .txt{font-weight:500;font-size:14px;letter-spacing:-.14px;color:var(--ink80);text-decoration:underline;text-underline-offset:2px;}
+  .tpWord{height:18px;display:flex;align-items:center;gap:4px;font-weight:800;font-size:15px;letter-spacing:-.02em;}
+  .tpWord .pin{width:16px;height:16px;background:var(--tpStar);border-radius:2px;display:inline-flex;align-items:center;justify-content:center;}
+  .tpWord .pin svg{width:12px;height:12px;fill:#fff;}
+  /* compact variant in header (v2 / mobile) sizing */
+  .headTp .tpCard{width:auto;min-width:230px;padding:10px 16px;}
+
+  /* ---------- Trustpilot review-quote card (desktop v1) ---------- */
+  .tpReviewWrap{display:flex;flex-direction:column;align-items:center;gap:24px;width:100%;}
+  .tpLogoBig{height:36px;display:flex;align-items:center;gap:6px;font-weight:800;font-size:29px;letter-spacing:-.02em;}
+  .tpLogoBig .pin{width:31px;height:31px;background:var(--tpStar);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;}
+  .tpLogoBig .pin svg{width:24px;height:24px;fill:#fff;}
+  .reviewCard{background:var(--reviewBg);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:10px;width:100%;}
+  .reviewCard .top{display:flex;align-items:center;justify-content:space-between;}
+  .reviewCard .top .stars{display:flex;gap:2px;}
+  .reviewCard .top .stars .sq{width:17px;height:17px;background:var(--tpStar);border-radius:1px;display:flex;align-items:center;justify-content:center;}
+  .reviewCard .top .stars .sq svg{width:13px;height:13px;fill:#fff;}
+  .reviewCard .date{font-family:'Assistant',sans-serif;font-size:14px;color:var(--ink60);letter-spacing:-.14px;}
+  .reviewCard .quote{font-family:'Assistant',sans-serif;font-size:14px;color:var(--ink80);letter-spacing:-.14px;line-height:1.35;}
+  .reviewCard .author{display:flex;align-items:center;gap:4px;font-family:'Assistant',sans-serif;font-size:14px;color:var(--ink60);letter-spacing:-.14px;}
+  .reviewCard .author svg{width:12px;height:12px;}
+  .reviewCard .tpFoot{height:34px;display:flex;align-items:center;gap:5px;font-weight:800;font-size:22px;letter-spacing:-.02em;}
+  .reviewCard .tpFoot .stars2{display:flex;gap:2px;}
+  .reviewCard .tpFoot .stars2 .sq{width:22px;height:22px;background:var(--tpStar);border-radius:2px;display:flex;align-items:center;justify-content:center;}
+  .reviewCard .tpFoot .stars2 .sq svg{width:16px;height:16px;fill:#fff;}
+  .reviewCard .tpFoot .pin{width:22px;height:22px;background:var(--tpStar);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;}
+  .reviewCard .tpFoot .pin svg{width:16px;height:16px;fill:#fff;}
+
+  /* ---------- Express checkout ---------- */
+  .expressLabel{text-align:center;font-size:13px;color:var(--ink50);}
+  .expressBtns{display:flex;gap:12px;justify-content:center;}
+  .expressBtns .xbtn{height:48px;flex:1;max-width:210px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;}
+  .expressBtns .paypal{background:#ffc439;}
+  .expressBtns .paypal img{height:20px;}
+  .expressBtns .applepay{background:#000;}
+  .expressBtns .applepay img{height:22px;}
+
+  .oder{display:flex;align-items:center;gap:14px;color:var(--ink50);font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
+  .oder::before,.oder::after{content:'';flex:1;height:1px;background:var(--line);}
+
+  /* ---------- Form ---------- */
+  .section{display:flex;flex-direction:column;gap:12px;}
+  .secHead{display:flex;align-items:center;justify-content:space-between;}
+  .secHead h2{margin:0;font-size:19px;font-weight:700;letter-spacing:-.4px;}
+  .secHead .link{font-size:14px;text-decoration:underline;text-underline-offset:2px;cursor:pointer;}
+  .subtle{font-size:12px;color:var(--ink50);}
+
+  .field{position:relative;}
+  .field input{
+    width:100%;height:48px;border:1px solid var(--inputBorder);border-radius:var(--radius);
+    padding:0 14px;font-family:'Roboto',sans-serif;font-size:14px;color:#111;background:#fff;
+  }
+  .field.hasIcon input{padding-right:40px;}
+  .field input::placeholder{color:var(--ink50);}
+  .field .fic{position:absolute;right:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--ink50);}
+  .field .floatLbl{position:absolute;left:12px;top:6px;font-size:11px;color:var(--ink50);font-family:'Roboto',sans-serif;}
+  .field.floating input{padding-top:16px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .select{position:relative;}
+  .select select{
+    width:100%;height:56px;border:1px solid var(--inputBorder);border-radius:var(--radius);
+    padding:18px 14px 6px;font-family:'Roboto',sans-serif;font-size:14px;color:#111;background:#fff;
+    appearance:none;-webkit-appearance:none;cursor:pointer;
+  }
+  .select .floatLbl{position:absolute;left:14px;top:8px;font-size:11px;color:var(--ink50);font-family:'Roboto',sans-serif;pointer-events:none;}
+  .select .caret{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink66);pointer-events:none;}
+
+  .checkline{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#111;}
+  .checkline .box{width:18px;height:18px;border:1px solid #b9b9b9;border-radius:4px;flex:none;margin-top:1px;background:#fff;}
+  .checkline .box.on{background:#000;border-color:#000;display:flex;align-items:center;justify-content:center;}
+  .checkline .box.on svg{width:12px;height:12px;fill:#fff;}
+
+  .infoBox{background:#f3f3f3;border-radius:var(--radius);padding:16px;font-size:14px;color:var(--ink50);}
+
+  /* Payment list */
+  .payList{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  .payRow{display:flex;align-items:center;gap:12px;padding:15px 14px;border-bottom:1px solid var(--line);cursor:pointer;}
+  .payRow:last-child{border-bottom:none;}
+  .payRow .radio{width:18px;height:18px;border:1.5px solid #c4c4c4;border-radius:50%;flex:none;position:relative;}
+  .payRow.on .radio{border-color:#000;}
+  .payRow.on .radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#000;}
+  .payRow .name{flex:1;font-weight:600;font-size:15px;letter-spacing:-.3px;}
+  .payChips{display:flex;align-items:center;gap:5px;}
+  .chip{height:20px;min-width:32px;border:1px solid var(--line);border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+  .chip img{height:14px;}
+  .chip.visa{background:#1a1f71;color:#fff;font-weight:800;font-size:9px;font-style:italic;letter-spacing:.02em;}
+  .chip.mc{gap:0;}
+  .chip.mc .c{width:11px;height:11px;border-radius:50%;}
+  .chip.mc .c.r{background:#eb001b;}
+  .chip.mc .c.o{background:#f79e1b;margin-left:-5px;mix-blend-mode:multiply;}
+  .chip.more{border:none;font-size:12px;color:var(--ink60);font-weight:600;min-width:auto;}
+  .chip.applepay{background:#000;}
+  .chip.applepay img{height:12px;}
+  .chip.paypal{border:none;background:transparent;}
+  .chip.paypal img{height:16px;}
+
+  .payRow.selectedGroup{background:var(--cream);box-shadow:inset 0 0 0 1.5px #111;border-bottom:none;cursor:default;position:relative;z-index:1;}
+  .payBody{background:var(--cream);box-shadow:inset 1.5px 0 0 #111,inset -1.5px 0 0 #111,inset 0 -1.5px 0 #111;padding:0 14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .payBody .field input{background:#fff;}
+
+  .buyBtn{width:100%;height:52px;background:#000;color:#fff;border:none;border-radius:8px;font-family:'Archivo';font-weight:700;font-size:16px;cursor:pointer;}
+
+  .footerLinks{display:flex;flex-wrap:wrap;gap:6px 14px;}
+  .footerLinks a{font-size:13px;text-decoration:underline;text-underline-offset:2px;color:#111;}
+
+  .legal{font-size:12px;color:var(--ink50);line-height:1.5;}
+  .legal a{text-decoration:underline;}
+
+  /* ---------- Order summary (right col / mobile expanded) ---------- */
+  .prod{display:flex;gap:16px;align-items:flex-start;position:relative;max-width:400px;}
+  .prod .thumbWrap{position:relative;flex:none;width:122px;}
+  .prod .thumb{width:122px;height:162px;object-fit:cover;border-radius:2px;}
+  .prod .qty{position:absolute;left:110px;top:-6px;width:18px;height:18px;background:#000;border:1px solid #fff;border-radius:4px;color:#fff;font-family:'Roboto';font-size:10px;display:flex;align-items:center;justify-content:center;}
+  .prod .meta{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .prod .titleRow{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-size:14px;letter-spacing:-.3px;line-height:1.35;}
+  .prod .titleRow .t{flex:1;}
+  .prod .titleRow .p{white-space:nowrap;}
+  .prod .desc{font-size:12px;color:var(--ink50);line-height:1.4;}
+  .prod .size{font-size:12px;color:var(--ink75);font-weight:500;}
+
+  .discount{display:flex;gap:14px;max-width:400px;}
+  .discount input{flex:1;height:47px;border:1px solid var(--inputBorder);border-radius:8px;padding:0 12px;font-family:'Roboto';font-size:14px;color:var(--ink66);background:#fff;}
+  .discount input::placeholder{color:var(--ink66);}
+  .discount .apply{height:47px;padding:0 22px;border:1px solid var(--inputBorder);border-radius:8px;background:#fff;font-family:'Roboto';font-weight:700;font-size:14px;color:var(--ink66);opacity:.66;cursor:pointer;}
+
+  .totals{max-width:400px;display:flex;flex-direction:column;gap:12px;padding-top:6px;}
+  .totRow{display:flex;align-items:center;justify-content:space-between;font-size:14px;color:var(--ink80);}
+  .totRow .lft{display:flex;align-items:center;gap:6px;}
+  .totRow .lft svg{width:15px;height:15px;color:var(--ink50);}
+  .grand{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid #000;padding-top:16px;margin-top:4px;}
+  .grand .gl{font-size:18px;font-weight:700;}
+  .grand .gr{text-align:right;}
+  .grand .gr .cur{font-size:12px;color:var(--ink50);margin-right:6px;}
+  .grand .gr .amt{font-size:20px;font-weight:700;}
+  .grand .gr .tax{font-size:12px;color:var(--ink50);margin-top:2px;}
+
+  /* ---------- Trust badges ---------- */
+  .badges{display:flex;justify-content:space-between;gap:8px;max-width:420px;}
+  .badge{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;}
+  .badge .ic{width:26px;height:26px;color:#111;}
+  .badge .bl{font-size:10px;line-height:1.25;color:var(--ink80);letter-spacing:-.1px;}
+
+  /* ---------- Noch Fragen ---------- */
+  .fragen{background:rgba(255,255,255,.5);border-radius:6px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:16px;max-width:400px;}
+  .fragen .ftitle{font-weight:700;font-size:14px;letter-spacing:-.3px;}
+  .fragen .fsub{font-weight:500;font-size:14px;color:var(--ink75);text-align:center;letter-spacing:-.3px;}
+  .fragen .fbody{font-size:12px;color:var(--ink50);text-align:center;line-height:1.45;}
+  .fragen .divl{width:288px;max-width:100%;height:1px;background:rgba(0,0,0,.12);}
+  .fragen .contact{display:flex;gap:24px;justify-content:center;}
+  .fragen .contact a{display:flex;align-items:center;gap:6px;font-weight:500;font-size:12px;color:var(--ink75);text-decoration:underline;text-underline-offset:2px;}
+  .fragen .contact svg{width:16px;height:16px;}
+  .fragen .hours{font-size:12px;color:var(--ink50);}
+
+  /* ---------- Mobile order-summary bar ---------- */
+  .obar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fbfbfb;border-bottom:1px solid var(--line);}
+  .obar .l{display:flex;align-items:center;gap:8px;font-size:15px;}
+  .obar .l svg{width:16px;height:16px;color:#111;}
+  .obar .amt{font-size:18px;font-weight:700;}
+
+  /* ---------- Desktop two-column layout ---------- */
+  .checkout{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:500px 1fr;align-items:stretch;background:#fff;}
+  .col-left{padding:24px 20px 40px 0;display:flex;flex-direction:column;gap:24px;}
+  .col-right{position:relative;background:var(--wk);padding:24px 24px 40px 40px;display:flex;flex-direction:column;gap:24px;}
+  .col-right::after{content:'';position:absolute;top:0;bottom:0;left:100%;width:100vw;background:var(--wk);}
+
+  /* ---------- Mobile single-column layout ---------- */
+  .mwrap{width:390px;max-width:100%;background:#fff;box-shadow:0 12px 40px rgba(0,0,0,.14);border-radius:22px;overflow:hidden;}
+  .mcol{padding:16px;display:flex;flex-direction:column;gap:22px;}
+  .mcol .expressBtns .xbtn{max-width:none;}
+  .mcol .section, .mcol .prod, .mcol .discount, .mcol .totals, .mcol .badges, .mcol .fragen{max-width:none;}
+  .mcol .badges{max-width:none;}
+  .mExpanded{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:20px;}
+  .mExpanded .obarTop{display:flex;align-items:center;justify-content:space-between;}
+  .mExpanded .obarTop .l{display:flex;align-items:center;gap:8px;font-size:19px;font-weight:700;letter-spacing:-.4px;}
+  .mExpanded .obarTop .l svg{width:18px;height:18px;}
+
+  @media(max-width:1024px){
+    .checkout{grid-template-columns:1fr;max-width:560px;}
+    .col-right{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <span class="brand">LUMAS · Checkout Entwurf</span>
+  <button data-v="dv1" class="active">Desktop v1</button>
+  <button data-v="dv2">Desktop v2</button>
+  <button data-v="mv1">Mobile v1</button>
+  <button data-v="mv2">Mobile v2</button>
+  <span class="note">Pixel-Nachbau der /Entwurf-Frames (wgIYONGiul2ZOULnQtDOKd)</span>
+</div>
+
+<div id="stage" class="stage"></div>
+
+<script>
+const A = 'assets/';
+
+/* ---------------- Icon set (inline SVG) ---------------- */
+const I = {
+  star:'<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.8 5.8 21.5l1.6-7L2 9.8l7.1-.6z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>',
+  verified:'<svg viewBox="0 0 24 24" fill="#00b67a"><path d="M12 1l2.4 2.1 3.1-.5 1.1 3 2.9 1.3-1 3 1 3-2.9 1.3-1.1 3-3.1-.5L12 23l-2.4-2.1-3.1.5-1.1-3L2.5 17l1-3-1-3 2.9-1.3 1.1-3 3.1.5z"/><path d="M10.6 14.6 8.2 12.2l-1 1 3.4 3.4 6-6-1-1z" fill="#fff"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  caretDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"/></svg>',
+  caretUp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 15l6-6 6 6"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>',
+  call:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1z"/></svg>',
+  forum:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h13a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2z"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>',
+  // trust badges
+  bReturn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8a8 8 0 1 1-1.5 6"/><path d="M3 4v4h4"/></svg>',
+  bInstall:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>',
+  bPeople:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 6.5a3 3 0 0 1 0 5.8"/><path d="M17 19a5 5 0 0 0-2.5-4"/></svg>',
+  bFrame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M7 15l3.5-4 2.5 2.5L16 10l3 4"/><circle cx="9" cy="8.5" r="1.3"/></svg>',
+  bShield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+};
+
+/* five green Trustpilot star squares, last one half-filled */
+function tpStars(size){
+  let s='<div class="tpStars">';
+  for(let i=0;i<5;i++){ s+=`<span class="sq${i===4?' half':''}">${I.star}</span>`; }
+  return s+'</div>';
+}
+
+/* ---------------- Reusable fragments ---------------- */
+function promoBar(){
+  return `<div class="promo">
+    <span class="promoText">10% AUF DEINE ERSTE BESTELLUNG – NUR BIS 21.06.2026!</span>
+    <span class="promoBtn">Jetzt sichern</span>
+    <span class="promoClose">✕</span>
+  </div>`;
+}
+function header(variant){
+  const logo = `<div class="logo"><svg viewBox="0 0 176 33" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.91 0.99V23.54H22.22V31.02H0.44V0.99H8.91ZM38.39 31.79C34.43 31.79 31.13 30.69 28.71 28.6C27.43 27.49 26.41 26.1 25.75 24.53C25.08 22.97 24.78 21.28 24.86 19.58V0.99H33.33V19.05C33.33 22.29 35.14 24.31 38.39 24.31C41.63 24.31 43.44 22.29 43.44 19.05V0.99H51.91V19.58C51.99 21.28 51.69 22.97 51.02 24.53C50.36 26.1 49.34 27.49 48.06 28.6C45.64 30.69 42.34 31.79 38.39 31.79ZM89.6 0.99V31.02H81.13V13.62L74.57 31.02H67.9L61.34 13.62V31.02H52.87L52.9 0.99H63.44L71.24 20.63L79.03 0.99H89.6ZM113.5 31.02L111.63 25.6H101.02L99.15 31.02H90.24L101.35 0.99H111.4L122.5 31.02H113.5ZM106.32 9.9L103.12 19.05H109.53L106.32 9.9ZM134.66 31.79C127.55 31.79 122.83 28.27 122.5 22.4H131.02C131.24 24.42 132.72 25.6 135.1 25.6C137.05 25.6 138.42 24.86 138.42 23.32C138.42 21.79 136.68 21.28 133.66 20.63C128.5 19.49 123.05 18.24 123.05 11.79C123.05 6.35 127.55 2.83 134.44 2.83C141.11 2.83 145.61 6.13 145.94 11.9H137.42C137.2 10.09 135.94 9.02 134 9.02C132.28 9.02 131.13 9.76 131.13 11.09C131.13 12.62 132.94 13.13 136.02 13.79C141.18 14.94 146.5 16.18 146.5 22.63C146.5 28.27 141.77 31.79 134.66 31.79Z"/>
+    <path d="M158 1h11v11h-4V5h-7z"/>
+  </svg></div>`;
+  if(variant==='v2'){
+    return `<div class="siteHead v2"><div class="inner">${logo}
+      <div class="headTp">${tpCompact(true)}</div>
+    </div></div>`;
+  }
+  return `<div class="siteHead"><div class="inner">${logo}</div></div>`;
+}
+/* compact Trustpilot green card */
+function tpCompact(header){
+  return `<div class="tpCard">
+    <div class="tpRow"><span class="lbl">Hervorragend</span>${tpStars()}</div>
+    <div class="tpRow tpRow2">
+      <span class="txt">5.471 Bewertungen auf</span>
+      <span class="tpWord"><span class="pin">${I.star}</span>Trustpilot</span>
+    </div>
+  </div>`;
+}
+/* big review-quote card (desktop v1) */
+function tpReview(){
+  let bigStars='<div class="stars2">';
+  for(let i=0;i<5;i++) bigStars+=`<span class="sq">${I.star}</span>`;
+  bigStars+='</div>';
+  let cardStars='<div class="stars">';
+  for(let i=0;i<5;i++) cardStars+=`<span class="sq">${I.star}</span>`;
+  cardStars+='</div>';
+  return `<div class="tpReviewWrap">
+    <div class="tpLogoBig"><span class="pin">${I.star}</span>Trustpilot</div>
+    <div class="reviewCard">
+      <div class="top">${cardStars}<span class="date">24/02/2026</span></div>
+      <div class="quote">„Ich liebe die Produkte von bedrop! Sie helfen mir schnell bei Schmerzen, fühlen sich auf der Haut wunderbar an – absolute Empfehlung!”</div>
+      <div class="author">– Ursula K. ${I.verified}</div>
+      <div class="tpFoot"><span class="pin">${I.star}</span>Trustpilot</div>
+    </div>
+  </div>`;
+}
+function express(){
+  return `<div class="section" style="gap:16px">
+    <div class="expressLabel">Express Checkout</div>
+    <div class="expressBtns">
+      <div class="xbtn paypal"><img src="${A}pay-paypal.png" alt="PayPal"></div>
+      <div class="xbtn applepay"><img src="${A}pay-applepay.png" alt="Apple Pay"></div>
+    </div>
+  </div>`;
+}
+function oder(){ return `<div class="oder">ODER</div>`; }
+
+function contact(){
+  return `<div class="section">
+    <div class="secHead"><h2>Kontakt</h2><span class="link">Anmelden</span></div>
+    <div class="field"><input placeholder="E-Mail"></div>
+    <label class="checkline"><span class="box"></span>Neuigkeiten und Angebote via E-Mail erhalten</label>
+  </div>`;
+}
+function delivery(){
+  return `<div class="section">
+    <div class="secHead"><h2>Lieferung</h2></div>
+    <div class="select">
+      <span class="floatLbl">Land / Region</span>
+      <select><option>Deutschland</option><option>Österreich</option><option>Schweiz</option></select>
+      <span class="caret">${I.caretDown}</span>
+    </div>
+    <div class="row2">
+      <div class="field"><input placeholder="Vorname"></div>
+      <div class="field"><input placeholder="Nachname"></div>
+    </div>
+    <div class="field"><input placeholder="Firma (optional)"></div>
+    <div class="field hasIcon"><input placeholder="Adresse"><span class="fic">${I.search}</span></div>
+    <div class="field"><input placeholder="Wohnung, Zimmer, usw. (optional)"></div>
+    <div class="row2">
+      <div class="field"><input placeholder="Postleitzahl"></div>
+      <div class="field"><input placeholder="Stadt"></div>
+    </div>
+    <div class="field hasIcon"><input placeholder="Telefon (optional)"><span class="fic">${I.help}</span></div>
+  </div>`;
+}
+function shipping(){
+  return `<div class="section">
+    <div class="secHead"><h2>Versand</h2></div>
+    <div class="infoBox">Gib deine Lieferadresse ein, um verfügbare Versandarten anzuzeigen.</div>
+  </div>`;
+}
+function payRow(name, chipsHtml, selected){
+  return `<div class="payRow${selected?' on':''}">
+    <span class="radio"></span><span class="name">${name}</span>
+    <span class="payChips">${chipsHtml}</span>
+  </div>`;
+}
+function payment(){
+  const paypalChip = `<span class="chip paypal"><img src="${A}pay-paypal.png" alt="PayPal"></span>`;
+  const appleChip = `<span class="chip applepay"><img src="${A}pay-applepay.png" alt="Apple Pay"></span>`;
+  const cardChips = `<span class="chip visa">VISA</span>
+    <span class="chip mc"><span class="c r"></span><span class="c o"></span></span>
+    <span class="chip mc"><span class="c r"></span><span class="c o"></span></span>
+    <span class="chip more">+2</span>`;
+  const sepaChip = `<span class="chip"><img src="${A}pay-sepa.png" alt="SEPA"></span>`;
+  const klarnaChip = `<span class="chip"><img src="${A}pay-klarna.png" alt="Klarna"></span>`;
+  const rechnungChip = `<span class="chip"><img src="${A}pay-rechnung.png" alt="Rechnung"></span>`;
+  return `<div class="section">
+    <div class="secHead"><h2>Zahlung</h2></div>
+    <div class="subtle">Alle Transaktionen sind sicher und verschlüsselt.</div>
+    <div class="payList">
+      ${payRow('Paypal', paypalChip, false)}
+      ${payRow('Apple Pay', appleChip, false)}
+      <div class="payRow selectedGroup">
+        <span class="radio"></span><span class="name">Kreditkarte</span>
+        <span class="payChips">${cardChips}</span>
+      </div>
+      <div class="payBody">
+        <div class="field hasIcon"><input placeholder="Kartennummer"><span class="fic">${I.lock}</span></div>
+        <div class="row2">
+          <div class="field"><input placeholder="Gültig bis (MM/JJ)"></div>
+          <div class="field hasIcon"><input placeholder="Sicherheitscode"><span class="fic">${I.help}</span></div>
+        </div>
+        <div class="field"><input placeholder="Name des Karteninhabers"></div>
+        <label class="checkline"><span class="box on">${I.check}</span>Lieferadresse als Rechnungsadresse verwenden</label>
+      </div>
+      ${payRow('Lastschrift', sepaChip, false)}
+      ${payRow('Klarna – Ratenzahlung', klarnaChip, false)}
+      ${payRow('Klarna – Sofort bezahlen', klarnaChip, false)}
+      ${payRow('Rechnung', rechnungChip, false)}
+    </div>
+  </div>`;
+}
+function billing(){
+  return `<div class="section">
+    <div class="secHead"><h2>Rechnungsadresse</h2></div>
+    <div class="payList">
+      <div class="payRow on selectedGroup" style="box-shadow:inset 0 0 0 1.5px #111;border-radius:8px 8px 0 0">
+        <span class="radio"></span><span class="name" style="font-weight:500;font-size:14px">Mit der Lieferadresse identisch</span>
+      </div>
+      <div class="payRow" style="border-top:none">
+        <span class="radio"></span><span class="name" style="font-weight:500;font-size:14px">Eine andere Rechnungsadresse verwenden</span>
+      </div>
+    </div>
+  </div>`;
+}
+function phoneSave(){
+  return `<div class="section">
+    <div class="secHead"><h2 style="font-size:16px">Meine Daten zum schnelleren Bezahlen speichern</h2></div>
+    <div class="field hasIcon floating">
+      <span class="floatLbl">Mobiltelefon (optional)</span>
+      <input value="+49" style="padding-top:16px">
+      <span class="fic" style="left:auto;right:auto;left:14px;display:none"></span>
+    </div>
+    <div class="legal">Indem du deine Telefonnummer angibst, stimmst du zu, ein Shop-Konto zu erstellen. Es gelten die <a>Bedingungen</a> und <a>Datenschutzerklärung</a> von Shop.</div>
+  </div>`;
+}
+function footer(){
+  return `<div class="footerLinks">
+    <a>Widerrufsrecht</a><a>Versand</a><a>Datenschutzerklärung</a><a>AGB</a><a>Impressum</a><a>Stornierungen</a>
+  </div>`;
+}
+
+/* ---- Order summary pieces ---- */
+function product(){
+  return `<div class="prod">
+    <div class="thumbWrap">
+      <img class="thumb" src="${A}product-swan.png" alt="Swan – Massimo Colonna">
+      <span class="qty">1</span>
+    </div>
+    <div class="meta">
+      <div class="titleRow"><span class="t">Swan - Massimo Colonna</span><span class="p">€ 1.990,00</span></div>
+      <div class="desc">Kaschierung unter Acrylglas, Stärke 2mm glänzend</div>
+      <div class="size">140 x 105 cm</div>
+    </div>
+  </div>`;
+}
+function discount(){
+  return `<div class="discount">
+    <input placeholder="Rabattcode oder Gutschein">
+    <button class="apply">Anwenden</button>
+  </div>`;
+}
+function totals(){
+  return `<div class="totals">
+    <div class="totRow"><span>Zwischensumme</span><span>€ 1.990,00</span></div>
+    <div class="totRow"><span class="lft">Versand ${I.info}</span><span>€ 29</span></div>
+    <div class="grand">
+      <span class="gl">Gesamt</span>
+      <span class="gr"><div><span class="cur">EUR</span><span class="amt">€ 2.019,00</span></div><div class="tax">inkl. MwSt € 322,36</div></span>
+    </div>
+  </div>`;
+}
+function badges(){
+  const items=[
+    [I.bReturn,'60 Tage<br>Rückgaberecht'],
+    [I.bInstall,'Zahle später<br>oder in Raten'],
+    [I.bPeople,'330.000<br>Kunden'],
+    [I.bFrame,'Fertig zum<br>Aufhängen'],
+    [I.bShield,'Art<br>security Box'],
+  ];
+  return `<div class="badges">${items.map(x=>`<div class="badge"><span class="ic">${x[0]}</span><span class="bl">${x[1]}</span></div>`).join('')}</div>`;
+}
+function fragen(){
+  return `<div class="fragen">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+      <div class="ftitle">Noch Fragen?</div>
+      <div class="fsub">Deine Kunst ist bei uns in besten Händen</div>
+    </div>
+    <div class="fbody">Vom Echtheitszertifikat bis zum sicheren Versand kümmern wir uns um jedes Detail. Bei Fragen erreichst du uns persönlich.</div>
+    <div class="divl"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="contact">
+        <a href="tel:+493030306969">${I.call}+493030306969</a>
+        <a href="#">${I.forum}CHAT</a>
+      </div>
+      <div class="hours">Mo–Sa 10–19 Uhr &amp; So 13–18 Uhr</div>
+    </div>
+  </div>`;
+}
+function buy(){ return `<button class="buyBtn">Jetzt kaufen</button>`; }
+
+function orderBarMobile(){
+  return `<div class="obar"><span class="l">Bestellübersicht ${I.caretDown}</span><span class="amt">€ 2.019,00</span></div>`;
+}
+function orderExpandedMobile(){
+  return `<div class="mExpanded">
+    <div class="obarTop"><span class="l">Bestellübersicht ${I.caretUp}</span></div>
+    ${product()}${discount()}${totals()}
+  </div>`;
+}
+
+/* ---------------- Variant compositions ---------------- */
+function renderDesktopV1(){
+  return `${promoBar()}${header('v1')}
+  <div class="checkout">
+    <div class="col-left">
+      ${tpCompact()}
+      ${tpReview()}
+      ${express()}
+      ${oder()}
+      ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${buy()}
+      ${footer()}
+    </div>
+    <div class="col-right">
+      ${product()}${discount()}${totals()}${badges()}${fragen()}
+    </div>
+  </div>`;
+}
+function renderDesktopV2(){
+  return `${promoBar()}${header('v2')}
+  <div class="checkout">
+    <div class="col-left">
+      ${badges()}
+      ${express()}
+      ${oder()}
+      ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${buy()}
+      ${footer()}
+    </div>
+    <div class="col-right">
+      ${product()}${discount()}${totals()}${fragen()}
+    </div>
+  </div>`;
+}
+function renderMobileV1(){
+  return `<div class="mwrap">
+    ${promoBar()}${header('v1')}
+    ${orderBarMobile()}
+    <div class="mcol">
+      ${tpCompact()}
+      ${express()}
+      ${oder()}
+      ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${orderExpandedMobile()}
+      ${buy()}
+      ${badges()}
+      ${fragen()}
+      ${footer()}
+    </div>
+  </div>`;
+}
+function renderMobileV2(){
+  return `<div class="mwrap">
+    ${promoBar()}${header('v1')}
+    <div class="mcol" style="padding-bottom:0">${tpCompact()}</div>
+    ${orderBarMobile()}
+    <div class="mcol">
+      ${badges()}
+      ${express()}
+      ${oder()}
+      ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${orderExpandedMobile()}
+      ${buy()}
+      ${badges()}
+      ${fragen()}
+      ${footer()}
+    </div>
+  </div>`;
+}
+
+const views={
+  dv1:{fn:renderDesktopV1,mobile:false},
+  dv2:{fn:renderDesktopV2,mobile:false},
+  mv1:{fn:renderMobileV1,mobile:true},
+  mv2:{fn:renderMobileV2,mobile:true},
+};
+const stage=document.getElementById('stage');
+function show(v){
+  const cfg=views[v];
+  stage.className='stage'+(cfg.mobile?' mobileStage':'');
+  stage.innerHTML=cfg.fn();
+  document.querySelectorAll('.switcher button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+}
+document.querySelectorAll('.switcher button').forEach(b=>{
+  b.addEventListener('click',()=>show(b.dataset.v));
+});
+show('dv1');
+</script>
+</body>
+</html>

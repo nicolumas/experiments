@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your first artwork, a first-time buyer's guide | LUMAS</title>
+<meta name="description" content="Buying art for the first time? No art degree required. Editions, budgets, sizing, and how to find a work you'll love, with a free Art Consultant and 60 days to be sure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{
+    /* ---- V2 (2026) semantic tokens ---- */
+    --color-text-primary:#1C1A18;
+    --color-text-secondary:#5A5752;
+    --color-text-tertiary:#908C87;
+    --color-text-disabled:#C7C3BE;
+    --color-text-inverse:#F4EDE2;
+    --color-surface-page:#FAF6F1;
+    --color-surface-card:#FFFFFF;
+    --color-surface-raised:#F7F1E9;
+    --color-surface-sunken:#F4EDE2;
+    --color-surface-inverse:#1C1A18;
+    --color-surface-muted:#F0EBE3;
+    --color-border-default:#E2D8CC;
+    --color-border-subtle:#EAE2D8;
+    --color-border-strong:#C7C3BE;
+    --color-border-focus:#1C1A18;
+    --color-border-inverse:#F4EDE2;
+
+    --font-display:"Utile Display","Archivo","Helvetica Neue",Arial,sans-serif;
+    --font-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+
+    --shadow-frame:0 18px 60px -16px rgba(28,26,24,.30); /* gallery-lift, artworks only */
+    --shadow-sm:0 1px 2px rgba(28,26,24,.06);
+
+    --ease:cubic-bezier(.16,1,.3,1);
+    --art-h:312px; /* uniform carousel artwork height — same height, never cropped */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--color-surface-page);
+    color:var(--color-text-primary);
+    font-family:var(--font-body);
+    font-variation-settings:"wdth" 100;
+    -webkit-font-smoothing:antialiased;
+    font-size:16px;line-height:1.5;font-weight:400;
+  }
+  img{display:block}
+  .serif{font-family:var(--font-display);font-weight:400;letter-spacing:0}
+  .eyebrow{
+    font-family:var(--font-body);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--color-text-tertiary);font-weight:700;
+  }
+  .container{max-width:1180px;margin:0 auto;padding:0 32px}
+  @media(max-width:640px){.container{padding:0 20px}}
+
+  /* ---- scroll reveal (enhances an already-visible default; off without JS) ---- */
+  .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .js .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1!important;transform:none!important;transition:none}}
+
+  /* ---------- buttons (V2) ---------- */
+  .btn{
+    display:inline-block;margin-top:30px;padding:16px 28px;
+    font-family:var(--font-body);font-weight:700;font-size:13px;
+    letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;
+    border:1px solid transparent;background:transparent;transition:background .25s,color .25s,border-color .25s,transform .15s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.solid{background:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse)}
+  .btn.solid:hover{background:transparent;color:var(--color-text-primary)}
+  .btn.dark{border-color:var(--color-border-focus);color:var(--color-text-primary)}
+  .btn.dark:hover{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+  .btn{border-color:var(--color-border-inverse);color:var(--color-text-inverse)}
+  .btn:hover{background:var(--color-text-inverse);color:var(--color-text-primary)}
+  .btn.primary-light{background:var(--color-text-inverse);color:var(--color-text-primary);border-color:var(--color-text-inverse)}
+  .btn.primary-light:hover{background:transparent;color:var(--color-text-inverse)}
+  .btn.ghost{margin-top:0;padding:4px 0 6px;border:none;border-bottom:1px solid var(--color-border-focus);color:var(--color-text-primary);font-weight:400;letter-spacing:.10em}
+
+  /* ---------- header ---------- */
+  .topbar{background:var(--color-surface-inverse);color:rgba(244,237,226,.75);font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:10px 16px;font-weight:700}
+  .topbar b{color:var(--color-text-inverse);font-weight:700}
+  header.site{
+    background:var(--color-surface-card);border-bottom:1px solid var(--color-border-default);
+    position:sticky;top:0;z-index:50;
+  }
+  .site-inner{display:flex;align-items:center;gap:36px;height:68px;max-width:1180px;margin:0 auto;padding:0 32px}
+  .logo{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:.16em}
+  nav.main{display:flex;gap:26px;font-size:13px;letter-spacing:.02em}
+  nav.main a{color:var(--color-text-secondary);text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
+  nav.main a:hover{border-color:var(--color-text-primary);color:var(--color-text-primary)}
+  .site-right{margin-left:auto;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-tertiary);white-space:nowrap;font-weight:700}
+  @media(max-width:860px){nav.main{display:none}}
+
+  /* ---------- hero (photographic — a real work in a real room) ---------- */
+  .hero{
+    position:relative;min-height:80vh;display:flex;align-items:flex-end;
+    color:var(--color-text-inverse);overflow:hidden;
+  }
+  .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .hero::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(8deg,rgba(28,26,24,.92) 0%,rgba(28,26,24,.55) 46%,rgba(28,26,24,.06) 78%)}
+  .hero-content{position:relative;z-index:2;padding:0 0 80px;max-width:660px}
+  .hero .eyebrow{color:rgba(244,237,226,.6)}
+  .hero h1{font-family:var(--font-display);font-size:clamp(40px,5.2vw,60px);line-height:1.05;margin:18px 0 20px;font-weight:400;letter-spacing:0;text-wrap:balance}
+  .hero p{font-size:20px;font-weight:300;line-height:1.6;color:rgba(244,237,226,.82);max-width:500px}
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+  .credit{position:absolute;right:18px;bottom:14px;z-index:2;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,237,226,.5)}
+
+  /* ---------- proof strip ---------- */
+  .proof{background:var(--color-surface-card);border-bottom:1px solid var(--color-border-default)}
+  .proof-inner{max-width:1180px;margin:0 auto;padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:18px 42px;flex-wrap:wrap}
+  .proof .rating{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--color-text-primary);white-space:nowrap}
+  .proof .stars{color:var(--color-text-primary);letter-spacing:.08em;font-size:13px}
+  .proof .rating b{font-weight:700}
+  .proof .press{display:flex;align-items:center;gap:10px 26px;flex-wrap:wrap;color:var(--color-text-tertiary)}
+  .proof .press .lbl{text-transform:uppercase;letter-spacing:.18em;font-size:10px;font-weight:700}
+  .proof .press span.pub{font-family:var(--font-display);font-size:16px;color:var(--color-text-secondary)}
+  .proof .divider{width:1px;height:20px;background:var(--color-border-default)}
+  @media(max-width:640px){.proof .divider{display:none}}
+
+  /* ---------- intro ---------- */
+  .intro{padding:84px 0 8px}
+  .intro-inner{max-width:720px}
+  .intro h2{font-family:var(--font-display);font-size:clamp(34px,3.6vw,46px);line-height:1.12;margin:0 0 20px;font-weight:400;text-wrap:balance}
+  .intro .lede{font-size:20px;font-weight:300;line-height:1.6;color:var(--color-text-secondary);margin-bottom:18px}
+  .intro p{color:var(--color-text-secondary);max-width:640px}
+  .reassure{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:32px;font-size:13px;letter-spacing:.02em;color:var(--color-text-primary)}
+  .reassure span{display:flex;align-items:center;gap:9px}
+  .reassure span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--color-text-primary)}
+
+  /* ---------- generic sections ---------- */
+  section.block{padding:96px 0 8px}
+  .block-head{max-width:720px;margin-bottom:40px}
+  .block-head h2{font-family:var(--font-display);font-size:clamp(34px,3.6vw,46px);line-height:1.12;margin:0 0 18px;font-weight:400;text-wrap:balance}
+  .lede{font-size:20px;font-weight:300;line-height:1.6;color:var(--color-text-secondary)}
+  .prose{max-width:680px;color:var(--color-text-secondary)}
+  .prose p{margin-bottom:18px}
+  .prose strong{color:var(--color-text-primary);font-weight:700}
+  .sub{font-family:var(--font-display);font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:8px 0 0;line-height:1.12}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+  @media(max-width:860px){.two-col{grid-template-columns:1fr;gap:40px}}
+
+  .pull{
+    border-left:2px solid var(--color-text-primary);padding:6px 0 6px 28px;margin:48px 0;
+    font-family:var(--font-display);font-size:clamp(22px,2.6vw,30px);line-height:1.25;max-width:660px;
+  }
+
+  /* ---------- price ladder ---------- */
+  .ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--color-border-default);border:1px solid var(--color-border-default);margin:40px 0}
+  @media(max-width:860px){.ladder{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.ladder{grid-template-columns:1fr}}
+  .ladder div{background:var(--color-surface-card);padding:28px 24px}
+  .ladder .tier{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:12px;font-weight:700}
+  .ladder .amt{font-family:var(--font-display);font-size:26px;margin-bottom:10px}
+  .ladder p{font-size:14px;color:var(--color-text-secondary)}
+
+  /* ---------- lifecycle ---------- */
+  .lifecycle{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin:44px 0 14px;counter-reset:step}
+  @media(max-width:860px){.lifecycle{grid-template-columns:1fr 1fr;gap:40px}}
+  @media(max-width:520px){.lifecycle{grid-template-columns:1fr}}
+  .lifecycle div{counter-increment:step;border-top:1px solid var(--color-text-primary);padding-top:18px}
+  .lifecycle div::before{content:"0" counter(step);font-family:var(--font-display);font-size:13px;color:var(--color-text-tertiary);display:block;margin-bottom:12px;letter-spacing:.1em}
+  .lifecycle h4{font-size:16px;margin-bottom:8px;font-weight:700}
+  .lifecycle p{font-size:14px;color:var(--color-text-secondary)}
+
+  /* ---------- carousels (gallery hang — uniform height, natural width, never cropped) ---------- */
+  .carousel-band{background:var(--color-surface-card);border-top:1px solid var(--color-border-default);border-bottom:1px solid var(--color-border-default);padding:72px 0;margin:88px 0 0}
+  .car-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:8px}
+  .car-head h3{font-family:var(--font-display);font-size:clamp(26px,2.8vw,34px);font-weight:400}
+  .car-head a{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--color-text-primary);text-decoration:none;border-bottom:1px solid var(--color-text-primary);padding-bottom:4px;white-space:nowrap}
+  .car-sub{font-size:14px;color:var(--color-text-tertiary);margin-bottom:30px}
+  .track{display:flex;gap:38px;align-items:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 26px;scrollbar-width:thin}
+  .card{flex:0 0 auto;scroll-snap-align:start;text-decoration:none;color:var(--color-text-primary);width:max-content;min-width:150px}
+  .art{height:var(--art-h);display:block;margin-bottom:18px}
+  .art img{height:100%;width:auto;max-width:none;object-fit:contain;box-shadow:var(--shadow-frame);transition:transform .35s var(--ease);background:var(--color-surface-muted)}
+  .card:hover .art img{transform:translateY(-5px)}
+  .cap{max-width:300px}
+  .card .artist{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;font-weight:700}
+  .card .title{font-family:var(--font-display);font-size:16px;margin-bottom:5px;line-height:1.2}
+  .card .price{font-size:13px;color:var(--color-text-secondary)}
+  .card .meta{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.04em;margin-top:6px;display:flex;align-items:center;gap:7px}
+  .card .meta::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--color-text-primary);flex:0 0 auto}
+  @media(max-width:640px){
+    :root{--art-h:218px}.track{gap:26px}
+    .car-head{flex-direction:column;align-items:flex-start;gap:10px}
+    .car-head a{white-space:normal}
+  }
+
+  /* filter chips (V2) */
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 30px}
+  .tab{font-family:var(--font-body);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:8px 16px;border:1px solid var(--color-border-strong);background:transparent;color:var(--color-text-secondary);cursor:pointer;border-radius:2px;transition:background .2s,color .2s,border-color .2s}
+  .tab:hover{background:var(--color-surface-raised);border-color:transparent}
+  .tab.active{border-color:transparent;background:var(--color-surface-inverse);color:var(--color-text-inverse)}
+
+  /* room-view cards (real interiors) */
+  .roomcard{flex:0 0 auto;width:clamp(300px,40vw,440px);scroll-snap-align:start;text-decoration:none;color:var(--color-text-primary)}
+  .scene{aspect-ratio:4/3;position:relative;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow-frame);background:var(--color-surface-muted)}
+  .scene img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+  .roomcard:hover .scene img{transform:scale(1.035)}
+  .roomcard .artist{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;font-weight:700}
+  .roomcard .title{font-family:var(--font-display);font-size:16px;margin-bottom:5px}
+  .roomcard .price{font-size:13px;color:var(--color-text-secondary)}
+  .roomcard .meta{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+
+  /* vignettes */
+  .vignettes{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin:48px 0 8px}
+  @media(max-width:860px){.vignettes{grid-template-columns:1fr;gap:48px}}
+  .vig .vig-img{aspect-ratio:4/5;overflow:hidden;box-shadow:var(--shadow-frame);background:var(--color-surface-muted)}
+  .vig .vig-img img{width:100%;height:100%;object-fit:cover}
+  .vig h4{font-family:var(--font-display);font-size:18px;margin:18px 0 9px;font-weight:400}
+  .vig p{font-size:14.5px;color:var(--color-text-secondary)}
+  .vig .note{font-family:var(--font-display);font-style:italic;font-size:16px;color:var(--color-text-primary);margin-top:11px;line-height:1.3}
+
+  /* ---------- collector quote = EditorialStrip (dark) ---------- */
+  .estrip{background:var(--color-surface-inverse);color:var(--color-text-inverse);padding:120px 32px;text-align:center}
+  .estrip-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:24px;align-items:center}
+  .estrip .eyebrow{color:rgba(244,237,226,.55)}
+  .estrip blockquote{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.15;letter-spacing:-.0125em}
+  .estrip .who{font-size:13px;line-height:1.6;color:rgba(244,237,226,.75)}
+  .estrip .who b{color:var(--color-text-inverse);font-weight:700}
+
+  /* ---------- editorial full-width image ---------- */
+  .editorial{margin:0}
+  .editorial .frame{aspect-ratio:16/8;width:100%;overflow:hidden;background:var(--color-surface-muted)}
+  .editorial .frame img{width:100%;height:100%;object-fit:cover}
+  @media(max-width:760px){.editorial .frame{aspect-ratio:4/3}}
+  .editorial figcaption{max-width:1180px;margin:0 auto;padding:16px 32px 0;font-size:13px;color:var(--color-text-tertiary);letter-spacing:.02em}
+  .editorial .cap-lede{display:block;font-family:var(--font-display);font-size:clamp(20px,2.4vw,26px);color:var(--color-text-primary);margin-bottom:6px}
+
+  /* ---------- trust band ---------- */
+  .trust{background:var(--color-surface-inverse);color:var(--color-text-inverse);padding:104px 0;margin-top:96px}
+  .trust .eyebrow{color:rgba(244,237,226,.55)}
+  .trust h2{font-family:var(--font-display);font-size:clamp(34px,3.6vw,46px);font-weight:400;line-height:1.12;margin:16px 0 48px;max-width:640px;text-wrap:balance}
+  .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+  @media(max-width:860px){.trust-grid{grid-template-columns:1fr}}
+  .trust-grid h3{font-family:var(--font-display);font-size:24px;font-weight:400;margin-bottom:14px;color:var(--color-text-inverse)}
+  .trust-grid p{font-size:15px;color:rgba(244,237,226,.75)}
+  .trust .btn{margin-top:48px}
+
+  /* ---------- galleries ---------- */
+  .galleries{padding:96px 0}
+  .gal-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start}
+  @media(max-width:860px){.gal-grid{grid-template-columns:1fr}}
+  .gal-grid h2{font-family:var(--font-display);font-size:clamp(30px,3.2vw,40px);font-weight:400;margin:0 0 10px;line-height:1.12}
+  .gal-list{columns:2;gap:40px;font-size:14.5px;color:var(--color-text-secondary);margin-top:24px}
+  .gal-list li{list-style:none;padding:8px 0;border-bottom:1px solid var(--color-border-default);break-inside:avoid}
+  .gal-list li b{color:var(--color-text-primary);font-weight:700}
+  .gal-visual{aspect-ratio:4/3;overflow:hidden;box-shadow:var(--shadow-frame);background:var(--color-surface-muted)}
+  .gal-visual img{width:100%;height:100%;object-fit:cover}
+
+  /* ---------- faq ---------- */
+  .faq{max-width:760px;margin:0 auto;padding:96px 32px}
+  .faq h2{font-family:var(--font-display);font-size:clamp(34px,3.6vw,46px);font-weight:400;margin:0 0 36px}
+  details{border-top:1px solid var(--color-border-default)}
+  details:last-of-type{border-bottom:1px solid var(--color-border-default)}
+  summary{cursor:pointer;padding:24px 36px 24px 0;font-size:17px;font-weight:500;list-style:none;position:relative}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:4px;top:20px;font-size:22px;font-weight:300;color:var(--color-text-tertiary)}
+  details[open] summary::after{content:"\2013"}
+  details .a{padding:0 0 26px;color:var(--color-text-secondary);font-size:15px;max-width:640px}
+
+  /* ---------- final cta ---------- */
+  .final{background:var(--color-surface-card);border-top:1px solid var(--color-border-default);padding:120px 0;text-align:center}
+  .final h2{font-family:var(--font-display);font-size:clamp(36px,4.4vw,60px);font-weight:400;line-height:1.05;margin:0 auto 20px;max-width:760px;text-wrap:balance}
+  .final p{max-width:540px;margin:0 auto;color:var(--color-text-secondary)}
+  .final .actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+  .tagline{margin-top:64px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:700}
+
+  footer{background:var(--color-surface-inverse);color:rgba(244,237,226,.55);font-size:12px;text-align:center;padding:32px;letter-spacing:.04em}
+
+  /* sticky consultation bar */
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--color-surface-inverse);color:var(--color-text-inverse);display:flex;align-items:center;justify-content:center;gap:22px;padding:14px 20px;font-size:13px;letter-spacing:.02em;flex-wrap:wrap;transform:translateY(110%);transition:transform .4s var(--ease)}
+  .sticky-cta.show{transform:translateY(0)}
+  .sticky-cta a.scta{color:var(--color-text-inverse);text-decoration:none;border:1px solid var(--color-border-inverse);padding:10px 20px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;font-weight:700}
+  .sticky-cta button.close{border:none;background:none;color:rgba(244,237,226,.55);font-size:18px;cursor:pointer;padding:0 4px}
+  @media(prefers-reduced-motion:reduce){.sticky-cta{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Hand-signed &amp; numbered editions &nbsp;&middot;&nbsp; <b>60-day love-it-or-return-it guarantee</b> &nbsp;&middot;&nbsp; 19 galleries worldwide</div>
+
+<header class="site">
+  <div class="site-inner">
+    <div class="logo">LUMAS</div>
+    <nav class="main">
+      <a href="#">Artworks</a><a href="#">Top 20</a><a href="#">ArtFinder</a>
+      <a href="#">Inspiration</a><a href="#galleries">Galleries</a><a href="#">About us</a>
+    </nav>
+    <div class="site-right">EN&nbsp;&middot;&nbsp;USD</div>
+  </div>
+</header>
+
+<!-- HERO (photographic — a real work in a real room) -->
+<div class="hero">
+  <img class="hero-img" src="first-buyer-assets/hero.jpg" alt="A Guachinarte edition hangs above a console in a collector's salon">
+  <div class="container hero-content">
+    <div class="eyebrow">Your first artwork</div>
+    <h1>Your first artwork.<br>No art degree required.</h1>
+    <p>The one qualification you need, you already have: something stopped you, and you couldn't forget it.</p>
+    <div class="hero-actions">
+      <a class="btn primary-light" href="#">Find your work with the ArtFinder</a>
+      <a class="btn" href="#consult">Talk to an Art Consultant, free</a>
+    </div>
+  </div>
+  <div class="credit">Guachinarte, L.A. Nights, shown in a collector's home</div>
+</div>
+
+<!-- PROOF STRIP -->
+<div class="proof">
+  <div class="proof-inner">
+    <div class="rating">
+      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span><b>4.7 / 5</b> from 5,000+ collector reviews</span>
+    </div>
+    <div class="divider"></div>
+    <div class="press">
+      <span class="lbl">As featured in</span>
+      <span class="pub">Dwell</span>
+      <span class="pub">Architectural Digest</span>
+      <span class="pub">Domino</span>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="intro container reveal" id="intro">
+  <div class="intro-inner">
+    <div class="eyebrow">Start here</div>
+    <h2>Your curiosity is enough</h2>
+    <p class="lede">Most people who love art never buy any. Somewhere along the way, they picked up the idea that collecting is for other people. It isn't.</p>
+    <p>This guide helps you decide with confidence: what editions are, what a first work should cost, and how to find one you'll still love in ten years. Read the parts you want, skip the rest, and an Art Consultant can fill in the gaps for free. By the end, you'll know more than most people who already own art.</p>
+    <div class="reassure">
+      <span>60 days to be sure</span>
+      <span>Free, no-obligation advice</span>
+      <span>Signed &amp; certified editions</span>
+    </div>
+  </div>
+</section>
+
+<!-- CAROUSEL 1: POPULAR -->
+<div class="carousel-band reveal" id="popular">
+  <div class="container">
+    <div class="car-head"><h3>Popular editions</h3><a href="#">Browse all artworks</a></div>
+    <div class="tabs">
+      <button class="tab active">New</button>
+      <button class="tab">Bestsellers</button>
+      <button class="tab">Under $1,000</button>
+      <button class="tab">Final copies</button>
+    </div>
+    <div class="track">
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_cmu39_full.jpg" alt="Osun by Carol Muthiga-Oyekunle" loading="lazy"></div><div class="cap"><div class="artist">Carol Muthiga-Oyekunle</div><div class="title">Osun</div><div class="price">From $1,099</div><div class="meta">Collector favorite</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_bhu100_full.jpg" alt="Cosmic Sphaera by Beatrice Hug" loading="lazy"></div><div class="cap"><div class="artist">Beatrice Hug</div><div class="title">Cosmic Sphaera</div><div class="price">From $3,690</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_ssn90_full.jpg" alt="29 Palms Oasis by Stefanie Schneider" loading="lazy"></div><div class="cap"><div class="artist">Stefanie Schneider</div><div class="title">29 Palms Oasis</div><div class="price">From $599</div><div class="meta">Collector favorite</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_gua41_full.jpg" alt="L.A. Nights by Guachinarte" loading="lazy"></div><div class="cap"><div class="artist">Guachinarte</div><div class="title">L.A. Nights</div><div class="price">From $799</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_gri03_full.jpg" alt="Kuchenstuhl by Gerhard Richter" loading="lazy"></div><div class="cap"><div class="artist">Gerhard Richter</div><div class="title">K&uuml;chenstuhl</div><div class="price">From $1,820</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_ime125_full.jpg" alt="La Vie en Rose by Isabelle Menin" loading="lazy"></div><div class="cap"><div class="artist">Isabelle Menin</div><div class="title">La Vie en Rose</div><div class="price">From $990</div></div></a>
+    </div>
+    <p class="car-sub" style="margin:14px 0 0">New to collecting? Keep reading, or <a href="#consult" style="color:var(--color-text-primary)">ask an Art Consultant</a>, free.</p>
+  </div>
+</div>
+
+<!-- WHAT YOU'RE ACTUALLY BUYING -->
+<section class="block container reveal" id="buying">
+  <div class="block-head">
+    <h2>Real art, and what "real" even means</h2>
+    <p class="lede">The difference between decor and art isn't snobbery. It's a relationship.</p>
+  </div>
+  <div class="prose">
+    <p>Mass-produced prints are made by the tens of thousands. No one curated yours. No artist signed it. It fills a wall, and that's the whole transaction.</p>
+    <p>A real edition is different in three ways. <strong>Someone made it on purpose:</strong> an artist spent years arriving at that image, and it rewards a second look, and a five-hundredth. <strong>It's accountable:</strong> signed and numbered, this image, this artist, exactly this many. And <strong>it can hold value,</strong> scarce by design, so when it sells out, it's gone.</p>
+  </div>
+  <div class="pull">The reason most people stop at decor isn't taste. It's the assumption that real art starts at auction prices. It doesn't.</div>
+  <div class="prose">
+    <p>The names you know (Gerhard Richter, Peter Doig, Damien Hirst) trade originals in the millions. Then the works disappear: private collections, freeports, climate-controlled vaults, museums. Art made to be looked at, sometimes owned only as an investment. Editions close that gap: signed, certified works by museum-represented artists, at prices an art lover can reach. LUMAS was founded in Berlin in 2004 on one conviction. <strong>Art belongs with art lovers, not in vaults.</strong></p>
+  </div>
+
+  <div style="margin-top:64px">
+    <h3 class="sub">What a limited edition actually is</h3>
+    <div class="prose" style="margin-top:20px">
+      <p>An artist creates an image. Instead of one original for one wealthy collector: a fixed number of gallery-grade prints, each hand-signed and numbered. <strong>"42/150"</strong> means you own the 42nd of exactly 150 in the world. When the 150th sells, the edition closes forever. D&uuml;rer did it in the 1500s; Picasso and Warhol after him. The model that put Picasso linocuts into living rooms puts art into yours.</p>
+      <p><strong>Gallery quality you can see.</strong> Every LUMAS edition is crafted in an award-winning photo lab, under the artist's eye. Stand close: sharpness that holds into the corners, blacks you can look <em>into</em>, a surface that's perfectly flat with the mounting invisible. See it once, and you can't unsee it.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:56px">
+    <h3 class="sub">Why early is the best seat</h3>
+    <div class="lifecycle">
+      <div><h4>Release</h4><p>The entry price. The lowest the work will ever be.</p></div>
+      <div><h4>Sell-through</h4><p>Demand rises, price rises, in defined stages. Supply, switched off.</p></div>
+      <div><h4>Final copies</h4><p>"8 of 150 remaining." The last works move quickly.</p></div>
+      <div><h4>Sold out</h4><p>Closed forever. From here: collector to collector, at a premium.</p></div>
+    </div>
+    <div class="pull">Tomorrow's scarce object, at today's open price.</div>
+  </div>
+</section>
+
+<!-- CAROUSEL 2: NEW RELEASES -->
+<div class="carousel-band reveal" id="new">
+  <div class="container">
+    <div class="car-head"><h3>New releases</h3><a href="#">Browse all artworks</a></div>
+    <p class="car-sub">Just released, editions at their entry price.</p>
+    <div class="track">
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_bhu106_full.jpg" alt="Sphaera Topaz by Beatrice Hug" loading="lazy"></div><div class="cap"><div class="artist">Beatrice Hug</div><div class="title">Sphaera Topaz</div><div class="price">From $3,690</div><div class="meta">New release</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_cgo155_full.jpg" alt="Ying &amp; Yang by Claudio Gotsch" loading="lazy"></div><div class="cap"><div class="artist">Claudio Gotsch</div><div class="title">Ying &amp; Yang</div><div class="price">From $1,150</div><div class="meta">New release</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_ssn87_full.jpg" alt="Daydream by Stefanie Schneider" loading="lazy"></div><div class="cap"><div class="artist">Stefanie Schneider</div><div class="title">Daydream</div><div class="price">From $699</div><div class="meta">New release</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_ime83_full.jpg" alt="Up To The Sky 03 by Isabelle Menin" loading="lazy"></div><div class="cap"><div class="artist">Isabelle Menin</div><div class="title">Up To The Sky 03</div><div class="price">From $1,590</div><div class="meta">New release</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_cmu22_full.jpg" alt="Aset by Carol Muthiga-Oyekunle" loading="lazy"></div><div class="cap"><div class="artist">Carol Muthiga-Oyekunle</div><div class="title">Aset</div><div class="price">From $1,490</div><div class="meta">New release</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_caa03_full.jpg" alt="Dogs Never Bite Me by Craig Alan" loading="lazy"></div><div class="cap"><div class="artist">Craig Alan</div><div class="title">Dogs Never Bite Me</div><div class="price">From $599</div><div class="meta">New release</div></div></a>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IT COSTS -->
+<section class="block container reveal" id="budget">
+  <div class="block-head">
+    <h2>What should your first artwork cost?</h2>
+    <p class="lede">The art world treats asking about price as vulgar. We'd rather you ask.</p>
+  </div>
+
+  <div class="ladder">
+    <div><div class="tier">Decor</div><div class="amt">Under $200</div><p>Open-edition posters. Unsigned, unlimited. Fine for a dorm. Not collecting.</p></div>
+    <div><div class="tier">The entry point</div><div class="amt">$300&ndash;$1,000</div><p>Signed editions by exhibited artists. Where most first acquisitions happen.</p></div>
+    <div><div class="tier">The anchor</div><div class="amt">$1,000&ndash;$5,000</div><p>Larger formats, smaller editions, established names. Works that anchor a room.</p></div>
+    <div><div class="tier">Blue chip</div><div class="amt">$5,000+</div><p>Abramovi&#263;. Hirst. Artists whose originals trade in the millions.</p></div>
+  </div>
+
+  <div class="prose">
+    <p><strong>Buy at the top of your comfort, not the bottom.</strong> The common regret isn't overspending. It's settling. You'll look at this every day for decades. And scarcity works in your favor on the way in: prices rise as editions sell through, so release-price collectors benefit most.</p>
+    <p>At LUMAS, most first works land at <strong>$700 to $1,500,</strong> and flexible monthly payments at checkout let a first work fit your budget. 350,000+ collectors started exactly where you are now.</p>
+  </div>
+</section>
+
+<!-- CAROUSEL 3: PRICE WILL INCREASE SOON -->
+<div class="carousel-band reveal" id="rising">
+  <div class="container">
+    <div class="car-head"><h3>Price will increase soon</h3><a href="#">See editions nearing their next stage</a></div>
+    <p class="car-sub">As these editions sell through, their price steps up. Today's price won't return.</p>
+    <div class="track">
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_saa110_full.jpg" alt="Positano Beach by Slim Aarons" loading="lazy"></div><div class="cap"><div class="artist">Slim Aarons</div><div class="title">Positano Beach</div><div class="price">From $3,199</div><div class="meta">Approaching next price stage</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_gve36_full.jpg" alt="3D Bowie by Gavin Evans" loading="lazy"></div><div class="cap"><div class="artist">Gavin Evans</div><div class="title">3D Bowie</div><div class="price">From $1,929</div><div class="meta">Approaching next price stage</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_bhu101_full.jpg" alt="Sphaera Purple by Beatrice Hug" loading="lazy"></div><div class="cap"><div class="artist">Beatrice Hug</div><div class="title">Sphaera Purple</div><div class="price">From $3,190</div><div class="meta">Approaching next price stage</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_gri04_full.jpg" alt="Landschaft mit Wolke by Gerhard Richter" loading="lazy"></div><div class="cap"><div class="artist">Gerhard Richter</div><div class="title">Landschaft mit Wolke</div><div class="price">From $1,990</div><div class="meta">Approaching next price stage</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_cmu42_full.jpg" alt="bell by Carol Muthiga-Oyekunle" loading="lazy"></div><div class="cap"><div class="artist">Carol Muthiga-Oyekunle</div><div class="title">bell</div><div class="price">From $1,990</div><div class="meta">Final stage ahead</div></div></a>
+      <a class="card" href="#"><div class="art"><img src="https://img.lumas.com/showimg_ime130_full.jpg" alt="Adventures in the Garden 02 by Isabelle Menin" loading="lazy"></div><div class="cap"><div class="artist">Isabelle Menin</div><div class="title">Adventures in the Garden 02</div><div class="price">From $1,790</div><div class="meta">Approaching next price stage</div></div></a>
+    </div>
+  </div>
+</div>
+
+<!-- FINDING YOUR WORK -->
+<section class="block container reveal" id="find">
+  <div class="block-head">
+    <h2>How to find a work you'll still love in ten years</h2>
+    <p class="lede">It isn't a knowledge problem. It's an attention problem.</p>
+  </div>
+  <div class="prose">
+    <p><strong>Look at a lot of art, quickly,</strong> and notice what makes you slow down. After fifty images, you'll see your pattern: color, emptiness, faces, cities at night. Then look slowly at what stopped you. Not "is this good?" (the curators settled that), but "does this image keep opening?"</p>
+    <p><strong>Learn the story. It changes the image.</strong> Three works, three stories:</p>
+  </div>
+
+  <div class="vignettes">
+    <div class="vig">
+      <div class="vig-img"><img src="https://img.lumas.com/showimg_ssn90_full.jpg" alt="29 Palms Oasis by Stefanie Schneider" loading="lazy"></div>
+      <h4>Stefanie Schneider, 29 Palms Oasis</h4>
+      <p>A sun-bleached dream of the Mojave. In 1996, Schneider bought expired Polaroid film at a Sunset Boulevard flea market and has worked with that decaying material ever since.</p>
+      <p class="note">The color shifts aren't a filter. They're thirty years of chemistry.</p>
+    </div>
+    <div class="vig">
+      <div class="vig-img"><img src="https://img.lumas.com/showimg_bhu100_full.jpg" alt="Cosmic Sphaera by Beatrice Hug" loading="lazy"></div>
+      <h4>Beatrice Hug, Cosmic Sphaera</h4>
+      <p>Looks like a digital rendering. It's glass containers, colored liquids, and sunlight through a Paris studio window, shot in extreme macro.</p>
+      <p class="note">No software. Just physics.</p>
+    </div>
+    <div class="vig">
+      <div class="vig-img"><img src="https://img.lumas.com/showimg_cgo48_full.jpg" alt="Highland cattle, a wildlife edition by Claudio Gotsch" loading="lazy"></div>
+      <h4>Claudio Gotsch, Heimat</h4>
+      <p>Looks like a studio shoot. The black backdrop is a mountain forest in shadow. Gotsch waited motionless in a hide, for hours, until the animal walked into frame.</p>
+      <p class="note">What looks staged is patience.</p>
+    </div>
+  </div>
+
+  <div class="prose" id="consult" style="margin-top:40px">
+    <p><strong>Use an expert. It costs nothing.</strong> An Art Consultant isn't a salesperson. They're a translator between what you respond to and 4,500 works you haven't seen. Show them three screenshots, and they'll show you twenty works you'd never have found, then show you any one of them on your own wall, in your light, at true scale, from a single photo.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 0">
+      <a class="btn solid" href="#">Discover with the ArtFinder</a>
+      <a class="btn dark" href="#consult">Talk to an Art Consultant</a>
+    </div>
+    <p style="font-size:13px;color:var(--color-text-tertiary);margin-top:16px">The ArtFinder builds your shortlist from a few visual choices, or have an Art Consultant guide you, free, no obligation.</p>
+  </div>
+</section>
+
+<!-- COLLECTOR QUOTE — EditorialStrip (dark) -->
+<section class="estrip reveal">
+  <div class="estrip-inner">
+    <div class="eyebrow">From a first-time collector</div>
+    <blockquote>"I almost didn't ask. I thought I'd embarrass myself. Instead my consultant sent me twenty works I'd never have found, showed me one on my actual wall, and I bought it. A year later it's the first thing every guest asks about."</blockquote>
+    <div class="who"><b>Danielle R.</b>, first work: Stefanie Schneider, <em>29 Palms Oasis</em> &middot; Brooklyn, NY</div>
+  </div>
+</section>
+
+<!-- CAROUSEL: IN COLLECTORS' HOMES (real interiors) -->
+<div class="carousel-band reveal" id="homes">
+  <div class="container">
+    <div class="car-head"><h3>In collectors' homes</h3><a href="#">See your wall, free visualization</a></div>
+    <p class="car-sub">First works, shown at true scale. Send a photo of your wall and see any edition in your own room.</p>
+    <div class="track">
+      <a class="roomcard" href="#"><div class="scene"><img src="first-buyer-assets/home-hug.jpg" alt="Beatrice Hug edition in an architect's living room" loading="lazy"></div><div class="artist">Beatrice Hug</div><div class="title">Cosmic Sphaera</div><div class="price">From $3,690</div><div class="meta">Architect's living room, Antwerp</div></a>
+      <a class="roomcard" href="#"><div class="scene"><img src="first-buyer-assets/home-jahns.jpg" alt="Robert Jahns edition above a console in a Paris salon" loading="lazy"></div><div class="artist">Robert Jahns</div><div class="title">Paris Balloons</div><div class="price">From $899</div><div class="meta">Haussmann salon, Paris</div></a>
+      <a class="roomcard" href="#"><div class="scene"><img src="first-buyer-assets/home-menin.jpg" alt="Isabelle Menin edition in a Milan apartment" loading="lazy"></div><div class="artist">Isabelle Menin</div><div class="title">Up To The Sky 03</div><div class="price">From $1,590</div><div class="meta">Brera apartment, Milan</div></a>
+      <a class="roomcard" href="#"><div class="scene"><img src="first-buyer-assets/home-carol.jpg" alt="Carol Muthiga-Oyekunle edition in a Milan room" loading="lazy"></div><div class="artist">Carol Muthiga-Oyekunle</div><div class="title">Aset</div><div class="price">From $1,490</div><div class="meta">Pink salon, Milan</div></a>
+      <a class="roomcard" href="#"><div class="scene"><img src="first-buyer-assets/home-schneider.jpg" alt="Stefanie Schneider edition in a light-filled study" loading="lazy"></div><div class="artist">Stefanie Schneider</div><div class="title">Palm Trees, Palm Springs</div><div class="price">From $2,790</div><div class="meta">Bleached-aqua study</div></a>
+    </div>
+  </div>
+</div>
+
+<!-- EDITORIAL FULL-WIDTH IMAGE -->
+<figure class="editorial reveal">
+  <div class="frame"><img src="first-buyer-assets/editorial.jpg" alt="A wide LUMAS edition anchoring a concrete loft living space" loading="lazy"></div>
+  <figcaption>
+    <span class="cap-lede">Not just homes. One confident work gives a whole room its center of gravity.</span>
+    A panoramic LUMAS edition in a collector's loft.
+  </figcaption>
+</figure>
+
+<!-- THE PRACTICAL PART -->
+<section class="block container reveal" id="practical">
+  <div class="block-head">
+    <h2>What to know before you buy</h2>
+    <p class="lede">A little about quality, a little about hanging, and the things to check before you commit.</p>
+  </div>
+
+  <div class="two-col" style="margin-bottom:8px">
+    <div class="prose">
+      <h4 style="font-weight:700;margin-bottom:10px;color:var(--color-text-primary)">Quality, briefly</h4>
+      <p>Two prints of the same image can be different objects. An <strong>archival pigment print</strong> lays pigment into cotton-rag paper, matte, painterly, and built to outlast you. A <strong>C-print</strong> is exposed onto light-sensitive photographic paper, the way photographs were made for a century, giving a deep, luminous color all its own. And <strong>Diasec,</strong> the print face-mounted behind polished acrylic, adds a glow and depth you can read from across a room. Ask where a piece is made; the lab is part of what you're paying for.</p>
+    </div>
+    <div class="prose">
+      <h4 style="font-weight:700;margin-bottom:10px;color:var(--color-text-primary)">Hanging it well</h4>
+      <p>When art just works in a room, it's rarely budget. It's a few gallery habits. <strong>Go a size up</strong> (between two sizes, take the larger). Aim for <strong>two-thirds to three-quarters</strong> of the furniture's width. Hang at <strong>gallery height,</strong> center at 57 to 60 inches, lower than most homes hang. One confident work gives a room its center of gravity.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:28px;max-width:720px">
+    <p>Then a few quick checks before you commit. <strong>Is it hand-signed?</strong> By the artist's hand, not printed in the image. <strong>Is it numbered, with the edition size disclosed?</strong> "Limited" without a number is marketing. You want the fraction: 42/150. <strong>Is there a certificate of authenticity?</strong> Work, artist, edition size, your number; keep it. And <strong>what's the return policy?</strong> LUMAS gives you 60 days: hang it, live with it, love it, or return it.</p>
+    <p>Take your time, but editions close. "12 of 150 remaining" isn't a countdown trick; it's arithmetic. If a work has stayed in your head for two weeks, that's your answer.</p>
+  </div>
+</section>
+
+<!-- TRUST BAND -->
+<div class="trust reveal">
+  <div class="container">
+    <div class="eyebrow">Why first-timers can take the leap</div>
+    <h2>A first acquisition doesn't have to feel like a risk.</h2>
+    <div class="trust-grid">
+      <div><h3>60 days to be sure</h3><p>On your wall, in your light, through your ordinary days. Love it or return it, and we mean it.</p></div>
+      <div><h3>A consultant in your corner</h3><p>Show them a screenshot and watch them light up. They love the hunt, and guide as much or as little as you want. In a gallery or virtually. Free, no obligation.</p></div>
+      <div><h3>A gallery you can walk into</h3><p>19 galleries worldwide: New York, Miami Beach, Berlin, Paris, London. Two decades of curation. 350,000+ collectors, most of whom once had no idea what a C-print was.</p></div>
+    </div>
+    <a class="btn" href="#galleries">Plan a visit</a>
+  </div>
+</div>
+
+<!-- GALLERIES -->
+<section class="galleries container reveal" id="galleries">
+  <div class="gal-grid">
+    <div>
+      <h2 class="serif">19 galleries worldwide</h2>
+      <p style="color:var(--color-text-secondary);max-width:480px">Stand in front of the works. It settles what a screen can't. Walk in anytime.</p>
+      <ul class="gal-list">
+        <li><b>New York</b></li><li><b>Miami Beach</b></li><li><b>Berlin Mitte</b></li><li><b>Berlin KuDamm</b></li>
+        <li><b>Paris</b></li><li><b>London</b></li><li>Hamburg</li><li>Munich</li><li>Cologne</li><li>D&uuml;sseldorf</li>
+        <li>Frankfurt</li><li>Frankfurt Main Airport</li><li>Stuttgart</li><li>Hanover</li><li>Dortmund</li>
+        <li>Mannheim</li><li>Vienna</li><li>Zurich</li><li>Budapest</li>
+      </ul>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:34px">
+        <a class="btn dark" href="#">Plan a visit</a>
+        <a class="btn dark" href="#">Book a virtual consultation</a>
+      </div>
+    </div>
+    <div class="gal-visual"><img src="first-buyer-assets/hero.jpg" alt="A LUMAS edition in a richly furnished salon" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<div style="background:var(--color-surface-card);border-top:1px solid var(--color-border-default)">
+  <div class="faq reveal" id="faq">
+    <h2>First-time collector FAQ</h2>
+    <details open>
+      <summary>Do I need to know about art to collect art?</summary>
+      <div class="a">No. You need to know what you respond to. Everything else can be learned in an afternoon, or told to you by an Art Consultant, free.</div>
+    </details>
+    <details>
+      <summary>Does it arrive framed?</summary>
+      <div class="a">Editions ship unframed by default, ready to frame. Hand framing is an optional service: your Art Consultant helps you choose a frame that suits the work and your space, finished by hand. It's a considered part of the piece, not an upsell.</div>
+    </details>
+    <details>
+      <summary>How does it ship, and how long does it take?</summary>
+      <div class="a">Each edition is finished to order, so allow about one to three weeks. Works arrive in protective packaging; larger formats ship in custom crates, with white-glove delivery available. Anything that arrives less than perfect, we make right.</div>
+    </details>
+    <details>
+      <summary>Can I pay over time?</summary>
+      <div class="a">Yes. Flexible monthly payments are available at checkout, so a first work can fit your budget without compromising on quality. <em>[Confirm provider and terms before publishing.]</em></div>
+    </details>
+    <details>
+      <summary>Is a limited edition a good investment?</summary>
+      <div class="a">Prices rise in stages as editions sell through, and sold-out editions can appreciate meaningfully. But the only guaranteed return is the one on your wall every morning. Collect what you love; treat appreciation as the bonus.</div>
+    </details>
+    <details>
+      <summary>What's the difference between an edition and a museum-shop print?</summary>
+      <div class="a">Signature, number, scarcity, production. A poster is an unlimited reproduction. An edition is a fine art print: hand-signed, fixed in quantity, crafted to archival standards.</div>
+    </details>
+    <details>
+      <summary>What if it doesn't work in my home?</summary>
+      <div class="a">60 days, love it or return it. And before you commit, visualization shows you the work on your wall at true scale, from a single photo.</div>
+    </details>
+    <details>
+      <summary>Can I see works in person before deciding?</summary>
+      <div class="a">Yes, and do it at least once. Scale and surface don't translate on screens, Diasec least of all. 19 galleries; New York and Miami Beach among them.</div>
+    </details>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final reveal">
+  <div class="container">
+    <div class="eyebrow">Start where you are</div>
+    <h2>The best first artwork is the one you kept coming back to.</h2>
+    <p>500+ artists. 4,500+ signed editions. Curated in Berlin since 2004. Collected by 350,000+ people who started exactly where you are.</p>
+    <div class="actions">
+      <a class="btn solid" href="#">Find your work with the ArtFinder</a>
+      <a class="btn dark" href="#consult">Talk to an Art Consultant, free</a>
+      <a class="btn dark" href="#galleries">Plan a gallery visit</a>
+    </div>
+    <div class="tagline">Signed&nbsp;&middot;&nbsp;Limited&nbsp;&middot;&nbsp;Curated</div>
+  </div>
+</div>
+
+<footer>&copy; LUMAS, Liberation of Arts. Room imagery shown for layout; artworks are live LUMAS editions. Reviews, press marks, and payment terms shown for layout, confirm before launch.</footer>
+
+<!-- STICKY CONSULTATION BAR -->
+<div class="sticky-cta" id="stickyCta">
+  <span style="color:rgba(244,237,226,.85)">Not sure where to start? An Art Consultant will help, free, no obligation. 60 days to love it or return it.</span>
+  <a class="scta" href="#consult">Talk to a consultant</a>
+  <button class="close" aria-label="Dismiss" onclick="this.parentElement.remove()">&times;</button>
+</div>
+
+<!-- sentinel for sticky-bar reveal (IntersectionObserver, no scroll listeners) -->
+<div id="ctaSentinel" style="position:absolute;top:120vh;height:1px;width:1px"></div>
+
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* scroll-reveal: enhances content that is already visible by default */
+    var reveals = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window) || reduce) {
+      reveals.forEach(function(el){ el.classList.add('in'); });
+    } else {
+      var ro = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+      reveals.forEach(function(el){ ro.observe(el); });
+    }
+
+    /* sticky CTA appears once the reader is past the hero (sentinel, not a scroll listener) */
+    var bar = document.getElementById('stickyCta');
+    var sentinel = document.getElementById('ctaSentinel');
+    if (bar && sentinel && 'IntersectionObserver' in window) {
+      var so = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if (e.isIntersecting) bar.classList.add('show'); });
+      });
+      so.observe(sentinel);
+    } else if (bar) {
+      bar.classList.add('show');
+    }
+
+    /* filter chips: visual active-state only (demo) */
+    document.querySelectorAll('.tabs').forEach(function(group){
+      group.addEventListener('click', function(ev){
+        var t = ev.target.closest('.tab'); if (!t) return;
+        group.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+        t.classList.add('active');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

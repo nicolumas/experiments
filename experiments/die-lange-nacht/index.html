@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inspired Nr. 45 · Die lange Nacht · LUMAS</title>
+<meta name="description" content="Die Herbstausgabe des LUMAS Magazins Inspired als begehbarer Raum. Ein Feld aus Konstellationen, durch das man sich in alle Richtungen bewegt.">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link rel="stylesheet" href="../assets/v2-tokens.css">
+<link rel="stylesheet" href="inspired.css">
+</head>
+<body>
+
+<div id="ambient"></div>
+
+<main id="viewport" role="application"
+      aria-label="Inspired Nr. 45, begehbarer Raum. Ziehen bewegt Sie, Scrollen führt tiefer. Mit L öffnen Sie die lineare Leseansicht.">
+  <div id="world"></div>
+</main>
+
+<div id="vignette"></div>
+<div id="grain"></div>
+
+<div id="mark"><b>Inspired</b><br>Nr. 45 · Die lange Nacht</div>
+
+<button id="here" type="button" aria-label="Übersicht der Kapitel öffnen">
+  <span class="label">Sie sind bei</span>
+  <span class="name"></span>
+</button>
+
+<div id="keys">
+  <button type="button" data-act="map">Kapitel<kbd>M</kbd></button>
+  <button type="button" data-act="read">Lesen<kbd>L</kbd></button>
+  <button type="button" data-act="about">Über<kbd>I</kbd></button>
+</div>
+
+<div id="plan-wrap" aria-hidden="true">
+  <span class="cap-label">Das Feld</span>
+  <div id="plan"></div>
+</div>
+
+<div id="cursor"></div>
+
+<div id="map" aria-hidden="true">
+  <div class="inner">
+    <p class="eyebrow">Acht Konstellationen, eine Nacht</p>
+    <div class="chapters"></div>
+    <p class="foot">Eine Konstellation wählen, oder mit Escape zurück in die Nacht.</p>
+  </div>
+</div>
+
+<div id="reading"><div class="col"></div></div>
+
+<div id="colophon">
+  <div class="box">
+    <p class="eyebrow">Über diesen Prototyp</p>
+    <h3>Ein Magazin, durch das man gehen kann.</h3>
+    <p>Diese Umgebung ist aus der Herbstausgabe von Inspired gebaut: Texte, Werke und Bildmaterial
+      stammen aus dem Layout im Arbeitsstand. Die Dunkelheit ist kein Dark Mode, sondern der Raum.
+      Die Werke sind das Licht darin.</p>
+    <p>Ziehen bewegt Sie nach links, rechts, oben und unten. Scrollen führt tiefer hinein und wieder
+      heraus. Ein Klick auf ein Werk öffnet seine Geschichte als Konstellation um das Werk herum,
+      durch die Sie sich weiterbewegen. M zeigt die Kapitel, L öffnet dieselbe Ausgabe linear und
+      unbewegt, I zeigt diesen Text.</p>
+    <p>Zur Zuschreibung: das Layout trägt an vielen Stellen noch Platzhalter-Bildunterschriften.
+      Werke sind hier nur dort namentlich zugeordnet, wo der Fließtext der Doppelseite die
+      Künstlerin oder den Künstler eindeutig nennt. Alle übrigen behalten die Zeile des Magazins.
+      Es wurde nichts erfunden.</p>
+    <p>Einzelne Raumansichten: Montage aus Fotografie und KI-generierten Bildteilen, manuell
+      bearbeitet. Die Werke selbst sind unverändert.</p>
+    <button class="close" type="button">Schließen</button>
+  </div>
+</div>
+
+<div id="overture">
+  <p class="line l1">Inspired · Ausgabe Nr. 45</p>
+  <p class="line l2">Es beginnt mit einem Fenster.</p>
+  <p class="line l3">Eine Nacht, in der die Werke das Licht machen.</p>
+  <button class="line enter" type="button">Eintreten</button>
+</div>
+
+<script type="module" src="world.js"></script>
+</body>
+</html>

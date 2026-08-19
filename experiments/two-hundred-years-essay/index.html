@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<!-- ═══ PROTO HEADER ═══════════════════════════════════════════════════════
+  ID:          PROTO-2026-014
+  Surface:     Campaign landing page · 200 years of photography (2026)
+  Hypothesis:  [ASSUMPTION] Visitors arriving on an editorial anniversary
+               landing page that frames LUMAS as the curatorial authority of
+               photography click through to PDPs at a higher rate than from a
+               generic category page, because historical framing raises
+               perceived permanence and edition value.
+  Prior:       ledger silent (no prior anniversary-campaign entries)
+  Goals:       primary  PDP click-through (select_item)  [ASSUMPTION: closest
+               documented goal name]
+               secondary collection CTA engagement (select_promotion)
+  Variants:    control only — marketing landing, no experiment wired yet
+  Status:      exploration
+  Data:        products + prices from the live COM feed (Lumas MCP, 2026-08-10);
+               all image URLs and outbound links verified 200 before build.
+  Note:        1.8-trillion-per-day figure taken from the campaign brief as
+               provided — verify before publication.
+═══════════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>200 years of photography · LUMAS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231C1A18'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%23F4EDE2'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="https://cdn.lumas.de/assets/white/fonts/utile/utile-display-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://cdn.lumas.de/assets/white/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  @font-face{font-family:'Utile Display';src:url('https://cdn.lumas.de/assets/white/fonts/utile/utile-display-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Utile Display';src:url('https://cdn.lumas.de/assets/white/fonts/utile/utile-display-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Archivo';src:url('https://cdn.lumas.de/assets/white/fonts/archivo.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
+
+  :root{
+    --charcoal-900:#1C1A18; --charcoal-800:#3A3835; --charcoal-700:#5A5752;
+    --charcoal-500:#908C87; --charcoal-300:#C7C3BE;
+    --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+    --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+
+    --text-primary:var(--charcoal-900);
+    --text-secondary:var(--charcoal-700);
+    --text-tertiary:var(--charcoal-500);
+    --text-inverse:var(--ivory-100);
+    --surface-page:#FFFFFF;
+    --surface-band:var(--ivory-300);
+    --surface-sunken:var(--ivory-100);
+    --surface-muted:var(--bone-300);
+    --surface-inverse:var(--charcoal-900);
+    --border-default:var(--bone-100);
+    --border-subtle:var(--bone-200);
+    --border-strong:var(--charcoal-300);
+
+    --font-display:'Utile Display','Archivo',Georgia,serif;
+    --font-body:'Archivo','Helvetica Neue',Arial,sans-serif;
+
+    --ease:cubic-bezier(0.2,0.8,0.2,1);
+    --dur-1:220ms; --dur-2:320ms; --dur-3:520ms;
+
+    --pad-x:clamp(20px,5vw,72px);
+    --max-w:1560px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+  body{
+    background:var(--surface-page);
+    color:var(--text-primary);
+    font-family:var(--font-body);
+    font-variation-settings:"wdth" 100;
+    font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;}
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--charcoal-900);outline-offset:3px;}
+
+  /* ── type ── */
+  .display-1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,4.6vw,62px);line-height:1.04;letter-spacing:0;text-wrap:balance;}
+  .display-2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12;letter-spacing:0;text-wrap:balance;}
+  .display-3{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12;text-wrap:balance;}
+  .display-4{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25;text-wrap:balance;}
+  .body-lg{font-weight:300;font-size:clamp(17px,1.4vw,20px);line-height:1.6;}
+  .body-sm{font-size:13px;line-height:1.65;}
+  .caption{font-size:11px;line-height:1.5;letter-spacing:0.03em;color:var(--text-tertiary);}
+  .eyebrow{font-weight:700;font-size:11px;line-height:1.5;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-tertiary);}
+  .measure{max-width:62ch;}
+
+  /* ── buttons ── */
+  .btn{
+    display:inline-block;background:var(--charcoal-900);color:var(--ivory-100);
+    font-family:var(--font-body);font-weight:700;font-size:13px;line-height:1.5;
+    letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;
+    padding:16px 28px;border:0;border-radius:0;cursor:pointer;
+    transition:background var(--dur-1) var(--ease);
+  }
+  .btn:hover{background:var(--charcoal-800);}
+  .btn-ghost{
+    display:inline-block;background:none;color:var(--charcoal-900);
+    font-weight:400;font-size:13px;line-height:1.5;letter-spacing:0.1em;text-transform:uppercase;
+    text-decoration:none;padding:4px 0 6px;border-bottom:1px solid var(--charcoal-900);
+    transition:opacity var(--dur-1) var(--ease);
+  }
+  .btn-ghost:hover{opacity:0.6;}
+  .btn-ghost.inverse{color:var(--text-inverse);border-bottom-color:var(--ivory-100);}
+
+  /* ── layout ── */
+  .wrap{max-width:var(--max-w);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x);}
+  section{position:relative;}
+
+  /* ── nav ── */
+  .nav{
+    position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.94);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--border-subtle);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .wordmark{font-weight:700;font-size:19px;letter-spacing:0.38em;text-decoration:none;padding-left:0.38em; /* optical: balances tracked last letter */ text-indent:-0.19em;}
+  .nav-links{display:flex;gap:36px;}
+  .nav-links a{font-weight:700;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;color:var(--text-secondary);transition:color var(--dur-1) var(--ease);}
+  .nav-links a:hover{color:var(--text-primary);}
+  @media (max-width:719px){.nav-links a:not(:first-child){display:none;}}
+
+  /* ── hero (art-forward split) ── */
+  .hero{padding:clamp(48px,7vh,88px) 0 clamp(56px,9vh,96px);}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(40px,6vw,112px);align-items:center;}
+  .hero-copy{display:flex;flex-direction:column;align-items:flex-start;gap:28px;}
+  .hero-copy .eyebrow{margin-bottom:-4px;}
+  .hero-copy .body-lg{color:var(--text-secondary);max-width:44ch;}
+  .hero-ctas{display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-top:8px;}
+  .hero-art{justify-self:end;max-width:100%;}
+  .hero-art a{display:block;}
+  .hero-art img{max-height:min(60vh,540px);width:auto;max-width:100%;box-shadow:0 18px 60px -16px rgba(28,26,24,0.35);}
+  .hero-art figcaption{margin-top:16px;}
+  .hero-art figcaption a{display:inline;color:var(--text-tertiary);text-decoration:none;transition:color var(--dur-1) var(--ease);}
+  .hero-art figcaption a:hover{color:var(--text-primary);}
+  @media (max-width:899px){
+    .hero-grid{grid-template-columns:1fr;align-items:start;}
+    .hero-art{justify-self:start;}
+    .hero-art img{max-height:56vh;}
+  }
+
+  /* ── image slots (empty spaces for campaign imagery) ── */
+  .slot{
+    background:var(--surface-sunken);border:1px solid var(--border-default);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;text-align:center;padding:24px;
+  }
+  .slot-label{font-weight:700;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-tertiary);}
+  .slot-note{font-size:11px;line-height:1.5;letter-spacing:0.03em;color:var(--text-tertiary);max-width:34ch;}
+  /* ── charcoal editorial strip ── */
+  .strip{background:var(--surface-inverse);color:var(--text-inverse);padding:clamp(72px,12vh,120px) var(--pad-x);}
+  .strip-inner{max-width:760px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:24px;}
+  .strip .eyebrow{color:rgba(244,237,226,0.55);}
+  .strip-display{font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4vw,56px);line-height:1.15;letter-spacing:-0.015em;}
+  .strip p:not(.eyebrow){font-weight:300;font-size:18px;line-height:1.6;color:rgba(244,237,226,0.75);}
+
+  /* ── timeline (scrollable rail of moments) ── */
+  .timeline{padding:clamp(72px,11vh,120px) 0;}
+  .timeline-head{margin-bottom:clamp(40px,6vh,64px);}
+  .rail.timeline-rail{align-items:flex-start;gap:clamp(32px,3.5vw,56px);}
+  .moment{flex:0 0 auto;width:min(340px,82vw);scroll-snap-align:start;display:flex;flex-direction:column;}
+  .moment-year{font-family:var(--font-display);font-weight:300;font-size:clamp(40px,3.6vw,56px);line-height:1;}
+  .moment-year small{font-family:var(--font-body);font-weight:400;font-size:13px;letter-spacing:0.03em;color:var(--text-tertiary);display:block;margin-top:8px;}
+  .moment h3{margin:24px 0 12px;}
+  .moment p:not(.moment-year){font-size:14px;line-height:1.65;color:var(--text-secondary);}
+  .moment-art{display:block;margin-top:28px;}
+  .moment-art img{width:100%;height:auto;transition:transform var(--dur-3) var(--ease);}
+  .moment-art:hover img{transform:scale(1.02);}
+  .moment-art{overflow:hidden;}
+  .moment .caption{margin-top:12px;}
+  .moment .caption a{color:var(--text-tertiary);text-decoration:none;transition:color var(--dur-1) var(--ease);}
+  .moment .caption a:hover{color:var(--text-primary);}
+  .timeline .rail-btn{top:200px;}
+
+  /* ── artwork rails ── */
+  .rail-section{padding:clamp(72px,11vh,120px) 0;}
+  .band{background:var(--surface-band);}
+  .rail-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(36px,5vh,56px);}
+  @media (max-width:719px){.rail-head{flex-direction:column;align-items:flex-start;gap:24px;}}
+  .rail-head-copy{max-width:720px;}
+  .rail-head-copy .eyebrow{margin-bottom:20px;}
+  .rail-head-copy p{margin-top:20px;color:var(--text-secondary);}
+  .rail-wrap{position:relative;}
+  .rail{
+    display:flex;align-items:flex-end;gap:clamp(32px,4vw,64px);
+    overflow-x:auto;scroll-snap-type:x proximity;
+    padding-bottom:8px;scrollbar-width:none;
+  }
+  .rail::-webkit-scrollbar{display:none;}
+  .work{flex:0 0 auto;scroll-snap-align:start;text-decoration:none;max-width:86vw;}
+  .work-frame{height:min(46vh,400px);display:flex;align-items:flex-end;overflow:hidden;}
+  .work-frame img{height:100%;width:auto;max-width:none;transition:transform var(--dur-3) var(--ease);}
+  .work:hover .work-frame img{transform:scale(1.02);}
+  .work-meta{padding-top:16px;display:flex;flex-direction:column;gap:3px;}
+  .work-artist{font-weight:700;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-tertiary);}
+  .work-title{font-size:13px;line-height:1.5;color:var(--text-primary);}
+  .work-price{font-size:13px;line-height:1.5;color:var(--text-secondary);}
+  @media (max-width:719px){.work-frame{height:min(52vh,320px);}}
+
+  /* circular carousel controls (overlay) */
+  .rail-btn{
+    position:absolute;top:calc(min(46vh,400px)/2);transform:translateY(-50%);
+    width:48px;height:48px;border-radius:50%;
+    background:#FFFFFF;border:1px solid var(--border-strong);color:var(--charcoal-900);
+    font-size:18px;line-height:1;cursor:pointer;z-index:5;
+    display:flex;align-items:center;justify-content:center;
+    transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease),opacity var(--dur-1) var(--ease);
+  }
+  .rail-btn:hover{background:var(--charcoal-900);color:var(--ivory-100);border-color:var(--charcoal-900);}
+  .rail-btn[disabled]{opacity:0.25;pointer-events:none;}
+  .rail-btn.prev{left:-12px;}
+  .rail-btn.next{right:-12px;}
+  @media (max-width:899px){.rail-btn{display:none;}}
+  @media (max-width:719px){.rail-btn{top:calc(min(52vh,320px)/2);}}
+
+  /* ── artist features ── */
+  .artists-intro{background:var(--surface-band);padding:clamp(64px,9vh,96px) 0;}
+  .artists-intro p{margin-top:20px;color:var(--text-secondary);}
+  .feature{padding:clamp(72px,11vh,120px) 0;}
+  .feature + .feature{padding-top:0;}
+  .feature-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(40px,5.5vw,104px);align-items:center;}
+  .feature.alt .feature-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);}
+  .feature.alt .feature-copy{order:1;}
+  .feature.alt .feature-art{order:2;}
+  @media (max-width:899px){.feature.alt .feature-copy{order:2;}.feature.alt .feature-art{order:1;}}
+  .feature-art img{width:100%;height:auto;box-shadow:0 18px 60px -16px rgba(28,26,24,0.35);}
+  .feature-art figcaption{margin-top:16px;}
+  .feature-art figcaption a{color:var(--text-tertiary);text-decoration:none;transition:color var(--dur-1) var(--ease);}
+  .feature-art figcaption a:hover{color:var(--text-primary);}
+  .feature-copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;}
+  .feature-copy p{color:var(--text-secondary);}
+  .feature-ctas{display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-top:8px;}
+  @media (max-width:899px){.feature-grid{grid-template-columns:1fr;}}
+
+  /* ── events ── */
+  .events{background:var(--surface-muted);padding:clamp(72px,11vh,120px) 0;}
+  .events-head{margin-bottom:clamp(36px,5vh,56px);}
+  .events-head .eyebrow{margin-bottom:20px;}
+  .events-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,3vw,48px);}
+  .event-card{background:#FFFFFF;border:1px solid var(--border-subtle);display:flex;flex-direction:column;}
+  .event-body{padding:clamp(28px,3vw,48px);display:flex;flex-direction:column;gap:12px;}
+  .event-body p:not(.caption){font-size:14px;line-height:1.65;color:var(--text-secondary);}
+  .event-body .caption{margin-top:8px;}
+  @media (max-width:899px){.events-grid{grid-template-columns:1fr;}}
+
+  /* ── footer ── */
+  footer{background:var(--surface-inverse);color:var(--text-inverse);padding:clamp(56px,8vh,88px) 0;}
+  .footer-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:48px;flex-wrap:wrap;}
+  .footer-brand{display:flex;flex-direction:column;gap:16px;}
+  .footer-brand .wordmark{color:var(--ivory-100);}
+  .footer-brand p{font-weight:300;font-size:14px;line-height:1.6;color:rgba(244,237,226,0.75);max-width:36ch;}
+  .footer-links{display:flex;flex-direction:column;gap:12px;}
+  .footer-links a{font-weight:700;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;color:rgba(244,237,226,0.55);transition:color var(--dur-1) var(--ease);}
+  .footer-links a:hover{color:var(--ivory-100);}
+  .footer-legal{margin-top:48px;padding-top:24px;border-top:1px solid rgba(244,237,226,0.15);font-size:11px;letter-spacing:0.03em;color:rgba(244,237,226,0.55);}
+
+  /* ── scroll reveal (progressive enhancement, JS-gated) ── */
+  @media (prefers-reduced-motion:no-preference){
+    html.js [data-reveal]{opacity:0;transform:translateY(14px);transition:opacity var(--dur-3) var(--ease),transform var(--dur-3) var(--ease);transition-delay:var(--d,0ms);}
+    html.js [data-reveal].is-in{opacity:1;transform:none;}
+    html.js.no-anim [data-reveal]{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="wordmark" href="https://www.lumas.com/" aria-label="LUMAS">LUMAS</a>
+    <nav class="nav-links" aria-label="Campaign">
+      <a href="#collection">The collection</a>
+      <a href="#artists">The artists</a>
+      <a href="#events">Events</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero: art-forward split, main content above the fold -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow">200 years of photography</p>
+          <h1 class="display-1">The photograph from 1826 is&nbsp;still on a wall.</h1>
+          <p class="body-lg">Nicéphore Niépce fixed the first permanent photograph two hundred years ago. It hangs in a museum in Texas to this day. We celebrate the images made to stay.</p>
+          <div class="hero-ctas">
+            <!-- ABLYFT-GOAL: collection CTA engagement [ASSUMPTION: closest documented goal] -->
+            <a class="btn" href="#collection" data-track="select_promotion" data-track-label="hero_discover_collection">Discover the collection</a>
+            <a class="btn-ghost" href="#timeline">The story of 1826</a>
+          </div>
+        </div>
+        <figure class="hero-art" data-reveal style="--d:120ms">
+          <a href="https://www.lumas.com/pictures/bert_stern-1/marilyn_monroe_ii/" data-track="select_item" data-track-label="BSE04">
+            <img src="https://img.lumas.com/showimg_bse04_full.jpg" alt="Bert Stern, Marilyn Monroe II">
+          </a>
+          <figcaption class="caption"><a href="https://www.lumas.com/pictures/bert_stern-1/marilyn_monroe_ii/">Bert Stern, Marilyn Monroe II · from $2,790</a></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- The fact: charcoal editorial strip -->
+  <section class="strip">
+    <div class="strip-inner" data-reveal>
+      <p class="eyebrow">1826 → 2026</p>
+      <h2 class="strip-display">Some images outlive their time. We show them.</h2>
+      <p>Around 1.8 trillion photographs are taken every day, and they disappear just as fast. The first photograph in history has been on view for two hundred years. Choosing the images that deserve that kind of life is what a gallery is for.</p>
+      <a class="btn-ghost inverse" href="#artists" data-track="select_content" data-track-label="strip_meet_photographers">Meet the photographers</a>
+    </div>
+  </section>
+
+  <!-- Timeline: three dates -->
+  <section class="timeline" id="timeline">
+    <div class="wrap">
+      <div class="timeline-head" data-reveal>
+        <h2 class="display-2">Two hundred years in eight dates.</h2>
+      </div>
+      <div class="rail-wrap">
+        <button class="rail-btn prev" type="button" aria-label="Earlier dates" data-rail-prev>←</button>
+        <button class="rail-btn next" type="button" aria-label="Later dates" data-rail-next>→</button>
+        <div class="rail timeline-rail" data-rail data-reveal>
+          <article class="moment">
+            <p class="moment-year">1826 <small>Saint-Loup-de-Varennes, France</small></p>
+            <h3 class="display-4">View from the window at Le Gras</h3>
+            <p>Nicéphore Niépce fixes the view from his workroom onto a pewter plate. The exposure takes days. The plate survives, and hangs today in the Harry Ransom Center in Austin, Texas.</p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1839 <small>Paris, 19 August</small></p>
+            <h3 class="display-4">The daguerreotype goes public</h3>
+            <p>Louis Daguerre's process is announced before the French Academy of Sciences and given to the world. The date has been celebrated as World Photography Day ever since.</p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1888 <small>Rochester, New York</small></p>
+            <h3 class="display-4">Photography leaves the studio</h3>
+            <p>The first Kodak ships loaded with film for a hundred pictures. You press the button, we do the rest: the camera moves into ordinary hands, and the snapshot is born.</p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1925 <small>Wetzlar, Germany</small></p>
+            <h3 class="display-4">The century learns to see</h3>
+            <p>The Leica puts 35mm film in a coat pocket. Photojournalism is born, and Robert Lebeck would later carry a camera like this around the world.</p>
+            <a class="moment-art" href="https://www.lumas.com/pictures/robert_lebeck/moskau_1979/" data-track="select_item" data-track-label="RLE14">
+              <img src="https://img.lumas.com/showimg_rle14_full.jpg" alt="Robert Lebeck, Moskau 1979" loading="lazy">
+            </a>
+            <p class="caption"><a href="https://www.lumas.com/pictures/robert_lebeck/moskau_1979/">Robert Lebeck, Moskau 1979 · from $599</a></p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1936 <small>Kodachrome</small></p>
+            <h3 class="display-4">The world in colour</h3>
+            <p>Colour film arrives for everyone. Saturated, stable, unmistakable: the palette in which Slim Aarons photographed high society at the pool.</p>
+            <a class="moment-art" href="https://www.lumas.com/pictures/slim_aarons-1/lounging_in_verbier-1/" data-track="select_item" data-track-label="SAA111">
+              <img src="https://img.lumas.com/showimg_saa111_full.jpg" alt="Slim Aarons, Lounging in Verbier" loading="lazy">
+            </a>
+            <p class="caption"><a href="https://www.lumas.com/pictures/slim_aarons-1/lounging_in_verbier-1/">Slim Aarons, Lounging in Verbier · from $3,199</a></p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1948 <small>Cambridge, Massachusetts</small></p>
+            <h3 class="display-4">The instant image</h3>
+            <p>Edwin Land's first Polaroid delivers a finished print in about a minute. It began with his daughter's question: why can't I see the picture now.</p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">1975 <small>Rochester, New York</small></p>
+            <h3 class="display-4">The image becomes data</h3>
+            <p>At Kodak, engineer Steven Sasson builds the first digital camera. It weighs four kilograms, records 0.01 megapixels to cassette tape, and changes everything that follows.</p>
+          </article>
+          <article class="moment">
+            <p class="moment-year">2026 <small>The anniversary year</small></p>
+            <h3 class="display-4">Photography turns two hundred</h3>
+            <p>We mark the year with a curated anniversary collection and hangings in our galleries worldwide. The peak: World Photography Day, 19 August 2026.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The artists who made the history -->
+  <section class="artists-intro" id="artists">
+    <div class="wrap">
+      <div class="rail-head-copy" data-reveal>
+        <h2 class="display-2">For 200 years, we have been choosing which images stay.</h2>
+        <p class="body-lg measure">LUMAS represents photographers who made the history we are celebrating. Three of them, in focus.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature: Slim Aarons -->
+  <section class="feature" id="aarons">
+    <div class="wrap feature-grid">
+      <figure class="feature-art" data-reveal>
+        <a href="https://www.lumas.com/pictures/slim_aarons-1/positano_beach/" data-track="select_item" data-track-label="SAA110">
+          <img src="https://img.lumas.com/showimg_saa110_full.jpg" alt="Slim Aarons, Positano Beach">
+        </a>
+        <figcaption class="caption"><a href="https://www.lumas.com/pictures/slim_aarons-1/positano_beach/">Slim Aarons, Positano Beach · from $3,199</a></figcaption>
+      </figure>
+      <div class="feature-copy" data-reveal style="--d:120ms">
+        <h2 class="display-2">Slim Aarons</h2>
+        <p class="body-lg measure">High society at the pool, photographed by the man who was invited.</p>
+        <p class="measure">Slim Aarons spent five decades among what he called attractive people doing attractive things in attractive places. The world he photographed is gone. The images stay.</p>
+        <div class="feature-ctas">
+          <!-- ABLYFT-GOAL: PDP click-through (select_item) [ASSUMPTION: closest documented goal] -->
+          <a class="btn-ghost" href="https://www.lumas.com/artist/slim_aarons-1/" data-track="select_content" data-track-label="artist_aarons">Discover Slim Aarons</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature: Bert Stern -->
+  <section class="feature alt" id="stern">
+    <div class="wrap feature-grid">
+      <figure class="feature-art" data-reveal>
+        <a href="https://www.lumas.com/pictures/bert_stern-1/kate_moss_diamond_ring/" data-track="select_item" data-track-label="BSE23">
+          <img src="https://img.lumas.com/showimg_bse23_full.jpg" alt="Bert Stern, Kate Moss, Diamond Ring">
+        </a>
+        <figcaption class="caption"><a href="https://www.lumas.com/pictures/bert_stern-1/kate_moss_diamond_ring/">Bert Stern, Kate Moss, Diamond Ring · from $999</a></figcaption>
+      </figure>
+      <div class="feature-copy" data-reveal style="--d:120ms">
+        <h2 class="display-2">Bert Stern</h2>
+        <p class="body-lg measure">In 1962, Vogue sent Bert Stern into a hotel room with Marilyn Monroe. The Last Sitting became one of the most famous portrait sessions ever made.</p>
+        <p class="measure">Stern photographed the icons of his century with the same directness, from Marilyn to Kate Moss. Both sittings hang in this collection.</p>
+        <div class="feature-ctas">
+          <a class="btn-ghost" href="https://www.lumas.com/artist/bert_stern-1/" data-track="select_content" data-track-label="artist_stern">Discover Bert Stern</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature: Robert Lebeck -->
+  <section class="feature" id="lebeck">
+    <div class="wrap feature-grid">
+      <figure class="feature-art" data-reveal>
+        <a href="https://www.lumas.com/pictures/robert_lebeck/bolschoi_theater_moskau_1976/" data-track="select_item" data-track-label="RLE20">
+          <img src="https://img.lumas.com/showimg_rle20_full.jpg" alt="Robert Lebeck, Bolschoi-Theater, Moskau 1976">
+        </a>
+        <figcaption class="caption"><a href="https://www.lumas.com/pictures/robert_lebeck/bolschoi_theater_moskau_1976/">Robert Lebeck, Bolschoi-Theater, Moskau 1976 · from $799</a></figcaption>
+      </figure>
+      <div class="feature-copy" data-reveal style="--d:120ms">
+        <h2 class="display-2">Robert Lebeck</h2>
+        <p class="body-lg measure">The twentieth century, photographed at close range.</p>
+        <p class="measure">Five decades of reportage for Germany's great magazines, made with the small fast cameras born in 1925. His Berlin and Moscow series show the stages of a divided century: theatres, embassies, monuments.</p>
+        <div class="feature-ctas">
+          <a class="btn-ghost" href="https://www.lumas.com/artist/robert_lebeck/" data-track="select_content" data-track-label="artist_lebeck">Discover Robert Lebeck</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Anniversary collection carousel -->
+  <section class="rail-section" id="collection">
+    <div class="wrap">
+      <div class="rail-head" data-reveal>
+        <div class="rail-head-copy">
+          <p class="eyebrow">The anniversary collection</p>
+          <h2 class="display-2">200 images. 200 years.</h2>
+          <p class="body-lg measure">From the pioneers to the artists defining photography now, released work by work through the anniversary year. A first selection.</p>
+        </div>
+        <a class="btn-ghost" href="https://www.lumas.com/" data-track="select_promotion" data-track-label="collection_view_all">View all works</a>
+      </div>
+      <div class="rail-wrap">
+        <button class="rail-btn prev" type="button" aria-label="Previous works" data-rail-prev>←</button>
+        <button class="rail-btn next" type="button" aria-label="Next works" data-rail-next>→</button>
+        <div class="rail" data-rail data-reveal>
+          <!-- ABLYFT-GOAL: PDP click-through (select_item) [ASSUMPTION: closest documented goal] -->
+          <a class="work" href="https://www.lumas.com/pictures/slim_aarons-1/nassau_speed_week/" data-track="select_item" data-track-label="SAA112">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_saa112_full.jpg" alt="Slim Aarons, Nassau Speed Week" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Slim Aarons</span><span class="work-title">Nassau Speed Week</span><span class="work-price">From $3,199</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/berenice_abbott-1/gasoline_station_bronx/" data-track="select_item" data-track-label="BAO07">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_bao07_full.jpg" alt="Berenice Abbott, Gasoline station, Bronx" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Berenice Abbott</span><span class="work-title">Gasoline station, Bronx</span><span class="work-price">From $249</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/chiron_duong/portrait_no209/" data-track="select_item" data-track-label="CDU01">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_cdu01_full.jpg" alt="Chiron Duong, Portrait no. 209" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Chiron Duong</span><span class="work-title">Portrait no. 209</span><span class="work-price">From $699</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/robert_lebeck/neue_nationalgalerie-2/" data-track="select_item" data-track-label="RLE01">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_rle01_full.jpg" alt="Robert Lebeck, Neue Nationalgalerie" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Robert Lebeck</span><span class="work-title">Neue Nationalgalerie</span><span class="work-price">From $599</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/kevin_krautgartner/in_full_bloom_i/" data-track="select_item" data-track-label="KKR01">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_kkr01_full.jpg" alt="Kevin Krautgartner, In Full Bloom I" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Kevin Krautgartner</span><span class="work-title">In Full Bloom I</span><span class="work-price">From $499</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/christophe_jacrot/times_square_snow_snow/" data-track="select_item" data-track-label="CJA400">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_cja400_full.jpg" alt="Christophe Jacrot, Times Square Snow Show" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Christophe Jacrot</span><span class="work-title">Times Square Snow Show</span><span class="work-price">From $369</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/berenice_abbott-1/watuppa_from_waterfront_brooklyn_manhattan/" data-track="select_item" data-track-label="BAO05">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_bao05_full.jpg" alt="Berenice Abbott, Watuppa, from waterfront, Brooklyn" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Berenice Abbott</span><span class="work-title">Watuppa, from waterfront, Brooklyn</span><span class="work-price">From $249</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/horst_daniel_zielske/notre_dame_de_paris/" data-track="select_item" data-track-label="HDZ103">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_hdz103_full.jpg" alt="Horst and Daniel Zielske, Notre-Dame de Paris" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Horst &amp; Daniel Zielske</span><span class="work-title">Notre-Dame de Paris</span><span class="work-price">From $1,250</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/robert_lebeck/synagoge/" data-track="select_item" data-track-label="RLE06">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_rle06_full.jpg" alt="Robert Lebeck, Synagoge" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Robert Lebeck</span><span class="work-title">Synagoge</span><span class="work-price">From $599</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/christophe_jacrot/man_on_broadway-2/" data-track="select_item" data-track-label="CJA401">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_cja401_full.jpg" alt="Christophe Jacrot, Man on Broadway" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Christophe Jacrot</span><span class="work-title">Man on Broadway</span><span class="work-price">From $369</span></span>
+          </a>
+          <a class="work" href="https://www.lumas.com/pictures/robert_lebeck/kosmonautendenkmal_moskau_1979/" data-track="select_item" data-track-label="RLE16">
+            <span class="work-frame"><img src="https://img.lumas.com/showimg_rle16_full.jpg" alt="Robert Lebeck, Kosmonautendenkmal, Moskau 1979" loading="lazy"></span>
+            <span class="work-meta"><span class="work-artist">Robert Lebeck</span><span class="work-title">Kosmonautendenkmal, Moskau 1979</span><span class="work-price">From $699</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events -->
+  <section class="events" id="events">
+    <div class="wrap">
+      <div class="events-head" data-reveal>
+        <p class="eyebrow">The anniversary year</p>
+        <h2 class="display-2">In the galleries.</h2>
+      </div>
+      <div class="events-grid">
+        <article class="event-card" data-reveal>
+          <div class="event-body">
+            <h3 class="display-4">The anniversary hanging</h3>
+            <p>Historical photographic references in dialogue with contemporary LUMAS works. Two hundred years of the medium, room by room.</p>
+            <p class="caption">Through the anniversary year · all 19 galleries</p>
+          </div>
+        </article>
+        <article class="event-card" data-reveal style="--d:120ms">
+          <div class="event-body">
+            <h3 class="display-4">World Photography Day</h3>
+            <p>Two hundred years to the day after the daguerreotype was given to the world. An evening among the works, in our galleries worldwide.</p>
+            <p class="caption">19 August 2026 · all galleries</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="wordmark" href="https://www.lumas.com/" aria-label="LUMAS">LUMAS</a>
+        <p>Hand-selected artists. Numbered editions. 19 galleries worldwide.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#collection">The collection</a>
+        <a href="#artists">The artists</a>
+        <a href="#events">Events</a>
+      </nav>
+    </div>
+    <p class="footer-legal">© LUMAS 2026 · Prototype for internal review, prices from the live COM shop</p>
+  </div>
+</footer>
+
+<script>
+  // Event stub layer: maps 1:1 to GA4 dataLayer pushes at dev handoff
+  function track(eventName, params) {
+    console.info('[track]', eventName, params || {});
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-track]');
+    if (el) track(el.getAttribute('data-track'), { label: el.getAttribute('data-track-label') });
+  });
+
+  // Scroll reveal (progressive enhancement; content visible without JS)
+  (function () {
+    var items = document.querySelectorAll('[data-reveal]');
+    function revealAll() {
+      document.documentElement.classList.add('no-anim');
+      items.forEach(function (el) { el.classList.add('is-in'); });
+    }
+    // Hidden or background tabs pause transitions; show everything instantly there
+    if (document.hidden) { revealAll(); return; }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) revealAll(); });
+    if (!('IntersectionObserver' in window)) {
+      revealAll();
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  // Carousel controls
+  (function () {
+    document.querySelectorAll('.rail-wrap').forEach(function (wrap) {
+      var rail = wrap.querySelector('[data-rail]');
+      var prev = wrap.querySelector('[data-rail-prev]');
+      var next = wrap.querySelector('[data-rail-next]');
+      if (!rail || !prev || !next) return;
+      function step() { return Math.max(rail.clientWidth * 0.7, 320); }
+      function update() {
+        prev.disabled = rail.scrollLeft <= 4;
+        next.disabled = rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 4;
+      }
+      prev.addEventListener('click', function () {
+        rail.scrollBy({ left: -step(), behavior: 'smooth' });
+        track('carousel_nav', { direction: 'prev' });
+      });
+      next.addEventListener('click', function () {
+        rail.scrollBy({ left: step(), behavior: 'smooth' });
+        track('carousel_nav', { direction: 'next' });
+      });
+      rail.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    });
+  })();
+</script>
+</body>
+</html>

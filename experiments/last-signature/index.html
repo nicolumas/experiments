@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Last Signature — LUMAS</title>
+<!--
+  THE LAST SIGNATURE — rough proof-of-concept (2026-07-20)
+  Concept: the authenticating MARK on the certificate is the hero and the doorway,
+  not the image. Six (here 4, image-verified) masters whose signature has closed.
+  Two states of the closed hand: signed-by-the-artist vs estate-stamped.
+  Tone: celebratory completeness, never requiem. Night at the threshold -> daylight in the rooms.
+  Data: real LUMAS works + real edition_signature per SKU (DWH lumas_article_new, EU feed).
+  Honesty: marks are REPRESENTATIONS; no live "N remaining" (copies_sold is unreliable);
+  scarcity via fact (edition size, signature state, completed oeuvre) only.
+  Spec: docs/superpowers/specs/2026-07-20-last-signature-design.md
+-->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link rel="stylesheet" href="../assets/v2-tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1C1A18; --charcoal-800:#3A3835; --charcoal-700:#5A5752; --charcoal-500:#908C87;
+    --ivory-300:#FAF6F1; --ivory-200:#F7F1E9; --ivory-100:#F4EDE2;
+    --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3; --white:#fff;
+    --utile:'UtileDisplay','Utile Display Trial','Utile Display',Georgia,serif;
+    --sans:'Archivo','Helvetica Neue',Arial,sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{font-family:var(--sans);background:var(--charcoal);color:var(--ivory-100);overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .eyebrow{font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .disp{font-family:var(--utile);font-weight:300;letter-spacing:0;line-height:1.04}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  /* ---------- THRESHOLD (night) ---------- */
+  #threshold{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:4.4rem 2.4rem;transition:opacity .6s var(--ease)}
+  #threshold .eyebrow{color:rgba(244,237,226,.55);margin-bottom:1.8rem}
+  #threshold h1{max-width:13ch;font-size:clamp(34px,4.6vw,56px);color:var(--ivory-100);margin-bottom:1.8rem}
+  #threshold .lede{max-width:50ch;font-weight:300;font-size:clamp(14px,1.5vw,17px);line-height:1.6;
+    color:rgba(244,237,226,.75);margin-bottom:4rem}
+  .marks{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(2.8rem,5vw,5.4rem);max-width:980px}
+  .mark{display:flex;flex-direction:column;align-items:center;gap:1.4rem;transition:transform .5s var(--ease),opacity .5s var(--ease)}
+  .mark .stampwrap{width:116px;height:116px;color:rgba(244,237,226,.72);transition:color .5s var(--ease),transform .5s var(--ease)}
+  .mark:hover{transform:translateY(-4px)}
+  .mark:hover .stampwrap{color:var(--ivory-100);transform:rotate(-3deg) scale(1.04)}
+  .mark:focus-visible{outline:2px solid var(--ivory-100);outline-offset:8px;border-radius:4px}
+  .mark .m-name{display:block;font-family:var(--utile);font-size:18px;color:var(--ivory-100);line-height:1.1}
+  .mark .m-life{display:block;font-size:11px;letter-spacing:.08em;color:rgba(244,237,226,.5);margin-top:.6rem}
+  .threshold-foot{margin-top:4rem;font-size:10px;letter-spacing:.02em;color:rgba(244,237,226,.38);max-width:46ch}
+
+  /* stamps */
+  .stamp-svg{width:100%;height:100%}
+  .stamp-svg .ring{fill:none;stroke:currentColor;stroke-width:1.4}
+  .stamp-svg .ring-i{stroke-width:1;opacity:.7}
+  .stamp-svg text{fill:currentColor;font-family:var(--sans)}
+  .stamp-svg .arc{font-size:14px;font-weight:700;letter-spacing:.14em}
+  .stamp-svg .arc-sm{font-size:9px;font-weight:700;letter-spacing:.22em;opacity:.8}
+  .stamp-svg .mid{font-size:13px;font-weight:700;letter-spacing:.16em}
+  .stamp-svg .yr{font-size:12px;font-weight:400;letter-spacing:.1em;opacity:.85}
+  .sig-svg{width:100%;height:100%;overflow:visible}
+  .sig-svg path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ---------- ROOM (night -> day) ---------- */
+  #room{position:fixed;inset:0;z-index:40;overflow-y:auto;
+    background:var(--charcoal);color:var(--ivory-100);
+    transition:background-color .9s var(--ease),color .9s var(--ease);
+    opacity:0;visibility:hidden;pointer-events:none}
+  #room.open{opacity:1;visibility:visible;pointer-events:auto}
+  #room.lit{background:var(--ivory-300);color:var(--charcoal)}
+  .room-inner{max-width:1080px;margin:0 auto;padding:3.2rem 2.4rem 8rem;min-height:100vh;
+    display:flex;flex-direction:column}
+  .room-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:clamp(3.2rem,7vh,7rem)}
+  .backbtn{display:inline-flex;align-items:center;gap:.8rem;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;opacity:.7;transition:opacity .3s}
+  .backbtn:hover{opacity:1}
+  .room-top .kick{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.5}
+
+  /* certificate face */
+  .cert{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:1.4rem 0 2rem;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+  .cert .bigmark{width:164px;height:164px;margin-bottom:2.2rem}
+  .cert .pair{display:flex;gap:clamp(2.4rem,6vw,5rem);align-items:flex-start;margin-bottom:2.2rem;flex-wrap:wrap;justify-content:center}
+  .cert .pair figure{display:flex;flex-direction:column;align-items:center;gap:1.1rem;max-width:220px}
+  .cert .pair .glyph{width:112px;height:112px;display:flex;align-items:center;justify-content:center}
+  .cert .pair figcaption{font-size:12px;line-height:1.5;opacity:.72;max-width:24ch}
+  .cert .pair .clabel{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.9}
+  .cert .eyebrow{opacity:.55;margin-bottom:1.2rem}
+  .cert h2{font-family:var(--utile);font-weight:300;font-size:clamp(30px,4.4vw,46px);line-height:1.05;margin-bottom:.6rem}
+  .cert .life{font-size:13px;letter-spacing:.06em;opacity:.6;margin-bottom:1.6rem}
+  .cert .line{max-width:46ch;font-weight:300;font-size:clamp(14px,1.6vw,18px);line-height:1.55;opacity:.85;margin-bottom:2rem}
+  .cert .facts{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.55;margin-bottom:2.4rem}
+  .viewbtn{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    padding:1.6rem 3rem;border:1px solid currentColor;border-radius:2px;transition:background .35s,color .35s}
+  #room.lit .viewbtn:hover{background:var(--charcoal);color:var(--ivory-100)}
+
+  /* plates */
+  .works{opacity:0;pointer-events:none;height:0;overflow:hidden}
+  .works.show{opacity:1;pointer-events:auto;height:auto;animation:flood .9s var(--ease) both}
+  @keyframes flood{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  .works h2{font-family:var(--utile);font-weight:300;font-size:clamp(28px,4vw,42px);margin-bottom:.6rem;text-align:center}
+  .works .sub{text-align:center;font-size:13px;opacity:.6;margin-bottom:4.8rem;font-weight:300}
+  .chapter{font-family:var(--utile);font-weight:300;font-size:22px;margin:1.6rem 0 2.4rem;
+    padding-bottom:1.2rem;border-bottom:1px solid var(--bone-100);display:flex;align-items:baseline;gap:1.2rem}
+  .chapter small{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.5}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:clamp(2.4rem,4vw,4rem);margin-bottom:5.6rem}
+  .plate{display:flex;flex-direction:column}
+  .plate .frame{background:var(--white);border:1px solid var(--bone-100);aspect-ratio:1/1.04;
+    display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;
+    box-shadow:0 18px 60px -22px rgba(28,26,24,.4)}
+  .plate .frame img{width:100%;height:100%;object-fit:contain}
+  .plate .frame.dead{background:var(--bone-300)}
+  .plate .frame.dead::after{content:"image unavailable";font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal-500)}
+  .plate .cap{padding-top:1.6rem}
+  .plate .t{font-family:var(--utile);font-size:17px;line-height:1.2;margin-bottom:.6rem}
+  .plate .certline{display:flex;align-items:center;gap:.7rem;font-size:10.5px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--charcoal-700);margin-bottom:1.2rem}
+  .certdot{width:7px;height:7px;border-radius:50%;flex:none}
+  .certdot.signed{background:var(--charcoal);border:1px solid var(--charcoal)}
+  .certdot.estate{background:transparent;border:1px solid var(--charcoal-700)}
+  .plate .go{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px;align-self:flex-start;opacity:.85;transition:opacity .3s}
+  .plate .go:hover{opacity:1}
+
+  /* pdp-band footer + demo */
+  .vaultfoot{margin-top:auto;padding-top:5.6rem;text-align:center}
+  .vaultfoot button{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:1px solid currentColor;padding-bottom:4px;opacity:.7;transition:opacity .3s}
+  .vaultfoot button:hover{opacity:1}
+
+  #pdp{position:fixed;inset:0;z-index:60;background:var(--ivory-300);color:var(--charcoal);
+    overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .4s}
+  #pdp.open{opacity:1;visibility:visible}
+  .pdp-inner{max-width:1000px;margin:0 auto;padding:3.2rem 2.4rem 8rem}
+  .pdp-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(3.2rem,5vw,6rem);align-items:start}
+  .pdp-art{background:var(--white);border:1px solid var(--bone-100);padding:0;aspect-ratio:1/1.1;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 18px 60px -22px rgba(28,26,24,.35);overflow:hidden}
+  .pdp-art img{width:100%;height:100%;object-fit:contain}
+  .pdp-buy .eyebrow{opacity:.5;margin-bottom:1.2rem}
+  .pdp-buy h2{font-family:var(--utile);font-weight:300;font-size:34px;line-height:1.1;margin-bottom:1.2rem}
+  .pdp-buy .price{font-size:20px;margin-bottom:2.4rem}
+  .pdp-buy .addcart{width:100%;background:var(--charcoal);color:var(--ivory-100);text-align:center;
+    padding:1.8rem;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:2px;margin-bottom:1.2rem}
+  .pdp-buy .fav{width:100%;border:1px solid var(--charcoal);padding:1.6rem;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;border-radius:2px}
+  /* the certificate band — the A/B VARIANT unit */
+  .certband{margin-top:2.8rem;background:var(--charcoal);color:var(--ivory-100);padding:2.8rem;border-radius:2px;
+    display:flex;gap:2rem;align-items:center}
+  .certband .cbmark{width:88px;height:88px;flex:none;color:rgba(244,237,226,.85)}
+  .certband .cbtxt .k{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,237,226,.55);margin-bottom:.8rem}
+  .certband .cbtxt h3{font-family:var(--utile);font-weight:300;font-size:20px;line-height:1.2;margin-bottom:.8rem}
+  .certband .cbtxt p{font-size:12.5px;line-height:1.55;color:rgba(244,237,226,.8)}
+  .abtoggle{display:inline-flex;border:1px solid var(--bone-100);border-radius:2px;overflow:hidden;margin-bottom:3.2rem}
+  .abtoggle button{padding:1rem 1.8rem;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.55}
+  .abtoggle button.on{background:var(--charcoal);color:var(--ivory-100);opacity:1}
+  .pdp-back{display:inline-flex;gap:.8rem;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3.2rem;opacity:.7}
+
+  @media(max-width:720px){
+    .pdp-grid{grid-template-columns:1fr}
+    .cert .bigmark{width:160px;height:160px}
+    .mark .stampwrap{width:112px;height:112px}
+  }
+</style>
+</head>
+<body>
+
+<main id="threshold">
+  <p class="eyebrow">The Last Signature</p>
+  <h1 class="disp">Some hands here are complete.</h1>
+  <p class="lede">These masters will sign nothing new — and that is not a loss but a rare completeness: a life's work, whole. What authenticates their editions now is the mark itself — a signature made by the artist's own hand, or the stamp of the estate that keeps the work. Choose a mark to enter.</p>
+  <div class="marks" id="marks"></div>
+  <p class="threshold-foot">Marks shown are representations of the authenticating stamp, at approximate scale. A rough proof of concept — four of the collection's masters, drawn from live LUMAS catalogue data.</p>
+</main>
+
+<section id="room" aria-hidden="true">
+  <div class="room-inner">
+    <div class="room-top">
+      <button class="backbtn" id="backBtn">&larr; The threshold</button>
+      <span class="kick">LUMAS · Estate &amp; Signature Vault</span>
+    </div>
+    <div class="cert" id="cert"></div>
+    <div class="works" id="works"></div>
+    <div class="vaultfoot" id="vaultfoot" style="display:none">
+      <button id="toPdp">See the certificate on a product page &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<section id="pdp" aria-hidden="true">
+  <div class="pdp-inner">
+    <button class="pdp-back" id="pdpBack">&larr; Back to the vault</button>
+    <div class="abtoggle" role="group" aria-label="A/B variant">
+      <button data-v="control" id="btnControl">Control</button>
+      <button data-v="variant" class="on" id="btnVariant">Variant · certificate band</button>
+    </div>
+    <div class="pdp-grid" id="pdpGrid"></div>
+  </div>
+</section>
+
+<script>
+/* ---- proto-kit instrumentation stub (GA4 / ABlyft goal hooks would bind here) ---- */
+function track(event, props){ try{ console.log('[track]', event, props||{}); }catch(e){} }
+
+/* ---- image URL: framed endpoint (full work in passepartout, never cropped) ---- */
+function imgUrl(w){ return w.img || ('https://eu.lumas.com/product/image-with-default-frame/?abstractId='+w.abstractId+'&sku='+w.sku); }
+function editionLabel(w){ return w.edition ? ('Edition of '+w.edition) : 'Open Edition'; }
+function stateLabel(s){ return s==='signed' ? 'Signed by the artist' : 'Estate-stamped'; }
+
+/* ---- REPRESENTATION of an estate stamp (philatelic cancellation motif) ---- */
+function estateStamp(surname, closed){
+  var id='a'+surname.replace(/[^a-z]/gi,'');
+  return '<svg class="stamp-svg" viewBox="0 0 200 200" role="img" aria-label="Representation of the estate stamp of '+surname+'">'
+    +'<defs><path id="top'+id+'" d="M 32 98 A 68 68 0 0 1 168 98"/></defs>'
+    +'<circle class="ring ring-o" cx="100" cy="100" r="94"/>'
+    +'<circle class="ring ring-i" cx="100" cy="100" r="83"/>'
+    +'<text class="arc"><textPath href="#top'+id+'" startOffset="50%" text-anchor="middle">ESTATE OF '+surname.toUpperCase()+'</textPath></text>'
+    +'<text class="mid" x="100" y="97" text-anchor="middle">NACHLASS-</text>'
+    +'<text class="mid" x="100" y="115" text-anchor="middle">STEMPEL</text>'
+    +'<text class="yr" x="100" y="140" text-anchor="middle">&#10022; '+closed+' &#10022;</text>'
+    +'</svg>';
+}
+/* ---- REPRESENTATION of a hand signature (generic, not an artist's real autograph) ---- */
+function sigMark(){
+  return '<svg class="sig-svg" viewBox="0 0 220 80" role="img" aria-label="Representation of a hand-written signature">'
+    +'<path d="M8,58 C28,6 40,74 54,40 C64,16 78,66 92,44 C104,26 118,70 138,38 C154,14 182,20 206,52"/>'
+    +'<path d="M150,60 C165,54 182,56 200,60" opacity="0.6"/>'
+    +'</svg>';
+}
+
+/* ---------- DATA: real works, real edition_signature (DWH), EU feed ---------- */
+var MASTERS=[
+ { key:'aarons', surname:'Aarons', name:'Slim Aarons', life:'1916 – 2006', closed:2006,
+   line:'For half a century he photographed the sunlit life — the poolsides, the palazzos, the people at their leisure. His archive keeps it shining.',
+   states:['estate'],
+   works:[
+     {sku:'SAA24', title:'Lounging in Verbier', year:1964, state:'estate', edition:null, abstractId:5782069, link:'https://eu.lumas.com/pictures/slim_aarons-1/lounging_in_verbier/'},
+     {sku:'SAA12', title:'Sea Drive', year:1967, state:'estate', edition:null, abstractId:5782057, link:'https://eu.lumas.com/pictures/slim_aarons-1/sea_drive/'},
+     {sku:'SAA40', title:'Pop and Society', year:1968, state:'estate', edition:null, abstractId:5782002, link:'https://eu.lumas.com/pictures/slim_aarons-1/pop_and_society/'},
+     {sku:'SAA48', title:'Hotel du Cap-Eden-Roc', year:1969, state:'estate', edition:null, abstractId:5782010, link:'https://eu.lumas.com/pictures/slim_aarons-1/hotel_du_cap-eden-roc/'},
+     {sku:'SAA64', title:'Beverly Hills Hotel', year:1957, state:'estate', edition:null, abstractId:5782026, link:'https://eu.lumas.com/pictures/slim_aarons-1/beverly_hills_hotel/'}
+   ]},
+ { key:'lebeck', surname:'Lebeck', name:'Robert Lebeck', life:'1929 – 2014', closed:2014,
+   line:'One of postwar Germany’s great photojournalists. For decades he signed his prints in pencil, by hand; today his estate signs for him. Both marks live in this catalogue at once.',
+   states:['signed','estate'],
+   works:[
+     {sku:'RLE45', title:'Bora Bora I, 1967', year:1967, state:'signed', edition:100, abstractId:1906, link:'https://eu.lumas.com/pictures/robert_lebeck/bora_bora_i_1967/'},
+     {sku:'RLE21', title:'Bolschoi-Theater, Moskau 1976', year:1976, state:'signed', edition:100, abstractId:492, link:'https://eu.lumas.com/pictures/robert_lebeck/bolschoi_theater_moskau_1976/'},
+     {sku:'RLE27', title:'Salvador Dalí, Cadaqués 1979', year:1979, state:'signed', edition:100, abstractId:2198, link:'https://eu.lumas.com/pictures/robert_lebeck/salvador_dali_cadaques_spanien_1979/'},
+     {sku:'RLE62', title:'Alfred Hitchcock', year:1960, state:'signed', edition:150, abstractId:8342, link:'https://eu.lumas.com/pictures/robert_lebeck/alfred_hitchcock/'},
+     {sku:'RLE59', title:'Romy Schneider', year:1976, state:'signed', edition:150, abstractId:8344, link:'https://eu.lumas.com/pictures/robert_lebeck/romy_schneider/'},
+     {sku:'RLE15', title:'Moskau 1979', year:1979, state:'signed', edition:100, abstractId:2442, link:'https://eu.lumas.com/pictures/robert_lebeck/moskau_1979/'},
+     {sku:'RLE65', title:'Bora Bora II, 1967', year:1967, state:'estate', edition:100, abstractId:3560, link:'https://eu.lumas.com/pictures/robert_lebeck/bora_bora_ii_1967/'},
+     {sku:'RLE64', title:'Auf der Brooklyn Bridge 1967', year:1967, state:'estate', edition:100, abstractId:5952116, link:'https://eu.lumas.com/pictures/robert_lebeck/auf_der_brooklyn_bridge_1967/'},
+     {sku:'RLE66', title:'Joseph Beuys, Schottland 1974', year:1974, state:'estate', edition:100, abstractId:204, link:'https://eu.lumas.com/pictures/robert_lebeck/joseph_beuys_schottland_1974/'},
+     {sku:'RLE69', title:'Friedrichstadt-Palast', year:2003, state:'estate', edition:100, abstractId:6070291, link:'https://eu.lumas.com/pictures/robert_lebeck/friedrichstadt-palast/'},
+     {sku:'RLE71', title:'Reichstagskuppel', year:2003, state:'estate', edition:100, abstractId:6070293, link:'https://eu.lumas.com/pictures/robert_lebeck/reichstagskuppel/'},
+     {sku:'RLE73', title:'Sony Center', year:2003, state:'estate', edition:100, abstractId:6070295, link:'https://eu.lumas.com/pictures/robert_lebeck/sony_center/'}
+   ]},
+ { key:'lessing', surname:'Lessing', name:'Erich Lessing', life:'1923 – 2018', closed:2018,
+   line:'A founding photographer of Magnum’s Europe, then a lifetime documenting the continent’s art and music. His life’s work is whole.',
+   states:['estate'],
+   works:[
+     {sku:'ELS30', title:'Hagia Sophia I', year:1978, state:'estate', edition:100, abstractId:5944354, link:'https://eu.lumas.com/pictures/erich_lessing/hagia_sophia_i/'},
+     {sku:'ELS32', title:'Hagia Sophia II', year:1978, state:'estate', edition:100, abstractId:5944356, link:'https://eu.lumas.com/pictures/erich_lessing/hagia_sophia_ii/'},
+     {sku:'ELS34', title:'Ski Children', year:1953, state:'estate', edition:100, abstractId:5944358, link:'https://eu.lumas.com/pictures/erich_lessing/ski_children/'},
+     {sku:'ELS36', title:'Lady and Poodle', year:1958, state:'estate', edition:100, abstractId:5944360, link:'https://eu.lumas.com/pictures/erich_lessing/lady_and_poodle/'},
+     {sku:'ELS38', title:'Berlin bleibt Frei', year:1959, state:'estate', edition:100, abstractId:5944362, link:'https://eu.lumas.com/pictures/erich_lessing/berlin_bleibt_frei-2/'}
+   ]},
+ { key:'stern', surname:'Stern', name:'Bert Stern', life:'1929 – 2013', closed:2013,
+   line:'Six weeks before she died, Marilyn sat for his camera over three summer days. He printed The Last Sitting for the rest of his life.',
+   states:['estate'],
+   works:[
+     {sku:'BSE01', title:'Marilyn Monroe', year:1962, state:'estate', edition:250, img:'https://img.lumas.com/showimg_bse02_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe/'},
+     {sku:'BSE04', title:'Marilyn Monroe II', year:1962, state:'estate', edition:250, img:'https://img.lumas.com/showimg_bse04_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe_ii/'},
+     {sku:'BSE07', title:'Marilyn Monroe III', year:1962, state:'estate', edition:250, img:'https://img.lumas.com/showimg_bse07_full.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe_iii/'},
+     {sku:'BSE10', title:'Marilyn Monroe IV', year:1962, state:'estate', edition:250, img:'https://img.lumas.com/showimg_bse10_full.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe_iv/'},
+     {sku:'BSE13', title:'Marilyn Monroe V', year:1962, state:'estate', edition:250, img:'https://img.lumas.com/showimg_bse13_full.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe_v/'},
+     {sku:'BSE25', title:'Marilyn Monroe, Pearls', year:1962, state:'estate', edition:100, img:'https://img.lumas.com/showimg_bse26_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/marilyn_monroe_pearls/'},
+     {sku:'BSE16', title:'Romy Schneider and Alain Delon', year:1959, state:'estate', edition:100, img:'https://img.lumas.com/showimg_bse17_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/romy_schneider_and_alain_delon/'},
+     {sku:'BSE19', title:'Serge Gainsbourg & Jane Birkin', year:1970, state:'estate', edition:100, img:'https://img.lumas.com/showimg_bse20_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/serge_gainsbourg_jane_birkin/'},
+     {sku:'BSE23', title:'Kate Moss, Diamond Ring', year:2001, state:'estate', edition:100, img:'https://img.lumas.com/showimg_bse23_desktop.jpg', link:'https://eu.lumas.com/pictures/bert_stern-1/kate_moss_diamond_ring/'}
+   ]}
+];
+
+/* ---------- THRESHOLD ---------- */
+var marksEl=document.getElementById('marks');
+MASTERS.forEach(function(m){
+  var b=document.createElement('button');
+  b.className='mark'; b.type='button';
+  b.innerHTML='<span class="stampwrap">'+estateStamp(m.surname,m.closed)+'</span>'
+    +'<span><span class="m-name">'+m.name+'</span><span class="m-life">'+m.life+'</span></span>';
+  b.addEventListener('click',function(){ openRoom(m); });
+  marksEl.appendChild(b);
+});
+
+/* ---------- ROOM ---------- */
+var room=document.getElementById('room');
+var certEl=document.getElementById('cert');
+var worksEl=document.getElementById('works');
+var vaultfoot=document.getElementById('vaultfoot');
+var currentMaster=null;
+
+function openRoom(m){
+  currentMaster=m;
+  var isTransition=m.states.length>1;
+  var facesHtml;
+  if(isTransition){
+    facesHtml='<div class="pair">'
+      +'<figure><span class="glyph">'+sigMark()+'</span><span class="clabel">Signed by his hand</span>'
+        +'<figcaption>He signed these prints in pencil, while he lived.</figcaption></figure>'
+      +'<figure><span class="glyph">'+estateStamp(m.surname,m.closed)+'</span><span class="clabel">Stamped by his estate</span>'
+        +'<figcaption>These the estate authenticates now, in his place.</figcaption></figure>'
+      +'</div>';
+  } else {
+    facesHtml='<div class="bigmark">'+estateStamp(m.surname,m.closed)+'</div>';
+  }
+  var authWord = isTransition ? 'his signature and his estate’s stamp' : 'the stamp of his estate';
+  certEl.innerHTML=facesHtml
+    +'<p class="eyebrow">A life’s work, complete</p>'
+    +'<h2>'+m.name+'</h2>'
+    +'<p class="life">'+m.life+'</p>'
+    +'<p class="line">'+m.line+'</p>'
+    +'<p class="facts">'+m.works.length+' works in this vault &nbsp;·&nbsp; authenticated by '+authWord+'</p>'
+    +'<button class="viewbtn" id="viewBtn">View the works &rarr;</button>';
+  certEl.style.display='flex'; certEl.style.opacity='1';
+  worksEl.className='works'; worksEl.innerHTML=''; vaultfoot.style.display='none';
+  document.getElementById('viewBtn').addEventListener('click',function(){ revealWorks(m); });
+
+  room.classList.add('open'); room.setAttribute('aria-hidden','false');
+  room.scrollTop=0;
+  room.classList.remove('lit');
+  // the lights come up
+  requestAnimationFrame(function(){ setTimeout(function(){ room.classList.add('lit'); },60); });
+  track('mark_open',{master:m.key,transition:isTransition});
+}
+
+function plateHtml(w){
+  return '<div class="plate">'
+    +'<div class="frame"><img loading="lazy" alt="'+w.title+' — '+currentMaster.name+'" src="'+imgUrl(w)+'" '
+      +'onerror="this.parentNode.classList.add(\'dead\');this.remove();"></div>'
+    +'<div class="cap"><p class="t">'+w.title+'</p>'
+    +'<p class="certline"><span class="certdot '+w.state+'"></span>'+stateLabel(w.state)+' · '+editionLabel(w)+' · '+w.year+'</p>'
+    +'<a class="go" href="'+w.link+'" target="_blank" rel="noopener" '
+      +'onclick="track(\'pdp_click\',{sku:\''+w.sku+'\'})">View on LUMAS &rarr;</a></div></div>';
+}
+
+function revealWorks(m){
+  certEl.style.opacity='0';
+  setTimeout(function(){ certEl.style.display='none'; },500);
+  var html='<h2>The work of '+m.name+'</h2>'
+    +'<p class="sub">Every plate shows the full work. Each carries its certificate: how it is signed, its edition size, its year.</p>';
+  if(m.states.length>1){
+    var signed=m.works.filter(function(w){return w.state==='signed';});
+    var estate=m.works.filter(function(w){return w.state==='estate';});
+    html+='<p class="chapter">Signed by his hand <small>'+signed.length+' works · never re-signable</small></p>'
+      +'<div class="grid">'+signed.map(plateHtml).join('')+'</div>';
+    html+='<p class="chapter">Stamped by his estate <small>'+estate.length+' works · authenticated by the archive</small></p>'
+      +'<div class="grid">'+estate.map(plateHtml).join('')+'</div>';
+  } else {
+    html+='<div class="grid">'+m.works.map(plateHtml).join('')+'</div>';
+  }
+  worksEl.innerHTML=html;
+  worksEl.className='works show';
+  vaultfoot.style.display='block';
+  room.scrollTop=0;
+  track('works_reveal',{master:m.key,count:m.works.length});
+}
+
+document.getElementById('backBtn').addEventListener('click',function(){
+  room.classList.remove('lit');
+  setTimeout(function(){ room.classList.remove('open'); room.setAttribute('aria-hidden','true'); },500);
+  track('room_close',{master:currentMaster&&currentMaster.key});
+});
+
+/* ---------- PDP band demo (the A/B variant unit) ---------- */
+var pdp=document.getElementById('pdp');
+var pdpGrid=document.getElementById('pdpGrid');
+var demoWork={sku:'RLE73', title:'Sony Center', year:2003, state:'estate', edition:100, abstractId:6070295,
+  link:'https://eu.lumas.com/pictures/robert_lebeck/sony_center/', artist:'Robert Lebeck', life:'1929 – 2014', surname:'Lebeck', closed:2014, price:'€ 499'};
+
+function renderPdp(variant){
+  var band = variant ? ('<div class="certband"><span class="cbmark">'+estateStamp(demoWork.surname,demoWork.closed)+'</span>'
+    +'<div class="cbtxt"><p class="k">The Last Signature</p>'
+    +'<h3>Estate-stamped · Edition of '+demoWork.edition+'</h3>'
+    +'<p>'+demoWork.artist+' ('+demoWork.life+') will sign no more. This edition is authenticated by the stamp of his estate — the hand that made it is complete.</p></div></div>') : '';
+  pdpGrid.innerHTML='<div class="pdp-art"><img alt="'+demoWork.title+'" src="'+imgUrl(demoWork)+'"></div>'
+    +'<div class="pdp-buy"><p class="eyebrow">'+demoWork.artist+'</p>'
+    +'<h2>'+demoWork.title+'</h2><p class="price">'+demoWork.price+'</p>'
+    +'<button class="addcart" onclick="track(\'addToCart\',{sku:\''+demoWork.sku+'\',variant:'+variant+'})">Add to cart</button>'
+    +'<button class="fav" onclick="track(\'saveIntent\',{sku:\''+demoWork.sku+'\',variant:'+variant+'})">Save to wishlist</button>'
+    +band+'</div>';
+  if(variant) track('certband_view',{sku:demoWork.sku});
+}
+document.getElementById('toPdp').addEventListener('click',function(){
+  renderPdp(true); pdp.classList.add('open'); pdp.setAttribute('aria-hidden','false');
+  document.getElementById('btnVariant').classList.add('on'); document.getElementById('btnControl').classList.remove('on');
+  track('pdp_demo_open',{});
+});
+document.getElementById('pdpBack').addEventListener('click',function(){ pdp.classList.remove('open'); pdp.setAttribute('aria-hidden','true'); });
+document.getElementById('btnControl').addEventListener('click',function(){ this.classList.add('on'); document.getElementById('btnVariant').classList.remove('on'); renderPdp(false); });
+document.getElementById('btnVariant').addEventListener('click',function(){ this.classList.add('on'); document.getElementById('btnControl').classList.remove('on'); renderPdp(true); });
+</script>
+</body>
+</html>

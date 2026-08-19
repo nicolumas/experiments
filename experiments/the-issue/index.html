@@ -1,0 +1,821 @@
+<!doctype html>
+<!-- ═══════════════════════════════════════════════════════════════
+  PROTO HEADER
+  ID:          PROTO-2026-001  ·  "Inspired" — the digital issue
+  Hypothesis:  For New Releases campaign visitors (mobile-first), replacing the
+               fragmented multi-page campaign with a single curated editorial
+               journey — modelled on the printed LUMAS magalog (art shown in
+               rooms, editorial spreads, authored pacing) — increases
+               discovery-to-consideration (PDP/artist clickthrough per visitor).
+  Prior:       Ledger silent (no Confluence tree). See lumas-new-releases-spec.md.
+  Goals:       primary select_item (PDP clickthrough) · secondary issue_progress-75 /
+               avenue_enter / time_in_avenue · guardrail RPV.
+               ABlyft goal names: BIND FROM 16-GOAL LIBRARY IN PHASE 5 — never invent.
+  Variants:    ?v=control (faithful flat campaign) | ?v=v1 (the issue). Key: "v".
+               ?issue=autumn-2026 | spring-2027 (reusability proof, config-only).
+  Reference:   Magazine_Spring-26 magalog (art-in-room, editorial pacing, full-bleed).
+  Branding:    STRICT V2 (Nico's call 2026-07-20). The print magalog uses a serif +
+    red; the digital issue does NOT — the magazine feeling is carried by rooms, scale,
+    full-bleed and pacing, all of which live inside V2. Type: Utile Display (V2 sans
+    display) for ALL display; Archivo body/UI. Colour: charcoal / ivory / bone only,
+    no accent (the art is the colour). Only deliberate V2 override: motion is on
+    (magazine cascade) with prefers-reduced-motion collapsing to instant.
+  Artworks are NEVER cropped (contain-fit). Room renders MAY cover-fit (they are
+  interior photography; the hung artwork sits safely centred).
+═══════════════════════════════════════════════════════════════ -->
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>Inspired · Die neuen Editionen · LUMAS</title>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link rel="stylesheet" href="../assets/v2-tokens.css">
+<style>
+  /* ── Tokens (magazine layer) ───────────────────────────── */
+  :root {
+    /* Strict V2: Utile Display (self-hosted family name is 'UtileDisplay') carries
+       ALL display type; charcoal/ivory/bone only, no accent colour. The magazine
+       feeling is carried by rooms, scale, full-bleed and pacing — not type/colour. */
+    --utile: 'UtileDisplay', 'Utile Display Trial', 'Utile Display', Georgia, serif;
+    --tab-bg: #EAE2D8;           /* bone — section tab chips (V2) */
+    --page: #FAF6F1;
+    --ink: #1C1A18;
+  }
+
+  /* ── Base ──────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; position: relative;
+    font-family: var(--sans); font-variation-settings: "wdth" 100;
+    font-size: var(--type-body); line-height: 1.5;
+    color: var(--ink); background: var(--page);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  button { font: inherit; cursor: pointer; background: none; border: 0; padding: 0; color: inherit; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .on-dark :focus-visible { outline-color: #F4EDE2; }
+
+  /* ── Type ──────────────────────────────────────────────── */
+  .serif { font-family: var(--utile); font-weight: 400; letter-spacing: 0; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.5; }
+  .tab {
+    display: inline-block; background: var(--tab-bg); color: var(--ink);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 6px 10px 5px; line-height: 1;
+  }
+  .body-lg { font-size: 19px; font-weight: 300; line-height: 1.62; }
+  .caption { font-size: 12px; line-height: 1.5; color: var(--color-text-tertiary); }
+  .measure { max-width: 34em; }
+  p { margin: 0; }
+
+  .btn-ghost {
+    display: inline-block; padding: 5px 0 6px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+    border-bottom: 1.5px solid var(--ink); transition: color .2s cubic-bezier(.23,1,.32,1), border-color .2s;
+  }
+  .btn-ghost:hover { opacity: 0.55; }
+  .btn-ghost:active { transform: translateY(1px); }
+  .on-dark .btn-ghost { color: #F4EDE2; border-color: #F4EDE2; }
+  .on-dark .btn-ghost:hover { color: #fff; border-color: #fff; }
+
+  /* ── Artwork box (never cropped) ───────────────────────── */
+  .art { position: relative; aspect-ratio: var(--ar, 1); background: var(--surface-muted); overflow: hidden; }
+  .on-dark .art { background: #2a2724; }
+  .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .js-reveal .art img { opacity: 0; transition: opacity .6s cubic-bezier(.4,0,.2,1); }
+  .js-reveal .art.loaded img { opacity: 1; }
+  .art.failed { display: flex; align-items: center; justify-content: center; padding: var(--sp-6); }
+  .art-fallback { text-align: center; color: var(--color-text-tertiary); }
+  .art-fallback .eyebrow { display: block; margin-bottom: 6px; }
+  .plate { padding: 14px; background: #fff; box-shadow: var(--shadow-frame); }
+
+  /* ── Reveal motion (armed only when IO proven live) ────── */
+  .js-reveal [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); transition-delay: var(--d,0ms); }
+  .js-reveal [data-reveal].in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js-reveal [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .art img { transition: none !important; }
+    .parallax > img { transform: none !important; }
+  }
+
+  /* ── Layout shells ─────────────────────────────────────── */
+  [id] { scroll-margin-top: 62px; }
+  .spread { padding: clamp(56px, 12vw, 128px) clamp(20px, 5vw, 80px); max-width: 1320px; margin: 0 auto; }
+  .spread.tight { padding-top: clamp(32px, 6vw, 64px); }
+  .grid { display: grid; gap: clamp(28px, 5vw, 64px); }
+  @media (min-width: 860px) { .cols-2 { grid-template-columns: 1fr 1fr; } .cols-2.asym { grid-template-columns: 1.15fr 0.85fr; } }
+
+  /* Section tab + heading rhythm */
+  .head .tab { margin-bottom: 22px; }
+  .head .kicker { color: var(--color-text-tertiary); margin-bottom: 10px; }
+  .artist-name { font-family: var(--utile); font-weight: 400; font-size: clamp(40px, 7vw, 84px); line-height: 0.98; letter-spacing: -0.01em; }
+  .section-title { font-family: var(--utile); font-weight: 400; font-size: clamp(34px, 5.5vw, 64px); line-height: 1.02; }
+
+  /* ── COVER ─── artwork contained (NEVER cropped) on charcoal;
+       masthead sits in the lower band, never over the art. ──── */
+  .cover { position: relative; min-height: 100dvh; background: var(--ink); color: #F4EDE2; overflow: hidden; display: flex; flex-direction: column; }
+  .cover-media { flex: 1; min-height: 0; position: relative; }
+  .cover-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
+  .cover-top { position: absolute; top: clamp(20px,4vw,40px); left: clamp(20px,5vw,64px); right: clamp(20px,5vw,64px); display: flex; justify-content: space-between; align-items: flex-start; z-index: 3; }
+  .cover-wordmark { font-weight: 800; letter-spacing: 0.22em; font-size: 15px; }
+  .cover-issue { position: absolute; right: clamp(14px,3vw,32px); top: 40%; transform: translateY(-50%); writing-mode: vertical-rl; text-orientation: mixed; font-size: 11px; font-weight: 700; letter-spacing: 0.36em; text-transform: uppercase; color: rgba(244,237,226,.8); z-index: 3; }
+  .cover-foot { position: relative; z-index: 2; padding: clamp(4px,2vw,16px) clamp(20px,5vw,64px) clamp(28px,5vw,56px); }
+  .masthead { font-family: var(--utile); font-weight: 400; color: var(--text-inverse); font-size: clamp(76px, 24vw, 300px); line-height: 0.86; letter-spacing: -0.02em; margin: 0 0 16px -0.02em; }
+  .cover-line { max-width: 32em; color: #F4EDE2; font-size: clamp(15px,2.4vw,20px); font-weight: 300; line-height: 1.5; }
+  .cover-credit { margin-top: 12px; font-size: 11px; letter-spacing: 0.08em; color: rgba(244,237,226,.7); }
+  .scroll-cue { position: absolute; left: 50%; bottom: 10px; width: 1px; height: 34px; background: rgba(244,237,226,.5); transform: translateX(-50%); z-index: 3; }
+  @media (prefers-reduced-motion: no-preference) { .scroll-cue { animation: cue 2.4s cubic-bezier(.4,0,.2,1) infinite; transform-origin: top; } @keyframes cue { 0%,100%{transform:translateX(-50%) scaleY(.35)} 50%{transform:translateX(-50%) scaleY(1)} } }
+
+  /* ── Full-bleed room spread ────────────────────────────── */
+  .bleed { position: relative; min-height: 100dvh; background: var(--ink); overflow: hidden; color: #F4EDE2; display: flex; align-items: flex-end; }
+  .bleed .parallax { position: absolute; inset: -8% 0; }
+  .bleed .parallax img { width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
+  .bleed-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,18,16,.15) 0%, rgba(20,18,16,0) 30%, rgba(20,18,16,.5) 100%); }
+  .bleed-inner { position: relative; z-index: 2; padding: clamp(28px,6vw,72px); width: 100%; max-width: 1320px; margin: 0 auto; }
+  .bleed .handwrite { font-family: var(--utile); font-size: clamp(28px,5vw,52px); line-height: 1.15; color: #fff; max-width: 16em; margin-bottom: 20px; }
+  .bleed .credit-line { font-size: 12px; letter-spacing: .04em; color: rgba(244,237,226,.85); }
+  .bleed .credit-line b { font-weight: 700; }
+  .bleed .work-meta-inline { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; margin-top: 14px; }
+
+  /* ── Feature: room establish → work up close ───────────── */
+  .room-establish { position: relative; min-height: 88dvh; background: var(--ink); overflow: hidden; display: flex; align-items: flex-end; }
+  .room-establish .parallax { position: absolute; inset: -8% 0; }
+  .room-establish .parallax img { width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
+  .room-establish .cap { position: relative; z-index: 2; padding: clamp(20px,5vw,48px); color: #F4EDE2; }
+  .room-establish .cap .eyebrow { color: rgba(244,237,226,.7); }
+  .feature-body { display: grid; gap: clamp(20px,4vw,48px); }
+  @media (min-width: 860px) { .feature-body { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .feature-lead { font-size: clamp(18px,2.6vw,22px); font-weight: 300; line-height: 1.55; }
+  .pull { font-family: var(--utile); font-size: clamp(24px,3.2vw,34px); line-height: 1.22; padding-left: 20px; border-left: 2px solid var(--ink); }
+
+  /* Works row */
+  .works { display: grid; gap: clamp(28px,4vw,52px); margin-top: clamp(36px,6vw,72px); }
+  @media (min-width: 720px) { .works { grid-template-columns: 1fr 1fr; } .works .work.hero-work { grid-column: 1 / -1; max-width: 920px; } }
+  .work-meta { margin-top: 14px; display: flex; flex-direction: column; gap: 2px; }
+  .work-title { font-family: var(--utile); font-size: clamp(20px,2.4vw,26px); line-height: 1.2; }
+  .work-artist { font-size: 13px; color: var(--color-text-secondary); }
+
+  /* Soft-shoppable gallery-wall label */
+  .wall-toggle { margin-top: 10px; align-self: flex-start; font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--color-text-tertiary); padding: 4px 0; }
+  .wall-toggle:hover, .wall-toggle[aria-expanded="true"] { color: var(--ink); }
+  .wall { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .3s cubic-bezier(.4,0,.2,1), opacity .3s; }
+  .wall.open { max-height: 240px; opacity: 1; }
+  .wall-inner { padding: 14px 0 4px; margin-top: 12px; border-top: 1px solid var(--border-subtle); display: grid; gap: 8px; }
+  .wall-row { display: flex; gap: 12px; font-size: 13px; color: var(--color-text-secondary); }
+  .wall-row .k { min-width: 72px; color: var(--color-text-tertiary); }
+  .wall .btn-ghost { justify-self: start; margin-top: 6px; }
+  @media (prefers-reduced-motion: reduce){ .wall { transition: none; } }
+
+  /* Avenues */
+  .avenues { margin-top: clamp(36px,5vw,64px); border-top: 1px solid var(--border-default); }
+  .avenue-link { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--border-default); text-align: left; transition: color .2s; }
+  .avenue-link:hover { opacity: 0.55; }
+  .avenue-link .eyebrow { color: var(--color-text-tertiary); }
+  .avenue-name { font-family: var(--utile); font-size: clamp(20px,2.4vw,26px); }
+  .avenue-link .arrow { font-size: 20px; }
+
+  /* ── VOICES letter / pull-quote ────────────────────────── */
+  .voice { background: var(--surface-sunken); }
+  .voice-quote { font-family: var(--utile); font-size: clamp(26px,4vw,44px); line-height: 1.18; max-width: 18em; }
+  .voice-attr { margin-top: 20px; font-size: 13px; }
+  .voice-attr b { font-weight: 700; }
+  .letter-body { display: grid; gap: 16px; max-width: 34em; font-size: 16px; line-height: 1.6; }
+  .letter-sign { font-family: var(--utile); font-size: 20px; margin-top: 8px; }
+
+  /* ── Mosaic (bestseller) — uniform contained tiles ─────── */
+  .mosaic { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px,2vw,20px); }
+  @media (min-width: 720px) { .mosaic { grid-template-columns: repeat(3, 1fr); } }
+  .mosaic .cell { position: relative; display: flex; flex-direction: column; }
+  .mosaic .cell.big { grid-column: span 2; }
+  .mosaic .cell .art { aspect-ratio: 1; height: auto; background: var(--bone); }
+  .mosaic .cell.big .art { aspect-ratio: 2 / 1; }
+  .mosaic .cell.room .art { background: var(--ink); }
+  .mosaic .cell .art img { object-fit: contain; }        /* artwork never cropped */
+  .mosaic .cell.room .art img { object-fit: cover; }     /* room photo may cover */
+  .mosaic-cap { margin-top: 8px; font-size: 12px; }
+  .mosaic-cap b { font-weight: 700; }
+  .empty-note { grid-column: 1 / -1; padding: clamp(48px,8vw,96px) 24px; background: var(--surface-muted); text-align: center; }
+  .empty-note .section-title { color: var(--color-text-secondary); }
+  .empty-note p { margin-top: 10px; color: var(--color-text-tertiary); }
+
+  /* ── Process (studio → wall) ───────────────────────────── */
+  .process-grid { display: grid; gap: clamp(28px,4vw,44px); }
+  @media (min-width: 720px) { .process-grid { grid-template-columns: repeat(3, 1fr); } }
+  .step-num { font-family: var(--utile); font-size: clamp(40px,6vw,72px); line-height: 1; color: var(--ink); }
+  .step h3 { font-family: var(--utile); font-weight: 400; font-size: 22px; margin: 10px 0 8px; }
+  .step p { font-size: 14px; line-height: 1.55; color: var(--color-text-secondary); }
+
+  /* ── Contents rail (sticky nav) ────────────────────────── */
+  .rail { position: sticky; top: 0; z-index: 20; background: rgba(250,246,241,.9); backdrop-filter: saturate(180%) blur(8px); border-bottom: 1px solid var(--border-subtle); }
+  .rail-inner { max-width: 1320px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px clamp(20px,5vw,64px); }
+  .rail-mark { font-weight: 800; letter-spacing: .22em; font-size: 14px; text-decoration: none; }
+  .rail-mark .no { color: var(--ink); }
+  .rail-links { display: none; gap: 22px; font-size: 12px; letter-spacing: .04em; }
+  .rail-links a { text-decoration: none; color: var(--color-text-secondary); }
+  .rail-links a:hover { color: var(--ink); }
+  @media (min-width: 860px) { .rail-links { display: flex; } }
+
+  /* ── Back matter ───────────────────────────────────────── */
+  .back { background: var(--ink); color: #F4EDE2; text-align: center; padding: clamp(72px,12vw,140px) 24px; }
+  .back .liberation { font-weight: 800; font-size: clamp(28px,5vw,52px); letter-spacing: -0.01em; }
+  .back .cities { margin-top: 28px; font-size: 12px; letter-spacing: .12em; color: rgba(244,237,226,.7); line-height: 2; max-width: 44em; margin-inline: auto; }
+  .back .back-exits { margin-top: 40px; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Avenue overlay ────────────────────────────────────── */
+  .overlay { position: fixed; inset: 0; z-index: 40; background: var(--page); overflow-y: auto; overscroll-behavior: contain; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s cubic-bezier(.4,0,.2,1), transform .3s; }
+  .overlay.open { opacity: 1; transform: none; pointer-events: auto; }
+  @media (prefers-reduced-motion: reduce){ .overlay { transition: none; transform: none; } }
+  .overlay-bar { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 16px clamp(20px,5vw,64px); background: var(--page); border-bottom: 1px solid var(--border-default); }
+  .overlay-body { padding: clamp(36px,6vw,72px) clamp(20px,5vw,64px) 96px; max-width: 1100px; margin: 0 auto; }
+  .overlay-body .avenue-text { margin-top: 20px; max-width: 34em; color: var(--color-text-secondary); }
+  .overlay-works { margin-top: 40px; display: grid; gap: clamp(24px,3vw,40px); }
+  @media (min-width: 720px){ .overlay-works { grid-template-columns: repeat(3,1fr); } }
+
+  .notice { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #F4EDE2; padding: 12px 20px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .notice.show { opacity: 1; }
+
+  /* ── Control variant (faithful current campaign) ───────── */
+  .ctrl-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border-default); position: sticky; top: 0; background: var(--page); z-index: 10; }
+  .ctrl-mark { font-weight: 800; letter-spacing: .22em; font-size: 15px; text-decoration: none; }
+  .ctrl-links { display: flex; gap: 18px; font-size: 13px; }
+  .ctrl-links a { text-decoration: none; color: var(--color-text-secondary); }
+  .ctrl-header { padding: 40px 20px 24px; max-width: 1320px; margin: 0 auto; }
+  .ctrl-header p { margin-top: 12px; max-width: 40em; color: var(--color-text-secondary); }
+  .ctrl-section { padding: 24px 20px; max-width: 1320px; margin: 0 auto; }
+  .ctrl-section h2 { font-family: var(--utile); font-weight: 400; font-size: 28px; margin: 0 0 18px; }
+  .ctrl-grid { display: grid; gap: 20px; grid-template-columns: repeat(2,1fr); }
+  @media (min-width:720px){ .ctrl-grid { grid-template-columns: repeat(3,1fr); } }
+  @media (min-width:1100px){ .ctrl-grid { grid-template-columns: repeat(4,1fr); } }
+  .ctrl-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; }
+  .ctrl-card .art { background: #fff; border: 1px solid var(--border-subtle); aspect-ratio: 1; }
+  .ctrl-card .t { font-size: 14px; }
+  .ctrl-card .a { font-size: 13px; color: var(--color-text-tertiary); }
+  .ctrl-footer { padding: 48px 20px; border-top: 1px solid var(--border-default); max-width: 1320px; margin: 32px auto 0; display: flex; gap: 24px; flex-wrap: wrap; }
+
+  /* Progress sentinels */
+  #sentinels { position: absolute; top: 0; left: 0; width: 1px; height: 100%; pointer-events: none; }
+  #sentinels span { position: absolute; width: 1px; height: 1px; }
+
+  .badge { position: fixed; right: 12px; bottom: 12px; z-index: 70; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--color-text-tertiary); background: var(--page); border: 1px solid var(--border-default); padding: 4px 8px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sentinels" aria-hidden="true"></div>
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+
+<script src="../assets/lumas-img.js"></script>
+
+<!-- ═══ ISSUE CONFIG — ALL content lives here. Render layer reads only
+     ISSUES + SHELL. A new issue = a new spreads[] + content (see
+     lumas-new-releases-spec.md). Spread `type` selects the renderer. ═══ -->
+<script>
+const SHELL = {
+  store: 'de',
+  wordmark: 'LUMAS',
+  wordmarkHref: 'https://www.lumas.de/',
+  issueNoLabel: 'Issue No.',
+  railLabel: 'Inhalt',
+  wallLabel: 'Als Edition erhältlich',
+  wallEdition: 'Edition',
+  wallFormat: 'Format',
+  wallCta: 'Zur Edition',
+  avenueEyebrow: { 'artist-world': 'Avenue · Künstlerwelt', 'inside-the-edition': 'Avenue · In der Edition', 'theme': 'Avenue · Thema' },
+  avenueEyebrowFallback: 'Avenue',
+  avenueReturn: 'Zurück zur Ausgabe',
+  avenueFail: 'Diese Avenue ist gerade nicht verfügbar. Sie sind zurück in der Ausgabe.',
+  emptyTitle: 'Kommt in diese Ausgabe',
+  liberation: 'liberation of arts',
+  cities: 'New York · London · Paris · Berlin · Hamburg · München · Köln · Frankfurt · Düsseldorf · Wien · Zürich',
+  badge: { control: 'control', v1: 'v1 · the issue' }
+};
+
+const ISSUES = {
+  'autumn-2026': {
+    issue: {
+      season: 'Herbst', year: 2026, number: 15,
+      masthead: 'Inspired',
+      tagline: 'Die neuen Editionen. Kuratiert, limitiert, handsigniert — und gemacht, um damit zu leben.',
+      cover: { image: 'ime125', framedFallback: { abstractId: '5264108', sku: 'IME125' }, credit: 'Isabelle Menin, La Vie en Rose', aspectRatio: 2.0 }
+    },
+    rail: [
+      { target: 'menin', label: 'Menin' },
+      { target: 'uhlig', label: 'Uhlig' },
+      { target: 'krautgartner', label: 'Krautgartner' },
+      { target: 'duong', label: 'Duong' },
+      { target: 'bestseller', label: 'Bestseller' }
+    ],
+    spreads: [
+      { type: 'letter',
+        tab: 'Voices',
+        quote: 'Kunst verändert einen Raum — und mit ihm den Tag, der darin stattfindet.',
+        attrName: 'Stefanie Harig', attrRole: 'Mitgründerin von LUMAS',
+        body: [
+          'Zweimal im Jahr öffnen wir mit dieser Ausgabe die Türen: in die Ateliers unserer Künstlerinnen und Künstler, in die Räume, in denen ihre Arbeiten hängen, und in die Editionen selbst.',
+          'Diese Ausgabe folgt drei neuen Positionen — Isabelle Menin, Wolfgang Uhlig und Kevin Krautgartner — und zeigt, was sie gemeinsam haben: Arbeiten, die einen Raum nicht dekorieren, sondern verändern.',
+          'Jede Edition erscheint in fester Auflage, nummeriert und handsigniert. Ist die letzte Nummer vergeben, schließt die Edition.'
+        ],
+        sign: 'Stefanie Harig & Marc Ullrich'
+      },
+      { type: 'feature', id: 'menin', tab: 'Cover Artist', artist: 'Isabelle Menin', kicker: 'Neue Arbeiten',
+        room: { image: '../assets/rooms-lib/ime110-room-wide.jpg', credit: 'Isabelle Menin, From a Dream 04', place: 'in einem Zuhause in Mexico City' },
+        lead: 'Isabelle Menin malt mit der Kamera. Die belgische Künstlerin schichtet Blüten, Wasser und Pigment zu digitalen Kompositionen, bis die Grenze zwischen Fotografie und Malerei verschwindet.',
+        body: 'Wer nah herangeht, findet keine Blume, die es so gegeben hätte. Menin baut ihre Gärten am Rechner: aus eigenen Aufnahmen, übermalt, verdichtet, in Bewegung gebracht. Das Ergebnis hat die Tiefe barocker Stillleben und bleibt doch unverkennbar digital.',
+        pull: 'Malerei, die durch ein Objektiv gegangen ist.',
+        works: [
+          { sku: 'IME125', title: 'La Vie en Rose', image: 'ime125', framedFallback: { abstractId: '5264108', sku: 'IME125' }, aspectRatio: 2.0, edition: 'Limitierte Edition, handsigniert', format: 'Vier Formate, bis 240 × 120 cm', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/la_vie_en_rose/' },
+          { sku: 'IME117', title: 'Midnight 01', image: 'ime117', framedFallback: { abstractId: '5076535', sku: 'IME117' }, aspectRatio: 2.0, edition: 'Limitierte Edition, handsigniert', format: 'Vier Formate, bis 240 × 120 cm', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/midnight_01/' },
+          { sku: 'IME110', title: 'From a Dream 04', image: 'ime111', framedFallback: { abstractId: '5584593', sku: 'IME110' }, aspectRatio: 1.0, edition: 'Limitierte Edition, handsigniert', format: 'Vier Formate, bis 180 × 180 cm', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/from_a_dream_04/' },
+          { sku: 'IME133', title: 'Les fonds angéliques', image: 'ime133', framedFallback: { abstractId: '6199950', sku: 'IME133' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Vier Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/les_fonds_angliques/' }
+        ],
+        avenues: [
+          { type: 'artist-world', ref: 'menin-world', label: 'Die Welt von Isabelle Menin' },
+          { type: 'theme', ref: 'theme-florals', label: 'Florale Welten im Bestand' }
+        ]
+      },
+      { type: 'bleed', id: 'uhlig',
+        room: { image: '../assets/rooms-lib/wuh128-room-tall.jpg', roomWide: '../assets/rooms-lib/wuh128-room-tall.jpg' },
+        handwrite: 'Der Horizont als Atempause.',
+        attrName: 'Wolfgang Uhlig',
+        work: { sku: 'WUH128', title: 'Seesaw Seascape XV', artist: 'Wolfgang Uhlig', image: 'wuh128', framedFallback: { abstractId: '6508909', sku: 'WUH128' }, aspectRatio: 0.5, edition: 'Limitierte Edition, handsigniert', format: 'Special Finishing, 180 × 90 cm', pdpUrl: 'https://www.lumas.de/pictures/wolfgang_uhlig/seesaw_seascape_xv/' },
+        note: 'Ein Horizont, zwei Flächen, sonst nichts. Uhligs neue Küstenarbeit erscheint als Special Finishing — die aufwendigste Veredelung im LUMAS Atelier.',
+        avenues: [ { type: 'theme', ref: 'theme-water', label: 'Wasser im Bestand' } ]
+      },
+      { type: 'voice', tab: 'Voices',
+        quote: 'Der Moment, in dem jemand seine Arbeit zum ersten Mal an der eigenen Wand sieht, ist immer ein sehr persönlicher.',
+        attrName: 'Lauren Colonna', attrRole: 'Gallery Director, LUMAS New York'
+      },
+      { type: 'feature', id: 'krautgartner', tab: 'Neue Serie', artist: 'Kevin Krautgartner', kicker: 'Aus der Luft',
+        room: { image: '../assets/rooms-lib/kkr54-room-wide.jpg', credit: 'Kevin Krautgartner, Salt Shapes X', place: 'in einem Zuhause in Reykjavík' },
+        lead: 'Von oben wird die Erde abstrakt. Kevin Krautgartner fotografiert Salzfelder und Gezeitenlandschaften aus der Luft, bis Geografie wie Malerei aussieht.',
+        body: 'Die Farben der Salt Shapes sind real: Sie entstehen in den Verdunstungsbecken selbst, Algen und Mineralien färben das Wasser von Rosa bis Rostrot. Krautgartner findet die Ausschnitte, in denen daraus Komposition wird.',
+        pull: 'Geografie, die aussieht wie Malerei.',
+        works: [
+          { sku: 'KKR54', title: 'Salt Shapes X', image: 'kkr54', framedFallback: { abstractId: '6343017', sku: 'KKR54' }, aspectRatio: 1.33, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate, bis 140 × 105 cm', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_x/' },
+          { sku: 'KKR10', title: 'Tidal Paintings I', image: 'kkr10', framedFallback: { abstractId: '4503155', sku: 'KKR10' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate, bis 140 × 105 cm', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/tidal_paintings_i/' },
+          { sku: 'KKR34', title: 'Salt Shapes VI', image: 'kkr34', framedFallback: { abstractId: '4567340', sku: 'KKR34' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_vi/' }
+        ],
+        avenues: [ { type: 'artist-world', ref: 'krautgartner-world', label: 'Die Welt von Kevin Krautgartner' } ]
+      },
+      { type: 'feature', id: 'duong', tab: 'Art en Vogue', artist: 'Chiron Duong', kicker: 'Neue Porträts',
+        room: { image: '../assets/rooms-lib/cdu07-room-wide.jpg', credit: 'Chiron Duong, Portrait no. 216', place: 'in einem Zuhause in Köln' },
+        lead: 'Chiron Duong verbindet vietnamesische Tradition mit zeitgenössischer Modefotografie. Seine Porträts sind still und farbgewaltig zugleich.',
+        body: 'Der Áo dài, das traditionelle vietnamesische Gewand, wird bei Duong zur Skulptur. Stoff, Haltung und Farbe verdichten sich zu Bildern, die zwischen Herkunft und Haute Couture stehen.',
+        pull: 'Zwischen Herkunft und Haute Couture.',
+        works: [
+          { sku: 'CDU07', title: 'Portrait no. 216', image: 'cdu07', framedFallback: { abstractId: '6435300', sku: 'CDU07' }, aspectRatio: 0.8, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate, bis 120 × 96 cm', pdpUrl: 'https://www.lumas.de/pictures/chiron_duong/portrait_no216/' },
+          { sku: 'CDU01', title: 'Portrait no. 209', image: 'cdu01', framedFallback: { abstractId: '6435306', sku: 'CDU01' }, aspectRatio: 0.8, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate, bis 120 × 96 cm', pdpUrl: 'https://www.lumas.de/pictures/chiron_duong/portrait_no209/' },
+          { sku: 'CDU10', title: 'Glass Panes', image: 'cdu10', framedFallback: { abstractId: '6435302', sku: 'CDU10' }, aspectRatio: 1.5, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate, bis 120 × 80 cm', pdpUrl: 'https://www.lumas.de/pictures/chiron_duong/glass_panes/' }
+        ],
+        avenues: []
+      },
+      { type: 'mosaic', id: 'bestseller', tab: 'Bestseller', title: 'Was gerade gesammelt wird',
+        blurb: 'Die meistgesammelten Arbeiten dieser Saison — quer durch Farbe, Format und Motiv.',
+        cells: [
+          { sku: 'BHU101', title: 'Sphaera Purple', artist: 'Beatrice Hug', image: 'bhu101', framedFallback: null, aspectRatio: 1.0, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/beatrice_hug/sphaera_purple/', big: true },
+          { sku: 'CGO145', title: 'Teddy', artist: 'Claudio Gotsch', room: '../assets/rooms-lib/cgo145-room-wide.jpg', image: 'cgo145', framedFallback: { abstractId: '6521651', sku: 'CGO145' }, aspectRatio: 1.15, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/claudio_gotsch/teddy/' },
+          { sku: 'BHU27', title: 'Purple Heart', artist: 'Beatrice Hug', image: 'bhu27', framedFallback: { abstractId: '4694', sku: 'BHU27' }, aspectRatio: 0.33, edition: 'Limitierte Edition, handsigniert', format: 'Bis 180 × 60 cm', pdpUrl: 'https://www.lumas.de/pictures/beatrice_hug/purple_heart/' },
+          { sku: 'KKR34', title: 'Salt Shapes VI', artist: 'Kevin Krautgartner', image: 'kkr34', framedFallback: { abstractId: '4567340', sku: 'KKR34' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_vi/' },
+          { sku: 'IME130', title: 'Adventures in the Garden 02', artist: 'Isabelle Menin', image: 'ime130', framedFallback: { abstractId: '5604953', sku: 'IME130' }, aspectRatio: 1.33, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/adventures_in_the_garden_02-1/' }
+        ]
+      },
+      { type: 'process', tab: 'About LUMAS', title: 'Vom Atelier an Ihre Wand',
+        steps: [
+          { n: '01', h: 'Die Künstler', p: 'Über 500 internationale Positionen — jede Edition trägt eine persönliche Handschrift.' },
+          { n: '02', h: 'Die Kuratoren', p: 'Zwischen Messen, Ausstellungen und Ateliers entdecken unsere Kuratoren neue Arbeiten.' },
+          { n: '03', h: 'Das Labor', p: 'Gefertigt in Deutschland, nach höchsten Galeriestandards — vom Rahmen bis zur Kaschierung.' },
+          { n: '04', h: 'Die Galerien', p: '19 Galerien weltweit, in denen Kunst zum Erlebnis wird.' },
+          { n: '05', h: 'Ihre Wand', p: 'Sicher verpackt und versichert, mit 60 Tagen Rückgaberecht. Raum für Gewissheit.' },
+          { n: '06', h: 'Das Zertifikat', p: 'Jede Arbeit ist nummeriert, handsigniert und mit Echtheitszertifikat.' }
+        ]
+      }
+    ],
+    avenueContent: {
+      'menin-world': { title: 'Die Welt von Isabelle Menin', body: 'Menin arbeitete als Malerin, bevor sie zur digitalen Komposition fand. Drei weitere Arbeiten aus ihrem Werk bei LUMAS.',
+        works: [
+          { sku: 'IME130', title: 'Adventures in the Garden 02', artist: 'Isabelle Menin', image: 'ime130', framedFallback: { abstractId: '5604953', sku: 'IME130' }, aspectRatio: 1.33, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/adventures_in_the_garden_02-1/' },
+          { sku: 'IME97', title: 'Only in Your Heart 03', artist: 'Isabelle Menin', image: 'ime97', framedFallback: null, aspectRatio: 1.0, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/only_in_your_heart_03/' },
+          { sku: 'IME166', title: 'Dew', artist: 'Isabelle Menin', image: 'ime166', framedFallback: null, aspectRatio: 1.0, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/dew/' }
+        ] },
+      'theme-florals': { title: 'Florale Welten im Bestand', body: 'Blüten, gemalt, geschichtet oder aus der Luft gesehen: verschiedene Wege zum selben Motiv, aus dieser Ausgabe und dem Bestand.',
+        works: [
+          { sku: 'IME130', title: 'Adventures in the Garden 02', artist: 'Isabelle Menin', image: 'ime130', framedFallback: { abstractId: '5604953', sku: 'IME130' }, aspectRatio: 1.33, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/isabelle_menin/adventures_in_the_garden_02-1/' },
+          { sku: 'KKR04', title: 'In Full Bloom II', artist: 'Kevin Krautgartner', image: 'kkr04', framedFallback: { abstractId: '4503149', sku: 'KKR04' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/in_full_bloom_ii/' }
+        ] },
+      'theme-water': { title: 'Wasser im Bestand', body: 'Das Meer als Fläche, als Farbe, als Struktur: drei Blicke aufs Wasser aus dieser Ausgabe und dem Werk der Künstler.',
+        works: [
+          { sku: 'KKR10', title: 'Tidal Paintings I', artist: 'Kevin Krautgartner', image: 'kkr10', framedFallback: { abstractId: '4503155', sku: 'KKR10' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/tidal_paintings_i/' },
+          { sku: 'WUH100', title: 'Vau', artist: 'Wolfgang Uhlig', image: 'wuh100', framedFallback: { abstractId: '6158986', sku: 'WUH100' }, aspectRatio: 1.33, edition: 'Limitierte Edition, handsigniert', format: 'Zwei Formate', pdpUrl: 'https://www.lumas.de/pictures/wolfgang_uhlig/vau/' }
+        ] },
+      'krautgartner-world': { title: 'Die Welt von Kevin Krautgartner', body: 'Der deutsche Fotograf arbeitet fast ausschließlich aus der Luft. Zwei weitere Arbeiten aus seinen Serien bei LUMAS.',
+        works: [
+          { sku: 'KKR01', title: 'In Full Bloom I', artist: 'Kevin Krautgartner', image: 'kkr01', framedFallback: { abstractId: '4503146', sku: 'KKR01' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/in_full_bloom_i/' },
+          { sku: 'KKR22', title: 'Salt Shapes II', artist: 'Kevin Krautgartner', image: 'kkr22', framedFallback: { abstractId: '4567328', sku: 'KKR22' }, aspectRatio: 0.75, edition: 'Limitierte Edition, handsigniert', format: 'Drei Formate', pdpUrl: 'https://www.lumas.de/pictures/kevin_krautgartner/salt_shapes_ii/' }
+        ] }
+    },
+    backmatter: {
+      note: 'Die nächste Ausgabe erscheint im Frühjahr.',
+      shopCta: { label: 'Alle Neuerscheinungen entdecken', href: 'https://www.lumas.de/neuheiten/' },
+      galleryCta: { label: 'Eine Galerie besuchen', href: 'https://www.lumas.de/galerien/' }
+    }
+  },
+
+  /* ── Reusability proof: a different issue, config only. ── */
+  'spring-2027': {
+    issue: {
+      season: 'Frühjahr', year: 2027, number: 16,
+      masthead: 'Inspired',
+      tagline: 'Zwei Positionen, eine Sammlung, ein Versprechen für den Sommer.',
+      cover: { image: 'hli91', framedFallback: null, credit: 'Holger Lippmann, crimson and scarlet IV', aspectRatio: 1.0 }
+    },
+    rail: [ { target: 'lippmann', label: 'Lippmann' }, { target: 'gotsch', label: 'Gotsch' }, { target: 'bestseller', label: 'Bestseller' } ],
+    spreads: [
+      { type: 'letter', tab: 'Voices',
+        quote: 'Sammeln beginnt mit einem einzigen Bild.',
+        attrName: 'Marc Ullrich', attrRole: 'Mitgründer von LUMAS',
+        body: [
+          'Die Frühjahrsausgabe stellt zwei Positionen vor, die unterschiedlicher kaum sein könnten — und doch beide vom selben ausgehen: der Frage, wie ein Bild entsteht.',
+          'Holger Lippmann schreibt seine Bilder als Code. Claudio Gotsch begegnet der Tierwelt der Alpen auf Augenhöhe.'
+        ],
+        sign: 'Marc Ullrich & Stefanie Harig'
+      },
+      { type: 'feature', id: 'lippmann', tab: 'Cover Artist', artist: 'Holger Lippmann', kicker: 'Neue Arbeiten',
+        room: { image: '../assets/rooms-lib/hli73-room-wide.jpg', credit: 'Holger Lippmann, Recursive Tree XI', place: 'in einem Zuhause in Antwerpen' },
+        lead: 'Holger Lippmann schreibt seine Bilder als Code. Der Berliner Künstler gehört zu den frühen Stimmen der generativen Kunst; seine Algorithmen zeichnen Gärten, die es nie gab.',
+        body: 'Jede Arbeit ist das Ergebnis eines Programms, das Lippmann über Jahre verfeinert hat. Der Zufall bekommt Regeln, die Regeln bekommen Farbe.',
+        pull: 'Der Zufall bekommt Regeln.',
+        works: [
+          { sku: 'HLI73', title: 'Recursive Tree XI', image: 'hli73', framedFallback: { abstractId: '10242', sku: 'HLI73' }, aspectRatio: 0.46, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate, bis 208 × 95 cm', pdpUrl: 'https://www.lumas.de/pictures/holger_lippmann/recursive_tree_xi/' },
+          { sku: 'HLI93', title: 'crimson and scarlet IV', image: 'hli91', framedFallback: null, aspectRatio: 1.68, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/holger_lippmann/crimson_and_scarlet_iv/' }
+        ],
+        avenues: [ { type: 'theme', ref: 'theme-generative', label: 'Kunst aus Code' } ]
+      },
+      { type: 'bleed', id: 'gotsch',
+        room: { image: '../assets/rooms-lib/cgo145-room-wide.jpg' },
+        handwrite: 'Auf Augenhöhe mit den Alpen.',
+        attrName: 'Claudio Gotsch',
+        work: { sku: 'CGO145', title: 'Teddy', artist: 'Claudio Gotsch', image: 'cgo145', framedFallback: { abstractId: '6521651', sku: 'CGO145' }, aspectRatio: 1.15, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/claudio_gotsch/teddy/' },
+        note: 'Claudio Gotsch fotografiert die Tierwelt des Engadins auf Augenhöhe — geduldig, nah, in Schwarzweiß und Farbe.',
+        avenues: []
+      },
+      { type: 'mosaic', id: 'bestseller', tab: 'Bestseller', title: 'Sommer, angekündigt',
+        blurb: 'Die Sommerarbeiten werden derzeit kuratiert.',
+        cells: []
+      },
+      { type: 'process', tab: 'About LUMAS', title: 'Vom Atelier an Ihre Wand',
+        steps: [
+          { n: '01', h: 'Die Künstler', p: 'Über 500 internationale Positionen — jede Edition trägt eine persönliche Handschrift.' },
+          { n: '02', h: 'Das Labor', p: 'Gefertigt in Deutschland, nach höchsten Galeriestandards.' },
+          { n: '03', h: 'Das Zertifikat', p: 'Jede Arbeit ist nummeriert, handsigniert und mit Echtheitszertifikat.' }
+        ]
+      }
+    ],
+    avenueContent: {
+      'theme-generative': { title: 'Kunst aus Code', body: 'Generative Arbeiten bei LUMAS: gezeichnet von Algorithmen, ausgewählt von Menschen.',
+        works: [ { sku: 'HLI33', title: 'Tree V', artist: 'Holger Lippmann', image: 'hli33', framedFallback: null, aspectRatio: 1.0, edition: 'Limitierte Edition, handsigniert', format: 'Mehrere Formate', pdpUrl: 'https://www.lumas.de/pictures/holger_lippmann/tree_v/' } ] }
+    },
+    backmatter: {
+      note: 'Die nächste Ausgabe erscheint im Herbst.',
+      shopCta: { label: 'Alle Neuerscheinungen entdecken', href: 'https://www.lumas.de/neuheiten/' },
+      galleryCta: { label: 'Eine Galerie besuchen', href: 'https://www.lumas.de/galerien/' }
+    }
+  }
+};
+</script>
+
+<!-- ═══ RENDER LAYER — reads only ISSUES + SHELL. Zero content below. ═══ -->
+<script>
+(function () {
+  'use strict';
+
+  var params = new URLSearchParams(location.search);
+  var issueKey = ISSUES[params.get('issue')] ? params.get('issue') : 'autumn-2026';
+  var CFG = ISSUES[issueKey];
+  var variant = params.get('v') === 'control' ? 'control' : 'v1';
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Reveal arming: optimistically arm if IO exists (no flash, pre-paint);
+     disarm if the liveness probe never fires (headless / hidden webview)
+     so content is simply visible — never a blank page. */
+  if ('IntersectionObserver' in window && !reduced) {
+    document.documentElement.classList.add('js-reveal');
+    var ioAlive = false;
+    try { var p = new IntersectionObserver(function () { ioAlive = true; p.disconnect(); }); p.observe(document.documentElement); } catch (e) {}
+    setTimeout(function () {
+      if (!ioAlive) { document.documentElement.classList.remove('js-reveal'); document.querySelectorAll('[data-reveal]').forEach(function (n) { n.classList.add('in'); }); }
+    }, 1500);
+  }
+
+  /* Instrumentation: track() → console in prototype mode; dev maps 1:1 to dataLayer. */
+  window.__trackLog = [];
+  function track(name, pl) { var e = Object.assign({ event: name, variant: variant, issue: issueKey }, pl || {}); window.__trackLog.push(e); console.log('[track]', name, e); }
+
+  var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); };
+  function imgSrc(image) { return image.indexOf('/') !== -1 ? image : LumasImg.full(image); }
+
+  /* Artwork figure: reserved ratio, contain-fit, fallback chain
+     bare _full → _desktop → framed(store) → tonal block keeping credit. */
+  function art(spec, opts) {
+    opts = opts || {};
+    var ff = spec.framedFallback;
+    return '<div class="art' + (opts.cls ? ' ' + opts.cls : '') + '" style="--ar:' + Number(spec.aspectRatio || 1) + '"' +
+      ' data-code="' + esc(spec.image) + '"' +
+      (ff ? ' data-framed="' + esc(LumasImg.framed(ff.abstractId, ff.sku, SHELL.store)) + '"' : '') +
+      ' data-credit="' + esc(spec.credit || ((spec.artist ? spec.artist + ', ' : '') + (spec.title || ''))) + '">' +
+      '<img src="' + esc(imgSrc(spec.image)) + '" alt="' + esc(spec.credit || spec.title || '') + '"' + (opts.eager ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async"></div>';
+  }
+  document.addEventListener('load', function (e) { var b = e.target.closest && e.target.closest('.art'); if (b) b.classList.add('loaded'); }, true);
+  document.addEventListener('error', function (e) {
+    var img = e.target, b = img.closest && img.closest('.art'); if (!b) return;
+    var stage = b.dataset.stage || 'full', code = b.dataset.code || '';
+    if (stage === 'full' && code.indexOf('/') === -1) { b.dataset.stage = 'desktop'; img.src = LumasImg.desktop(code); }
+    else if (stage !== 'framed' && b.dataset.framed) { b.dataset.stage = 'framed'; img.src = b.dataset.framed; }
+    else { b.classList.add('failed'); b.innerHTML = '<div class="art-fallback"><span class="eyebrow">' + esc(SHELL.wallEdition) + '</span><span class="caption">' + esc(b.dataset.credit) + '</span></div>'; }
+  }, true);
+
+  function wallLabel(w) {
+    return '<button class="wall-toggle" aria-expanded="false" data-wall>' + esc(SHELL.wallLabel) + '</button>' +
+      '<div class="wall"><div class="wall-inner">' +
+        '<div class="wall-row"><span class="k">' + esc(SHELL.wallEdition) + '</span><span>' + esc(w.edition) + '</span></div>' +
+        '<div class="wall-row"><span class="k">' + esc(SHELL.wallFormat) + '</span><span>' + esc(w.format) + '</span></div>' +
+        '<!-- ABLYFT-GOAL: pdp-clickthrough (closest documented name — BIND IN PHASE 5) -->' +
+        '<a class="btn-ghost" href="' + esc(w.pdpUrl) + '" data-select data-sku="' + esc(w.sku) + '" data-artist="' + esc(w.artist || '') + '">' + esc(SHELL.wallCta) + '</a>' +
+      '</div></div>';
+  }
+  function workCard(w, fallbackArtist, hero) {
+    var art_ = Object.assign({}, w, { artist: w.artist || fallbackArtist });
+    return '<figure class="work' + (hero ? ' hero-work' : '') + '" style="margin:0" data-reveal data-artwork data-sku="' + esc(w.sku) + '">' +
+      '<div class="plate">' + art(art_) + '</div>' +
+      '<figcaption class="work-meta"><span class="work-title">' + esc(w.title) + '</span>' +
+      '<span class="work-artist">' + esc(art_.artist) + '</span>' + wallLabel(art_) + '</figcaption></figure>';
+  }
+  function avenues(list, fromId) {
+    if (!list || !list.length) return '';
+    return '<div class="avenues">' + list.map(function (a) {
+      return '<!-- ABLYFT-GOAL: engaged-discovery (closest documented name — BIND IN PHASE 5) -->' +
+        '<button class="avenue-link" data-avenue data-type="' + esc(a.type) + '" data-ref="' + esc(a.ref) + '" data-from="' + esc(fromId || '') + '">' +
+        '<span><span class="eyebrow">' + esc(SHELL.avenueEyebrow[a.type] || SHELL.avenueEyebrowFallback) + '</span><br><span class="avenue-name">' + esc(a.label) + '</span></span>' +
+        '<span class="arrow" aria-hidden="true">&rarr;</span></button>';
+    }).join('') + '</div>';
+  }
+
+  /* ── Spread renderers ── */
+  function coverSpread(iss) {
+    return '<header class="cover on-dark" id="cover">' +
+      '<div class="cover-media">' + '<img src="' + esc(imgSrc(iss.cover.image)) + '" alt="' + esc(iss.cover.credit) + '" fetchpriority="high">' + '</div>' +
+      '<div class="cover-top"><span class="cover-wordmark">' + esc(SHELL.wordmark) + '</span></div>' +
+      '<div class="cover-issue">' + esc(SHELL.issueNoLabel) + ' ' + esc(iss.number) + ' · ' + esc(iss.season) + ' ' + esc(iss.year) + '</div>' +
+      '<div class="cover-foot">' +
+        '<h1 class="masthead">' + esc(iss.masthead) + '</h1>' +
+        '<p class="cover-line">' + esc(iss.tagline) + '</p>' +
+        '<p class="cover-credit">' + esc(iss.cover.credit) + '</p>' +
+      '</div>' +
+      '<div class="scroll-cue" aria-hidden="true"></div>' +
+    '</header>';
+  }
+  function letterSpread(s) {
+    return '<section class="spread voice"><div class="grid cols-2 asym">' +
+      '<div data-reveal><span class="tab">' + esc(s.tab) + '</span>' +
+        '<p class="voice-quote serif" style="margin-top:22px">' + esc(s.quote) + '</p>' +
+        '<p class="voice-attr"><b>' + esc(s.attrName) + '</b><br>' + esc(s.attrRole) + '</p></div>' +
+      '<div class="letter-body" data-reveal style="--d:100ms">' + s.body.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') +
+        '<p class="letter-sign">' + esc(s.sign) + '</p></div>' +
+    '</div></section>';
+  }
+  function voiceSpread(s) {
+    return '<section class="spread voice"><div data-reveal><span class="tab">' + esc(s.tab) + '</span>' +
+      '<p class="voice-quote serif" style="margin-top:24px">' + esc(s.quote) + '</p>' +
+      '<p class="voice-attr"><b>' + esc(s.attrName) + '</b>' + (s.attrRole ? ' · ' + esc(s.attrRole) : '') + '</p></div></section>';
+  }
+  function featureSpread(s) {
+    var r = s.room || {};
+    return '<section id="' + esc(s.id) + '" data-feature="' + esc(s.id) + '" data-artist="' + esc(s.artist) + '">' +
+      '<div class="room-establish"><div class="parallax"><img src="' + esc(r.image) + '" alt="' + esc((r.credit || s.artist) + (r.place ? ', ' + r.place : '')) + '" loading="lazy"></div>' +
+        '<div class="cap"><span class="eyebrow">' + esc(r.place || '') + '</span></div></div>' +
+      '<div class="spread tight">' +
+        '<div class="head" data-reveal><span class="tab">' + esc(s.tab) + '</span>' +
+          '<p class="kicker eyebrow" style="margin-top:20px">' + esc(s.kicker) + '</p>' +
+          '<h2 class="artist-name">' + esc(s.artist) + '</h2></div>' +
+        '<div class="feature-body" style="margin-top:36px">' +
+          '<p class="feature-lead" data-reveal>' + esc(s.lead) + '</p>' +
+          '<div data-reveal style="--d:100ms"><p style="margin-bottom:24px">' + esc(s.body) + '</p>' +
+            (s.pull ? '<p class="pull">' + esc(s.pull) + '</p>' : '') + '</div>' +
+        '</div>' +
+        '<div class="works">' + s.works.map(function (w, i) { return workCard(w, s.artist, i === 0); }).join('') + '</div>' +
+        avenues(s.avenues, s.id) +
+      '</div></section>';
+  }
+  function bleedSpread(s) {
+    var r = s.room || {}, w = s.work;
+    return '<section id="' + esc(s.id) + '" data-feature="' + esc(s.id) + '" data-artist="' + esc(w.artist) + '">' +
+      '<div class="bleed"><div class="parallax"><img src="' + esc(r.image) + '" alt="' + esc(w.title) + '" loading="lazy"></div>' +
+        '<div class="bleed-scrim"></div>' +
+        '<div class="bleed-inner" data-reveal>' +
+          '<p class="handwrite">' + esc(s.handwrite) + '</p>' +
+          '<p class="credit-line"><b>' + esc(w.artist) + '</b> — ' + esc(w.title) + '</p>' +
+        '</div></div>' +
+      '<div class="spread tight"><div class="grid cols-2 asym">' +
+        '<div data-reveal><p style="margin-bottom:20px">' + esc(s.note) + '</p>' +
+          '<figure style="margin:0" data-artwork data-sku="' + esc(w.sku) + '"><div class="plate">' + art(w) + '</div></figure></div>' +
+        '<div data-reveal style="--d:100ms"><h3 class="work-title" style="font-size:clamp(24px,3vw,32px)">' + esc(w.title) + '</h3>' +
+          '<p class="work-artist" style="margin-top:4px">' + esc(w.artist) + '</p>' + wallLabel(w) + '</div>' +
+      '</div>' + avenues(s.avenues, s.id) + '</div></section>';
+  }
+  function mosaicSpread(s) {
+    var cells = s.cells || [];
+    var body = cells.length
+      ? '<div class="mosaic">' + cells.map(function (c) {
+          var isRoom = !!c.room;
+          var spec = isRoom ? { image: c.room, aspectRatio: c.aspectRatio, credit: c.artist + ', ' + c.title } : c;
+          return '<a class="cell' + (c.big ? ' big' : '') + (isRoom ? ' room' : '') + '" href="' + esc(c.pdpUrl) + '" data-select data-sku="' + esc(c.sku) + '" data-artist="' + esc(c.artist) + '" data-reveal data-artwork style="text-decoration:none">' +
+            '<!-- ABLYFT-GOAL: pdp-clickthrough (closest documented name — BIND IN PHASE 5) -->' +
+            art(spec) + '<span class="mosaic-cap"><b>' + esc(c.artist) + '</b> ' + esc(c.title) + '</span></a>';
+        }).join('') + '</div>'
+      : '<div class="mosaic"><div class="empty-note" data-reveal><p class="section-title">' + esc(SHELL.emptyTitle) + '</p><p>' + esc(s.blurb) + '</p></div></div>';
+    return '<section class="spread" id="' + esc(s.id) + '">' +
+      '<div class="head" data-reveal><span class="tab">' + esc(s.tab) + '</span>' +
+      '<h2 class="section-title" style="margin-top:20px">' + esc(s.title) + '</h2>' +
+      '<p class="measure" style="margin-top:12px;color:var(--color-text-secondary)">' + esc(s.blurb) + '</p></div>' +
+      '<div style="margin-top:36px">' + body + '</div></section>';
+  }
+  function processSpread(s) {
+    return '<section class="spread"><div class="head" data-reveal><span class="tab">' + esc(s.tab) + '</span>' +
+      '<h2 class="section-title" style="margin-top:20px">' + esc(s.title) + '</h2></div>' +
+      '<div class="process-grid" style="margin-top:40px">' + s.steps.map(function (st, i) {
+        return '<div class="step" data-reveal style="--d:' + (i % 3 * 80) + 'ms"><div class="step-num">' + esc(st.n) + '</div><h3>' + esc(st.h) + '</h3><p>' + esc(st.p) + '</p></div>';
+      }).join('') + '</div></section>';
+  }
+  function backSpread(bm) {
+    return '<footer class="back" id="backmatter"><div data-reveal>' +
+      '<p class="liberation">' + esc(SHELL.liberation) + '</p>' +
+      '<p class="cities">' + esc(SHELL.cities) + '</p>' +
+      '<div class="back-exits">' +
+        '<!-- ABLYFT-GOAL: pdp-clickthrough (closest documented name — BIND IN PHASE 5) -->' +
+        '<a class="btn-ghost" href="' + esc(bm.shopCta.href) + '" data-select data-sku="" data-artist="">' + esc(bm.shopCta.label) + '</a>' +
+        '<!-- ABLYFT-GOAL: gallery-visit-intent (closest documented name — BIND IN PHASE 5) -->' +
+        '<a class="btn-ghost" href="' + esc(bm.galleryCta.href) + '">' + esc(bm.galleryCta.label) + '</a>' +
+      '</div>' +
+      '<p class="cover-credit" style="margin-top:32px;color:rgba(244,237,226,.6)">' + esc(bm.note) + '</p>' +
+    '</div></footer>';
+  }
+
+  function railBar(cfg) {
+    return '<nav class="rail"><div class="rail-inner">' +
+      '<a class="rail-mark" href="#cover"><span>' + esc(SHELL.wordmark) + '</span> <span class="no">' + esc(cfg.issue.number) + '</span></a>' +
+      '<div class="rail-links">' + cfg.rail.map(function (r) { return '<a href="#' + esc(r.target) + '" data-toc data-target="' + esc(r.target) + '">' + esc(r.label) + '</a>'; }).join('') + '</div>' +
+    '</div></nav>';
+  }
+
+  function renderV1(cfg) {
+    var html = coverSpread(cfg.issue) + railBar(cfg);
+    cfg.spreads.forEach(function (s) {
+      if (s.type === 'letter') html += letterSpread(s);
+      else if (s.type === 'voice') html += voiceSpread(s);
+      else if (s.type === 'feature') html += featureSpread(s);
+      else if (s.type === 'bleed') html += bleedSpread(s);
+      else if (s.type === 'mosaic') html += mosaicSpread(s);
+      else if (s.type === 'process') html += processSpread(s);
+    });
+    html += backSpread(cfg.backmatter);
+    return html;
+  }
+
+  /* ── Control: faithful flat campaign from the same works ── */
+  function collectWorks(cfg) {
+    var out = [];
+    cfg.spreads.forEach(function (s) {
+      if (s.type === 'feature') s.works.forEach(function (w) { out.push({ w: w, artist: s.artist, group: s.artist }); });
+      else if (s.type === 'bleed') out.push({ w: s.work, artist: s.work.artist, group: s.work.artist });
+      else if (s.type === 'mosaic') (s.cells || []).forEach(function (c) { out.push({ w: c, artist: c.artist, group: s.title }); });
+    });
+    return out;
+  }
+  function renderControl(cfg) {
+    var groups = {};
+    collectWorks(cfg).forEach(function (r) { (groups[r.group] = groups[r.group] || []).push(r); });
+    var html = '<nav class="ctrl-nav"><a class="ctrl-mark" href="' + esc(SHELL.wordmarkHref) + '">' + esc(SHELL.wordmark) + '</a>' +
+      '<div class="ctrl-links">' + cfg.rail.map(function (r) { return '<a href="#' + esc(r.target) + '">' + esc(r.label) + '</a>'; }).join('') + '</div></nav>';
+    html += '<header class="ctrl-header"><p class="eyebrow" style="color:var(--color-text-tertiary)">' + esc(cfg.issue.season) + ' ' + esc(cfg.issue.year) + '</p>' +
+      '<h1 class="section-title" style="margin-top:8px">Die neuen Editionen</h1><p>' + esc(cfg.issue.tagline) + '</p></header>';
+    Object.keys(groups).forEach(function (g) {
+      html += '<section class="ctrl-section" id="' + esc((groups[g][0].w.sku || 'g').toLowerCase()) + '"><h2>' + esc(g) + '</h2><div class="ctrl-grid">' +
+        groups[g].map(function (r) {
+          var w = Object.assign({}, r.w, { artist: r.w.artist || r.artist });
+          return '<a class="ctrl-card" href="' + esc(w.pdpUrl) + '" data-select data-sku="' + esc(w.sku) + '" data-artist="' + esc(w.artist) + '">' +
+            '<!-- ABLYFT-GOAL: pdp-clickthrough (closest documented name — BIND IN PHASE 5) -->' +
+            art({ image: w.image, framedFallback: w.framedFallback, aspectRatio: 1, title: w.title, artist: w.artist }) +
+            '<span class="t">' + esc(w.title) + '</span><span class="a">' + esc(w.artist) + '</span></a>';
+        }).join('') + '</div></section>';
+    });
+    html += '<footer class="ctrl-footer"><a class="btn-ghost" href="' + esc(cfg.backmatter.shopCta.href) + '" data-select data-sku="" data-artist="">' + esc(cfg.backmatter.shopCta.label) + '</a>' +
+      '<a class="btn-ghost" href="' + esc(cfg.backmatter.galleryCta.href) + '">' + esc(cfg.backmatter.galleryCta.label) + '</a></footer>';
+    return html;
+  }
+
+  /* ── Avenue overlay ── */
+  var avenueOpenedAt = 0, avenueType = '', lastFocus = null, savedScrollY = 0;
+  function openAvenue(type, ref, fromId, trigger) {
+    var content = CFG.avenueContent[ref];
+    if (!content) { showNotice(SHELL.avenueFail); track('avenue_return', { type: type, failed: true }); return; }
+    lastFocus = trigger; savedScrollY = window.scrollY; avenueOpenedAt = performance.now(); avenueType = type;
+    var el = document.createElement('div');
+    el.className = 'overlay'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', content.title);
+    el.innerHTML = '<div class="overlay-bar"><span class="eyebrow" style="color:var(--color-text-tertiary)">' + esc(SHELL.avenueEyebrow[type] || SHELL.avenueEyebrowFallback) + '</span>' +
+      '<button class="btn-ghost" data-close>' + esc(SHELL.avenueReturn) + '</button></div>' +
+      '<div class="overlay-body"><h2 class="section-title">' + esc(content.title) + '</h2><p class="avenue-text">' + esc(content.body) + '</p>' +
+      (content.works && content.works.length ? '<div class="overlay-works">' + content.works.map(function (w) { return workCard(w, null, false); }).join('') + '</div>' : '') +
+      '<p style="margin-top:48px"><button class="btn-ghost" data-close>' + esc(SHELL.avenueReturn) + '</button></p></div>';
+    document.body.appendChild(el); document.body.style.overflow = 'hidden';
+    void el.offsetHeight; el.classList.add('open'); el.querySelectorAll('[data-reveal]').forEach(function (n) { n.classList.add('in'); });
+    el.querySelector('[data-close]').focus({ preventScroll: true });
+    track('avenue_enter', { type: type, fromFeatureId: fromId });
+  }
+  function closeAvenue() {
+    var el = document.querySelector('.overlay'); if (!el) return;
+    el.classList.remove('open'); document.body.style.overflow = ''; window.scrollTo({ top: savedScrollY, left: 0, behavior: 'auto' });
+    track('avenue_return', { type: avenueType }); track('time_in_avenue', { type: avenueType, ms: Math.round(performance.now() - avenueOpenedAt) });
+    setTimeout(function () { el.remove(); }, reduced ? 0 : 320);
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+  }
+  var noticeTimer = null;
+  function showNotice(t) { var n = document.getElementById('notice'); n.textContent = t; n.classList.add('show'); clearTimeout(noticeTimer); noticeTimer = setTimeout(function () { n.classList.remove('show'); }, 4000); }
+
+  /* ── Mount + observers ── */
+  var app = document.getElementById('app'), observers = [], rafId = null, parallaxEls = [];
+  function mount() {
+    app.innerHTML = (variant === 'control') ? renderControl(CFG) : renderV1(CFG);
+    document.title = CFG.issue.masthead + ' · ' + CFG.issue.season + ' ' + CFG.issue.year + ' · LUMAS';
+    setupObservers();
+    var b = document.createElement('div'); b.className = 'badge'; b.textContent = 'PROTO-2026-001 · ' + SHELL.badge[variant] + ' · ' + issueKey; app.appendChild(b);
+  }
+  function setupObservers() {
+    observers.forEach(function (o) { o.disconnect(); }); observers = [];
+    var armed = document.documentElement.classList.contains('js-reveal');
+    if (armed) {
+      var rev = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); rev.unobserve(en.target); } }); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+      document.querySelectorAll('[data-reveal]').forEach(function (n) { rev.observe(n); }); observers.push(rev);
+    }
+    var feat = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { track('feature_view', { featureId: en.target.dataset.feature, artist: en.target.dataset.artist }); feat.unobserve(en.target); } }); }, { threshold: 0.15 });
+    document.querySelectorAll('[data-feature]').forEach(function (n) { feat.observe(n); }); observers.push(feat);
+    var awo = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { track('artwork_reveal', { sku: en.target.dataset.sku }); awo.unobserve(en.target); } }); }, { threshold: 0.4 });
+    document.querySelectorAll('[data-artwork]').forEach(function (n) { awo.observe(n); }); observers.push(awo);
+
+    var sent = document.getElementById('sentinels'); sent.innerHTML = '';
+    [25, 50, 75, 100].forEach(function (m) { var s = document.createElement('span'); s.dataset.milestone = m; s.style.top = 'calc(' + m + '% - 2px)'; sent.appendChild(s); });
+    var prog = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { track('issue_progress', { milestone: Number(en.target.dataset.milestone) }); prog.unobserve(en.target); } }); }, { threshold: 0 });
+    sent.querySelectorAll('span').forEach(function (s) { prog.observe(s); }); observers.push(prog);
+
+    setupParallax(armed);
+  }
+
+  /* Subtle room parallax — only while on-screen, only if reveal armed. */
+  function setupParallax(armed) {
+    parallaxEls = [];
+    if (!armed || reduced) return;
+    var visible = new Set();
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) visible.add(en.target); else visible.delete(en.target); }); if (visible.size && !rafId) loop(); });
+    document.querySelectorAll('.parallax').forEach(function (n) { io.observe(n); parallaxEls.push(n); }); observers.push(io);
+    function loop() {
+      rafId = null;
+      var vh = window.innerHeight;
+      visible.forEach(function (el) {
+        var img = el.querySelector('img'); if (!img) return;
+        var r = el.getBoundingClientRect(); var prog = (r.top + r.height / 2 - vh / 2) / vh; // -1..1
+        img.style.transform = 'translateY(' + (prog * -5).toFixed(2) + '%)';
+      });
+      if (visible.size) rafId = requestAnimationFrame(loop);
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var toc = e.target.closest('[data-toc]'); if (toc) { track('contents_nav_click', { target: toc.dataset.target }); return; }
+    var sel = e.target.closest('[data-select]'); if (sel) { track('select_item', { sku: sel.dataset.sku || null, artist: sel.dataset.artist || null }); return; }
+    var wall = e.target.closest('[data-wall]'); if (wall) { var pnl = wall.nextElementSibling; var open = pnl.classList.toggle('open'); wall.setAttribute('aria-expanded', String(open)); return; }
+    var av = e.target.closest('[data-avenue]'); if (av) { openAvenue(av.dataset.type, av.dataset.ref, av.dataset.from, av); return; }
+    var cl = e.target.closest('[data-close]'); if (cl) { closeAvenue(); return; }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.querySelector('.overlay')) { closeAvenue(); return; }
+    if ((e.key === 'v' || e.key === 'V') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      variant = (variant === 'v1') ? 'control' : 'v1';
+      var u = new URL(location.href); u.searchParams.set('v', variant); history.replaceState(null, '', u);
+      var ov = document.querySelector('.overlay'); if (ov) { ov.remove(); document.body.style.overflow = ''; }
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      mount(); window.scrollTo(0, 0);
+    }
+  });
+
+  mount();
+  track('issue_open', { season: CFG.issue.season, year: CFG.issue.year });
+})();
+</script>
+</body>
+</html>

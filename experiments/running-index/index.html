@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entdecken — Running Index · LUMAS V2</title>
+
+<!-- Allowed imports: Utile Display (display) + Archivo (body/UI). Falls back to Georgia serif. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.cdnfonts.com/css/utile-display" rel="stylesheet" />
+
+<style>
+  /* ---- LUMAS V2 tokens ---- */
+  :root{
+    --color-surface-page:#FAF6F1;
+    --color-text-primary:#1C1A18;
+    --color-text-secondary:#5A5752;
+    --color-text-tertiary:#908C87;
+    --color-text-dim:#C7C3BE;       /* charcoal/300 — dimming */
+    --color-border-subtle:#EAE2D8;  /* bone/200 */
+    --font-display:'Utile Display',Georgia,'Times New Roman',serif;
+    --font-ui:'Archivo',system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--color-surface-page);
+    color:var(--color-text-primary);
+    font-family:var(--font-ui);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---- Section ---- */
+  .running-index{
+    position:relative;
+    overflow:hidden;
+    background:var(--color-surface-page);
+    padding:96px 0;
+    border-top:1px solid var(--color-border-subtle);
+    border-bottom:1px solid var(--color-border-subtle);
+  }
+
+  /* Large artwork layer — sits BELOW the text block */
+  .hover-layer{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+  }
+  .art{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    opacity:0;
+    transition:opacity 350ms ease;
+    line-height:0;
+  }
+  .art.left{left:6%}
+  .art.right{right:6%}
+  .art.center{left:50%;transform:translate(-50%,-50%)}
+  .art img{
+    display:block;
+    width:auto;height:auto;
+    max-width:min(480px,70vw);
+    max-height:70vh;
+  }
+  .art .veil{
+    position:absolute;inset:0;
+    background:rgba(250,246,241,0.26);  /* ivory scrim keeps the type readable on top */
+    pointer-events:none;
+  }
+  .art.is-visible{opacity:1}
+
+  /* Text block — sits ON TOP of the artwork */
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .eyebrow{
+    margin:0 0 40px;
+    font-family:var(--font-ui);
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--color-text-tertiary);
+  }
+
+  /* ---- Running index ---- */
+  .index{
+    margin:0;
+    font-family:var(--font-display);
+    font-weight:400;
+    line-height:1.35;
+    text-align:left;
+  }
+
+  .term{
+    color:var(--color-text-primary);
+    text-decoration:none;
+    cursor:pointer;
+    transition:color 200ms ease;
+  }
+  .tier-1{font-size:clamp(40px,4vw,56px)}
+  .tier-2{font-size:clamp(30px,3vw,40px)}
+  .tier-3{font-size:clamp(22px,2vw,28px);color:var(--color-text-secondary)}
+
+  .term:hover{
+    text-decoration:underline;
+    text-decoration-thickness:1px;
+    text-underline-offset:6px;
+  }
+
+  /* Comma separators — text-tertiary, smallest tier size */
+  .sep{
+    color:var(--color-text-tertiary);
+    font-size:clamp(22px,2vw,28px);
+  }
+
+  /* Inline thumbnails — full artwork, uncropped, scales with its term's tier */
+  .thumb{
+    height:0.85em;
+    width:auto;
+    margin:0 8px;
+    vertical-align:middle;
+    transform-origin:center;
+    transition:transform 250ms ease;
+  }
+  .thumb-t1{font-size:clamp(40px,4vw,56px)}
+  .thumb-t2{font-size:clamp(30px,3vw,40px)}
+
+  /* ---- Hover state: dim others, lift the active term + its thumb ---- */
+  .index.is-dimming .term{color:var(--color-text-dim)}
+  .index.is-dimming .term.is-active{color:var(--color-text-primary)}
+  .term.is-active + .thumb{transform:scale(1.06)}
+
+  .caption{
+    margin:48px 0 0;
+    font-family:var(--font-ui);
+    font-weight:400;
+    font-size:11px;
+    letter-spacing:0.03em;
+    color:var(--color-text-tertiary);
+    text-align:right;
+  }
+
+  /* Touch / no-hover: the artwork layer is purely decorative scaffolding — hide it.
+     The index stays navigational and inline thumbnails remain. */
+  @media (hover:none){
+    .hover-layer{display:none}
+  }
+
+  /* Reduced motion: transitions become instant */
+  @media (prefers-reduced-motion:reduce){
+    .term,.thumb,.art{transition-duration:0s !important}
+  }
+</style>
+</head>
+<body>
+
+<section class="running-index" aria-label="Entdecken">
+
+  <!-- Large artwork layer (below the text) -->
+  <div class="hover-layer" aria-hidden="true">
+    <div class="art left"   data-art="cse34"><img src="https://img.lumas.com/showimg_cse34_full.jpg"    alt="Christiane Steinicke – Indian Summer II" loading="lazy" /><span class="veil"></span></div>
+    <div class="art center" data-art="bla06"><img src="https://img.lumas.com/showimg_bla06_full.jpg"    alt="Bernhard Lang – Adria III" loading="lazy" /><span class="veil"></span></div>
+    <div class="art right"  data-art="bhu87"><img src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera" loading="lazy" /><span class="veil"></span></div>
+    <div class="art left"   data-art="jbl13"><img src="https://img.lumas.com/showimg_jbl13_desktop.jpg" alt="Joachim Baldauf – Gigerl #1" loading="lazy" /><span class="veil"></span></div>
+    <div class="art center" data-art="rle403"><img src="https://img.lumas.com/showimg_rle403_desktop.jpg" alt="Robert Lebeck – New York 1967" loading="lazy" /><span class="veil"></span></div>
+    <div class="art right"  data-art="hli93"><img src="https://img.lumas.com/showimg_hli93_full.jpg"    alt="Holger Lippmann – crimson and scarlet IV" loading="lazy" /><span class="veil"></span></div>
+    <div class="art left"   data-art="pve172"><img src="https://img.lumas.com/showimg_pve172_full.jpg"  alt="Pep Ventosa – Prenzlauer Allee, Berlin" loading="lazy" /><span class="veil"></span></div>
+    <div class="art center" data-art="cts18"><img src="https://img.lumas.com/showimg_cts18_full.jpg"    alt="Charis Tsevis – Elephant" loading="lazy" /><span class="veil"></span></div>
+    <div class="art right"  data-art="bvl04"><img src="https://img.lumas.com/showimg_bvl04_full.jpg"    alt="Bart Van Leeuwen – Dior Paris" loading="lazy" /><span class="veil"></span></div>
+    <div class="art left"   data-art="pfu405"><img src="https://img.lumas.com/showimg_pfu405_full.jpg"  alt="Peter Funch – Bouncy II" loading="lazy" /><span class="veil"></span></div>
+  </div>
+
+  <div class="wrap">
+    <p class="eyebrow">Entdecken</p>
+
+    <p class="index">
+      <a href="#" class="term tier-1" data-art="cse34">Fotografie</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_cse34_full.jpg" alt="Christiane Steinicke – Indian Summer II" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-2">David Bowie</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">Marta Contreras Simó</a><span class="sep">, </span>
+      <a href="#" class="term tier-2">Asien</a><span class="sep">, </span>
+      <a href="#" class="term tier-1" data-art="bla06">Wasser</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_bla06_full.jpg" alt="Bernhard Lang – Adria III" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-2">Natur</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">Isabelle Menin</a><span class="sep">, </span>
+      <a href="#" class="term tier-2" data-art="bhu87">Malerei</a><img class="thumb thumb-t2" src="https://img.lumas.com/showimg_bhu87_desktop.jpg" alt="Beatrice Hug – Red Sphaera" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-1">Schwarz &amp; Weiß</a><span class="sep">, </span>
+      <a href="#" class="term tier-2" data-art="jbl13">Akt</a><img class="thumb thumb-t2" src="https://img.lumas.com/showimg_jbl13_desktop.jpg" alt="Joachim Baldauf – Gigerl #1" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-3">Petites</a><span class="sep">, </span>
+      <a href="#" class="term tier-2">Strand</a><span class="sep">, </span>
+      <a href="#" class="term tier-1" data-art="rle403">New York</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_rle403_desktop.jpg" alt="Robert Lebeck – New York 1967" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-2">Berge</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">Beatrice Hug</a><span class="sep">, </span>
+      <a href="#" class="term tier-2">Abstrakt</a><span class="sep">, </span>
+      <a href="#" class="term tier-1" data-art="hli93">Blumen</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_hli93_full.jpg" alt="Holger Lippmann – crimson and scarlet IV" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-2">Digital</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">Darlings</a><span class="sep">, </span>
+      <a href="#" class="term tier-2" data-art="pve172">Berlin</a><img class="thumb thumb-t2" src="https://img.lumas.com/showimg_pve172_full.jpg" alt="Pep Ventosa – Prenzlauer Allee, Berlin" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-1">Farbenfroh</a><span class="sep">, </span>
+      <a href="#" class="term tier-2" data-art="cts18">Tiere</a><img class="thumb thumb-t2" src="https://img.lumas.com/showimg_cts18_full.jpg" alt="Charis Tsevis – Elephant" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-3">Multi-Phase</a><span class="sep">, </span>
+      <a href="#" class="term tier-2">Sommer</a><span class="sep">, </span>
+      <a href="#" class="term tier-1" data-art="bvl04">Paris</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_bvl04_full.jpg" alt="Bart Van Leeuwen – Dior Paris" loading="lazy" /><span class="sep">, </span>
+      <a href="#" class="term tier-2">Unter €250</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">KI</a><span class="sep">, </span>
+      <a href="#" class="term tier-3">Illustration</a><span class="sep">, </span>
+      <a href="#" class="term tier-1" data-art="pfu405">Geschenke</a><img class="thumb thumb-t1" src="https://img.lumas.com/showimg_pfu405_full.jpg" alt="Peter Funch – Bouncy II" loading="lazy" />
+    </p>
+
+    <p class="caption">29 Themen · Von uns kuratiert</p>
+  </div>
+
+</section>
+
+<script>
+  // Hover orchestration only: dim the others, lift the active term, fade in its artwork.
+  (function () {
+    var index = document.querySelector('.index');
+    if (!index) return;
+
+    // Touch / no real hover: index is purely navigational — skip the artwork layer entirely.
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
+    var terms = index.querySelectorAll('.term');
+    var arts = document.querySelectorAll('.art');
+
+    function clearAll() {
+      terms.forEach(function (t) { t.classList.remove('is-active'); });
+      arts.forEach(function (a) { a.classList.remove('is-visible'); });
+    }
+
+    terms.forEach(function (term) {
+      term.addEventListener('mouseenter', function () {
+        clearAll();
+        index.classList.add('is-dimming');
+        term.classList.add('is-active');
+        var key = term.getAttribute('data-art');
+        if (key) {
+          var art = document.querySelector('.art[data-art="' + key + '"]');
+          if (art) art.classList.add('is-visible');
+        }
+      });
+    });
+
+    // Only reset when the pointer leaves the whole index — keeps dimming steady between terms.
+    index.addEventListener('mouseleave', function () {
+      index.classList.remove('is-dimming');
+      clearAll();
+    });
+  })();
+</script>
+
+</body>
+</html>

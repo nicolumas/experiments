@@ -1,0 +1,602 @@
+<!doctype html>
+<!-- ═══════════════════════════════════════════════════════════════════════════
+  PROTO HEADER
+  ID:          PROTO-2026-014
+  Surface:     PDP · buy-box local-inventory module
+  Hypothesis:  For high-consideration buyers on a limited-edition PDP, replacing the
+               single-line "available in Berlin Mitte" claim with an honest, network-
+               aware Gallery Availability panel (real per-gallery status + change-gallery
+               + clear ship/reserve/view choice architecture) will raise gallery-reserve
+               rate AND overall confidence-to-buy, because it turns a vague claim into a
+               concrete, verifiable reason to act — and the physical network is LUMAS's
+               moat (gallery AOV ~2x online).
+  Prior:       Ledger silent on this exact module. Related: gallery AOV ~2x online
+               (strengths audit 2026-06); mobile PDP→cart is the conversion leak, so
+               v2 protects ship-home primacy. Nav memory: surface the full gallery network.
+  Goals:       primary  RESERVE-gallery (begin_reserve)  ·  ATC (add_to_cart)
+               secondary  CHANGE-gallery, BOOK-viewing, VIEW-availability-expand
+  Variants:    control (current)  |  v1 (reserve-forward panel)  |  v2 (ship-forward panel)
+  Switch:      ?v=control|v1|v2   or press the "v" key to cycle
+  Status:      exploration  →  next gate: red-team → ticket
+  Data:        Real — Daria Petrilli "Ibis in Volo" (DPE, abstractId 3004812),
+               bare image showimg_dpe09, upright 5:4. Prices mirror the source mock.
+═══════════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LUMAS — Gallery availability (PDP redesign)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet" />
+<style>
+  /* ───────── Fonts (licensed Utile Display, copied into prototype assets) ───────── */
+  @font-face{
+    font-family:"Utile Display";font-style:normal;font-weight:400;font-display:swap;
+    src:url("../assets/fonts/utile/utile-display-regular.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"Utile Display";font-style:normal;font-weight:300;font-display:swap;
+    src:url("../assets/fonts/utile/utile-display-light.woff2") format("woff2");
+  }
+
+  /* ───────── V2 brand tokens (charcoal · ivory · bone) ───────── */
+  :root{
+    --charcoal-900:#1C1A18; --charcoal-800:#3A3835; --charcoal-700:#5A5752;
+    --charcoal-500:#908C87; --charcoal-300:#C7C3BE; --charcoal-100:#E3E0DB;
+    --ivory-100:#F4EDE2; --ivory-200:#F7F1E9; --ivory-300:#FAF6F1;
+    --bone-100:#E2D8CC; --bone-200:#EAE2D8; --bone-300:#F0EBE3;
+    --success:#3A6B4A; --success-bg:#E8F2EB;
+    --warning:#9B6D1E; --warning-bg:#FDF5E6;
+
+    --text-primary:var(--charcoal-900); --text-secondary:var(--charcoal-700);
+    --text-tertiary:var(--charcoal-500); --text-inverse:var(--ivory-100);
+    --surface-page:#FFFFFF; --surface-card:#FFFFFF; --surface-raised:var(--ivory-200);
+    --surface-sunken:var(--ivory-100); --surface-muted:var(--bone-300);
+    --surface-inverse:var(--charcoal-900); --wall:#EDE7DC;
+    --border-default:var(--bone-100); --border-subtle:var(--bone-200);
+    --border-strong:var(--charcoal-300); --border-focus:var(--charcoal-900);
+
+    --font-ui:"Archivo",system-ui,-apple-system,sans-serif;
+    --font-display:"Utile Display","Archivo",Georgia,serif;
+
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-io:cubic-bezier(0.77,0,0.175,1);
+
+    --z-base:1; --z-imgctl:10; --z-panel:20; --z-mobilecta:90; --z-header:100; --z-badge:200;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:62.5%} /* 1rem = 10px */
+  body{
+    font-family:var(--font-ui);font-weight:400;font-size:1.5rem;line-height:1.5;
+    color:var(--text-primary);background:var(--surface-page);
+    -webkit-font-smoothing:antialiased;font-variation-settings:"wdth" 100;
+  }
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  a{color:inherit;text-decoration:none}
+
+  .eyebrow{font-size:1.1rem;font-weight:700;letter-spacing:.198rem;text-transform:uppercase;color:var(--text-tertiary)}
+  .u-label{font-size:1rem;font-weight:700;letter-spacing:.18rem;text-transform:uppercase}
+
+  /* ───────── Header ───────── */
+  .hdr{position:sticky;top:0;z-index:var(--z-header);background:var(--surface-page);border-bottom:1px solid var(--border-subtle)}
+  .hdr-top{height:3.4rem;background:var(--charcoal-900)}
+  .hdr-bar{display:flex;align-items:center;gap:3.2rem;height:7rem;padding:0 4rem;max-width:1680px;margin:0 auto}
+  .logo{font-family:var(--font-ui);font-weight:700;font-size:2.4rem;letter-spacing:.05em;position:relative}
+  .logo sup{position:absolute;top:-.2rem;right:-1.1rem;font-size:1.4rem}
+  .nav{display:flex;gap:2.6rem;margin-left:1.2rem}
+  .nav a{font-size:1.5rem;color:var(--text-secondary);transition:color .18s var(--ease-out)}
+  .nav a:hover{color:var(--text-primary)}
+  .hdr-right{margin-left:auto;display:flex;align-items:center;gap:2rem}
+  .search{display:flex;align-items:center;gap:.8rem;background:var(--ivory-300);border:1px solid var(--border-subtle);border-radius:.4rem;padding:1rem 1.6rem;width:34rem;max-width:30vw;color:var(--text-tertiary);font-size:1.4rem}
+  .icons{display:flex;gap:1.6rem;align-items:center;color:var(--text-primary)}
+  .icons svg{width:2.1rem;height:2.1rem}
+  .cart-wrap{position:relative}
+  .cart-badge{position:absolute;top:-.6rem;right:-.8rem;width:1.7rem;height:1.7rem;border-radius:50%;background:#C9A24B;color:#fff;font-size:1rem;font-weight:700;display:grid;place-items:center}
+  @media(max-width:900px){
+    .hdr-bar{padding:0 1.6rem;gap:1.4rem;height:6rem}
+    .nav,.search{display:none}
+  }
+
+  /* ───────── PDP grid ───────── */
+  .pdp{max-width:1680px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 52rem;gap:0}
+  @media(max-width:1180px){.pdp{grid-template-columns:minmax(0,1fr) 44rem}}
+  @media(max-width:900px){.pdp{grid-template-columns:1fr}}
+
+  /* Left — artwork on the wall */
+  .stage{background:var(--wall);position:relative;min-height:78rem;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 4rem}
+  @media(max-width:900px){.stage{min-height:auto;padding:3.2rem 2rem 2.4rem}}
+  .stage-wash{position:absolute;inset:0;background:
+    radial-gradient(120% 90% at 78% 8%, rgba(255,255,255,.55), rgba(255,255,255,0) 46%),
+    linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(28,26,24,.05));pointer-events:none}
+  .artwork{position:relative;z-index:var(--z-base);max-width:46rem;width:100%}
+  .artwork img{width:100%;height:auto;box-shadow:0 2.2rem 5rem -1.6rem rgba(28,26,24,.34)}
+  .imgctl{position:absolute;bottom:2.4rem;right:2.4rem;z-index:var(--z-imgctl);display:flex;gap:.8rem}
+  .imgctl button{display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border:1px solid var(--border-default);padding:1rem 1.4rem;font-size:1.15rem;font-weight:700;letter-spacing:.12rem;text-transform:uppercase;transition:transform .16s var(--ease-out)}
+  .imgctl button:active{transform:scale(.97)}
+  .thumbs{display:flex;gap:1rem;margin-top:2.4rem;z-index:var(--z-base)}
+  .thumbs .t{width:6.4rem;height:8rem;background:var(--surface-sunken);border:1px solid var(--border-default);overflow:hidden;opacity:.7;transition:opacity .18s var(--ease-out),border-color .18s var(--ease-out)}
+  .thumbs .t:hover{opacity:1}
+  .thumbs .t.on{opacity:1;border-color:var(--charcoal-900)}
+  .thumbs .t img{width:100%;height:100%;object-fit:cover}
+  .thumbs .t.empty{background:var(--charcoal-100)}
+
+  /* Right — buy box */
+  .buy{padding:6rem 6rem 8rem;max-width:60rem}
+  @media(max-width:1180px){.buy{padding:4.4rem 3.6rem 8rem}}
+  @media(max-width:900px){.buy{padding:2.8rem 2rem 12rem}}
+  .artist{font-family:var(--font-display);font-weight:400;font-size:clamp(3.4rem,4vw,4.4rem);line-height:1.04;letter-spacing:0}
+  .title-line{margin-top:1.2rem;font-size:1.3rem;font-weight:700;letter-spacing:.16rem;text-transform:uppercase;color:var(--text-secondary)}
+  .edition{margin-top:1rem;font-size:1.5rem;color:var(--text-secondary)}
+  .edition a{border-bottom:1px solid var(--charcoal-300);font-style:italic}
+
+  /* Demand meter */
+  .demand{margin-top:2.8rem;background:var(--ivory-300);border:1px solid var(--border-subtle);padding:1.8rem 2rem}
+  .demand-h{font-size:1.4rem;font-weight:600}
+  .meter{margin-top:1.4rem}
+  .meter-track{height:.2rem;background:var(--bone-100);position:relative}
+  .meter-fill{position:absolute;left:0;top:0;height:100%;width:66%;background:var(--charcoal-900)}
+  .meter-dot{position:absolute;left:66%;top:50%;width:1rem;height:1rem;border-radius:50%;background:var(--charcoal-900);transform:translate(-50%,-50%);border:.2rem solid var(--ivory-300)}
+  .meter-labels{display:flex;justify-content:space-between;margin-top:1.1rem;font-size:1.05rem;letter-spacing:.06rem;text-transform:uppercase;color:var(--text-tertiary)}
+  .meter-labels .on{color:var(--text-primary);font-weight:700}
+
+  /* Options */
+  .opt{margin-top:3.2rem}
+  .opt > .eyebrow{display:block;margin-bottom:1.2rem}
+  .sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
+  .size{border:1px solid var(--border-strong);background:var(--surface-card);padding:1.4rem .6rem;font-size:1.4rem;font-weight:500;text-align:center;transition:transform .14s var(--ease-out),border-color .16s var(--ease-out)}
+  .size .s-sub{display:block;font-size:1.05rem;color:var(--text-tertiary);margin-top:.3rem;letter-spacing:.04rem}
+  .size:active{transform:scale(.98)}
+  .size.on{border-color:var(--charcoal-900);border-width:.2rem;padding:1.3rem .5rem}
+  .select{margin-top:1.2rem;width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border-default);background:var(--surface-card);padding:1.5rem 1.6rem;font-size:1.5rem}
+  .select svg{width:1.6rem;height:1.6rem;color:var(--text-tertiary)}
+
+  .price{margin-top:3rem;font-family:var(--font-display);font-size:3.4rem;letter-spacing:0}
+
+  /* ═══════════ CONTROL availability (faithful to current) ═══════════ */
+  .ctl-avail{margin-top:2rem;display:flex;align-items:center;gap:.9rem;font-size:1.35rem;letter-spacing:.12rem;text-transform:uppercase;font-weight:600;color:var(--text-secondary)}
+  .ctl-dot{width:.9rem;height:.9rem;border-radius:50%;background:var(--success)}
+  .ctl-fine{margin-top:1.4rem;font-size:1.2rem;letter-spacing:.08rem;text-transform:uppercase;color:var(--text-tertiary);line-height:1.6}
+
+  /* ═══════════ v1 / v2 — GALLERY AVAILABILITY PANEL ═══════════ */
+  .gpanel{margin-top:2.4rem;border:1px solid var(--border-default);background:var(--surface-raised)}
+  .gpanel-head{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border-subtle)}
+  .gpanel-head .eyebrow{color:var(--text-secondary)}
+  .change-btn{display:flex;align-items:center;gap:.6rem;font-size:1.2rem;font-weight:700;letter-spacing:.1rem;text-transform:uppercase;color:var(--text-primary);padding:.4rem 0}
+  .change-btn svg{width:1.3rem;height:1.3rem;transition:transform .24s var(--ease-out)}
+  .change-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+
+  .gbody{padding:1.8rem 1.8rem 2rem;position:relative}
+  .gstatus{display:flex;align-items:center;gap:.9rem}
+  .sdot{width:1rem;height:1rem;border-radius:50%;flex:none;position:relative}
+  .sdot.live{background:var(--success)}
+  .sdot.live::after{content:"";position:absolute;inset:-.5rem;border-radius:50%;border:.15rem solid var(--success);opacity:.5;animation:ping 2.4s var(--ease-out) infinite}
+  .sdot.soon{background:var(--charcoal-700)}
+  .sdot.order{background:transparent;border:.15rem solid var(--charcoal-300)}
+  @keyframes ping{0%{transform:scale(.7);opacity:.6}70%,100%{transform:scale(1.5);opacity:0}}
+  .status-text{font-size:1.7rem;font-weight:600;letter-spacing:.01rem}
+  .gname{margin-top:1rem;font-size:1.6rem;font-weight:500}
+  .gmeta{margin-top:.4rem;font-size:1.3rem;color:var(--text-secondary)}
+  .gmeta b{color:var(--success);font-weight:600}
+  .gsentence{margin-top:1.4rem;font-size:1.45rem;line-height:1.6;color:var(--text-secondary);max-width:44ch}
+  .ginv{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--border-subtle);display:flex;gap:1.8rem;font-size:1.25rem;color:var(--text-secondary);flex-wrap:wrap}
+  .ginv .n{color:var(--text-primary);font-weight:700}
+
+  /* crossfade shell for status swaps (emil: blur-mask the transition) */
+  .gswap{transition:opacity .22s var(--ease-out),filter .22s var(--ease-out)}
+  .gswap.busy{opacity:.35;filter:blur(2px)}
+
+  /* Location provenance / states */
+  .gloc{margin-top:1.6rem;font-size:1.2rem;color:var(--text-tertiary);display:flex;align-items:center;gap:.6rem}
+  .gloc svg{width:1.4rem;height:1.4rem}
+  .gloc button{text-decoration:underline;text-underline-offset:.2rem;color:var(--text-secondary)}
+
+  /* Nearby gallery list (expandable) */
+  .glist{overflow:hidden;max-height:0;transition:max-height .32s var(--ease-io);border-top:1px solid var(--border-subtle);background:var(--surface-card)}
+  .glist.open{max-height:52rem}
+  .glist-inner{padding:.8rem}
+  .grow{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.2rem;width:100%;text-align:left;padding:1.3rem 1.2rem;border-radius:.2rem;transition:background .16s var(--ease-out);opacity:0;transform:translateY(.6rem)}
+  .glist.open .grow{animation:rowin .34s var(--ease-out) forwards}
+  @keyframes rowin{to{opacity:1;transform:none}}
+  .grow:hover{background:var(--ivory-300)}
+  .grow.on{background:var(--ivory-200)}
+  .radio{width:1.7rem;height:1.7rem;border-radius:50%;border:.15rem solid var(--charcoal-300);position:relative;flex:none}
+  .grow.on .radio{border-color:var(--charcoal-900)}
+  .grow.on .radio::after{content:"";position:absolute;inset:.35rem;border-radius:50%;background:var(--charcoal-900)}
+  .grow .g-main{min-width:0}
+  .grow .g-nm{font-size:1.45rem;font-weight:500}
+  .grow .g-st{margin-top:.3rem;font-size:1.2rem;display:flex;align-items:center;gap:.55rem;color:var(--text-secondary)}
+  .grow .g-st .mini{width:.7rem;height:.7rem;border-radius:50%;flex:none}
+  .mini.live{background:var(--success)} .mini.soon{background:var(--charcoal-700)} .mini.order{background:transparent;border:.12rem solid var(--charcoal-300)}
+  .grow .g-dist{font-size:1.25rem;color:var(--text-tertiary);white-space:nowrap}
+  .gall-more{display:block;width:100%;text-align:left;padding:1.4rem 1.2rem;font-size:1.3rem;font-weight:700;letter-spacing:.08rem;text-transform:uppercase;color:var(--text-primary);border-top:1px solid var(--border-subtle)}
+  .gall-more:hover{background:var(--ivory-300)}
+
+  /* skeleton (loading state) */
+  .skel{background:linear-gradient(90deg,var(--bone-200) 25%,var(--ivory-100) 37%,var(--bone-200) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:.2rem}
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+  /* CTAs */
+  .ctas{margin-top:2.4rem;display:flex;flex-direction:column;gap:1rem}
+  .btn{width:100%;padding:0;border:1px solid transparent;transition:transform .16s var(--ease-out),background .18s var(--ease-out),color .18s var(--ease-out)}
+  .btn:active{transform:scale(.985)}
+  .btn-body{display:flex;flex-direction:column;align-items:center;padding:1.7rem 2rem}
+  .btn-lbl{font-size:1.35rem;font-weight:700;letter-spacing:.13rem;text-transform:uppercase}
+  .btn-sub{font-size:1.15rem;letter-spacing:.03rem;margin-top:.4rem;opacity:.72;text-transform:none;font-weight:400}
+  .btn-primary{background:var(--charcoal-900);color:var(--text-inverse)}
+  .btn-primary:hover{background:var(--charcoal-800)}
+  .btn-secondary{background:var(--surface-card);color:var(--text-primary);border-color:var(--charcoal-900)}
+  .btn-secondary:hover{background:var(--charcoal-900);color:var(--text-inverse)}
+  .btn-ghost{padding:1.2rem 0 0;color:var(--text-secondary)}
+  .btn-ghost span{border-bottom:1px solid var(--charcoal-300);padding-bottom:.3rem;font-size:1.3rem;letter-spacing:.02rem}
+  .btn-ghost:hover span{color:var(--text-primary);border-color:var(--charcoal-900)}
+
+  .fine{margin-top:2rem;font-size:1.2rem;letter-spacing:.06rem;text-transform:uppercase;color:var(--text-tertiary);line-height:1.7}
+
+  /* variant visibility */
+  [data-variant] .v-ctl,[data-variant] .v-v1,[data-variant] .v-v2{display:none}
+  [data-variant="control"] .v-ctl{display:block}
+  [data-variant="v1"] .v-v1{display:block}
+  [data-variant="v2"] .v-v2{display:block}
+
+  /* ───────── Variant badge ───────── */
+  .vbadge{position:fixed;top:4.4rem;right:1.6rem;z-index:var(--z-badge);background:var(--charcoal-900);color:var(--ivory-100);border-radius:999px;display:flex;align-items:center;gap:.2rem;padding:.5rem;box-shadow:0 .6rem 2rem -.6rem rgba(0,0,0,.5)}
+  .vbadge button{font-size:1.1rem;font-weight:700;letter-spacing:.06rem;text-transform:uppercase;color:rgba(244,237,226,.6);padding:.7rem 1.2rem;border-radius:999px;transition:color .16s var(--ease-out),background .16s var(--ease-out)}
+  .vbadge button.on{background:var(--ivory-100);color:var(--charcoal-900)}
+  .vbadge .vb-label{font-size:.95rem;letter-spacing:.14rem;color:rgba(244,237,226,.5);padding-left:1rem}
+  @media(max-width:900px){.vbadge{top:auto;bottom:9.2rem;right:1rem}}
+
+  /* mobile sticky purchase bar */
+  .msticky{display:none}
+  @media(max-width:900px){
+    .msticky{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:var(--z-mobilecta);gap:1rem;padding:1rem 1.4rem calc(1rem + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--border-default)}
+    .msticky .btn{flex:1}.msticky .btn-body{padding:1.4rem}
+    .msticky .btn-sub{display:none}
+  }
+
+  .toast{position:fixed;left:50%;bottom:3rem;transform:translate(-50%,1rem);z-index:var(--z-badge);background:var(--charcoal-900);color:var(--ivory-100);padding:1.4rem 2rem;font-size:1.35rem;border-radius:.3rem;opacity:0;pointer-events:none;transition:opacity .22s var(--ease-out),transform .22s var(--ease-out);max-width:90vw}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:900px){.toast{bottom:10rem}}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+    .grow{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body data-variant="v1">
+
+  <!-- Variant switcher (stakeholder review = a link) -->
+  <div class="vbadge" role="group" aria-label="Design variant">
+    <button data-v="control">Control</button>
+    <button data-v="v1" class="on">v1 · Reserve</button>
+    <button data-v="v2">v2 · Ship</button>
+    <span class="vb-label">press V</span>
+  </div>
+
+  <!-- ───────── Header ───────── -->
+  <header class="hdr">
+    <div class="hdr-top"></div>
+    <div class="hdr-bar">
+      <div class="logo">LUMAS<sup>&#8599;</sup></div>
+      <nav class="nav">
+        <a href="#">artworks</a><a href="#">top 20</a><a href="#">artfinder</a>
+        <a href="#">galleries</a><a href="#">magazine</a><a href="#">about us</a>
+      </nav>
+      <div class="hdr-right">
+        <div class="search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span>search</span>
+        </div>
+        <div class="icons">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.7Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <span class="cart-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 2H2"/></svg>
+            <span class="cart-badge" id="cartCount">1</span>
+          </span>
+          <span class="u-label" style="letter-spacing:.12rem">EN</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ───────── PDP ───────── -->
+  <main class="pdp">
+
+    <!-- Left: artwork -->
+    <section class="stage">
+      <div class="stage-wash"></div>
+      <figure class="artwork">
+        <img src="https://img.lumas.com/showimg_dpe09_full.jpg" alt="Daria Petrilli — Ibis in Volo" />
+      </figure>
+      <div class="imgctl">
+        <button type="button">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+          View in your space
+        </button>
+        <button type="button">3D view</button>
+      </div>
+      <div class="thumbs">
+        <button class="t on"><img src="https://img.lumas.com/showimg_dpe09_desktop.jpg" alt="" /></button>
+        <button class="t"><img src="https://eu.lumas.com/product/image-with-default-frame/?abstractId=3004812&sku=DPE10" alt="" /></button>
+        <button class="t empty"></button>
+        <button class="t empty"></button>
+        <button class="t empty"></button>
+      </div>
+    </section>
+
+    <!-- Right: buy box -->
+    <section class="buy">
+      <h1 class="artist">Daria Petrilli</h1>
+      <div class="title-line">Ibis in Volo</div>
+      <p class="edition">Limited Edition 150 &middot; Signed. <a href="#">More details</a></p>
+
+      <!-- Demand meter (kept from current, restyled) -->
+      <div class="demand">
+        <div class="demand-h">In high demand — only <strong>4 pieces</strong> left at this price</div>
+        <div class="meter">
+          <div class="meter-track"><div class="meter-fill"></div><div class="meter-dot"></div></div>
+          <div class="meter-labels"><span>Discovery</span><span>Popular</span><span class="on">High demand</span><span>Last prints</span></div>
+        </div>
+      </div>
+
+      <!-- Size -->
+      <div class="opt">
+        <span class="eyebrow">Size in cm</span>
+        <div class="sizes">
+          <button class="size on">60 × 48<span class="s-sub">Petite</span></button>
+          <button class="size">100 × 80<span class="s-sub">Classic</span></button>
+          <button class="size">130 × 104<span class="s-sub">Grand</span></button>
+          <button class="size">200 × 160<span class="s-sub">Museum</span></button>
+        </div>
+      </div>
+
+      <!-- Framing -->
+      <div class="opt">
+        <span class="eyebrow">Select mounting / framing</span>
+        <button class="select">
+          <span>Mounted under acrylic glass</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="price">€ 1.990</div>
+
+      <!-- ══════════ CONTROL — current design ══════════ -->
+      <div class="v-ctl">
+        <div class="ctl-avail"><span class="ctl-dot"></span> Available for you in LUMAS Galerie Berlin Mitte</div>
+        <div class="ctas">
+          <!-- ABLYFT-GOAL: RESERVE-gallery -->
+          <button class="btn btn-primary" data-track="begin_reserve"><span class="btn-body"><span class="btn-lbl">Reserve in Berlin Mitte</span></span></button>
+          <!-- ABLYFT-GOAL: ATC -->
+          <button class="btn btn-secondary" data-track="add_to_cart"><span class="btn-body"><span class="btn-lbl">Add to cart</span></span></button>
+        </div>
+        <div class="ctl-fine">Ready for pick up in the gallery or shipping in 4–9 days.<br>VAT incl. + € 6.90 shipping. 2024/2025 / SEF12</div>
+      </div>
+
+      <!-- ══════════ v1 + v2 — GALLERY AVAILABILITY PANEL ══════════ -->
+      <div class="v-v1 v-v2" id="panelWrap">
+        <div class="gpanel">
+          <div class="gpanel-head">
+            <span class="eyebrow">Availability in our galleries</span>
+            <button class="change-btn" id="changeBtn" aria-expanded="false" aria-controls="glist" data-track="view_gallery_list">
+              <span id="changeLbl">Change</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </div>
+
+          <div class="gbody">
+            <div class="gswap" id="gswap">
+              <div class="gstatus"><span class="sdot live" id="sdot"></span><span class="status-text" id="statusText">On view now</span></div>
+              <div class="gname" id="gName">LUMAS Galerie Berlin Mitte</div>
+              <div class="gmeta" id="gMeta"><b>2.1 km away</b> · Open until 19:00 today</div>
+              <p class="gsentence" id="gSentence">This exact signed edition is hanging in the gallery right now. Come see it in person — then take it home the same day, or have it shipped.</p>
+              <div class="ginv" id="gInv">
+                <span><span class="n">1</span> of this edition on view here</span>
+                <span><span class="n">4</span> of 150 left at this price</span>
+              </div>
+            </div>
+
+            <div class="gloc">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span>Estimated from your location · <button id="detectAgain" data-track="detect_location">not near Berlin?</button></span>
+            </div>
+          </div>
+
+          <!-- Expandable nearby list -->
+          <div class="glist" id="glist" role="listbox" aria-label="Nearby galleries">
+            <div class="glist-inner" id="glistInner"><!-- rows injected --></div>
+            <button class="gall-more" data-track="view_all_galleries">See all 12 galleries →</button>
+          </div>
+        </div>
+
+        <!-- CTAs — order flips between v1 (reserve-forward) and v2 (ship-forward) -->
+        <div class="ctas" id="ctas"><!-- injected per variant --></div>
+
+        <div class="fine" id="fineText"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- mobile sticky bar -->
+  <div class="msticky" id="msticky"></div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════ Proto-kit: event stub layer ═══════════
+   Each call is named after the GA4/dataLayer event it becomes in production. */
+function track(event, params){ console.log('%c[track] '+event, 'color:#3A6B4A;font-weight:700', params||{}); }
+
+/* ─── Gallery dataset (realistic LUMAS network; distances = user detected near Berlin) ─── */
+const GALLERIES = [
+  {id:'berlin-mitte', name:'LUMAS Galerie Berlin Mitte', dist:'2.1 km', hours:'Open until 19:00 today', state:'live'},
+  {id:'berlin-kudamm', name:'LUMAS Galerie Berlin Kurfürstendamm', dist:'6.4 km', hours:'Open until 19:00 today', state:'soon'},
+  {id:'hamburg', name:'LUMAS Galerie Hamburg', dist:'289 km', hours:'Opens 11:00 tomorrow', state:'live'},
+  {id:'munich', name:'LUMAS Galerie München · Fünf Höfe', dist:'584 km', hours:'Open until 19:00 today', state:'order'},
+  {id:'cologne', name:'LUMAS Galerie Köln', dist:'573 km', hours:'Open until 19:00 today', state:'soon'},
+];
+
+const STATES = {
+  live:{
+    dot:'live', text:'On view now',
+    sentence:(g)=>`This exact signed edition is hanging in ${short(g)} right now. Come see it in person — then take it home the same day, or have it shipped.`,
+    inv:'<span><span class="n">1</span> of this edition on view here</span><span><span class="n">4</span> of 150 left at this price</span>',
+    metaLead:(g)=>`<b>${g.dist} away</b> · ${g.hours}`,
+    reserveLbl:(g)=>`Reserve at ${short(g)}`,
+    reserveSub:'Free · no payment now · we hold it for 48 hours',
+  },
+  soon:{
+    dot:'soon', text:'Ready to reserve',
+    sentence:(g)=>`We'll have this edition framed and ready for you to view at ${short(g)} within 24 hours. Reserve it now — pay only once you've seen it.`,
+    inv:'<span>Ready in <span class="n">~24h</span> at this gallery</span><span><span class="n">4</span> of 150 left at this price</span>',
+    metaLead:(g)=>`<b>${g.dist} away</b> · ${g.hours}`,
+    reserveLbl:(g)=>`Reserve at ${short(g)}`,
+    reserveSub:'Free · no payment now · ready within 24 hours',
+  },
+  order:{
+    dot:'order', text:'Bring to this gallery',
+    sentence:(g)=>`Not on display at ${short(g)} today — we can bring this edition in for a private viewing in 2–3 days, no obligation to buy.`,
+    inv:'<span>Arrives in <span class="n">2–3 days</span> for viewing</span><span><span class="n">4</span> of 150 left at this price</span>',
+    metaLead:(g)=>`<b>${g.dist} away</b> · ${g.hours}`,
+    reserveLbl:(g)=>`Request a viewing`,
+    reserveSub:'Free · we bring it in for you in 2–3 days',
+  },
+};
+function short(g){ return g.name.replace('LUMAS Galerie ',''); }
+
+let current = GALLERIES[0];
+let variant = 'v1';
+
+/* ─── Render the selected-gallery panel ─── */
+const gswap=document.getElementById('gswap');
+function renderPanel(animate){
+  const st = STATES[current.state];
+  const paint = ()=>{
+    document.getElementById('sdot').className = 'sdot '+st.dot;
+    document.getElementById('statusText').textContent = st.text;
+    document.getElementById('gName').textContent = current.name;
+    document.getElementById('gMeta').innerHTML = st.metaLead(current);
+    document.getElementById('gSentence').textContent = st.sentence(current);
+    document.getElementById('gInv').innerHTML = st.inv;
+    renderCtas();
+  };
+  if(animate){
+    gswap.classList.add('busy');
+    setTimeout(()=>{ paint(); gswap.classList.remove('busy'); }, 200);
+  } else paint();
+}
+
+/* ─── CTAs: order flips by variant ─── */
+function ctaReserve(){
+  const st = STATES[current.state];
+  return `<button class="btn btn-primary" data-track="begin_reserve">
+      <span class="btn-body"><span class="btn-lbl">${st.reserveLbl(current)}</span><span class="btn-sub">${st.reserveSub}</span></span></button>`;
+}
+function ctaCart(kind){
+  return `<button class="btn ${kind}" data-track="add_to_cart">
+      <span class="btn-body"><span class="btn-lbl">Add to cart</span><span class="btn-sub">Ship home in 4–9 days · € 6.90</span></span></button>`;
+}
+function ctaViewing(){
+  return `<button class="btn btn-ghost" data-track="book_viewing"><span>Book a private viewing →</span></button>`;
+}
+function renderCtas(){
+  const box=document.getElementById('ctas');
+  // v1 = reserve-forward (gallery inventory is the hero). v2 = ship-forward (protect online conversion).
+  box.innerHTML = (variant==='v1')
+    ? ctaReserve()+ctaCart('btn-secondary')+ctaViewing()
+    : ctaCart('btn-primary')+ctaReserve().replace('btn-primary','btn-secondary')+ctaViewing();
+
+  document.getElementById('fineText').innerHTML =
+    'Reserve = held free at the gallery, no payment now. VAT incl. · shipping from € 6.90 · 2024/2025 / SEF12';
+
+  // mobile sticky mirrors the two main CTAs
+  const m=document.getElementById('msticky');
+  const primary = (variant==='v1')? ctaReserve() : ctaCart('btn-primary');
+  const secondary = (variant==='v1')? ctaCart('btn-secondary') : ctaReserve().replace('btn-primary','btn-secondary');
+  m.innerHTML = primary+secondary;
+  bindCtas();
+}
+function bindCtas(){
+  document.querySelectorAll('[data-track]').forEach(el=>{
+    if(el.dataset.bound) return; el.dataset.bound='1';
+    el.addEventListener('click',()=>{
+      const ev=el.dataset.track;
+      track(ev,{artwork:'DPE10',gallery:current.id,gallery_state:current.state,variant});
+      if(ev==='add_to_cart'){ bump(); showToast('Added to cart — ships in 4–9 days.'); }
+      if(ev==='begin_reserve'){ showToast('Reserved free at '+short(current)+' — held 48 hours. Check your email.'); }
+      if(ev==='book_viewing'){ showToast('Private viewing request started.'); }
+    });
+  });
+}
+
+/* ─── Nearby gallery list ─── */
+function renderList(){
+  const wrap=document.getElementById('glistInner');
+  wrap.innerHTML = GALLERIES.map((g,i)=>`
+    <button class="grow ${g.id===current.id?'on':''}" role="option" aria-selected="${g.id===current.id}"
+            data-id="${g.id}" style="animation-delay:${i*45}ms">
+      <span class="radio"></span>
+      <span class="g-main">
+        <span class="g-nm">${short(g)}</span>
+        <span class="g-st"><span class="mini ${STATES[g.state].dot}"></span>${STATES[g.state].text}</span>
+      </span>
+      <span class="g-dist">${g.dist}</span>
+    </button>`).join('');
+  wrap.querySelectorAll('.grow').forEach(row=>{
+    row.addEventListener('click',()=>{
+      current = GALLERIES.find(g=>g.id===row.dataset.id);
+      track('change_gallery',{gallery:current.id,gallery_state:current.state,variant});
+      wrap.querySelectorAll('.grow').forEach(r=>{r.classList.remove('on');r.setAttribute('aria-selected','false')});
+      row.classList.add('on'); row.setAttribute('aria-selected','true');
+      renderPanel(true);
+      closeList();
+    });
+  });
+}
+
+/* ─── Expand / collapse ─── */
+const glist=document.getElementById('glist'), changeBtn=document.getElementById('changeBtn'), changeLbl=document.getElementById('changeLbl');
+function openList(){ glist.classList.add('open'); changeBtn.setAttribute('aria-expanded','true'); changeLbl.textContent='Close'; }
+function closeList(){ glist.classList.remove('open'); changeBtn.setAttribute('aria-expanded','false'); changeLbl.textContent='Change'; }
+changeBtn.addEventListener('click',()=>{ glist.classList.contains('open')?closeList():(openList(),track('view_gallery_list',{variant})); });
+document.getElementById('detectAgain').addEventListener('click',()=>{ track('detect_location',{variant}); openList(); });
+
+/* ─── Variant switching ─── */
+function setVariant(v){
+  variant=v;
+  document.body.dataset.variant=v;
+  document.querySelectorAll('.vbadge button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v!=='control') renderCtas();
+  track('variant_view',{variant:v});
+}
+document.querySelectorAll('.vbadge button').forEach(b=>b.addEventListener('click',()=>setVariant(b.dataset.v)));
+document.addEventListener('keydown',e=>{
+  if(e.key==='v'||e.key==='V'){ const order=['control','v1','v2']; setVariant(order[(order.indexOf(variant)+1)%3]); }
+});
+
+/* ─── misc ─── */
+function bump(){ const c=document.getElementById('cartCount'); c.textContent=(+c.textContent+1); }
+let toastT; function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),3200); }
+document.querySelectorAll('.size').forEach(s=>s.addEventListener('click',()=>{
+  document.querySelectorAll('.size').forEach(x=>x.classList.remove('on')); s.classList.add('on');
+  track('select_variant',{size:s.textContent.trim()});
+}));
+
+/* ─── init: honor ?v=, simulate location resolve, then paint ─── */
+(function init(){
+  const p=new URLSearchParams(location.search).get('v');
+  const start=(p&&['control','v1','v2'].includes(p))?p:'v1';
+  renderList(); renderPanel(false); setVariant(start);
+  track('view_item',{artwork:'DPE10',artist:'Daria Petrilli',price:1990,edition:'LE150'});
+})();
+</script>
+</body>
+</html>

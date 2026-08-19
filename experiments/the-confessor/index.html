@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Confessor — LUMAS</title>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal:#1C1A18; --void:#141210; --ivory:#F4EDE2;
+  --head:#F4EDE2; --body:rgba(244,237,226,.72); --quiet:rgba(244,237,226,.42); --faint:rgba(244,237,226,.16);
+  --display:'UtileDisplay',Georgia,serif; --sans:'Archivo',-apple-system,sans-serif;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:62.5%}
+body{font-family:var(--sans);background:var(--void);color:var(--head);min-height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased}
+
+.room{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 42%,#221f1b 0%,#141210 58%,#0d0b0a 100%);transition:background 1.8s var(--ease)}
+.room.dim{background:radial-gradient(120% 90% at 50% 47%,#19161300 0%,#0a0908 52%,#050403 100%)}
+
+/* ambilight: the work's colour bleeds into the void */
+.ambient{position:absolute;inset:-14%;z-index:0;background-size:cover;background-position:center;
+  filter:blur(110px) saturate(1.55) brightness(.7);opacity:0;transform:scale(1.12);
+  transition:opacity 3s var(--ease);will-change:opacity;pointer-events:none}
+.ambient.on{opacity:.5}
+.room.dim .ambient.on{opacity:.62}
+.vignette{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(120% 100% at 50% 45%,transparent 52%,rgba(0,0,0,.5) 100%)}
+.grain{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.sound{position:fixed;top:3.2rem;right:3.2rem;z-index:50;font-family:var(--sans);font-weight:700;font-size:1rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--quiet);background:none;border:none;cursor:pointer;padding-bottom:.3rem;border-bottom:1px solid transparent;
+  transition:color .4s var(--ease),border-color .4s var(--ease)}
+.sound:hover,.sound:focus-visible,.sound[aria-pressed="true"]{color:var(--head);border-bottom-color:rgba(244,237,226,.4);outline:none}
+
+/* artwork: materialises from the dark, dims back gracefully */
+.piece{position:absolute;top:50%;left:50%;width:min(56vh,80vw);aspect-ratio:1;translate:-50% -50%;
+  opacity:0;filter:blur(40px) brightness(.25) saturate(.7);scale:1.09;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.9), inset 0 0 0 1px rgba(244,237,226,.06);
+  background:#0d0b0a center/cover no-repeat;will-change:opacity,filter,scale;
+  transition:opacity 1.5s var(--ease),filter 1.5s var(--ease),scale 1.5s var(--ease)}
+.piece.lit{opacity:1;filter:blur(0) brightness(1) saturate(1);scale:1;
+  transition:opacity 2.4s var(--ease),filter 2.6s var(--ease),scale 2.8s var(--ease)}
+.piece.closer{width:min(82vh,94vw);transition:width 1.9s var(--ease),scale 2.8s var(--ease),filter 2.6s var(--ease)}
+.piece.breathe{animation:breathe 14s ease-in-out infinite alternate}
+@keyframes breathe{to{scale:1.014}}
+.halo{position:absolute;top:50%;left:50%;width:90vh;height:90vh;translate:-50% -50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(244,237,226,.05),transparent 60%);opacity:0;transition:opacity 2.6s var(--ease)}
+.halo.on{opacity:1}
+
+.col{position:relative;z-index:2;width:min(960px,90vw);text-align:center;display:flex;flex-direction:column;align-items:center;gap:4.4rem;
+  transition:transform 1.4s var(--ease), opacity 1.2s var(--ease)}
+.col.recede{transform:translateY(34vh) scale(.92);opacity:.001;pointer-events:none}
+
+.presence{width:6px;height:6px;border-radius:50%;background:var(--ivory);opacity:.5;animation:pres 3.4s ease-in-out infinite}
+@keyframes pres{0%,100%{opacity:.22;transform:scale(1)}50%{opacity:.7;transform:scale(1.5)}}
+
+.ask{font-family:var(--display);font-weight:300;font-size:clamp(3rem,5vw,5.4rem);line-height:1.18;letter-spacing:-.015em;min-height:1.18em;text-wrap:balance}
+.car{display:inline-block;width:2px;height:.95em;background:var(--ivory);vertical-align:-1px;margin-left:3px;animation:bl 1.1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+
+.answers{display:flex;flex-wrap:wrap;gap:1.4rem 2.8rem;justify-content:center;align-items:center;opacity:0;transform:translateY(8px);transition:opacity .9s var(--ease) .3s,transform .9s var(--ease) .3s}
+.answers.show{opacity:1;transform:none}
+.answers.deep .chip,.answers.deep .answers-or{display:none}
+.answers-or{font-family:var(--sans);font-size:1rem;letter-spacing:.16em;text-transform:uppercase;color:var(--quiet);width:100%;margin:.6rem 0 -.4rem}
+.chip{font-family:var(--display);font-style:italic;font-size:2.1rem;color:var(--body);background:transparent;border:none;cursor:pointer;padding:.5rem .2rem .7rem;position:relative;transition:color .4s var(--ease)}
+.chip::after{content:"";position:absolute;left:0;right:0;bottom:.2rem;height:1px;background:var(--ivory);opacity:.28;transition:opacity .4s var(--ease)}
+.chip:hover,.chip:focus-visible{color:var(--head);outline:none}
+.chip:hover::after,.chip:focus-visible::after{opacity:.95}
+.own{margin-top:.4rem;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+.answers.deep .own{margin-top:0}
+.own input{width:min(46ch,82vw);background:transparent;border:none;border-bottom:1px solid rgba(244,237,226,.3);color:var(--head);
+  font-family:var(--display);font-size:clamp(1.9rem,2.4vw,2.4rem);text-align:center;padding:.9rem 0;caret-color:var(--ivory)}
+.own input::placeholder{color:var(--quiet);font-style:italic}
+.own input:focus{outline:none;border-bottom-color:rgba(244,237,226,.6)}
+.enter-hint{font-family:var(--sans);font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--quiet);opacity:0;transition:opacity .5s var(--ease)}
+.own input:focus ~ .enter-hint,.own.filled .enter-hint{opacity:.7}
+
+.reply{position:absolute;left:50%;bottom:19vh;translate:-50% 0;z-index:3;width:min(44ch,88vw);text-align:center;
+  font-family:var(--display);font-weight:300;font-size:clamp(2rem,2.7vw,2.8rem);line-height:1.46;color:var(--head);
+  text-shadow:0 2px 30px rgba(0,0,0,.85);opacity:0;transition:opacity 1.2s var(--ease)}
+.reply.show{opacity:1}
+.reply::before{content:"";position:absolute;inset:-90% -25%;z-index:-1;background:radial-gradient(ellipse at center,rgba(8,7,6,.78) 0%,rgba(8,7,6,.42) 42%,transparent 72%)}
+.reply .who{display:block;margin-top:1.8rem;font-family:var(--sans);font-weight:700;font-size:1rem;letter-spacing:.16em;text-transform:uppercase;color:var(--quiet)}
+.acts{position:absolute;left:50%;bottom:7vh;translate:-50% 0;z-index:3;display:flex;align-items:center;gap:4rem;opacity:0;transition:opacity 1.2s var(--ease) .6s}
+.acts.show{opacity:1}
+.act{font-family:var(--sans);font-weight:700;font-size:1.3rem;letter-spacing:.16em;text-transform:uppercase;color:var(--quiet);
+  background:none;border:none;cursor:pointer;padding:.6rem 0;border-bottom:1px solid transparent;transition:color .4s var(--ease),border-color .4s var(--ease)}
+.act:hover,.act:focus-visible{color:var(--head);border-bottom-color:rgba(244,237,226,.55);outline:none}
+.act.primary{color:var(--head);border-bottom-color:rgba(244,237,226,.35)}
+.act.primary:hover{border-bottom-color:var(--ivory)}
+
+.whisper{position:absolute;left:50%;bottom:12vh;translate:-50% 0;z-index:3;width:min(48ch,88vw);text-align:center;
+  font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(1.8rem,2.4vw,2.4rem);line-height:1.5;color:var(--head);
+  text-shadow:0 2px 44px rgba(0,0,0,.96);opacity:0;transition:opacity 1.4s var(--ease)}
+.whisper.show{opacity:1}
+.whisper::before{content:"";position:absolute;inset:-120% -20%;z-index:-1;background:radial-gradient(ellipse at center,rgba(8,7,6,.82) 0%,rgba(8,7,6,.5) 40%,transparent 72%)}
+
+.brand{position:fixed;top:3.2rem;left:3.2rem;z-index:4;font-family:var(--sans);font-weight:700;font-size:1.2rem;letter-spacing:.2em;color:var(--quiet)}
+
+@media (prefers-reduced-motion:reduce){
+  .piece,.piece.lit{transition:opacity .5s ease!important;filter:none!important;scale:1!important}
+  .piece.breathe{animation:none}.presence{animation:none;opacity:.5}.car{animation:none}
+  .col,.col.recede{transition:opacity .5s ease}.col.recede{transform:none}
+  .room{transition:background .5s ease}
+}
+</style></head>
+<body>
+<div class="brand">LUMAS</div>
+<button class="sound" id="sound" aria-pressed="false">Sound</button>
+<div class="grain"></div>
+<div class="room">
+  <div class="ambient" id="ambient"></div>
+  <div class="vignette"></div>
+  <div class="halo" id="halo"></div>
+  <div class="piece" id="piece"></div>
+  <div class="acts" id="acts">
+    <button class="act primary" id="closer">Come closer &rarr;</button>
+    <button class="act" id="again">Ask again</button>
+  </div>
+  <div class="reply" id="reply"></div>
+  <div class="acts" id="backWrap"><button class="act" id="back">&larr; Step back</button></div>
+  <div class="whisper" id="whisper"></div>
+
+  <div class="col" id="col">
+    <div class="presence" id="presence"></div>
+    <h1 class="ask" id="ask"></h1>
+    <div class="answers" id="answers">
+      <button class="chip" data-k="held">Held.</button>
+      <button class="chip" data-k="escape">Like I have gone somewhere.</button>
+      <button class="chip" data-k="seen">Seen.</button>
+      <button class="chip" data-k="alive">A little more alive.</button>
+      <div class="answers-or">or</div>
+      <div class="own">
+        <input id="own" type="text" placeholder="tell me in your own words" autocomplete="off">
+        <div class="enter-hint">press enter &crarr;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const FULL = c => `https://img.lumas.com/showimg_${c}_full.jpg`;
+
+const READINGS = {
+  held:   { code:'ime111', who:'Isabelle Menin, From a Dream 04',
+    line:'Then you do not want noise on your walls. You want something that holds the room still. Menin painted this like a held breath.',
+    probe:'And when the room is finally quiet, what is it you are keeping out?',
+    deeper:'Then this is not decoration. It is a wall you can love. Let the day stop at the door.',
+    whisper:['Menin builds these in layers. Hundreds of blooms, and not one of them is real.','Stay a while. The longer you look, the more of them you find.'] },
+  escape: { code:'rle403', who:'Robert Lebeck, New York 1967',
+    line:'You want the door to open somewhere else. A New York afternoon in 1967, children on a branch over the lake. It still smells like summer.',
+    probe:'Where were you the last time you felt truly far from all of it?',
+    deeper:'Then you do not want a window. You want a memory of one. This will do it, every evening.',
+    whisper:['Lebeck waited on that bank for the light. The city behind them is gone now.','Find the smallest figure. That is the one who jumped first.'] },
+  seen:   { code:'gve07',  who:'Gavin Evans, David Bowie',
+    line:'You do not want to vanish into your own home. You want to be met. Bowie, asking for quiet, looking straight back at you.',
+    probe:'And who are you hoping will notice?',
+    deeper:'Then you are not hiding. You want one honest face in the house that meets yours. Here it is.',
+    whisper:['Evans shot this in a single afternoon. Bowie barely spoke.','He is not performing here. He is just looking back at you. Hold it.'] },
+  alive:  { code:'dpe400', who:'Daria Petrilli, The Lady of the Ibis',
+    line:'Then your hallway should have a pulse. A still woman, her scarlet birds on invisible threads. It watches the room, and the room wakes up.',
+    probe:'When did you last feel that. What were you doing?',
+    deeper:'Then stillness was never the point. You want the room to feel like it might move. It will.',
+    whisper:['Petrilli paints women who stay perfectly still while everything around them moves.','The birds are on threads. Follow one, and see where it wants to go.'] },
+};
+let currentReading = READINGS.held;
+function readFor(text){
+  const t=(text||'').toLowerCase();
+  if(/calm|quiet|still|safe|home|rest|peace|held|warm|alone|myself|hide|protect/.test(t)) return READINGS.held;
+  if(/escape|away|travel|gone|elsewhere|free|sea|sky|abroad|holiday|summer|somewhere/.test(t)) return READINGS.escape;
+  if(/seen|bold|met|confront|strong|brave|notice|guest|impress|judge|them|people/.test(t)) return READINGS.seen;
+  if(/alive|joy|colour|color|wild|pulse|energy|happy|light|dance|move|young/.test(t)) return READINGS.alive;
+  return READINGS.held;
+}
+
+const ask=document.getElementById('ask'), answers=document.getElementById('answers'),
+  col=document.getElementById('col'), piece=document.getElementById('piece'), halo=document.getElementById('halo'),
+  reply=document.getElementById('reply'), acts=document.getElementById('acts'), own=document.getElementById('own'),
+  room=document.querySelector('.room'), whisper=document.getElementById('whisper'), backWrap=document.getElementById('backWrap'),
+  ambient=document.getElementById('ambient');
+
+function type(el, text, speed=108){
+  return new Promise(res=>{
+    el.innerHTML=''; const car=document.createElement('span'); car.className='car'; el.appendChild(car);
+    if(reduce){ car.remove(); el.textContent=text; return res(); }
+    let i=0; (function step(){
+      if(i<text.length){
+        const ch=text[i++]; car.insertAdjacentText('beforebegin', ch);
+        let d=speed;
+        if(ch===' ') d=speed*0.5;
+        else if(ch===','||ch===';'||ch===':') d=speed+320;
+        else if(ch==='.'||ch==='?'||ch==='!') d=speed+620;
+        setTimeout(step, d);
+      } else { setTimeout(()=>car.remove(),900); res(); }
+    })();
+  });
+}
+function wait(ms){ return new Promise(r=>setTimeout(r, ms)); }
+function preload(code){ const i=new Image(); i.src=FULL(code); return i.decode().catch(()=>{}); }
+
+function materialize(reading){
+  piece.classList.remove('lit','breathe');
+  const url=`url('${FULL(reading.code)}')`;
+  piece.style.backgroundImage=url;
+  ambient.style.backgroundImage=url; ambient.classList.add('on');
+  halo.classList.add('on');
+  void piece.offsetWidth;
+  requestAnimationFrame(()=>requestAnimationFrame(()=> piece.classList.add('lit')));
+  swell();
+  setTimeout(()=>{ if(piece.classList.contains('lit')) piece.classList.add('breathe'); }, 2900);
+}
+function dimPiece(){ piece.classList.remove('lit','breathe'); halo.classList.remove('on'); ambient.classList.remove('on'); }
+async function showReply(text, who){
+  reply.innerHTML='<span id="rl"></span><span class="who">'+who+'</span>';
+  reply.classList.add('show');
+  await type(document.getElementById('rl'), text, 72);
+}
+async function riseCol(question, deep){
+  ask.textContent='';
+  answers.classList.remove('show');
+  answers.classList.toggle('deep', !!deep);
+  col.classList.remove('recede');
+  await wait(700);
+  await type(ask, question);
+  answers.classList.add('show');
+  if(deep){ own.value=''; own.parentElement.classList.remove('filled'); own.placeholder='tell me, in your own words'; setTimeout(()=>{ try{own.focus();}catch(e){} }, 120); }
+}
+
+let busy=false, gazing=false, stage=1, firstReading=null;
+
+async function confess(text){
+  if(busy||gazing) return; busy=true;
+  answers.classList.remove('show');
+  const reading = readFor(text); currentReading = reading;
+  await type(ask, text.replace(/\.$/,'') + '.', 88);
+  await wait(1100);
+
+  if(stage===1){
+    firstReading = reading;
+    await preload(reading.code);
+    await type(ask, 'Mmm. I think I know.', 100);
+    await wait(800);
+    col.classList.add('recede');
+    materialize(reading);
+    await wait(1600);
+    await showReply(reading.line, reading.who);
+    await wait(2200);
+    // the confessor presses further
+    reply.classList.remove('show');
+    dimPiece();
+    await wait(1300);
+    stage = 2;
+    await riseCol(reading.probe, true);
+    busy=false;
+  } else {
+    const shifted = reading.code !== firstReading.code;
+    await preload(reading.code);
+    await type(ask, shifted ? 'Ah. That changes everything.' : 'Yes. I thought so.', 100);
+    await wait(900);
+    col.classList.add('recede');
+    materialize(reading);
+    await wait(1600);
+    await showReply(shifted ? reading.line : reading.deeper, reading.who);
+    await wait(500);
+    acts.classList.add('show');
+    busy=false;
+  }
+}
+
+document.querySelectorAll('.chip').forEach(c=> c.addEventListener('click', ()=> confess(c.textContent)));
+own.addEventListener('keydown', e=>{ if(e.key==='Enter' && own.value.trim()) confess(own.value.trim()); });
+own.addEventListener('input', ()=> own.parentElement.classList.toggle('filled', !!own.value.trim()));
+
+async function openQuestion(){
+  await wait(700);
+  await type(ask, 'How do you want to feel when you walk through your own front door?');
+  answers.classList.add('show');
+}
+
+function reset(){
+  busy=false; gazing=false; stage=1; firstReading=null;
+  piece.classList.remove('lit','breathe','closer'); halo.classList.remove('on'); room.classList.remove('dim'); ambient.classList.remove('on');
+  reply.classList.remove('show'); acts.classList.remove('show'); backWrap.classList.remove('show'); whisper.classList.remove('show');
+  setTimeout(()=>{ piece.style.backgroundImage=''; ambient.style.backgroundImage=''; }, 1200);
+  answers.classList.remove('deep'); own.value=''; own.parentElement.classList.remove('filled'); own.placeholder='tell me in your own words';
+  col.classList.remove('recede');
+  openQuestion();
+}
+document.getElementById('again').addEventListener('click', reset);
+
+document.getElementById('closer').addEventListener('click', async ()=>{
+  if(gazing||busy) return; gazing=true;
+  acts.classList.remove('show'); reply.classList.remove('show');
+  room.classList.add('dim'); piece.classList.remove('breathe'); piece.classList.add('closer');
+  await wait(1600);
+  for(const line of (currentReading.whisper||[])){
+    if(!gazing) return;
+    whisper.innerHTML='<span id="wl"></span>'; whisper.classList.add('show');
+    await type(document.getElementById('wl'), line, 72);
+    await wait(3000); whisper.classList.remove('show'); await wait(1500);
+  }
+  if(gazing) backWrap.classList.add('show');
+});
+document.getElementById('back').addEventListener('click', ()=>{
+  gazing=false;
+  backWrap.classList.remove('show'); whisper.classList.remove('show');
+  room.classList.remove('dim'); piece.classList.remove('closer'); piece.classList.add('breathe');
+  setTimeout(()=>{ reply.classList.add('show'); acts.classList.add('show'); }, 900);
+});
+
+/* ambient room tone: synthesised, off by default, never blocks the visual */
+let actx, padGain, padFilter, soundOn=false, soundInit=false;
+function initSound(){
+  try{
+    actx = new (window.AudioContext||window.webkitAudioContext)();
+    padGain = actx.createGain(); padGain.gain.value=0; padGain.connect(actx.destination);
+    padFilter = actx.createBiquadFilter(); padFilter.type='lowpass'; padFilter.frequency.value=440; padFilter.Q.value=5; padFilter.connect(padGain);
+    [55,82.41,110,164.81].forEach((f,i)=>{ const o=actx.createOscillator(); o.type=i<2?'sine':'triangle'; o.frequency.value=f; o.detune.value=(i-1)*4;
+      const g=actx.createGain(); g.gain.value=[0.6,0.4,0.22,0.12][i]; o.connect(g); g.connect(padFilter); o.start(); });
+    const lfo=actx.createOscillator(); lfo.frequency.value=0.06; const lg=actx.createGain(); lg.gain.value=130; lfo.connect(lg); lg.connect(padFilter.frequency); lfo.start();
+    soundInit=true;
+  }catch(e){ soundInit=false; }
+}
+function swell(){
+  if(!soundOn||!actx||!padFilter) return;
+  const t=actx.currentTime;
+  padFilter.frequency.cancelScheduledValues(t);
+  padFilter.frequency.setValueAtTime(440,t);
+  padFilter.frequency.linearRampToValueAtTime(1100,t+1.4);
+  padFilter.frequency.linearRampToValueAtTime(440,t+5);
+}
+const soundBtn=document.getElementById('sound');
+soundBtn.addEventListener('click', ()=>{
+  if(!soundInit) initSound();
+  if(!soundInit) return;
+  if(actx.state==='suspended') actx.resume();
+  soundOn=!soundOn;
+  soundBtn.setAttribute('aria-pressed', soundOn?'true':'false');
+  const t=actx.currentTime;
+  padGain.gain.cancelScheduledValues(t);
+  padGain.gain.linearRampToValueAtTime(soundOn?0.06:0, t+(soundOn?2.2:1));
+});
+
+openQuestion();
+</script>
+</body></html>

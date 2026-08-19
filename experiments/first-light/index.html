@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>LUMAS · First Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --charcoal-900:#1C1A18; --charcoal-800:#2A2724; --charcoal-700:#5A5752; --charcoal-500:#908C87;
+    --ivory-100:#F4EDE2; --bone-100:#E2D8CC;
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-in-out:cubic-bezier(.77,0,.175,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--charcoal-900); color:var(--ivory-100);
+    font-family:"Archivo",system-ui,sans-serif; overflow:hidden;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+
+  .stage{position:fixed; inset:0; display:grid; place-items:center; isolation:isolate}
+
+  /* soft-lit breathing backdrop */
+  .glow{
+    position:absolute; inset:0; z-index:0; opacity:.5;
+    background:radial-gradient(120% 90% at 50% 46%, #312D29 0%, #211E1B 38%, var(--charcoal-900) 72%);
+    transition:opacity 1400ms var(--ease-out), background 1400ms var(--ease-out);
+    animation:breathe 11s ease-in-out infinite;
+  }
+  .revealed .glow{opacity:1; background:radial-gradient(116% 86% at 50% 43%, #3E3A34 0%, #2A2622 42%, #131210 80%)}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+
+  .scene{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:0; padding:24px}
+
+  /* wordmark */
+  .wordmark{
+    font-size:clamp(13px,1.5vw,16px); letter-spacing:.44em; font-weight:400; text-indent:.44em;
+    color:var(--ivory-100); opacity:0; transform:translateY(8px);
+    transition:opacity 1000ms var(--ease-out) 120ms, transform 1000ms var(--ease-out) 120ms;
+    margin-bottom:clamp(22px,3.4vh,42px);
+  }
+  .revealed .wordmark{opacity:1; transform:none}
+
+  /* the framed piece floats up on reveal (lift wrapper), tilts via JS (.piece) */
+  .lift{transform:translateY(18px); transition:transform 1200ms var(--ease-out) 160ms}
+  .revealed .lift{transform:none}
+
+  .piece{
+    position:relative; height:min(66vh,592px); aspect-ratio:4/5; will-change:transform;
+    transform-style:preserve-3d; transition:box-shadow 1200ms var(--ease-out) 160ms;
+  }
+  .revealed .piece{box-shadow:0 22px 64px -18px rgba(8,6,4,.9), 0 4px 16px -6px rgba(8,6,4,.6)}
+
+  .opening{position:absolute; inset:0; overflow:hidden; background:#191613; transform-style:preserve-3d}
+
+  /* art-wrap: first-load reveal (scale/blur/opacity) + JS parallax once revealed */
+  .art-wrap{
+    position:absolute; inset:-3%; will-change:transform; transform-style:preserve-3d;
+    opacity:0; transform:scale(1.05); filter:blur(12px);
+    transition:opacity 1000ms var(--ease-out) 220ms, transform 1200ms var(--ease-out) 220ms, filter 1000ms var(--ease-out) 220ms;
+  }
+  .revealed .art-wrap{opacity:1; transform:scale(1); filter:blur(0)}
+  /* two stacked image layers cross-fade on advance */
+  .art-layer{position:absolute; inset:0; background:center/cover no-repeat #191613; opacity:0;
+    transition:opacity 780ms var(--ease-out), transform 840ms var(--ease-out)}
+
+  /* the gleam / glass: faint pane highlight + moving sheen */
+  .gleam{
+    position:absolute; inset:0; overflow:hidden; pointer-events:none; mix-blend-mode:screen;
+    background:linear-gradient(176deg, rgba(255,255,255,.05) 0%, transparent 13%, transparent 88%, rgba(255,255,255,.02) 100%);
+    opacity:0; transition:opacity 900ms var(--ease-out) 240ms;
+  }
+  .revealed .gleam{opacity:1}
+  .sheen{
+    position:absolute; top:-20%; bottom:-20%; left:0; width:52%;
+    background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.04) 44%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.03) 57%, transparent 72%);
+    transform:translateX(58%) skewX(-14deg);
+  }
+
+  /* drawn frame */
+  .frame{position:absolute; inset:0; overflow:visible; z-index:2}
+  .frame rect{fill:none; stroke:var(--ivory-100); stroke-width:1; vector-effect:non-scaling-stroke;
+    stroke-dasharray:1; stroke-dashoffset:1; opacity:.82}
+  .frame .tick{fill:none; stroke:var(--ivory-100); stroke-width:1; vector-effect:non-scaling-stroke; opacity:0;
+    transition:opacity 600ms var(--ease-out)}
+  .revealed .frame rect{stroke-dashoffset:0}
+
+  /* prev / next */
+  .nav{position:fixed; top:50%; transform:translateY(-50%); z-index:4; appearance:none; background:none; border:0;
+    cursor:pointer; color:rgba(244,237,226,.32); padding:16px; opacity:0; pointer-events:none;
+    transition:opacity 900ms var(--ease-out) 800ms, color 240ms var(--ease-out)}
+  .revealed .nav{opacity:1; pointer-events:auto}
+  .nav:hover{color:rgba(244,237,226,.9)}
+  .nav:focus-visible{outline:none; color:rgba(244,237,226,.9)}
+  .nav.prev{left:clamp(10px,4vw,52px)} .nav.next{right:clamp(10px,4vw,52px)}
+  .nav svg{display:block; width:26px; height:26px}
+
+  /* meta row: counter (load) then caption (reveal) */
+  .meta{height:clamp(64px,11vh,96px); margin-top:clamp(20px,3vh,38px); display:grid; place-items:center; text-align:center}
+  .counter{
+    grid-area:1/1; font-size:clamp(13px,1.5vw,15px); letter-spacing:.42em; text-indent:.42em;
+    color:var(--ivory-100); font-variant-numeric:tabular-nums; transition:opacity 500ms var(--ease-out)}
+  .caption{grid-area:1/1; opacity:0; transform:translateY(10px); transition:opacity 900ms var(--ease-out) 640ms, transform 900ms var(--ease-out) 640ms}
+  .revealed .counter{opacity:0}
+  .revealed .caption{opacity:1; transform:none}
+  .caption .artist{font-family:"Cormorant",Georgia,serif; font-weight:400; font-size:clamp(23px,2.6vw,31px); letter-spacing:.005em; line-height:1.1}
+  .caption .work{margin-top:10px; font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(244,237,226,.62)}
+
+  /* hint */
+  .hint{
+    font-family:"Cormorant",Georgia,serif; font-style:italic; font-size:clamp(13px,1.4vw,15px); letter-spacing:.02em;
+    color:rgba(244,237,226,.45); opacity:0; transition:opacity 1000ms var(--ease-out); pointer-events:none;
+    text-align:center; margin-top:clamp(12px,1.8vh,18px); min-height:1.1em}
+  .hint.show{opacity:1}
+
+  /* bottom cluster: position index + controls */
+  .bottom{position:fixed; left:0; right:0; bottom:max(18px,env(safe-area-inset-bottom)); z-index:3;
+    display:flex; flex-direction:column; align-items:center; gap:14px}
+  .index{display:flex; gap:8px; opacity:0; transition:opacity 900ms var(--ease-out) 740ms}
+  .revealed .index{opacity:1}
+  .index i{width:14px; height:2px; background:rgba(244,237,226,.26); transition:background 420ms var(--ease-out), width 420ms var(--ease-out)}
+  .index i.on{width:22px; background:rgba(244,237,226,.85)}
+  .controls{display:flex; gap:26px; justify-content:center; opacity:0; transition:opacity 1000ms var(--ease-out) 800ms}
+  .revealed .controls{opacity:1}
+  .ctrl{appearance:none; background:none; border:0; cursor:pointer; color:rgba(244,237,226,.5);
+    font-family:"Archivo",sans-serif; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    padding:9px 6px; display:inline-flex; align-items:center; gap:7px; transition:color 220ms var(--ease-out), transform 160ms var(--ease-out)}
+  .ctrl:hover{color:rgba(244,237,226,.92)}
+  .ctrl:focus-visible{outline:none; color:rgba(244,237,226,.92); box-shadow:0 2px 0 rgba(244,237,226,.5)}
+  .ctrl:active{transform:scale(.97)}
+  .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.65; transition:box-shadow 220ms var(--ease-out)}
+  .ctrl[aria-pressed="true"] .dot{opacity:1; box-shadow:0 0 0 3px rgba(244,237,226,.16)}
+
+  @media (max-width:640px){
+    .piece{height:auto; width:min(82vw,360px)}
+    .hint{white-space:normal; width:80vw}
+    .nav{padding:10px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .glow{animation:none}
+    .lift{transform:none; transition:none}
+    .art-wrap{transition:opacity 700ms ease; transform:none; filter:none}
+    .revealed .art-wrap{transform:none}
+    .art-layer{transition:opacity 400ms ease}
+    .sheen{display:none}
+    .piece, .wordmark, .caption, .gleam, .index, .controls, .nav{transition:opacity 600ms ease}
+    .revealed .piece{box-shadow:0 12px 40px -16px rgba(8,6,4,.85)}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="glow"></div>
+
+    <button class="nav prev" id="prev" type="button" aria-label="Previous work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4 L7 12 L15 20"/></svg>
+    </button>
+    <button class="nav next" id="next" type="button" aria-label="Next work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L17 12 L9 20"/></svg>
+    </button>
+
+    <div class="scene">
+      <div class="wordmark">LUMAS</div>
+
+      <div class="lift">
+        <div class="piece" id="piece" role="img" aria-label="A limited-edition photograph by Chiron Duong">
+          <div class="opening">
+            <div class="art-wrap" id="artWrap">
+              <div class="art-layer" id="artA"></div>
+              <div class="art-layer" id="artB"></div>
+            </div>
+            <div class="gleam"><div class="sheen" id="sheen"></div></div>
+          </div>
+          <svg class="frame" viewBox="0 0 400 500" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="6" y="6" width="388" height="488" pathLength="1" id="frameRect"></rect>
+            <path class="tick" d="M6 30 L6 6 L30 6"></path>
+            <path class="tick" d="M370 6 L394 6 L394 30"></path>
+            <path class="tick" d="M394 470 L394 494 L370 494"></path>
+            <path class="tick" d="M30 494 L6 494 L6 470"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div class="counter" id="counter" aria-hidden="true">00</div>
+        <div class="caption">
+          <div class="artist">Chiron Duong</div>
+          <div class="work" id="work">Portrait no.&nbsp;209 · Limited edition</div>
+        </div>
+      </div>
+
+      <div class="hint" id="hint">Move to let it catch the light</div>
+    </div>
+
+    <div class="bottom">
+      <div class="index" id="index" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="controls">
+        <button class="ctrl" id="replay" type="button" aria-label="Replay the reveal"><span class="dot"></span>Replay</button>
+        <button class="ctrl" id="sound" type="button" aria-pressed="false" aria-label="Toggle ambient sound"><span class="dot"></span>Sound</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+  const stage=$('stage'), piece=$('piece'), artWrap=$('artWrap'), sheen=$('sheen'),
+        counter=$('counter'), frameRect=$('frameRect'), hint=$('hint'), workEl=$('work');
+  const layers=[$('artA'),$('artB')];
+  const ticks=document.querySelectorAll('#index i');
+  const frameTicks=document.querySelectorAll('.frame .tick');
+
+  const ARTIST='Chiron Duong';
+  const WORKS=[{code:'cdu01',num:'209'},{code:'cdu07',num:'216'},{code:'cdu04',num:'183'}];
+  const url=c=>`https://img.lumas.com/showimg_${c}_xl.jpg`;
+  let idx=0, active=0, isRevealed=false, transitioning=false;
+
+  /* preload every work; track the first for the opening ceremony */
+  let imgReady=false;
+  WORKS.forEach((w,i)=>{ const im=new Image(); if(i===0){ im.onload=im.onerror=()=>{imgReady=true}; } im.src=url(w.code); });
+  function setWork(layer,w){ layer.style.backgroundImage=`url("${url(w.code)}")`; }
+  function workLabel(w){ return 'Portrait no.&nbsp;'+w.num+' · Limited edition'; }
+
+  /* ---- audio (soft chime, muted by default) ---- */
+  let actx=null, soundOn=false;
+  function unlockAudio(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(actx&&actx.state==='suspended') actx.resume(); }
+  function chime(){
+    if(!soundOn||!actx) return;
+    const now=actx.currentTime;
+    [523.25,783.99,1046.5].forEach((f,i)=>{
+      const o=actx.createOscillator(), g=actx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      const peak=[.13,.075,.038][i];
+      g.gain.setValueAtTime(0,now);
+      g.gain.linearRampToValueAtTime(peak, now+.02+i*.02);
+      g.gain.exponentialRampToValueAtTime(.0001, now+1.9);
+      o.connect(g).connect(actx.destination); o.start(now); o.stop(now+2);
+    });
+  }
+
+  /* ---- the spring-driven tilt ---- */
+  const MAX=9, K=.082, D=.84;
+  let rx=0,ry=0,vx=0,vy=0,trx=0,trY=0, tilting=false, pointerInside=false, looping=false;
+  function loop(){
+    vx += (trx-rx)*K; vx*=D; rx+=vx;
+    vy += (trY-ry)*K; vy*=D; ry+=vy;
+    const lift=Math.min(22,Math.hypot(rx,ry)*1.5);
+    piece.style.transform=`perspective(1300px) rotateX(${rx.toFixed(3)}deg) rotateY(${ry.toFixed(3)}deg) translateZ(${lift.toFixed(2)}px)`;
+    artWrap.style.transform=`translate(${(ry*0.7).toFixed(2)}px, ${(-rx*0.7).toFixed(2)}px)`;
+    sheen.style.transform=`translateX(${(58 - ry*5.6).toFixed(1)}%) skewX(-14deg)`;
+    if(Math.abs(vx)>.0006||Math.abs(vy)>.0006||Math.abs(trx-rx)>.01||Math.abs(trY-ry)>.01||pointerInside){ requestAnimationFrame(loop); } else { looping=false; }
+  }
+  function kick(){ if(!looping){ looping=true; requestAnimationFrame(loop); } }
+  function setTargetFromPoint(x,y){
+    const nx=(x/innerWidth)*2-1, ny=(y/innerHeight)*2-1;
+    trx=Math.max(-1.3,Math.min(1.3,-ny))*MAX; trY=Math.max(-1.3,Math.min(1.3,nx))*MAX; kick();
+  }
+  function rest(){ trx=0; trY=0; kick(); }
+
+  let hintGone=false;
+  function dismissHint(){ if(hintGone) return; hintGone=true; hint.classList.remove('show'); }
+
+  /* ---- one-time light sweep (the "first light", reused to mask advances) ---- */
+  function sweep(){
+    if(reduce) return;
+    sheen.animate(
+      [{transform:'translateX(-65%) skewX(-14deg)'},{transform:'translateX(175%) skewX(-14deg)'}],
+      {duration:1100, easing:'cubic-bezier(.77,0,.175,1)', fill:'forwards'}
+    ).onfinish=()=>{ sheen.style.transform=`translateX(${(58-ry*5.6).toFixed(1)}%) skewX(-14deg)`; };
+  }
+
+  /* ---- gallery walk ---- */
+  function setIndex(n){ ticks.forEach((el,i)=>el.classList.toggle('on', i===n)); }
+  function advance(dir){
+    if(!isRevealed || transitioning) return;
+    const N=WORKS.length, next=(idx+dir+N)%N;
+    transitioning=true; dismissHint();
+    const cur=layers[active], inc=layers[1-active];
+    setWork(inc, WORKS[next]);
+    inc.style.transition='none';
+    inc.style.opacity='0';
+    inc.style.transform = reduce ? 'none' : `translateX(${dir*5}%)`;
+    void inc.offsetWidth;            /* commit the primed state before transitioning */
+    inc.style.transition='';
+    sweep();
+    if(soundOn) chime();
+    requestAnimationFrame(()=>{
+      inc.style.opacity='1'; inc.style.transform='translateX(0)';
+      cur.style.opacity='0'; cur.style.transform = reduce ? 'none' : `translateX(${-dir*5}%)`;
+    });
+    /* cross-fade only the changing line (artist stays steady) */
+    workEl.style.transition='opacity 260ms var(--ease-out)'; workEl.style.opacity='0';
+    setTimeout(()=>{ workEl.innerHTML=workLabel(WORKS[next]); workEl.style.opacity='1'; }, 280);
+    setIndex(next);
+    active=1-active; idx=next; rest();
+    setTimeout(()=>{ transitioning=false; }, reduce?300:840);
+  }
+
+  /* ---- pointer: hover/drag tilt + swipe-to-advance ---- */
+  let sx=0,sy=0,st=0;
+  addEventListener('pointermove', e=>{
+    if(!isRevealed || reduce || !tilting) return;
+    if(e.pointerType==='touch' && !pointerInside) return;
+    setTargetFromPoint(e.clientX,e.clientY); dismissHint();
+  }, {passive:true});
+  addEventListener('pointerdown', e=>{
+    if(!isRevealed) return;
+    unlockAudio(); pointerInside=true; sx=e.clientX; sy=e.clientY; st=performance.now();
+    if(!reduce && tilting) setTargetFromPoint(e.clientX,e.clientY);
+    dismissHint();
+  }, {passive:true});
+  addEventListener('pointerup', e=>{
+    if(!isRevealed) return;
+    pointerInside=false;
+    const dx=e.clientX-sx, dy=e.clientY-sy, dt=performance.now()-st;
+    if(!transitioning && Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.4 && dt<700){ advance(dx<0?1:-1); }
+    else if(!reduce && tilting){ rest(); }
+  }, {passive:true});
+  stage.addEventListener('pointerleave', ()=>{ if(!pointerInside && !reduce && tilting) rest(); }, {passive:true});
+  addEventListener('keydown', e=>{ if(e.key==='ArrowRight') advance(1); else if(e.key==='ArrowLeft') advance(-1); });
+  $('prev').addEventListener('click', ()=>advance(-1));
+  $('next').addEventListener('click', ()=>advance(1));
+
+  function enableTilt(){
+    if(reduce) return;
+    tilting=true;
+    if(matchMedia('(hover:none)').matches) hint.textContent='Swipe, or drag to catch the light';
+    hint.classList.add('show');
+  }
+
+  /* ---- opening ceremony ---- */
+  function easeOutCubic(t){ return 1-Math.pow(1-t,3); }
+  let raf=null, safety=null, started=false;
+  function reset(){
+    stage.classList.remove('revealed'); isRevealed=false;
+    rx=ry=vx=vy=trx=trY=0; tilting=false; pointerInside=false; hintGone=false; transitioning=false;
+    hint.classList.remove('show');
+    idx=0; active=0;
+    piece.style.transform='perspective(1300px)'; artWrap.style.transform='';
+    sheen.style.transform='translateX(58%) skewX(-14deg)';
+    layers.forEach((l,i)=>{ l.style.transition='none'; l.style.opacity = i===0?'1':'0'; l.style.transform='none'; });
+    setWork(layers[0],WORKS[0]); setWork(layers[1],WORKS[0]);
+    void layers[0].offsetWidth; layers.forEach(l=>l.style.transition='');
+    workEl.style.transition=''; workEl.style.opacity=''; workEl.innerHTML=workLabel(WORKS[0]);
+    setIndex(0);
+    counter.textContent='00'; frameRect.style.strokeDashoffset='1';
+    frameTicks.forEach(t=>t.style.opacity='0');
+  }
+  function fill(p){
+    counter.textContent=String(Math.round(p*100)).padStart(2,'0');
+    frameRect.style.strokeDashoffset=String(1-p);
+    if(p>0.7) frameTicks.forEach(tk=>tk.style.opacity='0.82');
+  }
+  function run(){
+    if(raf) cancelAnimationFrame(raf); if(safety) clearTimeout(safety);
+    started=false; reset();
+    const dur=reduce?700:2500, start=performance.now();
+    function tick(now){
+      const t=Math.min(1,((now||performance.now())-start)/dur);
+      fill(easeOutCubic(t));
+      if(t<1){ raf=requestAnimationFrame(tick); } else { startRevealOnce(); }
+    }
+    raf=requestAnimationFrame(tick);
+    /* safety net: rAF is paused in hidden/background tabs */
+    safety=setTimeout(()=>{ fill(1); startRevealOnce(); }, dur+600);
+  }
+  function startRevealOnce(){
+    if(started) return; started=true;
+    const go=()=>{ counter.textContent='100'; setTimeout(reveal, reduce?60:300); };
+    if(imgReady) go(); else { const iv=setInterval(()=>{ if(imgReady){ clearInterval(iv); go(); } },60); setTimeout(()=>{clearInterval(iv); go();},2500); }
+  }
+  function reveal(){
+    stage.classList.add('revealed'); isRevealed=true;
+    chime();
+    setTimeout(sweep, reduce?0:600);
+    setTimeout(enableTilt, reduce?0:1240);
+  }
+
+  $('replay').addEventListener('click', ()=>{ unlockAudio(); run(); });
+  $('sound').addEventListener('click', e=>{
+    unlockAudio(); soundOn=!soundOn;
+    e.currentTarget.setAttribute('aria-pressed', String(soundOn));
+    if(soundOn) chime();
+  });
+
+  run();
+})();
+</script>
+</body>
+</html>

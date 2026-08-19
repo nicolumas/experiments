@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMAS Edition Register</title>
+<meta name="description" content="The public record of every limited edition published by LUMAS.">
+<style>
+/*__FONTS__*/
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1C1A18;
+    --color-text-secondary: #5A5752;
+    --color-text-tertiary: #908C87;
+    --color-text-inverse: #F4EDE2;
+    --color-surface-page: #FAF6F1;
+    --color-surface-card: #FFFFFF;
+    --color-surface-raised: #F7F1E9;
+    --color-surface-sunken: #F4EDE2;
+    --color-surface-inverse: #1C1A18;
+    --color-surface-muted: #F0EBE3;
+    --color-border-default: #E2D8CC;
+    --color-border-subtle: #EAE2D8;
+    --color-border-strong: #C7C3BE;
+    --display: 'UtileDisplay', Georgia, serif;
+    --sans: 'Archivo', system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-surface-page);
+    color: var(--color-text-primary);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  header.masthead { padding: 64px 0 0; }
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.198em;
+    text-transform: uppercase; color: var(--color-text-tertiary);
+  }
+  .masthead h1 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(42px, 6vw, 62px); line-height: 1.04;
+    margin-top: 12px;
+  }
+  .masthead .dek {
+    margin-top: 16px; max-width: 620px;
+    font-weight: 300; font-size: 20px; line-height: 1.6; color: var(--color-text-secondary);
+  }
+  nav.reg-nav {
+    display: flex; gap: 32px; margin-top: 48px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border-default);
+  }
+  nav.reg-nav a {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-text-tertiary); text-decoration: none;
+    padding-bottom: 15px; margin-bottom: -16px; border-bottom: 1px solid transparent;
+    transition: color 160ms var(--ease-out);
+  }
+  nav.reg-nav a:hover { color: var(--color-text-primary); }
+  nav.reg-nav a.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); }
+
+  main { min-height: 55vh; padding: 56px 0 96px; }
+  main.fade-in { animation: viewIn 220ms var(--ease-out); }
+  @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 64px; margin-bottom: 64px; }
+  .stat .n { font-family: var(--display); font-weight: 300; font-size: 46px; line-height: 1.12; font-variant-numeric: tabular-nums; }
+  .stat .l { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-tertiary); }
+
+  /* Search */
+  .search-wrap { margin-bottom: 64px; max-width: 560px; }
+  .search-wrap label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.198em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 8px; }
+  #search {
+    width: 100%; padding: 14px; font-family: var(--sans); font-size: 14px; line-height: 1.5;
+    color: var(--color-text-primary); background: var(--color-surface-card);
+    border: 1px solid var(--color-border-default); border-radius: 4px; outline: none;
+    transition: border-color 160ms var(--ease-out);
+  }
+  #search::placeholder { color: var(--color-text-tertiary); }
+  #search:focus { border: 2px solid var(--color-text-primary); padding: 13px; }
+  .search-note { margin-top: 10px; font-size: 12px; color: var(--color-text-tertiary); }
+
+  /* Artist directory */
+  .dir-letter { margin-bottom: 40px; }
+  .dir-letter h3 { font-family: var(--display); font-weight: 300; font-size: 26px; line-height: 1.1; margin-bottom: 12px; color: var(--color-text-tertiary); }
+  .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 2px 32px; border-top: 1px solid var(--color-border-default); padding-top: 12px; }
+  .dir-grid a {
+    display: flex; justify-content: space-between; gap: 12px; padding: 6px 4px;
+    font-size: 13px; line-height: 1.5; text-decoration: none; color: var(--color-text-primary);
+    transition: background-color 160ms var(--ease-out);
+  }
+  .dir-grid a:hover { background: var(--color-surface-raised); }
+  .dir-grid .dc { color: var(--color-text-tertiary); font-variant-numeric: tabular-nums; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.198em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 24px; }
+
+  .artist-block { margin-bottom: 80px; }
+  .artist-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 8px; }
+  .artist-head h2 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.12; }
+  .artist-head .count { font-size: 13px; color: var(--color-text-tertiary); white-space: nowrap; }
+  .artist-note { font-size: 13px; line-height: 1.65; color: var(--color-text-secondary); max-width: 640px; margin-bottom: 24px; }
+
+  .ledger { border-top: 1px solid var(--color-border-default); }
+  .lrow {
+    display: grid; grid-template-columns: 90px minmax(0,1fr) 64px 110px 110px 150px 140px;
+    gap: 16px; align-items: baseline; padding: 13px 8px 12px;
+    border-bottom: 1px solid var(--color-border-subtle);
+    text-decoration: none; color: inherit; font-size: 13px; line-height: 1.65;
+    transition: background-color 160ms var(--ease-out);
+  }
+  a.lrow:hover { background: var(--color-surface-raised); }
+  a.lrow:active { background: var(--color-surface-sunken); }
+  .lrow.lhead {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-text-tertiary); border-bottom: 1px solid var(--color-border-default); padding-top: 0;
+  }
+  .lrow .id { font-variant-numeric: tabular-nums; color: var(--color-text-tertiary); }
+  .lrow .work { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lrow .sub { display: block; font-weight: 400; font-size: 12px; color: var(--color-text-tertiary); }
+  .lrow .num { font-variant-numeric: tabular-nums; }
+  .lrow .dim { color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+  .lrow .mk { color: var(--color-text-secondary); }
+
+  .state { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 8px 1px; border-radius: 2px; white-space: nowrap; }
+  .state.completed { background: var(--color-surface-inverse); color: var(--color-text-inverse); }
+  .state.closing { border: 1px solid var(--color-text-primary); color: var(--color-text-primary); }
+  .state.retired { border: 1px solid var(--color-border-strong); color: var(--color-text-secondary); }
+  .state.enquiry { border: 1px solid var(--color-border-default); color: var(--color-text-tertiary); }
+  .state.gallery { border: 1px solid var(--color-border-default); color: var(--color-text-tertiary); }
+  .state.announced { color: var(--color-text-tertiary); padding-left: 0; }
+  .state.open { color: var(--color-text-tertiary); padding-left: 0; }
+
+  .crumb { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 40px; }
+  .crumb a { color: var(--color-text-tertiary); text-decoration: none; transition: color 160ms var(--ease-out); }
+  .crumb a:hover { color: var(--color-text-primary); }
+  .crumb span { color: var(--color-border-strong); margin: 0 10px; }
+
+  .entry { display: grid; grid-template-columns: minmax(0, 7fr) minmax(300px, 5fr); gap: 64px; align-items: start; }
+  .plate { background: var(--color-surface-muted); display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .plate img {
+    max-width: 100%; max-height: 64vh; width: auto; height: auto; display: block;
+    box-shadow: 0 18px 60px -16px rgba(28, 26, 24, 0.35);
+    opacity: 0; transition: opacity 400ms var(--ease-out);
+  }
+  .plate img.loaded { opacity: 1; }
+  .plate .noimg { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-tertiary); padding: 96px 24px; text-align: center; }
+
+  .entry-facts .eyebrow { margin-bottom: 12px; }
+  .entry-facts h1 { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4vw, 42px); line-height: 1.08; }
+  .entry-facts .artist-line { margin-top: 8px; font-size: 16px; color: var(--color-text-secondary); }
+  .entry-facts .artist-line a, dl.facts dd a {
+    color: inherit; text-decoration: underline; text-underline-offset: 4px;
+    text-decoration-thickness: 1px; text-decoration-color: var(--color-border-strong);
+    transition: text-decoration-color 160ms var(--ease-out);
+  }
+  .entry-facts .artist-line a:hover, dl.facts dd a:hover { text-decoration-color: var(--color-text-primary); }
+
+  .statement { margin-top: 28px; padding: 16px 20px; background: var(--color-surface-raised); font-size: 14px; line-height: 1.65; }
+  .statement.completed { background: var(--color-surface-inverse); color: rgba(244, 237, 226, 0.75); }
+  .statement.completed strong { color: var(--color-text-inverse); font-weight: 500; }
+  .statement strong { font-weight: 500; }
+
+  dl.facts { margin-top: 32px; border-top: 1px solid var(--color-border-default); }
+  dl.facts div { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 11px 0 10px; border-bottom: 1px solid var(--color-border-subtle); }
+  dl.facts dt { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-tertiary); padding-top: 3px; }
+  dl.facts dd { font-size: 14px; line-height: 1.6; }
+
+  .siblings { margin-top: 40px; }
+  .siblings .sl { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 12px; }
+  .siblings a {
+    display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;
+    border-bottom: 1px solid var(--color-border-subtle); text-decoration: none; color: inherit; font-size: 13px;
+    transition: background-color 160ms var(--ease-out);
+  }
+  .siblings a:hover { background: var(--color-surface-raised); }
+  .siblings .sid { color: var(--color-text-tertiary); font-variant-numeric: tabular-nums; }
+
+  .prose { max-width: 680px; }
+  .prose h1 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4.6vw, 46px); line-height: 1.12; margin-bottom: 32px; }
+  .prose h2 { font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1.25; margin: 48px 0 16px; }
+  .prose p { margin-bottom: 16px; font-size: 15px; line-height: 1.7; color: var(--color-text-secondary); }
+  .prose p strong { color: var(--color-text-primary); font-weight: 500; }
+  .prose dl div { display: grid; grid-template-columns: 190px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--color-border-subtle); }
+  .prose dl { border-top: 1px solid var(--color-border-default); margin: 24px 0; }
+  .prose dt { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-tertiary); padding-top: 3px; }
+  .prose dd { font-size: 14px; line-height: 1.65; color: var(--color-text-secondary); }
+  .ghost-btn {
+    display: inline-block; margin-top: 8px; padding: 4px 0 6px;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-text-primary); text-decoration: none;
+    border-bottom: 1px solid var(--color-text-primary);
+    transition: opacity 160ms var(--ease-out);
+  }
+  .ghost-btn:hover { opacity: 0.6; }
+
+  .annal-year { margin-bottom: 56px; }
+  .annal-year h2 { font-family: var(--display); font-weight: 300; font-size: 46px; line-height: 1.1; margin-bottom: 16px; }
+  .annal-line {
+    display: block; padding: 14px 8px 13px; border-bottom: 1px solid var(--color-border-subtle);
+    font-size: 14px; line-height: 1.65; text-decoration: none; color: var(--color-text-secondary);
+    transition: background-color 160ms var(--ease-out);
+  }
+  .annal-line:first-of-type { border-top: 1px solid var(--color-border-default); }
+  .annal-line:hover { background: var(--color-surface-raised); }
+  .annal-line strong { color: var(--color-text-primary); font-weight: 500; }
+
+  footer {
+    border-top: 1px solid var(--color-border-default);
+    padding: 32px 0 64px; font-size: 11px; line-height: 1.7; color: var(--color-text-tertiary); letter-spacing: 0.02em;
+  }
+  footer .shell { display: flex; flex-direction: column; gap: 6px; }
+
+  a:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 2px; }
+
+  @media (max-width: 900px) {
+    .entry { grid-template-columns: 1fr; gap: 40px; }
+    .lrow { grid-template-columns: 74px minmax(0,1fr) 90px 130px; }
+    .lrow .dim, .lrow .yr, .lrow .mk { display: none; }
+    .stats { gap: 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    main.fade-in { animation: none; }
+    .plate img { transition: opacity 120ms linear; }
+  }
+</style>
+<script type="application/ld+json" id="jsonld"></script>
+</head>
+<body>
+<header class="masthead">
+  <div class="shell">
+    <div class="eyebrow">Lumas · Est. 2004</div>
+    <h1>Edition register</h1>
+    <p class="dek">The public record of every limited edition published by LUMAS — its size, its authentication mark, its process, and its place in the ledger. Entries are permanent: an edition that closes is never removed.</p>
+    <nav class="reg-nav" id="nav">
+      <a href="#/" data-route="index">Register</a>
+      <a href="#/annals" data-route="annals">Annals</a>
+      <a href="#/methodology" data-route="methodology">Methodology</a>
+      <a href="#/data" data-route="data">Data</a>
+    </nav>
+  </div>
+</header>
+<main id="view"><div class="shell" id="content"></div></main>
+<footer>
+  <div class="shell">
+    <div>Records drawn from the LUMAS article master and order ledger, retrieved 3 July 2026. Sales records are complete from November 2004; earlier gallery sales are reconciled against the article master.</div>
+    <div>Prototype — internal. Data via the LUMAS MCP beta; figures may be incomplete or inaccurate and should be verified before external use.</div>
+  </div>
+</footer>
+<script>
+/*__DATA__*/
+</script>
+<script>
+(function () {
+  /* RAW row: [sku, artist, title, cap, mark, technique, surface, w, h, yc, yp, state, figure, img, first, last] */
+  const MARKS = {
+    signatur: 'Hand-signed', archivstempel: 'Archive-stamped', studiostempel: 'Studio-stamped',
+    nachlassstempel: 'Estate-stamped', echtheitszertifikat: 'Certificate of authenticity',
+  };
+  const STATES = {
+    open: 'In the edition', closing: 'Edition closing', completed: 'Edition completed',
+    retired: 'Edition retired', enquiry: 'Archive record', gallery: 'Gallery only', announced: 'Announced',
+  };
+  const slug = (s) => s.toLowerCase().replace(/[’'.]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const ypKey = (yp) => /^[12][0-9]{3}$/.test(yp) ? yp : '9999';
+
+  const R = window.RAW.map((r) => ({
+    sku: r[0], artist: r[1] || 'Unattributed', title: r[2] || r[0], editionSize: r[3] || null,
+    markKey: r[4], mark: MARKS[r[4]] || (r[4] ? r[4] : 'Not recorded'),
+    technique: r[5] || null, surface: r[6] || null, widthMm: r[7] || null, heightMm: r[8] || null,
+    yearCreation: r[9] || null, yearPublication: r[10] || null,
+    state: r[11], stateLabel: STATES[r[11]], completionFigure: r[12] || null,
+    image: r[13] || null, firstRecordedSale: r[14] || null, lastRecordedSale: r[15] || null,
+  }));
+  R.sort((a, b) => (ypKey(a.yearPublication || '') + a.sku).localeCompare(ypKey(b.yearPublication || '') + b.sku));
+  R.forEach((e, i) => { e.registerId = 'LER-' + String(i + 1).padStart(5, '0'); e.artistSlug = slug(e.artist); });
+
+  const bySku = Object.fromEntries(R.map((e) => [e.sku, e]));
+  const artists = [];
+  const byArtist = {};
+  R.forEach((e) => {
+    if (!byArtist[e.artistSlug]) { byArtist[e.artistSlug] = { slug: e.artistSlug, name: e.artist, editions: [] }; artists.push(byArtist[e.artistSlug]); }
+    byArtist[e.artistSlug].editions.push(e);
+  });
+  const surname = (n) => n.trim().split(' ').pop().toLowerCase();
+  artists.sort((a, b) => surname(a.name).localeCompare(surname(b.name)));
+
+  const BIOS = {
+    'edward-steichen': 'Edward Steichen (1879–1973), American photographer and curator; chief photographer for Vogue and Vanity Fair from 1923 to 1938, later director of the department of photography at the Museum of Modern Art. LUMAS holds two edition families: silver gelatine editions published 1982–1987, and archive-stamped editions from the Condé Nast archive published 2015.',
+    'horst-p-horst': 'Horst P. Horst (1906–1999), German-American photographer whose work for Vogue spanned six decades. These archive-stamped editions from the Condé Nast archive were published 2014–2015; The Mainbocher Corset (1939) is among the most recognised fashion photographs ever made.',
+    'gavin-evans': 'Gavin Evans (b. 1966), British photographer known for his portrait sittings, including David Bowie.',
+    'isabelle-menin': 'Isabelle Menin (b. 1961), Belgian artist composing dense digital floral landscapes. Each format of a motif is its own edition.',
+    'niki-hare': 'Niki Hare, British artist working with layered text and paint.',
+    'robert-jahns': 'Robert Jahns, German digital artist.',
+    'soo-burnell': 'Soo Burnell, Scottish photographer known for her architectural poolside series.',
+  };
+
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const fmtMonth = (d) => { if (!d) return null; const p = d.split('-'); return MONTHS[+p[1] - 1] + ' ' + p[0]; };
+  const cm = (mm) => (mm / 10) % 1 === 0 ? mm / 10 : (mm / 10).toFixed(1);
+  const dims = (e) => (e.widthMm && e.heightMm) ? cm(e.widthMm) + ' × ' + cm(e.heightMm) + ' cm' : '—';
+  const created = (e) => !e.yearCreation || e.yearCreation === 'undated' ? 'Undated' : e.yearCreation;
+  const edLabel = (e) => e.editionSize ? 'Edition of ' + e.editionSize : 'Size not recorded';
+  const stateTag = (e) => '<span class="state ' + e.state + '">' + esc(e.stateLabel) + '</span>';
+  const imgUrl = (e) => e.image ? 'https://img.lumas.com/showimg_' + e.image + '_full.jpg' : null;
+  const sentence = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
+  function ledgerRows(editions, withArtist) {
+    const head = '<div class="lrow lhead"><span>No.</span><span>Work</span><span>Created</span><span class="dim">Format</span><span>Edition</span><span class="mk">Mark</span><span>Status</span></div>';
+    return '<div class="ledger">' + head + editions.map((e) =>
+      '<a class="lrow" href="#/edition/' + e.sku + '">' +
+      '<span class="id">' + e.registerId + '</span>' +
+      '<span class="work">' + esc(e.title) + (withArtist ? '<span class="sub">' + esc(e.artist) + '</span>' : '') + '</span>' +
+      '<span class="num yr">' + esc(created(e)) + '</span>' +
+      '<span class="dim">' + dims(e) + '</span>' +
+      '<span class="num">' + edLabel(e) + '</span>' +
+      '<span class="mk">' + esc(e.mark) + '</span>' +
+      '<span>' + stateTag(e) + '</span></a>'
+    ).join('') + '</div>';
+  }
+
+  function viewIndex() {
+    const completed = R.filter((e) => e.state === 'completed').length;
+    const years = R.map((e) => e.yearPublication).filter((y) => /^[12][0-9]{3}$/.test(y));
+    const earliest = years.length ? years.reduce((a, b) => a < b ? a : b) : '—';
+    const stats =
+      '<div class="stats">' +
+      '<div class="stat"><div class="n">' + R.length.toLocaleString('en') + '</div><div class="l">Editions recorded</div></div>' +
+      '<div class="stat"><div class="n">' + artists.length.toLocaleString('en') + '</div><div class="l">Artists</div></div>' +
+      '<div class="stat"><div class="n">' + completed.toLocaleString('en') + '</div><div class="l">Editions completed</div></div>' +
+      '<div class="stat"><div class="n">' + earliest + '</div><div class="l">Earliest publication</div></div>' +
+      '</div>';
+    const search =
+      '<div class="search-wrap"><label for="search">Search the register</label>' +
+      '<input id="search" type="search" placeholder="Artist, work, or reference — e.g. Steichen, Balance, CNA51" autocomplete="off">' +
+      '<div class="search-note" id="search-note"></div></div><div id="search-results"></div>';
+    const letters = {};
+    artists.forEach((a) => { const L = surname(a.name).charAt(0).toUpperCase(); (letters[L] = letters[L] || []).push(a); });
+    const dir = '<div class="section-label" id="dir-label">Artists — by surname</div>' +
+      Object.keys(letters).sort().map((L) =>
+        '<div class="dir-letter"><h3>' + L + '</h3><div class="dir-grid">' +
+        letters[L].map((a) =>
+          '<a href="#/artist/' + a.slug + '"><span>' + esc(a.name) + '</span><span class="dc">' + a.editions.length + '</span></a>'
+        ).join('') + '</div></div>'
+      ).join('');
+    return { title: 'LUMAS Edition Register', html: stats + search + dir, index: true };
+  }
+
+  function bindSearch() {
+    const input = document.getElementById('search');
+    if (!input) return;
+    const results = document.getElementById('search-results');
+    const note = document.getElementById('search-note');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      if (q.length < 2) { results.innerHTML = ''; note.textContent = ''; return; }
+      const hits = R.filter((e) =>
+        e.sku.toLowerCase().includes(q) || e.title.toLowerCase().includes(q) ||
+        e.artist.toLowerCase().includes(q) || e.registerId.toLowerCase().includes(q));
+      const shown = hits.slice(0, 150);
+      note.textContent = hits.length === 0 ? 'No entries match.' :
+        hits.length + ' entr' + (hits.length === 1 ? 'y' : 'ies') + (hits.length > 150 ? ' — showing the first 150; narrow the search' : '');
+      results.innerHTML = shown.length ? ledgerRows(shown, true) : '';
+    });
+  }
+
+  function viewArtist(slugArg) {
+    const a = byArtist[slugArg];
+    if (!a) return viewIndex();
+    const completed = a.editions.filter((e) => e.state === 'completed').length;
+    const marks = [...new Set(a.editions.map((e) => e.mark))].filter((m) => m !== 'Not recorded').join(', ');
+    const html =
+      '<div class="crumb"><a href="#/">Register</a><span>/</span>' + esc(a.name) + '</div>' +
+      '<section class="artist-block">' +
+      '<div class="artist-head"><h2>' + esc(a.name) + '</h2><span class="count">' + a.editions.length + ' edition' + (a.editions.length > 1 ? 's' : '') +
+      (completed ? ' · ' + completed + ' completed' : '') + '</span></div>' +
+      '<p class="artist-note">' + esc(BIOS[slugArg] || '') + (marks ? ' Authentication: ' + esc(marks.toLowerCase()) + '.' : '') + '</p>' +
+      ledgerRows(a.editions) + '</section>';
+    return { title: a.name + ' — LUMAS Edition Register', html };
+  }
+
+  function entryStatement(e) {
+    const first = fmtMonth(e.firstRecordedSale), last = fmtMonth(e.lastRecordedSale);
+    if (e.state === 'completed') {
+      const fig = e.completionFigure
+        ? 'All ' + e.completionFigure + ' copies of this edition are recorded placed.'
+        : 'This edition is recorded complete.';
+      return '<div class="statement completed"><strong>Edition completed.</strong> ' + fig +
+        (last ? ' Closed ' + last + '.' : '') + (first ? ' First recorded placement ' + first + '.' : '') + '</div>';
+    }
+    if (e.state === 'closing') {
+      return '<div class="statement"><strong>Edition closing.</strong> The final copies of this edition are being placed. When the edition completes, its closing is dated in the annals.</div>';
+    }
+    if (e.state === 'retired') {
+      return '<div class="statement"><strong>Edition retired.</strong> No further copies are issued from this edition.' +
+        (first && last ? ' Recorded placements from ' + first + ' to ' + last + '.' : '') + '</div>';
+    }
+    if (e.state === 'enquiry') {
+      return '<div class="statement"><strong>Archive record.</strong> This edition is held in the archive; enquiries are taken through LUMAS galleries.' +
+        (first && last ? ' Recorded placements from ' + first + ' to ' + last + '.' : '') + '</div>';
+    }
+    if (e.state === 'gallery') {
+      return '<div class="statement"><strong>Gallery only.</strong> This edition is placed exclusively through LUMAS galleries.</div>';
+    }
+    if (e.state === 'announced') {
+      return '<div class="statement"><strong>Announced.</strong> This edition is entering publication.</div>';
+    }
+    return '<div class="statement"><strong>In the edition.</strong> This edition is open. The register records edition size and lifecycle, not availability.</div>';
+  }
+
+  function viewEntry(sku) {
+    const e = bySku[sku];
+    if (!e) return viewIndex();
+    const siblings = e.image ? R.filter((x) => x.image === e.image && x.sku !== e.sku) : [];
+    const facts = [
+      ['Register no.', e.registerId],
+      ['Artist', '<a href="#/artist/' + e.artistSlug + '">' + esc(e.artist) + '</a>'],
+      ['Created', created(e)],
+      ['Published', e.yearPublication || 'Not recorded'],
+      ['Edition', e.editionSize ? 'Edition of ' + e.editionSize + ' — this format' : 'Size not recorded'],
+      ['Mark', esc(e.mark)],
+      ['Process', e.technique ? esc(sentence(e.technique)) : 'Not recorded'],
+      ['Surface', e.surface ? esc(sentence(e.surface)) : 'Not recorded'],
+      ['Format', dims(e)],
+      ['Publisher', 'LUMAS'],
+      ['Reference', e.sku],
+    ].map(([t, d]) => '<div><dt>' + t + '</dt><dd>' + d + '</dd></div>').join('');
+    const sibs = siblings.length
+      ? '<div class="siblings"><div class="sl">Other formats of this motif — each its own edition</div>' +
+        siblings.slice(0, 12).map((s) =>
+          '<a href="#/edition/' + s.sku + '"><span>' + dims(s) + ' · ' + edLabel(s) + '</span><span class="sid">' + s.registerId + '</span></a>'
+        ).join('') + '</div>'
+      : '';
+    const url = imgUrl(e);
+    const ratio = (e.widthMm && e.heightMm) ? (+e.widthMm + 80) + '/' + (+e.heightMm + 80) : '5/4';
+    const plate = url
+      ? '<img loading="lazy" alt="' + esc(e.title) + ' — ' + esc(e.artist) + '" ' +
+        'onload="this.classList.add(\'loaded\')" ' +
+        'onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'noimg\',textContent:\'No image held in the record\'}))" ' +
+        'src="' + url + '">'
+      : '<div class="noimg">No image held in the record</div>';
+    const html =
+      '<div class="crumb"><a href="#/">Register</a><span>/</span><a href="#/artist/' + e.artistSlug + '">' + esc(e.artist) + '</a><span>/</span>' + e.registerId + '</div>' +
+      '<div class="entry">' +
+      '<figure class="plate" style="aspect-ratio:' + ratio + '">' + plate + '</figure>' +
+      '<div class="entry-facts">' +
+      '<div class="eyebrow">' + e.registerId + '</div>' +
+      '<h1>' + esc(e.title) + '</h1>' +
+      '<div class="artist-line"><a href="#/artist/' + e.artistSlug + '">' + esc(e.artist) + '</a>, ' + esc(created(e)) + '</div>' +
+      entryStatement(e) +
+      '<dl class="facts">' + facts + '</dl>' + sibs +
+      '</div></div>';
+    return { title: e.title + ' — ' + e.artist + ' — LUMAS Edition Register', html, entry: e };
+  }
+
+  function viewAnnals() {
+    const closed = R.filter((e) => e.state === 'completed');
+    const dated = closed.filter((e) => e.lastRecordedSale).sort((a, b) => b.lastRecordedSale.localeCompare(a.lastRecordedSale));
+    const undated = closed.filter((e) => !e.lastRecordedSale);
+    const byYear = {};
+    dated.forEach((e) => { const y = e.lastRecordedSale.slice(0, 4); (byYear[y] = byYear[y] || []).push(e); });
+    const years = Object.keys(byYear).sort().reverse();
+    const line = (e, withDate) =>
+      '<a class="annal-line" href="#/edition/' + e.sku + '">' + (withDate ? fmtMonth(e.lastRecordedSale) + ' — ' : '') +
+      '<strong>' + esc(e.artist) + ', ' + esc(e.title) + '</strong>' + (e.editionSize ? ', edition of ' + e.editionSize : '') +
+      (e.firstRecordedSale && withDate ? ', first placed ' + fmtMonth(e.firstRecordedSale) : '') + '. ' + e.registerId + '</a>';
+    const html = '<div class="prose"><h1>Annals</h1>' +
+      '<p>The closing log of the register — ' + closed.length.toLocaleString('en') + ' completed editions. An entry is made when an edition completes: every copy recorded placed. Closed editions remain in the register permanently.</p></div>' +
+      years.map((y) => '<section class="annal-year"><h2>' + y + '</h2>' + byYear[y].map((e) => line(e, true)).join('') + '</section>').join('') +
+      (undated.length ? '<section class="annal-year"><h2>Undated</h2><div class="prose"><p>Editions recorded complete whose closing predates the order ledger or falls outside it.</p></div>' +
+        undated.map((e) => line(e, false)).join('') + '</section>' : '');
+    return { title: 'Annals — LUMAS Edition Register', html };
+  }
+
+  function viewMethodology() {
+    const html = '<div class="prose"><h1>Methodology</h1>' +
+      '<p>The register is drawn from the LUMAS article master — the internal record in which every edition is created — and from the order ledger kept since November 2004. Entries are published verbatim from these records.</p>' +
+      '<p><strong>Scope.</strong> The register lists every limited edition LUMAS has ever created: Limited Editions, Darlings (small limited editions), and Digital Editions — every edition with a fixed size. Open Editions, which have no cap, are outside the register.</p>' +
+      '<p><strong>Every edition is per format.</strong> When a motif is published in several sizes, each size is its own edition with its own size and register number. Frames are an addition to a work and are not part of the edition number.</p>' +
+      '<p><strong>The register does not publish counts of remaining copies.</strong> It records what an edition is — size, mark, process, state — and when it closes. Availability is a matter for the shop and the galleries, not the ledger.</p>' +
+      '<h2>States</h2><dl>' +
+      '<div><dt>In the edition</dt><dd>The edition is open. Copies may be issued up to the edition size.</dd></div>' +
+      '<div><dt>Announced</dt><dd>The edition is entering publication.</dd></div>' +
+      '<div><dt>Edition closing</dt><dd>The final copies of the edition are being placed.</dd></div>' +
+      '<div><dt>Edition completed</dt><dd>Every copy of the edition is recorded placed. The entry becomes a permanent record and is dated in the annals.</dd></div>' +
+      '<div><dt>Edition retired</dt><dd>Publication ended before the edition completed. No further copies are issued.</dd></div>' +
+      '<div><dt>Gallery only</dt><dd>The edition is placed exclusively through LUMAS galleries.</dd></div>' +
+      '<div><dt>Archive record</dt><dd>The edition is held in the archive; enquiries are taken through LUMAS galleries.</dd></div>' +
+      '</dl>' +
+      '<h2>Authentication marks</h2>' +
+      '<p>Every LUMAS edition carries a mark of authentication, recorded per edition exactly as it appears in the article master. Each mark constitutes verification of the work.</p><dl>' +
+      '<div><dt>Hand-signed</dt><dd>Signed by the artist.</dd></div>' +
+      '<div><dt>Archive-stamped</dt><dd>Stamped by the holding archive — for example, the Condé Nast archive.</dd></div>' +
+      '<div><dt>Estate-stamped</dt><dd>Stamped by the artist’s estate for posthumous editions.</dd></div>' +
+      '<div><dt>Studio-stamped</dt><dd>Stamped by the artist’s studio.</dd></div>' +
+      '<div><dt>Certificate</dt><dd>Accompanied by a certificate of authenticity.</dd></div>' +
+      '</dl>' +
+      '<h2>Record boundary</h2>' +
+      '<p>Sales records are complete from November 2004, when the LUMAS ledger begins. For editions published earlier, placements before 2004 are reconciled against the article master and lifespans shown are of recorded placements only.</p>' +
+      '<h2>Permanence</h2>' +
+      '<p>Register numbers are minted once, in order of publication, and never reassigned. Entries are never removed. A closed edition keeps its page indefinitely.</p>' +
+      '</div>';
+    return { title: 'Methodology — LUMAS Edition Register', html };
+  }
+
+  function viewData() {
+    const html = '<div class="prose"><h1>Data</h1>' +
+      '<p>The register is published as a machine-readable dataset of all ' + R.length.toLocaleString('en') + ' editions. Every entry carries structured data (schema.org VisualArtwork, including <strong>artEdition</strong> — the total number of copies) so the record can be read and cited directly.</p>' +
+      '<p>Fields: register number, reference, artist, title, year of creation, year of publication, edition size, authentication mark, process, surface, format, state, and — for closed editions — the recorded lifespan.</p>' +
+      '<a class="ghost-btn" href="editions.json" download>Download the register — JSON</a>' +
+      '<h2>Citation</h2>' +
+      '<p>Cite an edition by its register number, e.g. “LUMAS Edition Register, ' + R[0].registerId + '”. Register pages are permanent.</p>' +
+      '</div>';
+    return { title: 'Data — LUMAS Edition Register', html };
+  }
+
+  function jsonld(e) {
+    const el = document.getElementById('jsonld');
+    if (!e) { el.textContent = ''; return; }
+    el.textContent = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'VisualArtwork',
+      name: e.title, identifier: e.registerId,
+      creator: { '@type': 'Person', name: e.artist },
+      dateCreated: e.yearCreation && e.yearCreation !== 'undated' ? e.yearCreation : undefined,
+      datePublished: e.yearPublication || undefined,
+      artEdition: e.editionSize ? +e.editionSize : undefined,
+      artMedium: e.technique || undefined, artform: 'Photograph',
+      width: e.widthMm ? { '@type': 'QuantitativeValue', value: e.widthMm / 10, unitCode: 'CMT' } : undefined,
+      height: e.heightMm ? { '@type': 'QuantitativeValue', value: e.heightMm / 10, unitCode: 'CMT' } : undefined,
+      publisher: { '@type': 'Organization', name: 'LUMAS' },
+      image: imgUrl(e) || undefined,
+    });
+  }
+
+  function route() {
+    const h = location.hash.replace(/^#\/?/, '');
+    const [seg, arg] = h.split('/');
+    let v, active = 'index';
+    if (seg === 'edition' && arg) { v = viewEntry(arg); }
+    else if (seg === 'artist' && arg) { v = viewArtist(arg); }
+    else if (seg === 'annals') { v = viewAnnals(); active = 'annals'; }
+    else if (seg === 'methodology') { v = viewMethodology(); active = 'methodology'; }
+    else if (seg === 'data') { v = viewData(); active = 'data'; }
+    else { v = viewIndex(); }
+    document.title = v.title;
+    jsonld(v.entry || null);
+    const main = document.getElementById('view');
+    document.getElementById('content').innerHTML = v.html;
+    if (v.index) bindSearch();
+    main.classList.remove('fade-in');
+    void main.offsetWidth;
+    main.classList.add('fade-in');
+    window.scrollTo(0, 0);
+    document.querySelectorAll('#nav a').forEach((a) => a.classList.toggle('active', a.dataset.route === active));
+  }
+
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+</body>
+</html>

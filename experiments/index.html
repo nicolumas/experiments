@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="assets/gate.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMAS · Experiments</title>
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="assets/lumas-fonts.css" rel="stylesheet">
+  <style>
+    :root {
+      --charcoal: #1c1b19;
+      --raise: #262420;
+      --ivory: #f4f1ea;
+      --bone: #d8d2c6;
+      --muted: #9a958b;
+      --line: rgba(244, 241, 234, 0.14);
+      --line-soft: rgba(244, 241, 234, 0.08);
+      --disp: 'UtileDisplay', Georgia, serif;
+      --sans: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--charcoal); color: var(--ivory);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased; line-height: 1.5;
+    }
+    .wrap { max-width: 940px; margin: 0 auto; padding: clamp(2.5rem, 6vw, 6rem) 1.5rem 5rem; }
+
+    /* ---- Masthead ---- */
+    header { margin-bottom: clamp(1.75rem, 4vw, 2.75rem); }
+    .eyebrow { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem; }
+    .eyebrow a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+    .eyebrow a:hover { color: var(--ivory); }
+    h1 { font-family: var(--disp); font-size: clamp(2.4rem, 5.5vw, 3.9rem); font-weight: 400; letter-spacing: -0.01em; line-height: 1.04; margin: 0 0 0.85rem; }
+    .lede { color: var(--bone); max-width: 54ch; margin: 0; }
+
+    /* ---- Theme index ---- */
+    .index { display: flex; flex-wrap: wrap; gap: 0.4rem 0; align-items: baseline;
+      margin: clamp(1.75rem, 4vw, 2.75rem) 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    .index a { text-decoration: none; color: var(--bone); display: inline-flex; align-items: baseline; gap: 0.55rem;
+      padding: 0.35rem 0.95rem 0.35rem 0; transition: color 0.2s var(--ease-out); }
+    .index a:first-child { padding-left: 0; }
+    .index a + a { border-left: 1px solid var(--line); padding-left: 0.95rem; }
+    .index a:hover { color: var(--ivory); }
+    .index .d { font-family: var(--disp); font-size: 1.02rem; letter-spacing: -0.01em; }
+    .index .c { font-size: 0.68rem; letter-spacing: 0.12em; color: var(--muted); }
+
+    /* ---- Theme section ---- */
+    .theme { border-top: 1px solid var(--line); padding-top: clamp(2rem, 4vw, 3rem); margin-top: clamp(2.6rem, 5vw, 3.75rem); }
+    .theme-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.5rem; }
+    .theme-kicker { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.7rem; }
+    .theme-name { font-family: var(--disp); font-weight: 400; font-size: clamp(1.9rem, 4vw, 2.9rem); letter-spacing: -0.015em; line-height: 1; margin: 0; }
+    .theme-count { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; padding-bottom: 0.35rem; }
+
+    /* ---- Cards ---- */
+    .rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .card { position: relative; display: block; background: var(--charcoal); color: inherit; text-decoration: none;
+      border: 1px solid var(--line); border-radius: 11px; padding: 1.35rem 1.4rem;
+      transition:
+        background 0.2s var(--ease-out) 0s,
+        border-color 0.2s var(--ease-out) 0s,
+        transform 0.2s var(--ease-out) 0s,
+        opacity 0.55s var(--ease-out) var(--d, 0ms),
+        translate 0.55s var(--ease-out) var(--d, 0ms); }
+    .card .num { font-size: 0.72rem; letter-spacing: 0.18em; color: var(--muted); }
+    .card h2 { font-family: var(--disp); font-size: 1.3rem; font-weight: 400; letter-spacing: 0; margin: 0.45rem 0 0.4rem; }
+    .card p { margin: 0; color: var(--bone); font-size: 0.9rem; max-width: 46ch; }
+    .card .arrow { display: inline-block; margin-top: 1rem; font-size: 0.85rem; color: var(--ivory); }
+    .card .arrow .g { display: inline-block; transition: transform 0.2s var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) {
+      .card:hover { background: var(--raise); border-color: rgba(244, 241, 234, 0.30); transform: translateY(-2px); }
+      .card:hover .arrow .g { transform: translate(2px, -2px); }
+    }
+    .card:active { transform: scale(0.994); }
+    .feature { padding: 1.5rem 1.5rem; }
+    .feature h2 { font-size: 1.5rem; margin-top: 0.5rem; }
+    .feature p { font-size: 0.92rem; }
+
+    footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line-soft); font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--bone); }
+
+    .anim:not(.card) { transition: opacity 0.55s var(--ease-out) var(--d, 0ms), translate 0.55s var(--ease-out) var(--d, 0ms); }
+    @starting-style { .anim { opacity: 0; translate: 0 12px; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card, .anim:not(.card) { transition: none; }
+      @starting-style { .anim { opacity: 1; translate: 0 0; } }
+    }
+
+    @media (max-width: 620px) {
+      .rest { grid-template-columns: 1fr; }
+      .theme-head { align-items: flex-start; flex-direction: column; gap: 0.5rem; }
+      .theme-count { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">LUMAS · Internal · <a href="../">All previews</a></p>
+      <h1>Experiments</h1>
+      <p class="lede">The back catalogue: concepts built and never published, grouped by what they were trying to do. One tile per idea. Everything here is a prototype, not a proposal.</p>
+      <nav class="index" id="index" aria-label="Themes"></nav>
+    </header>
+
+    <div id="themes"></div>
+
+    <footer>LUMAS · experiments · unlisted · <a href="../onsite-alignment/">Onsite alignment</a></footer>
+  </div>
+
+  <script>
+    /* ---------------------------------------------------------------
+       THEMES — what the idea was trying to do, not when it was built.
+       To add an idea: drop its folder in beside this file and add one
+       entry to `projects` with the matching `t` id.
+    --------------------------------------------------------------- */
+    const themes = [
+      { id: "t-experience", kicker: "Interaction concepts",  name: "Art experiences",        short: "Experiences" },
+      { id: "t-discovery",  kicker: "Ways into the catalogue", name: "Discovery & browsing", short: "Discovery" },
+      { id: "t-collector",  kicker: "After the first purchase", name: "Collector relationship", short: "Collector" },
+      { id: "t-editorial",  kicker: "Acquisition surfaces",  name: "Editorial & landing pages", short: "Editorial" },
+      { id: "t-commerce",   kicker: "Shop surfaces",         name: "Commerce surfaces",      short: "Commerce" },
+    ];
+
+    const projects = [
+      // ── Art experiences ────────────────────────────────────────
+      { t: "t-experience", feature: true, title: "SEEN", href: "seen/", desc: "A gamified art-discovery build on the premise that the visitor already has a collector's eye and only needs it shown to them. The passepartout is the recurring motif: works are revealed through a moving frame, a canvas colour-sampling REVEAL step reads the palette straight off the artwork, and the chapters are carried by Isabelle Menin and Sebastian Hug. No-fail throughout, nothing is scored against you." },
+      { t: "t-experience", feature: true, title: "Die lange Nacht", href: "die-lange-nacht/", desc: "Inspired Nr. 45, the print magazine rebuilt as a navigable darkness. Eight constellations across one night, laid out in a CSS 3D depth world you move through rather than scroll down. German." },
+      { t: "t-experience", title: "The Living Artwork", href: "living-artwork/", desc: "One work, approached rather than viewed. Scroll or pinch to come closer, and the piece keeps resolving as you do." },
+      { t: "t-experience", title: "Passage", href: "passage/", desc: "The collection with no categories and one road. A single ordered route through the catalogue instead of a grid, filters, or a taxonomy to learn." },
+      { t: "t-experience", title: "First Light", href: "first-light/", desc: "Reveal-and-tilt proof of concept on a single Chiron Duong work. The first of the four self-contained interaction POCs, each built on a different artist and a different gesture." },
+      { t: "t-experience", title: "The Wall", href: "the-wall/", desc: "An immersive single-room gallery on Kevin Krautgartner, walked rather than browsed." },
+      { t: "t-experience", title: "Kaleidoscope", href: "kaleidoscope/", desc: "A canvas mirror that turns one Isabelle Menin work into a symmetry you steer with the pointer." },
+      { t: "t-experience", title: "The After-Hours Job", href: "after-hours-job/", desc: "The gallery is closed, the cameras are dozing, and the back door never quite locked. A playable exhibition framed as a night-time break-in, where looking closely is the mechanic." },
+      { t: "t-experience", title: "Ways of Seeing", href: "ways-of-seeing/", desc: "A guided journey through a handful of works, each introduced by the way it asks to be looked at." },
+      { t: "t-experience", title: "The Confessor", href: "the-confessor/", desc: "A typed entry point: say what you actually want, in your own words, and the collection answers. The precursor to the mood-led Feel flow." },
+      { t: "t-experience", title: "Choose an atmosphere", href: "mood-entrance/", desc: "The mood door. Pick an atmosphere first and it shapes how the works are shown, opening into the Feel walk behind it." },
+
+      // ── Discovery & browsing ───────────────────────────────────
+      { t: "t-discovery", feature: true, title: "Edition register", href: "edition-register/", desc: "The public record of every limited edition LUMAS has published: edition size, authentication mark, process, and its place in the ledger. Archive-first, in the spirit of a catalogue raisonné rather than a live scarcity ticker. Built from the full edition dump, so it is browsable at catalogue scale." },
+      { t: "t-discovery", title: "Browse by colour", href: "browse-by-colour/", desc: "A PLP ordered as one continuous colour field, ivory down through ink and then into full colour, instead of by category or date." },
+      { t: "t-discovery", title: "The Issue, new releases", href: "the-issue/", desc: "New editions delivered as a dated magazine issue with a masthead, a cover work and specimen spreads. Config-driven, so each issue is data rather than a rebuild. German." },
+      { t: "t-discovery", title: "Transform your spaces", href: "transform-your-spaces/", desc: "The inspiration-to-ArtFinder landing page: real bestsellers shown in real room renders, with before and after sliders that put the edition on the visitor's own kind of wall. Four locales." },
+      { t: "t-discovery", title: "Running index", href: "running-index/", desc: "A V2 treatment of Entdecken as a continuously running index rather than a set of tiles." },
+
+      // ── Collector relationship ─────────────────────────────────
+      { t: "t-collector", feature: true, title: "The Invitation", href: "the-invitation/", desc: "The commission idea from the collector's side: an artist they already own is opening new works this year, and they are invited first. Built on an anonymised but real online B2C collection, names replaced, buying history intact." },
+      { t: "t-collector", title: "Concierge reactivation desk", href: "concierge-desk/", desc: "The internal desk view for reactivating dormant collectors: what they own, what has happened since, and what is worth saying. Anonymised real collections, placeholder names." },
+      { t: "t-collector", title: "Atelier member collection", href: "atelier-membership/", desc: "A membership framing of the ongoing relationship, presented as the member's own collection rather than a tier or a perk sheet." },
+      { t: "t-collector", title: "Live with it first", href: "live-with-it-first/", desc: "Returns confidence turned into an offer rather than a policy footnote: hang it, live with it, decide after. Shown on Isabelle Menin, Midnight 01." },
+      { t: "t-collector", title: "The Last Signature", href: "last-signature/", desc: "The masters whose hands are complete. What authenticates an edition when the artist will sign nothing new, written as completeness rather than loss." },
+
+      // ── Editorial & landing pages ──────────────────────────────
+      { t: "t-editorial", feature: true, title: "200 years of photography", href: "two-hundred-years-essay/", desc: "The essay page: Niépce fixed the first permanent photograph two hundred years ago and it is still on a wall in Texas. The argument for images made to stay, and the editorial source the drift experiences were later cut from." },
+      { t: "t-editorial", title: "Buy art online with confidence", href: "buy-art-online/", desc: "The confidence landing page for first-time online buyers: curation, seeing a work on your own wall before committing, and what actually arrives." },
+      { t: "t-editorial", title: "Your first artwork", href: "first-artwork-guide/", desc: "A first-time buyer's guide that opens on the one qualification you already have, something stopped you and you could not forget it. No art degree required." },
+      { t: "t-editorial", title: "LUMAS × Bang & Olufsen", href: "bang-olufsen/", desc: "A partnership concept: LUMAS artist covers for the Beosound A9. A speaker that becomes a canvas, and a canvas you can hear." },
+
+      // ── Commerce surfaces ──────────────────────────────────────
+      { t: "t-commerce", feature: true, title: "PDP restructure v1", href: "pdp-restructure/", desc: "A full rebuild of the product page order of argument, on Mina&Sena by Marta Contreras Simó. Placeholder pricing, German." },
+      { t: "t-commerce", title: "Edition line lab", href: "pdp-edition-lab/", desc: "Six treatments for the limited-edition line on the PDP, answering whether “Limited Edition 100” reads as clearly as we assume. Live product, DE store." },
+      { t: "t-commerce", title: "Gallery availability", href: "gallery-availability/", desc: "A PDP redesign that puts local gallery availability into the buy box, on Ibis in Volo by Daria Petrilli." },
+      { t: "t-commerce", title: "Checkout, Shopify style", href: "checkout-shopify/", desc: "A draft of the checkout rebuilt to the Shopify pattern, for comparison against the current flow. German." },
+    ];
+
+    /* ---------------------------------------------------------------
+       Render
+    --------------------------------------------------------------- */
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const byTheme = (id) => projects.filter((p) => p.t === id);
+
+    let n = 0;
+    const delay = (i) => `--d:${Math.min(i, 7) * 45}ms`;
+    const ext = (href) => /^https?:\/\//i.test(href);
+    const openAttrs = (href) => (ext(href) ? ' target="_blank" rel="noopener"' : "");
+    const card = (p, i = 0) => {
+      n += 1;
+      return `
+        <a class="card anim${p.feature ? " feature" : ""}" href="${p.href}" style="${delay(i)}"${openAttrs(p.href)}>
+          <span class="num">${String(n).padStart(2, "0")}</span>
+          <h2>${esc(p.title)}</h2>
+          ${p.desc ? `<p>${esc(p.desc)}</p>` : ""}
+          <span class="arrow">Open <span class="g">&#8599;</span></span>
+        </a>`;
+    };
+
+    document.getElementById("index").innerHTML = themes.map((t) => `
+      <a href="#${t.id}">
+        <span class="d">${esc(t.short)}</span>
+        <span class="c">${byTheme(t.id).length}</span>
+      </a>`).join("");
+
+    document.getElementById("themes").innerHTML = themes.map((t) => {
+      const items = byTheme(t.id);
+      const features = items.filter((p) => p.feature);
+      const full = items.filter((p) => !p.feature);
+      let body = features.length ? `<div class="rest">${features.map((p, i) => card(p, i)).join("")}</div>` : "";
+      if (full.length) body += `<div class="rest">${full.map((p, i) => card(p, i)).join("")}</div>`;
+      const label = items.length === 1 ? "1 idea" : `${items.length} ideas`;
+      return `
+        <section class="theme" id="${t.id}">
+          <div class="theme-head">
+            <div>
+              <p class="theme-kicker anim" style="--d:0ms">${esc(t.kicker)}</p>
+              <h2 class="theme-name anim" style="--d:60ms">${esc(t.name)}</h2>
+            </div>
+            <span class="theme-count anim" style="--d:120ms">${label}</span>
+          </div>
+          ${body}
+        </section>`;
+    }).join("");
+  </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>LUMAS · The Wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Cormorant:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --charcoal-900:#1C1A18; --ivory-100:#F4EDE2; --bone-100:#E2D8CC;
+    --ease-out:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--charcoal-900); color:var(--ivory-100);
+    font-family:"Archivo",system-ui,sans-serif; overflow:hidden; touch-action:none;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .stage{position:fixed; inset:0; overflow:hidden; isolation:isolate}
+
+  /* gallery spotlight */
+  .glow{position:absolute; inset:0; z-index:0;
+    background:radial-gradient(58% 64% at 50% 48%, #38332D 0%, #262220 42%, #131210 82%);
+    opacity:0; transition:opacity 1400ms var(--ease-out)}
+  .ready .glow{opacity:1}
+
+  /* top: wordmark + series */
+  .top{position:absolute; top:clamp(22px,4vh,46px); left:0; right:0; z-index:3; text-align:center;
+    opacity:0; transform:translateY(-8px); transition:opacity 1000ms var(--ease-out) 120ms, transform 1000ms var(--ease-out) 120ms}
+  .ready .top{opacity:1; transform:none}
+  .wordmark{font-size:clamp(13px,1.5vw,16px); letter-spacing:.44em; text-indent:.44em}
+  .series{margin-top:10px; font-family:"Cormorant",Georgia,serif; font-style:italic; font-size:clamp(14px,1.6vw,18px);
+    color:rgba(244,237,226,.62); letter-spacing:.01em}
+
+  /* the rail + track */
+  .rail{position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); z-index:1; overflow:visible}
+  .track{display:flex; align-items:center; will-change:transform}
+  .work{flex:0 0 auto; position:relative; will-change:transform, opacity}
+  .frame{position:absolute; inset:0; overflow:hidden; border:0.5px solid rgba(244,237,226,.5);
+    background:#191613; transition:box-shadow 600ms var(--ease-out)}
+  .art{position:absolute; inset:0; background:center/cover no-repeat #191613}
+  .work.focused .frame{box-shadow:0 26px 70px -22px rgba(6,4,3,.92), 0 6px 18px -8px rgba(6,4,3,.6)}
+
+  /* entry (staggered fade) + depth falloff are driven in JS render() */
+  .work{opacity:0}
+
+  /* bottom: caption + progress + hint */
+  .bottom{position:absolute; left:0; right:0; bottom:clamp(26px,5.5vh,60px); z-index:3; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:clamp(12px,2vh,20px);
+    opacity:0; transition:opacity 1000ms var(--ease-out) 500ms}
+  .ready .bottom{opacity:1}
+  .caption{min-height:3.2em}
+  .title{font-family:"Cormorant",Georgia,serif; font-size:clamp(22px,2.5vw,30px); line-height:1.1;
+    transition:opacity 300ms var(--ease-out)}
+  .edition{margin-top:8px; font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    color:rgba(244,237,226,.55); transition:opacity 300ms var(--ease-out)}
+  .progress{position:relative; width:min(280px,52vw); height:1px; background:rgba(244,237,226,.18)}
+  .progress .fill{position:absolute; top:-1px; height:3px; background:rgba(244,237,226,.85);
+    width:34px; border-radius:2px; transform:translateX(0)}
+  .hint{font-family:"Cormorant",Georgia,serif; font-style:italic; font-size:13px; color:rgba(244,237,226,.42);
+    transition:opacity 700ms var(--ease-out)}
+  .hint.gone{opacity:0}
+
+  /* prev / next */
+  .nav{position:absolute; top:50%; transform:translateY(-50%); z-index:4; appearance:none; background:none; border:0;
+    cursor:pointer; color:rgba(244,237,226,.34); padding:16px; transition:color 220ms var(--ease-out);
+    opacity:0}
+  .ready .nav{opacity:1; transition:opacity 900ms var(--ease-out) 700ms, color 220ms var(--ease-out)}
+  .nav:hover{color:rgba(244,237,226,.9)} .nav:focus-visible{outline:none; color:rgba(244,237,226,.9)}
+  .nav.prev{left:clamp(8px,2.5vw,30px)} .nav.next{right:clamp(8px,2.5vw,30px)}
+  .nav svg{display:block;width:26px;height:26px}
+
+  @media (prefers-reduced-motion:reduce){
+    .glow,.top,.bottom,.nav{transition:opacity 500ms ease}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="glow"></div>
+
+    <div class="top">
+      <div class="wordmark">LUMAS</div>
+      <div class="series">Kevin Krautgartner · Salt Shapes</div>
+    </div>
+
+    <button class="nav prev" id="prev" type="button" aria-label="Previous work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4 L7 12 L15 20"/></svg>
+    </button>
+    <button class="nav next" id="next" type="button" aria-label="Next work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L17 12 L9 20"/></svg>
+    </button>
+
+    <div class="rail" id="rail"><div class="track" id="track"></div></div>
+
+    <div class="bottom">
+      <div class="caption">
+        <div class="title" id="title">Salt Shapes I</div>
+        <div class="edition" id="edition">Kevin Krautgartner · Limited edition</div>
+      </div>
+      <div class="progress"><div class="fill" id="fill"></div></div>
+      <div class="hint" id="hint">Drag, scroll or use arrows to walk the wall</div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+  const stage=$('stage'), track=$('track'), titleEl=$('title'), editionEl=$('edition'), fill=$('fill'), hint=$('hint');
+
+  const ARTIST='Kevin Krautgartner';
+  const WORKS=[
+    {n:'I',code:'kkr19'},{n:'II',code:'kkr22'},{n:'IV',code:'kkr28'},{n:'VI',code:'kkr34'},
+    {n:'VIII',code:'kkr48'},{n:'X',code:'kkr54'},{n:'XII',code:'kkr78'},{n:'XIV',code:'kkr75'}
+  ];
+  const url = c => `https://img.lumas.com/showimg_${c}_xl.jpg`;
+  const N = WORKS.length;
+
+  /* build frames */
+  const works = WORKS.map((w,i)=>{
+    const el=document.createElement('div'); el.className='work';
+    const f=document.createElement('div'); f.className='frame';
+    const a=document.createElement('div'); a.className='art'; a.style.backgroundImage=`url("${url(w.code)}")`;
+    f.appendChild(a); el.appendChild(f); track.appendChild(el);
+    new Image().src=url(w.code);
+    return el;
+  });
+
+  /* layout (recomputed on resize) */
+  let frameW, frameH, gap, slotW, centerX;
+  function layout(){
+    frameH = Math.min(window.innerHeight*0.58, 540);
+    frameW = Math.round(frameH*0.75);
+    gap = Math.round(frameW*0.18);
+    slotW = frameW + gap;
+    centerX = window.innerWidth/2;
+    track.style.gap = gap+'px';
+    works.forEach(el=>{ el.style.width=frameW+'px'; el.style.height=frameH+'px'; });
+  }
+  const workCenter = i => i*slotW + frameW/2;
+
+  /* motion state */
+  let pos=0, posTarget=0, current=0, dragging=false, snapT=null, looping=false;
+  const minPos=()=>workCenter(0), maxPos=()=>workCenter(N-1);
+  const clampPos = p => Math.max(minPos(), Math.min(maxPos(), p));
+
+  let entryStart=0; const ENTRY_DUR=900;
+  const eo = t => 1-Math.pow(1-t,3);
+  function render(){
+    const now = performance.now();
+    track.style.transform = `translateX(${(centerX - pos).toFixed(2)}px)`;
+    for(let i=0;i<N;i++){
+      const d = workCenter(i) - pos;
+      const k = Math.min(Math.abs(d)/(slotW*1.35), 1);
+      const s = 1 - k*0.2;
+      const e = (reduce || !entryStart) ? 1 : eo(Math.max(0,Math.min(1,(now-entryStart-(120+i*70))/ENTRY_DUR)));
+      works[i].style.transform = `scale(${s.toFixed(4)})`;
+      works[i].style.opacity = ((1 - k*0.62)*e).toFixed(3);
+    }
+    const span = (maxPos()-minPos())||1;
+    const t = (pos-minPos())/span;
+    const trackW = (fill.parentElement.clientWidth - fill.offsetWidth);
+    fill.style.transform = `translateX(${(t*trackW).toFixed(1)}px)`;
+  }
+  function entering(){ return !reduce && entryStart && performance.now() < entryStart + (120+(N-1)*70) + ENTRY_DUR; }
+  function loop(){
+    pos += (posTarget-pos) * (reduce?1:0.12);
+    render();
+    if(dragging || entering() || (!reduce && Math.abs(posTarget-pos)>0.4)){ requestAnimationFrame(loop); }
+    else { pos=posTarget; render(); looping=false; }
+  }
+  function kick(){ if(!looping){ looping=true; requestAnimationFrame(loop); } }
+
+  function setCurrent(i){
+    i=Math.max(0,Math.min(N-1,i));
+    if(i===current) return;
+    current=i;
+    works.forEach((el,j)=>el.classList.toggle('focused', j===i));
+    const w=WORKS[i];
+    titleEl.style.opacity='0'; editionEl.style.opacity='0';
+    setTimeout(()=>{ titleEl.textContent='Salt Shapes '+w.n; editionEl.textContent=ARTIST+' · Limited edition';
+      titleEl.style.opacity='1'; editionEl.style.opacity='1'; }, reduce?0:300);
+  }
+  function scheduleSnap(){
+    clearTimeout(snapT);
+    snapT=setTimeout(()=>{
+      const i=Math.round((posTarget - frameW/2)/slotW);
+      posTarget=clampPos(workCenter(Math.max(0,Math.min(N-1,i))));
+      setCurrent(Math.max(0,Math.min(N-1,i))); kick();
+    }, 130);
+  }
+  function go(i){ i=Math.max(0,Math.min(N-1,i)); posTarget=clampPos(workCenter(i)); setCurrent(i); dismissHint(); kick(); }
+
+  let hintGone=false;
+  function dismissHint(){ if(hintGone)return; hintGone=true; hint.classList.add('gone'); }
+
+  /* input: wheel */
+  stage.addEventListener('wheel', e=>{
+    e.preventDefault();
+    const d = Math.abs(e.deltaX)>Math.abs(e.deltaY)? e.deltaX : e.deltaY;
+    posTarget = clampPos(posTarget + d*0.9); dismissHint(); scheduleSnap(); kick();
+  }, {passive:false});
+
+  /* input: drag */
+  let sx=0, sp=0, lastX=0, lastT=0, vel=0;
+  stage.addEventListener('pointerdown', e=>{
+    dragging=true; sx=e.clientX; sp=posTarget; lastX=e.clientX; lastT=performance.now(); vel=0;
+    clearTimeout(snapT); stage.setPointerCapture?.(e.pointerId); dismissHint(); kick();
+  });
+  stage.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    posTarget = clampPos(sp - (e.clientX - sx));
+    const now=performance.now(), dt=now-lastT;
+    if(dt>0){ vel = (e.clientX-lastX)/dt; lastX=e.clientX; lastT=now; }
+  });
+  function endDrag(){
+    if(!dragging) return; dragging=false;
+    posTarget = clampPos(posTarget - vel*120);   /* fling */
+    scheduleSnap(); kick();
+  }
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+
+  /* input: keys + chevrons */
+  addEventListener('keydown', e=>{ if(e.key==='ArrowRight') go(current+1); else if(e.key==='ArrowLeft') go(current-1); });
+  $('next').addEventListener('click', ()=>go(current+1));
+  $('prev').addEventListener('click', ()=>go(current-1));
+
+  addEventListener('resize', ()=>{ layout(); posTarget=clampPos(workCenter(current)); pos=posTarget; render(); });
+
+  /* boot */
+  layout();
+  pos=posTarget=workCenter(0);
+  works[0].classList.add('focused');
+  entryStart = performance.now();
+  render();
+  requestAnimationFrame(()=>{ stage.classList.add('ready'); kick(); });
+})();
+</script>
+</body>
+</html>

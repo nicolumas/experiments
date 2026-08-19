@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDP edition line lab · LUMAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c1a18;
+    --ink-2: #5a5752;
+    --ink-3: #908c87;
+    --hairline: #e6e3de;
+    --hairline-strong: #c7c3be;
+    --mock-ink: #111111;
+    --mock-grey: #666666;
+    --mock-line: #e8e8e8;
+    --mock-box: #f6f6f6;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #ffffff;
+    color: var(--ink);
+    font-family: 'Archivo', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  .wrap { padding: 0 clamp(20px, 4vw, 64px); }
+
+  /* ---------- compact header band ---------- */
+  header {
+    border-bottom: 1px solid var(--hairline);
+    padding-top: 28px; padding-bottom: 24px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap;
+  }
+  header h1 {
+    font-family: 'UtileDisplay', 'Archivo', sans-serif;
+    font-weight: 300; font-size: clamp(26px, 3vw, 36px); line-height: 1.05; letter-spacing: 0;
+  }
+  header .intro { max-width: 520px; font-size: 13px; color: var(--ink-2); }
+  header .intro strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- stage ---------- */
+  .stage {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 470px);
+    gap: clamp(32px, 5vw, 80px);
+    padding-top: 36px; padding-bottom: 56px;
+    align-items: start;
+  }
+  .art { position: sticky; top: 36px; }
+  .art img { width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+  .art figcaption { margin-top: 12px; font-size: 11px; color: var(--ink-3); text-align: center; }
+
+  .picker { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .picker button {
+    border: 1px solid var(--hairline-strong); border-radius: 2px;
+    padding: 7px 13px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: background 160ms var(--ease), color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .picker button:hover { border-color: var(--ink); }
+  .picker button[aria-pressed="true"] { background: var(--ink); color: #f4ede2; border-color: var(--ink); }
+
+  /* ---------- buybox mock ---------- */
+  .buybox { color: var(--mock-ink); }
+  .buybox .artist { font-weight: 800; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.08; letter-spacing: -0.01em; }
+  .buybox .worktitle { font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 10px; }
+  .buybox .aboutlink { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 600; font-style: italic; color: var(--mock-ink); text-decoration: underline; text-underline-offset: 2px; }
+  .buybox .pricerow { margin-top: 18px; font-size: 15px; font-weight: 700; }
+  .buybox .pricerow span { font-weight: 400; font-size: 13px; color: var(--mock-grey); }
+
+  #edition-slot, #demand-slot { transition: opacity 160ms var(--ease), transform 160ms var(--ease); }
+  .swapping { opacity: 0; transform: translateY(4px); }
+
+  /* edition treatments */
+  .ed { margin-top: 16px; font-size: 14px; }
+  .ed .lead { font-weight: 700; }
+  .ed .sep { color: var(--mock-grey); padding: 0 2px; }
+
+  .ed-margin { margin-top: 18px; border-top: 1px solid var(--mock-line); padding-top: 12px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .ed-margin .no { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ed-margin .no i { display: inline-block; width: 26px; border-bottom: 1px solid var(--mock-ink); transform: translateY(-2px); }
+  .ed-margin .sig { display: flex; align-items: center; gap: 8px; font-size: 13px; font-style: italic; color: var(--mock-ink); text-align: right; }
+  .ed-margin .sig svg { width: 15px; height: 14px; flex: none; }
+
+  .ed-chips { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .ed-chips span {
+    border: 1px solid var(--hairline-strong); border-radius: 2px; padding: 6px 10px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mock-ink);
+  }
+
+  .ed-term { border-bottom: 1px dotted var(--mock-grey); cursor: help; }
+  .ed-popwrap { position: relative; display: block; }
+  .ed-pop {
+    position: absolute; left: 0; top: calc(100% + 10px); z-index: 5;
+    width: min(340px, 88vw); background: #ffffff; border: 1px solid var(--hairline-strong);
+    padding: 18px 20px; box-shadow: 0 8px 32px rgba(28, 26, 24, 0.10);
+    opacity: 0; transform: scale(0.97); transform-origin: top left; pointer-events: none;
+    transition: opacity 160ms var(--ease), transform 160ms var(--ease);
+  }
+  .ed-pop.open, .ed-pop.static { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .ed-pop.static { position: static; margin-top: 12px; box-shadow: none; }
+  .ed-pop h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .ed-pop p { font-size: 13px; color: #333333; margin-bottom: 7px; }
+  .ed-pop .mech { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--mock-line); font-size: 12px; color: var(--mock-grey); margin-bottom: 0; }
+
+  .ed-track { margin-top: 12px; }
+  .ed-track .bar { height: 2px; background: var(--mock-line); position: relative; }
+  .ed-track .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 78%; background: var(--mock-ink); }
+  .ed-track .cnt { margin-top: 8px; font-size: 12px; color: var(--mock-grey); }
+  .ed-track .cnt b { color: var(--mock-ink); font-weight: 700; }
+
+  /* demand module */
+  .demand { margin-top: 22px; background: var(--mock-box); padding: 16px 18px 20px; }
+  .demand .dh { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  .demand .dh small { display: block; font-size: 12px; font-weight: 400; color: var(--mock-grey); margin-top: 4px; }
+  .demand .scale { display: flex; gap: 10px; }
+  .demand .seg { flex: 1; position: relative; }
+  .demand .seg .rule { height: 1px; background: #999999; margin-bottom: 8px; }
+  .demand .seg .lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mock-ink); }
+  .demand .seg .dia {
+    position: absolute; left: 0; top: -5px; width: 9px; height: 9px;
+    background: #ffffff; border: 1.5px solid var(--mock-ink); transform: rotate(45deg);
+  }
+  .demand .dfoot { margin-top: 14px; font-size: 12px; color: var(--mock-grey); }
+
+  /* ---------- rationale panel ---------- */
+  .rationale { margin-top: 28px; border-top: 1px solid var(--hairline); padding-top: 18px; }
+  .rationale .rname { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+  .rationale dl { display: grid; grid-template-columns: 84px 1fr; row-gap: 7px; column-gap: 14px; font-size: 13px; }
+  .rationale dt { color: var(--ink-3); }
+  .rationale dd { color: var(--ink); }
+
+  /* ---------- comparison ---------- */
+  .compare { border-top: 1px solid var(--hairline); padding-top: 48px; padding-bottom: 72px; }
+  .compare > .wrap-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+  .compare h2 { font-family: 'UtileDisplay', 'Archivo', sans-serif; font-weight: 300; font-size: clamp(22px, 2.4vw, 28px); }
+  .compare .hint { font-size: 13px; color: var(--ink-2); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 48px; }
+  .card { border: 1px solid var(--hairline); }
+  .card .mock { padding: 26px 28px 30px; border-bottom: 1px solid var(--hairline); min-height: 150px; }
+  .card .mock .artist { font-weight: 800; font-size: 19px; }
+  .card .mock .worktitle { font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 5px; }
+  .card .meta { padding: 18px 28px 24px; }
+  .card .meta h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .card .meta h3 span { color: var(--ink-3); font-weight: 400; }
+  .card .meta p { font-size: 13px; color: var(--ink-2); }
+  .card .tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .card .tags span { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); border: 1px solid var(--hairline-strong); border-radius: 2px; padding: 4px 8px; }
+
+  /* ---------- footnotes ---------- */
+  .notes { border-top: 1px solid var(--hairline); padding-top: 36px; padding-bottom: 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+  .notes h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  .notes li { font-size: 13px; color: var(--ink-2); margin: 0 0 10px 18px; }
+  .notes li b { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; padding-top: 24px; }
+    .art { position: static; }
+    .art img { max-width: min(72vw, 420px); }
+    .picker { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+    .picker button { white-space: nowrap; }
+    .grid { grid-template-columns: 1fr; }
+    .notes { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <h1>Edition line lab</h1>
+  <p class="intro"><strong>Six treatments for the limited-edition USP on the PDP.</strong> Marc's question: is "Limited Edition 100" clear enough? Live product: Suni, Marta Contreras Simó, DE store. Click through the variants in place.</p>
+</header>
+
+<section class="stage wrap">
+  <figure class="art">
+    <img src="https://img.lumas.com/showimg_mcs10_full.jpg" alt="Suni by Marta Contreras Simó" width="620" height="620">
+    <figcaption>Suni · 3 sizes from 699 € · live DE catalogue</figcaption>
+  </figure>
+
+  <div>
+    <div class="picker" role="tablist" aria-label="Edition line variants">
+      <button data-v="live" aria-pressed="true">Live today</button>
+      <button data-v="a" aria-pressed="false">A · Klartext</button>
+      <button data-v="b" aria-pressed="false">B · Signaturrand</button>
+      <button data-v="c" aria-pressed="false">C · Fakten-Chips</button>
+      <button data-v="d" aria-pressed="false">D · Editionsleiter</button>
+      <button data-v="e" aria-pressed="false">E · Erklär-Layer</button>
+      <button data-v="f" aria-pressed="false">F · Verbleibend</button>
+    </div>
+
+    <div class="buybox">
+      <div class="artist">Marta Contreras Simó</div>
+      <div class="worktitle">Suni</div>
+      <div id="edition-slot"></div>
+      <a class="aboutlink" href="#" onclick="return false">Über dieses Werk</a>
+      <div class="pricerow">Ab 699 € <span>· 3 Größen</span></div>
+      <div id="demand-slot"></div>
+    </div>
+
+    <div class="rationale">
+      <div class="rname" id="r-name"></div>
+      <dl>
+        <dt>Fixes</dt><dd id="r-fixes"></dd>
+        <dt>Trade-off</dt><dd id="r-tradeoff"></dd>
+        <dt>Ship path</dt><dd id="r-ship"></dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="compare wrap">
+  <div class="wrap-head">
+    <h2>All six, side by side</h2>
+    <p class="hint">A is the floor. A + E is the recommended pairing. D works with any of them.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="notes wrap">
+  <div>
+    <h3>Before anything ships</h3>
+    <ul>
+      <li><b>"Handsigniert" stays data-driven.</b> The signature label comes from the edition_signature attribute (handsigniert, signiert, Nachlassstempel). Never hardcode it.</li>
+      <li><b>No live counters until the copies data is verified.</b> Variant F depends on copiesLeft, the field the social-proof bar already reads. Sample value on this page is illustrative.</li>
+      <li><b>All strings are glossary keys</b>, one per locale (EN, DE, FR). Check FR and EN line lengths before freeze.</li>
+      <li><b>Price mechanic copy</b> (Startpreis steigt) must be suppressed for products flagged no_price_increase, which includes Suni today.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Why the current line fails</h3>
+    <ul>
+      <li>"100" has no unit. It reads as a model number, not as "only 100 exemplars exist".</li>
+      <li>English label inside an otherwise German spec block.</li>
+      <li>The Startpreis bar below depends on understanding the edition mechanic, and nothing on the page explains it.</li>
+      <li>The backend already sends "Auflage: 100" with a label. The frontend strips it before render, so this is cheap to fix.</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  var SIG = '<svg viewBox="0 0 24 22" aria-hidden="true"><path fill="currentColor" d="M1.5 22v-2.8L20.8.2l.4-.1a1.3 1.3 0 0 1 .7 0c.2 0 .3 0 .4.2l1.4 1.4.2.3.1.4v.4l-.3.3L4.4 22h-3Zm1-1h1.4L19.7 5.6 19 5l-.7-.7L2.5 19.6V21ZM19 4.9l-.7-.7 1.4 1.4L19 5ZM14.7 22c1.6 0 3-.4 4.4-1 1.3-.8 2-1.8 2-3 0-.9-.3-1.6-1-2.3a6.4 6.4 0 0 0-2.6-1.5l-.8.8c1 .3 1.9.7 2.5 1.2.6.5.8 1.1.8 1.7 0 1-.5 1.6-1.5 2.2-1 .6-2.3.9-3.8.9l-.4.1-.1.4.1.4.4.1ZM2.4 13.2l.7-.7c-.7-.3-1.2-.6-1.6-1-.3-.3-.5-.6-.5-1 0-.5.3-1 .9-1.4.6-.4 1.6-1 3.1-1.6C7 6.7 8.2 6 8.8 5.5c.7-.7 1-1.4 1-2.1 0-1-.5-1.8-1.4-2.4-.9-.7-2-1-3.5-1C4 0 3.2.2 2.4.5S1 1.2.7 1.6L.6 2c0 .1 0 .2.2.3l.3.1.4-.1c.4-.5.9-.8 1.5-1 .5-.2 1.2-.3 1.9-.3a5 5 0 0 1 2.8.7c.7.5 1 1 1 1.7 0 .5-.2 1-.8 1.4-.6.5-1.6 1-3.3 1.7-1.7.8-3 1.5-3.6 2-.7.6-1 1.3-1 2 0 .5.2 1 .6 1.5.4.4 1 .9 1.8 1.3Z"/></svg>';
+
+  var DEMAND_DEFAULT =
+    '<div class="demand">' +
+      '<div class="dh">Neuheit - profitiere vom günstigen Startpreis.</div>' +
+      '<div class="scale">' +
+        '<div class="seg"><div class="rule"></div><div class="dia"></div><div class="lbl">Geheimtipp</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Beliebt</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Stark nachgefragt</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Letzte Exemplare</div></div>' +
+      '</div>' +
+    '</div>';
+
+  var DEMAND_D =
+    '<div class="demand">' +
+      '<div class="dh">Neuheit. Sichere dir eines von 100 Exemplaren zum Startpreis.<small>Der Startpreis steigt, während sich die Auflage füllt.</small></div>' +
+      '<div class="scale">' +
+        '<div class="seg"><div class="rule"></div><div class="dia"></div><div class="lbl">Geheimtipp</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Beliebt</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Stark nachgefragt</div></div>' +
+        '<div class="seg"><div class="rule"></div><div class="lbl">Letzte Exemplare</div></div>' +
+      '</div>' +
+    '</div>';
+
+  var POP_BODY =
+    '<h4>Was heißt limitierte Edition?</h4>' +
+    '<p>Suni erscheint in einer festen Auflage: 100 Exemplare weltweit.</p>' +
+    '<p>Jedes Exemplar ist von der Künstlerin handsigniert.</p>' +
+    '<p>Ist die Auflage vergeben, wird das Werk nicht wieder aufgelegt.</p>' +
+    '<p class="mech">Der Startpreis steigt, während sich die Auflage füllt.</p>';
+
+  var V = {
+    live: {
+      name: 'Live today · the problem',
+      ed: '<div class="ed"><span class="lead">Limited Edition 100</span><span class="sep"> • </span>Signiert</div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'Nothing. Shown for comparison.',
+      tradeoff: '"100" has no unit, the label is English on a German PDP, and the USP goes unexplained.',
+      ship: 'n/a'
+    },
+    a: {
+      name: 'A · Klartext',
+      ed: '<div class="ed"><span class="lead">Limitiert auf 100 Exemplare</span><span class="sep"> • </span>Handsigniert</div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'The ambiguity, in one word. Same footprint, same position, German throughout.',
+      tradeoff: 'Still a spec line. Explains what, not why it matters.',
+      ship: 'Glossary key with %count% placeholder + the small builder / Edition.vue cleanup. Effort S.'
+    },
+    b: {
+      name: 'B · Signaturrand',
+      ed: '<div class="ed-margin"><span class="no">Exemplar <i></i>&thinsp;/&thinsp;100</span><span class="sig">' + SIG + 'handsigniert von Marta Contreras Simó</span></div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'Borrows the pencil margin of a physical print. Numbering becomes tangible: your exemplar gets one of 100 numbers.',
+      tradeoff: 'Taller than a plain line. The blank number must never promise a specific one.',
+      ship: 'New Twig partial + SCSS, artist name from data. Effort S-M.'
+    },
+    c: {
+      name: 'C · Fakten-Chips',
+      ed: '<div class="ed-chips"><span>Auflage 100</span><span>Handsigniert</span><span>Nummeriert</span></div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'Scannable on mobile, each collectible fact gets equal weight. Chips flex with per-product data.',
+      tradeoff: 'Loses the sentence. Three labels read cooler, less curatorial.',
+      ship: 'Partial + chip styles, chips rendered from attributes. Effort S-M.'
+    },
+    d: {
+      name: 'D · Editionsleiter',
+      ed: '<div class="ed"><span class="lead">Limitiert auf 100 Exemplare</span><span class="sep"> • </span>Handsigniert</div>',
+      demand: DEMAND_D,
+      fixes: 'Connects the Startpreis bar to the edition mechanic. The meter stops being vague popularity and becomes the reason to act.',
+      tradeoff: 'Price-rise copy must be suppressed where no_price_increase is set.',
+      ship: 'Copy change + module header restyle on the existing social-proof bar. Effort M.'
+    },
+    e: {
+      name: 'E · Erklär-Layer',
+      ed: '<div class="ed ed-popwrap"><span class="lead"><span class="ed-term" role="button" tabindex="0" aria-expanded="false">Limitierte Edition</span> · 100 Exemplare</span><span class="sep"> • </span>Handsigniert<div class="ed-pop">' + POP_BODY + '</div></div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'Educates first-time buyers at the exact moment of doubt, without permanent noise for collectors who already know. Try it: tap the dotted term.',
+      tradeoff: 'Hidden by default, so it only helps those curious enough to tap.',
+      ship: 'Small popover component + three glossary strings. Effort M. Pairs with A.'
+    },
+    f: {
+      name: 'F · Verbleibende Exemplare',
+      ed: '<div class="ed"><span class="lead">Limitiert auf 100 Exemplare</span><span class="sep"> • </span>Handsigniert' +
+          '<div class="ed-track"><div class="bar"><i></i></div><div class="cnt"><b>78 von 100</b> Exemplaren vergeben (Beispielwert)</div></div></div>',
+      demand: DEMAND_DEFAULT,
+      fixes: 'Makes depletion concrete. Strongest scarcity signal of the six.',
+      tradeoff: 'Only honest with verified copies data. Gated: show below a threshold, fall back to A above it.',
+      ship: 'Needs the copiesLeft feed the social-proof bar reads, plus a data-quality check. Effort M, data-gated.'
+    }
+  };
+
+  var edSlot = document.getElementById('edition-slot');
+  var demandSlot = document.getElementById('demand-slot');
+  var current = 'live';
+
+  function render(key, instant) {
+    var v = V[key];
+    var apply = function () {
+      edSlot.innerHTML = v.ed;
+      demandSlot.innerHTML = v.demand;
+      document.getElementById('r-name').textContent = v.name;
+      document.getElementById('r-fixes').textContent = v.fixes;
+      document.getElementById('r-tradeoff').textContent = v.tradeoff;
+      document.getElementById('r-ship').textContent = v.ship;
+      edSlot.classList.remove('swapping');
+      demandSlot.classList.remove('swapping');
+    };
+    if (instant) { apply(); return; }
+    edSlot.classList.add('swapping');
+    demandSlot.classList.add('swapping');
+    setTimeout(apply, 160);
+  }
+
+  document.querySelectorAll('.picker button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.dataset.v === current) return;
+      current = btn.dataset.v;
+      document.querySelectorAll('.picker button').forEach(function (b) {
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+      render(current, false);
+    });
+  });
+
+  // popover toggle for variant E (event delegation, survives re-render)
+  document.addEventListener('click', function (e) {
+    var term = e.target.closest('.ed-term');
+    var pop = document.querySelector('#edition-slot .ed-pop');
+    if (term && pop) {
+      var open = pop.classList.toggle('open');
+      term.setAttribute('aria-expanded', open ? 'true' : 'false');
+    } else if (pop && !e.target.closest('.ed-pop')) {
+      pop.classList.remove('open');
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var term = e.target.closest && e.target.closest('.ed-term');
+      if (term) { e.preventDefault(); term.click(); }
+    }
+  });
+
+  render('live', true);
+
+  // ---------- static comparison grid ----------
+  var order = ['live', 'a', 'b', 'c', 'd', 'e', 'f'];
+  var grid = document.getElementById('grid');
+  order.forEach(function (key) {
+    if (key === 'live') return;
+    var v = V[key];
+    var ed = v.ed.replace('ed-pop"', 'ed-pop static"');
+    var extra = (key === 'd') ? v.demand : '';
+    var tags = {
+      a: ['Aufwand S', 'Nur Glossar + FE-Cleanup'],
+      b: ['Aufwand S-M', 'Print-Konvention'],
+      c: ['Aufwand S-M', 'Mobile-stark'],
+      d: ['Aufwand M', 'Bestehendes Modul'],
+      e: ['Aufwand M', 'Paart mit A'],
+      f: ['Aufwand M', 'Daten-abhängig']
+    }[key].map(function (t) { return '<span>' + t + '</span>'; }).join('');
+    grid.insertAdjacentHTML('beforeend',
+      '<div class="card">' +
+        '<div class="mock"><div class="artist">Marta Contreras Simó</div><div class="worktitle">Suni</div>' + ed + extra + '</div>' +
+        '<div class="meta"><h3>' + v.name.replace(' · ', ' <span>·</span> ') + '</h3><p>' + v.fixes + ' ' + v.tradeoff + '</p><div class="tags">' + tags + '</div></div>' +
+      '</div>');
+  });
+</script>
+</body>
+</html>

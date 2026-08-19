@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Living Artwork — LUMAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+<style>
+:root{
+  --color-text-primary:#1C1A18; --color-text-secondary:#5A5752; --color-text-tertiary:#908C87;
+  --color-text-disabled:#C7C3BE; --color-text-inverse:#F4EDE2;
+  --color-surface-page:#FAF6F1; --color-surface-card:#FFFFFF; --color-surface-raised:#F7F1E9;
+  --color-surface-sunken:#F4EDE2; --color-surface-inverse:#1C1A18; --color-surface-muted:#F0EBE3;
+  --color-border-default:#E2D8CC; --color-border-subtle:#EAE2D8; --color-border-strong:#C7C3BE;
+  --color-border-focus:#1C1A18; --color-border-inverse:#F4EDE2;
+  --ink-inv-eyebrow:rgba(244,237,226,.55); --ink-inv-body:rgba(244,237,226,.75); --ink-inv-head:#F4EDE2;
+  --sp-1:.4rem; --sp-2:.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem; --sp-6:2.4rem;
+  --sp-8:3.2rem; --sp-10:4rem; --sp-12:4.8rem; --sp-16:6.4rem; --sp-20:8rem; --sp-24:9.6rem;
+  --radius-xs:2px; --radius-sm:4px;
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.55);
+  --display:'UtileDisplay',Georgia,serif; --sans:'Archivo',-apple-system,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+html{font-size:62.5%} /* 1rem = 10px */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--color-surface-inverse);color:var(--color-text-inverse);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* ---- shared utility type ---- */
+.eyebrow{
+  font-family:var(--sans);font-weight:700;font-size:1.1rem;line-height:1.5;
+  letter-spacing:.198rem;text-transform:uppercase;color:var(--ink-inv-eyebrow);
+}
+
+/* ---- app shell: full-viewport stage, chrome floats over it ---- */
+.app{
+  position:fixed;inset:0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  height:100dvh;
+}
+
+/* ---- top bar ---- */
+.bar{display:flex;align-items:center;gap:var(--sp-5);background:transparent;z-index:2;pointer-events:none;}
+.bar > *{pointer-events:auto;}
+.bar-top{padding:var(--sp-6) var(--sp-8);justify-content:space-between;}
+.wordmark{display:inline-flex;align-items:center;}
+.wordmark svg{height:15px;width:auto;display:block;fill:var(--color-text-inverse);}
+
+/* ---- stage: artwork as hero ---- */
+.stage{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--sp-6);
+  padding:var(--sp-4) var(--sp-8);
+  min-height:0; /* allow grid row to constrain */
+  touch-action:pan-y;
+}
+.art{
+  display:flex;align-items:center;justify-content:center;
+  max-width:min(58vw,640px);
+  max-height:100%;
+  flex:0 1 auto;
+}
+.art img{
+  display:block;
+  max-width:100%;
+  max-height:62vh;
+  width:auto;height:auto;
+  object-fit:contain;
+  box-shadow:var(--shadow-frame);
+  opacity:0;
+  transition:opacity .45s var(--ease);
+  will-change:transform;
+  transform:translate(0,0) scale(1);
+  transform-origin:center center;
+  touch-action:none;
+  -webkit-user-select:none;user-select:none;-webkit-user-drag:none;
+}
+.art img.loaded{opacity:1;}
+.art img.swapping{opacity:0;}
+/* release momentum: ease the transform only when settling, never mid-drag */
+.art img.settling{transition:opacity .45s var(--ease),transform .42s var(--ease);}
+
+/* cursor affordances driven by zoom state */
+.art{cursor:zoom-in;}
+.art.zoomed{cursor:grab;touch-action:none;}
+.art.zoomed.panning{cursor:grabbing;}
+
+/* shimmer placeholder behind the art while it loads (from index.html family) */
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.art.loading{
+  width:min(42vw,440px);aspect-ratio:4/5;border-radius:var(--radius-xs);
+  background-image:linear-gradient(100deg,#26231f 25%,#322e29 50%,#26231f 75%);
+  background-size:200% 100%;animation:shimmer 1.4s linear infinite;
+}
+
+.zoom-hint{
+  font-family:var(--sans);font-weight:400;font-size:1.1rem;line-height:1.5;
+  letter-spacing:.03em;color:var(--ink-inv-eyebrow);text-align:center;
+  animation:hintPulse 3.6s var(--ease) infinite;
+  transition:opacity .4s var(--ease);
+}
+@keyframes hintPulse{0%,100%{opacity:.35}50%{opacity:.85}}
+.zoom-hint.gone{opacity:0;pointer-events:none;animation:none;}
+
+/* thin loading bar while the high-res _full swaps in (doesn't disturb the visible art) */
+.art.fetching::after{
+  content:"";position:absolute;left:50%;bottom:-1.2rem;transform:translateX(-50%);
+  width:6.4rem;height:2px;border-radius:1px;overflow:hidden;
+  background:rgba(244,237,226,.14);
+}
+.art.fetching::before{
+  content:"";position:absolute;left:50%;bottom:-1.2rem;transform:translateX(-50%);
+  width:6.4rem;height:2px;border-radius:1px;z-index:1;
+  background:linear-gradient(90deg,transparent,var(--ink-inv-body),transparent);
+  background-size:50% 100%;background-repeat:no-repeat;
+  animation:fetchSlide 1.05s var(--ease) infinite;
+}
+@keyframes fetchSlide{from{background-position:-60% 0}to{background-position:160% 0}}
+
+/* ---- zoom controls: small inverse ghost cluster, only when relevant ---- */
+.zoom-controls{
+  position:fixed;right:var(--sp-8);top:50%;transform:translateY(-50%);z-index:4;
+  display:flex;flex-direction:column;gap:var(--sp-2);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .28s var(--ease),visibility .28s var(--ease);
+}
+.zoom-controls.on{opacity:1;visibility:visible;pointer-events:auto;}
+.zoom-btn{
+  width:4rem;height:4rem;display:flex;align-items:center;justify-content:center;
+  background:rgba(28,26,24,.55);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid var(--color-border-inverse);border-radius:var(--radius-xs);
+  color:var(--color-text-inverse);cursor:pointer;
+  font-family:var(--sans);font-weight:400;font-size:2rem;line-height:1;
+  transition:background-color .18s var(--ease),transform .12s var(--ease),opacity .18s var(--ease);
+}
+.zoom-btn svg{display:block;width:1.6rem;height:1.6rem;stroke:currentColor;stroke-width:1.5;fill:none;}
+.zoom-btn:active{transform:scale(0.94);}
+.zoom-btn:disabled{opacity:.35;cursor:default;}
+.zoom-btn:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:2px;}
+@media (hover:hover){.zoom-btn:not(:disabled):hover{background:rgba(28,26,24,.78);}}
+
+/* reset: a quiet centered affordance shown only while zoomed */
+.zoom-reset{
+  position:absolute;left:50%;bottom:-1.2rem;transform:translateX(-50%) translateY(.4rem);
+  display:inline-flex;align-items:center;gap:var(--sp-2);
+  background:transparent;border:0;cursor:pointer;padding:var(--sp-1) var(--sp-2);
+  font-family:var(--sans);font-weight:700;font-size:1rem;line-height:1.5;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-inv-eyebrow);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s var(--ease),transform .22s var(--ease),color .18s var(--ease);
+}
+.zoom-reset.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+@media (hover:hover){.zoom-reset:hover{color:var(--ink-inv-body);}}
+.zoom-reset:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:2px;border-radius:var(--radius-xs);}
+
+/* ---- bottom bar: meta + actions ---- */
+.bar-bottom{
+  padding:var(--sp-6) var(--sp-8) var(--sp-8);
+  align-items:flex-end;justify-content:space-between;gap:var(--sp-8);
+  flex-wrap:wrap;
+}
+.meta{min-width:0;}
+.art-title{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(2.6rem,4vw,3.4rem);line-height:1.08;letter-spacing:-0.01em;
+  color:var(--ink-inv-head);text-wrap:balance;
+  transition:opacity .3s var(--ease);
+}
+.art-sub{
+  font-family:var(--sans);font-weight:400;font-size:1.4rem;line-height:1.5;
+  color:var(--ink-inv-body);margin-top:var(--sp-2);
+  transition:opacity .3s var(--ease);
+}
+.meta.swapping .art-title,.meta.swapping .art-sub{opacity:0;}
+
+.actions{display:flex;align-items:center;gap:var(--sp-3);flex-shrink:0;}
+
+/* ---- V2 inverse buttons ---- */
+.btn{
+  font-family:var(--sans);font-weight:700;font-size:1.3rem;line-height:1;
+  letter-spacing:.182rem;text-transform:uppercase;
+  padding:1.6rem 2.8rem;border:1px solid transparent;border-radius:var(--radius-xs);
+  cursor:pointer;white-space:nowrap;
+  transition:background-color .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .12s var(--ease);
+}
+.btn:active{transform:scale(0.97);}
+.btn:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:3px;}
+.btn-primary-inv{background:var(--color-text-inverse);color:var(--color-text-primary);}
+.btn-secondary-inv{background:transparent;color:var(--color-text-inverse);border-color:var(--color-border-inverse);}
+@media (hover:hover){
+  .btn-primary-inv:hover{background:#fff;}
+  .btn-secondary-inv:hover{background:var(--color-text-inverse);color:var(--color-text-primary);}
+}
+
+/* ---- filmstrip ---- */
+.filmstrip{
+  position:fixed;left:0;right:0;bottom:0;z-index:3;
+  display:flex;justify-content:center;gap:var(--sp-3);
+  padding:var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom));
+  pointer-events:none;
+}
+.thumb{
+  pointer-events:auto;
+  position:relative;
+  width:44px;height:54px;padding:0;border:0;cursor:pointer;background:transparent;
+  border-radius:var(--radius-xs);overflow:hidden;
+  opacity:.5;
+  transition:opacity .25s var(--ease),transform .25s var(--ease);
+}
+.thumb::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background-image:linear-gradient(100deg,#26231f 25%,#322e29 50%,#26231f 75%);
+  background-size:200% 100%;animation:shimmer 1.4s linear infinite;
+}
+.thumb.loaded::before{display:none;}
+.thumb img{
+  position:relative;display:block;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .4s var(--ease);background:var(--color-surface-inverse);
+}
+.thumb.loaded img{opacity:1;}
+.thumb.active{opacity:1;}
+/* functional accent marker for the current work: a thin underline */
+.thumb .marker{
+  position:absolute;left:50%;bottom:-7px;height:2px;width:0;
+  background:var(--accent,var(--color-text-inverse));border-radius:1px;
+  transform:translateX(-50%);
+  transition:width .3s var(--ease);
+}
+.thumb.active .marker{width:100%;}
+@media (hover:hover){
+  .thumb:not(.active):hover{opacity:.8;transform:translateY(-2px);}
+}
+.thumb:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:2px;opacity:1;}
+
+/* =========================================================================
+   YOUR WALL — a quiet, persistent strip lower-left of the stage. Kept works
+   live here as small matted thumbs; the centred filmstrip stays untouched.
+   The strip sits above the filmstrip's lane and is left-anchored so the two
+   never fight for the same horizontal space.
+   ========================================================================= */
+.yourwall{
+  position:fixed;z-index:3;
+  /* sit in the left gutter, lifted clear of the bottom bar's meta + the
+     centred filmstrip lane below it; the bar reserves ~14rem of bottom band */
+  left:var(--sp-8);bottom:calc(14rem + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;gap:var(--sp-2);
+  max-width:min(38vw,34rem);
+  pointer-events:none;
+}
+.yourwall > *{pointer-events:auto;}
+.yourwall-head{display:flex;align-items:baseline;gap:var(--sp-3);}
+.yourwall-eyebrow{
+  font-family:var(--sans);font-weight:700;font-size:1rem;line-height:1.5;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-inv-eyebrow);
+}
+.yourwall-count{
+  font-family:var(--sans);font-weight:400;font-size:1rem;line-height:1.5;
+  letter-spacing:.04em;color:var(--ink-inv-eyebrow);
+}
+.yourwall-rail{display:flex;align-items:flex-end;gap:var(--sp-3);min-height:60px;}
+.yourwall-empty{
+  font-family:var(--sans);font-weight:300;font-size:1.2rem;line-height:1.5;
+  color:var(--ink-inv-eyebrow);align-self:center;
+}
+.yourwall-foreshadow{
+  font-family:var(--sans);font-weight:400;font-size:1rem;line-height:1.5;
+  letter-spacing:.033em;color:var(--color-text-tertiary);
+}
+
+/* a kept piece: a small matted artwork that reads as hung, not as a chip */
+.kept{
+  position:relative;flex:0 0 auto;
+  padding:0;border:0;background:transparent;cursor:pointer;
+  opacity:0;transform:translateY(.6rem) scale(.96);
+  transition:opacity .4s var(--ease),transform .4s var(--ease);
+}
+.kept.in{opacity:1;transform:translateY(0) scale(1);}
+.kept-mat{
+  display:block;padding:4px;background:var(--color-text-inverse);
+  box-shadow:var(--shadow-frame);
+}
+.kept img{
+  display:block;width:auto;height:48px;max-width:64px;object-fit:cover;
+  background:var(--color-surface-inverse);
+}
+.kept .marker{
+  position:absolute;left:4px;right:4px;bottom:0;height:2px;
+  background:var(--accent,var(--color-text-inverse));
+  transform:scaleX(0);transform-origin:center;
+  transition:transform .3s var(--ease);
+}
+.kept.active .marker{transform:scaleX(1);}
+@media (hover:hover){.kept:hover{transform:translateY(-2px) scale(1.01);}}
+.kept:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:3px;}
+
+/* un-keep affordance: a small × that surfaces on hover/focus of the piece */
+.kept-remove{
+  position:absolute;top:-7px;right:-7px;z-index:1;
+  width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--color-border-inverse);border-radius:50%;
+  background:var(--color-surface-inverse);color:var(--color-text-inverse);
+  cursor:pointer;padding:0;
+  opacity:0;transform:scale(.8);pointer-events:none;
+  transition:opacity .18s var(--ease),transform .18s var(--ease),background-color .18s var(--ease);
+}
+.kept-remove svg{display:block;width:1rem;height:1rem;stroke:currentColor;stroke-width:1.8;fill:none;}
+.kept:hover .kept-remove,.kept:focus-within .kept-remove,.kept-remove:focus-visible{
+  opacity:1;transform:scale(1);pointer-events:auto;
+}
+.kept-remove:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:2px;}
+@media (hover:hover){.kept-remove:hover{background:#000;}}
+
+/* a soft, non-functional "Make it real" whisper on the strip */
+.yourwall-makereal{
+  font-family:var(--sans);font-weight:700;font-size:1rem;line-height:1.5;
+  letter-spacing:.18em;text-transform:uppercase;
+  background:transparent;border:0;padding:0 0 2px;cursor:pointer;
+  color:var(--ink-inv-eyebrow);border-bottom:1px solid transparent;
+  align-self:flex-start;
+  transition:color .18s var(--ease),border-color .18s var(--ease);
+}
+.yourwall-makereal[hidden]{display:none;}
+@media (hover:hover){.yourwall-makereal:hover{color:var(--ink-inv-body);border-bottom-color:var(--color-border-inverse);}}
+.yourwall-makereal:focus-visible{outline:2px solid var(--color-border-inverse);outline-offset:3px;}
+.yourwall-makereal .whisper{
+  font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--ink-inv-eyebrow);
+  margin-left:var(--sp-2);opacity:0;transition:opacity .3s var(--ease);
+}
+.yourwall-makereal.whispered .whisper{opacity:1;}
+
+/* =========================================================================
+   KEEP CEREMONY — a brief inverse overlay using the V2 EditorialStrip
+   composition. The line "This one's yours." lands once, the work's title
+   beneath it, then the overlay fades as the piece flies into Your Wall.
+   ========================================================================= */
+.ceremony{
+  position:fixed;inset:0;z-index:30;
+  background:var(--color-surface-inverse);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:var(--sp-12) var(--sp-8);
+  gap:var(--sp-6);
+  opacity:0;visibility:hidden;pointer-events:none;
+}
+.ceremony.on{opacity:1;visibility:visible;}
+.ceremony-col{max-width:76rem;display:flex;flex-direction:column;gap:var(--sp-6);align-items:center;}
+.ceremony-eyebrow{
+  font-family:var(--sans);font-weight:700;font-size:1.1rem;line-height:1.5;
+  letter-spacing:.198rem;text-transform:uppercase;color:var(--ink-inv-eyebrow);
+  opacity:0;transform:translateY(.6rem);
+}
+.ceremony-line{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(3.6rem,7vw,5.6rem);line-height:1.15;letter-spacing:-0.084rem;
+  color:var(--ink-inv-head);text-wrap:balance;
+  opacity:0;transform:translateY(.8rem);
+}
+.ceremony-title{
+  font-family:var(--sans);font-weight:300;font-size:1.8rem;line-height:1.6;
+  color:var(--ink-inv-body);text-wrap:balance;
+  opacity:0;transform:translateY(.8rem);
+}
+.ceremony.on .ceremony-eyebrow{
+  animation:ceremonyRise .55s var(--ease) forwards;
+}
+.ceremony.on .ceremony-line{
+  animation:ceremonyRise .62s var(--ease) .06s forwards;
+}
+.ceremony.on .ceremony-title{
+  animation:ceremonyRise .62s var(--ease) .13s forwards;
+}
+@keyframes ceremonyRise{to{opacity:1;transform:translateY(0);}}
+
+/* the artwork copy that physically flies from stage-centre into Your Wall */
+.flyer{
+  position:fixed;z-index:40;
+  background:var(--color-text-inverse);padding:4px;
+  box-shadow:var(--shadow-frame);
+  pointer-events:none;
+  transition:transform .9s var(--ease),opacity .9s var(--ease);
+  will-change:transform,opacity;
+}
+.flyer img{display:block;width:100%;height:100%;object-fit:contain;background:var(--color-surface-inverse);}
+
+@media (prefers-reduced-motion:reduce){
+  .ceremony,.kept,.flyer{transition:opacity .2s var(--ease)!important;}
+  .ceremony.on .ceremony-eyebrow,.ceremony.on .ceremony-line,.ceremony.on .ceremony-title{
+    animation:none;opacity:1;transform:none;
+  }
+  .kept{transform:none;}
+  .kept.in{transform:none;}
+  .kept .marker,.kept-remove{transition:none;}
+}
+
+/* =========================================================================
+   WALL OVERLAY — "See it on your wall". A light ivory surface laid over the
+   dark stage. Scene area (preset room or uploaded photo) + control rail.
+   ========================================================================= */
+.wall{
+  position:fixed;inset:0;z-index:20;
+  background:var(--color-surface-page);color:var(--color-text-primary);
+  display:grid;grid-template-columns:1fr 34rem;
+  opacity:0;visibility:hidden;
+  transition:opacity .34s var(--ease),visibility .34s var(--ease);
+}
+.wall.on{opacity:1;visibility:visible;}
+.wall.on .wall-scene-stage,.wall.on .wall-rail{
+  transform:translateY(0);opacity:1;
+}
+
+/* scene column */
+.wall-scene{
+  position:relative;min-width:0;min-height:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:var(--sp-10);
+  overflow:hidden;
+}
+.wall-scene-stage{
+  position:relative;
+  max-width:100%;max-height:100%;
+  border-radius:var(--radius-xs);overflow:hidden;
+  background:var(--color-surface-sunken);
+  transform:translateY(1.2rem);opacity:0;
+  transition:transform .5s var(--ease) .04s,opacity .5s var(--ease) .04s;
+}
+@media (prefers-reduced-motion:reduce){
+  .wall-scene-stage,.wall-rail{transition:opacity .3s var(--ease)!important;transform:none!important;}
+}
+.wall-scene-bg{display:block;width:100%;height:100%;object-fit:cover;background:var(--color-surface-muted);}
+
+/* composited artwork sitting on the wall: thin ivory mat + the gallery shadow */
+.wall-piece{
+  position:absolute;
+  padding:1.4%;                      /* the mat, proportional to the piece */
+  background:var(--color-text-inverse);
+  box-shadow:var(--shadow-frame);
+  transition:width .42s var(--ease),height .42s var(--ease),left .42s var(--ease),top .42s var(--ease);
+  -webkit-user-select:none;user-select:none;
+}
+.wall-piece.dragging{transition:none;cursor:grabbing;}
+.wall-piece img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;}
+/* in uploaded mode the piece is grabbable and shows a resize handle */
+.wall-piece.placeable{cursor:grab;touch-action:none;}
+.wall-handle{
+  position:absolute;right:-1px;bottom:-1px;width:2.8rem;height:2.8rem;
+  display:none;align-items:flex-end;justify-content:flex-end;
+  cursor:nwse-resize;touch-action:none;
+}
+.wall-piece.placeable .wall-handle{display:flex;}
+.wall-handle::after{
+  content:"";width:1.6rem;height:1.6rem;margin:.4rem;
+  border-right:2px solid var(--color-text-inverse);
+  border-bottom:2px solid var(--color-text-inverse);
+  box-shadow:0 1px 3px rgba(28,26,24,.4);
+}
+
+.wall-caption{
+  position:absolute;left:var(--sp-10);bottom:var(--sp-6);
+  font-family:var(--sans);font-weight:400;font-size:1.1rem;line-height:1.5;
+  letter-spacing:.033em;color:var(--color-text-tertiary);
+  pointer-events:none;
+}
+
+/* close button: secondary/standard on the light surface */
+.wall-close{
+  position:absolute;top:var(--sp-6);right:calc(34rem + var(--sp-6));z-index:2;
+  width:4.4rem;height:4.4rem;display:flex;align-items:center;justify-content:center;
+  background:var(--color-surface-card);border:1px solid var(--color-border-default);
+  border-radius:var(--radius-xs);color:var(--color-text-primary);cursor:pointer;
+  transition:background-color .18s var(--ease),border-color .18s var(--ease),transform .12s var(--ease);
+}
+.wall-close svg{display:block;width:1.8rem;height:1.8rem;stroke:currentColor;stroke-width:1.5;fill:none;}
+.wall-close:active{transform:scale(0.94);}
+.wall-close:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:2px;}
+@media (hover:hover){.wall-close:hover{background:var(--color-surface-raised);border-color:var(--color-border-strong);}}
+
+/* control rail */
+.wall-rail{
+  background:var(--color-surface-card);
+  border-left:1px solid var(--color-border-subtle);
+  padding:var(--sp-12) var(--sp-8) var(--sp-8);
+  display:flex;flex-direction:column;gap:var(--sp-8);
+  overflow-y:auto;
+  transform:translateY(1.2rem);opacity:0;
+  transition:transform .5s var(--ease) .1s,opacity .5s var(--ease) .1s;
+}
+.wall-rail-head .eyebrow{color:var(--color-text-tertiary);}
+.wall-rail-title{
+  font-family:var(--display);font-weight:400;font-size:2.4rem;line-height:1.25;
+  color:var(--color-text-primary);margin-top:var(--sp-2);text-wrap:balance;
+}
+.wall-group{display:flex;flex-direction:column;gap:var(--sp-3);}
+.wall-label{
+  font-family:var(--sans);font-weight:700;font-size:1.1rem;line-height:1.5;
+  letter-spacing:.198rem;text-transform:uppercase;color:var(--color-text-tertiary);
+}
+
+/* room toggle — quiet segmented chips */
+.wall-rooms{display:flex;flex-wrap:wrap;gap:var(--sp-2);}
+.room-chip{
+  font-family:var(--sans);font-weight:700;font-size:1.2rem;line-height:1;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:.8rem 1.6rem;border:1px solid var(--color-border-strong);
+  border-radius:var(--radius-xs);background:transparent;color:var(--color-text-secondary);
+  cursor:pointer;white-space:nowrap;
+  transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .12s var(--ease);
+}
+.room-chip:active{transform:scale(0.97);}
+.room-chip:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:2px;}
+@media (hover:hover){.room-chip:not(.active):hover{background:var(--color-surface-raised);border-color:var(--color-border-strong);}}
+.room-chip.active{background:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse);}
+
+/* size chips — the spec'd V2 chip */
+.wall-sizes{display:flex;flex-wrap:wrap;gap:var(--sp-2);}
+.size-chip{
+  font-family:var(--sans);font-weight:700;font-size:1.2rem;line-height:1;
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:.8rem 1.6rem;border:1px solid var(--color-border-strong);
+  border-radius:var(--radius-xs);background:transparent;color:var(--color-text-secondary);
+  cursor:pointer;white-space:nowrap;
+  transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .12s var(--ease);
+}
+.size-chip:active{transform:scale(0.97);}
+.size-chip:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:2px;}
+@media (hover:hover){.size-chip:not(.active):hover{background:var(--color-surface-raised);border-color:var(--color-border-strong);}}
+.size-chip.active{background:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse);}
+
+.wall-dim{
+  font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;
+  color:var(--color-text-primary);
+}
+.wall-dim small{
+  display:block;margin-top:var(--sp-1);
+  font-family:var(--sans);font-weight:400;font-size:1.2rem;color:var(--color-text-secondary);
+  letter-spacing:0;
+}
+
+/* upload — V2 input */
+.wall-upload{display:flex;flex-direction:column;gap:var(--sp-2);}
+.wall-file{
+  display:flex;align-items:center;gap:var(--sp-3);
+  border:1px solid var(--color-border-default);border-radius:var(--radius-sm);
+  background:var(--color-surface-card);padding:1.4rem;cursor:pointer;
+  transition:border-color .18s var(--ease),background-color .18s var(--ease);
+}
+.wall-file:focus-within{border:2px solid var(--color-border-focus);padding:calc(1.4rem - 1px);}
+@media (hover:hover){.wall-file:hover{background:var(--color-surface-raised);}}
+.wall-file input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+.wall-file svg{flex-shrink:0;width:1.8rem;height:1.8rem;stroke:var(--color-text-secondary);stroke-width:1.5;fill:none;}
+.wall-file-text{
+  font-family:var(--sans);font-weight:700;font-size:1.2rem;line-height:1.4;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-primary);
+}
+.wall-hint{
+  font-family:var(--sans);font-weight:400;font-size:1.1rem;line-height:1.5;
+  color:var(--color-text-tertiary);
+}
+.wall-hint.placeable-only{display:none;}
+.wall.is-uploaded .wall-hint.placeable-only{display:block;}
+
+.wall-spacer{flex:1;min-height:var(--sp-4);}
+
+/* ---- responsive: phone ---- */
+@media (max-width:900px){
+  .wall{grid-template-columns:1fr;grid-template-rows:1fr auto;}
+  .wall-scene{padding:var(--sp-5);}
+  .wall-rail{
+    border-left:0;border-top:1px solid var(--color-border-subtle);
+    padding:var(--sp-6) var(--sp-5) calc(var(--sp-6) + env(safe-area-inset-bottom));
+    gap:var(--sp-5);max-height:46vh;
+  }
+  .wall-rail-title{font-size:2rem;}
+  .wall-close{top:var(--sp-5);right:var(--sp-5);}
+  .wall-caption{left:var(--sp-5);bottom:var(--sp-4);}
+  .wall-spacer{display:none;}
+}
+
+/* ---- responsive: phone ---- */
+@media (max-width:640px){
+  .bar-top{padding:var(--sp-5) var(--sp-5);}
+  .stage{padding:var(--sp-3) var(--sp-5) var(--sp-2);gap:var(--sp-4);}
+  .art{max-width:84vw;}
+  .art img{max-height:48vh;}
+  .art.loading{width:min(64vw,300px);}
+  .bar-bottom{
+    flex-direction:column;align-items:stretch;gap:var(--sp-5);
+    padding:var(--sp-5) var(--sp-5) calc(var(--sp-8) + 60px);
+    text-align:left;
+  }
+  .actions{justify-content:stretch;}
+  .actions .btn{flex:1;text-align:center;padding:1.6rem 1.2rem;}
+  .zoom-controls{right:var(--sp-4);top:auto;bottom:calc(env(safe-area-inset-bottom) + 18rem);transform:none;}
+  .zoom-btn{width:4.4rem;height:4.4rem;}
+
+  /* on a phone the centred filmstrip owns the bottom; Your Wall tucks just
+     above it, full bleed and left-anchored, so the two stack without overlap */
+  .yourwall{
+    left:var(--sp-5);right:var(--sp-5);max-width:none;
+    bottom:calc(var(--sp-3) + 50px + env(safe-area-inset-bottom));
+    gap:var(--sp-1);
+  }
+  .yourwall-rail{min-height:48px;gap:var(--sp-2);}
+  .kept img{height:40px;max-width:52px;}
+  .yourwall-foreshadow{display:none;}
+  .ceremony-title{font-size:1.5rem;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .art img,.meta.swapping .art-title,.meta.swapping .art-sub,.art-title,.art-sub{transition:none;}
+  .art img.settling{transition:opacity .45s var(--ease);}
+  .zoom-hint{animation:none;opacity:.55;}
+  .art.loading,.thumb::before,.art.fetching::before{animation:none;}
+  .art.fetching::before{background:var(--ink-inv-body);}
+  .thumb .marker{transition:none;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar bar-top">
+    <span class="wordmark"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMAS"><g><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></g></svg></span>
+    <span class="eyebrow">The Living Artwork</span>
+  </header>
+
+  <main id="stage" class="stage" aria-live="polite">
+    <figure id="art" class="art loading">
+      <img id="artImg" alt="">
+      <button id="zoomReset" class="zoom-reset" type="button" aria-label="Reset zoom">Step back</button>
+    </figure>
+    <p id="zoomHint" class="zoom-hint">Scroll or pinch to come closer</p>
+  </main>
+
+  <div id="zoomControls" class="zoom-controls" role="group" aria-label="Zoom">
+    <button id="zoomIn" class="zoom-btn" type="button" aria-label="Zoom in">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="6" x2="12" y2="18"/><line x1="6" y1="12" x2="18" y2="12"/></svg>
+    </button>
+    <button id="zoomOut" class="zoom-btn" type="button" aria-label="Zoom out">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="12" x2="18" y2="12"/></svg>
+    </button>
+  </div>
+
+  <footer class="bar bar-bottom">
+    <div id="meta" class="meta">
+      <h1 id="title" class="art-title"></h1>
+      <p id="sub" class="art-sub"></p>
+    </div>
+    <nav class="actions" aria-label="Artwork actions">
+      <button id="wallBtn" class="btn btn-secondary-inv" type="button">See it on your wall</button>
+      <button id="keepBtn" class="btn btn-primary-inv" type="button">♡ Keep</button>
+    </nav>
+  </footer>
+</div>
+<nav id="filmstrip" class="filmstrip" aria-label="Choose an artwork"></nav>
+
+<!-- ===== Your wall — the kept pieces, persistent ===== -->
+<section id="yourwall" class="yourwall" aria-label="Your wall">
+  <div class="yourwall-head">
+    <span class="yourwall-eyebrow">Your wall</span>
+    <span id="yourwallCount" class="yourwall-count"></span>
+  </div>
+  <div id="yourwallRail" class="yourwall-rail" role="list">
+    <p id="yourwallEmpty" class="yourwall-empty">Keep a piece and it lives here.</p>
+  </div>
+  <button id="yourwallMakeReal" class="yourwall-makereal" type="button" hidden>
+    Make it real →<span class="whisper" aria-hidden="true">coming soon</span>
+  </button>
+  <p class="yourwall-foreshadow">The beginning of your Taste Portrait.</p>
+</section>
+
+<!-- ===== Keep ceremony ===== -->
+<div id="ceremony" class="ceremony" aria-hidden="true">
+  <div class="ceremony-col">
+    <p class="ceremony-eyebrow">Kept</p>
+    <p id="ceremonyLine" class="ceremony-line">This one's yours.</p>
+    <p id="ceremonyTitle" class="ceremony-title"></p>
+  </div>
+</div>
+
+<!-- ===== See it on your wall ===== -->
+<section id="wall" class="wall" role="dialog" aria-modal="true" aria-labelledby="wallTitle" aria-hidden="true">
+  <button id="wallClose" class="wall-close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+
+  <div class="wall-scene">
+    <div id="wallStage" class="wall-scene-stage">
+      <img id="wallBg" class="wall-scene-bg" alt="" decoding="async">
+      <figure id="wallPiece" class="wall-piece">
+        <img id="wallArt" alt="" decoding="async">
+        <span class="wall-handle" id="wallHandle" aria-hidden="true"></span>
+      </figure>
+    </div>
+    <p class="wall-caption">Scale is approximate.</p>
+  </div>
+
+  <aside class="wall-rail" aria-label="Wall preview controls">
+    <div class="wall-rail-head">
+      <p class="eyebrow">See it on your wall</p>
+      <p id="wallTitle" class="wall-rail-title"></p>
+    </div>
+
+    <div class="wall-group">
+      <span class="wall-label" id="wallRoomLabel">Room</span>
+      <div id="wallRooms" class="wall-rooms" role="radiogroup" aria-labelledby="wallRoomLabel"></div>
+    </div>
+
+    <div class="wall-group">
+      <span class="wall-label" id="wallSizeLabel">Size</span>
+      <div id="wallSizes" class="wall-sizes" role="radiogroup" aria-labelledby="wallSizeLabel"></div>
+      <p id="wallDim" class="wall-dim"></p>
+    </div>
+
+    <div class="wall-group wall-upload">
+      <span class="wall-label" id="wallUploadLabel">Your wall</span>
+      <label class="wall-file" for="wallFile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 20h16"/></svg>
+        <span class="wall-file-text">Upload a photo</span>
+        <input id="wallFile" type="file" accept="image/*" aria-labelledby="wallUploadLabel">
+      </label>
+      <p class="wall-hint placeable-only">Drag to place · pinch or drag the corner to size.</p>
+    </div>
+
+    <div class="wall-spacer"></div>
+  </aside>
+</section>
+
+<script>
+const WORKS = [
+  { code:'ime111', artist:'Isabelle Menin',  title:'From a Dream 04',
+    edition:'Limited Edition', editionSize:'Edition of 100',
+    sizes:[{label:'60 × 60 cm', w:60,h:60},{label:'90 × 90 cm', w:90,h:90},{label:'120 × 120 cm', w:120,h:120}],
+    accent:'#C24B6E', blurb:'A dream pressed into bloom — petals you can fall into.' },
+  { code:'gve07',  artist:'Gavin Evans',      title:'David Bowie',
+    edition:'Open Edition', editionSize:'Open Edition',
+    sizes:[{label:'40 × 40 cm', w:40,h:40},{label:'70 × 70 cm', w:70,h:70},{label:'100 × 100 cm', w:100,h:100}],
+    accent:'#8A8A8A', blurb:'The quiet before a word — Bowie, asking for silence.' },
+  { code:'rle403', artist:'Robert Lebeck',    title:'New York 1967',
+    edition:'Petites · Small Open Edition', editionSize:'Open Edition',
+    sizes:[{label:'30 × 20 cm', w:30,h:20},{label:'45 × 30 cm', w:45,h:30},{label:'60 × 40 cm', w:60,h:40}],
+    accent:'#B98A4B', blurb:'A golden afternoon on a branch over the lake — 1967, held still.' },
+  { code:'trn401', artist:'Jason Schmidt · Trunk Archive', title:'Love Me Forever, Yves Saint Laurent Atelier',
+    edition:'Petites · Small Open Edition', editionSize:'Open Edition',
+    sizes:[{label:'30 × 24 cm', w:30,h:24},{label:'45 × 36 cm', w:45,h:36},{label:'60 × 48 cm', w:60,h:48}],
+    accent:'#C9A24B', blurb:'Paris at dusk, the tower lit, one window still awake.' },
+  { code:'dpe400', artist:'Daria Petrilli',   title:'The Lady of the Ibis',
+    edition:'Petites · Small Open Edition', editionSize:'Open Edition',
+    sizes:[{label:'40 × 30 cm', w:40,h:30},{label:'60 × 45 cm', w:60,h:45},{label:'80 × 60 cm', w:80,h:60}],
+    accent:'#C7402F', blurb:'A still woman, her scarlet ibises on invisible threads.' },
+];
+const imgFull = c => `https://img.lumas.com/showimg_${c}_full.jpg`;
+const imgThumb = c => `https://img.lumas.com/showimg_${c}_desktop.jpg`;
+
+const state = { i:0, zoomed:false };
+
+const prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+const artFig = document.getElementById('art');
+const artImg = document.getElementById('artImg');
+const metaEl = document.getElementById('meta');
+const titleEl = document.getElementById('title');
+const subEl = document.getElementById('sub');
+const stripEl = document.getElementById('filmstrip');
+const zoomHint = document.getElementById('zoomHint');
+const zoomControls = document.getElementById('zoomControls');
+const zoomInBtn = document.getElementById('zoomIn');
+const zoomOutBtn = document.getElementById('zoomOut');
+const zoomResetBtn = document.getElementById('zoomReset');
+
+// build the filmstrip once
+const thumbs = WORKS.map((w, idx) => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'thumb';
+  btn.style.setProperty('--accent', w.accent);
+  btn.setAttribute('aria-label', `${w.title} by ${w.artist}`);
+
+  const img = document.createElement('img');
+  img.alt = '';
+  img.decoding = 'async';
+  // clear the shimmer on success OR error — a 403 thumb must not shimmer forever
+  const settle = () => { btn.classList.add('loaded'); };
+  img.addEventListener('load', settle, { once:true });
+  img.addEventListener('error', settle, { once:true });
+  img.src = imgThumb(w.code);
+
+  const marker = document.createElement('span');
+  marker.className = 'marker';
+
+  btn.append(img, marker);
+  btn.addEventListener('click', () => go(idx));
+  stripEl.appendChild(btn);
+  return btn;
+});
+
+function paintMeta() {
+  const w = WORKS[state.i];
+  titleEl.textContent = w.title;
+  subEl.textContent = `${w.artist} · ${w.editionSize}`;
+  artImg.alt = `${w.title} by ${w.artist}`;
+  thumbs.forEach((t, idx) => {
+    const on = idx === state.i;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-current', on ? 'true' : 'false');
+  });
+}
+
+// Reveal the stage image, whether it loaded or errored. A 403 on showimg must
+// never leave the figure stuck blank: on error we still drop the shimmer and
+// reveal whatever the <img> holds (the last good frame, or its alt).
+function revealStage() {
+  artFig.classList.remove('loading');
+  artImg.classList.remove('swapping');
+  artImg.classList.add('loaded');
+}
+// Bind a one-shot load+error pair to the stage <img> for a src swap.
+function onStageSettle(handler) {
+  const done = () => {
+    artImg.removeEventListener('load', done);
+    artImg.removeEventListener('error', done);
+    handler();
+  };
+  artImg.addEventListener('load', done);
+  artImg.addEventListener('error', done);
+}
+
+// initial render: load main image, reveal once ready (or on error)
+function render() {
+  const w = WORKS[state.i];
+  paintMeta();
+  onStageSettle(revealStage);
+  artImg.src = imgThumb(w.code);
+}
+
+let swapTimer = null;
+function go(n) {
+  const next = (n + WORKS.length) % WORKS.length;
+  if (next === state.i) return;
+  state.i = next;
+  const w = WORKS[state.i];
+
+  zoom.reset(true); // switching works always returns to 1x, drops _full
+
+  if (prefersReduced) {
+    artImg.classList.remove('loaded');
+    onStageSettle(() => artImg.classList.add('loaded'));
+    artImg.src = imgThumb(w.code);
+    paintMeta();
+    return;
+  }
+
+  // crossfade: fade out -> swap src -> fade in on load (or error)
+  clearTimeout(swapTimer);
+  artImg.classList.add('swapping');
+  metaEl.classList.add('swapping');
+
+  swapTimer = setTimeout(() => {
+    artImg.classList.remove('loaded');
+    onStageSettle(() => {
+      artImg.classList.remove('swapping');
+      artImg.classList.add('loaded');
+    });
+    artImg.src = imgThumb(w.code);
+    paintMeta();
+    metaEl.classList.remove('swapping');
+  }, 220);
+}
+
+/* =========================================================================
+   ZoomController — focal-point touch/trackpad/keyboard zoom over #art.
+   Physical feel: the point under the cursor stays put; pan is clamped so the
+   scaled image always covers the frame; release eases with a short ease-out;
+   pinch/pan/wheel all share one transform applied on a single rAF.
+   ========================================================================= */
+const zoom = (() => {
+  const z = { scale:1, tx:0, ty:0, max:2.8, fullLoaded:false };
+  let fullImg = null;
+
+  // Pointer/wheel events are already ~frame-throttled by the browser, so a
+  // synchronous transform write per event is smooth and never stalls on a
+  // hidden tab. No rAF coalescing needed.
+  function write() {
+    artImg.style.transform = `translate(${z.tx.toFixed(2)}px, ${z.ty.toFixed(2)}px) scale(${z.scale.toFixed(4)})`;
+  }
+
+  // keep the scaled image covering the frame: bound each axis to the overflow.
+  // offsetWidth/Height are the untransformed layout box (object-fit:contain),
+  // so they stay correct regardless of the current transform — no one-frame lag.
+  function clampPan() {
+    const baseW = artImg.offsetWidth, baseH = artImg.offsetHeight;
+    const maxX = Math.max(0, (baseW * z.scale - baseW) / 2);
+    const maxY = Math.max(0, (baseH * z.scale - baseH) / 2);
+    z.tx = clamp(z.tx, -maxX, maxX);
+    z.ty = clamp(z.ty, -maxY, maxY);
+  }
+
+  function setZoomed(on) {
+    if (state.zoomed === on) { syncControls(); return; }
+    state.zoomed = on;
+    artFig.classList.toggle('zoomed', on);
+    if (on && !zoomHint.classList.contains('gone')) zoomHint.classList.add('gone'); // permanent
+    syncControls();
+  }
+
+  // Touch devices have pinch (no keyboard), so the stage stays uncluttered:
+  // the +/- cluster only appears once zoomed. Pointer-fine devices (mouse,
+  // trackpad) get the accessible cluster up front, since pinch isn't available.
+  const finePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  let lastAriaLabel = '';
+  function syncControls() {
+    const z1 = z.scale <= 1.01;
+    zoomControls.classList.toggle('on', finePointer || !z1);
+    zoomInBtn.disabled = z.scale >= z.max - 0.001;
+    zoomOutBtn.disabled = z1;
+    zoomResetBtn.classList.toggle('on', !z1);
+    // #artImg lives inside #stage[aria-live=polite]; only touch its aria-label
+    // when the announced string actually changes, so a pinch (many zoomAt
+    // frames at the same rounded scale) doesn't flood screen-reader output.
+    const label = z1
+      ? `${WORKS[state.i].title} by ${WORKS[state.i].artist}`
+      : `${WORKS[state.i].title}, zoomed ${z.scale.toFixed(1)}×`;
+    if (label !== lastAriaLabel) {
+      artImg.setAttribute('aria-label', label);
+      lastAriaLabel = label;
+    }
+  }
+
+  // ---- lazy high-res swap on first real zoom intent ----
+  function ensureFull() {
+    if (z.fullLoaded) return;
+    z.fullLoaded = true; // guard against repeat triggers; reset() clears it
+    const code = WORKS[state.i].code;
+    artFig.classList.add('fetching');
+    const probe = new Image();
+    probe.decoding = 'async';
+    probe.onload = () => {
+      // only swap if we're still on the same work and still zoomed-in
+      if (WORKS[state.i].code !== code) { artFig.classList.remove('fetching'); return; }
+      artImg.src = probe.src;          // already in cache -> no flicker
+      artFig.classList.remove('fetching');
+    };
+    probe.onerror = () => { artFig.classList.remove('fetching'); }; // keep _desktop
+    probe.src = imgFull(code);
+    fullImg = probe;
+  }
+
+  // ---- core focal-point zoom (spec formula) ----
+  function zoomAt(clientX, clientY, factor) {
+    artImg.classList.remove('settling'); // mid-gesture: track 1:1, no transition
+    const r = artImg.getBoundingClientRect();
+    const ox = clientX - (r.left + r.width / 2);
+    const oy = clientY - (r.top + r.height / 2);
+    const next = clamp(z.scale * factor, 1, z.max);
+    const k = next / z.scale;
+    z.tx = ox - (ox - z.tx) * k;
+    z.ty = oy - (oy - z.ty) * k;
+    z.scale = next;
+    clampPan();
+    write();
+    if (z.scale > 1.01) ensureFull();
+    setZoomed(z.scale > 1.01);
+  }
+
+  // settle with a short ease-out (snap instantly under reduced motion)
+  function settle() {
+    if (prefersReduced) { write(); return; }
+    artImg.classList.add('settling');
+    write();
+    clearTimeout(settle._t);
+    settle._t = setTimeout(() => artImg.classList.remove('settling'), 460);
+  }
+
+  function panBy(dx, dy) {
+    artImg.classList.remove('settling');
+    z.tx += dx; z.ty += dy;
+    clampPan();
+    write();
+  }
+
+  // reset to 1x. hard=true (on work-change) also drops the _full bitmap.
+  function reset(hard) {
+    if (hard) {
+      if (fullImg) { fullImg.onload = fullImg.onerror = null; fullImg = null; }
+      z.fullLoaded = false;
+      artFig.classList.remove('fetching');
+    }
+    panMoved = false; // a fresh 1× state must not block double-tap-to-zoom-in
+    if (z.scale === 1 && z.tx === 0 && z.ty === 0) { setZoomed(false); return; }
+    z.scale = 1; z.tx = 0; z.ty = 0;
+    if (hard) write(); else settle();
+    setZoomed(false);
+  }
+
+  return {
+    get scale(){ return z.scale; },
+    get max(){ return z.max; },
+    zoomAt, panBy, reset, settle, syncControls,
+    isZoomed: () => z.scale > 1.01,
+  };
+})();
+
+/* ---- input bindings ---- */
+
+// Wheel / trackpad: focal zoom toward the cursor.
+artFig.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  zoom.zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.12 : 1 / 1.12);
+}, { passive:false });
+
+// Pointer Events: unify pan (1 pointer) and pinch (2 pointers).
+const pointers = new Map();
+let pinchPrevDist = 0;
+let panLast = null, panMoved = false;
+let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
+
+function dist(a, b){ return Math.hypot(a.x - b.x, a.y - b.y); }
+function mid(a, b){ return { x:(a.x + b.x) / 2, y:(a.y + b.y) / 2 }; }
+
+artFig.addEventListener('pointerdown', (e) => {
+  pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+  artFig.setPointerCapture(e.pointerId);
+
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinchPrevDist = dist(a, b);
+    panLast = null; // pinch supersedes pan
+  } else if (pointers.size === 1) {
+    // reset on EVERY fresh single-pointer down so double-tap-to-zoom-in works
+    // regardless of any prior pan (panMoved only matters within this tap).
+    panMoved = false;
+    if (zoom.isZoomed()) {
+      panLast = { x:e.clientX, y:e.clientY };
+      artFig.classList.add('panning');
+    }
+  }
+}, { passive:false });
+
+artFig.addEventListener('pointermove', (e) => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const d = dist(a, b);
+    const m = mid(a, b);
+    if (pinchPrevDist > 0 && d > 0) zoom.zoomAt(m.x, m.y, d / pinchPrevDist);
+    pinchPrevDist = d;
+    e.preventDefault();
+  } else if (pointers.size === 1 && panLast) {
+    const dx = e.clientX - panLast.x;
+    const dy = e.clientY - panLast.y;
+    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) panMoved = true;
+    zoom.panBy(dx, dy);
+    panLast = { x:e.clientX, y:e.clientY };
+    e.preventDefault();
+  }
+}, { passive:false });
+
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.delete(e.pointerId);
+
+  if (pointers.size < 2) { pinchPrevDist = 0; }
+  if (pointers.size === 0) {
+    if (panLast) { artFig.classList.remove('panning'); zoom.settle(); }
+    panLast = null;
+  } else if (pointers.size === 1) {
+    // lifted one finger from a pinch: resume pan from the survivor
+    const [p] = [...pointers.values()];
+    panLast = zoom.isZoomed() ? { x:p.x, y:p.y } : null;
+  }
+}
+artFig.addEventListener('pointerup', endPointer);
+artFig.addEventListener('pointercancel', endPointer);
+
+// Double-click / double-tap: toggle 1x <-> 2x at the pointer.
+artFig.addEventListener('dblclick', (e) => {
+  e.preventDefault();
+  toggleZoomAt(e.clientX, e.clientY);
+});
+function toggleZoomAt(x, y) {
+  if (zoom.isZoomed()) { zoom.reset(false); return; }
+  // zoom from 1x to ~2x anchored at the tap point
+  zoom.zoomAt(x, y, 2);
+}
+// manual double-tap detection for touch (dblclick can be flaky on touch)
+artFig.addEventListener('pointerup', (e) => {
+  if (e.pointerType === 'mouse') return;
+  const now = performance.now();
+  const near = Math.hypot(e.clientX - lastTapX, e.clientY - lastTapY) < 30;
+  if (now - lastTapTime < 300 && near && !panMoved) {
+    toggleZoomAt(e.clientX, e.clientY);
+    lastTapTime = 0;
+  } else {
+    lastTapTime = now; lastTapX = e.clientX; lastTapY = e.clientY;
+  }
+});
+
+// +/- buttons: the accessible path (zoom about the viewport centre).
+function centre(){ const r = artFig.getBoundingClientRect(); return { x:r.left + r.width / 2, y:r.top + r.height / 2 }; }
+zoomInBtn.addEventListener('click', () => { const c = centre(); zoom.zoomAt(c.x, c.y, 1.4); zoom.settle(); });
+zoomOutBtn.addEventListener('click', () => { const c = centre(); zoom.zoomAt(c.x, c.y, 1 / 1.4); zoom.settle(); });
+zoomResetBtn.addEventListener('click', () => zoom.reset(false));
+
+// keyboard navigation + zoom shortcuts
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && zoom.isZoomed()) { e.preventDefault(); zoom.reset(false); return; }
+  if (e.key === '+' || e.key === '=') { e.preventDefault(); const c = centre(); zoom.zoomAt(c.x, c.y, 1.4); zoom.settle(); return; }
+  if (e.key === '-' || e.key === '_') { e.preventDefault(); const c = centre(); zoom.zoomAt(c.x, c.y, 1 / 1.4); zoom.settle(); return; }
+  if (zoom.isZoomed()) return; // arrows navigate only at 1x
+  if (e.key === 'ArrowRight') { e.preventDefault(); go(state.i + 1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); go(state.i - 1); }
+});
+
+// horizontal swipe on the stage (Pointer Events). Suppressed while zoomed and
+// aborted the moment a second pointer appears (that's a pinch, not a swipe).
+const stage = document.getElementById('stage');
+let pStartX = 0, pStartY = 0, pId = null, tracking = false;
+stage.addEventListener('pointerdown', (e) => {
+  if (state.zoomed || zoom.isZoomed()) { tracking = false; return; } // zoom suppresses swipe
+  if (pointers.size > 1) { tracking = false; return; }                // multi-touch -> pinch
+  pId = e.pointerId; pStartX = e.clientX; pStartY = e.clientY; tracking = true;
+});
+stage.addEventListener('pointermove', () => {
+  if (pointers.size > 1) tracking = false; // a pinch began mid-gesture: abandon the swipe
+});
+stage.addEventListener('pointerup', (e) => {
+  if (!tracking || e.pointerId !== pId) { tracking = false; return; }
+  tracking = false;
+  if (state.zoomed || zoom.isZoomed()) return; // re-check: a zoom happened during the gesture
+  const dx = e.clientX - pStartX;
+  const dy = e.clientY - pStartY;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+    go(state.i + (dx < 0 ? 1 : -1));
+  }
+});
+stage.addEventListener('pointercancel', () => { tracking = false; });
+
+/* =========================================================================
+   WallController — "See it on your wall". Composites the bare _full artwork
+   onto a preset interior at true scale (derived from a known furniture
+   reference), or onto an uploaded photo where the piece becomes drag/resize-
+   able. The stage's zoom state is untouched; closing returns to it cleanly.
+
+   True-scale model: each preset carries refWidthCm (a known object, e.g. a
+   ~210cm sofa) and that object's pixel width in the source image. The scene
+   is rendered at the image's native aspect, so the cm-per-scene-width is
+   roomWidthCm = refWidthCm * (imgW / refPxW). The piece's on-screen width is
+   then  sceneW * (work.w / roomWidthCm)  — switch size, it rescales vs the
+   furniture. Position is given as fractional anchor coords on the image.
+   ========================================================================= */
+const ROOMS = [
+  { id:'green', label:'Living room',
+    src:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&q=80',
+    imgW:1600, imgH:1067,
+    refWidthCm:210, refPxW:955,          // green 3-seat sofa, x 120–1075
+    cx:0.373, baselineY:0.30 },           // centre x; bottom of piece sits at this y (above sofa back)
+  { id:'tan', label:'Loft',
+    src:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1600&q=80',
+    imgW:1600, imgH:1067,
+    refWidthCm:220, refPxW:705,          // tan 3-seat sofa, x 55–760
+    cx:0.254, baselineY:0.235 },          // sofa back top ~y250 → 0.234
+];
+
+const wall = (() => {
+  const el = document.getElementById('wall');
+  const closeBtn = document.getElementById('wallClose');
+  const stageEl = document.getElementById('wallStage');
+  const bgImg = document.getElementById('wallBg');
+  const pieceEl = document.getElementById('wallPiece');
+  const artImgEl = document.getElementById('wallArt');
+  const handleEl = document.getElementById('wallHandle');
+  const titleEl2 = document.getElementById('wallTitle');
+  const roomsEl = document.getElementById('wallRooms');
+  const sizesEl = document.getElementById('wallSizes');
+  const dimEl = document.getElementById('wallDim');
+  const fileInput = document.getElementById('wallFile');
+
+  let open = false;
+  let roomIdx = 0;          // index into ROOMS, or -1 for "Your wall"
+  let sizeIdx = 1;          // default to the middle size
+  let objectURL = null;     // current uploaded blob URL (revoke on replace/close)
+  let lastFocus = null;
+  // uploaded-mode placement, fractions of the scene box:
+  let up = { cx:0.5, cy:0.42, wFrac:0.34 };
+
+  const fmtCm = s => s.label;
+
+  // ----- build room chips (presets + "Your wall") -----
+  const roomChips = [];
+  ROOMS.forEach((r, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'room-chip'; b.textContent = r.label;
+    b.setAttribute('role', 'radio');
+    b.addEventListener('click', () => selectRoom(i));
+    roomsEl.appendChild(b); roomChips.push(b);
+  });
+  const yourWallChip = document.createElement('button');
+  yourWallChip.type = 'button'; yourWallChip.className = 'room-chip';
+  yourWallChip.textContent = 'Your wall'; yourWallChip.setAttribute('role', 'radio');
+  yourWallChip.addEventListener('click', () => fileInput.click());
+  roomsEl.appendChild(yourWallChip);
+
+  // ----- size chips, rebuilt per work -----
+  let sizeChips = [];
+  function buildSizes() {
+    sizesEl.textContent = '';
+    sizeChips = WORKS[state.i].sizes.map((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'size-chip'; b.textContent = s.label;
+      b.setAttribute('role', 'radio');
+      b.addEventListener('click', () => { sizeIdx = i; paint(); });
+      sizesEl.appendChild(b); return b;
+    });
+  }
+
+  // scene box geometry: stage is sized to the image aspect, fit inside the scene area
+  function fitStage() {
+    const scene = stageEl.parentElement;          // .wall-scene
+    const cs = getComputedStyle(scene);
+    const availW = scene.clientWidth  - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const availH = scene.clientHeight - parseFloat(cs.paddingTop)  - parseFloat(cs.paddingBottom);
+    let aspect;
+    if (roomIdx >= 0) aspect = ROOMS[roomIdx].imgW / ROOMS[roomIdx].imgH;
+    else aspect = (bgImg.naturalWidth && bgImg.naturalHeight) ? bgImg.naturalWidth / bgImg.naturalHeight : 3 / 2;
+    let w = availW, h = w / aspect;
+    if (h > availH) { h = availH; w = h * aspect; }
+    stageEl.style.width = w + 'px';
+    stageEl.style.height = h + 'px';
+  }
+
+  // place + size the composited piece
+  function paint() {
+    const w = WORKS[state.i];
+    const size = w.sizes[sizeIdx];
+    sizeChips.forEach((c, i) => {
+      const on = i === sizeIdx;
+      c.classList.toggle('active', on);
+      c.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+    dimEl.innerHTML = `${size.label}<small>${w.title} · ${w.artist}</small>`;
+
+    fitStage();
+    const sw = stageEl.clientWidth, sh = stageEl.clientHeight;
+    if (!sw || !sh) return;
+
+    const ar = size.w / size.h;            // artwork aspect (landscape/portrait/square)
+    let pieceW, pieceH, left, top;
+
+    if (roomIdx >= 0) {
+      const r = ROOMS[roomIdx];
+      const roomWidthCm = r.refWidthCm * (r.imgW / r.refPxW);
+      pieceW = sw * (size.w / roomWidthCm);
+      pieceH = pieceW / ar;
+      const cx = sw * r.cx;
+      const baseY = sh * r.baselineY;      // bottom edge of the piece (just above the furniture)
+      left = cx - pieceW / 2;
+      top  = baseY - pieceH;
+      // a tall piece would run off the top of the in-frame wall; nudge it down
+      // so it stays on the wall (a larger work simply hangs lower), keeping a
+      // small breathing inset from the scene's top edge.
+      const minTop = sh * 0.03;
+      if (top < minTop) top = minTop;
+      el.classList.remove('is-uploaded');
+      pieceEl.classList.remove('placeable');
+    } else {
+      // uploaded mode: free placement, fraction-based, draggable/resizable
+      pieceW = sw * up.wFrac;
+      pieceH = pieceW / ar;
+      left = sw * up.cx - pieceW / 2;
+      top  = sh * up.cy - pieceH / 2;
+      // keep on canvas
+      left = clamp(left, -pieceW * 0.4, sw - pieceW * 0.6);
+      top  = clamp(top,  -pieceH * 0.4, sh - pieceH * 0.6);
+      el.classList.add('is-uploaded');
+      pieceEl.classList.add('placeable');
+    }
+    pieceEl.style.width  = pieceW + 'px';
+    pieceEl.style.height = pieceH + 'px';
+    pieceEl.style.left   = left + 'px';
+    pieceEl.style.top    = top + 'px';
+  }
+
+  function selectRoom(i) {
+    roomIdx = i;
+    roomChips.forEach((c, idx) => {
+      const on = idx === i;
+      c.classList.toggle('active', on);
+      c.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+    yourWallChip.classList.remove('active');
+    yourWallChip.setAttribute('aria-checked', 'false');
+    bgImg.src = ROOMS[i].src;
+    paint();
+  }
+
+  function useUpload(file) {
+    if (objectURL) { URL.revokeObjectURL(objectURL); objectURL = null; }
+    objectURL = URL.createObjectURL(file);
+    roomIdx = -1;
+    roomChips.forEach(c => { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
+    yourWallChip.classList.add('active');
+    yourWallChip.setAttribute('aria-checked', 'true');
+    up = { cx:0.5, cy:0.42, wFrac:0.34 };
+    bgImg.onload = () => { paint(); bgImg.onload = null; };
+    bgImg.src = objectURL;
+  }
+  fileInput.addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) useUpload(f);
+    e.target.value = '';     // allow re-selecting the same file
+  });
+
+  // ----- open / close -----
+  function show() {
+    if (open) return;
+    open = true;
+    lastFocus = document.activeElement;
+    buildSizes();
+    titleEl2.textContent = WORKS[state.i].title;
+    artImgEl.src = imgFull(WORKS[state.i].code);
+    artImgEl.alt = `${WORKS[state.i].title} by ${WORKS[state.i].artist}`;
+    if (roomIdx < 0) roomIdx = 0;
+    selectRoom(roomIdx);
+    el.classList.add('on');
+    el.setAttribute('aria-hidden', 'false');
+    // paint once geometry has settled
+    requestAnimationFrame(() => requestAnimationFrame(paint));
+    closeBtn.focus();
+  }
+  function hide() {
+    if (!open) return;
+    open = false;
+    el.classList.remove('on');
+    el.setAttribute('aria-hidden', 'true');
+    if (objectURL) { URL.revokeObjectURL(objectURL); objectURL = null; bgImg.removeAttribute('src'); }
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  closeBtn.addEventListener('click', hide);
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); hide(); }
+  });
+
+  // ----- drag + resize the piece in uploaded mode (Pointer Events) -----
+  const dp = new Map();
+  let mode = null;             // 'drag' | 'resize'
+  let pinchStart = 0, pinchW0 = 0;
+  let dragOff = { x:0, y:0 };
+
+  function sceneRect(){ return stageEl.getBoundingClientRect(); }
+
+  pieceEl.addEventListener('pointerdown', (e) => {
+    if (roomIdx >= 0) return;                 // only in uploaded mode
+    dp.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    pieceEl.setPointerCapture(e.pointerId);
+    pieceEl.classList.add('dragging');
+    if (dp.size === 2) {
+      const [a, b] = [...dp.values()];
+      pinchStart = Math.hypot(a.x - b.x, a.y - b.y);
+      pinchW0 = up.wFrac; mode = 'resize';
+    } else if (e.target === handleEl) {
+      mode = 'resize'; pinchStart = 0;
+      const r = sceneRect();
+      pinchW0 = up.wFrac; dragOff = { x:e.clientX, y:e.clientY, w:pieceEl.offsetWidth, sw:r.width };
+    } else {
+      mode = 'drag';
+      const r = sceneRect();
+      dragOff = { x:e.clientX - (up.cx * r.width + r.left), y:e.clientY - (up.cy * r.height + r.top) };
+    }
+    e.preventDefault();
+  });
+  pieceEl.addEventListener('pointermove', (e) => {
+    if (!dp.has(e.pointerId) || roomIdx >= 0) return;
+    dp.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    const r = sceneRect();
+    if (mode === 'resize' && dp.size === 2) {
+      const [a, b] = [...dp.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (pinchStart > 0) up.wFrac = clamp(pinchW0 * (d / pinchStart), 0.08, 0.9);
+      paint();
+    } else if (mode === 'resize') {
+      const dx = e.clientX - dragOff.x;
+      up.wFrac = clamp((dragOff.w + dx) / dragOff.sw, 0.08, 0.9);
+      paint();
+    } else if (mode === 'drag') {
+      up.cx = clamp((e.clientX - dragOff.x - r.left) / r.width, 0, 1);
+      up.cy = clamp((e.clientY - dragOff.y - r.top) / r.height, 0, 1);
+      paint();
+    }
+    e.preventDefault();
+  });
+  function endDp(e) {
+    if (!dp.has(e.pointerId)) return;
+    dp.delete(e.pointerId);
+    if (dp.size < 2) pinchStart = 0;
+    if (dp.size === 0) { mode = null; pieceEl.classList.remove('dragging'); }
+  }
+  pieceEl.addEventListener('pointerup', endDp);
+  pieceEl.addEventListener('pointercancel', endDp);
+
+  // keep the composite correct on resize / orientation change
+  let rT = null;
+  window.addEventListener('resize', () => {
+    if (!open) return;
+    clearTimeout(rT); rT = setTimeout(paint, 80);
+  });
+
+  return { show, hide, isOpen: () => open };
+})();
+
+document.getElementById('wallBtn').addEventListener('click', () => wall.show());
+
+/* =========================================================================
+   KeepController — the only persistence in the prototype. A flat array of
+   work codes in localStorage; the Your Wall strip and the Keep button are
+   both projections of it.
+   ========================================================================= */
+const KEEP_KEY = 'lumas.livingArtwork.kept';
+const Keep = {
+  load(){ try{ return JSON.parse(localStorage.getItem(KEEP_KEY)) || []; }catch{ return []; } },
+  save(a){ localStorage.setItem(KEEP_KEY, JSON.stringify(a)); },
+  has(code){ return this.load().includes(code); },
+  toggle(code){ const a=this.load(); const i=a.indexOf(code); i<0?a.push(code):a.splice(i,1); this.save(a); return i<0; }
+};
+
+const keepBtn = document.getElementById('keepBtn');
+const ceremonyEl = document.getElementById('ceremony');
+const ceremonyTitle = document.getElementById('ceremonyTitle');
+
+const wallStripEl = document.getElementById('yourwallRail');
+const wallEmptyEl = document.getElementById('yourwallEmpty');
+const wallCountEl = document.getElementById('yourwallCount');
+const makeRealBtn = document.getElementById('yourwallMakeReal');
+const byCode = code => WORKS.find(w => w.code === code);
+
+// reflect the current work's kept state onto #keepBtn
+function paintKeepBtn(){
+  const kept = Keep.has(WORKS[state.i].code);
+  keepBtn.textContent = kept ? '♥ Kept' : '♡ Keep';
+  keepBtn.setAttribute('aria-pressed', kept ? 'true' : 'false');
+}
+
+// build one kept piece for the strip
+function makeKeptEl(code){
+  const w = byCode(code);
+  if (!w) return null;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'kept';
+  btn.dataset.code = code;
+  btn.style.setProperty('--accent', w.accent);
+  btn.setAttribute('role', 'listitem');
+  btn.setAttribute('aria-label', `Go to ${w.title} by ${w.artist}`);
+
+  const mat = document.createElement('span');
+  mat.className = 'kept-mat';
+  const img = document.createElement('img');
+  img.alt = '';
+  img.decoding = 'async';
+  img.src = imgThumb(code);
+  mat.appendChild(img);
+
+  const marker = document.createElement('span');
+  marker.className = 'marker';
+
+  const remove = document.createElement('span');
+  remove.className = 'kept-remove';
+  remove.setAttribute('role', 'button');
+  remove.tabIndex = 0;
+  remove.setAttribute('aria-label', `Remove ${w.title} from your wall`);
+  remove.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
+  const doRemove = (e) => { e.stopPropagation(); unkeep(code); };
+  remove.addEventListener('click', doRemove);
+  remove.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); doRemove(e); }
+  });
+
+  btn.append(mat, marker, remove);
+  btn.addEventListener('click', () => {
+    const idx = WORKS.indexOf(w);
+    if (idx >= 0) go(idx);
+  });
+  return btn;
+}
+
+// re-render the whole strip from storage (used on load + un-keep)
+function renderWall(animateLast){
+  const codes = Keep.load();
+  wallStripEl.querySelectorAll('.kept').forEach(n => n.remove());
+  const has = codes.length > 0;
+  wallEmptyEl.hidden = has;
+  makeRealBtn.hidden = !has;
+  wallCountEl.textContent = has ? (codes.length === 1 ? '1 piece' : `${codes.length} pieces`) : '';
+  codes.forEach((code, idx) => {
+    const el = makeKeptEl(code);
+    if (!el) return;
+    wallStripEl.appendChild(el);
+    const isLast = idx === codes.length - 1;
+    if (animateLast && isLast && !prefersReduced) {
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+    } else {
+      el.classList.add('in');
+    }
+  });
+  syncWallActive();
+}
+
+// mark the kept thumb matching the current work
+function syncWallActive(){
+  const cur = WORKS[state.i].code;
+  wallStripEl.querySelectorAll('.kept').forEach(n => {
+    const on = n.dataset.code === cur;
+    n.classList.toggle('active', on);
+    n.setAttribute('aria-current', on ? 'true' : 'false');
+  });
+}
+
+function unkeep(code){
+  if (!Keep.has(code)) return;
+  Keep.toggle(code);                 // removes
+  renderWall(false);
+  if (WORKS[state.i].code === code) paintKeepBtn();
+}
+
+// ---- the ceremony: a kept piece flies from the stage into Your Wall ----
+let ceremonyTimer = null;
+function runCeremony(){
+  const w = WORKS[state.i];
+  ceremonyTitle.textContent = `${w.title} · ${w.artist}`;
+
+  if (prefersReduced) {
+    // no motion: a brief static confirmation, then settle
+    ceremonyEl.classList.add('on');
+    ceremonyEl.setAttribute('aria-hidden', 'false');
+    renderWall(true);
+    clearTimeout(ceremonyTimer);
+    ceremonyTimer = setTimeout(() => {
+      ceremonyEl.classList.remove('on');
+      ceremonyEl.setAttribute('aria-hidden', 'true');
+    }, 900);
+    return;
+  }
+
+  // capture the live artwork's rect as the flyer's start
+  const start = artImg.getBoundingClientRect();
+  ceremonyEl.classList.add('on');
+  ceremonyEl.setAttribute('aria-hidden', 'false');
+
+  // render the strip first (so the destination thumb exists to fly toward)
+  renderWall(false);
+  const destThumb = wallStripEl.querySelector(`.kept[data-code="${w.code}"] .kept-mat`);
+
+  const flyer = document.createElement('div');
+  flyer.className = 'flyer';
+  flyer.style.left = start.left + 'px';
+  flyer.style.top = start.top + 'px';
+  flyer.style.width = start.width + 'px';
+  flyer.style.height = start.height + 'px';
+  const fImg = document.createElement('img');
+  fImg.src = artImg.currentSrc || artImg.src;
+  fImg.alt = '';
+  flyer.appendChild(fImg);
+  document.body.appendChild(flyer);
+
+  // fly after a beat so the line is read before the piece leaves
+  setTimeout(() => {
+    const dest = destThumb ? destThumb.getBoundingClientRect()
+                           : { left: 40, top: window.innerHeight - 100, width: 64, height: 48 };
+    const sx = dest.width / start.width;
+    const sy = dest.height / start.height;
+    const s = Math.min(sx, sy);
+    const dx = (dest.left + dest.width / 2) - (start.left + start.width / 2);
+    const dy = (dest.top + dest.height / 2) - (start.top + start.height / 2);
+    flyer.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
+    flyer.style.opacity = '0.35';
+  }, 480);
+
+  // fade the overlay, reveal the kept thumb, clean up
+  clearTimeout(ceremonyTimer);
+  ceremonyTimer = setTimeout(() => {
+    ceremonyEl.classList.remove('on');
+    ceremonyEl.setAttribute('aria-hidden', 'true');
+    if (destThumb) destThumb.closest('.kept').classList.add('in');
+  }, 1100);
+  setTimeout(() => { flyer.remove(); }, 1500);
+}
+
+keepBtn.addEventListener('click', () => {
+  const code = WORKS[state.i].code;
+  const nowKept = Keep.toggle(code);
+  paintKeepBtn();
+  if (nowKept) {
+    runCeremony();
+  } else {
+    renderWall(false);   // un-keep from the button: piece simply leaves
+  }
+});
+
+makeRealBtn.addEventListener('click', () => {
+  makeRealBtn.classList.add('whispered');     // non-functional: whispers only
+  clearTimeout(makeRealBtn._t);
+  makeRealBtn._t = setTimeout(() => makeRealBtn.classList.remove('whispered'), 2400);
+});
+
+// when navigating works, keep button + active-thumb both follow
+const _go = go;
+go = function(n){ _go(n); paintKeepBtn(); syncWallActive(); };
+
+render();
+paintKeepBtn();
+renderWall(false);   // restore Your Wall from localStorage on load
+zoom.syncControls();
+</script>
+</body>
+</html>

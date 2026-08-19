@@ -1,0 +1,1181 @@
+<!doctype html>
+<!-- ═══ PROTO HEADER ═══════════════════════════════════════════════════════
+  ID:          PROTO-2026-014
+  Hypothesis:  DE mobile PDP visitors (65% of PDP traffic, median 44 s / 17 %
+               scroll) · restructure the PDP so image → price → size → finish
+               → add-to-cart resolve inside the first 1.5 viewports, with a
+               persistent sticky ATC and a progressive (curated → disclosed)
+               configurator · mobile ATC rate 2.45 % → ≥ 3.4 % · because
+               converters iterate inside the configurator rather than read
+               below the fold (350 s vs 164 s, scroll depth ≈ noise), and
+               today's layout hides price + CTA below viewport 1 while broken
+               affordances burn the 44-second attention budget.
+  Prior:       lumas-revenue-leak-audit-2026-06 (mobile leak = PDP→cart, not
+               payment) · never-deter-the-online-purchase (standing rule) ·
+               pdp-edition-line-lab (edition-line variants) · brief
+               pdp-restructure-design-brief.md 12 Aug 2026 (evidence base).
+  Goals:       primary add_to_cart (mobile) · secondary artwork_finish_select,
+               carousel_artwork_click · guardrails AOV,
+               framing attach, desktop ATC.  [ASSUMPTION: exact ABlyft goal
+               names from 16-goal library to be mapped at ticket time]
+  Variants:    control = live PDP (lumas.de/pictures/marta_contreras_simo/
+               minasena/) · v1 = this file (redesign). Press "v" or use
+               ?v=control|v1. States: ?state=loading|lastcopies|atc-error|
+               open-edition. Debug event console: ?debug=1 or press "d".
+  Data:        VERIFIED live 12 Aug 2026 (lumas.de + webshop feed):
+               sizes/prices Acrylglas 40×40 € 449 (MCS36) · 80×80 € 990
+               (MCS35) · 120×120 € 1.690 (MCS34); 40×40 finishing set:
+               Fotografie-Abzug € 240 · Acrylglas € 449 · Rahmen Basel € 599
+               (Außenmaß 44,4 cm, Profil 15 mm, Kanadischer Ahorn braun);
+               Basel colour renders erlebraun/schwarz/nussbaum; Versand 5
+               Tage, € 6,90/12,90/14,90; 60 Tage Rückgabe; Zertifikat;
+               Trustpilot 4,7/5 (6 k). PLACEHOLDERS (PIM unreachable through
+               broken configurator, flagged with * in UI): Abzug + Basel
+               prices at 80/120.
+  Status:      exploration → ready for red-team
+═══════════════════════════════════════════════════════════════════════════ -->
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mina&amp;Sena · Marta Contreras Simó · LUMAS — PDP Restructure v1</title>
+<link rel="stylesheet" href="../assets/v2-tokens.css">
+<style>
+/* real shop font binaries (frontend/themes/white/assets/fonts) — no trial cut, no CDN */
+@font-face{
+  font-family: 'UtileDisplay';
+  src: url('../assets/fonts/utile/utile-display-light.woff2') format('woff2');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face{
+  font-family: 'UtileDisplay';
+  src: url('../assets/fonts/utile/utile-display-regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face{
+  font-family: 'Archivo';
+  src: url('../assets/fonts/archivo.woff2') format('woff2');
+  font-weight: 300 700; font-style: normal; font-display: swap;
+}
+/* ══ base ═════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root{
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-1: 160ms; --dur-2: 220ms; --dur-3: 320ms;
+  --page: #FFFFFF;
+  --stage: var(--color-ivory-200, #F7F1E9);
+  --maxw: 1440px;
+  --gutter: clamp(16px, 4vw, 48px);
+}
+html { scroll-behavior: smooth; }
+body{
+  background: var(--page);
+  color: var(--color-text-primary, #1C1A18);
+  font-family: 'Archivo', sans-serif;
+  font-variation-settings: "wdth" 100;
+  font-size: 16px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--color-border-focus, #1C1A18); outline-offset: 2px; }
+
+/* type helpers */
+.display { font-family: 'UtileDisplay', 'Archivo', sans-serif; font-weight: 400; letter-spacing: 0; }
+.eyebrow{
+  font-family: 'Archivo'; font-weight: 700; font-size: 11px; line-height: 1.5;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87);
+}
+.body-small { font-size: 13px; line-height: 1.65; }
+.caption { font-size: 11px; line-height: 1.5; letter-spacing: 0.03em; }
+
+/* buttons — V2 spec */
+.btn{
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 16px 28px; min-height: 48px; border-radius: 0;
+  font-family: 'Archivo'; font-weight: 700; font-size: 13px; line-height: 1.5;
+  letter-spacing: 1.82px; text-transform: uppercase; text-decoration: none;
+  transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); width: 100%; }
+.btn-primary:hover { background: var(--color-charcoal-800, #3A3835); }
+.btn-primary[disabled] { background: var(--color-surface-muted, #F0EBE3); color: var(--color-text-disabled, #C7C3BE); cursor: not-allowed; }
+.btn-secondary { border: 1px solid var(--color-border-focus, #1C1A18); background: transparent; width: 100%; }
+.btn-secondary:hover { background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); }
+.btn-ghost{
+  padding: 4px 0 6px; border-bottom: 1px solid currentColor;
+  font-weight: 400; letter-spacing: 1.3px; font-size: 13px; text-transform: uppercase; min-height: 0;
+}
+
+/* ══ promo + header ═══════════════════════════════════════════════════ */
+.promo{
+  background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2);
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 9px calc(16px + 32px) 9px 16px; position: relative; text-align: center;
+}
+.promo b{
+  font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+}
+@media (max-width: 560px){
+  .promo{ gap: 8px; padding: 8px 40px 8px 12px; }
+  .promo b{ font-size: 10.5px; letter-spacing: 0.1em; }
+  .promo .promo-cta{ display: none; }
+}
+.promo .promo-cta{ font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1px solid rgba(244,237,226,0.55); padding-bottom: 1px; white-space: nowrap; }
+.promo .promo-x{ position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; display: grid; place-items: center; color: rgba(244,237,226,0.75); }
+.site-head{
+  position: sticky; top: 0; z-index: 40; background: var(--page);
+  border-bottom: 1px solid var(--color-border-subtle, #EAE2D8);
+  display: flex; align-items: center; gap: 6px;
+  height: 56px; padding: 0 8px;
+}
+.site-head .wordmark{ display: flex; align-items: center; padding: 8px; }
+.site-head .wordmark img{ height: 19px; width: auto; display: block; }
+.site-head .spacer{ flex: 1; }
+.icon-btn{ width: 44px; height: 44px; display: grid; place-items: center; border-radius: 0; }
+.icon-btn svg{ width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+/* ══ layout shell ═════════════════════════════════════════════════════ */
+.shell{ max-width: var(--maxw); margin: 0 auto; }
+@media (min-width: 1024px){
+  .shell.pdp{ display: grid; grid-template-columns: minmax(0, 7fr) minmax(380px, 5fr); gap: clamp(32px, 4vw, 72px); padding: 0 var(--gutter); align-items: start; }
+  .col-stage{ position: sticky; top: 72px; }
+}
+
+/* ══ zone 1 — stage / gallery ═════════════════════════════════════════ */
+.stage{ position: relative; background: var(--stage); }
+.stage-track{
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.stage-track::-webkit-scrollbar{ display: none; }
+.stage-slide{
+  flex: 0 0 100%; scroll-snap-align: center;
+  display: grid; place-items: center;
+  aspect-ratio: 1 / 1; padding: clamp(20px, 6vw, 56px);
+}
+.stage-slide img{
+  max-width: 100%; max-height: 100%; width: auto; height: auto;
+  object-fit: contain; /* full artwork, true ratio, never cropped */
+  box-shadow: 0 18px 60px -16px rgba(28,26,24,0.28); /* shadow/frame — featured artwork lift */
+}
+.stage-slide.detail img{ box-shadow: none; }
+.stage-slide img.skeleton-img{ opacity: 0; }
+.stage .skel{
+  position: absolute; inset: 0; margin: auto; width: 72%; aspect-ratio: 1/1;
+  background: linear-gradient(100deg, var(--color-bone-300,#F0EBE3) 40%, var(--color-ivory-200,#F7F1E9) 50%, var(--color-bone-300,#F0EBE3) 60%);
+  background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer{ to { background-position: -200% 0; } }
+.stage-dots{
+  position: absolute; left: 0; right: 0; bottom: 10px;
+  display: flex; justify-content: center; gap: 8px; pointer-events: none;
+}
+.stage-dots button{ pointer-events: auto; width: 24px; height: 24px; display: grid; place-items: center; }
+.stage-dots i{
+  width: 6px; height: 6px; border-radius: 50%; background: var(--color-charcoal-300, #C7C3BE);
+  transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out); display: block;
+}
+.stage-dots button[aria-current="true"] i{ background: var(--color-charcoal-900, #1C1A18); transform: scale(1.34); }
+.stage-zoom{
+  position: absolute; right: 10px; bottom: 10px; width: 44px; height: 44px;
+  display: grid; place-items: center; background: rgba(255,255,255,0.85);
+  border: 1px solid var(--color-border-default, #E2D8CC);
+}
+.stage-discover{ position: absolute; right: 54px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
+.stage-wish{ position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
+.stage-wish[aria-pressed="true"] svg{ fill: var(--color-charcoal-900, #1C1A18); }
+.stage-caption{
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px var(--gutter) 0; background: var(--page);
+}
+.stage-caption .caption{ color: var(--color-text-tertiary, #908C87); }
+
+/* thumbnail rail — desktop only */
+.thumb-rail{ display: none; }
+@media (min-width: 1024px){
+  .stage-dots{ display: none; }
+  .thumb-rail{ display: flex; gap: 10px; padding: 14px 0 0; }
+  .thumb-rail button{
+    width: 64px; height: 64px; display: grid; place-items: center; padding: 6px;
+    border: 1px solid var(--color-border-subtle, #EAE2D8); background: var(--stage);
+    transition: border-color var(--dur-2) var(--ease-out);
+  }
+  .thumb-rail button[aria-current="true"]{ border: 2px solid var(--color-border-focus, #1C1A18); }
+  .thumb-rail img{ max-width: 100%; max-height: 100%; object-fit: contain; }
+}
+
+/* ══ zone 1 — identity ════════════════════════════════════════════════ */
+.identity{ padding: 20px var(--gutter) 0; }
+@media (min-width: 1024px){ .identity{ padding: 28px 0 0; } }
+.identity .artist{
+  font-size: 16px; color: var(--color-text-secondary, #5A5752); text-decoration: none;
+}
+.identity .artist:hover{ text-decoration: underline; text-underline-offset: 3px; }
+.identity h1{
+  font-family: 'UtileDisplay', sans-serif; font-weight: 400;
+  font-size: clamp(26px, 5.4vw, 34px); line-height: 1.12; margin: 4px 0 12px;
+}
+.edition-chip{
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 2px;
+  padding: 8px 12px; min-height: 40px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  transition: border-color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.edition-chip:hover{ background: var(--color-surface-raised, #F7F1E9); }
+.edition-chip:active{ transform: scale(0.97); }
+.edition-chip .n-left{ color: var(--color-status-warning, #9B6D1E); }
+.edition-chip svg{ width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+.price-row{ display: flex; align-items: baseline; gap: 10px; margin: 16px 0 0; }
+.price{
+  font-family: 'UtileDisplay', sans-serif; font-weight: 400;
+  font-size: clamp(24px, 5vw, 28px); line-height: 1.25;
+  transition: filter var(--dur-2) ease, opacity var(--dur-2) ease;
+}
+.price.updating{ filter: blur(2px); opacity: 0.55; }
+.price-note{ font-size: 12px; color: var(--color-text-tertiary, #908C87); }
+.price-flag{ font-size: 11px; color: var(--color-status-warning, #9B6D1E); display: none; }
+.price-flag.on{ display: inline; }
+
+/* ══ zone 2 — configurator ════════════════════════════════════════════ */
+.config{ padding: 20px var(--gutter) 0; }
+@media (min-width: 1024px){ .config{ padding: 24px 0 0; } }
+.config .group{ margin-bottom: 22px; }
+.config .group-label{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.chip-row{ display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chip-row::-webkit-scrollbar{ display: none; }
+.size-chip{
+  flex: 1 0 auto; min-width: 104px; min-height: 48px;
+  border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 2px;
+  padding: 13px 14px; text-align: center;
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.size-chip:active{ transform: scale(0.97); }
+.size-chip .dim{ display: block; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; }
+.size-chip .p{ display: block; font-size: 12px; color: var(--color-text-secondary, #5A5752); margin-top: 2px; }
+.size-chip[aria-checked="true"]{ background: var(--color-surface-inverse, #1C1A18); border-color: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); }
+.size-chip[aria-checked="true"] .p{ color: rgba(244,237,226,0.75); }
+.size-chip[aria-disabled="true"]{ background: var(--color-surface-muted, #F0EBE3); color: var(--color-text-disabled, #C7C3BE); border-color: var(--color-border-subtle, #EAE2D8); cursor: not-allowed; }
+.size-chip[aria-disabled="true"] .p{ color: var(--color-text-disabled, #C7C3BE); }
+
+.finish-trigger{
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border: 1px solid var(--color-border-focus, #1C1A18); border-radius: 4px;
+  padding: 14px 16px; min-height: 52px; font-size: 16px; text-align: left;
+  transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.finish-trigger:hover{ background: var(--color-surface-raised, #F7F1E9); }
+.finish-trigger:active{ transform: scale(0.99); }
+.finish-trigger .chev{ flex: 0 0 auto; }
+.reveal{ overflow: hidden; max-height: 0; opacity: 0; transition: max-height var(--dur-3) var(--ease-drawer), opacity var(--dur-3) var(--ease-out); }
+.reveal.open{ max-height: 220px; opacity: 1; }
+.swatch-row{ display: flex; gap: 10px; padding: 4px 2px 2px; }
+.swatch{
+  width: 56px; text-align: center;
+}
+.swatch .ring{
+  display: block; width: 44px; height: 44px; margin: 0 auto; border-radius: 50%;
+  border: 1px solid var(--color-border-strong, #C7C3BE); padding: 3px;
+  transition: border-color var(--dur-2) var(--ease-out);
+}
+.swatch[aria-checked="true"] .ring{ border: 2px solid var(--color-border-focus, #1C1A18); padding: 2px; }
+.swatch .ring{ overflow: hidden; }
+.swatch .ring img{
+  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+  /* crop into the upper-left frame corner so the wood tone reads, not the sample motif */
+  object-position: 0% 0%; transform: scale(2.6); transform-origin: 14% 16%;
+}
+.swatch .sw-name{ display: block; font-size: 10px; line-height: 1.3; margin-top: 5px; color: var(--color-text-secondary, #5A5752); }
+.options-ghost{ margin-top: 12px; color: var(--color-text-primary, #1C1A18); }
+
+/* ATC + reassurance */
+.atc-wrap{ padding: 8px var(--gutter) 0; }
+@media (min-width: 1024px){ .atc-wrap{ padding: 8px 0 0; } }
+.atc-error{
+  display: none; margin-top: 10px; padding: 12px 14px;
+  background: var(--color-status-error-bg, #FDECEA); color: var(--color-status-error, #B5352A);
+  font-size: 13px; line-height: 1.5;
+}
+.atc-error.on{ display: block; }
+.reassure{
+  display: flex; flex-wrap: wrap; gap: 4px 8px; justify-content: center;
+  padding: 14px var(--gutter) 0; font-size: 12px; color: var(--color-text-secondary, #5A5752); text-align: center;
+  text-wrap: balance;
+}
+@media (min-width: 1024px){ .reassure{ padding: 14px 0 0; justify-content: flex-start; text-align: left; } }
+.reassure .dot-sep{ color: var(--color-charcoal-300, #C7C3BE); }
+.gallery-link{ margin-top: 14px; text-align: center; }
+@media (min-width: 1024px){ .gallery-link{ text-align: left; } }
+.gallery-link a{ font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-secondary, #5A5752); text-decoration: none; border-bottom: 1px solid var(--color-border-strong, #C7C3BE); padding-bottom: 2px; }
+
+/* ══ zone 3 — depth ═══════════════════════════════════════════════════ */
+.zone3{ padding: 28px var(--gutter) 0; }
+@media (min-width: 1024px){ .zone3{ padding: 32px 0 0; } }
+.scale-entry{ padding: 16px var(--gutter) 0; }
+@media (min-width: 1024px){
+  .stage-tools{ display: flex; align-items: stretch; justify-content: space-between; gap: 14px; padding-top: 14px; }
+  .stage-tools .thumb-rail{ padding-top: 0; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .stage-tools .thumb-rail::-webkit-scrollbar{ display: none; }
+  .scale-entry{ padding: 0; flex: 0 0 auto; display: flex; }
+  .scale-entry .btn{ width: auto; height: 64px; padding: 0 24px; white-space: nowrap; }
+}
+.trust-row{
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 18px;
+  border-top: 1px solid var(--color-border-default, #E2D8CC);
+  border-bottom: 1px solid var(--color-border-default, #E2D8CC);
+  padding: 16px 2px;
+}
+.tr-text{ font-size: 13px; white-space: nowrap; }
+.tr-text strong{ font-weight: 700; }
+.tr-count{ font-size: 12px; margin-bottom: 4px; }
+.tr-tiles{ display: flex; gap: 2px; }
+.tr-tile{ width: 20px; height: 20px; display: grid; place-items: center; background: #00B67A; }
+.tr-tile.partial{ background: linear-gradient(90deg, #00B67A 70%, #DCDCE6 70%); }
+.tr-tile svg{ width: 14px; height: 14px; fill: #fff; }
+.tr-logo{ display: flex; align-items: center; gap: 5px; font-weight: 700; font-size: 16px; white-space: nowrap; }
+.tr-logo svg{ width: 18px; height: 18px; fill: #00B67A; }
+@media (max-width: 560px){
+  .trust-row{ justify-content: center; text-align: center; }
+}
+
+/* ══ zone 4 — continue ════════════════════════════════════════════════ */
+.zone4{ padding: 44px var(--gutter) 72px; max-width: var(--maxw); margin: 0 auto; }
+.zone4 .tabs{ display: flex; gap: 22px; border-bottom: 1px solid var(--color-border-default, #E2D8CC); margin-bottom: 20px; }
+.zone4 .tab{
+  padding: 10px 2px 12px; font-size: 14px; font-weight: 600; color: var(--color-text-tertiary, #908C87);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+}
+.zone4 .tab[aria-selected="true"]{ color: var(--color-text-primary, #1C1A18); border-bottom-color: var(--color-charcoal-900, #1C1A18); }
+.works-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+@media (min-width: 1024px){ .works-grid{ grid-template-columns: repeat(4, 1fr); gap: 28px 20px; } }
+.work-card{ text-decoration: none; display: block; }
+.work-card .art{
+  background: var(--stage); aspect-ratio: 1/1; display: grid; place-items: center; padding: 12%;
+  overflow: hidden;
+}
+.work-card .art img{
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  transition: transform 520ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine){ .work-card:hover .art img{ transform: scale(1.03); } }
+.work-card .w-title{ font-size: 13px; font-weight: 600; margin-top: 8px; }
+.work-card .w-artist{ font-size: 12px; color: var(--color-text-tertiary, #908C87); margin-top: 1px; }
+.work-card .w-badge{ font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
+.zone4 .all-link{ margin-top: 24px; text-align: center; }
+
+/* ══ sticky ATC ═══════════════════════════════════════════════════════ */
+.sticky-atc{
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  background: var(--page); border-top: 1px solid var(--color-border-default, #E2D8CC);
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 12px;
+  transform: translateY(110%); transition: transform var(--dur-3) var(--ease-drawer);
+}
+.sticky-atc.on{ transform: translateY(0); }
+.sticky-atc img{ width: 40px; height: 40px; object-fit: contain; background: var(--stage); flex: 0 0 auto; }
+.sticky-atc .meta{ min-width: 0; flex: 1; }
+.sticky-atc .meta .m1{ font-size: 12px; color: var(--color-text-secondary, #5A5752); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-atc .meta .m2{ font-weight: 600; font-size: 14px; }
+.sticky-atc .btn{ width: auto; padding: 13px 20px; min-height: 44px; flex: 0 0 auto; }
+@media (min-width: 1024px){
+  .sticky-atc{ bottom: auto; top: 0; border-top: 0; border-bottom: 1px solid var(--color-border-default, #E2D8CC); transform: translateY(-110%); }
+  .sticky-atc .shell-in{ max-width: var(--maxw); margin: 0 auto; display: flex; align-items: center; gap: 16px; width: 100%; padding: 0 var(--gutter); }
+}
+
+/* ══ sheets / overlays ════════════════════════════════════════════════ */
+.scrim{
+  position: fixed; inset: 0; z-index: 80; background: rgba(28,26,24,0.44);
+  opacity: 0; pointer-events: none; transition: opacity var(--dur-3) ease;
+}
+.scrim.on{ opacity: 1; pointer-events: auto; }
+.sheet{
+  position: fixed; z-index: 90; background: var(--page);
+  left: 0; right: 0; bottom: 0; max-height: 86dvh;
+  transform: translateY(103%); transition: transform var(--dur-3) var(--ease-drawer);
+  display: flex; flex-direction: column;
+}
+.sheet.on{ transform: translateY(0); }
+@media (min-width: 1024px){
+  .sheet{ left: auto; top: 0; bottom: 0; width: 480px; max-height: none; transform: translateX(103%); }
+  .sheet.on{ transform: translateX(0); }
+}
+.sheet-head{
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 18px var(--gutter) 14px; border-bottom: 1px solid var(--color-border-subtle, #EAE2D8);
+}
+.sheet-head h2{ font-family: 'UtileDisplay'; font-weight: 400; font-size: 22px; line-height: 1.25; }
+.sheet-body{ overflow-y: auto; padding: 18px var(--gutter) 28px; font-size: 14px; line-height: 1.65; }
+.sheet-body p + p{ margin-top: 10px; }
+.sheet .x{ width: 44px; height: 44px; display: grid; place-items: center; margin-right: -10px; }
+
+/* provenance sheet specifics */
+.prov-scale{ display: flex; gap: 4px; margin: 16px 0 6px; }
+.prov-scale i{ flex: 1; height: 2px; background: var(--color-bone-100, #E2D8CC); }
+.prov-scale i.hot{ background: var(--color-charcoal-900, #1C1A18); }
+.prov-scale-labels{ display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
+
+/* scale viewer */
+.viewer{
+  position: fixed; inset: 0; z-index: 100; background: var(--color-ivory-300, #FAF6F1);
+  display: none; flex-direction: column;
+}
+.viewer.on{ display: flex; }
+.viewer-head{ display: flex; align-items: center; justify-content: space-between; padding: 14px var(--gutter); }
+.viewer-modes{ display: flex; gap: 8px; }
+.mode-chip{
+  padding: 8px 16px; border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 2px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.96px; text-transform: uppercase; white-space: nowrap;
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+}
+.mode-chip[aria-selected="true"]{ background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); border-color: var(--color-surface-inverse, #1C1A18); }
+.viewer-stage{ flex: 1; position: relative; overflow: hidden; }
+.wall{
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center;
+}
+.wall-floor{ position: absolute; left: 0; right: 0; bottom: 0; height: 18%; border-top: 1px solid var(--color-bone-100, #E2D8CC); background: var(--color-ivory-100, #F4EDE2); }
+.wall-art{ position: absolute; box-shadow: 0 18px 60px -16px rgba(28,26,24,0.3); }
+.wall-art img{ width: 100%; height: 100%; object-fit: contain; }
+.wall-sofa{ position: absolute; border: 1.5px solid var(--color-charcoal-500, #908C87); border-bottom: 0; opacity: 0.75; }
+.wall-sofa::before{ content: ""; position: absolute; left: -7%; right: -7%; bottom: 0; height: 34%; border: 1.5px solid var(--color-charcoal-500, #908C87); background: var(--color-ivory-300, #FAF6F1); }
+.wall-legend{ position: absolute; left: var(--gutter); bottom: 12px; font-size: 11px; color: var(--color-text-tertiary, #908C87); }
+.viewer-sizes{ display: flex; gap: 8px; justify-content: center; padding: 12px var(--gutter) calc(16px + env(safe-area-inset-bottom)); }
+.zoom-pane{ position: absolute; inset: 0; overflow: hidden; display: none; cursor: grab; touch-action: none; }
+.zoom-pane.on{ display: block; }
+.zoom-pane img{ position: absolute; max-width: none; transform-origin: 0 0; will-change: transform; user-select: none; -webkit-user-drag: none; }
+.ar-pane{ position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 32px; }
+.ar-pane.on{ display: grid; }
+
+/* ══ debug console ════════════════════════════════════════════════════ */
+.debug{
+  position: fixed; left: 10px; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 70;
+  background: rgba(28,26,24,0.92); color: #F4EDE2; font-family: ui-monospace, monospace;
+  font-size: 10px; line-height: 1.5; padding: 8px 10px; max-width: 320px; max-height: 180px; overflow: auto;
+  display: none;
+}
+.debug.on{ display: block; }
+.debug .ev + .ev{ border-top: 1px dashed rgba(244,237,226,0.25); margin-top: 4px; padding-top: 4px; }
+
+/* variant note */
+.variant-note{
+  position: fixed; inset: 0; z-index: 200; background: var(--color-ivory-300, #FAF6F1);
+  display: none; place-items: center; padding: 32px; text-align: center;
+}
+.variant-note.on{ display: grid; }
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ transition-duration: 1ms !important; animation-duration: 1ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- promo bar: kept, single line, no viewport theft. V2 voice: no "!" -->
+<div class="promo" id="promo">
+  <b>10 % auf dein erstes Kunstwerk</b>
+  <a class="promo-cta" href="#" onclick="return false">Bis 16.08. sichern</a>
+  <button class="promo-x" aria-label="Hinweis schließen" onclick="this.parentElement.remove()">
+    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<header class="site-head">
+  <button class="icon-btn" aria-label="Zurück zur Übersicht">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <a class="wordmark" href="https://www.lumas.de/" aria-label="LUMAS Startseite"><img src="../assets/lumas-logo-black.svg" alt="LUMAS"></a>
+  <div class="spacer"></div>
+  <button class="icon-btn" aria-label="Suche">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  </button>
+  <button class="icon-btn" aria-label="Wunschliste">
+    <svg viewBox="0 0 24 24"><path d="M12 21C7 16.6 3 13.3 3 9.3 3 6.4 5.2 4.5 7.7 4.5c1.7 0 3.3.9 4.3 2.4 1-1.5 2.6-2.4 4.3-2.4 2.5 0 4.7 1.9 4.7 4.8 0 4-4 7.3-9 11.7z"/></svg>
+  </button>
+  <button class="icon-btn" aria-label="Warenkorb">
+    <svg viewBox="0 0 24 24"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+  </button>
+</header>
+
+<main class="shell pdp">
+  <!-- ══ Zone 1a: gallery ══ -->
+  <div class="col-stage">
+    <section class="stage" aria-roledescription="Galerie" aria-label="Werkabbildungen">
+      <div class="skel" id="stageSkel" hidden></div>
+      <div class="stage-track" id="stageTrack">
+        <!-- slide 1: the work, bare, true ratio -->
+        <div class="stage-slide" role="group" aria-label="Ansicht 1 von 4: Das Werk">
+          <img id="heroImg" src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena von Marta Contreras Simó: zwei Frauen in historisierender Kleidung mit skulpturalen Hauben und roten Blüten" fetchpriority="high">
+        </div>
+        <!-- slide 2: framed (live default-frame render) -->
+        <div class="stage-slide" role="group" aria-label="Ansicht 2 von 4: Gerahmt">
+          <img loading="lazy" src="https://www.lumas.de/product/image-with-default-frame/?abstractId=6437864&amp;sku=MCS36" alt="Mina&amp;Sena im Rahmen Basel mit Schattenfuge">
+        </div>
+        <!-- slide 3: acrylic finish detail -->
+        <div class="stage-slide detail" role="group" aria-label="Ansicht 3 von 4: Acrylglas im Detail">
+          <img loading="lazy" src="https://img.lumas.com/fileadmin/images/rahmenbilder/lumasec_2mm_matt.jpg" alt="Detail: Kaschierung unter mattem Acrylglas, 2 mm">
+        </div>
+        <!-- slide 4: frame corner detail -->
+        <div class="stage-slide detail" role="group" aria-label="Ansicht 4 von 4: Rahmenecke">
+          <img loading="lazy" src="https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg" alt="Detail: Rahmen Basel mit Schattenfuge, Kanadischer Ahorn braun" id="cornerImg">
+        </div>
+      </div>
+      <div class="stage-dots" id="stageDots" role="tablist" aria-label="Galerie-Navigation"></div>
+      <button class="stage-discover" id="discoverBtn" aria-label="Ähnliche Werke entdecken">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M15.5 8.5l-2.2 5-5 2.2 2.2-5z"/></svg>
+      </button>
+      <button class="stage-wish" id="wishBtn" aria-pressed="false" aria-label="Auf die Wunschliste">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M12 21C7 16.6 3 13.3 3 9.3 3 6.4 5.2 4.5 7.7 4.5c1.7 0 3.3.9 4.3 2.4 1-1.5 2.6-2.4 4.3-2.4 2.5 0 4.7 1.9 4.7 4.8 0 4-4 7.3-9 11.7z"/></svg>
+      </button>
+      <!-- ABLYFT-GOAL: scale-viewer-open [ASSUMPTION: closest goal name] -->
+      <button class="stage-zoom" id="zoomBtn" aria-label="Werk vergrößern">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+      </button>
+    </section>
+    <div class="stage-caption">
+      <span class="caption" id="slideCaption">Das Werk · ohne Rahmen</span>
+      <span class="caption" id="slideCount">1 / 4</span>
+    </div>
+    <div class="stage-tools">
+      <div class="thumb-rail" id="thumbRail" aria-hidden="true"></div>
+      <div class="scale-entry">
+        <!-- one entry for AR / 3D / Zoom -->
+        <button class="btn btn-secondary" id="scaleBtn">In Größe sehen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Zone 1b + 2: identity + configurator ══ -->
+  <div class="col-buy">
+    <section class="identity">
+      <a class="artist" href="https://www.lumas.de/artist/marta_contreras_simo/">Marta Contreras Simó</a>
+      <h1>Mina&amp;Sena</h1>
+      <!-- ABLYFT-GOAL: edition-info-open [ASSUMPTION] -->
+      <button class="edition-chip" id="editionChip" aria-haspopup="dialog">
+        <span>Limited Edition · 150 · Signiert</span>
+        <span class="n-left" id="nLeft" hidden></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
+      </button>
+      <div class="price-row">
+        <span class="price" id="price" aria-live="polite">€ 449</span>
+        <span class="price-note">inkl. MwSt.</span>
+      </div>
+      <span class="price-flag caption" id="priceFlag">* Platzhalterpreis, final aus PIM</span>
+    </section>
+
+    <section class="config" aria-label="Konfiguration">
+      <!-- size -->
+      <div class="group" id="sizeGroup">
+        <div class="group-label">
+          <span class="eyebrow">Größe</span>
+          <span class="caption" id="sizeHint" style="color:var(--color-text-tertiary)">Außenmaß je Ausführung</span>
+        </div>
+        <div class="chip-row" role="radiogroup" aria-label="Größe wählen" id="sizeRow"></div>
+      </div>
+      <!-- finishing -->
+      <div class="group">
+        <div class="group-label"><span class="eyebrow">Ausführung</span></div>
+        <!-- ABLYFT-GOAL: frame-options-expand [ASSUMPTION] -->
+        <button class="finish-trigger" id="finishTrigger" aria-haspopup="dialog" aria-label="Ausführung wählen">
+          <span id="finishLabel">Kaschierung unter Acrylglas</span>
+          <svg class="chev" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <!-- frame colour: progressive — exists only once a framed finish is active -->
+        <div class="reveal" id="colourReveal">
+          <div class="group-label" style="margin-top:14px"><span class="eyebrow">Rahmenfarbe</span></div>
+          <div class="swatch-row" role="radiogroup" aria-label="Rahmenfarbe wählen" id="swatchRow"></div>
+        </div>
+      </div>
+
+      <div class="atc-wrap">
+        <!-- ABLYFT-GOAL: ATC (primary goal) -->
+        <button class="btn btn-primary" id="atc">In den Warenkorb</button>
+        <div class="atc-error" id="atcError" role="alert">
+          Das hat leider nicht geklappt. Deine Auswahl ist gespeichert, bitte versuche es erneut.
+        </div>
+      </div>
+      <p class="reassure" id="reassure">
+        <span id="deliveryLine">Versand in 5 Tagen</span>
+        <span class="dot-sep">·</span>
+        <span>60 Tage Rückgabe</span>
+        <span class="dot-sep">·</span>
+        <span>Zertifikat inklusive</span>
+      </p>
+      <p class="gallery-link"><a href="https://www.lumas.de/galerien/" id="galleryLink">In einer Galerie ansehen</a></p>
+    </section>
+
+    <!-- ══ Zone 3: depth, opt-in ══ -->
+    <section class="zone3">
+      <!-- Trustpilot summary — verified live 12 Aug 2026: 4,7/5 aus 6 k Bewertungen -->
+      <div class="trust-row" role="img" aria-label="Bewertet mit 4,7 von 5 Sternen bei Trustpilot, 6.000 Bewertungen">
+        <p class="tr-text">Bewertet mit <strong>4,7</strong> von 5 Sternen</p>
+        <div class="tr-mid" aria-hidden="true">
+          <p class="tr-count"><strong>6K</strong> Bewertungen</p>
+          <div class="tr-tiles">
+            <span class="tr-tile"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></span>
+            <span class="tr-tile"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></span>
+            <span class="tr-tile"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></span>
+            <span class="tr-tile"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></span>
+            <span class="tr-tile partial"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></span>
+          </div>
+        </div>
+        <div class="tr-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg>
+          <span>Trustpilot</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ══ Zone 4: continue ══ -->
+<section class="zone4" aria-label="Weitere Werke">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" id="tabArtist" data-tab="artist">Von Marta Contreras Simó</button>
+    <button class="tab" role="tab" aria-selected="false" id="tabSimilar" data-tab="similar">Ähnliche Werke</button>
+  </div>
+  <div class="works-grid" id="worksGrid"></div>
+  <div class="all-link">
+    <a class="btn-ghost" style="display:inline-block" href="https://www.lumas.de/artist/marta_contreras_simo/" id="allWorksLink">Alle Werke der Künstlerin</a>
+  </div>
+</section>
+
+<!-- sticky ATC -->
+<div class="sticky-atc" id="stickyAtc" aria-hidden="true">
+  <img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="">
+  <div class="meta">
+    <div class="m1"><span id="stickyMeta">40 × 40 · Acrylglas</span></div>
+    <div class="m2" id="stickyPrice">€ 449</div>
+  </div>
+  <button class="btn btn-primary" id="stickyBtn">In den Warenkorb</button>
+</div>
+
+<!-- scrim + sheets -->
+<div class="scrim" id="scrim"></div>
+
+<!-- provenance sheet -->
+<aside class="sheet" id="provSheet" role="dialog" aria-modal="true" aria-labelledby="provTitle">
+  <div class="sheet-head">
+    <h2 id="provTitle">Edition &amp; Provenienz</h2>
+    <button class="x" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="sheet-body">
+    <p><strong>Limited Edition, 150 Exemplare.</strong> Jedes Exemplar ist von Marta Contreras Simó signiert und wird mit Echtheitszertifikat ausgeliefert.</p>
+    <dl class="kv" style="display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:14px 0;font-size:13px">
+      <dt style="color:var(--color-text-tertiary)">Auflage</dt><dd>150 Exemplare, limitiert</dd>
+      <dt style="color:var(--color-text-tertiary)">Signatur</dt><dd>Von der Künstlerin signiert</dd>
+      <dt style="color:var(--color-text-tertiary)">Entstanden</dt><dd>2025</dd>
+      <dt style="color:var(--color-text-tertiary)">Ediert</dt><dd>2025</dd>
+      <dt style="color:var(--color-text-tertiary)">Werknummer</dt><dd>MCS36</dd>
+      <dt style="color:var(--color-text-tertiary)">Zertifikat</dt><dd>Echtheitszertifikat inklusive</dd>
+    </dl>
+    <div class="prov-scale" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></div>
+    <div class="prov-scale-labels" aria-hidden="true"><span>Geheimtipp</span><span>Beliebt</span><span>Stark nachgefragt</span><span>Letzte Exemplare</span></div>
+    <p class="body-small" style="margin-top:10px;color:var(--color-text-secondary)">Nachfragestatus: beliebt. Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
+  </div>
+</aside>
+
+<!-- all options sheet -->
+<aside class="sheet" id="optionsSheet" role="dialog" aria-modal="true" aria-labelledby="optTitle">
+  <div class="sheet-head">
+    <h2 id="optTitle">Ausführungen im Detail</h2>
+    <button class="x" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="sheet-body" id="optionsBody"></div>
+</aside>
+
+<!-- scale viewer: zoom / room-scale / AR in one entry -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Werk in Größe sehen">
+  <div class="viewer-head">
+    <div class="viewer-modes" role="tablist">
+      <button class="mode-chip" role="tab" data-mode="ar" aria-selected="false" id="arChip" hidden>AR-Ansicht</button>
+      <button class="mode-chip" role="tab" data-mode="scale" aria-selected="true">3D-Ansicht</button>
+      <button class="mode-chip" role="tab" data-mode="zoom" aria-selected="false">Zoom</button>
+    </div>
+    <button class="x" data-close aria-label="Schließen" style="width:44px;height:44px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="viewer-stage">
+    <div class="wall" id="wallPane">
+      <div class="wall-floor"></div>
+      <div class="wall-sofa" id="wallSofa" title="Sofa, 180 cm, zum Größenvergleich"></div>
+      <div class="wall-art" id="wallArt"><img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt=""></div>
+      <div class="wall-legend" id="wallLegend">Sofa 180 cm breit als Maßstab</div>
+    </div>
+    <div class="zoom-pane" id="zoomPane"><img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena in hoher Auflösung" id="zoomImg" draggable="false"></div>
+    <div class="ar-pane" id="arPane">
+      <div>
+        <p class="display" style="font-size:24px;margin-bottom:10px">Im eigenen Raum betrachten</p>
+        <p class="body-small" style="max-width:42ch;margin:0 auto 20px;color:var(--color-text-secondary)">Öffnet die Augmented-Reality-Ansicht deines Geräts und projiziert das Werk in Originalgröße an deine Wand.</p>
+        <button class="btn btn-primary" style="width:auto" id="arLaunch">AR starten</button>
+      </div>
+    </div>
+  </div>
+  <div class="viewer-sizes" id="viewerSizes" role="radiogroup" aria-label="Größe im Raum wählen"></div>
+</div>
+
+<!-- debug console -->
+<div class="debug" id="debug" aria-hidden="true"></div>
+
+<!-- control-variant note -->
+<div class="variant-note" id="variantNote">
+  <div style="max-width:52ch">
+    <p class="eyebrow" style="margin-bottom:14px">Variante: Control</p>
+    <p class="display" style="font-size:28px;line-height:1.2;margin-bottom:14px">Die Kontrolle ist die Live-PDP</p>
+    <p style="margin-bottom:22px;color:var(--color-text-secondary)">Für den A/B-Test läuft die unveränderte Produktionsseite als Control. Diese Datei enthält nur die Redesign-Variante v1.</p>
+    <p><a class="btn btn-secondary" style="width:auto;display:inline-flex" href="https://www.lumas.de/pictures/marta_contreras_simo/minasena/" target="_blank" rel="noopener">Live-PDP öffnen</a></p>
+    <p style="margin-top:18px"><button class="btn-ghost" onclick="location.search='?v=v1'">Zur Redesign-Variante v1</button></p>
+  </div>
+</div>
+
+<script>
+/* ═══ data — verified from live PDP + webshop feed, 12 Aug 2026 ═══ */
+const IMG_BARE = 'https://img.lumas.com/showimg_mcs35_full.jpg';
+const PRODUCT = {
+  artist: 'Marta Contreras Simó',
+  title: 'Mina&Sena',
+  abstractId: 6437864,
+  sizes: [
+    { key: '40',  dim: '40 × 40',  sku: 'MCS36', ship: '6,90',  outerBasel: '44,4 × 44,4 cm',
+      prices: { print: 240, acryl: 449, basel: 599 }, verified: { print: true, acryl: true, basel: true } },
+    { key: '80',  dim: '80 × 80',  sku: 'MCS35', ship: '12,90', outerBasel: '84,4 × 84,4 cm',
+      prices: { print: 530, acryl: 990, basel: 1190 }, verified: { print: false, acryl: true, basel: false } },
+    { key: '120', dim: '120 × 120', sku: 'MCS34', ship: '14,90', outerBasel: '124,4 × 124,4 cm',
+      prices: { print: 900, acryl: 1690, basel: 1990 }, verified: { print: false, acryl: true, basel: false } },
+  ],
+  finishes: [
+    { key: 'acryl', name: 'Kaschierung unter Acrylglas', spec: 'Acrylglas 2 mm matt, fertig zum Aufhängen',
+      rec: 'Empfehlung der Künstlerin', framed: false, curated: true,
+      thumb: 'https://img.lumas.com/fileadmin/images/rahmenbilder/lumasec_2mm_matt.jpg' },
+    { key: 'basel', name: 'Rahmen Basel mit Schattenfuge', spec: 'Profil 15 mm, Acrylglas matt, fertig zum Aufhängen',
+      rec: 'Empfehlung des Kurators', framed: true, curated: true,
+      thumb: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg' },
+    { key: 'print', name: 'Fotografie-Abzug', spec: 'Premium-Papier matt, ungerahmt, gerollt versendet',
+      rec: '', framed: false, curated: true,
+      thumb: IMG_BARE },
+  ],
+  colours: [ /* verified corner renders on img.lumas.com */
+    { key: 'ahorn',    name: 'Kanad. Ahorn braun', img: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg' },
+    { key: 'schwarz',  name: 'Schwarz',            img: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-schwarz.jpg' },
+    { key: 'nussbaum', name: 'Nussbaum',           img: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-nussbaum.jpg' },
+  ],
+};
+const WORKS_ARTIST = [
+  { t: 'Winda',        a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs41_search.jpg', badge: 'Bestseller', href: 'https://www.lumas.de/pictures/marta_contreras_simo/winda/' },
+  { t: 'Alika&Siara',  a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs01_search.jpg', badge: 'Neu', href: 'https://www.lumas.de/pictures/marta_contreras_simo/alikasiara/' },
+  { t: 'Sade',         a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs16_search.jpg', badge: 'Bestseller', href: 'https://www.lumas.de/pictures/marta_contreras_simo/sade/' },
+  { t: 'Kya',          a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs04_search.jpg', badge: '', href: 'https://www.lumas.de/pictures/marta_contreras_simo/kya/' },
+  { t: 'Monifa',       a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs07_search.jpg', badge: '', href: 'https://www.lumas.de/pictures/marta_contreras_simo/monifa/' },
+  { t: 'Suni',         a: 'Marta Contreras Simó', img: 'https://img.lumas.com/showimg_mcs10_search.jpg', badge: 'Neu', href: 'https://www.lumas.de/pictures/marta_contreras_simo/suni/' },
+];
+const WORKS_SIMILAR = [
+  { t: 'Portrait no.209',          a: 'Chiron Duong',     img: 'https://img.lumas.com/showimg_cdu01_search.jpg', badge: 'Bestseller', href: 'https://www.lumas.de/pictures/chiron_duong/portrait_no209/' },
+  { t: 'Blue Black Porcelain 02',  a: 'Dallae Bae',       img: 'https://img.lumas.com/showimg_dba39_search.jpg', badge: '', href: 'https://www.lumas.de/' },
+  { t: 'Where is the cat?',        a: 'Edward B. Gordon', img: 'https://img.lumas.com/showimg_ebg22_search.jpg', badge: '', href: 'https://www.lumas.de/' },
+  { t: 'White shadow',             a: 'Jiwoon Pak',       img: 'https://img.lumas.com/showimg_jpk07_search.jpg', badge: '', href: 'https://www.lumas.de/' },
+  { t: 'Tangara Seledon',          a: 'Liliroze',         img: 'https://img.lumas.com/showimg_lil10_search.jpg', badge: '', href: 'https://www.lumas.de/' },
+];
+
+/* ═══ tracking — event names from brief §10, 1:1 ═══ */
+const qs = new URLSearchParams(location.search);
+let DEBUG = qs.get('debug') === '1';
+const debugEl = document.getElementById('debug');
+function track(event, params = {}){
+  const payload = { event, page_type: 'pdp', edition_archetype: 'limited_signed', ...params };
+  console.info('[track]', event, payload);           // prototype: console; prod: dataLayer.push
+  if (DEBUG){
+    const d = document.createElement('div'); d.className = 'ev';
+    d.textContent = event + ' ' + JSON.stringify(params);
+    debugEl.prepend(d); debugEl.classList.add('on');
+    while (debugEl.children.length > 14) debugEl.lastChild.remove();
+  }
+}
+
+/* ═══ state ═══ */
+const state = {
+  size: PRODUCT.sizes[0],
+  finish: PRODUCT.finishes[0],   // artist recommendation preselected
+  colour: PRODUCT.colours[0],
+  archetype: qs.get('state') === 'open-edition' ? 'open' : 'limited',
+  lastCopies: qs.get('state') === 'lastcopies',
+  atcError: qs.get('state') === 'atc-error',
+};
+const fmt = n => '€ ' + n.toLocaleString('de-DE');
+
+/* ═══ variant switch (proto-kit) ═══ */
+function applyVariant(){
+  const v = qs.get('v') || 'v1';
+  document.getElementById('variantNote').classList.toggle('on', v === 'control');
+}
+applyVariant();
+document.addEventListener('keydown', e => {
+  if (e.key === 'v' && !e.metaKey && !e.ctrlKey && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
+    location.search = (qs.get('v') === 'control') ? '?v=v1' : '?v=control';
+  }
+  if (e.key === 'd' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
+    DEBUG = !DEBUG; debugEl.classList.toggle('on', DEBUG);
+  }
+  if (e.key === 'Escape') closeAllSheets();
+});
+
+/* ═══ render: size chips ═══ */
+const sizeRow = document.getElementById('sizeRow');
+function renderSizes(){
+  if (state.archetype === 'open'){
+    document.getElementById('sizeGroup').innerHTML =
+      '<div class="group-label"><span class="eyebrow">Größe</span></div>' +
+      '<p class="body-small" style="color:var(--color-text-secondary)">Feste Größe: 40 × 40 cm</p>';
+    return;
+  }
+  sizeRow.innerHTML = '';
+  PRODUCT.sizes.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'size-chip'; b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', String(s === state.size));
+    b.innerHTML = `<span class="dim">${s.dim} cm</span>`;
+    b.addEventListener('click', () => {
+      if (b.getAttribute('aria-disabled') === 'true'){ return; }
+      state.size = s;
+      track('artwork_size_select', { size: s.dim.replace(/\s/g,'') , sku: s.sku });
+      update('size');
+    });
+    sizeRow.appendChild(b);
+  });
+}
+
+/* ═══ render: finishing (select-style trigger → sheet) ═══ */
+function renderFinishes(){
+  document.getElementById('finishLabel').textContent = state.finish.name;
+}
+document.getElementById('finishTrigger').addEventListener('click', () => {
+  track('frame_options_expand', { option_count: PRODUCT.finishes.length });
+  renderOptionsSheet();
+  showSheet('optionsSheet');
+});
+
+/* ═══ render: frame colours (progressive) ═══ */
+const colourReveal = document.getElementById('colourReveal');
+const swatchRow = document.getElementById('swatchRow');
+function renderColours(){
+  const framed = state.finish.framed;
+  colourReveal.classList.toggle('open', framed);
+  colourReveal.setAttribute('aria-hidden', String(!framed));
+  if (!framed) return;
+  swatchRow.innerHTML = '';
+  PRODUCT.colours.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'swatch'; b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', String(c === state.colour));
+    b.innerHTML = `<span class="ring"><img src="${c.img}" alt=""></span><span class="sw-name">${c.name}</span>`;
+    b.addEventListener('click', () => {
+      state.colour = c;
+      document.getElementById('cornerImg').src = c.img;
+      track('configurator_apply', { size: state.size.dim, finish: state.finish.key, frame_color: c.key });
+      update('colour');
+    });
+    swatchRow.appendChild(b);
+  });
+}
+
+/* ═══ price + sticky + delivery ═══ */
+const priceEl = document.getElementById('price');
+const priceFlag = document.getElementById('priceFlag');
+let deliverySeen = false;
+function update(trigger){
+  renderSizes(); renderFinishes(); renderColours();
+  const p = state.size.prices[state.finish.key];
+  const verified = state.size.verified[state.finish.key];
+  priceEl.classList.add('updating');
+  setTimeout(() => {
+    priceEl.textContent = fmt(p) + (verified ? '' : '*');
+    priceEl.classList.remove('updating');
+  }, 180);
+  priceFlag.classList.toggle('on', !verified);
+  document.getElementById('stickyPrice').textContent = fmt(p) + (verified ? '' : '*');
+  document.getElementById('stickyMeta').textContent =
+    `${state.size.dim} · ${state.finish.key === 'acryl' ? 'Acrylglas' : state.finish.key === 'basel' ? 'Rahmen Basel' : 'Abzug'}`;
+  document.getElementById('deliveryLine').textContent = `Versand in 5 Tagen (zzgl. € ${state.size.ship})`;
+  document.getElementById('sizeHint').textContent =
+    state.finish.key === 'basel' ? `Außenmaß gerahmt: ${state.size.outerBasel}` : 'Bildmaß in cm';
+  if (trigger) track('price_updated', { new_price: p, trigger });
+  if (!deliverySeen){ deliverySeen = true; track('delivery_estimate_view', { estimate_days: 5 }); }
+}
+
+/* ═══ ATC ═══ */
+function addToCart(position){
+  track('add_to_cart', {
+    cta_position: position, value: state.size.prices[state.finish.key],
+    size: state.size.dim, finish: state.finish.key,
+    frame_color: state.finish.framed ? state.colour.key : null, sku: state.size.sku,
+  });
+  const err = document.getElementById('atcError');
+  if (state.atcError){ err.classList.add('on'); return; }
+  err.classList.remove('on');
+  const btn = document.getElementById('atc');
+  const old = btn.textContent;
+  btn.textContent = 'Zum Warenkorb hinzugefügt';
+  setTimeout(() => { btn.textContent = old; }, 1600);
+}
+document.getElementById('atc').addEventListener('click', () => addToCart('inline'));
+document.getElementById('stickyBtn').addEventListener('click', () => addToCart('sticky'));
+
+/* last copies state */
+if (state.lastCopies){
+  const n = document.getElementById('nLeft'); n.hidden = false; n.textContent = 'Noch 7 Exemplare';
+  document.getElementById('atc').textContent = 'Exemplar sichern';
+}
+
+/* ═══ sticky ATC via IntersectionObserver ═══ */
+const stickyEl = document.getElementById('stickyAtc');
+const atcSentinel = document.getElementById('atc');
+if ('IntersectionObserver' in window){
+  new IntersectionObserver(([e]) => {
+    // sticky only once the inline ATC has been scrolled PAST (brief: "from this point down")
+    const passed = !e.isIntersecting && e.boundingClientRect.top < 0;
+    stickyEl.classList.toggle('on', passed);
+    stickyEl.setAttribute('aria-hidden', String(!passed));
+  }, { rootMargin: '-56px 0px 0px 0px' }).observe(atcSentinel);
+}
+
+/* ═══ gallery: dots, swipe, thumbs ═══ */
+const track_ = document.getElementById('stageTrack');
+const dots = document.getElementById('stageDots');
+const rail = document.getElementById('thumbRail');
+const captions = ['Das Werk · ohne Rahmen', 'Gerahmt · Rahmen Basel', 'Acrylglas · Detail', 'Rahmenecke · Detail'];
+const slides = [...track_.children];
+slides.forEach((_, i) => {
+  const d = document.createElement('button');
+  d.setAttribute('aria-label', `Ansicht ${i + 1}`);
+  d.setAttribute('aria-current', String(i === 0));
+  d.innerHTML = '<i></i>';
+  d.addEventListener('click', () => { goSlide(i, 'dot'); });
+  dots.appendChild(d);
+  const t = document.createElement('button');
+  t.setAttribute('aria-label', `Ansicht ${i + 1}`);
+  t.setAttribute('aria-current', String(i === 0));
+  const src = slides[i].querySelector('img').src;
+  t.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+  t.addEventListener('click', () => { goSlide(i, 'thumb'); });
+  rail.appendChild(t);
+});
+function goSlide(i, method){
+  track_.scrollTo({ left: i * track_.clientWidth, behavior: 'smooth' });
+  track('gallery_nav', { index: i, method });
+}
+let slideTimer;
+track_.addEventListener('scroll', () => {
+  clearTimeout(slideTimer);
+  slideTimer = setTimeout(() => {
+    const i = Math.round(track_.scrollLeft / track_.clientWidth);
+    [...dots.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
+    [...rail.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
+    document.getElementById('slideCaption').textContent = captions[i] || '';
+    document.getElementById('slideCount').textContent = (i + 1) + ' / ' + slides.length;
+  }, 80);
+}, { passive: true });
+
+/* loading state: skeleton at correct ratio, no layout shift */
+const heroImg = document.getElementById('heroImg');
+const skel = document.getElementById('stageSkel');
+if (qs.get('state') === 'loading' || !heroImg.complete){
+  skel.hidden = false; heroImg.classList.add('skeleton-img');
+  const done = () => setTimeout(() => { skel.hidden = true; heroImg.classList.remove('skeleton-img'); heroImg.style.transition = 'opacity 320ms ease'; heroImg.style.opacity = 1; },
+    qs.get('state') === 'loading' ? 2200 : 0);
+  heroImg.complete ? done() : heroImg.addEventListener('load', done, { once: true });
+}
+
+/* wishlist — kept, de-emphasised */
+const wishBtn = document.getElementById('wishBtn');
+wishBtn.addEventListener('click', () => {
+  const on = wishBtn.getAttribute('aria-pressed') !== 'true';
+  wishBtn.setAttribute('aria-pressed', String(on));
+  wishBtn.querySelector('svg').style.fill = on ? 'currentColor' : 'none';
+  track('add_to_wishlist', { active: on });
+});
+
+/* ═══ sheets ═══ */
+const scrim = document.getElementById('scrim');
+let openSheet = null, lastFocus = null;
+function showSheet(id){
+  lastFocus = document.activeElement;
+  openSheet = document.getElementById(id);
+  scrim.classList.add('on');
+  openSheet.classList.add('on');
+  openSheet.querySelector('[data-close]').focus();
+}
+function closeAllSheets(){
+  scrim.classList.remove('on');
+  document.querySelectorAll('.sheet.on').forEach(s => s.classList.remove('on'));
+  document.getElementById('viewer').classList.remove('on');
+  if (lastFocus) lastFocus.focus();
+  openSheet = null;
+}
+scrim.addEventListener('click', closeAllSheets);
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeAllSheets));
+
+document.getElementById('editionChip').addEventListener('click', () => {
+  track('edition_info_open', { edition_type: 'limited_signed', edition_size: 150 });
+  showSheet('provSheet');
+});
+function renderOptionsSheet(){
+  const el = document.getElementById('optionsBody');
+  el.innerHTML = PRODUCT.finishes.map(f => {
+    const p = state.size.prices[f.key];
+    const star = state.size.verified[f.key] ? '' : '*';
+    return `
+    <div data-active="${f === state.finish}" style="display:grid;grid-template-columns:96px 1fr;gap:16px;padding:14px;margin:0 -14px;border-bottom:1px solid var(--color-border-subtle);${f === state.finish ? 'outline:2px solid var(--color-border-focus);outline-offset:-2px;' : ''}">
+      <img src="${f.thumb}" alt="" style="width:96px;height:96px;object-fit:cover;background:var(--stage)">
+      <div>
+        ${f.rec ? `<span class="rec" style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-tertiary);display:block;margin-bottom:3px">${f.rec}</span>` : ''}
+        <strong style="font-size:14px">${f.name}</strong>
+        <p class="body-small" style="color:var(--color-text-secondary);margin:3px 0 6px">${f.spec}${f.key === 'basel' ? ' · Rahmenfarben: Kanad. Ahorn braun, Schwarz, Nussbaum' : ''}</p>
+        <span style="font-weight:600;font-size:14px">${fmt(p)}${star}</span>
+      </div>
+    </div>`;
+  }).join('') + `<p class="caption" style="margin-top:12px;color:var(--color-text-tertiary)">Bei Werken mit größerem Rahmenkatalog erscheint hier die vollständige Liste aller Ausführungen, gruppiert nach Rahmenfamilie.${' '}Auswahl gilt sofort, ein zusätzlicher Bestätigen-Schritt entfällt.</p>`;
+  el.querySelectorAll('div[style*="grid"]').forEach((row, i) => {
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', () => {
+      state.finish = PRODUCT.finishes[i];
+      track('artwork_finish_select', { finish_name: state.finish.key, is_curated: true, price_delta: 0, source: 'options_sheet' });
+      update('finish'); closeAllSheets();
+    });
+  });
+}
+
+/* ═══ zone 4 tabs + grid ═══ */
+const worksGrid = document.getElementById('worksGrid');
+function renderWorks(tab){
+  const list = tab === 'artist' ? WORKS_ARTIST : WORKS_SIMILAR;
+  worksGrid.innerHTML = '';
+  list.forEach(w => {
+    const a = document.createElement('a');
+    a.className = 'work-card'; a.href = w.href;
+    a.innerHTML = `
+      <span class="art"><img src="${w.img}" alt="${w.t} von ${w.a}" loading="lazy"></span>
+      ${w.badge ? `<span class="w-badge">${w.badge}</span>` : ''}
+      <span class="w-title" style="display:block">${w.t}</span>
+      <span class="w-artist" style="display:block">${w.a}</span>`;
+    a.addEventListener('click', e => {
+      e.preventDefault(); // prototype: don't navigate away
+      track('carousel_artwork_click', { title: w.t, tab });
+    });
+    worksGrid.appendChild(a);
+  });
+  document.getElementById('allWorksLink').textContent = tab === 'artist' ? 'Alle Werke der Künstlerin' : 'Mehr ähnliche Werke entdecken';
+}
+document.querySelectorAll('.zone4 .tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.zone4 .tab').forEach(x => x.setAttribute('aria-selected', 'false'));
+    t.setAttribute('aria-selected', 'true');
+    renderWorks(t.dataset.tab);
+  });
+});
+renderWorks('artist');
+
+/* ═══ scale viewer (zoom + room scale + AR in one) ═══ */
+const viewer = document.getElementById('viewer');
+const isTouch = matchMedia('(pointer: coarse)').matches;
+if (isTouch) document.getElementById('arChip').hidden = false; // AR mobile only — no dead entry on desktop
+function openViewer(mode){
+  viewer.classList.add('on');
+  setViewerMode(mode);
+  renderViewerSizes();
+  track('scale_viewer_open', { modality: mode });
+}
+function setViewerMode(mode){
+  document.querySelectorAll('.mode-chip').forEach(c => c.setAttribute('aria-selected', String(c.dataset.mode === mode)));
+  document.getElementById('wallPane').style.display = mode === 'scale' ? 'flex' : 'none';
+  document.getElementById('zoomPane').classList.toggle('on', mode === 'zoom');
+  document.getElementById('arPane').classList.toggle('on', mode === 'ar');
+  document.getElementById('viewerSizes').style.visibility = mode === 'scale' ? 'visible' : 'hidden';
+  if (mode === 'scale') layoutWall();
+  if (mode === 'zoom') initZoom();
+}
+document.querySelectorAll('.mode-chip').forEach(c => c.addEventListener('click', () => {
+  setViewerMode(c.dataset.mode);
+  track('scale_viewer_open', { modality: c.dataset.mode });
+}));
+document.getElementById('scaleBtn').addEventListener('click', () => openViewer('scale'));
+document.getElementById('zoomBtn').addEventListener('click', () => openViewer('zoom'));
+heroImg.addEventListener('click', () => openViewer('zoom'));
+document.getElementById('arLaunch').addEventListener('click', () => {
+  track('ar_preview', { supported: isTouch });
+  alert('Prototyp: hier startet die native AR-Ansicht (Quick Look / Scene Viewer).');
+});
+function renderViewerSizes(){
+  const el = document.getElementById('viewerSizes'); el.innerHTML = '';
+  PRODUCT.sizes.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'mode-chip'; b.setAttribute('role', 'radio');
+    b.setAttribute('aria-selected', String(s === state.size));
+    b.textContent = s.dim + ' cm';
+    b.addEventListener('click', () => { state.size = s; update('viewer_size'); renderViewerSizes(); layoutWall(); });
+    el.appendChild(b);
+  });
+}
+function layoutWall(){
+  // true scale: sofa 180 cm wide against artwork edge length
+  const pane = document.getElementById('wallPane');
+  const W = pane.clientWidth, H = pane.clientHeight;
+  // scene: sofa 180 cm wide, art up to 120 cm hung 30 cm above it → ~230 cm tall
+  const pxPerCm = Math.min(W * 0.85 / 190, H * 0.62 / 232);
+  const sofaW = 180 * pxPerCm, sofaH = 78 * pxPerCm;
+  const artCm = parseInt(state.size.key, 10);
+  const artPx = artCm * pxPerCm;
+  const sofa = document.getElementById('wallSofa');
+  const floorY = H * 0.86;
+  sofa.style.cssText += `;width:${sofaW}px;height:${sofaH}px;left:${(W - sofaW) / 2}px;top:${floorY - sofaH}px`;
+  const art = document.getElementById('wallArt');
+  const artBottom = floorY - sofaH - 30 * pxPerCm; // 30 cm over sofa
+  art.style.cssText += `;width:${artPx}px;height:${artPx}px;left:${(W - artPx) / 2}px;top:${artBottom - artPx}px`;
+  document.getElementById('wallLegend').textContent = `Maßstabsansicht · Sofa 180 cm · Werk ${state.size.dim} cm`;
+}
+addEventListener('resize', () => { if (viewer.classList.contains('on')) layoutWall(); });
+
+/* zoom pane: drag + wheel + double-tap */
+let zx = 0, zy = 0, zs = 1, dragging = false, lx = 0, ly = 0;
+const zoomImg = document.getElementById('zoomImg');
+const zoomPane = document.getElementById('zoomPane');
+function initZoom(){
+  const p = zoomPane.getBoundingClientRect();
+  zs = Math.min(p.width, p.height) / 2400 * 2; // start ~2x of fit
+  zs = Math.max(zs, 0.25);
+  zx = (p.width - 2400 * zs) / 2; zy = (p.height - 2400 * zs) / 2;
+  applyZoom();
+}
+function applyZoom(){ zoomImg.style.transform = `translate(${zx}px, ${zy}px) scale(${zs})`; zoomImg.style.width = '2400px'; }
+zoomPane.addEventListener('pointerdown', e => { dragging = true; lx = e.clientX; ly = e.clientY; zoomPane.setPointerCapture(e.pointerId); });
+zoomPane.addEventListener('pointermove', e => { if (!dragging) return; zx += e.clientX - lx; zy += e.clientY - ly; lx = e.clientX; ly = e.clientY; applyZoom(); });
+zoomPane.addEventListener('pointerup', () => dragging = false);
+zoomPane.addEventListener('wheel', e => { e.preventDefault(); const f = e.deltaY < 0 ? 1.12 : 0.9; zs = Math.min(Math.max(zs * f, 0.15), 3); applyZoom(); }, { passive: false });
+zoomPane.addEventListener('dblclick', () => { zs = zs < 1 ? 1.4 : 0.3; applyZoom(); });
+
+/* ═══ scroll depth ═══ */
+const thresholds = [25, 50, 75, 90]; const fired = new Set();
+addEventListener('scroll', () => {
+  const d = (scrollY + innerHeight) / document.body.scrollHeight * 100;
+  thresholds.forEach(t => { if (d >= t && !fired.has(t)){ fired.add(t); track('pdp_scroll', { threshold: t }); } });
+}, { passive: true });
+
+/* discover icon — jumps to similar works */
+document.getElementById('discoverBtn').addEventListener('click', () => {
+  track('discover_similar_click', { source: 'stage' });
+  document.getElementById('tabSimilar').click();
+  document.querySelector('.zone4').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* gallery CTA — demoted, still measured */
+document.getElementById('galleryLink').addEventListener('click', () => track('gallery_visit_click', {}));
+
+/* init */
+update();
+if (DEBUG) debugEl.classList.add('on');
+track('pdp_view', { sku: state.size.sku, variant: qs.get('v') || 'v1' });
+</script>
+</body>
+</html>

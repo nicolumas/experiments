@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>LUMAS · Kaleidoscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Cormorant:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --charcoal-900:#1C1A18; --ivory-100:#F4EDE2; --ease-out:cubic-bezier(.22,1,.36,1); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--charcoal-900); color:var(--ivory-100); font-family:"Archivo",system-ui,sans-serif;
+    overflow:hidden; touch-action:none; -webkit-font-smoothing:antialiased}
+  .stage{position:fixed; inset:0; overflow:hidden}
+  #kaleido{position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0;
+    transition:opacity 1400ms var(--ease-out); cursor:grab}
+  .ready #kaleido{opacity:1}
+  .stage.dragging #kaleido{cursor:grabbing}
+  /* faint center vignette to seat the disc */
+  .vignette{position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:radial-gradient(60% 60% at 50% 50%, transparent 52%, rgba(19,17,15,.55) 100%)}
+
+  .top{position:absolute; top:clamp(22px,4vh,46px); left:0; right:0; z-index:3; text-align:center;
+    opacity:0; transform:translateY(-8px); transition:opacity 1000ms var(--ease-out) 120ms, transform 1000ms var(--ease-out) 120ms; pointer-events:none}
+  .ready .top{opacity:1; transform:none}
+  .wordmark{font-size:clamp(13px,1.5vw,16px); letter-spacing:.44em; text-indent:.44em; text-shadow:0 2px 18px rgba(0,0,0,.6)}
+
+  .nav{position:absolute; top:50%; transform:translateY(-50%); z-index:4; appearance:none; background:none; border:0;
+    cursor:pointer; color:rgba(244,237,226,.4); padding:16px; opacity:0; transition:color 220ms var(--ease-out)}
+  .ready .nav{opacity:1; transition:opacity 900ms var(--ease-out) 700ms, color 220ms var(--ease-out)}
+  .nav:hover{color:rgba(244,237,226,.95)} .nav:focus-visible{outline:none; color:rgba(244,237,226,.95)}
+  .nav.prev{left:clamp(8px,2.5vw,30px)} .nav.next{right:clamp(8px,2.5vw,30px)}
+  .nav svg{display:block;width:26px;height:26px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+
+  .bottom{position:absolute; left:0; right:0; bottom:clamp(24px,5vh,52px); z-index:3; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:clamp(12px,2vh,18px);
+    opacity:0; transition:opacity 1000ms var(--ease-out) 500ms}
+  .ready .bottom{opacity:1}
+  .title{font-family:"Cormorant",Georgia,serif; font-size:clamp(22px,2.5vw,30px); line-height:1.1;
+    text-shadow:0 2px 20px rgba(0,0,0,.6); transition:opacity 320ms var(--ease-out)}
+  .edition{margin-top:8px; font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    color:rgba(244,237,226,.62); text-shadow:0 1px 12px rgba(0,0,0,.6); transition:opacity 320ms var(--ease-out)}
+  .index{display:flex; gap:8px; justify-content:center}
+  .index i{width:13px; height:2px; background:rgba(244,237,226,.3); transition:background 420ms var(--ease-out), width 420ms var(--ease-out)}
+  .index i.on{width:20px; background:rgba(244,237,226,.9)}
+  .row{display:flex; align-items:center; gap:22px}
+  .ctrl{appearance:none; background:none; border:0; cursor:pointer; color:rgba(244,237,226,.5);
+    font-family:"Archivo",sans-serif; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    padding:9px 6px; display:inline-flex; align-items:center; gap:7px; transition:color 220ms var(--ease-out), transform 160ms var(--ease-out); touch-action:none}
+  .ctrl:hover{color:rgba(244,237,226,.92)} .ctrl:focus-visible{outline:none; color:rgba(244,237,226,.92)}
+  .ctrl.held{color:var(--ivory-100); transform:scale(.97)}
+  .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7}
+  .hint{font-family:"Cormorant",Georgia,serif; font-style:italic; font-size:13px; color:rgba(244,237,226,.45);
+    text-shadow:0 1px 12px rgba(0,0,0,.6); transition:opacity 700ms var(--ease-out)}
+  .hint.gone{opacity:0}
+  @media (prefers-reduced-motion:reduce){ #kaleido,.top,.bottom,.nav{transition:opacity 500ms ease} }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <canvas id="kaleido"></canvas>
+    <div class="vignette"></div>
+
+    <div class="top"><div class="wordmark">LUMAS</div></div>
+
+    <button class="nav prev" id="prev" type="button" aria-label="Previous bloom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4 L7 12 L15 20"/></svg>
+    </button>
+    <button class="nav next" id="next" type="button" aria-label="Next bloom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L17 12 L9 20"/></svg>
+    </button>
+
+    <div class="bottom">
+      <div>
+        <div class="title" id="title">La Vie en Rose</div>
+        <div class="edition" id="edition">Isabelle Menin · Limited edition</div>
+      </div>
+      <div class="index" id="index"></div>
+      <div class="row">
+        <button class="ctrl" id="reveal" type="button" aria-label="Hold to reveal the artwork"><span class="dot"></span>Hold to reveal</button>
+      </div>
+      <div class="hint" id="hint">Move to stir it · drag to spin · ← → for the next bloom</div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $=id=>document.getElementById(id);
+  const stage=$('stage'), canvas=$('kaleido'), ctx=canvas.getContext('2d');
+  const titleEl=$('title'), editionEl=$('edition'), hint=$('hint'), indexEl=$('index');
+
+  const ARTIST='Isabelle Menin';
+  const WORKS=[
+    {code:'ime125', title:'La Vie en Rose'},
+    {code:'ime130', title:'Adventures in the Garden'},
+    {code:'ime117', title:'Midnight'},
+    {code:'ime142', title:'The Beautiful Morning'},
+  ];
+  const url=c=>`https://img.lumas.com/showimg_${c}_xl.jpg`;
+  const N=WORKS.length;
+  const imgs=WORKS.map(w=>{ const im=new Image(); im.src=url(w.code); return im; });
+
+  WORKS.forEach((w,i)=>{ const b=document.createElement('i'); if(i===0)b.className='on'; indexEl.appendChild(b); });
+  const ticks=indexEl.querySelectorAll('i');
+
+  /* sizing */
+  let W,H,cx,cy,R,dpr;
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1, 1.6);
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+    cx=W/2; cy=H/2; R=Math.hypot(cx,cy)+60;
+  }
+  resize(); addEventListener('resize', resize);
+
+  const SIDES=12, slice=(Math.PI*2)/SIDES;
+
+  /* state */
+  let cur=0, prev=-1, trans=0;            // crossfade progress old->new (1..0)
+  let rot=0, rotVel=0;                     // overall spin
+  let zoom=1.0, zoomT=1.0;                 // wheel zoom
+  let panPx=0, panPy=0;                    // cursor stir offset (target)
+  let cpx=0, cpy=0;                        // smoothed cursor offset
+  let reveal=0, revealT=0;                 // 0=kaleido, 1=flat artwork
+  const AUTO=0.0011;                       // idle spin
+  let t0=performance.now();
+
+  function drawKaleido(img, alpha){
+    if(!img.complete || !img.naturalWidth) return;
+    const t=(performance.now()-t0)/1000;
+    const iw=img.naturalWidth, ih=img.naturalHeight;
+    const base=Math.max(W,H);
+    const fit=(R*2.1)/Math.min(iw,ih);     // scale source so a rich chunk fills the wedge
+    const sc=fit*zoom;
+    // sample point drifts (Lissajous) + cursor stir
+    const sx=iw*(0.5 + 0.16*Math.sin(t*0.13) + cpx*0.12);
+    const sy=ih*(0.5 + 0.16*Math.cos(t*0.11) + cpy*0.12);
+    ctx.globalAlpha=alpha;
+    for(let i=0;i<SIDES;i++){
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(i*slice + rot);
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,R,-slice/2,slice/2); ctx.closePath(); ctx.clip();
+      if(i%2===1) ctx.scale(1,-1);          // mirror odd wedges -> reflection symmetry
+      ctx.rotate(0.2*Math.sin(t*0.07));     // gentle source sway
+      ctx.scale(sc,sc);
+      ctx.drawImage(img, -sx, -sy);
+      ctx.restore();
+    }
+    ctx.globalAlpha=1;
+  }
+  function drawFlat(img, alpha){
+    if(!img.complete||!img.naturalWidth) return;
+    const iw=img.naturalWidth, ih=img.naturalHeight;
+    const m=Math.min(W,H)*0.82, s=Math.min(m/iw, m/ih);
+    const w=iw*s, h=ih*s;
+    ctx.globalAlpha=alpha;
+    ctx.drawImage(img, cx-w/2, cy-h/2, w, h);
+    ctx.globalAlpha=1;
+  }
+
+  function frame(){
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#161310'; ctx.fillRect(0,0,W,H);
+    // motion integration
+    if(!reduce){
+      rot += AUTO + rotVel; rotVel *= 0.94;
+      cpx += (panPx-cpx)*0.06; cpy += (panPy-cpy)*0.06;
+      zoom += (zoomT-zoom)*0.08;
+      reveal += (revealT-reveal)*0.12;
+      if(trans>0){ trans=Math.max(0,trans-0.022); }
+    } else { cpx=panPx; cpy=panPy; zoom=zoomT; reveal=revealT; trans=0; }
+
+    const kAlpha = 1 - reveal*0.9;
+    if(trans>0 && prev>=0){ drawKaleido(imgs[prev], kAlpha*trans); drawKaleido(imgs[cur], kAlpha*(1-trans)); }
+    else { drawKaleido(imgs[cur], kAlpha); }
+    if(reveal>0.01) drawFlat(imgs[cur], reveal);
+
+    requestAnimationFrame(frame);
+  }
+
+  function setWork(i){
+    i=(i%N+N)%N; if(i===cur) return;
+    prev=cur; cur=i; trans=1;
+    ticks.forEach((el,j)=>el.classList.toggle('on', j===cur));
+    titleEl.style.opacity='0'; editionEl.style.opacity='0';
+    setTimeout(()=>{ titleEl.textContent=WORKS[cur].title; editionEl.textContent=ARTIST+' · Limited edition';
+      titleEl.style.opacity='1'; editionEl.style.opacity='1'; }, reduce?0:320);
+    dismissHint();
+  }
+  let hintGone=false; function dismissHint(){ if(hintGone)return; hintGone=true; hint.classList.add('gone'); }
+
+  /* input: stir (hover), spin (drag), zoom (wheel) */
+  let dragging=false, lastAng=0, lastT=0;
+  function angle(x,y){ return Math.atan2(y-cy, x-cx); }
+  stage.addEventListener('pointermove', e=>{
+    panPx=(e.clientX/W*2-1); panPy=(e.clientY/H*2-1);
+    if(dragging){
+      const a=angle(e.clientX,e.clientY); let d=a-lastAng;
+      if(d>Math.PI)d-=Math.PI*2; if(d<-Math.PI)d+=Math.PI*2;
+      rot+=d; const now=performance.now(); rotVel=d; lastAng=a; lastT=now;
+      dismissHint();
+    }
+  });
+  stage.addEventListener('pointerdown', e=>{
+    if(e.target.closest('.nav')||e.target.closest('.ctrl')) return;
+    dragging=true; stage.classList.add('dragging'); lastAng=angle(e.clientX,e.clientY); lastT=performance.now();
+    stage.setPointerCapture?.(e.pointerId); dismissHint();
+  });
+  function endDrag(){ dragging=false; stage.classList.remove('dragging'); }
+  stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('wheel', e=>{ e.preventDefault();
+    zoomT=Math.max(0.6, Math.min(2.4, zoomT * (e.deltaY>0?0.92:1.08))); dismissHint();
+  }, {passive:false});
+
+  /* reveal (hold) */
+  const rev=$('reveal');
+  const hold=on=>{ revealT=on?1:0; rev.classList.toggle('held',on); };
+  ['pointerdown'].forEach(ev=>rev.addEventListener(ev, e=>{ e.preventDefault(); hold(true); }));
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>rev.addEventListener(ev, ()=>hold(false)));
+
+  /* nav */
+  $('next').addEventListener('click', ()=>setWork(cur+1));
+  $('prev').addEventListener('click', ()=>setWork(cur-1));
+  addEventListener('keydown', e=>{ if(e.key==='ArrowRight')setWork(cur+1); else if(e.key==='ArrowLeft')setWork(cur-1);
+    else if(e.key===' '){ e.preventDefault(); hold(true); setTimeout(()=>hold(false),900);} });
+
+  /* boot: reveal scene once first image is in */
+  function start(){ stage.classList.add('ready'); zoom=1.5; zoomT=1.0; rotVel=0.05; }
+  if(imgs[0].complete && imgs[0].naturalWidth) start();
+  else { imgs[0].onload=start; imgs[0].onerror=start; setTimeout(start,2500); }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

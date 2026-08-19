@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Passage · the collection has one road</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+<link href="../assets/v2-tokens.css" rel="stylesheet">
+<style>
+  :root{
+    --display:'UtileDisplay',Georgia,serif;
+    --sans:'Archivo',-apple-system,BlinkMacSystemFont,sans-serif;
+    --page:#FFFFFF;
+    --ease:cubic-bezier(0.2,0.8,0.2,1);
+    --t-fast:220ms; --t-mid:320ms; --t-slow:520ms;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    background:var(--page); color:var(--color-charcoal-900);
+    font-family:var(--sans); font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  button{border:0;background:none;font:inherit;color:inherit;cursor:pointer;padding:0;margin:0}
+
+  /* ---------- drift ribbon ---------- */
+  .ribbon{
+    position:fixed; top:0; left:0; right:0; height:3px;
+    display:flex; z-index:40; background:var(--color-bone-300);
+  }
+  .ribbon i{flex:0 0 1.5%; transition:background var(--t-mid) var(--ease)}
+  .ribbon i.now{box-shadow:inset 0 0 0 1px rgba(28,26,24,.35)}
+
+  /* ---------- masthead ---------- */
+  .top{
+    position:fixed; top:0; left:0; right:0; z-index:30;
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:22px 30px 0;
+    pointer-events:none;
+  }
+  .brand{
+    font-family:var(--sans); font-weight:700;
+    font-size:var(--type-ui-label); letter-spacing:var(--tracking-ui-label);
+    text-transform:uppercase; color:var(--color-charcoal-900);
+  }
+  .odo{
+    font-size:var(--type-caption); letter-spacing:.06em;
+    color:var(--color-charcoal-500); font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- stage ---------- */
+  .stage{
+    position:absolute; inset:0;
+    display:grid; grid-template-columns:1fr minmax(0,auto) 1fr;
+    align-items:center; gap:0;
+    padding:76px 30px 150px;
+  }
+  .art{
+    grid-column:2; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    min-width:0;
+  }
+  /* true aspect ratio, never cropped: cap both axes, let the image scale itself */
+  .art img{
+    display:block; max-height:66vh; max-width:min(62vw,860px);
+    width:auto; height:auto; object-fit:contain;
+    opacity:0; transition:opacity var(--t-slow) var(--ease);
+  }
+  .art img.in{opacity:1}
+
+  /* left plate: who */
+  .who{
+    grid-column:1; justify-self:start; align-self:center;
+    max-width:270px; padding-right:44px;
+    opacity:0; transform:translateY(6px);
+    transition:opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--ease);
+  }
+  .who.in{opacity:1; transform:none}
+  .stop{
+    font-size:var(--type-micro); font-weight:700; letter-spacing:var(--tracking-ui-label);
+    text-transform:uppercase; color:var(--color-charcoal-500);
+    display:block; margin-bottom:14px; font-variant-numeric:tabular-nums;
+  }
+  .artist{
+    font-family:var(--display); font-weight:400;
+    font-size:var(--type-display-h3); line-height:1.12; letter-spacing:0;
+    margin:0 0 6px;
+  }
+  .title{
+    font-family:var(--display); font-weight:300; font-style:italic;
+    font-size:var(--type-body-large); line-height:1.35;
+    color:var(--color-charcoal-700); margin:0 0 18px;
+  }
+  .toks{display:flex; flex-wrap:wrap; gap:5px}
+  .toks span{
+    font-size:var(--type-micro); letter-spacing:.04em;
+    color:var(--color-charcoal-500);
+    border:1px solid var(--color-bone-100); padding:3px 7px; border-radius:2px;
+  }
+
+  /* right plate: what it costs */
+  .buy{
+    grid-column:3; justify-self:end; align-self:center; text-align:right;
+    max-width:230px; padding-left:44px;
+    opacity:0; transform:translateY(6px);
+    transition:opacity var(--t-mid) var(--ease) 60ms, transform var(--t-mid) var(--ease) 60ms;
+  }
+  .buy.in{opacity:1; transform:none}
+  .lbl{
+    font-size:var(--type-micro); font-weight:700; letter-spacing:var(--tracking-ui-label);
+    text-transform:uppercase; color:var(--color-charcoal-500); display:block; margin-bottom:5px;
+  }
+  .price{font-family:var(--display); font-size:var(--type-display-h4); margin:0 0 4px}
+  .dims{font-size:var(--type-body-small); color:var(--color-charcoal-500); margin:0 0 20px}
+  .shop{
+    display:inline-block; border-bottom:1px solid var(--color-charcoal-900);
+    padding-bottom:2px; font-size:var(--type-body-small); text-decoration:none;
+    color:var(--color-charcoal-900); transition:opacity var(--t-fast) var(--ease);
+  }
+  .shop:hover{opacity:.55}
+
+  /* ---------- controls ---------- */
+  .deck{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    padding:0 30px 26px;
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    background:linear-gradient(to top,var(--page) 62%,rgba(255,255,255,0));
+  }
+  .turns{display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center}
+  .turn{
+    font-size:var(--type-body-small); color:var(--color-charcoal-700);
+    border:1px solid var(--color-bone-100); padding:9px 15px;
+    transition:border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+               background var(--t-fast) var(--ease);
+  }
+  .turn:hover:not([disabled]){border-color:var(--color-charcoal-900); color:var(--color-charcoal-900)}
+  .turn[disabled]{opacity:.3; cursor:default}
+  .turn.go{
+    background:var(--color-charcoal-900); color:var(--color-ivory-100);
+    border-color:var(--color-charcoal-900); font-weight:500;
+    letter-spacing:.02em; padding:9px 22px;
+  }
+  .turn.go:hover{opacity:.86}
+  .hint{
+    font-size:var(--type-micro); letter-spacing:.05em;
+    color:var(--color-charcoal-300); text-align:center;
+  }
+
+  /* ---------- opening ---------- */
+  .veil{
+    position:fixed; inset:0; z-index:60; background:var(--page);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:20px; text-align:center; padding:30px;
+    transition:opacity var(--t-slow) var(--ease);
+  }
+  .veil.gone{opacity:0; pointer-events:none}
+  .veil h1{
+    font-family:var(--display); font-weight:300;
+    font-size:var(--type-display-h1); line-height:1.06; letter-spacing:0;
+    margin:0; max-width:16em;
+  }
+  .veil p{
+    font-size:var(--type-body); color:var(--color-charcoal-700);
+    max-width:34em; margin:0; line-height:1.6;
+  }
+  .enter{
+    margin-top:8px; background:var(--color-charcoal-900); color:var(--color-ivory-100);
+    font-size:13px; font-weight:700; letter-spacing:var(--tracking-ui-label);
+    text-transform:uppercase; padding:15px 34px;
+    transition:opacity var(--t-fast) var(--ease);
+  }
+  .enter:hover{opacity:.85}
+
+  /* ---------- mobile ---------- */
+  @media (max-width:900px){
+    .stage{
+      grid-template-columns:1fr; grid-template-rows:auto auto auto;
+      padding:64px 20px 168px; align-content:center; gap:20px;
+    }
+    .art{grid-column:1; grid-row:1}
+    .art img{max-height:46vh; max-width:88vw}
+    .who{grid-column:1; grid-row:2; justify-self:center; text-align:center; max-width:100%; padding:0}
+    .toks{justify-content:center}
+    .buy{grid-column:1; grid-row:3; justify-self:center; text-align:center; max-width:100%; padding:0}
+    .buy .dims{margin-bottom:12px}
+    .turns{
+      flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start;
+      width:100%; padding-bottom:4px; -webkit-overflow-scrolling:touch;
+    }
+    .turn{flex:0 0 auto}
+    .top{padding:18px 20px 0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:1ms !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="ribbon" id="ribbon"></div>
+
+<div class="top">
+  <span class="brand">Lumas · Passage</span>
+  <span class="odo" id="odo"></span>
+</div>
+
+<div class="stage">
+  <div class="who" id="who">
+    <span class="stop" id="stopno"></span>
+    <h2 class="artist" id="artist"></h2>
+    <p class="title" id="title"></p>
+    <div class="toks" id="toks"></div>
+  </div>
+  <div class="art"><img id="img" alt=""></div>
+  <div class="buy" id="buy">
+    <span class="lbl">From</span>
+    <p class="price" id="price"></p>
+    <p class="dims" id="dims"></p>
+    <a class="shop" id="shop" href="#" target="_blank" rel="noopener">View in shop &rarr;</a>
+  </div>
+</div>
+
+<div class="deck">
+  <div class="turns" id="turns"></div>
+  <div class="hint">Space or &darr; to travel on &nbsp;·&nbsp; 1 to 5 to turn &nbsp;·&nbsp; &larr; to step back</div>
+</div>
+
+<div class="veil" id="veil">
+  <h1>The collection has no categories. It has one road.</h1>
+  <p>Four thousand two hundred and forty nine works, ordered so that each one dissolves into the next. You do not filter. You travel, and you turn.</p>
+  <button class="enter" id="enter">Set out</button>
+</div>
+
+<script>
+const IMG = c => `https://img.lumas.com/showimg_${c}_desktop.jpg`;
+let D=null, road=[], pos=0, cur=0, trail=[], seen=new Set(), artists=new Set(), hist=[];
+
+const $ = id => document.getElementById(id);
+
+fetch('data.json').then(r=>r.json()).then(d=>{
+  D=d; road=d.road;
+  $('enter').disabled=false;
+  // pre-warm the opening frame
+  cur=road[0]; new Image().src=IMG(D.works[cur].c);
+});
+
+$('enter').addEventListener('click',()=>{
+  $('veil').classList.add('gone');
+  setTimeout(()=>$('veil').style.display='none',560);
+  show(road[0],true);
+});
+
+function preload(i){
+  // next along the road plus each turn's first candidate
+  const nx=[]; if(pos+1<road.length) nx.push(road[pos+1]);
+  D.turns[i].forEach(t=>{ if(t.length) nx.push(t[0]); });
+  nx.slice(0,4).forEach(k=>{ new Image().src=IMG(D.works[k].c); });
+}
+
+function show(i,first){
+  cur=i; seen.add(i); artists.add(D.works[i].a);
+  hist.push(i);
+  trail.push(D.works[i].sw); if(trail.length>64) trail.shift();
+
+  const w=D.works[i], im=$('img');
+  im.classList.remove('in'); $('who').classList.remove('in'); $('buy').classList.remove('in');
+
+  const swap=()=>{
+    im.src=IMG(w.c);
+    im.alt=`${w.a}, ${w.t}`;
+    $('stopno').textContent=`Stop ${seen.size}`;
+    $('artist').textContent=w.a;
+    $('title').textContent=w.t||'';
+    $('toks').innerHTML=w.k.map(k=>`<span>${D.vocab[k].replace(/_/g,' ')}</span>`).join('');
+    $('price').textContent=`€ ${w.p.toLocaleString('de-DE')}`;
+    const cm=v=>Math.round(v/10);
+    const [a,b,c,e]=w.sz.map(cm);
+    $('dims').textContent = (c&&e)
+      ? (a===c&&b===e ? `${a} × ${b} cm` : `${a} × ${b} cm to ${c} × ${e} cm`)
+      : '';
+    $('shop').href=w.u;
+    const pl=(n,s)=>`${n} ${s}${n===1?'':'s'}`;
+    $('odo').textContent=`${pl(seen.size,'work')} · ${pl(artists.size,'artist')}`;
+    im.decode ? im.decode().catch(()=>{}).then(paint) : paint();
+  };
+  const paint=()=>{
+    im.classList.add('in'); $('who').classList.add('in'); $('buy').classList.add('in');
+  };
+
+  first ? swap() : setTimeout(swap,200);
+  drawRibbon();
+  buildTurns(i);
+  preload(i);
+}
+
+function drawRibbon(){
+  $('ribbon').innerHTML = trail.map((c,n)=>
+    `<i class="${n===trail.length-1?'now':''}" style="background:${c}"></i>`).join('');
+}
+
+function buildTurns(i){
+  const t=$('turns'); t.innerHTML='';
+  const go=document.createElement('button');
+  go.className='turn go'; go.textContent='Travel on';
+  go.onclick=onward; t.appendChild(go);
+  D.axes.forEach((name,a)=>{
+    const cand=D.turns[i][a];
+    const b=document.createElement('button');
+    b.className='turn'; b.textContent=name;
+    if(!cand.length){ b.disabled=true; }
+    else b.onclick=()=>{ jump(cand[Math.floor(Math.random()*cand.length)]); };
+    t.appendChild(b);
+  });
+}
+
+function onward(){
+  // continue along the road from wherever we currently stand
+  const at=road.indexOf(cur);
+  pos = at>=0 ? at : pos;
+  if(pos+1<road.length){ pos++; show(road[pos]); }
+}
+function jump(i){
+  const at=road.indexOf(i); if(at>=0) pos=at;
+  show(i);
+}
+function back(){
+  if(hist.length<2) return;
+  hist.pop(); const prev=hist.pop();
+  const at=road.indexOf(prev); if(at>=0) pos=at;
+  show(prev);
+}
+
+addEventListener('keydown',e=>{
+  if($('veil').style.display!=='none' && !$('veil').classList.contains('gone')){
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); $('enter').click(); }
+    return;
+  }
+  if(e.key===' '||e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); onward(); }
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); back(); }
+  else if(e.key>='1'&&e.key<='5'){
+    const cand=D.turns[cur][+e.key-1];
+    if(cand.length) jump(cand[Math.floor(Math.random()*cand.length)]);
+  }
+});
+
+// wheel / swipe travel
+let lock=0;
+addEventListener('wheel',e=>{
+  if(!D || Date.now()<lock) return;
+  if(Math.abs(e.deltaY)<12) return;
+  lock=Date.now()+480;
+  e.deltaY>0 ? onward() : back();
+},{passive:true});
+let ty=null;
+addEventListener('touchstart',e=>{ ty=e.touches[0].clientY; },{passive:true});
+addEventListener('touchend',e=>{
+  if(ty===null) return;
+  const dy=ty-e.changedTouches[0].clientY;
+  if(Math.abs(dy)>52) dy>0 ? onward() : back();
+  ty=null;
+},{passive:true});
+</script>
+</body>
+</html>
