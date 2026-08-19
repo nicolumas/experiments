@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <!-- ═══════════════════════════════════════════════════════════════════════════
   PROTO HEADER
-  ID:          PROTO-2026-014  ·  LUMAS Event System
-  Hypothesis:  [ASSUMPTION] For visitors reaching /events/ and gallery pages,
-               replacing hand-built per-gallery event tiles with an
-               occurrence-derived event system will raise event-to-gallery
-               engagement (RSVP clicks + "Directions & opening hours" clicks per
-               event session), because one card exposes the visitor's own city
-               instead of forcing them to scan up to 19 near-duplicate tiles,
-               and because publishing one event auto-populates up to 18 gallery
-               pages, where visit intent already lives.
-  Prior:       Ledger not consulted programmatically (no local ledger store).
-               Standing knowledge applied: galleries carry ~56% of B2C revenue
-               at ~13x walk-in conversion; "never deter the online purchase".
+  ID:          PROTO-2026-014 rev C  ·  LUMAS Event System
+  Hypothesis:  [ASSUMPTION] The visitor's only question is "is this on near me,
+               and where is that gallery". Naming every participating gallery as
+               a plain link on the card answers it with no controls to operate,
+               and will beat both today's one-tile-per-gallery feed and rev B's
+               locator/filter/expand machinery on gallery-CTA clicks per session.
+
+  Rev C:       Rev B was still an event browser. Removed: the "your gallery"
+               locator, the filter, resolved/unresolved states, inline expansion
+               regions, scope badges, the charcoal network card, the separate
+               works rail. 18 gallery names is two lines of text; rev B turned
+               two lines of text into a state machine.
+
+               THE ENTIRE RULE SET:
+                 1. Every participating gallery is a link, with its date if
+                    dates differ between galleries.
+                 2. Add a Register button when registration is required.
+               Nothing else. No detail pages.
+
+  Rev D:       Images are now real LUMAS EVENT PHOTOGRAPHY (guests, a packed
+               artist talk, live music, people discussing one work). Rev C used
+               bare artworks, which described the catalogue; rev A/B used empty
+               gallery interiors, which described the property. An events page
+               has to show events. Photographs may be cropped, so they share one
+               editorial frame.
+
+               Also fixed against the skill set: Archivo 700 now loaded so
+               eyebrows and buttons render at the specified weight; every token
+               bound to a real V2 primitive instead of an invented near-value;
+               hover gated behind (hover: hover); small copy moved off
+               text/tertiary, which is 3.3:1 on white and fails WCAG AA.
   Goals:       primary [ASSUMPTION: Gallery-CTA click] ·
                secondary [ASSUMPTION: RSVP outbound click, Newsletter signup]
-               Real names must come from the ABlyft 16-goal library.
-  Variants:    ?v=control (one tile per gallery, today's reality)
-               ?v=system  (occurrence-derived, default)
+  Variants:    ?v=control (one tile per gallery, today) · ?v=system (default)
   Status:      exploration
-  Language:    EN, matching the existing prototype/galleries/*.html set.
-               German original preserved as events.de.html — note that the
-               brandbook du/Sie firewall is a German-only constraint; in EN the
-               gallery-page strip stays prose-free for content-duplication and
-               editorial-cost reasons, not linguistic ones.
 ═══════════════════════════════════════════════════════════════════════════ -->
 <html lang="en">
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>LUMAS Event System · Prototype</title>
-<meta name="description" content="Prototype of the LUMAS Event System: one event card, three derived states, five CTA labels.">
+<title>Events · LUMAS</title>
+<meta name="description" content="Openings, artist talks and gallery evenings at LUMAS. Entry is always free.">
 
 <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 <link rel="stylesheet" href="assets/fonts/utile.css">
@@ -41,410 +53,305 @@
 
 <style>
 :root {
-  --surface-page: #FFFFFF;
-  --surface-raised: #F7F1E9;
-  --surface-sunken: #F4EDE2;
-  --surface-muted: #F0EBE3;
-  --surface-inverse: #1C1A18;
-  --text-primary: #1C1A18;
-  --text-secondary: #58524B;
-  --text-tertiary: #8F877D;
-  --text-inverse: #F4EDE2;
-  --border-default: rgba(28, 26, 24, 0.10);
-  --border-strong: rgba(28, 26, 24, 0.24);
-  --border-inverse: rgba(244, 237, 226, 0.28);
+  /* V2 primitives, verbatim. No invented near-values. */
+  --charcoal-900: #1C1A18;
+  --charcoal-800: #3A3835;
+  --charcoal-700: #5A5752;
+  --charcoal-500: #908C87;
+  --ivory-100: #F4EDE2;
+  --ivory-200: #F7F1E9;
+  --bone-100: #E2D8CC;
+  --bone-300: #F0EBE3;
+
+  /* Semantic aliases: components consume these, never the primitives. */
+  --page: #FFFFFF;                    /* standing rule: LUMAS pages are white */
+  --ivory: var(--ivory-200);          /* surface/raised */
+  --bone: var(--bone-300);            /* surface/muted */
+  --charcoal: var(--charcoal-900);    /* surface/inverse */
+  --ink: var(--charcoal-900);         /* text/primary   11.7:1 on white */
+  --ink-2: var(--charcoal-700);       /* text/secondary  7.2:1 on white */
+  /* text/tertiary is 3.3:1 on white: LARGE OR DECORATIVE TEXT ONLY.
+     It cannot carry 13px copy without failing WCAG AA, so every small
+     line in this page uses --ink-2 instead. */
+  --ink-3: var(--charcoal-500);
+  --hair: var(--bone-100);            /* border/default */
+  --inverse: var(--ivory-100);        /* text/inverse */
   --on-dark-75: rgba(244, 237, 226, 0.75);
   --on-dark-55: rgba(244, 237, 226, 0.55);
-  --font-display: "Utile Display", "Times New Roman", Georgia, serif;
-  --font-body: Archivo, system-ui, -apple-system, sans-serif;
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --z-nav: 50;
-  --z-protochrome: 60;
+
+  --display: "Utile Display", "Times New Roman", Georgia, serif;
+  --body: Archivo, system-ui, -apple-system, sans-serif;
+
+  /* V2 motion: 220 / 320 / 520, one curve. */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast: 220ms;
+  --t-mid: 320ms;
+  --t-slow: 520ms;
+
+  /* Named layers, never raw values. */
   --z-panel: 70;
+  --z-proto: 60;
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--surface-page); color: var(--text-primary); font-family: var(--font-body); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--body); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-.container { max-width: 1440px; margin: 0 auto; padding: 0 64px; }
-@media (max-width: 880px) { .container { padding: 0 20px; } }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 64px; }
+@media (max-width: 880px) { .wrap { padding: 0 22px; } }
 
-.display-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 3.6vw, 52px); line-height: 1.06; letter-spacing: 0; margin: 0; text-wrap: balance; }
-.display-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.12; letter-spacing: 0; margin: 0; text-wrap: balance; }
-.display-h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(23px, 1.9vw, 29px); line-height: 1.14; letter-spacing: 0; margin: 0; text-wrap: balance; }
-.display-h4 { font-family: var(--font-display); font-weight: 400; font-size: 21px; line-height: 1.25; margin: 0; }
-.eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-.ui-label { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
-.lede { font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; color: var(--text-secondary); max-width: 62ch; }
-
-/* ── Buttons ─────────────────────────────────────────────────────── */
-.btn { display: inline-flex; align-items: center; gap: 9px; padding: 15px 26px; border-radius: 0; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; transition: background 220ms var(--ease-out), color 220ms var(--ease-out), box-shadow 220ms var(--ease-out), transform 160ms var(--ease-out); }
-.btn:active { transform: scale(0.97); }
-.btn-primary { background: var(--surface-inverse); color: var(--text-inverse); }
-.btn-primary:hover { background: #322E29; }
-.btn-primary.is-inverse { background: var(--text-inverse); color: var(--text-primary); }
-.btn-primary.is-inverse:hover { background: #FFFFFF; }
-.btn-secondary { box-shadow: inset 0 0 0 1px var(--text-primary); }
-.btn-secondary:hover { background: var(--surface-inverse); color: var(--text-inverse); }
-.btn-ghost { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-body); font-weight: 400; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 0 5px; border-bottom: 1px solid currentColor; transition: opacity 220ms var(--ease-out); }
-.btn-ghost:hover { opacity: 0.6; }
-.btn iconify-icon, .btn-ghost iconify-icon { font-size: 13px; }
-:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 3px; }
-.on-dark :focus-visible { outline-color: var(--text-inverse); }
-
-/* ── Proto chrome (never production UI) ──────────────────────────── */
-.proto-chrome { position: sticky; top: 0; z-index: var(--z-protochrome); background: #14120F; color: var(--on-dark-75); border-bottom: 1px solid rgba(244,237,226,0.12); }
-.proto-chrome-inner { max-width: 1440px; margin: 0 auto; padding: 9px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 12px; }
-.proto-tag { font-family: var(--font-body); font-weight: 700; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #B8AE9F; padding: 4px 8px; box-shadow: inset 0 0 0 1px rgba(244,237,226,0.22); }
+/* ── Proto chrome (not production UI) ────────────────────────────── */
+.proto { background: #14120F; color: var(--on-dark-75); }
+.proto-inner { max-width: 1280px; margin: 0 auto; padding: 8px 22px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; }
+.proto-tag { font-weight: 500; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #B8AE9F; padding: 4px 8px; box-shadow: inset 0 0 0 1px rgba(244,237,226,0.22); }
 .proto-seg { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
-.proto-seg button { padding: 6px 13px; font-size: 11px; letter-spacing: 0.04em; color: var(--on-dark-55); transition: background 220ms var(--ease-out), color 220ms var(--ease-out); }
-.proto-seg button[aria-pressed="true"] { background: var(--text-inverse); color: #14120F; font-weight: 500; }
-.proto-chrome .spacer { flex: 1; }
-.proto-chrome kbd { font-family: var(--font-body); font-size: 10px; padding: 2px 5px; background: rgba(244,237,226,0.12); border-radius: 2px; }
-@media (max-width: 720px) { .proto-chrome-inner { gap: 10px; padding: 8px 14px; } .proto-hint { display: none; } }
+.proto-seg button { padding: 6px 12px; font-size: 11px; color: var(--on-dark-55); transition: background 220ms var(--ease), color 220ms var(--ease); }
+.proto-seg button[aria-pressed="true"] { background: var(--inverse); color: #14120F; font-weight: 500; }
+.proto .sp { flex: 1; }
+.proto kbd { font-size: 10px; padding: 2px 5px; background: rgba(244,237,226,0.12); border-radius: 2px; }
+@media (max-width: 760px) { .proto-hint { display: none; } }
 
 /* ── Site chrome ─────────────────────────────────────────────────── */
-.promo-bar { background: var(--surface-inverse); color: var(--text-inverse); text-align: center; padding: 11px 24px; font-size: 13px; }
-.site-nav { position: sticky; top: 39px; z-index: var(--z-nav); background: var(--surface-page); border-bottom: 1px solid var(--border-default); }
-.site-nav-inner { max-width: 1440px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; gap: 34px; }
-.site-nav-logo svg { height: 20px; width: auto; display: block; }
-.site-nav-links { display: flex; gap: 26px; }
-.site-nav-links a { font-size: 14px; position: relative; padding-bottom: 3px; transition: opacity 220ms var(--ease-out); }
-.site-nav-links a:hover { opacity: 0.55; }
-.site-nav-links a.is-current::after { content: ''; position: absolute; left: 0; right: 0; bottom: -17px; height: 2px; background: var(--text-primary); }
-.site-nav .spacer { flex: 1; }
-.site-nav-utilities { display: flex; gap: 4px; }
-.site-nav-utilities a, .site-nav-utilities button { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 2px; transition: background 220ms var(--ease-out); }
-.site-nav-utilities a:hover, .site-nav-utilities button:hover { background: var(--surface-raised); }
-.site-nav-utilities iconify-icon { font-size: 21px; }
-@media (max-width: 1000px) { .site-nav-links { display: none; } }
-@media (max-width: 720px) { .site-nav-inner { padding: 13px 16px; } }
+.promo { background: var(--charcoal); color: var(--inverse); text-align: center; padding: 11px 22px; font-size: 13px; }
+.nav { border-bottom: 1px solid var(--hair); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: center; gap: 32px; }
+.nav-logo svg { height: 20px; width: auto; display: block; }
+.nav-links { display: flex; gap: 26px; }
+.nav-links a { font-size: 14px; position: relative; padding-bottom: 3px; transition: opacity 220ms var(--ease); }
+.nav-links a:hover { opacity: 0.55; }
+.nav-links a.here::after { content: ''; position: absolute; left: 0; right: 0; bottom: -19px; height: 2px; background: var(--ink); }
+.nav .sp { flex: 1; }
+.nav-util { display: flex; gap: 4px; }
+.nav-util button { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; transition: background 220ms var(--ease); }
+.nav-util button:hover { background: var(--ivory); }
+.nav-util iconify-icon { font-size: 21px; }
+@media (max-width: 1000px) { .nav-links { display: none; } }
+@media (max-width: 720px) { .nav-inner { padding: 14px 16px; } }
 
-/* ── Compact page band ───────────────────────────────────────────── */
-.page-band { padding: 52px 0 34px; border-bottom: 1px solid var(--border-default); }
-.page-band-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: end; }
-.page-band .lede { margin: 14px 0 0; }
-.page-band-meta { text-align: right; color: var(--text-tertiary); font-size: 13px; padding-bottom: 4px; }
-@media (max-width: 880px) { .page-band { padding: 32px 0 24px; } .page-band-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; } .page-band-meta { text-align: left; } }
+/* ── Editorial head ─────────────────────────────────────────────── */
+.head { padding: 72px 0 8px; }
+.head h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 4.4vw, 62px); line-height: 1.02; margin: 0; }
+.head p { font-size: 19px; line-height: 1.62; color: var(--ink-2); max-width: 48ch; margin: 26px 0 0; text-wrap: pretty; }
+@media (max-width: 720px) { .head { padding: 44px 0 4px; } .head p { font-size: 17px; margin-top: 20px; } }
 
-/* ── Filter bar ──────────────────────────────────────────────────── */
-.filter-bar { position: sticky; top: 110px; z-index: 30; background: rgba(255,255,255,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-default); }
-.filter-inner { max-width: 1440px; margin: 0 auto; padding: 14px 64px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.filter-label { color: var(--text-tertiary); }
-.filter-select { position: relative; }
-.filter-select select { appearance: none; padding: 11px 40px 11px 14px; background: var(--surface-page); box-shadow: inset 0 0 0 1px var(--border-strong); border-radius: 4px; font-family: var(--font-body); font-size: 14px; color: var(--text-primary); cursor: pointer; }
-.filter-select select:focus { outline: none; box-shadow: inset 0 0 0 2px var(--text-primary); }
-.filter-select iconify-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-tertiary); font-size: 14px; }
-.filter-status { color: var(--text-secondary); font-size: 13px; }
-.filter-status strong { font-weight: 500; color: var(--text-primary); }
-.filter-inner .spacer { flex: 1; }
-@media (max-width: 880px) { .filter-bar { top: 96px; } .filter-inner { padding: 12px 20px; gap: 10px; } }
+/* ── The feed ────────────────────────────────────────────────────── */
+.feed { padding: 20px 0 0; }
+/* V2 eyebrow: Archivo Bold 11px / 0.18em. ink-2, not tertiary: 13px grey at
+   3.3:1 is the contrast failure this page is meant not to have. */
+.month { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); padding: 56px 0 0; }
 
-/* ── Feed ────────────────────────────────────────────────────────── */
-.feed { padding: 8px 0 40px; }
-.month-divider { display: flex; align-items: baseline; gap: 18px; padding: 44px 0 20px; }
-.month-divider .eyebrow { color: var(--text-tertiary); flex-shrink: 0; }
-.month-divider .rule { flex: 1; height: 1px; background: var(--border-default); }
+/* ── One card. No variants. No states. ──────────────────────────── */
+.ev-wrap { border-bottom: 1px solid var(--hair); }
+.ev { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 56px; padding: 48px 0; }
+.ev-wrap:first-child .ev { padding-top: 32px; }
+.ev-wrap.has-band .ev { padding-bottom: 32px; }
 
-/* Event card — one component, three derived states */
-.event-card { position: relative; display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 40px; padding: 30px 0; border-top: 1px solid var(--border-default); }
-.event-card:first-of-type { border-top: 0; }
-.event-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-muted); }
-.event-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 520ms var(--ease-out); }
-.event-body { display: flex; flex-direction: column; align-items: flex-start; padding-top: 2px; }
-.event-date { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 13px; }
-.event-title { margin-bottom: 11px; }
-.event-title a { position: relative; }
-.event-title a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 320ms var(--ease-out); }
-.event-place { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.event-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
-.event-teaser { font-size: 15px; line-height: 1.6; color: var(--text-secondary); max-width: 56ch; margin: 0 0 22px; }
-.event-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: auto; }
+/* Event photography. Unlike artworks these MAY be cropped, so one editorial
+   frame gives the feed a steady rhythm and the pictures carry the feeling. */
+.ev-shot { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--bone); }
+.ev-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-slow) var(--ease); }
 
-/* Scope is a UI label. Place is prose. They must never look alike. */
-.scope-badge { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-primary); padding: 5px 9px; background: var(--surface-sunken); flex-shrink: 0; }
-.place-prose { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
-.place-prose .more { color: var(--text-tertiary); }
-.place-prose.is-place { color: var(--text-primary); display: inline-flex; align-items: center; gap: 5px; }
-.place-prose.is-place iconify-icon { font-size: 15px; color: var(--text-tertiary); }
-.tag { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-tertiary); padding: 4px 8px; box-shadow: inset 0 0 0 1px var(--border-default); border-radius: 2px; }
+.ev-body { min-width: 0; padding-top: 4px; }
+.ev-title { font-family: var(--display); font-weight: 400; font-size: clamp(29px, 2.9vw, 41px); line-height: 1.08; margin: 0 0 16px; text-wrap: balance; }
+/* Date, scope and the practical fact, in one readable line. Not micro-caps. */
+.ev-facts { font-size: 15px; color: var(--ink-2); margin-bottom: 16px; }
+.ev-facts b { font-weight: 500; color: var(--ink); }
+.ev-text { font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 54ch; margin: 0 0 24px; text-wrap: pretty; }
 
-/* Whole card clickable — always the internal canonical destination */
-.card-hit { position: absolute; inset: 0; z-index: 1; }
-.event-actions, .event-title a, .event-disclosure { position: relative; z-index: 2; }
+/* V2 button: Archivo Bold 13px, tracking 1.82px, uppercase, sharp corners. */
+.ev-register { display: inline-flex; align-items: center; gap: 8px; padding: 16px 28px; background: var(--charcoal); color: var(--inverse); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 24px; transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
+.ev-register:active { transform: scale(0.97); }
+.ev-register iconify-icon { font-size: 13px; }
+
+/* THE ANSWER. Gallery names are links. That is the whole mechanism. */
+.ev-where { border-top: 1px solid var(--hair); padding-top: 20px; }
+.ev-where-lead { font-size: 13px; color: var(--ink-2); margin-bottom: 12px; }
+.ev-links { font-size: 15.5px; line-height: 2.05; color: var(--ink-2); }
+/* A gallery name must never wrap away from its own date. */
+.ev-links a { display: inline-block; white-space: nowrap; color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 2px; transition: border-color 220ms var(--ease), color 220ms var(--ease); }
+.ev-links a:hover { border-bottom-color: var(--ink); }
+.ev-links a .d { color: var(--ink-2); font-size: 14px; }
+.ev-links .sep { padding: 0 8px; color: var(--ink-3); }
+.ev-links .street { color: var(--ink-2); font-size: 14px; }
+
+/* ── 6+ galleries: the list gets its own full-width band below the card ──
+   Forced through the copy column it wraps into ragged rows with separators
+   dangling at the line ends. Given the full width it becomes a directory. */
+/* Grouped by evening, so the date is stated once per column instead of once
+   per gallery. Eighteen rows of name-over-date was the space it was eating.
+   The lead line becomes the label column so the band fills its width instead
+   of hugging the left edge. */
+.ev-band { padding: 4px 0 44px; display: flex; flex-wrap: wrap; gap: 28px 64px; }
+.ev-band-lead { flex: 0 0 190px; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+.ev-groups { display: flex; flex-wrap: wrap; gap: 28px 64px; }
+.ev-group { min-width: 152px; }
+.ev-group h3 { margin: 0 0 10px; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
+.ev-group a { display: block; font-size: 15.5px; line-height: 1.92; color: var(--ink); }
+.ev-group a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
+
+/* Hover only where a real pointer exists, so it does not stick on touch. */
 @media (hover: hover) and (pointer: fine) {
-  .event-card:hover .event-frame img { transform: scale(1.03); }
-  .event-card:hover .event-title a::after { transform: scaleX(1); }
+  .ev-shot:hover img { transform: scale(1.03); }
+  .ev-register:hover { background: var(--charcoal-800); }
+  .ev-group a:hover span { border-bottom-color: var(--ink); }
+}
+@media (max-width: 760px) {
+  .ev-band { padding: 0 0 32px; gap: 16px; }
+  .ev-band-lead { flex: 1 1 100%; }
+  .ev-groups { gap: 24px 40px; }
+  /* Each evening takes the full width and splits its galleries into two
+     columns, rather than one narrow column leaving half the row empty. */
+  .ev-group { flex: 1 1 100%; min-width: 0; }
+  .ev-group-list { columns: 2; column-gap: 28px; }
+  /* Comfortable tap targets once the columns narrow. */
+  .ev-group a { line-height: 1.5; padding: 12px 0; }
 }
 
-/* Network state: scope encoded in the surface, not only in words */
-.event-card.is-network { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0; margin: 34px 0; border-top: 0; }
-.network-band { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); background: var(--surface-inverse); color: var(--text-inverse); }
-.network-copy { padding: 60px 56px; display: flex; flex-direction: column; align-items: flex-start; }
-.network-copy .event-date { color: var(--text-inverse); }
-.network-copy .event-teaser { color: var(--on-dark-75); font-size: 16px; }
-.network-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
-.network-copy .place-prose { color: var(--on-dark-75); }
-.network-copy .place-prose .more { color: var(--on-dark-55); }
-.network-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
-.network-frame { position: relative; overflow: hidden; min-height: 380px; background: #14120F; }
-.network-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.92; transition: transform 520ms var(--ease-out); }
-@media (hover: hover) and (pointer: fine) { .event-card.is-network:hover .network-frame img { transform: scale(1.03); } }
-.network-mosaic { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px; }
-.network-mosaic span { background-size: cover; background-position: center; opacity: 0.9; }
-
-@media (max-width: 1000px) {
-  .event-card { grid-template-columns: 240px minmax(0, 1fr); gap: 28px; }
-  .network-band { grid-template-columns: 1fr; }
-  .network-frame { min-height: 240px; order: -1; }
-  .network-copy { padding: 36px 24px 40px; }
-}
-@media (max-width: 720px) {
-  .event-card { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
-  .event-frame { aspect-ratio: 3 / 2; }
-  .event-actions { gap: 16px; }
-  .event-actions .btn { width: 100%; justify-content: center; }
-}
-
-/* ── Occurrence disclosure (inline, desktop) ─────────────────────── */
-.event-disclosure { margin-top: 18px; width: 100%; }
-.disclosure-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; color: var(--text-tertiary); transition: color 220ms var(--ease-out); }
-.disclosure-toggle:hover { color: var(--text-primary); }
-.disclosure-toggle iconify-icon { transition: transform 320ms var(--ease-out); }
-.disclosure-toggle[aria-expanded="true"] iconify-icon { transform: rotate(180deg); }
-.disclosure-region { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
-.disclosure-region[data-open="true"] { grid-template-rows: 1fr; }
-.disclosure-region > div { overflow: hidden; }
-/* Collapsed content must leave the tab order, not just disappear */
-.disclosure-region[data-open="false"] > div { visibility: hidden; }
-.disclosure-region[data-open="true"] > div { visibility: visible; }
-
-/* ── Occurrence list ─────────────────────────────────────────────── */
-.occ-list { list-style: none; margin: 16px 0 0; padding: 0; }
-.occ-row { display: grid; grid-template-columns: minmax(0, 1.5fr) 210px minmax(0, 0.8fr) auto; gap: 20px; align-items: center; padding: 15px 0; border-top: 1px solid var(--border-default); }
-.occ-row:hover { background: rgba(28,26,24,0.015); }
-.occ-city { font-size: 15px; color: var(--text-primary); }
-.occ-city small { display: block; font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
-.occ-when { font-size: 14px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-.occ-part { font-size: 13px; color: var(--text-tertiary); }
-.occ-act { display: flex; gap: 16px; justify-content: flex-end; align-items: center; }
-.on-dark .occ-row { border-top-color: var(--border-inverse); }
-.on-dark .occ-city { color: var(--text-inverse); }
-.on-dark .occ-when { color: var(--on-dark-75); }
-.on-dark .occ-part { color: var(--on-dark-55); }
-@media (max-width: 880px) {
-  .occ-row { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
-  .occ-act { justify-content: flex-start; margin-top: 8px; }
+@media (max-width: 1000px) { .ev { grid-template-columns: 320px minmax(0, 1fr); gap: 40px; } }
+@media (max-width: 760px) {
+  .ev { grid-template-columns: 1fr; gap: 24px; padding: 32px 0 40px; }
+  .ev:first-of-type { padding-top: 24px; }
+  .ev-shot { aspect-ratio: 4 / 3; }
+  .ev-register { width: 100%; justify-content: center; }
+  /* On mobile the gallery links are the primary action, so they become a
+     properly tappable list instead of inline text. */
+  .ev-links { line-height: 1.5; }
+  .ev-links .sep { display: none; }
+  .ev-links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; width: 100%; white-space: normal; padding: 13px 0; border-bottom: 1px solid var(--hair); }
+  .ev-links > span { display: block; padding: 13px 0; }
 }
 
 /* ── Empty state ─────────────────────────────────────────────────── */
-.empty-state { padding: 72px 0 90px; }
-.empty-inner { max-width: 700px; }
-.empty-inner p { color: var(--text-secondary); font-size: 16px; line-height: 1.65; margin: 16px 0 0; }
-.empty-routes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 34px; }
-.empty-route { display: flex; align-items: center; gap: 14px; padding: 20px 22px; box-shadow: inset 0 0 0 1px var(--border-default); transition: box-shadow 220ms var(--ease-out), background 220ms var(--ease-out); }
-.empty-route:hover { box-shadow: inset 0 0 0 1px var(--text-primary); background: var(--surface-raised); }
-.empty-route iconify-icon { font-size: 21px; flex-shrink: 0; }
-.empty-route span { font-size: 14px; }
-.empty-route small { display: block; color: var(--text-tertiary); font-size: 12px; margin-top: 3px; }
-@media (max-width: 720px) { .empty-routes { grid-template-columns: 1fr; } }
+.empty { padding: 56px 0 76px; max-width: 620px; }
+.empty h2 { font-family: var(--display); font-weight: 400; font-size: clamp(27px, 2.6vw, 36px); line-height: 1.14; margin: 0; }
+.empty p { font-size: 17px; line-height: 1.66; color: var(--ink-2); margin: 18px 0 0; }
+.empty-links { margin-top: 26px; font-size: 15.5px; line-height: 2; }
+.empty-links a { border-bottom: 1px solid var(--hair); padding-bottom: 2px; transition: border-color 220ms var(--ease); }
+.empty-links a:hover { border-bottom-color: var(--ink); }
 
-/* ── Newsletter band ─────────────────────────────────────────────── */
-.news-band { background: var(--surface-raised); padding: 84px 0; }
-.news-inner { max-width: 620px; }
-.news-inner p { color: var(--text-secondary); margin: 14px 0 28px; }
-.news-form { display: flex; gap: 8px; flex-wrap: wrap; }
-.news-form input { flex: 1; min-width: 220px; padding: 15px 16px; background: var(--surface-page); box-shadow: inset 0 0 0 1px var(--border-strong); border-radius: 4px; font-family: var(--font-body); font-size: 14px; }
-.news-form input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--text-primary); }
+/* ── Newsletter ──────────────────────────────────────────────────── */
+.news { background: var(--ivory); padding: 84px 0; margin-top: 8px; }
+.news-in { max-width: 560px; }
+.news h2 { font-family: var(--display); font-weight: 400; font-size: clamp(27px, 2.6vw, 36px); line-height: 1.14; margin: 0; }
+.news p { color: var(--ink-2); font-size: 16px; margin: 16px 0 28px; }
+.news form { display: flex; gap: 8px; flex-wrap: wrap; }
+.news input { flex: 1; min-width: 210px; padding: 15px 16px; background: var(--page); box-shadow: inset 0 0 0 1px rgba(28,26,24,0.2); font-family: var(--body); font-size: 15px; }
+.news input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
+.news button { padding: 15px 26px; background: var(--charcoal); color: var(--inverse); font-size: 12px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; transition: background 220ms var(--ease), transform 160ms var(--ease); }
+.news button:hover { background: #322E29; }
+.news button:active { transform: scale(0.97); }
 
-/* ── Detail surface ──────────────────────────────────────────────── */
-.detail-hero { position: relative; background: var(--surface-inverse); color: var(--text-inverse); overflow: hidden; }
-.detail-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-.detail-hero-copy { padding: 76px 56px 76px 64px; }
-.detail-hero-copy .event-date { color: var(--text-inverse); }
-.detail-hero-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
-.detail-hero-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
-.detail-hero-frame { position: relative; min-height: 420px; }
-.detail-hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.detail-crumb { font-size: 12px; color: var(--on-dark-55); margin-bottom: 26px; display: block; }
-.detail-crumb a:hover { color: var(--text-inverse); }
-.detail-body { padding: 76px 0; }
-.detail-body-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 76px; align-items: start; }
-.detail-prose p { font-size: 17px; line-height: 1.72; color: var(--text-secondary); margin: 0 0 20px; max-width: 62ch; text-wrap: pretty; }
-.detail-prose p:first-child { font-size: 19px; color: var(--text-primary); }
-.detail-aside { padding: 28px 30px; background: var(--surface-raised); }
-.detail-aside h3 { margin: 0 0 16px; }
-.detail-aside dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 9px 18px; font-size: 14px; }
-.detail-aside dt { color: var(--text-tertiary); }
-.detail-aside dd { margin: 0; color: var(--text-primary); }
-.detail-occ { padding: 0 0 76px; }
-.detail-occ-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
-.provider-note { font-size: 13px; color: var(--text-tertiary); margin: 14px 0 0; }
-@media (max-width: 1000px) {
-  .detail-hero-grid { grid-template-columns: 1fr; }
-  .detail-hero-frame { min-height: 260px; order: -1; }
-  .detail-hero-copy { padding: 40px 20px 48px; }
-  .detail-body-grid { grid-template-columns: 1fr; gap: 40px; }
-  .detail-body, .detail-occ { padding: 44px 0; }
+/* ── Gallery page (the destination) ──────────────────────────────── */
+.gp-hero { position: relative; min-height: 300px; display: flex; align-items: flex-end; background: var(--charcoal); background-size: cover; background-position: center; color: var(--inverse); padding: 60px 0 40px; }
+.gp-hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(28,26,24,0.2), rgba(28,26,24,0.8)); }
+.gp-hero .wrap { position: relative; width: 100%; }
+.gp-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 4vw, 54px); line-height: 1.04; margin: 0; }
+.gp-hero p { color: var(--on-dark-75); font-size: 17px; margin: 12px 0 0; max-width: 46ch; }
+.gp-body { padding: 60px 0 76px; }
+.gp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+.gp-cols h3 { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; font-weight: 400; }
+.gp-cols .line { font-size: 16px; line-height: 1.6; }
+.gp-next { margin-top: 52px; border-top: 1px solid var(--hair); padding-top: 30px; }
+.gp-next h3 { font-family: var(--display); font-weight: 400; font-size: 26px; margin: 0 0 20px; }
+.gp-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 24px; align-items: baseline; padding: 15px 0; border-top: 1px solid var(--hair); }
+.gp-row:first-of-type { border-top: 0; }
+.gp-row .w { font-size: 14px; color: var(--ink-2); }
+.gp-row .t { font-family: var(--display); font-size: 20px; }
+.gp-row .t small { display: block; font-family: var(--body); font-size: 13.5px; color: var(--ink-3); margin-top: 5px; }
+.gp-row a.act { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--hair); padding-bottom: 2px; white-space: nowrap; }
+.gp-row a.act:hover { border-bottom-color: var(--ink); }
+.gp-note { margin-top: 24px; font-size: 13px; color: var(--ink-3); }
+@media (max-width: 760px) {
+  .gp-cols { grid-template-columns: 1fr; gap: 30px; }
+  .gp-row { grid-template-columns: 1fr; gap: 6px; }
 }
 
-/* ── Works rail (bare artworks, true aspect ratio, never cropped) ── */
-.works-band { background: var(--surface-raised); padding: 76px 0; }
-.works-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 34px; }
-.works-rail { display: flex; gap: 32px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; }
-.work { flex: 0 0 auto; width: 210px; }
-.work-frame { height: 250px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 14px; }
-.work-frame img { max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain; }
-.work-meta { font-size: 13px; }
-.work-meta strong { display: block; font-weight: 500; }
-.work-meta span { color: var(--text-tertiary); }
-.work-meta em { display: block; font-style: normal; color: var(--text-secondary); margin-top: 5px; }
-
-/* ── Gallery-page surface ────────────────────────────────────────── */
-.gal-hero { position: relative; min-height: 330px; display: flex; align-items: flex-end; background: var(--surface-inverse); background-size: cover; background-position: center; color: var(--text-inverse); padding: 56px 0 44px; }
-.gal-hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(28,26,24,0.25), rgba(28,26,24,0.82)); }
-/* .container is a flex item here: without width it shrinks to content and the
-   auto margins centre it into a narrow column. Force it to fill. */
-.gal-hero .container { position: relative; width: 100%; }
-.gal-hero .lede { max-width: 52ch; }
-.gal-visit { padding: 60px 0; }
-.gal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-.gal-cell { padding: 26px 30px; background: var(--surface-raised); border-radius: 4px; }
-.gal-cell h3 { color: var(--text-tertiary); margin: 0 0 16px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-.gal-cell .line { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; padding: 3px 0; }
-.gal-cell .line .label { color: var(--text-secondary); }
-@media (max-width: 720px) { .gal-grid { grid-template-columns: 1fr; } }
-
-/* EventStrip — structured fields only, no event prose. Reason is content
-   duplication and editorial cost; in DE it is also the du/Sie firewall. */
-.event-strip { padding: 8px 0 76px; }
-.strip-shell { box-shadow: inset 0 0 0 1px var(--border-default); }
-.strip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 24px 30px; border-bottom: 1px solid var(--border-default); }
-.strip-head .eyebrow { color: var(--text-tertiary); }
-.strip-row { display: grid; grid-template-columns: 130px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 20px 30px; border-top: 1px solid var(--border-default); transition: background 220ms var(--ease-out); }
-.strip-row:first-of-type { border-top: 0; }
-.strip-row:hover { background: var(--surface-raised); }
-.strip-when { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); }
-.strip-when small { display: block; font-weight: 400; letter-spacing: 0.04em; text-transform: none; color: var(--text-tertiary); font-size: 12px; margin-top: 4px; }
-.strip-title { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.25; }
-.strip-title small { display: block; font-family: var(--font-body); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 700; margin-top: 7px; }
-.strip-note { padding: 18px 30px; border-top: 1px solid var(--border-default); font-size: 13px; color: var(--text-tertiary); background: var(--surface-raised); }
-@media (max-width: 720px) { .strip-row { grid-template-columns: 1fr; gap: 10px; padding: 18px 20px; } .strip-head { padding: 20px; } }
-
 /* ── Footer ──────────────────────────────────────────────────────── */
-.footer { background: var(--surface-inverse); color: var(--text-inverse); padding: 72px 0 40px; }
-.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 52px; }
-.footer-brand p { color: var(--on-dark-75); max-width: 320px; font-size: 14px; margin: 18px 0 0; }
-.footer-brand svg { width: 104px; height: auto; }
-.footer-col h3 { color: var(--on-dark-55); margin: 0 0 16px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-.footer-col a { display: block; color: var(--on-dark-75); padding: 5px 0; font-size: 14px; }
-.footer-col a:hover { color: var(--text-inverse); }
-.footer-bottom { padding-top: 28px; border-top: 1px solid rgba(244,237,226,0.14); color: var(--on-dark-55); font-size: 13px; }
-@media (max-width: 880px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
+.foot { background: var(--charcoal); color: var(--inverse); padding: 68px 0 36px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 46px; }
+.foot-brand p { color: var(--on-dark-75); max-width: 300px; font-size: 14px; margin: 18px 0 0; }
+.foot-brand svg { width: 104px; height: auto; }
+.foot h3 { color: var(--on-dark-55); margin: 0 0 16px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 400; }
+.foot a { display: block; color: var(--on-dark-75); padding: 5px 0; font-size: 14px; }
+.foot a:hover { color: var(--inverse); }
+.foot-btm { padding-top: 26px; border-top: 1px solid rgba(244,237,226,0.14); color: var(--on-dark-55); font-size: 13px; }
+@media (max-width: 880px) { .foot-grid { grid-template-columns: 1fr; gap: 26px; } }
 
-/* ── Control variant (today's reality) ───────────────────────────── */
-.control-note { background: #FDECEA; color: #7A241C; padding: 14px 0; font-size: 13px; }
-.control-note .container { display: flex; gap: 12px; align-items: flex-start; }
-.control-note iconify-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
-.control-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px; padding: 34px 0 60px; }
-.control-tile { display: flex; flex-direction: column; }
-.control-tile .frame { aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-muted); margin-bottom: 16px; }
-.control-tile .frame img { width: 100%; height: 100%; object-fit: cover; }
-.control-tile .meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
-.control-tile h3 { margin: 0 0 8px; font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.2; }
-.control-tile p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin: 0 0 16px; }
-.control-tile .cta { margin-top: auto; }
+/* ── Control variant ─────────────────────────────────────────────── */
+.ctl-note { background: #FDECEA; color: #7A241C; padding: 14px 0; font-size: 13px; }
+.ctl-note .wrap { display: flex; gap: 12px; align-items: flex-start; }
+.ctl-note iconify-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.ctl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; padding: 34px 0 60px; }
+.ctl-tile { display: flex; flex-direction: column; }
+.ctl-tile .f { aspect-ratio: 4 / 3; overflow: hidden; background: var(--bone); margin-bottom: 14px; }
+.ctl-tile .f img { width: 100%; height: 100%; object-fit: cover; }
+.ctl-tile .m { font-size: 13px; color: var(--ink-2); margin-bottom: 7px; }
+.ctl-tile h3 { margin: 0 0 8px; font-family: var(--display); font-weight: 400; font-size: 21px; line-height: 1.2; }
+.ctl-tile p { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin: 0 0 14px; }
+.ctl-tile .c { margin-top: auto; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 1px solid var(--ink); display: inline-block; padding-bottom: 3px; align-self: flex-start; }
 
-/* ── System panel ────────────────────────────────────────────────── */
-.sys-panel { position: fixed; right: 0; bottom: 0; top: auto; width: 384px; max-width: 100vw; max-height: 78vh; z-index: var(--z-panel); background: #14120F; color: var(--on-dark-75); box-shadow: 0 -8px 40px -12px rgba(0,0,0,0.5); transform: translateY(calc(100% - 44px)); transition: transform 320ms var(--ease-out); display: flex; flex-direction: column; }
-.sys-panel[data-open="true"] { transform: translateY(0); }
-.sys-head { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 44px; flex-shrink: 0; cursor: pointer; border-bottom: 1px solid rgba(244,237,226,0.12); }
-.sys-head .eyebrow { color: var(--text-inverse); font-size: 10px; }
-.sys-head .spacer { flex: 1; }
-.sys-head iconify-icon { transition: transform 320ms var(--ease-out); font-size: 16px; }
-.sys-panel[data-open="true"] .sys-head iconify-icon { transform: rotate(180deg); }
-.sys-scroll { overflow-y: auto; padding: 18px 16px 22px; font-size: 12px; line-height: 1.5; }
-.sys-block + .sys-block { margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(244,237,226,0.12); }
-.sys-block h4 { margin: 0 0 12px; font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--on-dark-55); }
-.sys-ctl { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 7px 0; }
-.sys-ctl label { color: var(--text-inverse); }
-.sys-ctl input[type="range"] { width: 130px; accent-color: #F4EDE2; }
-.sys-switch { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
-.sys-switch button { padding: 5px 11px; font-size: 11px; color: var(--on-dark-55); }
-.sys-switch button[aria-pressed="true"] { background: var(--text-inverse); color: #14120F; font-weight: 500; }
-.sys-trace { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.75; background: rgba(244,237,226,0.06); padding: 12px 13px; color: #D9CFC0; white-space: pre-wrap; }
-.sys-trace b { color: #F4EDE2; font-weight: 500; }
-.sys-log { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; line-height: 1.7; max-height: 132px; overflow-y: auto; color: #A79C8C; }
-.sys-log div { padding: 1px 0; }
-.sys-log b { color: #F4EDE2; font-weight: 500; }
-@media (max-width: 720px) { .sys-panel { width: 100%; max-height: 68vh; } }
+/* ── Notes panel ─────────────────────────────────────────────────── */
+.panel { position: fixed; right: 0; bottom: 0; width: 340px; max-width: 100vw; max-height: 70vh; z-index: 70; background: #14120F; color: var(--on-dark-75); box-shadow: 0 -8px 40px -12px rgba(0,0,0,0.5); transform: translateY(calc(100% - 40px)); transition: transform 320ms var(--ease); display: flex; flex-direction: column; }
+.panel[data-open="true"] { transform: translateY(0); }
+.panel-head { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 40px; flex-shrink: 0; cursor: pointer; border-bottom: 1px solid rgba(244,237,226,0.12); }
+.panel-head span { color: var(--inverse); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+.panel-head .sp { flex: 1; }
+.panel-head iconify-icon { transition: transform 320ms var(--ease); font-size: 16px; }
+.panel[data-open="true"] .panel-head iconify-icon { transform: rotate(180deg); }
+.panel-scroll { overflow-y: auto; padding: 18px 16px 22px; font-size: 12px; line-height: 1.6; }
+.panel h4 { margin: 0 0 10px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--on-dark-55); font-weight: 400; }
+.panel .blk + .blk { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(244,237,226,0.12); }
+.panel b { color: var(--inverse); font-weight: 500; }
+.panel ol { margin: 0; padding-left: 18px; }
+.panel ol li { margin-bottom: 7px; }
+.log { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; line-height: 1.7; max-height: 120px; overflow-y: auto; color: #A79C8C; }
+.log b { color: var(--inverse); }
+@media (max-width: 700px) { .panel { width: 100%; max-height: 60vh; } }
 
-/* Resolver annotation under each card */
-.resolver-note { grid-column: 1 / -1; margin-top: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.7; color: var(--text-tertiary); background: var(--surface-muted); padding: 10px 13px; }
-.resolver-note b { color: var(--text-primary); font-weight: 500; }
-.is-network .resolver-note { margin: 0; background: rgba(244,237,226,0.08); color: var(--on-dark-55); }
-.is-network .resolver-note b { color: var(--text-inverse); }
-body:not([data-resolver="on"]) .resolver-note { display: none; }
-
-.on-dark .place-prose { color: var(--on-dark-75); }
-.on-dark .place-prose.is-place { color: var(--text-inverse); }
-.on-dark .place-prose.is-place iconify-icon { color: var(--on-dark-55); }
-
-/* ── Reveal (default visible; JS only enhances) ──────────────────── */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); }
-.reveal.is-in { opacity: 1; transform: none; }
-html:not(.js) .reveal { opacity: 1; transform: none; }
-
-/* Stagger on re-render */
-@keyframes feedIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-[data-stagger] > * { animation: feedIn 320ms var(--ease-out) both; }
-
+/* ── Reveal ──────────────────────────────────────────────────────── */
+.rv { opacity: 0; transform: translateY(16px); transition: opacity 560ms var(--ease), transform 560ms var(--ease); }
+.rv.in { opacity: 1; transform: none; }
+html:not(.js) .rv { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1 !important; transform: none !important; }
+  .rv { opacity: 1 !important; transform: none !important; }
   *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
 }
 </style>
 </head>
-<body data-resolver="off">
+<body>
 
-<!-- ═══ PROTO CHROME — prototype affordance, not production UI ═══ -->
-<div class="proto-chrome">
-  <div class="proto-chrome-inner">
-    <span class="proto-tag">Proto-2026-014</span>
+<div class="proto">
+  <div class="proto-inner">
+    <span class="proto-tag">Proto-2026-014 · rev C</span>
     <div class="proto-seg" role="group" aria-label="Variant">
       <button type="button" data-variant="control" aria-pressed="false">Control (today)</button>
-      <button type="button" data-variant="system" aria-pressed="true">Event System</button>
+      <button type="button" data-variant="system" aria-pressed="true">Rev C</button>
     </div>
     <div class="proto-seg" role="group" aria-label="Surface">
-      <button type="button" data-surface="overview" aria-pressed="true">Overview</button>
-      <button type="button" data-surface="detail" aria-pressed="false">Event detail</button>
+      <button type="button" data-surface="events" aria-pressed="true">Events</button>
       <button type="button" data-surface="gallery" aria-pressed="false">Gallery page</button>
     </div>
-    <span class="spacer"></span>
-    <span class="proto-hint"><kbd>v</kbd> Variant · <kbd>r</kbd> Resolver · <kbd>s</kbd> Panel</span>
+    <span class="sp"></span>
+    <span class="proto-hint"><kbd>v</kbd> variant · <kbd>e</kbd> empty · <kbd>s</kbd> notes</span>
   </div>
 </div>
 
-<div class="promo-bar">Signed, limited editions. 19 galleries. Free entry.</div>
+<div class="promo">Signed, limited editions. 19 galleries. Free entry.</div>
 
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a class="site-nav-logo" href="index.html" aria-label="LUMAS">
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="LUMAS">
       <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
     </a>
-    <div class="site-nav-links">
-      <a href="#">Discover</a>
-      <a href="#">Artworks</a>
-      <a href="#">Artists</a>
-      <a href="index.html">Galleries</a>
-      <a href="#" class="is-current" aria-current="page">Events</a>
-      <a href="#">Advisory</a>
+    <div class="nav-links">
+      <a href="#">Discover</a><a href="#">Artworks</a><a href="#">Artists</a>
+      <a href="index.html">Galleries</a><a href="#" class="here" aria-current="page">Events</a><a href="#">Advisory</a>
     </div>
-    <span class="spacer"></span>
-    <div class="site-nav-utilities">
+    <span class="sp"></span>
+    <div class="nav-util">
       <button type="button" aria-label="Search"><iconify-icon icon="ph:magnifying-glass-light"></iconify-icon></button>
       <button type="button" aria-label="Wishlist"><iconify-icon icon="ph:heart-light"></iconify-icon></button>
       <button type="button" aria-label="Account"><iconify-icon icon="ph:user-light"></iconify-icon></button>
@@ -454,128 +361,87 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 </nav>
 
 <main>
-  <!-- ════════════ SURFACE 1 · EVENTS OVERVIEW ════════════ -->
-  <section id="surface-overview">
-    <div class="control-note" id="controlNote" hidden>
-      <div class="container">
+  <section id="s-events">
+    <div class="ctl-note" id="ctlNote" hidden>
+      <div class="wrap">
         <iconify-icon icon="ph:warning-circle-light"></iconify-icon>
-        <span><strong>Control: today's practice.</strong> One tile per gallery. The same six events produce <strong id="controlCount">29</strong> tiles, the identical description five times over, three different CTA labels for the same action, and in four tiles no indication that the event is happening in other galleries at all.</span>
+        <span><strong>Control: today's practice.</strong> One tile per gallery. The same six events produce <strong id="ctlCount">29</strong> tiles, the identical description repeated, and five different link labels for the same action.</span>
       </div>
     </div>
 
-    <div class="page-band">
-      <div class="container page-band-inner">
-        <div>
-          <h1 class="display-h1">Discover art. Meet people.</h1>
-          <p class="lede">Openings, artist talks and gallery evenings in our galleries. Entry is always free, and registration is needed only where places are limited.</p>
-        </div>
-        <div class="page-band-meta" id="bandMeta"></div>
+    <header class="head">
+      <div class="wrap">
+        <h1>Discover art.<br>Meet people.</h1>
+        <p>Art behaves differently in a room with other people in it. Entry is always free, and most evenings you can simply walk in.</p>
       </div>
-    </div>
+    </header>
 
-    <div class="filter-bar" id="filterBar">
-      <div class="filter-inner">
-        <label class="filter-label" for="cityFilter" style="font-size:13px">Gallery</label>
-        <span class="filter-select">
-          <select id="cityFilter"></select>
-          <iconify-icon icon="ph:caret-down"></iconify-icon>
-        </span>
-        <span class="filter-status" id="filterStatus"></span>
-        <span class="spacer"></span>
-        <button type="button" class="btn-ghost" id="emptyToggle">Show empty state</button>
-      </div>
-    </div>
+    <div class="feed"><div class="wrap" id="feed"></div></div>
 
-    <div class="feed"><div class="container" id="feed" data-stagger></div></div>
-
-    <div class="empty-state" id="emptyState" hidden>
-      <div class="container empty-inner">
-        <h2 class="display-h2">No event is planned right now.</h2>
-        <p>Our galleries are open regardless, and our art consultants make time for you without an occasion. As soon as the next event is confirmed, we will announce it here and in the newsletter.</p>
-        <div class="empty-routes">
-          <a class="empty-route" href="index.html"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Galleries and opening hours<small>19 locations, free entry</small></span></a>
-          <a class="empty-route" href="#"><iconify-icon icon="ph:calendar-check-light"></iconify-icon><span>Book an advisory appointment<small>In person or by video</small></span></a>
+    <div class="empty" hidden id="empty">
+      <div class="wrap">
+        <h2>No event is planned right now.</h2>
+        <p>Our galleries are open regardless, and our art consultants make time for you without an occasion. As soon as the next evening is confirmed, we announce it here first.</p>
+        <div class="empty-links">
+          <a href="index.html">All 19 galleries and their opening hours</a><br>
+          <a href="#">Book an advisory appointment</a>
         </div>
       </div>
     </div>
 
-    <div class="news-band">
-      <div class="container news-inner">
-        <h2 class="display-h2">Never miss an event</h2>
+    <div class="news">
+      <div class="wrap news-in">
+        <h2>Never miss an evening</h2>
         <p>We write when something is happening at your gallery. No more often than that.</p>
-        <form class="news-form" onsubmit="return false">
-          <label class="ui-label" for="newsEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
-          <input id="newsEmail" type="email" placeholder="Email address" autocomplete="email">
+        <form onsubmit="return false">
+          <label for="mail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+          <input id="mail" type="email" placeholder="Email address" autocomplete="email">
           <!-- ABLYFT-GOAL: [ASSUMPTION] Newsletter signup -->
-          <button type="submit" class="btn btn-primary" data-track="newsletter_signup">Sign up</button>
+          <button type="submit" data-track="newsletter_signup">Sign up</button>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- ════════════ SURFACE 2 · EVENT DETAIL ════════════ -->
-  <section id="surface-detail" hidden></section>
-
-  <!-- ════════════ SURFACE 3 · GALLERY PAGE ════════════ -->
-  <section id="surface-gallery" hidden></section>
+  <section id="s-gallery" hidden></section>
 </main>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
         <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
         <p>Signed, limited editions by international artists. In 19 galleries and online.</p>
       </div>
-      <div class="footer-col"><h3>Galleries</h3><a href="index.html">All locations</a><a href="#">Berlin Mitte</a><a href="#">Hamburg</a><a href="#">Wien</a></div>
-      <div class="footer-col"><h3>Discover</h3><a href="#">New editions</a><a href="#">Artists</a><a href="#">Art Finder</a></div>
-      <div class="footer-col"><h3>Service</h3><a href="#">Advisory</a><a href="#">Framing</a><a href="#">Collector service</a></div>
+      <div><h3>Galleries</h3><a href="index.html">All locations</a><a href="#">Berlin Mitte</a><a href="#">Hamburg</a><a href="#">Wien</a></div>
+      <div><h3>Discover</h3><a href="#">New editions</a><a href="#">Artists</a><a href="#">Art Finder</a></div>
+      <div><h3>Service</h3><a href="#">Advisory</a><a href="#">Framing</a><a href="#">Collector service</a></div>
     </div>
-    <div class="footer-bottom">Prototype · LUMAS Event System · not public</div>
+    <div class="foot-btm">Prototype · LUMAS Event System rev C · not public</div>
   </div>
 </footer>
 
-<!-- ═══ SYSTEM PANEL — the resolver, made visible ═══ -->
-<aside class="sys-panel" id="sysPanel" data-open="false" aria-label="System panel">
-  <div class="sys-head" id="sysHead" role="button" tabindex="0" aria-expanded="false" aria-controls="sysScroll">
-    <span class="eyebrow">Event System · Resolver</span>
-    <span class="spacer"></span>
+<aside class="panel" id="panel" data-open="false" aria-label="System notes">
+  <div class="panel-head" id="panelHead" role="button" tabindex="0" aria-expanded="false" aria-controls="panelScroll">
+    <span>Event System · rev C</span><span class="sp"></span>
     <iconify-icon icon="ph:caret-up"></iconify-icon>
   </div>
-  <div class="sys-scroll" id="sysScroll">
-    <div class="sys-block">
-      <h4>Resolver playground</h4>
-      <div class="sys-ctl">
-        <label for="occRange">Occurrences <b id="occVal" style="color:#F4EDE2">1</b></label>
-        <input id="occRange" type="range" min="1" max="18" value="1">
-      </div>
-      <div class="sys-ctl">
-        <label>RSVP present</label>
-        <span class="sys-switch" role="group">
-          <button type="button" data-rsvp="none" aria-pressed="true">none</button>
-          <button type="button" data-rsvp="some" aria-pressed="false">some</button>
-          <button type="button" data-rsvp="all" aria-pressed="false">all</button>
-        </span>
-      </div>
-      <div class="sys-ctl">
-        <label>Detail page</label>
-        <span class="sys-switch" role="group">
-          <button type="button" data-detail="false" aria-pressed="true">no</button>
-          <button type="button" data-detail="true" aria-pressed="false">yes</button>
-        </span>
-      </div>
-      <div class="sys-trace" id="sysTrace"></div>
+  <div class="panel-scroll" id="panelScroll">
+    <div class="blk">
+      <h4>The entire rule set</h4>
+      <ol>
+        <li>Every participating gallery is a <b>link</b>, carrying its own date when dates differ between galleries.</li>
+        <li>Add a <b>Register</b> button when registration is required.</li>
+      </ol>
+      <div style="margin-top:12px">That is all. No detail pages, no filters, no scope badges, no card variants, no states.</div>
     </div>
-    <div class="sys-block">
-      <h4>Rules</h4>
-      <div style="color:var(--on-dark-75)">
-        1 occurrence → <b style="color:#F4EDE2">single</b> · 2 to 5 → <b style="color:#F4EDE2">multi</b> (every city inline) · 6+ → <b style="color:#F4EDE2">network</b> (charcoal surface, count + sample cities).<br><br>
-        No authoring field picks the state. Every branch reads data.
-      </div>
+    <div class="blk">
+      <h4>What a content editor fills in</h4>
+      <div>Title · one image (the artwork) · two sentences · a list of gallery + date rows · an optional RSVP link per row.</div>
     </div>
-    <div class="sys-block">
+    <div class="blk">
       <h4>Event stubs → dev handoff</h4>
-      <div class="sys-log" id="sysLog"><div style="color:#6F675C">No events yet. Click a card or a CTA.</div></div>
+      <div class="log" id="log"><div style="color:#6F675C">No events yet. Click a gallery link.</div></div>
     </div>
   </div>
 </aside>
@@ -584,802 +450,391 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 document.documentElement.classList.add('js');
 
 /* ══════════════════════════════════════════════════════════════════
-   1 · DATA — the content model, verbatim
-   Gallery ─┐
-            └─ Occurrence ─── Event ─── (Series)
-   Occurrence is the ONLY join between Event and Gallery.
+   DATA · Gallery ─── Occurrence ─── Event
+   Occurrence is the only join, and now it is also the only UI: each
+   occurrence renders as one link.
    ══════════════════════════════════════════════════════════════════ */
-
-const MEDIA = 'https://media.lumas.de/galerien/';
-const teaser = (slug) => `${MEDIA}${slug}/galerie-${slug}-teaser-1220x450.jpg`;
-
 const GALLERIES = [
-  { id:'berlin-mitte',  city:'Berlin',      name:'LUMAS Gallery Berlin Mitte',  store:'DE', canHost:true,  street:'Rosenthaler Straße 40/41, Hackesche Höfe, Hof II', zip:'10178', hours:'Mon to Sat 11 am to 7 pm, Sun 1 to 6 pm', photo:'assets/berlin-mitte/viewing-room.jpg' },
-  { id:'berlin-kudamm', city:'Berlin',      name:'LUMAS Gallery Berlin KuDamm', store:'DE', canHost:true,  street:'Fasanenstraße 73', zip:'10719', hours:'Mon to Fri 11 am to 7 pm, Sat 10 am to 7 pm', photo:'assets/photos/DSC06390.jpg' },
-  { id:'hamburg',       city:'Hamburg',     name:'LUMAS Gallery Hamburg',       store:'DE', canHost:true,  street:'Große Bleichen 31, Kaufmannshaus', zip:'20354', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('hamburg') },
-  { id:'muenchen',      city:'München',     name:'LUMAS Gallery München',       store:'DE', canHost:true,  street:'Brienner Straße 3', zip:'80333', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('muenchen') },
-  { id:'koeln',         city:'Köln',        name:'LUMAS Gallery Köln',          store:'DE', canHost:true,  street:'Mittelstraße 15', zip:'50672', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('koeln') },
-  { id:'frankfurt',     city:'Frankfurt',   name:'LUMAS Gallery Frankfurt',     store:'DE', canHost:true,  street:'Kaiserstraße 13', zip:'60311', hours:'Mon to Fri 10.30 am to 7 pm, Sat 10 am to 7 pm', photo:teaser('frankfurt') },
-  { id:'duesseldorf',   city:'Düsseldorf',  name:'LUMAS Gallery Düsseldorf',    store:'DE', canHost:true,  street:'Grünstraße 8', zip:'40212', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('duesseldorf') },
-  { id:'stuttgart',     city:'Stuttgart',   name:'LUMAS Gallery Stuttgart',     store:'DE', canHost:true,  street:'Lange Straße 3', zip:'70173', hours:'Mon to Fri 11 am to 7 pm, Sat 10 am to 7 pm', photo:teaser('stuttgart') },
-  { id:'hannover',      city:'Hannover',    name:'LUMAS Gallery Hannover',      store:'DE', canHost:true,  street:'Luisenstraße 10-11, Kröpcke-Passage', zip:'30159', hours:'Mon to Fri 10 am to 7 pm, Sat 10 am to 6 pm', photo:teaser('hannover') },
-  { id:'mannheim',      city:'Mannheim',    name:'LUMAS Gallery Mannheim',      store:'DE', canHost:true,  street:'N6 3-7, Kunststraße', zip:'68161', hours:'Mon to Sat 11 am to 6.30 pm', photo:teaser('mannheim') },
-  { id:'dortmund',      city:'Dortmund',    name:'LUMAS Gallery Dortmund',      store:'DE', canHost:true,  street:'Schwarze-Brüder-Straße 1', zip:'44137', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('dortmund') },
-  // Airside, non-Schengen, Terminal 3. Cannot host a public event. This is why
-  // "all galleries" must never be a literal string.
-  { id:'fraport',       city:'Frankfurt Airport', name:'LUMAS Gallery Frankfurt Airport', store:'DE', canHost:false, street:'Non-Schengen Marktplatz, Terminal 3', zip:'60547', hours:'Mon to Sun 6 am to 9.30 pm', photo:teaser('frankfurt') },
-  { id:'wien',          city:'Wien',        name:'LUMAS Gallery Wien',          store:'AT', canHost:true,  street:'Tuchlauben 11', zip:'1010', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('wien') },
-  { id:'zuerich',       city:'Zürich',      name:'LUMAS Gallery Zürich',        store:'CH', canHost:true,  street:'Weinplatz 3', zip:'8001', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('zuerich') },
-  { id:'paris',         city:'Paris',       name:'LUMAS Gallery Paris',         store:'FR', canHost:true,  street:'25 rue de Seine', zip:'75006', hours:'Mon to Sat 11 am to 7 pm', photo:teaser('paris') },
-  { id:'london',        city:'London',      name:'LUMAS Gallery London',        store:'UK', canHost:true,  street:'75 Marylebone High Street', zip:'W1U 5JY', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('london') },
-  { id:'budapest',      city:'Budapest',    name:'LUMAS Gallery Budapest',      store:'HU', canHost:true,  street:'Andrássy út 39', zip:'1061', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('budapest') },
-  { id:'new-york',      city:'New York',    name:'LUMAS Gallery New York SoHo', store:'COM', canHost:true, street:'474 West Broadway', zip:'NY 10012', hours:'Mon to Sat 11 am to 7 pm', photo:teaser('new-york-soho') },
-  { id:'miami',         city:'Miami Beach', name:'LUMAS Gallery Miami Beach',   store:'COM', canHost:true,  street:'1052 Lincoln Road', zip:'FL 33139', hours:'Mon to Sun 11 am to 8 pm', photo:teaser('miami') }
+  { id:'berlin-mitte',  short:'Berlin Mitte',  city:'Berlin', canHost:true,  street:'Rosenthaler Straße 40/41', zip:'10178', hours:'Mon to Sat 11 am to 7 pm · Sun 1 to 6 pm', photo:'assets/berlin-mitte/viewing-room.jpg' },
+  { id:'berlin-kudamm', short:'Berlin KuDamm', city:'Berlin', canHost:true,  street:'Fasanenstraße 73', zip:'10719', hours:'Mon to Fri 11 am to 7 pm · Sat 10 am to 7 pm', photo:'assets/photos/DSC06390.jpg' },
+  { id:'hamburg',     short:'Hamburg',     city:'Hamburg',    canHost:true,  street:'Große Bleichen 31', zip:'20354', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/hamburg/galerie-hamburg-teaser-1220x450.jpg' },
+  { id:'muenchen',    short:'München',     city:'München',    canHost:true,  street:'Brienner Straße 3', zip:'80333', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/muenchen/galerie-muenchen-teaser-1220x450.jpg' },
+  { id:'koeln',       short:'Köln',        city:'Köln',       canHost:true,  street:'Mittelstraße 15', zip:'50672', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/koeln/galerie-koeln-teaser-1220x450.jpg' },
+  { id:'frankfurt',   short:'Frankfurt',   city:'Frankfurt',  canHost:true,  street:'Kaiserstraße 13', zip:'60311', hours:'Mon to Fri 10.30 am to 7 pm · Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/frankfurt/galerie-frankfurt-teaser-1220x450.jpg' },
+  { id:'duesseldorf', short:'Düsseldorf',  city:'Düsseldorf', canHost:true,  street:'Grünstraße 8', zip:'40212', hours:'Mon to Sat 10 am to 6 pm', photo:'https://media.lumas.de/galerien/duesseldorf/galerie-duesseldorf-teaser-1220x450.jpg' },
+  { id:'stuttgart',   short:'Stuttgart',   city:'Stuttgart',  canHost:true,  street:'Lange Straße 3', zip:'70173', hours:'Mon to Fri 11 am to 7 pm · Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/stuttgart/galerie-stuttgart-teaser-1220x450.jpg' },
+  { id:'hannover',    short:'Hannover',    city:'Hannover',   canHost:true,  street:'Luisenstraße 10-11', zip:'30159', hours:'Mon to Fri 10 am to 7 pm · Sat 10 am to 6 pm', photo:'https://media.lumas.de/galerien/hannover/galerie-hannover-teaser-1220x450.jpg' },
+  { id:'mannheim',    short:'Mannheim',    city:'Mannheim',   canHost:true,  street:'N6 3-7, Kunststraße', zip:'68161', hours:'Mon to Sat 11 am to 6.30 pm', photo:'https://media.lumas.de/galerien/mannheim/galerie-mannheim-teaser-1220x450.jpg' },
+  { id:'dortmund',    short:'Dortmund',    city:'Dortmund',   canHost:true,  street:'Schwarze-Brüder-Straße 1', zip:'44137', hours:'Mon to Sat 10 am to 6 pm', photo:'https://media.lumas.de/galerien/dortmund/galerie-dortmund-teaser-1220x450.jpg' },
+  // Airside, non-Schengen, Terminal 3: cannot host a public event. This flag is
+  // why "all galleries" is never a literal string anywhere in this system.
+  { id:'fraport',     short:'Frankfurt Airport', city:'Frankfurt', canHost:false, street:'Non-Schengen Marktplatz, Terminal 3', zip:'60547', hours:'Mon to Sun 6 am to 9.30 pm', photo:'https://media.lumas.de/galerien/frankfurt/galerie-frankfurt-teaser-1220x450.jpg' },
+  { id:'wien',        short:'Wien',        city:'Wien',       canHost:true,  street:'Tuchlauben 11', zip:'1010', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/wien/galerie-wien-teaser-1220x450.jpg' },
+  { id:'zuerich',     short:'Zürich',      city:'Zürich',     canHost:true,  street:'Weinplatz 3', zip:'8001', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/zuerich/galerie-zuerich-teaser-1220x450.jpg' },
+  { id:'paris',       short:'Paris',       city:'Paris',      canHost:true,  street:'25 rue de Seine', zip:'75006', hours:'Mon to Sat 11 am to 7 pm', photo:'https://media.lumas.de/galerien/paris/galerie-paris-teaser-1220x450.jpg' },
+  { id:'london',      short:'London',      city:'London',     canHost:true,  street:'75 Marylebone High Street', zip:'W1U 5JY', hours:'Mon to Sat 10 am to 6 pm', photo:'https://media.lumas.de/galerien/london/galerie-london-teaser-1220x450.jpg' },
+  { id:'budapest',    short:'Budapest',    city:'Budapest',   canHost:true,  street:'Andrássy út 39', zip:'1061', hours:'Mon to Sat 10 am to 7 pm', photo:'https://media.lumas.de/galerien/budapest/galerie-budapest-teaser-1220x450.jpg' },
+  { id:'new-york',    short:'New York',    city:'New York',   canHost:true,  street:'474 West Broadway', zip:'NY 10012', hours:'Mon to Sat 11 am to 7 pm', photo:'https://media.lumas.de/galerien/new-york-soho/galerie-new-york-soho-teaser-1220x450.jpg' },
+  { id:'miami',       short:'Miami Beach', city:'Miami Beach',canHost:true,  street:'1052 Lincoln Road', zip:'FL 33139', hours:'Mon to Sun 11 am to 8 pm', photo:'https://media.lumas.de/galerien/miami/galerie-miami-teaser-1220x450.jpg' }
 ];
 const G = Object.fromEntries(GALLERIES.map(g => [g.id, g]));
 const HOSTABLE = GALLERIES.filter(g => g.canHost);
-
 const EC = 'https://lumas.eventcreate.com/';
+const shot = (f) => `assets/photos/${f}`;
 
-// Helper: build occurrences for every hostable gallery
-const everywhere = (date, time, rsvp = null) =>
-  HOSTABLE.map(g => ({ galleryId: g.id, start: `${date}T${time}`, rsvp }));
-
+/* Real LUMAS event photography. An events page has to show events: guests,
+   talks, music, people looking at work together. Artworks alone described the
+   catalogue; empty rooms described the property. These describe the evening.
+   Photographs may be cropped, so they share one editorial frame. */
 const EVENTS = [
   {
-    id: 'golden-hour',
-    title: 'Golden Hour',
-    format: 'Network happening',
-    scopeLabel: 'LUMAS galleries worldwide',
-    teaser: 'One week in which the finest light of the summer comes to every LUMAS gallery.',
-    image: teaser('koeln'),
-    detail: true,
-    body: [
-      'Some evenings need no programme to be special, only the right moment.',
-      'We bring the finest light of the summer into the gallery, and we are glad to mark this particular time of year, gathered into its golden hour.',
-      'We would like to share that moment with you: a curated selection of works, cold drinks, and impressions that stay.',
-      'Come as you are, without registration, alone or in company. Which of our galleries is yours to choose.'
-    ],
-    // 18 occurrences. Frankfurt Airport is excluded by canHost, not by hand.
-    occurrences: [
-      ...everywhere('2026-09-02', '18:00').slice(0, 6),
-      ...everywhere('2026-09-03', '18:00').slice(6, 11),
-      ...everywhere('2026-09-04', '18:00').slice(11, 18)
-    ],
-    works: [
-      { code:'ime109', artist:'Isabelle Menin', title:'Sudden Spring III' },
-      { code:'gve30',  artist:'Gavin Evans',    title:'Kate Moss, Contact' },
-      { code:'cdu04',  artist:'Chiron Duong',   title:'Portrait of Áo Dài' },
-      { code:'wuh110', artist:'Wolfgang Uhlig', title:'Colour Field' }
+    id:'menin-talk',
+    title:'Isabelle Menin in conversation',
+    text:'She builds her compositions on a scanner, from blooms well past their peak. An evening about the moment a picture tips, and about why she never trained as a painter and works like one anyway.',
+    photo:'DSC06764.jpg',
+    alt:'Guests filling the gallery for an artist talk',
+    dates:[ { gallery:'berlin-mitte', start:'2026-08-27T19:00', rsvp:EC } ]
+  },
+  {
+    id:'golden-hour',
+    title:'Golden Hour',
+    text:'Some evenings need no programme to be special, only the right moment. Cold drinks, a curated selection, and the last of the summer light, in every room we have.',
+    photo:'DSC06554.jpg',
+    alt:'A saxophonist playing in the gallery during an evening opening',
+    dates: HOSTABLE.map((g, i) => ({
+      gallery: g.id,
+      start: `2026-09-0${i < 6 ? 2 : i < 11 ? 3 : 4}T18:00`,
+      rsvp: null
+    }))
+  },
+  {
+    id:'jahns-signing',
+    title:'Signing with Robert Jahns',
+    text:'Three hours in which he signs, and explains how a montage that looks impossible is actually put together.',
+    photo:'DSC06503.jpg',
+    alt:'A visitor holding a newly signed framed edition',
+    dates:[ { gallery:'koeln', start:'2026-09-05T14:00', end:'2026-09-05T17:00', rsvp:null } ]
+  },
+  {
+    id:'krautgartner-opening',
+    title:'Terra Incognita',
+    text:'Kevin Krautgartner photographs from a helicopter what mining has written into the landscape. Turquoise basins, ochre terraces, lines that nobody drew. He is present in Hamburg and München.',
+    photo:'DSC06571.jpg',
+    alt:'A guest with a glass of wine studying the hung series at an opening',
+    dates:[
+      { gallery:'hamburg',  start:'2026-09-10T19:00', rsvp:EC },
+      { gallery:'muenchen', start:'2026-09-11T19:00', rsvp:EC },
+      { gallery:'zuerich',  start:'2026-09-12T18:00', rsvp:null }
     ]
   },
   {
-    id: 'menin-talk',
-    title: 'Isabelle Menin in conversation',
-    format: 'Artist talk',
-    teaser: 'On flowers, decay, and the question of when a picture is finished.',
-    image: 'assets/berlin-mitte/viewing-room.jpg',
-    detail: true,
-    body: [
-      'Isabelle Menin works with what is already passing. Her compositions are built on the scanner, from blooms that are well past their peak.',
-      'This evening she speaks in Berlin Mitte about her method, about the moment a picture tips, and about why she never trained as a painter and works like one anyway.',
-      'Places are limited, so we ask you to register.'
-    ],
-    occurrences: [
-      { galleryId:'berlin-mitte', start:'2026-08-27T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
-    ],
-    works: [
-      { code:'ime83',  artist:'Isabelle Menin', title:'Tohu Bohu VII' },
-      { code:'ime97',  artist:'Isabelle Menin', title:'Sub Rosa II' },
-      { code:'ime117', artist:'Isabelle Menin', title:'Fugue I' },
-      { code:'ime130', artist:'Isabelle Menin', title:'Nocturne' }
-    ]
+    id:'advisory-day',
+    title:'Advisory day',
+    text:'One wall, one measurement, one uncertainty: which work can carry that space for years. Our consultants set the day aside for exactly that. Bring a photo of the room.',
+    photo:'DSC06464.jpg',
+    alt:'An art consultant and a visitor discussing one work closely',
+    dates:['duesseldorf','frankfurt','stuttgart','hannover','mannheim'].map(id => ({
+      gallery:id, start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null
+    }))
   },
   {
-    id: 'krautgartner-opening',
-    title: 'Terra Incognita: Kevin Krautgartner',
-    format: 'Opening',
-    teaser: 'Aerial views of places that look like painting, and are not.',
-    image: teaser('hamburg'),
-    detail: true,
-    body: [
-      'Kevin Krautgartner photographs from a helicopter what mining has written into the landscape. Turquoise basins, ochre terraces, lines that nobody drew.',
-      'We open the series in three galleries within one week. The artist is present in Hamburg and München, where we ask you to register. In Zürich you can simply join us.',
-      'An example of why registration is a property of the date, not of the event.'
-    ],
-    occurrences: [
-      { galleryId:'hamburg',  start:'2026-09-10T19:00', rsvp:{ url:EC, provider:'EventCreate' } },
-      { galleryId:'muenchen', start:'2026-09-11T19:00', rsvp:{ url:EC, provider:'EventCreate' } },
-      { galleryId:'zuerich',  start:'2026-09-12T18:00', rsvp:null }
-    ],
-    works: [
-      { code:'ldr13', artist:'Kevin Krautgartner', title:'Terra Incognita I' },
-      { code:'ldr15', artist:'Kevin Krautgartner', title:'Terra Incognita IV' },
-      { code:'ldr73', artist:'Kevin Krautgartner', title:'Water Colours II' },
-      { code:'ldr80', artist:'Kevin Krautgartner', title:'Above Nazaré' }
-    ]
-  },
-  {
-    id: 'jahns-signing',
-    title: 'Signing with Robert Jahns',
-    format: 'Signing',
-    // No body copy → no detail page. The system derives that, nobody decides it.
-    teaser: 'Three hours in which Robert Jahns signs and explains how the montages come about.',
-    image: teaser('koeln'),
-    detail: false,
-    occurrences: [
-      { galleryId:'koeln', start:'2026-09-05T14:00', end:'2026-09-05T17:00', rsvp:null }
-    ]
-  },
-  {
-    id: 'advisory-day',
-    title: 'Advisory day',
-    format: 'Advisory day',
-    series: 'Advisory days 2026',
-    teaser: 'A day when our art consultants have time for your wall. Bring a photo of the room.',
-    image: teaser('duesseldorf'),
-    detail: true,
-    body: [
-      'One wall, one measurement, one uncertainty: which work can carry that space for years.',
-      'On this day our art consultants set aside time in five galleries, without an appointment and without any expectation that you buy. Bring a photo of your room, ideally with measurements.',
-      'The advisory day runs monthly. The next dates are listed below.'
-    ],
-    occurrences: [
-      { galleryId:'duesseldorf', start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
-      { galleryId:'frankfurt',   start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
-      { galleryId:'stuttgart',   start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
-      { galleryId:'hannover',    start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
-      { galleryId:'mannheim',    start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null }
-    ]
-  },
-  {
-    id: 'curator-tour',
-    title: 'Curator’s tour online: the new editions',
-    format: 'Artist talk',
-    teaser: 'Thirty minutes through the autumn arrivals, live and from anywhere.',
-    image: 'assets/photos/DSC06554.jpg',
-    detail: true,
-    body: [
-      'New editions enter the portfolio four times a year. Which of them lasts is decided in the first few weeks.',
-      'Our curator walks through the arrivals in thirty minutes, names the reason each one was taken on, and answers your questions afterwards.',
-      // Occurrence without a gallery: same object, nullable location.
-      'The tour takes place online. You receive the access link after registering.'
-    ],
-    occurrences: [
-      { galleryId:null, online:true, start:'2026-09-30T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
-    ]
+    id:'curator-tour',
+    title:'The new editions, with our curator',
+    text:'New editions enter the portfolio four times a year. Thirty minutes on what came in this autumn and the reason each one was taken on.',
+    photo:'DSC06802.jpg',
+    alt:'A curator showing a group of guests through the new editions',
+    dates:[ { gallery:null, online:true, start:'2026-09-30T19:00', rsvp:EC } ]
   }
 ];
 
 /* ══════════════════════════════════════════════════════════════════
-   2 · DERIVED LOGIC — nothing below is authored in the CMS
+   FORMAT
    ══════════════════════════════════════════════════════════════════ */
-
-const STORE = 'DE';                       // the shop this feed renders in
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-const scopeOf = (ev) => {
-  const n = ev.occurrences.length;
-  return n === 1 ? 'single' : n <= 5 ? 'multi' : 'network';
+const t = (iso) => {
+  const d = new Date(iso), h = d.getHours(), m = d.getMinutes();
+  return `${h % 12 === 0 ? 12 : h % 12}${m ? '.' + String(m).padStart(2, '0') : ''} ${h >= 12 ? 'pm' : 'am'}`;
 };
+const timeOf = (o) => o.end ? `${t(o.start)} to ${t(o.end)}` : `from ${t(o.start)}`;
+const longDate = (iso) => { const d = new Date(iso); return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+const shortDate = (iso) => { const d = new Date(iso); return `${d.getDate()} ${MON[d.getMonth()]}`; };
+const first = (ev) => [...ev.dates].sort((a, b) => a.start.localeCompare(b.start))[0];
+const last  = (ev) => [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).pop();
 
-const rsvpStateOf = (ev) => {
-  const withRsvp = ev.occurrences.filter(o => o.rsvp).length;
-  if (withRsvp === 0) return 'none';
-  return withRsvp === ev.occurrences.length ? 'all' : 'some';
-};
+/* THE ONE NUMBER. Up to 5 galleries read as prose in the copy column.
+   6 or more get their own full-width band below the card. Nobody authors
+   this: it is counted. */
+const BAND_MIN = 6;
 
-/* The CTA resolver. Five labels, no free text, one primary, max one secondary. */
-function resolveCta(ev) {
-  const scope = scopeOf(ev);
-  const rsvp = rsvpStateOf(ev);
-  const detailHref = `#/event/${ev.id}`;
-  const only = ev.occurrences[0];
+/* Only show what varies: per-gallery dates appear only when they differ. */
+const datesVary = (ev) => new Set(ev.dates.map(o => o.start.slice(0, 10))).size > 1;
 
-  if (scope === 'single') {
-    const g = only.galleryId ? G[only.galleryId] : null;
-    if (rsvp !== 'none') {
-      return {
-        primary: { label:'Register', href:only.rsvp.url, external:true, provider:only.rsvp.provider, track:'event_rsvp_click' },
-        secondary: g ? { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' } : null,
-        rule:'single + rsvp'
-      };
-    }
-    if (ev.detail) {
-      return {
-        primary: { label:'Learn more', href:detailHref, track:'event_detail_click' },
-        secondary: g ? { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' } : null,
-        rule:'single + no rsvp + detail page'
-      };
-    }
-    return {
-      primary: { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' },
-      secondary: null,
-      rule:'single + no rsvp + no detail page'
-    };
+/* The one line of facts: when · how many rooms · whether to register. */
+function facts(ev) {
+  const a = first(ev), z = last(ev), bits = [];
+  if (ev.dates.length === 1) {
+    bits.push(`<b>${longDate(a.start)}</b>, ${timeOf(a)}`);
+  } else if (!datesVary(ev)) {
+    bits.push(`<b>${longDate(a.start)}</b>, ${timeOf(a)}`);
+    bits.push(`${ev.dates.length} galleries`);
+  } else {
+    const sameMonth = new Date(a.start).getMonth() === new Date(z.start).getMonth();
+    bits.push(`<b>${sameMonth
+      ? `${new Date(a.start).getDate()} to ${new Date(z.start).getDate()} ${MONTHS[new Date(z.start).getMonth()]}`
+      : `${shortDate(a.start)} to ${shortDate(z.start)}`}</b>`);
+    bits.push(`${ev.dates.length} galleries`);
   }
-
-  // Multi and network never expose a card-level RSVP: which city would it mean?
-  if (rsvp !== 'none') {
-    return {
-      primary: { label:'Choose date & gallery', href:detailHref, track:'event_picker_click' },
-      secondary: null,
-      rule:`${scope} + rsvp (at least one)`
-    };
-  }
-  return {
-    primary: { label:'Participating galleries', href:detailHref, track:'event_locations_click' },
-    secondary: null,
-    rule:`${scope} + no rsvp`
-  };
+  bits.push(ev.dates.some(o => o.rsvp) ? 'registration required' : 'no registration');
+  return bits.join(' · ');
 }
-
-const fmtDate = (iso, withDay = true) => {
-  const d = new Date(iso);
-  return `${withDay ? DAYS[d.getDay()] + ', ' : ''}${d.getDate()} ${MONTHS[d.getMonth()]}`;
-};
-const fmtTime = (iso) => {
-  const d = new Date(iso);
-  const h = d.getHours(), m = d.getMinutes();
-  const suffix = h >= 12 ? 'pm' : 'am';
-  const hh = h % 12 === 0 ? 12 : h % 12;
-  return `${hh}${m ? '.' + String(m).padStart(2, '0') : ''} ${suffix}`;
-};
-
-/* Cards show dates. Only a single occurrence may show a time. */
-function dateLabel(ev) {
-  const sorted = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start));
-  const first = sorted[0], last = sorted[sorted.length - 1];
-  const sameDay = first.start.slice(0, 10) === last.start.slice(0, 10);
-
-  if (ev.occurrences.length === 1) {
-    const t = first.end
-      ? `${fmtTime(first.start)} to ${fmtTime(first.end)}`
-      : `from ${fmtTime(first.start)}`;
-    return `${fmtDate(first.start)} · ${t}`;
-  }
-  if (sameDay) return fmtDate(first.start);
-  // Same month: name it once. "2 to 4 September", not "2 September to 4 September".
-  const sameMonth = new Date(first.start).getMonth() === new Date(last.start).getMonth();
-  if (sameMonth) return `${new Date(first.start).getDate()} to ${fmtDate(last.start, false)}`;
-  return `${fmtDate(first.start, false)} to ${fmtDate(last.start, false)}`;
-}
-
-/* Scope label + place prose. Store-relevant cities first, deduplicated. */
-function placeOf(ev) {
-  const scope = scopeOf(ev);
-  const cities = [];
-  ev.occurrences.forEach(o => {
-    const label = o.online ? 'Online' : G[o.galleryId].city;
-    if (!cities.some(c => c.label === label)) {
-      cities.push({ label, store: o.online ? STORE : G[o.galleryId].store });
-    }
-  });
-  cities.sort((a, b) => (a.store === STORE ? 0 : 1) - (b.store === STORE ? 0 : 1));
-
-  // Single: there is no scope to announce, only a place. A place is prose.
-  // Online is a modality, not a place, so it keeps the label treatment.
-  if (scope === 'single') {
-    const o = ev.occurrences[0];
-    if (o.online) return { badge: 'Online', prose: '' };
-    return { badge: null, prose: G[o.galleryId].name, isPlace: true };
-  }
-  if (scope === 'multi') {
-    return { badge: `${cities.length} galleries`, prose: cities.map(c => c.label).join(', ') };
-  }
-  const shown = cities.slice(0, 4).map(c => c.label).join(', ');
-  return {
-    badge: ev.scopeLabel || `${ev.occurrences.length} galleries`,
-    prose: `${ev.occurrences.length} locations: ${shown}`,
-    more: ` and more`
-  };
-}
-
-const participationLabel = (ev) => {
-  const r = rsvpStateOf(ev);
-  return r === 'none' ? 'No registration' : r === 'all' ? 'Registration required' : 'Registration varies by gallery';
-};
-
-const sortedEvents = () => [...EVENTS].sort((a, b) => {
-  const ka = [...a.occurrences].sort((x, y) => x.start.localeCompare(y.start))[0].start;
-  const kb = [...b.occurrences].sort((x, y) => x.start.localeCompare(y.start))[0].start;
-  return ka.localeCompare(kb);
-});
 
 /* ══════════════════════════════════════════════════════════════════
-   3 · INSTRUMENTATION — stubs named after the real GA4 events
+   INSTRUMENTATION
    ══════════════════════════════════════════════════════════════════ */
-const logEl = () => document.getElementById('sysLog');
-let logCount = 0;
-function track(name, params = {}) {
-  console.log('[track]', name, params);
-  const el = logEl();
+let logN = 0;
+function track(name, p = {}) {
+  console.log('[track]', name, p);
+  const el = document.getElementById('log');
   if (!el) return;
-  if (!logCount) el.innerHTML = '';
-  logCount++;
-  const row = document.createElement('div');
-  row.innerHTML = `<b>${name}</b> ${Object.entries(params).map(([k, v]) => `${k}=${v}`).join(' ')}`;
-  el.prepend(row);
+  if (!logN) el.innerHTML = '';
+  logN++;
+  const r = document.createElement('div');
+  r.innerHTML = `<b>${name}</b> ${Object.entries(p).map(([k, v]) => `${k}=${v}`).join(' ')}`;
+  el.prepend(r);
 }
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-track]');
-  if (!t) return;
-  track(t.dataset.track, JSON.parse(t.dataset.params || '{}'));
+  const el = e.target.closest('[data-track]');
+  if (el) track(el.dataset.track, JSON.parse(el.dataset.params || '{}'));
 });
 
 /* ══════════════════════════════════════════════════════════════════
-   4 · RENDER
+   RENDER
    ══════════════════════════════════════════════════════════════════ */
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
-const params = (o) => esc(JSON.stringify(o));
+const prm = (o) => esc(JSON.stringify(o));
 
-function ctaHtml(cta, ev, inverse = false) {
-  const p = cta.primary;
-  const ext = p.external
-    ? ` target="_blank" rel="noopener" aria-label="${esc(p.label)} (external site, ${esc(p.provider)})"`
+/* RULE 1 - every participating gallery is a link. */
+function whereHtml(ev) {
+  const vary = datesVary(ev);
+  const single = ev.dates.length === 1;
+
+  const links = [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).map(o => {
+    if (o.online) return `<span>Online, link sent after registering</span>`;
+    const g = G[o.gallery];
+    const date = vary ? ` <span class="d">${shortDate(o.start)}</span>` : '';
+    const street = single ? ` <span class="street">${esc(g.street)}</span>` : '';
+    return `<a href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${prm({ event_id: ev.id, gallery: g.id })}">${esc(g.short)}${date}${street}</a>`;
+  }).join('<span class="sep">·</span>');
+
+  // The dates on the links already say the evenings differ. No need to say it.
+  const lead = single ? '' : `<div class="ev-where-lead">Pick the gallery nearest you.</div>`;
+
+  return `<div class="ev-where">${lead}<div class="ev-links">${links}</div></div>`;
+}
+
+/* The band. Grouped by evening: one date heading per column instead of the
+   same date repeated beside every gallery. Compact, and it shows the shape of
+   the week for free. */
+function bandHtml(ev) {
+  const byDay = new Map();
+  [...ev.dates].sort((a, b) => a.start.localeCompare(b.start)).forEach(o => {
+    const key = o.start.slice(0, 10);
+    if (!byDay.has(key)) byDay.set(key, []);
+    byDay.get(key).push(o);
+  });
+
+  const link = (o) => {
+    const g = G[o.gallery];
+    return `<a href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${prm({ event_id: ev.id, gallery: g.id })}"><span>${esc(g.short)}</span></a>`;
+  };
+
+  // A single group means the dates do not vary, so it needs no heading.
+  const groups = [...byDay.entries()].map(([day, list]) => `<div class="ev-group">
+    ${byDay.size > 1 ? `<h3>${esc(longDate(list[0].start).replace(/^\w+ /, ''))}</h3>` : ''}
+    <div class="ev-group-list">${list.map(link).join('')}</div>
+  </div>`).join('');
+
+  return `<section class="ev-band">
+    <div class="ev-band-lead">Pick the gallery nearest you.</div>
+    <div class="ev-groups">${groups}</div>
+  </section>`;
+}
+
+function evHtml(ev) {
+  const rsvp = ev.dates.find(o => o.rsvp);
+  // RULE 2 - a Register button, only when registration is required.
+  const register = rsvp
+    ? `<a class="ev-register" href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">Register<iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
     : '';
-  const icon = p.external ? '<iconify-icon icon="ph:arrow-up-right"></iconify-icon>' : '';
-  let html = `<a class="btn btn-primary${inverse ? ' is-inverse' : ''}" href="${esc(p.href)}"${ext} data-track="${p.track}" data-params="${params({ event_id: ev.id, scope: scopeOf(ev) })}">${esc(p.label)}${icon}</a>`;
-  if (cta.secondary) {
-    html += `<a class="btn-ghost" href="${esc(cta.secondary.href)}" data-track="${cta.secondary.track}" data-params="${params({ event_id: ev.id })}">${esc(cta.secondary.label)}</a>`;
-  }
-  return html;
-}
 
-function resolverNote(ev) {
-  const cta = resolveCta(ev);
-  return `<div class="resolver-note">occurrences=<b>${ev.occurrences.length}</b> · rsvp=<b>${rsvpStateOf(ev)}</b> · detail=<b>${!!ev.detail}</b> → state=<b>${scopeOf(ev)}</b> · rule=<b>${esc(cta.rule)}</b> → CTA=<b>${esc(cta.primary.label)}</b></div>`;
-}
+  const band = ev.dates.length >= BAND_MIN;
 
-function placeHtml(ev) {
-  const pl = placeOf(ev);
-  return `<div class="event-place">
-    ${pl.badge ? `<span class="scope-badge">${esc(pl.badge)}</span>` : ''}
-    ${pl.prose ? `<span class="place-prose${pl.isPlace ? ' is-place' : ''}">${pl.isPlace ? '<iconify-icon icon="ph:map-pin-light"></iconify-icon> ' : ''}${esc(pl.prose)}${pl.more ? `<span class="more">${esc(pl.more)}</span>` : ''}</span>` : ''}
-  </div>`;
-}
-
-function tagsHtml(ev) {
-  return `<div class="event-tags">
-    <span class="tag">${esc(ev.format)}</span>
-    <span class="tag">${esc(participationLabel(ev))}</span>
-    ${ev.series ? `<span class="tag">Series: ${esc(ev.series)}</span>` : ''}
-  </div>`;
-}
-
-function cardHtml(ev) {
-  const cta = resolveCta(ev);
-  const scope = scopeOf(ev);
-  const internalHref = ev.detail ? `#/event/${ev.id}` : cta.primary.href;
-
-  if (scope === 'network') {
-    const mosaic = ev.occurrences.slice(0, 4)
-      .map(o => `<span style="background-image:url('${G[o.galleryId].photo}')"></span>`).join('');
-    return `<article class="event-card is-network on-dark reveal">
-      <a class="card-hit" href="${esc(internalHref)}" aria-label="${esc(ev.title)}" data-track="event_card_click" data-params="${params({ event_id: ev.id, scope })}"></a>
-      <div class="network-band">
-        <div class="network-copy">
-          <div class="event-date">${esc(dateLabel(ev))}</div>
-          <h2 class="display-h2 event-title"><a href="${esc(internalHref)}">${esc(ev.title)}</a></h2>
-          ${placeHtml(ev)}
-          ${tagsHtml(ev)}
-          <p class="event-teaser">${esc(ev.teaser)}</p>
-          <div class="event-actions">${ctaHtml(cta, ev, true)}</div>
-          ${resolverNote(ev)}
-        </div>
-        <div class="network-frame"><div class="network-mosaic">${mosaic}</div></div>
+  return `<div class="ev-wrap rv${band ? ' has-band' : ''}">
+    <article class="ev">
+      <div class="ev-shot">
+        <img src="${shot(ev.photo)}" alt="${esc(ev.alt)}" ${ev.first ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
       </div>
-    </article>`;
-  }
-
-  const showList = scope === 'multi';
-  return `<article class="event-card reveal">
-    <a class="card-hit" href="${esc(internalHref)}" aria-label="${esc(ev.title)}" data-track="event_card_click" data-params="${params({ event_id: ev.id, scope })}"></a>
-    <div class="event-frame"><img src="${esc(ev.image)}" alt="" loading="lazy"></div>
-    <div class="event-body">
-      <div class="event-date">${esc(dateLabel(ev))}</div>
-      <h2 class="display-h3 event-title"><a href="${esc(internalHref)}">${esc(ev.title)}</a></h2>
-      ${placeHtml(ev)}
-      ${tagsHtml(ev)}
-      <p class="event-teaser">${esc(ev.teaser)}</p>
-      <div class="event-actions">${ctaHtml(cta, ev)}</div>
-      ${showList ? disclosureHtml(ev) : ''}
-      ${resolverNote(ev)}
-    </div>
-  </article>`;
-}
-
-function disclosureHtml(ev) {
-  return `<div class="event-disclosure">
-    <button type="button" class="disclosure-toggle" aria-expanded="false" data-disclosure="${ev.id}">
-      <iconify-icon icon="ph:caret-down"></iconify-icon> Show all dates
-    </button>
-    <div class="disclosure-region" data-open="false" inert id="disc-${ev.id}"><div>${occListHtml(ev)}</div></div>
+      <div class="ev-body">
+        <h2 class="ev-title">${esc(ev.title)}</h2>
+        <div class="ev-facts">${facts(ev)}</div>
+        <p class="ev-text">${esc(ev.text)}</p>
+        ${register}
+        ${band ? '' : whereHtml(ev)}
+      </div>
+    </article>
+    ${band ? bandHtml(ev) : ''}
   </div>`;
-}
-
-function occListHtml(ev) {
-  const rows = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start)).map(o => {
-    const g = o.galleryId ? G[o.galleryId] : null;
-    const when = o.end
-      ? `${fmtDate(o.start)}, ${fmtTime(o.start)} to ${fmtTime(o.end)}`
-      : `${fmtDate(o.start)}, from ${fmtTime(o.start)}`;
-    const part = o.rsvp ? 'Registration required' : 'No registration';
-    const act = o.rsvp
-      ? `<a class="btn-ghost" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Register (external site, ${o.rsvp.provider})" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g ? g.id : 'online' })}">Register <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
-      : '';
-    const gal = g
-      ? `<a class="btn-ghost" href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${params({ event_id: ev.id, gallery: g.id })}">Gallery</a>`
-      : '';
-    // The row is where a visitor picks one room, so it names the gallery,
-    // not the city: Berlin has two, and "Berlin" twice is unusable.
-    return `<li class="occ-row">
-      <span class="occ-city">${g ? esc(g.name.replace('LUMAS Gallery ', '')) : 'Online'}${g ? `<small>${esc(g.street)}</small>` : '<small>Access link after registering</small>'}</span>
-      <span class="occ-when">${esc(when)}</span>
-      <span class="occ-part">${esc(part)}</span>
-      <span class="occ-act">${act}${gal}</span>
-    </li>`;
-  }).join('');
-  return `<ul class="occ-list">${rows}</ul>`;
-}
-
-/* ── Feed ────────────────────────────────────────────────────────── */
-let cityFilter = 'all';
-
-/* Filtering happens on OCCURRENCES, so a network event can never be hidden
-   from a city it actually includes. The model makes the filter correct. */
-function visibleEvents() {
-  const all = sortedEvents();
-  if (cityFilter === 'all') return all;
-  return all.filter(ev => ev.occurrences.some(o => o.galleryId === cityFilter));
 }
 
 function renderFeed() {
-  const host = document.getElementById('feed');
-  const list = visibleEvents();
+  const list = [...EVENTS].sort((a, b) => first(a).start.localeCompare(first(b).start));
   let html = '', lastMonth = '';
-
+  // The first photograph is the LCP element, so it must not be lazy.
+  list.forEach((ev, i) => { ev.first = i === 0; });
   list.forEach(ev => {
-    const first = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start))[0];
-    const d = new Date(first.start);
-    const month = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-    if (month !== lastMonth) {
-      html += `<div class="month-divider"><span class="eyebrow">${month}</span><span class="rule"></span></div>`;
-      lastMonth = month;
-    }
-    html += cardHtml(ev);
+    const d = new Date(first(ev).start);
+    const m = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    if (m !== lastMonth) { html += `<div class="month">${m}</div>`; lastMonth = m; }
+    html += evHtml(ev);
   });
-
-  host.innerHTML = html;
-
-  const total = EVENTS.length;
-  const occTotal = EVENTS.reduce((n, e) => n + e.occurrences.length, 0);
-  document.getElementById('bandMeta').innerHTML =
-    `${total} events · ${occTotal} dates<br>19 galleries, 18 of them able to host`;
-
-  const status = document.getElementById('filterStatus');
-  if (cityFilter === 'all') {
-    status.innerHTML = `<strong>${list.length}</strong> of ${total} events`;
-  } else {
-    status.innerHTML = `Filtered: <strong>${G[cityFilter].city}</strong> · ${list.length} event${list.length === 1 ? '' : 's'} · <button type="button" class="btn-ghost" data-reset-filter style="margin-left:8px">Show all</button>`;
-  }
-  observeReveals();
+  document.getElementById('feed').innerHTML = html;
+  reveal();
 }
 
-/* ── Detail surface ──────────────────────────────────────────────── */
-function renderDetail(id) {
-  const ev = EVENTS.find(e => e.id === id) || EVENTS[0];
-  const cta = resolveCta(ev);
-  const pl = placeOf(ev);
-  const host = document.getElementById('surface-detail');
-  const heroImg = ev.occurrences[0].galleryId ? G[ev.occurrences[0].galleryId].photo : ev.image;
-
-  const worksHtml = (ev.works || []).map(w => `
-    <figure class="work">
-      <div class="work-frame"><img src="https://img.lumas.com/showimg_${w.code}_desktop.jpg" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy"></div>
-      <figcaption class="work-meta"><strong>${esc(w.artist)}</strong><span>${esc(w.title)}</span><em>Discover the work →</em></figcaption>
-    </figure>`).join('');
-
-  host.innerHTML = `
-    <div class="detail-hero on-dark">
-      <div class="detail-hero-grid">
-        <div class="detail-hero-copy">
-          <span class="detail-crumb"><a href="#/">Events</a> · ${esc(ev.format)}</span>
-          <div class="event-date">${esc(dateLabel(ev))}</div>
-          <h1 class="display-h1" style="margin:0 0 18px">${esc(ev.title)}</h1>
-          ${placeHtml(ev)}
-          ${tagsHtml(ev)}
-          <div class="event-actions" style="margin-top:14px">${ctaHtml(cta, ev, true)}</div>
-        </div>
-        <div class="detail-hero-frame"><img src="${esc(heroImg)}" alt=""></div>
-      </div>
-    </div>
-
-    <div class="detail-body"><div class="container detail-body-grid">
-      <div class="detail-prose">${(ev.body || [ev.teaser]).map(p => `<p>${esc(p)}</p>`).join('')}</div>
-      <aside class="detail-aside">
-        <h3 class="display-h4">At a glance</h3>
-        <dl>
-          <dt>Format</dt><dd>${esc(ev.format)}</dd>
-          <dt>Dates</dt><dd>${ev.occurrences.length}</dd>
-          <dt>Scope</dt><dd>${esc(pl.badge || pl.prose)}</dd>
-          <dt>Registration</dt><dd>${esc(participationLabel(ev))}</dd>
-          <dt>Entry</dt><dd>Free</dd>
-          ${ev.series ? `<dt>Series</dt><dd>${esc(ev.series)}</dd>` : ''}
-        </dl>
-      </aside>
-    </div></div>
-
-    <div class="detail-occ"><div class="container">
-      <div class="detail-occ-head">
-        <h2 class="display-h2">${ev.occurrences.length === 1 ? 'Date and place' : 'Participating galleries'}</h2>
-        <span class="filter-status">${ev.occurrences.length} date${ev.occurrences.length === 1 ? '' : 's'}</span>
-      </div>
-      ${occListHtml(ev)}
-      ${rsvpStateOf(ev) !== 'none' ? `<p class="provider-note">Registration runs through ${esc(ev.occurrences.find(o => o.rsvp).rsvp.provider)}. You will be leaving lumas.com.</p>` : ''}
-      ${ev.occurrences.length > 5 ? `<p class="provider-note">Frankfurt Airport is not included: the gallery sits in the non-Schengen area of Terminal 3 and is reachable only with a boarding pass.</p>` : ''}
-    </div></div>
-
-    ${worksHtml ? `<div class="works-band"><div class="container">
-      <div class="works-head">
-        <div><h2 class="display-h2">Works you will see there</h2><p class="lede" style="margin-top:10px">If you cannot join us: the selection is available online too.</p></div>
-      </div>
-      <div class="works-rail">${worksHtml}</div>
-    </div></div>` : ''}
-  `;
-}
-
-/* ── Gallery-page surface, with the EventStrip in situ ───────────── */
+/* The destination. Small, because the events page already did the work. */
 function renderGallery(id) {
-  const g = G[id] || G['koeln'];
-  const host = document.getElementById('surface-gallery');
+  const g = G[id] || G['hamburg'];
+  const rows = EVENTS.flatMap(ev => ev.dates.filter(o => o.gallery === g.id).map(o => ({ ev, o })))
+    .sort((a, b) => a.o.start.localeCompare(b.o.start));
 
-  // The only query needed: occurrences at this gallery, upcoming, soonest first.
-  const rows = EVENTS.flatMap(ev =>
-    ev.occurrences.filter(o => o.galleryId === g.id).map(o => ({ ev, o }))
-  ).sort((a, b) => a.o.start.localeCompare(b.o.start)).slice(0, 3);
-
-  const stripRows = rows.map(({ ev, o }) => {
-    // Structured fields only. No event prose: it would duplicate the event's
-    // own copy across up to 18 pages, and in DE it would also break the
-    // brandbook du/Sie rule, since gallery pages address the reader as "du".
-    const action = o.rsvp
-      ? `<a class="btn btn-secondary" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Register (external site)" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Register <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
-      : `<a class="btn btn-secondary" href="#/event/${ev.id}" data-track="event_detail_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Learn more</a>`;
-    return `<div class="strip-row">
-      <div class="strip-when">${esc(fmtDate(o.start))}<small>${o.end ? `${fmtTime(o.start)} to ${fmtTime(o.end)}` : `from ${fmtTime(o.start)}`}</small></div>
-      <div class="strip-title">${esc(ev.title)}<small>${esc(ev.format)} · ${o.rsvp ? 'Registration required' : 'No registration'}${scopeOf(ev) !== 'single' ? ` · also in ${ev.occurrences.length - 1} other galleries` : ''}</small></div>
-      <div>${action}</div>
+  const html = rows.map(({ ev, o }) => {
+    const others = ev.dates.length - 1;
+    const act = o.rsvp
+      ? `<a class="act" href="${o.rsvp}" target="_blank" rel="noopener" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id, gallery: g.id, surface: 'gallery' })}">Register</a>`
+      : `<a class="act" href="#/" data-track="event_list_click" data-params="${prm({ event_id: ev.id, surface: 'gallery' })}">All events</a>`;
+    return `<div class="gp-row">
+      <div class="w">${esc(longDate(o.start))}<br>${esc(timeOf(o))}</div>
+      <div class="t">${esc(ev.title)}<small>${o.rsvp ? 'Registration required' : 'No registration, simply walk in'}${others ? ` · also in ${others} other galleries` : ''}</small></div>
+      <div>${act}</div>
     </div>`;
   }).join('');
 
-  host.innerHTML = `
-    <div class="gal-hero" style="background-image:url('${g.photo}')">
-      <div class="container">
-        <span class="eyebrow" style="color:var(--on-dark-55);display:block;margin-bottom:14px">Gallery</span>
-        <h1 class="display-h1">${esc(g.name.replace('LUMAS Gallery ', ''))}</h1>
-        <p class="lede" style="color:var(--on-dark-75);margin-top:12px">Discover limited editions in ${esc(g.city)}. Free entry, no appointment needed.</p>
-      </div>
+  document.getElementById('s-gallery').innerHTML = `
+    <div class="gp-hero" style="background-image:url('${g.photo}')">
+      <div class="wrap"><h1>${esc(g.short)}</h1>
+        <p>Limited editions in ${esc(g.city)}. Free entry, no appointment needed.</p></div>
     </div>
-
-    <div class="gal-visit"><div class="container">
-      <div class="gal-grid">
-        <div class="gal-cell"><h3>Address</h3>
-          <div class="line"><span class="label">${esc(g.street)}</span></div>
-          <div class="line"><span class="label">${esc(g.zip)} ${esc(g.city)}</span></div>
-        </div>
-        <div class="gal-cell"><h3>Opening hours</h3>
-          <div class="line"><span class="label">${esc(g.hours)}</span></div>
-        </div>
+    <div class="gp-body"><div class="wrap">
+      <div class="gp-cols">
+        <div><h3>Address</h3><div class="line">${esc(g.street)}<br>${esc(g.zip)} ${esc(g.city)}</div></div>
+        <div><h3>Opening hours</h3><div class="line">${esc(g.hours)}</div></div>
       </div>
-    </div></div>
-
-    <div class="event-strip"><div class="container">
-      <div class="strip-shell">
-        <div class="strip-head">
-          <h2 class="display-h3">At our gallery in ${esc(g.city)}</h2>
-          <span class="eyebrow">${rows.length} upcoming event${rows.length === 1 ? '' : 's'}</span>
-        </div>
-        ${rows.length ? stripRows : `<div class="strip-row"><div></div><div class="strip-title" style="font-size:16px;color:var(--text-secondary)">No event in ${esc(g.city)} right now.<small style="text-transform:none;letter-spacing:0;font-weight:300;font-size:13px">An advisory appointment is possible any time.</small></div><div><a class="btn btn-secondary" href="#">Book an appointment</a></div></div>`}
-        <div class="strip-note">This module is populated by <code>occurrences WHERE gallery = ${esc(g.id)}</code>. No duplicated content and no extra editorial work: one network event fills up to 18 gallery pages automatically.</div>
+      <div class="gp-next">
+        <h3>What is on here</h3>
+        ${rows.length ? html : `<div class="gp-row"><div class="w"></div><div class="t" style="font-size:17px;color:var(--ink-2)">Nothing on right now.<small>An advisory appointment is possible any time.</small></div><div><a class="act" href="#">Book</a></div></div>`}
+        <div class="gp-note">Populated by <code>occurrences WHERE gallery = ${esc(g.id)}</code>. One all-gallery event fills up to 18 gallery pages with no duplicated content.</div>
       </div>
-    </div></div>
-  `;
+    </div></div>`;
 }
 
-/* ── Control variant: today's reality, faithfully ────────────────── */
+/* ── Control variant: today's practice, faithfully ───────────────── */
 function renderControl() {
-  const host = document.getElementById('feed');
-  // One tile per gallery per event. Copy duplicated. CTA labels hand-typed.
-  const HAND_TYPED = ['Register now', 'RSVP', 'Sign up', 'More info', 'To the gallery'];
+  const LABELS = ['Register now', 'RSVP', 'Sign up', 'More info', 'To the gallery'];
   let tiles = [], i = 0;
-
-  sortedEvents().forEach(ev => {
-    ev.occurrences.forEach(o => {
-      const g = o.galleryId ? G[o.galleryId] : null;
-      const label = o.rsvp ? HAND_TYPED[i % 3] : HAND_TYPED[3 + (i % 2)];
-      i++;
-      tiles.push(`<article class="control-tile reveal">
-        <div class="frame"><img src="${esc(g ? g.photo : ev.image)}" alt="" loading="lazy"></div>
-        <div class="meta">${esc(fmtDate(o.start))} | from ${esc(fmtTime(o.start))} | ${g ? esc(g.name) : 'Online'}</div>
-        <h3>${esc(ev.title)}</h3>
-        <p>${esc(ev.teaser)}</p>
-        <div class="cta"><a class="btn btn-secondary" href="#" data-track="event_card_click" data-params="${params({ event_id: ev.id, variant: 'control' })}">${esc(label)}</a></div>
-      </article>`);
-    });
-  });
-
-  host.innerHTML = `<div class="control-grid">${tiles.join('')}</div>`;
-  document.getElementById('controlCount').textContent = tiles.length;
-  document.getElementById('bandMeta').innerHTML = `${tiles.length} tiles for ${EVENTS.length} events`;
-  document.getElementById('filterStatus').innerHTML = `<strong>${tiles.length}</strong> tiles`;
-  observeReveals();
+  [...EVENTS].sort((a, b) => first(a).start.localeCompare(first(b).start)).forEach(ev => ev.dates.forEach(o => {
+    const g = o.gallery ? G[o.gallery] : null;
+    const label = o.rsvp ? LABELS[i % 3] : LABELS[3 + (i % 2)];
+    i++;
+    tiles.push(`<article class="ctl-tile rv">
+      <div class="f"><img src="${esc(g ? g.photo : shot(ev.photo))}" alt="" loading="lazy"></div>
+      <div class="m">${esc(longDate(o.start))} | ${esc(timeOf(o))} | ${g ? 'LUMAS ' + esc(g.short) : 'Online'}</div>
+      <h3>${esc(ev.title)}</h3><p>${esc(ev.text.split('.')[0])}.</p>
+      <a class="c" href="#" data-track="event_card_click" data-params="${prm({ event_id: ev.id, variant: 'control' })}">${esc(label)}</a>
+    </article>`);
+  }));
+  document.getElementById('feed').innerHTML = `<div class="ctl-grid">${tiles.join('')}</div>`;
+  document.getElementById('ctlCount').textContent = tiles.length;
+  reveal();
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   5 · ROUTING, STATE, INTERACTION
+   STATE - variant, surface, empty. That is all the state there is.
    ══════════════════════════════════════════════════════════════════ */
 let variant = new URLSearchParams(location.search).get('v') === 'control' ? 'control' : 'system';
 
 function setVariant(v) {
   variant = v;
-  document.querySelectorAll('[data-variant]').forEach(b =>
-    b.setAttribute('aria-pressed', String(b.dataset.variant === v)));
-  document.getElementById('controlNote').hidden = v !== 'control';
-  document.getElementById('filterBar').hidden = false;
-  const url = new URL(location.href);
-  v === 'control' ? url.searchParams.set('v', 'control') : url.searchParams.delete('v');
-  history.replaceState(null, '', url);
+  document.querySelectorAll('[data-variant]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.variant === v)));
+  document.getElementById('ctlNote').hidden = v !== 'control';
+  const u = new URL(location.href);
+  v === 'control' ? u.searchParams.set('v', 'control') : u.searchParams.delete('v');
+  history.replaceState(null, '', u);
   route();
 }
 
-function showSurface(name) {
-  ['overview', 'detail', 'gallery'].forEach(s =>
-    document.getElementById('surface-' + s).hidden = s !== name);
-  document.querySelectorAll('[data-surface]').forEach(b =>
-    b.setAttribute('aria-pressed', String(b.dataset.surface === name)));
-}
-
 function route() {
-  const hash = location.hash.replace(/^#\/?/, '');
-  const [kind, id] = hash.split('/');
-
-  if (kind === 'event' && id) { showSurface('detail'); renderDetail(id); window.scrollTo(0, 0); observeReveals(); return; }
-  if (kind === 'gallery' && id) { showSurface('gallery'); renderGallery(id); window.scrollTo(0, 0); observeReveals(); return; }
-
-  showSurface('overview');
+  const [kind, id] = location.hash.replace(/^#\/?/, '').split('/');
+  const gallery = kind === 'gallery' && id;
+  document.getElementById('s-events').hidden = !!gallery;
+  document.getElementById('s-gallery').hidden = !gallery;
+  document.querySelectorAll('[data-surface]').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.surface === (gallery ? 'gallery' : 'events'))));
+  if (gallery) { renderGallery(id); window.scrollTo(0, 0); reveal(); return; }
   variant === 'control' ? renderControl() : renderFeed();
 }
 
-/* City filter */
-const sel = document.getElementById('cityFilter');
-sel.innerHTML = `<option value="all">All galleries</option>` +
-  HOSTABLE.map(g => `<option value="${g.id}">${g.id.startsWith('berlin') ? g.name.replace('LUMAS Gallery ', '') : g.city}</option>`).join('');
-sel.addEventListener('change', () => {
-  cityFilter = sel.value;
-  track('event_filter_apply', { gallery: cityFilter });
-  renderFeed();
-});
-document.addEventListener('click', (e) => {
-  if (e.target.closest('[data-reset-filter]')) { cityFilter = 'all'; sel.value = 'all'; renderFeed(); }
-});
+document.querySelectorAll('[data-variant]').forEach(b => b.addEventListener('click', () => setVariant(b.dataset.variant)));
+document.querySelectorAll('[data-surface]').forEach(b => b.addEventListener('click', () => {
+  location.hash = b.dataset.surface === 'events' ? '#/' : '#/gallery/hamburg';
+}));
 
-/* Occurrence disclosure */
-document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-disclosure]');
-  if (!t) return;
-  e.preventDefault();
-  const region = document.getElementById('disc-' + t.dataset.disclosure);
-  const open = region.dataset.open !== 'true';
-  region.dataset.open = String(open);
-  region.inert = !open;
-  t.setAttribute('aria-expanded', String(open));
-  t.lastChild.textContent = open ? ' Hide dates' : ' Show all dates';
-  if (open) track('event_occurrences_expand', { event_id: t.dataset.disclosure });
-});
-
-/* Empty state */
-document.getElementById('emptyToggle').addEventListener('click', (e) => {
-  const es = document.getElementById('emptyState');
-  const on = es.hidden;
-  es.hidden = !on;
-  document.getElementById('feed').parentElement.hidden = on;
-  document.getElementById('filterBar').querySelector('.filter-select').style.opacity = on ? '0.35' : '1';
-  e.target.textContent = on ? 'Hide empty state' : 'Show empty state';
-});
-
-/* Proto chrome */
-document.querySelectorAll('[data-variant]').forEach(b =>
-  b.addEventListener('click', () => setVariant(b.dataset.variant)));
-document.querySelectorAll('[data-surface]').forEach(b =>
-  b.addEventListener('click', () => {
-    const s = b.dataset.surface;
-    location.hash = s === 'overview' ? '#/' : s === 'detail' ? '#/event/golden-hour' : '#/gallery/hamburg';
-  }));
-
-/* System panel */
-const panel = document.getElementById('sysPanel');
+const panel = document.getElementById('panel');
 const togglePanel = () => {
   const open = panel.dataset.open !== 'true';
   panel.dataset.open = String(open);
-  document.getElementById('sysHead').setAttribute('aria-expanded', String(open));
+  document.getElementById('panelHead').setAttribute('aria-expanded', String(open));
 };
-document.getElementById('sysHead').addEventListener('click', togglePanel);
-document.getElementById('sysHead').addEventListener('keydown', (e) => {
+document.getElementById('panelHead').addEventListener('click', togglePanel);
+document.getElementById('panelHead').addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePanel(); }
 });
 
-/* Resolver playground — proves the card is derived, not authored */
-let pg = { occ: 1, rsvp: 'none', detail: false };
-function renderTrace() {
-  const fake = {
-    id: 'playground', title: 'Golden Hour', format: 'Gallery evening',
-    detail: pg.detail, teaser: '', image: '',
-    occurrences: HOSTABLE.slice(0, pg.occ).map((g, i) => ({
-      galleryId: g.id, start: '2026-09-02T18:00',
-      rsvp: pg.rsvp === 'all' || (pg.rsvp === 'some' && i === 0) ? { url: EC, provider: 'EventCreate' } : null
-    }))
-  };
-  const cta = resolveCta(fake);
-  document.getElementById('sysTrace').innerHTML =
-    `occurrences  <b>${pg.occ}</b>\nrsvp         <b>${rsvpStateOf(fake)}</b>\ndetail page  <b>${pg.detail}</b>\n\n→ state      <b>${scopeOf(fake)}</b>\n→ rule       <b>${cta.rule}</b>\n→ primary    <b>${cta.primary.label}</b>${cta.primary.external ? ' ↗ external' : ''}\n→ secondary  <b>${cta.secondary ? cta.secondary.label : 'none'}</b>\n→ target     <b>${cta.primary.external ? 'external RSVP' : 'internal'}</b>`;
+function toggleEmpty() {
+  const em = document.getElementById('empty'), on = em.hidden;
+  em.hidden = !on;
+  document.querySelector('.feed').hidden = on;
 }
-document.getElementById('occRange').addEventListener('input', (e) => {
-  pg.occ = +e.target.value;
-  document.getElementById('occVal').textContent = pg.occ;
-  renderTrace();
-});
-document.querySelectorAll('[data-rsvp]').forEach(b => b.addEventListener('click', () => {
-  pg.rsvp = b.dataset.rsvp;
-  document.querySelectorAll('[data-rsvp]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  renderTrace();
-}));
-document.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => {
-  pg.detail = b.dataset.detail === 'true';
-  document.querySelectorAll('[data-detail]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  renderTrace();
-}));
 
-/* Keyboard: no animation on keyboard-initiated actions */
 document.addEventListener('keydown', (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
   if (e.key === 'v') setVariant(variant === 'control' ? 'system' : 'control');
-  if (e.key === 'r') document.body.dataset.resolver = document.body.dataset.resolver === 'on' ? 'off' : 'on';
+  if (e.key === 'e') toggleEmpty();
   if (e.key === 's') togglePanel();
 });
 
-/* Reveal: content is visible by default; JS only adds the entrance.
-   Guard for hidden tabs and headless renderers so nothing ships blank. */
+/* Reveal: visible by default, JS only adds the entrance */
 let io;
-function observeReveals() {
-  const nodes = document.querySelectorAll('.reveal:not(.is-in)');
-  if (document.hidden || !('IntersectionObserver' in window)) {
-    nodes.forEach(n => n.classList.add('is-in'));
-    return;
-  }
-  if (!io) {
-    io = new IntersectionObserver((entries) => {
-      entries.forEach((en, i) => {
-        if (en.isIntersecting) {
-          en.target.style.transitionDelay = `${Math.min(i * 40, 160)}ms`;
-          en.target.classList.add('is-in');
-          io.unobserve(en.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px' });
-  }
+function reveal() {
+  const nodes = document.querySelectorAll('.rv:not(.in)');
+  if (document.hidden || !('IntersectionObserver' in window)) { nodes.forEach(n => n.classList.add('in')); return; }
+  if (!io) io = new IntersectionObserver(es => es.forEach((en, i) => {
+    if (en.isIntersecting) {
+      en.target.style.transitionDelay = `${Math.min(i * 40, 120)}ms`;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    }
+  }), { rootMargin: '0px 0px -6% 0px' });
   nodes.forEach(n => io.observe(n));
 }
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) observeReveals();
-});
+document.addEventListener('visibilitychange', () => { if (!document.hidden) reveal(); });
 
 window.addEventListener('hashchange', route);
 setVariant(variant);
-renderTrace();
-track('view_item_list', { list_id: 'events_overview', items: EVENTS.length });
+track('view_item_list', { list_id: 'events', items: EVENTS.length });
 </script>
 </body>
 </html>
