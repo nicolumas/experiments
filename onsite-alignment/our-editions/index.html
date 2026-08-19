@@ -20,6 +20,8 @@
   Status:      exploration — red-team pass NOT yet run
   Switch:      ?v=control | ?v=v1   ·  press "v" to toggle  ·  press "a" for the
                annotation overlay  ·  ?state=loading | ?state=empty | ?state=error
+               ?anno=1 opens the annotation panel (the on-page ribbon was removed,
+               so the switches live on the keyboard and in the query string)
                ?lang=de | ?lang=en  ·  EN is a review aid only; DE is the shipping
                locale for this surface. Control-arm tile copy is never translated,
                it is reproduced verbatim from live.
@@ -151,33 +153,6 @@ a{color:inherit;text-decoration:none}
 @media(hover:hover) and (pointer:fine){
   .btn-inverse:hover{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
 }
-
-/* ─── indicative site chrome (not part of the redesign) ─────────────────── */
-.chrome{border-bottom:1px solid var(--color-border-subtle);background:var(--color-surface-page);
-  position:sticky;top:0;z-index:var(--z-chrome)}
-.chrome-in{max-width:var(--max);margin:0 auto;padding:var(--sp-4) var(--sp-6);
-  display:flex;align-items:center;gap:var(--sp-8)}
-.wordmark{font-weight:700;letter-spacing:2.4px;font-size:16px}
-.chrome nav{display:none;gap:var(--sp-6);font-size:14px;color:var(--color-text-secondary)}
-@media(min-width:900px){.chrome nav{display:flex}.chrome-in{padding:var(--sp-4) var(--sp-12)}}
-.chrome .here{color:var(--color-text-primary);font-weight:600;
-  box-shadow:inset 0 -1px 0 var(--color-text-primary)}
-
-/* ─── proto ribbon ──────────────────────────────────────────────────────── */
-.ribbon{background:var(--color-surface-inverse);color:var(--color-text-inverse);
-  padding:var(--sp-2) var(--sp-6);display:flex;flex-wrap:wrap;gap:var(--sp-3);
-  align-items:center;justify-content:center}
-.ribbon .eyebrow{color:var(--on-dark-label)}
-.ribbon button{font:inherit;font-size:10px;font-weight:700;letter-spacing:1.8px;
-  text-transform:uppercase;background:none;color:var(--color-text-inverse);cursor:pointer;
-  border:1px solid var(--color-border-inverse);border-radius:var(--radius-xs);
-  padding:5px 10px;transition:background var(--dur-hover) var(--ease-brand),
-    color var(--dur-hover) var(--ease-brand),transform var(--dur-press) var(--ease-brand)}
-@media(hover:hover) and (pointer:fine){
-  .ribbon button:hover{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
-}
-.ribbon button:active{transform:scale(.97)}
-.ribbon button[aria-pressed=true]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
 
 /* ─── HERO ──────────────────────────────────────────────────────────────── */
 .hero{background:var(--color-surface-inverse);color:var(--color-text-inverse);
@@ -406,26 +381,6 @@ html[data-kb] .anno,html[data-kb] .anno *{transition:none!important;animation:no
 </style>
 </head>
 <body>
-
-<!-- ══ prototype ribbon (not part of the design) ══ -->
-<div class="ribbon">
-  <span class="eyebrow">PROTO-2026-014</span>
-  <button id="btn-variant" aria-pressed="true">Variante: V1</button>
-  <button id="btn-anno" aria-pressed="false" data-en="What changed">Was wurde geändert</button>
-  <button id="btn-lang" aria-pressed="true">Language: EN</button>
-  <span class="eyebrow" style="opacity:.55" data-en="Keys V · A">Taste V · A</span>
-</div>
-
-<!-- ══ indicative chrome ══ -->
-<header class="chrome">
-  <div class="chrome-in">
-    <span class="wordmark">LUMAS</span>
-    <nav aria-label="Hauptnavigation (indikativ)" data-en-aria="Main navigation (indicative)">
-      <span class="here" data-en="Artworks">Kunstwerke</span><span>Top 20</span><span>Artfinder</span>
-      <span data-en="Inspiration">Inspiration</span><span data-en="Galleries">Galerien</span><span data-en="About us">Über uns</span>
-    </nav>
-  </div>
-</header>
 
 <!-- ═══════════════════════ VARIANT: V1 ═══════════════════════ -->
 <main id="v1">
@@ -896,10 +851,11 @@ function track(name, params){
 var qs = new URLSearchParams(location.search);
 var variant = qs.get('v') === 'control' ? 'control' : 'v1';
 var lang = qs.get('lang') === 'de' ? 'de' : 'en';
-var btnV = document.getElementById('btn-variant');
+var btnV = document.getElementById('btn-variant');   /* absent once the ribbon is removed */
 
 /* the variant label is JS-set, so it has to follow the language switch too */
 function labelVariant(){
+  if (!btnV) return;
   btnV.textContent = (lang === 'de' ? 'Variante: ' : 'Variant: ')
     + (variant === 'control' ? 'Control' : 'V1');
 }
@@ -937,7 +893,7 @@ function setVariant(v, push){
   document.getElementById('v1').hidden = (v !== 'v1');
   document.getElementById('control').hidden = (v !== 'control');
   labelVariant();
-  btnV.setAttribute('aria-pressed', String(v === 'v1'));
+  if (btnV) btnV.setAttribute('aria-pressed', String(v === 'v1'));
   if (v === 'control') renderControl();
   if (push){
     qs.set('v', v);
@@ -946,7 +902,7 @@ function setVariant(v, push){
   track('view_item_list', { item_list_name: 'unsere_editionen', variant: v });
 }
 setVariant(variant, false);
-btnV.addEventListener('click', function(){ setVariant(variant === 'v1' ? 'control' : 'v1', true); });
+btnV && btnV.addEventListener('click', function(){ setVariant(variant === 'v1' ? 'control' : 'v1', true); });
 
 /* ═══ language switch (prototype affordance) ═══════════════════════════════
    The shipping locale for this surface is DE. EN exists so non-German readers
@@ -972,18 +928,18 @@ function setLang(l, push){
   });
   document.documentElement.lang = l;
   labelVariant();
-  btnL.textContent = (l === 'en') ? 'Language: EN' : 'Sprache: DE';
+  if (btnL) btnL.textContent = (l === 'en') ? 'Language: EN' : 'Sprache: DE';
   document.title = (l === 'en')
     ? 'Our editions · Prototype PROTO-2026-014 · LUMAS'
     : 'Unsere Editionen · Prototyp PROTO-2026-014 · LUMAS';
-  btnL.setAttribute('aria-pressed', String(l === 'en'));
+  if (btnL) btnL.setAttribute('aria-pressed', String(l === 'en'));
   if (push){
     qs.set('lang', l);
     history.replaceState(null, '', location.pathname + '?' + qs.toString());
   }
 }
 setLang(lang, false);
-btnL.addEventListener('click', function(){ setLang(lang === 'en' ? 'de' : 'en', true); });
+btnL && btnL.addEventListener('click', function(){ setLang(lang === 'en' ? 'de' : 'en', true); });
 
 /* ═══ card clicks → select_item ═══ */
 document.querySelectorAll('#groups .card').forEach(function(card, i){
@@ -1032,9 +988,9 @@ var btnA = document.getElementById('btn-anno');
 function toggleAnno(force){
   var open = force !== undefined ? force : anno.dataset.open !== 'true';
   anno.dataset.open = String(open);
-  btnA.setAttribute('aria-pressed', String(open));
+  if (btnA) btnA.setAttribute('aria-pressed', String(open));
 }
-btnA.addEventListener('click', function(){ toggleAnno(); });
+btnA && btnA.addEventListener('click', function(){ toggleAnno(); });
 document.getElementById('anno-close').addEventListener('click', function(){ toggleAnno(false); });
 
 /* ═══ keyboard: repeated actions, so suppress the animation for this frame ═══ */
@@ -1054,6 +1010,10 @@ document.addEventListener('keydown', function(e){
   if (e.key === 'a' || e.key === 'A') withoutMotion(function(){ toggleAnno(); });
   if (e.key === 'Escape') withoutMotion(function(){ toggleAnno(false); });
 });
+
+/* ═══ the annotations are still reachable without the ribbon: press A, or
+       open the page with ?anno=1 on a shared link ═══ */
+if (qs.get('anno') === '1') toggleAnno(true);
 
 /* ═══ demo states: ?state=loading | empty | error ═══ */
 var state = qs.get('state');
