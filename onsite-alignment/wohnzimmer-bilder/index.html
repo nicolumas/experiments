@@ -337,6 +337,13 @@ html{scroll-behavior:smooth}
   .carousel__nav{width:38px;height:38px;top:calc(240px / 2)}
   .carousel__nav svg{width:17px;height:17px}
 }
+
+/* closing band: stop the nowrap CTAs forcing the page wider than the screen */
+@media (max-width:760px){
+  .closing__inner{padding:40px 20px;max-width:100%;min-width:0}
+  .closing__cta{flex-direction:column;align-items:stretch}
+  .closing__cta .btn{width:100%;white-space:normal}
+}
 </style>
 </head>
 <body>

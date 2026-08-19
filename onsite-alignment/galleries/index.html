@@ -413,7 +413,8 @@
   .carousel-card {
     flex: 0 0 calc((100% - 128px - 2 * 24px) / 3);
     scroll-snap-align: start;
-    display: flex; flex-direction: column; gap: 18px;
+    display: flex; flex-direction: column; gap: 4px;
+    text-decoration: none;
   }
   .carousel-card-image {
     aspect-ratio: 4 / 5;
@@ -421,7 +422,8 @@
     background-size: cover; background-position: center;
     border-radius: 4px;
     position: relative;
-    transition: transform 600ms var(--ease-glide), box-shadow 400ms var(--ease-glide);
+    margin-bottom: 20px;
+    transition: transform 600ms var(--ease-glide);
   }
   .carousel-card:hover .carousel-card-image {
     transform: translateY(-3px);
@@ -448,30 +450,22 @@
   .carousel-card-image.is-typographic .city-mark em { display: block; font-style: normal; font-family: var(--font-display); font-size: 18px; line-height: 1.3; color: rgba(244, 237, 226, 0.62); margin-top: 14px; padding-top: 16px; border-top: 1px solid rgba(244, 237, 226, 0.22); max-width: 90%; }
   .carousel-card-status {
     position: absolute; top: 12px; left: 12px; z-index: 2;
-    background: rgba(28, 26, 24, 0.70);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    color: var(--text-inverse);
-    font-family: var(--font-body); font-weight: 400; font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 6px 10px; border-radius: 2px;
+    color: var(--text-primary);
+    font-family: var(--font-body); font-weight: 500; font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 5px 10px; border-radius: 2px;
     display: inline-flex; align-items: center; gap: 7px;
   }
-  .carousel-card-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #6FB48B; flex-shrink: 0; }
-  .carousel-card-status.is-closed .dot { background: rgba(244, 237, 226, 0.4); }
-  .carousel-card-meta { color: var(--text-tertiary); }
-  .carousel-card-title { color: var(--text-primary); }
-  .carousel-card-desc { color: var(--text-secondary); }
-  .carousel-card-foot {
-    margin-top: 6px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-default);
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .carousel-card-foot .row { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-body); font-size: 12px; line-height: 1.4; }
-  .carousel-card-foot .row .label { color: var(--text-tertiary); }
-  .carousel-card-foot .row .value { color: var(--text-primary); text-align: right; }
-  .carousel-card .btn-link { align-self: flex-start; }
+  .carousel-card-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #4C9C6E; flex-shrink: 0; }
+  .carousel-card-status.is-closed { color: var(--text-secondary); }
+  .carousel-card-status.is-closed .dot { background: var(--text-tertiary); }
+  .carousel-card-meta { color: var(--text-tertiary); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .carousel-card-title { color: var(--text-primary); font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.15; margin: 0 0 8px; }
+  .carousel-card-director { font-family: var(--font-body); font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
+  .carousel-card-director .role { color: var(--text-tertiary); }
 
   @media (max-width: 1100px) {
     .carousel-rail { padding: 0 24px 24px; }
@@ -1067,86 +1061,56 @@
     <div class="carousel-rail" id="carouselRail">
       <a href="berlin-mitte.html" class="carousel-card" aria-label="LUMAS Gallery Berlin Mitte, Hackeschen Höfe">
         <div class="carousel-card-image" style="background-image: url('assets/berlin-mitte/exterior.jpg');">
-          <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–19</span>
+          <span class="carousel-card-status"><span class="dot"></span>Open &middot; 11–19</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Hackeschen Höfe</span>
-        <h3 class="display-h3 carousel-card-title">Berlin Mitte</h3>
-        <p class="body carousel-card-desc">Our first gallery, opened in 2004 in the second courtyard.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">Rosenthaler 40, Berlin</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Maike Hahn</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Hackeschen Höfe</span>
+        <h3 class="carousel-card-title">Berlin Mitte</h3>
+        <span class="carousel-card-director">Maike Hahn <span class="role">&middot; Director</span></span>
       </a>
 
       <a href="new-york.html" class="carousel-card" aria-label="LUMAS Gallery New York, Soho">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-new-york.webp');">
-          <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–18</span>
+          <span class="carousel-card-status"><span class="dot"></span>Open &middot; 11–18</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Soho, Greene Street</span>
-        <h3 class="display-h3 carousel-card-title">New York</h3>
-        <p class="body carousel-card-desc">A print archive and viewing gallery at the centre of Soho.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">419 Greene St, NY</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Sofia Ortiz</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Soho</span>
+        <h3 class="carousel-card-title">New York</h3>
+        <span class="carousel-card-director">Sofia Ortiz <span class="role">&middot; Director</span></span>
       </a>
 
       <a href="paris.html" class="carousel-card" aria-label="LUMAS Gallery Paris, Saint-Germain-des-Prés">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-paris.webp');">
-          <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–19</span>
+          <span class="carousel-card-status"><span class="dot"></span>Open &middot; 11–19</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Saint-Germain-des-Prés</span>
-        <h3 class="display-h3 carousel-card-title">Paris</h3>
-        <p class="body carousel-card-desc">Left Bank space dedicated to limited editions and intimate viewings.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">12 rue de Seine, Paris</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Émilie Roche</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Saint-Germain-des-Prés</span>
+        <h3 class="carousel-card-title">Paris</h3>
+        <span class="carousel-card-director">Émilie Roche <span class="role">&middot; Director</span></span>
       </a>
 
       <a href="london.html" class="carousel-card" aria-label="LUMAS Gallery London, Mayfair">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-london.webp');">
           <span class="carousel-card-status is-closed"><span class="dot"></span>By appointment</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Mayfair</span>
-        <h3 class="display-h3 carousel-card-title">London</h3>
-        <p class="body carousel-card-desc">Editorial gallery presenting a curated rotation of contemporary photography.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">18 Bruton Place, London</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Henry Whitmore</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Mayfair</span>
+        <h3 class="carousel-card-title">London</h3>
+        <span class="carousel-card-director">Henry Whitmore <span class="role">&middot; Director</span></span>
       </a>
 
       <a href="wien.html" class="carousel-card" aria-label="LUMAS Gallery Vienna, Innere Stadt">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-vienna.webp');">
-          <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 11–18</span>
+          <span class="carousel-card-status"><span class="dot"></span>Open &middot; 11–18</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Innere Stadt</span>
-        <h3 class="display-h3 carousel-card-title">Vienna</h3>
-        <p class="body carousel-card-desc">Imperial-quarter gallery with a focus on European masters and rising talent.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">Singerstraße 8, Vienna</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Maximilian Berger</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Innere Stadt</span>
+        <h3 class="carousel-card-title">Vienna</h3>
+        <span class="carousel-card-director">Maximilian Berger <span class="role">&middot; Director</span></span>
       </a>
 
       <a href="miami.html" class="carousel-card" aria-label="LUMAS Gallery Miami Beach, Lincoln Road">
         <div class="carousel-card-image" style="background-image: url('assets/photos/galerie-miami.webp');">
-          <span class="carousel-card-status"><span class="dot"></span>Open today &middot; 12–20</span>
+          <span class="carousel-card-status"><span class="dot"></span>Open &middot; 12–20</span>
         </div>
-        <span class="eyebrow carousel-card-meta">Lincoln Road</span>
-        <h3 class="display-h3 carousel-card-title">Miami Beach</h3>
-        <p class="body carousel-card-desc">Beachside gallery presenting large-format works and architectural editions.</p>
-        <div class="carousel-card-foot">
-          <div class="row"><span class="label">Address</span><span class="value">922 Lincoln Rd, Miami</span></div>
-          <div class="row"><span class="label">Director</span><span class="value">Camila Reyes</span></div>
-        </div>
-        <span class="btn-link">Visit</span>
+        <span class="carousel-card-meta">Lincoln Road</span>
+        <h3 class="carousel-card-title">Miami Beach</h3>
+        <span class="carousel-card-director">Camila Reyes <span class="role">&middot; Director</span></span>
       </a>
     </div>
 

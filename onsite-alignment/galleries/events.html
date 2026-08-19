@@ -5,29 +5,33 @@
   Hypothesis:  [ASSUMPTION] For visitors reaching /events/ and gallery pages,
                replacing hand-built per-gallery event tiles with an
                occurrence-derived event system will raise event-to-gallery
-               engagement (RSVP clicks + "Anfahrt & Öffnungszeiten" clicks per
+               engagement (RSVP clicks + "Directions & opening hours" clicks per
                event session), because one card exposes the visitor's own city
                instead of forcing them to scan up to 19 near-duplicate tiles,
                and because publishing one event auto-populates up to 18 gallery
                pages, where visit intent already lives.
   Prior:       Ledger not consulted programmatically (no local ledger store).
                Standing knowledge applied: galleries carry ~56% of B2C revenue
-               at ~13x walk-in conversion; "never deter the online purchase";
-               brandbook s14 du/Sie split (Sie on event landing pages).
+               at ~13x walk-in conversion; "never deter the online purchase".
   Goals:       primary [ASSUMPTION: Gallery-CTA click] ·
                secondary [ASSUMPTION: RSVP outbound click, Newsletter signup]
                Real names must come from the ABlyft 16-goal library.
   Variants:    ?v=control (one tile per gallery, today's reality)
                ?v=system  (occurrence-derived, default)
   Status:      exploration
+  Language:    EN, matching the existing prototype/galleries/*.html set.
+               German original preserved as events.de.html — note that the
+               brandbook du/Sie firewall is a German-only constraint; in EN the
+               gallery-page strip stays prose-free for content-duplication and
+               editorial-cost reasons, not linguistic ones.
 ═══════════════════════════════════════════════════════════════════════════ -->
-<html lang="de">
+<html lang="en">
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>LUMAS Event System · Prototyp</title>
-<meta name="description" content="Prototyp des LUMAS Event Systems: eine Event-Karte, drei abgeleitete Zustände, fünf CTA-Labels.">
+<title>LUMAS Event System · Prototype</title>
+<meta name="description" content="Prototype of the LUMAS Event System: one event card, three derived states, five CTA labels.">
 
 <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 <link rel="stylesheet" href="assets/fonts/utile.css">
@@ -185,9 +189,6 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .network-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
 .network-copy .place-prose { color: var(--on-dark-75); }
 .network-copy .place-prose .more { color: var(--on-dark-55); }
-.on-dark .place-prose { color: var(--on-dark-75); }
-.on-dark .place-prose.is-place { color: var(--text-inverse); }
-.on-dark .place-prose.is-place iconify-icon { color: var(--on-dark-55); }
 .network-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
 .network-frame { position: relative; overflow: hidden; min-height: 380px; background: #14120F; }
 .network-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.92; transition: transform 520ms var(--ease-out); }
@@ -265,7 +266,6 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .detail-hero-copy { padding: 76px 56px 76px 64px; }
 .detail-hero-copy .event-date { color: var(--text-inverse); }
 .detail-hero-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
-.detail-hero-copy .place-prose { color: var(--on-dark-75); }
 .detail-hero-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
 .detail-hero-frame { position: relative; min-height: 420px; }
 .detail-hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -316,15 +316,15 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .gal-cell h3 { color: var(--text-tertiary); margin: 0 0 16px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
 .gal-cell .line { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; padding: 3px 0; }
 .gal-cell .line .label { color: var(--text-secondary); }
-.gal-cell .line .value { font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .gal-grid { grid-template-columns: 1fr; } }
 
-/* EventStrip — structured fields only. No event prose (du/Sie firewall). */
+/* EventStrip — structured fields only, no event prose. Reason is content
+   duplication and editorial cost; in DE it is also the du/Sie firewall. */
 .event-strip { padding: 8px 0 76px; }
 .strip-shell { box-shadow: inset 0 0 0 1px var(--border-default); }
 .strip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 24px 30px; border-bottom: 1px solid var(--border-default); }
 .strip-head .eyebrow { color: var(--text-tertiary); }
-.strip-row { display: grid; grid-template-columns: 116px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 20px 30px; border-top: 1px solid var(--border-default); transition: background 220ms var(--ease-out); }
+.strip-row { display: grid; grid-template-columns: 130px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 20px 30px; border-top: 1px solid var(--border-default); transition: background 220ms var(--ease-out); }
 .strip-row:first-of-type { border-top: 0; }
 .strip-row:hover { background: var(--surface-raised); }
 .strip-when { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); }
@@ -389,6 +389,10 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .is-network .resolver-note b { color: var(--text-inverse); }
 body:not([data-resolver="on"]) .resolver-note { display: none; }
 
+.on-dark .place-prose { color: var(--on-dark-75); }
+.on-dark .place-prose.is-place { color: var(--text-inverse); }
+.on-dark .place-prose.is-place iconify-icon { color: var(--on-dark-55); }
+
 /* ── Reveal (default visible; JS only enhances) ──────────────────── */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); }
 .reveal.is-in { opacity: 1; transform: none; }
@@ -410,21 +414,21 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 <div class="proto-chrome">
   <div class="proto-chrome-inner">
     <span class="proto-tag">Proto-2026-014</span>
-    <div class="proto-seg" role="group" aria-label="Variante">
-      <button type="button" data-variant="control" aria-pressed="false">Control (heute)</button>
+    <div class="proto-seg" role="group" aria-label="Variant">
+      <button type="button" data-variant="control" aria-pressed="false">Control (today)</button>
       <button type="button" data-variant="system" aria-pressed="true">Event System</button>
     </div>
-    <div class="proto-seg" role="group" aria-label="Oberfläche">
-      <button type="button" data-surface="overview" aria-pressed="true">Übersicht</button>
-      <button type="button" data-surface="detail" aria-pressed="false">Event-Detail</button>
-      <button type="button" data-surface="gallery" aria-pressed="false">Galerieseite</button>
+    <div class="proto-seg" role="group" aria-label="Surface">
+      <button type="button" data-surface="overview" aria-pressed="true">Overview</button>
+      <button type="button" data-surface="detail" aria-pressed="false">Event detail</button>
+      <button type="button" data-surface="gallery" aria-pressed="false">Gallery page</button>
     </div>
     <span class="spacer"></span>
-    <span class="proto-hint"><kbd>v</kbd> Variante · <kbd>r</kbd> Resolver · <kbd>s</kbd> Panel</span>
+    <span class="proto-hint"><kbd>v</kbd> Variant · <kbd>r</kbd> Resolver · <kbd>s</kbd> Panel</span>
   </div>
 </div>
 
-<div class="promo-bar">Signierte, limitierte Editionen. 19 Galerien. Eintritt frei.</div>
+<div class="promo-bar">Signed, limited editions. 19 galleries. Free entry.</div>
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -432,19 +436,19 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
       <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
     </a>
     <div class="site-nav-links">
-      <a href="#">Entdecken</a>
-      <a href="#">Kunstwerke</a>
-      <a href="#">Künstler:innen</a>
-      <a href="index.html">Galerien</a>
+      <a href="#">Discover</a>
+      <a href="#">Artworks</a>
+      <a href="#">Artists</a>
+      <a href="index.html">Galleries</a>
       <a href="#" class="is-current" aria-current="page">Events</a>
-      <a href="#">Beratung</a>
+      <a href="#">Advisory</a>
     </div>
     <span class="spacer"></span>
     <div class="site-nav-utilities">
-      <button type="button" aria-label="Suche"><iconify-icon icon="ph:magnifying-glass-light"></iconify-icon></button>
-      <button type="button" aria-label="Merkliste"><iconify-icon icon="ph:heart-light"></iconify-icon></button>
-      <button type="button" aria-label="Konto"><iconify-icon icon="ph:user-light"></iconify-icon></button>
-      <button type="button" aria-label="Warenkorb"><iconify-icon icon="ph:bag-light"></iconify-icon></button>
+      <button type="button" aria-label="Search"><iconify-icon icon="ph:magnifying-glass-light"></iconify-icon></button>
+      <button type="button" aria-label="Wishlist"><iconify-icon icon="ph:heart-light"></iconify-icon></button>
+      <button type="button" aria-label="Account"><iconify-icon icon="ph:user-light"></iconify-icon></button>
+      <button type="button" aria-label="Bag"><iconify-icon icon="ph:bag-light"></iconify-icon></button>
     </div>
   </div>
 </nav>
@@ -455,15 +459,15 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
     <div class="control-note" id="controlNote" hidden>
       <div class="container">
         <iconify-icon icon="ph:warning-circle-light"></iconify-icon>
-        <span><strong>Control: heutige Praxis.</strong> Ein Tile pro Galerie. Dieselben sechs Events erzeugen <strong id="controlCount">29</strong> Tiles, fünffach dieselbe Beschreibung, drei verschiedene CTA-Labels für dieselbe Handlung, und in vier Tiles fehlt die Information, dass das Event überhaupt in weiteren Galerien stattfindet.</span>
+        <span><strong>Control: today's practice.</strong> One tile per gallery. The same six events produce <strong id="controlCount">29</strong> tiles, the identical description five times over, three different CTA labels for the same action, and in four tiles no indication that the event is happening in other galleries at all.</span>
       </div>
     </div>
 
     <div class="page-band">
       <div class="container page-band-inner">
         <div>
-          <h1 class="display-h1">Kunst entdecken. Menschen begegnen.</h1>
-          <p class="lede">Vernissagen, Künstlergespräche und Galerieabende in unseren Galerien. Der Eintritt ist immer frei, eine Anmeldung nur dort nötig, wo die Plätze begrenzt sind.</p>
+          <h1 class="display-h1">Discover art. Meet people.</h1>
+          <p class="lede">Openings, artist talks and gallery evenings in our galleries. Entry is always free, and registration is needed only where places are limited.</p>
         </div>
         <div class="page-band-meta" id="bandMeta"></div>
       </div>
@@ -471,14 +475,14 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 
     <div class="filter-bar" id="filterBar">
       <div class="filter-inner">
-        <label class="filter-label" for="cityFilter" style="font-size:13px">Galerie</label>
+        <label class="filter-label" for="cityFilter" style="font-size:13px">Gallery</label>
         <span class="filter-select">
           <select id="cityFilter"></select>
           <iconify-icon icon="ph:caret-down"></iconify-icon>
         </span>
         <span class="filter-status" id="filterStatus"></span>
         <span class="spacer"></span>
-        <button type="button" class="btn-ghost" id="emptyToggle">Empty state zeigen</button>
+        <button type="button" class="btn-ghost" id="emptyToggle">Show empty state</button>
       </div>
     </div>
 
@@ -486,24 +490,24 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 
     <div class="empty-state" id="emptyState" hidden>
       <div class="container empty-inner">
-        <h2 class="display-h2">Zurzeit ist kein Event geplant.</h2>
-        <p>Unsere Galerien sind trotzdem geöffnet, und unsere Art Consultants nehmen sich auch ohne Anlass Zeit für Sie. Sobald das nächste Event steht, kündigen wir es hier und im Newsletter an.</p>
+        <h2 class="display-h2">No event is planned right now.</h2>
+        <p>Our galleries are open regardless, and our art consultants make time for you without an occasion. As soon as the next event is confirmed, we will announce it here and in the newsletter.</p>
         <div class="empty-routes">
-          <a class="empty-route" href="index.html"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Galerien und Öffnungszeiten<small>19 Standorte, Eintritt frei</small></span></a>
-          <a class="empty-route" href="#"><iconify-icon icon="ph:calendar-check-light"></iconify-icon><span>Beratungstermin vereinbaren<small>Persönlich oder per Video</small></span></a>
+          <a class="empty-route" href="index.html"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Galleries and opening hours<small>19 locations, free entry</small></span></a>
+          <a class="empty-route" href="#"><iconify-icon icon="ph:calendar-check-light"></iconify-icon><span>Book an advisory appointment<small>In person or by video</small></span></a>
         </div>
       </div>
     </div>
 
     <div class="news-band">
       <div class="container news-inner">
-        <h2 class="display-h2">Kein Event verpassen</h2>
-        <p>Wir schreiben Ihnen, sobald in Ihrer Galerie etwas stattfindet. Nicht öfter.</p>
+        <h2 class="display-h2">Never miss an event</h2>
+        <p>We write when something is happening at your gallery. No more often than that.</p>
         <form class="news-form" onsubmit="return false">
-          <label class="ui-label" for="newsEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">E-Mail-Adresse</label>
-          <input id="newsEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email">
+          <label class="ui-label" for="newsEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+          <input id="newsEmail" type="email" placeholder="Email address" autocomplete="email">
           <!-- ABLYFT-GOAL: [ASSUMPTION] Newsletter signup -->
-          <button type="submit" class="btn btn-primary" data-track="newsletter_signup">Anmelden</button>
+          <button type="submit" class="btn btn-primary" data-track="newsletter_signup">Sign up</button>
         </form>
       </div>
     </div>
@@ -521,18 +525,18 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
     <div class="footer-grid">
       <div class="footer-brand">
         <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
-        <p>Signierte, limitierte Editionen internationaler Künstler:innen. In 19 Galerien und online.</p>
+        <p>Signed, limited editions by international artists. In 19 galleries and online.</p>
       </div>
-      <div class="footer-col"><h3>Galerien</h3><a href="index.html">Alle Standorte</a><a href="#">Berlin Mitte</a><a href="#">Hamburg</a><a href="#">Wien</a></div>
-      <div class="footer-col"><h3>Entdecken</h3><a href="#">Neue Editionen</a><a href="#">Künstler:innen</a><a href="#">Art Finder</a></div>
-      <div class="footer-col"><h3>Service</h3><a href="#">Beratung</a><a href="#">Rahmung</a><a href="#">Sammlerservice</a></div>
+      <div class="footer-col"><h3>Galleries</h3><a href="index.html">All locations</a><a href="#">Berlin Mitte</a><a href="#">Hamburg</a><a href="#">Wien</a></div>
+      <div class="footer-col"><h3>Discover</h3><a href="#">New editions</a><a href="#">Artists</a><a href="#">Art Finder</a></div>
+      <div class="footer-col"><h3>Service</h3><a href="#">Advisory</a><a href="#">Framing</a><a href="#">Collector service</a></div>
     </div>
-    <div class="footer-bottom">Prototyp · LUMAS Event System · nicht öffentlich</div>
+    <div class="footer-bottom">Prototype · LUMAS Event System · not public</div>
   </div>
 </footer>
 
 <!-- ═══ SYSTEM PANEL — the resolver, made visible ═══ -->
-<aside class="sys-panel" id="sysPanel" data-open="false" aria-label="System-Panel">
+<aside class="sys-panel" id="sysPanel" data-open="false" aria-label="System panel">
   <div class="sys-head" id="sysHead" role="button" tabindex="0" aria-expanded="false" aria-controls="sysScroll">
     <span class="eyebrow">Event System · Resolver</span>
     <span class="spacer"></span>
@@ -540,38 +544,38 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
   </div>
   <div class="sys-scroll" id="sysScroll">
     <div class="sys-block">
-      <h4>Resolver-Playground</h4>
+      <h4>Resolver playground</h4>
       <div class="sys-ctl">
         <label for="occRange">Occurrences <b id="occVal" style="color:#F4EDE2">1</b></label>
         <input id="occRange" type="range" min="1" max="18" value="1">
       </div>
       <div class="sys-ctl">
-        <label>RSVP vorhanden</label>
+        <label>RSVP present</label>
         <span class="sys-switch" role="group">
-          <button type="button" data-rsvp="none" aria-pressed="true">keine</button>
-          <button type="button" data-rsvp="some" aria-pressed="false">teilweise</button>
-          <button type="button" data-rsvp="all" aria-pressed="false">alle</button>
+          <button type="button" data-rsvp="none" aria-pressed="true">none</button>
+          <button type="button" data-rsvp="some" aria-pressed="false">some</button>
+          <button type="button" data-rsvp="all" aria-pressed="false">all</button>
         </span>
       </div>
       <div class="sys-ctl">
-        <label>Detailseite</label>
+        <label>Detail page</label>
         <span class="sys-switch" role="group">
-          <button type="button" data-detail="false" aria-pressed="true">nein</button>
-          <button type="button" data-detail="true" aria-pressed="false">ja</button>
+          <button type="button" data-detail="false" aria-pressed="true">no</button>
+          <button type="button" data-detail="true" aria-pressed="false">yes</button>
         </span>
       </div>
       <div class="sys-trace" id="sysTrace"></div>
     </div>
     <div class="sys-block">
-      <h4>Regeln</h4>
+      <h4>Rules</h4>
       <div style="color:var(--on-dark-75)">
-        1 Occurrence → <b style="color:#F4EDE2">single</b> · 2–5 → <b style="color:#F4EDE2">multi</b> (alle Städte inline) · 6+ → <b style="color:#F4EDE2">network</b> (Charcoal-Fläche, Anzahl + Beispielstädte).<br><br>
-        Kein Autor:innen-Feld wählt den Zustand. Jeder Zweig liest Daten.
+        1 occurrence → <b style="color:#F4EDE2">single</b> · 2 to 5 → <b style="color:#F4EDE2">multi</b> (every city inline) · 6+ → <b style="color:#F4EDE2">network</b> (charcoal surface, count + sample cities).<br><br>
+        No authoring field picks the state. Every branch reads data.
       </div>
     </div>
     <div class="sys-block">
-      <h4>Event-Stubs → Dev-Handoff</h4>
-      <div class="sys-log" id="sysLog"><div style="color:#6F675C">Noch keine Events. Klicken Sie eine Karte oder einen CTA.</div></div>
+      <h4>Event stubs → dev handoff</h4>
+      <div class="sys-log" id="sysLog"><div style="color:#6F675C">No events yet. Click a card or a CTA.</div></div>
     </div>
   </div>
 </aside>
@@ -590,28 +594,27 @@ const MEDIA = 'https://media.lumas.de/galerien/';
 const teaser = (slug) => `${MEDIA}${slug}/galerie-${slug}-teaser-1220x450.jpg`;
 
 const GALLERIES = [
-  // id, city, store, canHost, street, zip, hours, photo
-  { id:'berlin-mitte',  city:'Berlin',      name:'LUMAS Galerie Berlin Mitte',  store:'DE', canHost:true,  street:'Rosenthaler Straße 40/41, Hackesche Höfe, Hof II', zip:'10178', hours:'Mo bis Sa 11 bis 19 Uhr, So 13 bis 18 Uhr', photo:'assets/berlin-mitte/viewing-room.jpg' },
-  { id:'berlin-kudamm', city:'Berlin',      name:'LUMAS Galerie Berlin KuDamm', store:'DE', canHost:true,  street:'Fasanenstraße 73', zip:'10719', hours:'Mo bis Fr 11 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:'assets/photos/DSC06390.jpg' },
-  { id:'hamburg',       city:'Hamburg',     name:'LUMAS Galerie Hamburg',       store:'DE', canHost:true,  street:'Große Bleichen 31, Kaufmannshaus', zip:'20354', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('hamburg') },
-  { id:'muenchen',      city:'München',     name:'LUMAS Galerie München',       store:'DE', canHost:true,  street:'Brienner Straße 3', zip:'80333', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('muenchen') },
-  { id:'koeln',         city:'Köln',        name:'LUMAS Galerie Köln',          store:'DE', canHost:true,  street:'Mittelstraße 15', zip:'50672', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('koeln') },
-  { id:'frankfurt',     city:'Frankfurt',   name:'LUMAS Galerie Frankfurt',     store:'DE', canHost:true,  street:'Kaiserstraße 13', zip:'60311', hours:'Mo bis Fr 10:30 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:teaser('frankfurt') },
-  { id:'duesseldorf',   city:'Düsseldorf',  name:'LUMAS Galerie Düsseldorf',    store:'DE', canHost:true,  street:'Grünstraße 8', zip:'40212', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('duesseldorf') },
-  { id:'stuttgart',     city:'Stuttgart',   name:'LUMAS Galerie Stuttgart',     store:'DE', canHost:true,  street:'Lange Straße 3', zip:'70173', hours:'Mo bis Fr 11 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:teaser('stuttgart') },
-  { id:'hannover',      city:'Hannover',    name:'LUMAS Galerie Hannover',      store:'DE', canHost:true,  street:'Luisenstraße 10-11, Kröpcke-Passage', zip:'30159', hours:'Mo bis Fr 10 bis 19 Uhr, Sa 10 bis 18 Uhr', photo:teaser('hannover') },
-  { id:'mannheim',      city:'Mannheim',    name:'LUMAS Galerie Mannheim',      store:'DE', canHost:true,  street:'N6 3-7, Kunststraße', zip:'68161', hours:'Mo bis Sa 11 bis 18:30 Uhr', photo:teaser('mannheim') },
-  { id:'dortmund',      city:'Dortmund',    name:'LUMAS Galerie Dortmund',      store:'DE', canHost:true,  street:'Schwarze-Brüder-Straße 1', zip:'44137', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('dortmund') },
+  { id:'berlin-mitte',  city:'Berlin',      name:'LUMAS Gallery Berlin Mitte',  store:'DE', canHost:true,  street:'Rosenthaler Straße 40/41, Hackesche Höfe, Hof II', zip:'10178', hours:'Mon to Sat 11 am to 7 pm, Sun 1 to 6 pm', photo:'assets/berlin-mitte/viewing-room.jpg' },
+  { id:'berlin-kudamm', city:'Berlin',      name:'LUMAS Gallery Berlin KuDamm', store:'DE', canHost:true,  street:'Fasanenstraße 73', zip:'10719', hours:'Mon to Fri 11 am to 7 pm, Sat 10 am to 7 pm', photo:'assets/photos/DSC06390.jpg' },
+  { id:'hamburg',       city:'Hamburg',     name:'LUMAS Gallery Hamburg',       store:'DE', canHost:true,  street:'Große Bleichen 31, Kaufmannshaus', zip:'20354', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('hamburg') },
+  { id:'muenchen',      city:'München',     name:'LUMAS Gallery München',       store:'DE', canHost:true,  street:'Brienner Straße 3', zip:'80333', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('muenchen') },
+  { id:'koeln',         city:'Köln',        name:'LUMAS Gallery Köln',          store:'DE', canHost:true,  street:'Mittelstraße 15', zip:'50672', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('koeln') },
+  { id:'frankfurt',     city:'Frankfurt',   name:'LUMAS Gallery Frankfurt',     store:'DE', canHost:true,  street:'Kaiserstraße 13', zip:'60311', hours:'Mon to Fri 10.30 am to 7 pm, Sat 10 am to 7 pm', photo:teaser('frankfurt') },
+  { id:'duesseldorf',   city:'Düsseldorf',  name:'LUMAS Gallery Düsseldorf',    store:'DE', canHost:true,  street:'Grünstraße 8', zip:'40212', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('duesseldorf') },
+  { id:'stuttgart',     city:'Stuttgart',   name:'LUMAS Gallery Stuttgart',     store:'DE', canHost:true,  street:'Lange Straße 3', zip:'70173', hours:'Mon to Fri 11 am to 7 pm, Sat 10 am to 7 pm', photo:teaser('stuttgart') },
+  { id:'hannover',      city:'Hannover',    name:'LUMAS Gallery Hannover',      store:'DE', canHost:true,  street:'Luisenstraße 10-11, Kröpcke-Passage', zip:'30159', hours:'Mon to Fri 10 am to 7 pm, Sat 10 am to 6 pm', photo:teaser('hannover') },
+  { id:'mannheim',      city:'Mannheim',    name:'LUMAS Gallery Mannheim',      store:'DE', canHost:true,  street:'N6 3-7, Kunststraße', zip:'68161', hours:'Mon to Sat 11 am to 6.30 pm', photo:teaser('mannheim') },
+  { id:'dortmund',      city:'Dortmund',    name:'LUMAS Gallery Dortmund',      store:'DE', canHost:true,  street:'Schwarze-Brüder-Straße 1', zip:'44137', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('dortmund') },
   // Airside, non-Schengen, Terminal 3. Cannot host a public event. This is why
-  // "alle Galerien" must never be a literal string.
-  { id:'fraport',       city:'Frankfurt Airport', name:'LUMAS Galerie Frankfurt Airport', store:'DE', canHost:false, street:'Non-Schengen Marktplatz, Terminal 3', zip:'60547', hours:'Mo bis So 6 bis 21:30 Uhr', photo:teaser('frankfurt') },
-  { id:'wien',          city:'Wien',        name:'LUMAS Galerie Wien',          store:'AT', canHost:true,  street:'Tuchlauben 11', zip:'1010', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('wien') },
-  { id:'zuerich',       city:'Zürich',      name:'LUMAS Galerie Zürich',        store:'CH', canHost:true,  street:'Weinplatz 3', zip:'8001', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('zuerich') },
-  { id:'paris',         city:'Paris',       name:'LUMAS Galerie Paris',         store:'FR', canHost:true,  street:'25 rue de Seine', zip:'75006', hours:'Mo bis Sa 11 bis 19 Uhr', photo:teaser('paris') },
-  { id:'london',        city:'London',      name:'LUMAS Galerie London',        store:'UK', canHost:true,  street:'75 Marylebone High Street', zip:'W1U 5JY', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('london') },
-  { id:'budapest',      city:'Budapest',    name:'LUMAS Galerie Budapest',      store:'HU', canHost:true,  street:'Andrássy út 39', zip:'1061', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('budapest') },
-  { id:'new-york',      city:'New York',    name:'LUMAS Galerie New York SoHo', store:'COM', canHost:true, street:'474 West Broadway', zip:'NY 10012', hours:'Mo bis Sa 11 bis 19 Uhr', photo:teaser('new-york-soho') },
-  { id:'miami',         city:'Miami Beach', name:'LUMAS Galerie Miami Beach',   store:'COM', canHost:true,  street:'1052 Lincoln Road', zip:'FL 33139', hours:'Mo bis So 11 bis 20 Uhr', photo:teaser('miami') }
+  // "all galleries" must never be a literal string.
+  { id:'fraport',       city:'Frankfurt Airport', name:'LUMAS Gallery Frankfurt Airport', store:'DE', canHost:false, street:'Non-Schengen Marktplatz, Terminal 3', zip:'60547', hours:'Mon to Sun 6 am to 9.30 pm', photo:teaser('frankfurt') },
+  { id:'wien',          city:'Wien',        name:'LUMAS Gallery Wien',          store:'AT', canHost:true,  street:'Tuchlauben 11', zip:'1010', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('wien') },
+  { id:'zuerich',       city:'Zürich',      name:'LUMAS Gallery Zürich',        store:'CH', canHost:true,  street:'Weinplatz 3', zip:'8001', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('zuerich') },
+  { id:'paris',         city:'Paris',       name:'LUMAS Gallery Paris',         store:'FR', canHost:true,  street:'25 rue de Seine', zip:'75006', hours:'Mon to Sat 11 am to 7 pm', photo:teaser('paris') },
+  { id:'london',        city:'London',      name:'LUMAS Gallery London',        store:'UK', canHost:true,  street:'75 Marylebone High Street', zip:'W1U 5JY', hours:'Mon to Sat 10 am to 6 pm', photo:teaser('london') },
+  { id:'budapest',      city:'Budapest',    name:'LUMAS Gallery Budapest',      store:'HU', canHost:true,  street:'Andrássy út 39', zip:'1061', hours:'Mon to Sat 10 am to 7 pm', photo:teaser('budapest') },
+  { id:'new-york',      city:'New York',    name:'LUMAS Gallery New York SoHo', store:'COM', canHost:true, street:'474 West Broadway', zip:'NY 10012', hours:'Mon to Sat 11 am to 7 pm', photo:teaser('new-york-soho') },
+  { id:'miami',         city:'Miami Beach', name:'LUMAS Gallery Miami Beach',   store:'COM', canHost:true,  street:'1052 Lincoln Road', zip:'FL 33139', hours:'Mon to Sun 11 am to 8 pm', photo:teaser('miami') }
 ];
 const G = Object.fromEntries(GALLERIES.map(g => [g.id, g]));
 const HOSTABLE = GALLERIES.filter(g => g.canHost);
@@ -626,16 +629,16 @@ const EVENTS = [
   {
     id: 'golden-hour',
     title: 'Golden Hour',
-    format: 'Netzwerk-Happening',
-    scopeLabel: 'LUMAS Galerien weltweit',
-    teaser: 'Eine Woche, in der das schönste Licht des Sommers in jede LUMAS Galerie kommt.',
+    format: 'Network happening',
+    scopeLabel: 'LUMAS galleries worldwide',
+    teaser: 'One week in which the finest light of the summer comes to every LUMAS gallery.',
     image: teaser('koeln'),
     detail: true,
     body: [
-      'Manche Abende brauchen kein Programm, um besonders zu sein, nur den richtigen Moment.',
-      'Das schönste Licht des Sommers holen wir in die Galerie und freuen uns, diese besondere Zeit des Jahres zu genießen, gebündelt in ihrer goldenen Stunde.',
-      'Diesen Moment möchten wir mit Ihnen zusammen genießen: bei einer kuratierten Werkauswahl, erfrischenden Drinks und Eindrücken, die bleiben.',
-      'Kommen Sie einfach vorbei, ganz ohne Anmeldung, ob allein oder in Begleitung. In welcher unserer Galerien, entscheiden Sie.'
+      'Some evenings need no programme to be special, only the right moment.',
+      'We bring the finest light of the summer into the gallery, and we are glad to mark this particular time of year, gathered into its golden hour.',
+      'We would like to share that moment with you: a curated selection of works, cold drinks, and impressions that stay.',
+      'Come as you are, without registration, alone or in company. Which of our galleries is yours to choose.'
     ],
     // 18 occurrences. Frankfurt Airport is excluded by canHost, not by hand.
     occurrences: [
@@ -651,16 +654,16 @@ const EVENTS = [
     ]
   },
   {
-    id: 'menin-gespraech',
-    title: 'Isabelle Menin im Gespräch',
-    format: 'Künstlergespräch',
-    teaser: 'Über Blumen, Verfall und die Frage, wann ein Bild fertig ist.',
+    id: 'menin-talk',
+    title: 'Isabelle Menin in conversation',
+    format: 'Artist talk',
+    teaser: 'On flowers, decay, and the question of when a picture is finished.',
     image: 'assets/berlin-mitte/viewing-room.jpg',
     detail: true,
     body: [
-      'Isabelle Menin arbeitet mit dem, was schon vergeht. Ihre Kompositionen entstehen am Scanner, aus Blüten, die den Höhepunkt hinter sich haben.',
-      'An diesem Abend spricht sie in Berlin Mitte über ihre Arbeitsweise, über den Moment, in dem ein Bild kippt, und darüber, warum sie Malerei nie gelernt hat und trotzdem malerisch arbeitet.',
-      'Die Plätze sind begrenzt, wir bitten um Anmeldung.'
+      'Isabelle Menin works with what is already passing. Her compositions are built on the scanner, from blooms that are well past their peak.',
+      'This evening she speaks in Berlin Mitte about her method, about the moment a picture tips, and about why she never trained as a painter and works like one anyway.',
+      'Places are limited, so we ask you to register.'
     ],
     occurrences: [
       { galleryId:'berlin-mitte', start:'2026-08-27T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
@@ -673,16 +676,16 @@ const EVENTS = [
     ]
   },
   {
-    id: 'krautgartner-vernissage',
+    id: 'krautgartner-opening',
     title: 'Terra Incognita: Kevin Krautgartner',
-    format: 'Vernissage',
-    teaser: 'Luftbilder von Orten, die aussehen wie Malerei, und es nicht sind.',
+    format: 'Opening',
+    teaser: 'Aerial views of places that look like painting, and are not.',
     image: teaser('hamburg'),
     detail: true,
     body: [
-      'Kevin Krautgartner fotografiert aus dem Hubschrauber, was der Bergbau in die Landschaft geschrieben hat. Türkise Becken, ockerfarbene Terrassen, Linien, die niemand gezeichnet hat.',
-      'Wir eröffnen die Serie in drei Galerien innerhalb einer Woche. In Hamburg und München ist der Künstler anwesend, dort bitten wir um Anmeldung. In Zürich können Sie ohne Anmeldung dazukommen.',
-      'Ein Beispiel dafür, dass Anmeldepflicht eine Eigenschaft des Termins ist, nicht des Events.'
+      'Kevin Krautgartner photographs from a helicopter what mining has written into the landscape. Turquoise basins, ochre terraces, lines that nobody drew.',
+      'We open the series in three galleries within one week. The artist is present in Hamburg and München, where we ask you to register. In Zürich you can simply join us.',
+      'An example of why registration is a property of the date, not of the event.'
     ],
     occurrences: [
       { galleryId:'hamburg',  start:'2026-09-10T19:00', rsvp:{ url:EC, provider:'EventCreate' } },
@@ -697,11 +700,11 @@ const EVENTS = [
     ]
   },
   {
-    id: 'jahns-signierstunde',
-    title: 'Signierstunde mit Robert Jahns',
-    format: 'Signierstunde',
+    id: 'jahns-signing',
+    title: 'Signing with Robert Jahns',
+    format: 'Signing',
     // No body copy → no detail page. The system derives that, nobody decides it.
-    teaser: 'Drei Stunden, in denen Robert Jahns signiert und erklärt, wie seine Montagen entstehen.',
+    teaser: 'Three hours in which Robert Jahns signs and explains how the montages come about.',
     image: teaser('koeln'),
     detail: false,
     occurrences: [
@@ -709,17 +712,17 @@ const EVENTS = [
     ]
   },
   {
-    id: 'beratungstag',
-    title: 'Beratungstag',
-    format: 'Beratungstag',
-    series: 'Beratungstage 2026',
-    teaser: 'Ein Tag, an dem unsere Art Consultants Zeit für Ihre Wand haben. Bringen Sie ein Foto mit.',
+    id: 'advisory-day',
+    title: 'Advisory day',
+    format: 'Advisory day',
+    series: 'Advisory days 2026',
+    teaser: 'A day when our art consultants have time for your wall. Bring a photo of the room.',
     image: teaser('duesseldorf'),
     detail: true,
     body: [
-      'Eine Wand, ein Maß, eine Unsicherheit: welches Werk hält das aus, über Jahre.',
-      'An diesem Tag nehmen sich unsere Art Consultants in fünf Galerien Zeit, ohne Termin und ohne Kaufabsicht. Bringen Sie ein Foto Ihres Raums mit, gerne mit Maßen.',
-      'Der Beratungstag findet monatlich statt. Die nächsten Termine finden Sie unten.'
+      'One wall, one measurement, one uncertainty: which work can carry that space for years.',
+      'On this day our art consultants set aside time in five galleries, without an appointment and without any expectation that you buy. Bring a photo of your room, ideally with measurements.',
+      'The advisory day runs monthly. The next dates are listed below.'
     ],
     occurrences: [
       { galleryId:'duesseldorf', start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
@@ -730,17 +733,17 @@ const EVENTS = [
     ]
   },
   {
-    id: 'kuratorenfuehrung',
-    title: 'Kuratorenführung: die neuen Editionen',
-    format: 'Künstlergespräch',
-    teaser: 'Dreißig Minuten durch die Neuzugänge des Herbstes, live und von überall.',
+    id: 'curator-tour',
+    title: 'Curator’s tour online: the new editions',
+    format: 'Artist talk',
+    teaser: 'Thirty minutes through the autumn arrivals, live and from anywhere.',
     image: 'assets/photos/DSC06554.jpg',
     detail: true,
     body: [
-      'Vier Mal im Jahr kommen neue Editionen ins Portfolio. Was davon bleibt, entscheidet sich in den ersten Wochen.',
-      'Unsere Kuratorin führt in dreißig Minuten durch die Neuzugänge, nennt die Gründe für jede Aufnahme und beantwortet Ihre Fragen im Anschluss.',
+      'New editions enter the portfolio four times a year. Which of them lasts is decided in the first few weeks.',
+      'Our curator walks through the arrivals in thirty minutes, names the reason each one was taken on, and answers your questions afterwards.',
       // Occurrence without a gallery: same object, nullable location.
-      'Die Führung findet online statt. Sie erhalten den Zugangslink nach der Anmeldung.'
+      'The tour takes place online. You receive the access link after registering.'
     ],
     occurrences: [
       { galleryId:null, online:true, start:'2026-09-30T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
@@ -753,8 +756,8 @@ const EVENTS = [
    ══════════════════════════════════════════════════════════════════ */
 
 const STORE = 'DE';                       // the shop this feed renders in
-const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 const scopeOf = (ev) => {
   const n = ev.occurrences.length;
@@ -778,48 +781,50 @@ function resolveCta(ev) {
     const g = only.galleryId ? G[only.galleryId] : null;
     if (rsvp !== 'none') {
       return {
-        primary: { label:'Anmelden', href:only.rsvp.url, external:true, provider:only.rsvp.provider, track:'event_rsvp_click' },
-        secondary: g ? { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' } : null,
+        primary: { label:'Register', href:only.rsvp.url, external:true, provider:only.rsvp.provider, track:'event_rsvp_click' },
+        secondary: g ? { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' } : null,
         rule:'single + rsvp'
       };
     }
     if (ev.detail) {
       return {
-        primary: { label:'Mehr erfahren', href:detailHref, track:'event_detail_click' },
-        secondary: g ? { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' } : null,
-        rule:'single + kein rsvp + Detailseite'
+        primary: { label:'Learn more', href:detailHref, track:'event_detail_click' },
+        secondary: g ? { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' } : null,
+        rule:'single + no rsvp + detail page'
       };
     }
     return {
-      primary: { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' },
+      primary: { label:'Directions & opening hours', href:`#/gallery/${g.id}`, track:'event_gallery_click' },
       secondary: null,
-      rule:'single + kein rsvp + keine Detailseite'
+      rule:'single + no rsvp + no detail page'
     };
   }
 
   // Multi and network never expose a card-level RSVP: which city would it mean?
   if (rsvp !== 'none') {
     return {
-      primary: { label:'Termin & Galerie wählen', href:detailHref, track:'event_picker_click' },
+      primary: { label:'Choose date & gallery', href:detailHref, track:'event_picker_click' },
       secondary: null,
-      rule:`${scope} + rsvp (mind. 1)`
+      rule:`${scope} + rsvp (at least one)`
     };
   }
   return {
-    primary: { label:'Teilnehmende Galerien', href:detailHref, track:'event_locations_click' },
+    primary: { label:'Participating galleries', href:detailHref, track:'event_locations_click' },
     secondary: null,
-    rule:`${scope} + kein rsvp`
+    rule:`${scope} + no rsvp`
   };
 }
 
 const fmtDate = (iso, withDay = true) => {
   const d = new Date(iso);
-  return `${withDay ? DAYS[d.getDay()] + ', ' : ''}${d.getDate()}. ${MONTHS[d.getMonth()]}`;
+  return `${withDay ? DAYS[d.getDay()] + ', ' : ''}${d.getDate()} ${MONTHS[d.getMonth()]}`;
 };
 const fmtTime = (iso) => {
   const d = new Date(iso);
-  const m = d.getMinutes();
-  return `${d.getHours()}${m ? ':' + String(m).padStart(2, '0') : ''} Uhr`;
+  const h = d.getHours(), m = d.getMinutes();
+  const suffix = h >= 12 ? 'pm' : 'am';
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}${m ? '.' + String(m).padStart(2, '0') : ''} ${suffix}`;
 };
 
 /* Cards show dates. Only a single occurrence may show a time. */
@@ -830,15 +835,15 @@ function dateLabel(ev) {
 
   if (ev.occurrences.length === 1) {
     const t = first.end
-      ? `${fmtTime(first.start)} bis ${fmtTime(first.end)}`
-      : `ab ${fmtTime(first.start)}`;
+      ? `${fmtTime(first.start)} to ${fmtTime(first.end)}`
+      : `from ${fmtTime(first.start)}`;
     return `${fmtDate(first.start)} · ${t}`;
   }
   if (sameDay) return fmtDate(first.start);
-  // Same month: name it once. "2. bis 4. September", not "2. September bis 4. September".
+  // Same month: name it once. "2 to 4 September", not "2 September to 4 September".
   const sameMonth = new Date(first.start).getMonth() === new Date(last.start).getMonth();
-  if (sameMonth) return `${new Date(first.start).getDate()}. bis ${fmtDate(last.start, false)}`;
-  return `${fmtDate(first.start, false)} bis ${fmtDate(last.start, false)}`;
+  if (sameMonth) return `${new Date(first.start).getDate()} to ${fmtDate(last.start, false)}`;
+  return `${fmtDate(first.start, false)} to ${fmtDate(last.start, false)}`;
 }
 
 /* Scope label + place prose. Store-relevant cities first, deduplicated. */
@@ -861,19 +866,19 @@ function placeOf(ev) {
     return { badge: null, prose: G[o.galleryId].name, isPlace: true };
   }
   if (scope === 'multi') {
-    return { badge: `${cities.length} Galerien`, prose: cities.map(c => c.label).join(', ') };
+    return { badge: `${cities.length} galleries`, prose: cities.map(c => c.label).join(', ') };
   }
   const shown = cities.slice(0, 4).map(c => c.label).join(', ');
   return {
-    badge: ev.scopeLabel || `${ev.occurrences.length} Galerien`,
-    prose: `${ev.occurrences.length} Standorte: ${shown}`,
-    more: ` u. a.`
+    badge: ev.scopeLabel || `${ev.occurrences.length} galleries`,
+    prose: `${ev.occurrences.length} locations: ${shown}`,
+    more: ` and more`
   };
 }
 
 const participationLabel = (ev) => {
   const r = rsvpStateOf(ev);
-  return r === 'none' ? 'Ohne Anmeldung' : r === 'all' ? 'Mit Anmeldung' : 'Anmeldung je Galerie';
+  return r === 'none' ? 'No registration' : r === 'all' ? 'Registration required' : 'Registration varies by gallery';
 };
 
 const sortedEvents = () => [...EVENTS].sort((a, b) => {
@@ -912,7 +917,7 @@ const params = (o) => esc(JSON.stringify(o));
 function ctaHtml(cta, ev, inverse = false) {
   const p = cta.primary;
   const ext = p.external
-    ? ` target="_blank" rel="noopener" aria-label="${esc(p.label)} (externe Seite, ${esc(p.provider)})"`
+    ? ` target="_blank" rel="noopener" aria-label="${esc(p.label)} (external site, ${esc(p.provider)})"`
     : '';
   const icon = p.external ? '<iconify-icon icon="ph:arrow-up-right"></iconify-icon>' : '';
   let html = `<a class="btn btn-primary${inverse ? ' is-inverse' : ''}" href="${esc(p.href)}"${ext} data-track="${p.track}" data-params="${params({ event_id: ev.id, scope: scopeOf(ev) })}">${esc(p.label)}${icon}</a>`;
@@ -924,7 +929,7 @@ function ctaHtml(cta, ev, inverse = false) {
 
 function resolverNote(ev) {
   const cta = resolveCta(ev);
-  return `<div class="resolver-note">occurrences=<b>${ev.occurrences.length}</b> · rsvp=<b>${rsvpStateOf(ev)}</b> · detail=<b>${!!ev.detail}</b> → state=<b>${scopeOf(ev)}</b> · regel=<b>${esc(cta.rule)}</b> → CTA=<b>${esc(cta.primary.label)}</b></div>`;
+  return `<div class="resolver-note">occurrences=<b>${ev.occurrences.length}</b> · rsvp=<b>${rsvpStateOf(ev)}</b> · detail=<b>${!!ev.detail}</b> → state=<b>${scopeOf(ev)}</b> · rule=<b>${esc(cta.rule)}</b> → CTA=<b>${esc(cta.primary.label)}</b></div>`;
 }
 
 function placeHtml(ev) {
@@ -939,7 +944,7 @@ function tagsHtml(ev) {
   return `<div class="event-tags">
     <span class="tag">${esc(ev.format)}</span>
     <span class="tag">${esc(participationLabel(ev))}</span>
-    ${ev.series ? `<span class="tag">Reihe: ${esc(ev.series)}</span>` : ''}
+    ${ev.series ? `<span class="tag">Series: ${esc(ev.series)}</span>` : ''}
   </div>`;
 }
 
@@ -988,7 +993,7 @@ function cardHtml(ev) {
 function disclosureHtml(ev) {
   return `<div class="event-disclosure">
     <button type="button" class="disclosure-toggle" aria-expanded="false" data-disclosure="${ev.id}">
-      <iconify-icon icon="ph:caret-down"></iconify-icon> Alle Termine zeigen
+      <iconify-icon icon="ph:caret-down"></iconify-icon> Show all dates
     </button>
     <div class="disclosure-region" data-open="false" inert id="disc-${ev.id}"><div>${occListHtml(ev)}</div></div>
   </div>`;
@@ -998,19 +1003,19 @@ function occListHtml(ev) {
   const rows = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start)).map(o => {
     const g = o.galleryId ? G[o.galleryId] : null;
     const when = o.end
-      ? `${fmtDate(o.start)}, ${fmtTime(o.start)} bis ${fmtTime(o.end)}`
-      : `${fmtDate(o.start)}, ab ${fmtTime(o.start)}`;
-    const part = o.rsvp ? 'Anmeldung erforderlich' : 'Ohne Anmeldung';
+      ? `${fmtDate(o.start)}, ${fmtTime(o.start)} to ${fmtTime(o.end)}`
+      : `${fmtDate(o.start)}, from ${fmtTime(o.start)}`;
+    const part = o.rsvp ? 'Registration required' : 'No registration';
     const act = o.rsvp
-      ? `<a class="btn-ghost" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Anmelden (externe Seite, ${o.rsvp.provider})" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g ? g.id : 'online' })}">Anmelden <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+      ? `<a class="btn-ghost" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Register (external site, ${o.rsvp.provider})" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g ? g.id : 'online' })}">Register <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
       : '';
     const gal = g
-      ? `<a class="btn-ghost" href="#/galerie/${g.id}" data-track="event_gallery_click" data-params="${params({ event_id: ev.id, gallery: g.id })}">Galerie</a>`
+      ? `<a class="btn-ghost" href="#/gallery/${g.id}" data-track="event_gallery_click" data-params="${params({ event_id: ev.id, gallery: g.id })}">Gallery</a>`
       : '';
+    // The row is where a visitor picks one room, so it names the gallery,
+    // not the city: Berlin has two, and "Berlin" twice is unusable.
     return `<li class="occ-row">
-      <!-- The row is where a visitor picks one room, so it names the gallery,
-           not the city: Berlin has two, and "Berlin" twice is unusable. -->
-      <span class="occ-city">${g ? esc(g.name.replace('LUMAS Galerie ', '')) : 'Online'}${g ? `<small>${esc(g.street)}</small>` : '<small>Zugangslink nach der Anmeldung</small>'}</span>
+      <span class="occ-city">${g ? esc(g.name.replace('LUMAS Gallery ', '')) : 'Online'}${g ? `<small>${esc(g.street)}</small>` : '<small>Access link after registering</small>'}</span>
       <span class="occ-when">${esc(when)}</span>
       <span class="occ-part">${esc(part)}</span>
       <span class="occ-act">${act}${gal}</span>
@@ -1051,13 +1056,13 @@ function renderFeed() {
   const total = EVENTS.length;
   const occTotal = EVENTS.reduce((n, e) => n + e.occurrences.length, 0);
   document.getElementById('bandMeta').innerHTML =
-    `${total} Events · ${occTotal} Termine<br>19 Galerien, 18 davon eventfähig`;
+    `${total} events · ${occTotal} dates<br>19 galleries, 18 of them able to host`;
 
   const status = document.getElementById('filterStatus');
   if (cityFilter === 'all') {
-    status.innerHTML = `<strong>${list.length}</strong> von ${total} Events`;
+    status.innerHTML = `<strong>${list.length}</strong> of ${total} events`;
   } else {
-    status.innerHTML = `Gefiltert: <strong>${G[cityFilter].city}</strong> · ${list.length} Event${list.length === 1 ? '' : 's'} · <button type="button" class="btn-ghost" data-reset-filter style="margin-left:8px">Alle anzeigen</button>`;
+    status.innerHTML = `Filtered: <strong>${G[cityFilter].city}</strong> · ${list.length} event${list.length === 1 ? '' : 's'} · <button type="button" class="btn-ghost" data-reset-filter style="margin-left:8px">Show all</button>`;
   }
   observeReveals();
 }
@@ -1072,8 +1077,8 @@ function renderDetail(id) {
 
   const worksHtml = (ev.works || []).map(w => `
     <figure class="work">
-      <div class="work-frame"><img src="https://img.lumas.com/showimg_${w.code}_desktop.jpg" alt="${esc(w.title)} von ${esc(w.artist)}" loading="lazy"></div>
-      <figcaption class="work-meta"><strong>${esc(w.artist)}</strong><span>${esc(w.title)}</span><em>Werk entdecken →</em></figcaption>
+      <div class="work-frame"><img src="https://img.lumas.com/showimg_${w.code}_desktop.jpg" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy"></div>
+      <figcaption class="work-meta"><strong>${esc(w.artist)}</strong><span>${esc(w.title)}</span><em>Discover the work →</em></figcaption>
     </figure>`).join('');
 
   host.innerHTML = `
@@ -1094,31 +1099,31 @@ function renderDetail(id) {
     <div class="detail-body"><div class="container detail-body-grid">
       <div class="detail-prose">${(ev.body || [ev.teaser]).map(p => `<p>${esc(p)}</p>`).join('')}</div>
       <aside class="detail-aside">
-        <h3 class="display-h4">Auf einen Blick</h3>
+        <h3 class="display-h4">At a glance</h3>
         <dl>
           <dt>Format</dt><dd>${esc(ev.format)}</dd>
-          <dt>Termine</dt><dd>${ev.occurrences.length}</dd>
-          <dt>Umfang</dt><dd>${esc(pl.badge)}</dd>
-          <dt>Anmeldung</dt><dd>${esc(participationLabel(ev))}</dd>
-          <dt>Eintritt</dt><dd>Frei</dd>
-          ${ev.series ? `<dt>Reihe</dt><dd>${esc(ev.series)}</dd>` : ''}
+          <dt>Dates</dt><dd>${ev.occurrences.length}</dd>
+          <dt>Scope</dt><dd>${esc(pl.badge || pl.prose)}</dd>
+          <dt>Registration</dt><dd>${esc(participationLabel(ev))}</dd>
+          <dt>Entry</dt><dd>Free</dd>
+          ${ev.series ? `<dt>Series</dt><dd>${esc(ev.series)}</dd>` : ''}
         </dl>
       </aside>
     </div></div>
 
     <div class="detail-occ"><div class="container">
       <div class="detail-occ-head">
-        <h2 class="display-h2">${ev.occurrences.length === 1 ? 'Termin' : 'Teilnehmende Galerien'}</h2>
-        <span class="filter-status">${ev.occurrences.length} Termin${ev.occurrences.length === 1 ? '' : 'e'}</span>
+        <h2 class="display-h2">${ev.occurrences.length === 1 ? 'Date and place' : 'Participating galleries'}</h2>
+        <span class="filter-status">${ev.occurrences.length} date${ev.occurrences.length === 1 ? '' : 's'}</span>
       </div>
       ${occListHtml(ev)}
-      ${rsvpStateOf(ev) !== 'none' ? `<p class="provider-note">Die Anmeldung läuft über ${esc(ev.occurrences.find(o => o.rsvp).rsvp.provider)}. Sie verlassen dabei lumas.de.</p>` : ''}
-      ${ev.occurrences.length > 5 ? `<p class="provider-note">Frankfurt Airport ist nicht dabei: die Galerie liegt im Non-Schengen-Bereich von Terminal 3 und ist nur mit Bordkarte erreichbar.</p>` : ''}
+      ${rsvpStateOf(ev) !== 'none' ? `<p class="provider-note">Registration runs through ${esc(ev.occurrences.find(o => o.rsvp).rsvp.provider)}. You will be leaving lumas.com.</p>` : ''}
+      ${ev.occurrences.length > 5 ? `<p class="provider-note">Frankfurt Airport is not included: the gallery sits in the non-Schengen area of Terminal 3 and is reachable only with a boarding pass.</p>` : ''}
     </div></div>
 
     ${worksHtml ? `<div class="works-band"><div class="container">
       <div class="works-head">
-        <div><h2 class="display-h2">Werke, die Sie dort sehen</h2><p class="lede" style="margin-top:10px">Falls Sie nicht kommen können: die Auswahl ist auch online verfügbar.</p></div>
+        <div><h2 class="display-h2">Works you will see there</h2><p class="lede" style="margin-top:10px">If you cannot join us: the selection is available online too.</p></div>
       </div>
       <div class="works-rail">${worksHtml}</div>
     </div></div>` : ''}
@@ -1136,15 +1141,15 @@ function renderGallery(id) {
   ).sort((a, b) => a.o.start.localeCompare(b.o.start)).slice(0, 3);
 
   const stripRows = rows.map(({ ev, o }) => {
-    const cta = resolveCta(ev);
-    // Structured fields only. No event prose here: the gallery page is "du",
-    // event copy is "Sie", and the brandbook forbids mixing them in one asset.
+    // Structured fields only. No event prose: it would duplicate the event's
+    // own copy across up to 18 pages, and in DE it would also break the
+    // brandbook du/Sie rule, since gallery pages address the reader as "du".
     const action = o.rsvp
-      ? `<a class="btn btn-secondary" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Anmelden (externe Seite)" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Anmelden <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
-      : `<a class="btn btn-secondary" href="#/event/${ev.id}" data-track="event_detail_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Mehr erfahren</a>`;
+      ? `<a class="btn btn-secondary" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Register (external site)" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Register <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+      : `<a class="btn btn-secondary" href="#/event/${ev.id}" data-track="event_detail_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Learn more</a>`;
     return `<div class="strip-row">
-      <div class="strip-when">${esc(fmtDate(o.start))}<small>${o.end ? `${fmtTime(o.start)} bis ${fmtTime(o.end)}` : `ab ${fmtTime(o.start)}`}</small></div>
-      <div class="strip-title">${esc(ev.title)}<small>${esc(ev.format)} · ${o.rsvp ? 'Mit Anmeldung' : 'Ohne Anmeldung'}${scopeOf(ev) !== 'single' ? ` · auch in ${ev.occurrences.length - 1} weiteren Galerien` : ''}</small></div>
+      <div class="strip-when">${esc(fmtDate(o.start))}<small>${o.end ? `${fmtTime(o.start)} to ${fmtTime(o.end)}` : `from ${fmtTime(o.start)}`}</small></div>
+      <div class="strip-title">${esc(ev.title)}<small>${esc(ev.format)} · ${o.rsvp ? 'Registration required' : 'No registration'}${scopeOf(ev) !== 'single' ? ` · also in ${ev.occurrences.length - 1} other galleries` : ''}</small></div>
       <div>${action}</div>
     </div>`;
   }).join('');
@@ -1152,19 +1157,19 @@ function renderGallery(id) {
   host.innerHTML = `
     <div class="gal-hero" style="background-image:url('${g.photo}')">
       <div class="container">
-        <span class="eyebrow" style="color:var(--on-dark-55);display:block;margin-bottom:14px">Galerie</span>
-        <h1 class="display-h1">${esc(g.name.replace('LUMAS Galerie ', ''))}</h1>
-        <p class="lede" style="color:var(--on-dark-75);margin-top:12px">Entdecke limitierte Editionen in ${esc(g.city)}. Eintritt frei, ohne Termin.</p>
+        <span class="eyebrow" style="color:var(--on-dark-55);display:block;margin-bottom:14px">Gallery</span>
+        <h1 class="display-h1">${esc(g.name.replace('LUMAS Gallery ', ''))}</h1>
+        <p class="lede" style="color:var(--on-dark-75);margin-top:12px">Discover limited editions in ${esc(g.city)}. Free entry, no appointment needed.</p>
       </div>
     </div>
 
     <div class="gal-visit"><div class="container">
       <div class="gal-grid">
-        <div class="gal-cell"><h3>Adresse</h3>
+        <div class="gal-cell"><h3>Address</h3>
           <div class="line"><span class="label">${esc(g.street)}</span></div>
           <div class="line"><span class="label">${esc(g.zip)} ${esc(g.city)}</span></div>
         </div>
-        <div class="gal-cell"><h3>Öffnungszeiten</h3>
+        <div class="gal-cell"><h3>Opening hours</h3>
           <div class="line"><span class="label">${esc(g.hours)}</span></div>
         </div>
       </div>
@@ -1173,11 +1178,11 @@ function renderGallery(id) {
     <div class="event-strip"><div class="container">
       <div class="strip-shell">
         <div class="strip-head">
-          <h2 class="display-h3">Bei uns in ${esc(g.city)}</h2>
-          <span class="eyebrow">${rows.length} kommende${rows.length === 1 ? 's' : ''} Event${rows.length === 1 ? '' : 's'}</span>
+          <h2 class="display-h3">At our gallery in ${esc(g.city)}</h2>
+          <span class="eyebrow">${rows.length} upcoming event${rows.length === 1 ? '' : 's'}</span>
         </div>
-        ${rows.length ? stripRows : `<div class="strip-row"><div></div><div class="strip-title" style="font-size:16px;color:var(--text-secondary)">Zurzeit kein Event in ${esc(g.city)}.<small style="text-transform:none;letter-spacing:0;font-weight:300;font-size:13px">Der Beratungstermin ist jederzeit möglich.</small></div><div><a class="btn btn-secondary" href="#">Termin vereinbaren</a></div></div>`}
-        <div class="strip-note">Dieses Modul wird von <code>occurrences WHERE gallery = ${esc(g.id)}</code> befüllt. Kein doppelter Inhalt, kein zusätzlicher redaktioneller Aufwand: ein Netzwerk-Event füllt bis zu 18 Galerieseiten automatisch.</div>
+        ${rows.length ? stripRows : `<div class="strip-row"><div></div><div class="strip-title" style="font-size:16px;color:var(--text-secondary)">No event in ${esc(g.city)} right now.<small style="text-transform:none;letter-spacing:0;font-weight:300;font-size:13px">An advisory appointment is possible any time.</small></div><div><a class="btn btn-secondary" href="#">Book an appointment</a></div></div>`}
+        <div class="strip-note">This module is populated by <code>occurrences WHERE gallery = ${esc(g.id)}</code>. No duplicated content and no extra editorial work: one network event fills up to 18 gallery pages automatically.</div>
       </div>
     </div></div>
   `;
@@ -1187,7 +1192,7 @@ function renderGallery(id) {
 function renderControl() {
   const host = document.getElementById('feed');
   // One tile per gallery per event. Copy duplicated. CTA labels hand-typed.
-  const HAND_TYPED = ['Jetzt anmelden', 'RSVP', 'Anmelden', 'Mehr Infos', 'Zur Galerie'];
+  const HAND_TYPED = ['Register now', 'RSVP', 'Sign up', 'More info', 'To the gallery'];
   let tiles = [], i = 0;
 
   sortedEvents().forEach(ev => {
@@ -1197,7 +1202,7 @@ function renderControl() {
       i++;
       tiles.push(`<article class="control-tile reveal">
         <div class="frame"><img src="${esc(g ? g.photo : ev.image)}" alt="" loading="lazy"></div>
-        <div class="meta">${esc(fmtDate(o.start))} | ab ${esc(fmtTime(o.start))} | ${g ? esc(g.name) : 'Online'}</div>
+        <div class="meta">${esc(fmtDate(o.start))} | from ${esc(fmtTime(o.start))} | ${g ? esc(g.name) : 'Online'}</div>
         <h3>${esc(ev.title)}</h3>
         <p>${esc(ev.teaser)}</p>
         <div class="cta"><a class="btn btn-secondary" href="#" data-track="event_card_click" data-params="${params({ event_id: ev.id, variant: 'control' })}">${esc(label)}</a></div>
@@ -1207,8 +1212,8 @@ function renderControl() {
 
   host.innerHTML = `<div class="control-grid">${tiles.join('')}</div>`;
   document.getElementById('controlCount').textContent = tiles.length;
-  document.getElementById('bandMeta').innerHTML = `${tiles.length} Tiles für ${EVENTS.length} Events`;
-  document.getElementById('filterStatus').innerHTML = `<strong>${tiles.length}</strong> Tiles`;
+  document.getElementById('bandMeta').innerHTML = `${tiles.length} tiles for ${EVENTS.length} events`;
+  document.getElementById('filterStatus').innerHTML = `<strong>${tiles.length}</strong> tiles`;
   observeReveals();
 }
 
@@ -1241,7 +1246,7 @@ function route() {
   const [kind, id] = hash.split('/');
 
   if (kind === 'event' && id) { showSurface('detail'); renderDetail(id); window.scrollTo(0, 0); observeReveals(); return; }
-  if (kind === 'galerie' && id) { showSurface('gallery'); renderGallery(id); window.scrollTo(0, 0); observeReveals(); return; }
+  if (kind === 'gallery' && id) { showSurface('gallery'); renderGallery(id); window.scrollTo(0, 0); observeReveals(); return; }
 
   showSurface('overview');
   variant === 'control' ? renderControl() : renderFeed();
@@ -1249,8 +1254,8 @@ function route() {
 
 /* City filter */
 const sel = document.getElementById('cityFilter');
-sel.innerHTML = `<option value="all">Alle Galerien</option>` +
-  HOSTABLE.map(g => `<option value="${g.id}">${g.city}${g.id.startsWith('berlin') ? ' ' + g.name.split(' ').pop() : ''}</option>`).join('');
+sel.innerHTML = `<option value="all">All galleries</option>` +
+  HOSTABLE.map(g => `<option value="${g.id}">${g.id.startsWith('berlin') ? g.name.replace('LUMAS Gallery ', '') : g.city}</option>`).join('');
 sel.addEventListener('change', () => {
   cityFilter = sel.value;
   track('event_filter_apply', { gallery: cityFilter });
@@ -1270,7 +1275,7 @@ document.addEventListener('click', (e) => {
   region.dataset.open = String(open);
   region.inert = !open;
   t.setAttribute('aria-expanded', String(open));
-  t.lastChild.textContent = open ? ' Termine ausblenden' : ' Alle Termine zeigen';
+  t.lastChild.textContent = open ? ' Hide dates' : ' Show all dates';
   if (open) track('event_occurrences_expand', { event_id: t.dataset.disclosure });
 });
 
@@ -1281,7 +1286,7 @@ document.getElementById('emptyToggle').addEventListener('click', (e) => {
   es.hidden = !on;
   document.getElementById('feed').parentElement.hidden = on;
   document.getElementById('filterBar').querySelector('.filter-select').style.opacity = on ? '0.35' : '1';
-  e.target.textContent = on ? 'Empty state ausblenden' : 'Empty state zeigen';
+  e.target.textContent = on ? 'Hide empty state' : 'Show empty state';
 });
 
 /* Proto chrome */
@@ -1290,7 +1295,7 @@ document.querySelectorAll('[data-variant]').forEach(b =>
 document.querySelectorAll('[data-surface]').forEach(b =>
   b.addEventListener('click', () => {
     const s = b.dataset.surface;
-    location.hash = s === 'overview' ? '#/' : s === 'detail' ? '#/event/golden-hour' : '#/galerie/koeln';
+    location.hash = s === 'overview' ? '#/' : s === 'detail' ? '#/event/golden-hour' : '#/gallery/hamburg';
   }));
 
 /* System panel */
@@ -1309,7 +1314,7 @@ document.getElementById('sysHead').addEventListener('keydown', (e) => {
 let pg = { occ: 1, rsvp: 'none', detail: false };
 function renderTrace() {
   const fake = {
-    id: 'playground', title: 'Golden Hour', format: 'Galerieabend',
+    id: 'playground', title: 'Golden Hour', format: 'Gallery evening',
     detail: pg.detail, teaser: '', image: '',
     occurrences: HOSTABLE.slice(0, pg.occ).map((g, i) => ({
       galleryId: g.id, start: '2026-09-02T18:00',
@@ -1318,7 +1323,7 @@ function renderTrace() {
   };
   const cta = resolveCta(fake);
   document.getElementById('sysTrace').innerHTML =
-    `occurrences  <b>${pg.occ}</b>\nrsvp         <b>${rsvpStateOf(fake)}</b>\ndetailseite  <b>${pg.detail}</b>\n\n→ zustand    <b>${scopeOf(fake)}</b>\n→ regel      <b>${cta.rule}</b>\n→ primary    <b>${cta.primary.label}</b>${cta.primary.external ? ' ↗ extern' : ''}\n→ secondary  <b>${cta.secondary ? cta.secondary.label : 'keine'}</b>\n→ ziel       <b>${cta.primary.external ? 'externe RSVP' : 'intern'}</b>`;
+    `occurrences  <b>${pg.occ}</b>\nrsvp         <b>${rsvpStateOf(fake)}</b>\ndetail page  <b>${pg.detail}</b>\n\n→ state      <b>${scopeOf(fake)}</b>\n→ rule       <b>${cta.rule}</b>\n→ primary    <b>${cta.primary.label}</b>${cta.primary.external ? ' ↗ external' : ''}\n→ secondary  <b>${cta.secondary ? cta.secondary.label : 'none'}</b>\n→ target     <b>${cta.primary.external ? 'external RSVP' : 'internal'}</b>`;
 }
 document.getElementById('occRange').addEventListener('input', (e) => {
   pg.occ = +e.target.value;
