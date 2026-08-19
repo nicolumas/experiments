@@ -97,12 +97,13 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-.wrap { max-width: 1280px; margin: 0 auto; padding: 0 64px; }
-@media (max-width: 880px) { .wrap { padding: 0 22px; } }
+/* Full-bleed with fluid gutters. No centred box: the gutter grows with the
+   viewport and the grid takes the width, rather than white space taking it. */
+.wrap { width: 100%; max-width: 2000px; margin: 0 auto; padding: 0 clamp(20px, 4.6vw, 88px); }
 
 /* ── Proto chrome (not production UI) ────────────────────────────── */
 .proto { background: #14120F; color: var(--on-dark-75); }
-.proto-inner { max-width: 1280px; margin: 0 auto; padding: 8px 22px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; }
+.proto-inner { max-width: 2000px; margin: 0 auto; padding: 8px clamp(20px, 4.6vw, 88px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; }
 .proto-tag { font-weight: 500; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #B8AE9F; padding: 4px 8px; box-shadow: inset 0 0 0 1px rgba(244,237,226,0.22); }
 .proto-seg { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
 .proto-seg button { padding: 6px 12px; font-size: 11px; color: var(--on-dark-55); transition: background 220ms var(--ease), color 220ms var(--ease); }
@@ -114,7 +115,7 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 /* ── Site chrome ─────────────────────────────────────────────────── */
 .promo { background: var(--charcoal); color: var(--inverse); text-align: center; padding: 11px 22px; font-size: 13px; }
 .nav { border-bottom: 1px solid var(--hair); }
-.nav-inner { max-width: 1280px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: center; gap: 32px; }
+.nav-inner { max-width: 2000px; margin: 0 auto; padding: 18px clamp(20px, 4.6vw, 88px); display: flex; align-items: center; gap: 32px; }
 .nav-logo svg { height: 20px; width: auto; display: block; }
 .nav-links { display: flex; gap: 26px; }
 .nav-links a { font-size: 14px; position: relative; padding-bottom: 3px; transition: opacity 220ms var(--ease); }
@@ -126,7 +127,8 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .nav-util button:hover { background: var(--ivory); }
 .nav-util iconify-icon { font-size: 21px; }
 @media (max-width: 1000px) { .nav-links { display: none; } }
-@media (max-width: 720px) { .nav-inner { padding: 14px 16px; } }
+@media (max-width: 720px) { .nav-inner { padding: 14px clamp(16px, 4.6vw, 22px); gap: 16px; } }
+@media (max-width: 430px) { .nav-util button { width: 34px; } .nav-util { gap: 0; } }
 
 /* ── Editorial head ─────────────────────────────────────────────── */
 .head { padding: 72px 0 8px; }
@@ -141,8 +143,21 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .month { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); padding: 56px 0 0; }
 
 /* ── One card. No variants. No states. ──────────────────────────── */
-.ev { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 56px; padding: 48px 0; border-bottom: 1px solid var(--hair); }
-.ev:first-of-type { padding-top: 32px; }
+/* Mobile first: one column. Two at 760, three at 1400 where the "where"
+   column moves up beside the copy instead of sitting under it, so a wide
+   viewport is filled by content rather than by a growing void. */
+.ev { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 32px 0 40px; border-bottom: 1px solid var(--hair); }
+.ev:first-of-type { padding-top: 24px; }
+@media (min-width: 820px) {
+  .ev { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: clamp(28px, 3vw, 56px); padding: 48px 0; align-items: start; }
+  .ev:first-of-type { padding-top: 32px; }
+  .ev-body { grid-column: 2; }
+  .ev-where { grid-column: 2; }
+}
+@media (min-width: 1400px) {
+  .ev { grid-template-columns: minmax(0, 32%) minmax(0, 1fr) minmax(240px, 28%); gap: clamp(40px, 3.4vw, 72px); }
+  .ev-where { grid-column: 3; grid-row: 1; border-top: 0; padding-top: 0; margin-top: 6px; }
+}
 
 /* Event photography. Unlike artworks these MAY be cropped, so one editorial
    frame gives the feed a steady rhythm and the pictures carry the feeling. */
@@ -157,7 +172,7 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-text { font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 54ch; margin: 0 0 24px; text-wrap: pretty; }
 
 /* V2 button: Archivo Bold 13px, tracking 1.82px, uppercase, sharp corners. */
-.ev-register { display: inline-flex; align-items: center; gap: 8px; padding: 16px 28px; background: var(--charcoal); color: var(--inverse); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 24px; transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
+.ev-register { display: inline-flex; align-items: center; gap: 8px; padding: 16px 28px; background: var(--charcoal); color: var(--inverse); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
 .ev-register:active { transform: scale(0.97); }
 .ev-register iconify-icon { font-size: 13px; }
 
@@ -179,6 +194,18 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-col h4 { margin: 0 0 8px; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
 .ev-col a { display: block; font-size: 15.5px; line-height: 1.9; color: var(--ink); }
 .ev-col a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
+/* Declared after the base rule so it actually wins. In the three-column
+   layout the where-column is too narrow for auto-fit to place 3 evenings
+   without going ragged (2 + 1), so stack them and split the names instead. */
+@media (min-width: 1400px) {
+  .ev-cols { grid-template-columns: 1fr; gap: 20px; }
+  .ev-col-list { columns: 2; column-gap: 24px; }
+}
+
+/* A coarse pointer means touch, at any width, so grow the targets there. */
+@media (pointer: coarse) {
+  .ev-col a { padding: 7px 0; line-height: 1.6; }
+}
 
 /* Hover only where a real pointer exists, so it does not stick on touch. */
 @media (hover: hover) and (pointer: fine) {
@@ -186,21 +213,24 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
   .ev-register:hover { background: var(--charcoal-800); }
   .ev-col a:hover span { border-bottom-color: var(--ink); }
 }
-@media (max-width: 1000px) { .ev { grid-template-columns: 320px minmax(0, 1fr); gap: 40px; } }
-@media (max-width: 760px) {
-  .ev { grid-template-columns: 1fr; gap: 24px; padding: 32px 0 40px; }
-  .ev:first-of-type { padding-top: 24px; }
-  .ev-shot { aspect-ratio: 4 / 3; }
+/* Small screens: taller frame, full-width button, and both gallery shapes
+   become tappable lists. */
+@media (max-width: 819px) {
+  /* Capped so the single-column card stays a readable height on a tablet. */
+  .ev-shot { aspect-ratio: 4 / 3; max-width: 620px; }
   .ev-register { width: 100%; justify-content: center; }
-  /* One evening per row, its galleries in two columns. */
   .ev-cols { grid-template-columns: 1fr; gap: 18px; }
   .ev-col-list { columns: 2; column-gap: 24px; }
   .ev-col a { line-height: 1.5; padding: 12px 0; }
-  /* The one-line shape becomes a tappable list once the column narrows. */
   .ev-links { line-height: 1.5; }
   .ev-links .sep { display: none; }
   .ev-links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; width: 100%; white-space: normal; padding: 13px 0; border-bottom: 1px solid var(--hair); }
   .ev-links > span { display: block; padding: 13px 0; }
+}
+/* Between 820 and 1100 the copy column is narrow, so two evening columns
+   rather than three squeezed ones. */
+@media (min-width: 820px) and (max-width: 1100px) {
+  .ev-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ── Empty state ─────────────────────────────────────────────────── */
@@ -217,7 +247,7 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .news h2 { font-family: var(--display); font-weight: 400; font-size: clamp(27px, 2.6vw, 36px); line-height: 1.14; margin: 0; }
 .news p { color: var(--ink-2); font-size: 16px; margin: 16px 0 28px; }
 .news form { display: flex; gap: 8px; flex-wrap: wrap; }
-.news input { flex: 1; min-width: 210px; padding: 15px 16px; background: var(--page); box-shadow: inset 0 0 0 1px rgba(28,26,24,0.2); font-family: var(--body); font-size: 15px; }
+.news input { flex: 1 1 200px; min-width: 0; padding: 15px 16px; background: var(--page); box-shadow: inset 0 0 0 1px rgba(28,26,24,0.2); font-family: var(--body); font-size: 15px; }
 .news input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
 .news button { padding: 15px 26px; background: var(--charcoal); color: var(--inverse); font-size: 12px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; transition: background 220ms var(--ease), transform 160ms var(--ease); }
 .news button:hover { background: #322E29; }
@@ -230,7 +260,7 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .gp-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 4vw, 54px); line-height: 1.04; margin: 0; }
 .gp-hero p { color: var(--on-dark-75); font-size: 17px; margin: 12px 0 0; max-width: 46ch; }
 .gp-body { padding: 60px 0 76px; }
-.gp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+.gp-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 400px)); gap: clamp(32px, 4vw, 72px); }
 .gp-cols h3 { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; font-weight: 400; }
 .gp-cols .line { font-size: 16px; line-height: 1.6; }
 .gp-next { margin-top: 52px; border-top: 1px solid var(--hair); padding-top: 30px; }
@@ -650,8 +680,8 @@ function evHtml(ev) {
       <div class="ev-facts">${facts(ev)}</div>
       <p class="ev-text">${esc(ev.text)}</p>
       ${register}
-      ${whereHtml(ev)}
     </div>
+    ${whereHtml(ev)}
   </article>`;
 }
 
