@@ -120,6 +120,8 @@
   }
 
   /* ── Type scale — V2 spec (Utile Display + Archivo) ─ */
+  /* Typographic safety net — balance display lines, no auto-hyphenation, no widowed single words */
+  .display-xl, .display-h1, .display-h2, .display-h3, .display-h4 { text-wrap: balance; -webkit-hyphens: manual; hyphens: manual; }
   .display-xl { font-family: var(--font-display); font-weight: 300; font-size: clamp(64px, 7vw, 88px); line-height: 1.0; letter-spacing: 0; }
   .display-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(42px, 4.4vw, 62px); line-height: 1.04; letter-spacing: 0; }
   .display-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 3vw, 46px); line-height: 1.12; letter-spacing: 0; }
@@ -318,59 +320,18 @@
   }
 
   /* ── Exhibitions (asymmetric: 1 hero + 2 supporting) ── */
-  .ex-grid {
-    display: grid;
-    grid-template-columns: 8fr 5fr;
-    gap: 24px;
-  }
-  .ex-hero {
-    display: flex; flex-direction: column;
-    background: var(--surface-raised);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: transform 600ms var(--ease-glide);
-  }
-  .ex-hero:hover { transform: translateY(-3px); }
-  .ex-hero-image {
-    aspect-ratio: 16 / 9;
-    background-color: var(--surface-raised);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-origin: content-box;
-    padding: 18px;
-  }
-  .ex-hero-copy { padding: 22px 28px 24px; display: flex; flex-direction: column; gap: 10px; }
-  .ex-hero-copy .meta { color: var(--text-tertiary); }
-  .ex-hero-copy h3 { color: var(--text-primary); font-size: 28px; line-height: 1.15; margin-top: 2px; }
-  .ex-hero-copy p { color: var(--text-secondary); font-size: 14px; line-height: 1.55; }
-  .ex-hero-copy .btn-link { align-self: flex-start; margin-top: 6px; }
-
-  .ex-aside { display: flex; flex-direction: column; gap: 16px; }
-  .ex-card {
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    gap: 14px;
-    background: var(--surface-raised);
-    border-radius: 4px;
-    padding: 10px;
-    transition: transform 400ms var(--ease-glide);
-  }
-  .ex-card:hover { transform: translateY(-2px); }
-  .ex-card-image {
-    aspect-ratio: 1 / 1;
-    background-color: var(--surface-raised);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-origin: content-box;
-    padding: 12px;
-    border-radius: 3px;
-  }
-  .ex-card-copy { display: flex; flex-direction: column; gap: 6px; padding: 8px 14px 8px 4px; }
-  .ex-card-copy .meta { color: var(--text-tertiary); }
-  .ex-card-copy h3 { color: var(--text-primary); }
-  .ex-card-copy .artist { color: var(--text-secondary); font-size: 13px; }
+  /* Events grid — 3 equal cards, clean alignment */
+  .events-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+  .event-card { display: flex; flex-direction: column; background: var(--surface-raised); border-radius: 4px; overflow: hidden; text-decoration: none; transition: transform 400ms var(--ease-glide); }
+  .event-card:hover { transform: translateY(-3px); }
+  .event-card-image { aspect-ratio: 4 / 3; background-color: var(--surface-raised); background-size: contain; background-repeat: no-repeat; background-position: center; background-origin: content-box; padding: 20px; }
+  .event-card-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .event-card-body .type-pill { align-self: flex-start; margin-bottom: 6px; }
+  .event-card-body .when { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.04em; color: var(--text-tertiary); }
+  .event-card-body h3 { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.18; color: var(--text-primary); margin: 2px 0 6px; }
+  .event-card-body p { color: var(--text-secondary); font-size: 14px; line-height: 1.55; margin: 0; }
+  .event-card-body .btn-link { align-self: flex-start; margin-top: auto; padding-top: 16px; }
+  @media (max-width: 900px) { .events-grid { grid-template-columns: 1fr; } }
 
   /* Type pill on exhibition / event cards */
   .type-pill { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 5px 10px; border-radius: 2px; font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
@@ -911,7 +872,7 @@
     <div class="hero-grid">
       <div class="hero-copy reveal">
         <span class="breadcrumb"><span>LUMAS</span><span class="sep">/</span><span>Galleries</span></span>
-        <h1 class="display-xl">Nineteen Galleries. Seven Countries. One World of Art.</h1>
+        <h1 class="display-xl">Nineteen&nbsp;Galleries.<br>Seven&nbsp;Countries.<br>One&nbsp;World of&nbsp;Art.</h1>
         <p class="body-large">Each LUMAS gallery is staffed by a local team and dedicated to limited and open editions. Walk in for an unhurried look at the work in person, ask the kind of questions that don't fit in an email, and try a piece on your own wall before it ships.</p>
         <p class="body" style="color: rgba(244, 241, 234, 0.62); max-width: 540px; margin-top: 18px; font-size: 14px; line-height: 1.65;">Coffee at the counter, expert framing on site, hand delivery to most of Europe, sixty days to return. Talks, drops, and Art After Work evenings every week.</p>
       </div>
@@ -997,52 +958,50 @@
   </div>
 </section>
 
-<!-- ── What's on this week (Exhibitions + Events + Releases) ─── -->
+<!-- ── What's happening in our galleries — 3 distinct events ─── -->
 <section class="section" id="exhibitions">
   <div class="container">
     <div class="section-head with-link reveal">
       <div>
-        <h2 class="display-h1">What's on this week.</h2>
-        <p class="body-large" style="max-width: 640px; margin-top: 16px;">Exhibitions, new releases, and Art After Work evenings across our nineteen galleries. Most are free, all are walk-in.</p>
+        <h2 class="display-h1">What&rsquo;s happening in&nbsp;our&nbsp;galleries.</h2>
+        <p class="body-large" style="max-width: 640px; margin-top: 16px;">Openings, artist talks, and Art After Work evenings across our nineteen galleries. Most are free, all are walk-in.</p>
       </div>
       <a href="#" class="btn-link">Full programme</a>
     </div>
 
-    <div class="ex-grid">
-      <a href="berlin-mitte.html" class="ex-hero reveal">
-        <div class="ex-hero-image" style="background-image: url('https://img.lumas.com/showimg_gve31_desktop.jpg');"></div>
-        <div class="ex-hero-copy">
-          <span class="type-pill is-exhibition">Exhibition</span>
-          <span class="caption meta">Berlin Mitte &middot; through 14 July</span>
-          <h3 class="display-h2">Lazarus, a study in light.</h3>
-          <p class="body">Gavin Evans returns to the Hackeschen Höfe with twelve new portrait studies. Open edition prints, signed in person at the opening.</p>
-          <span class="btn-link">View exhibition</span>
+    <div class="events-grid">
+      <a href="berlin-mitte.html#events" class="event-card reveal">
+        <div class="event-card-image" style="background-image: url('https://img.lumas.com/showimg_gve31_desktop.jpg');"></div>
+        <div class="event-card-body">
+          <span class="type-pill is-exhibition">Opening reception</span>
+          <span class="when">Berlin Mitte &middot; Fri 6 June, 19:00</span>
+          <h3>Lazarus, a study in light.</h3>
+          <p>Gavin Evans returns to the Hackeschen H&ouml;fe with twelve new portrait studies. Meet the artist and sign your print in person.</p>
+          <span class="btn-link">RSVP</span>
         </div>
       </a>
 
-      <div class="ex-aside">
-        <a href="#" class="ex-card reveal">
-          <div class="ex-card-image" style="background-image: url('https://img.lumas.com/showimg_wuh128_desktop.jpg');"></div>
-          <div class="ex-card-copy">
-            <span class="type-pill is-release">New release</span>
-            <span class="caption meta">All galleries &middot; from this week</span>
-            <h3 class="display-h4">Seesaw seascapes.</h3>
-            <span class="artist">Wolfgang Uhlig, limited edition of 75</span>
-            <span class="btn-link" style="margin-top: 4px;">View edition</span>
-          </div>
-        </a>
+      <a href="muenchen.html#events" class="event-card reveal">
+        <div class="event-card-image" style="background-image: url('https://img.lumas.com/showimg_mcn04_desktop.jpg');"></div>
+        <div class="event-card-body">
+          <span class="type-pill is-event">Artist talk</span>
+          <span class="when">M&uuml;nchen &middot; Thu 20 June, 18:30</span>
+          <h3>In conversation with Massimo&nbsp;Colonna.</h3>
+          <p>On rendering, ruins, and the architecture of the imagined city. Drinks, talk, Q&amp;A &mdash; free with RSVP.</p>
+          <span class="btn-link">RSVP</span>
+        </div>
+      </a>
 
-        <a href="#" class="ex-card reveal">
-          <div class="ex-card-image" style="background-image: url('https://img.lumas.com/showimg_mcn04_desktop.jpg');"></div>
-          <div class="ex-card-copy">
-            <span class="type-pill is-event">Art After Work</span>
-            <span class="caption meta">Munich &middot; Thu 20 June, 19:00</span>
-            <h3 class="display-h4">An evening with Massimo Colonna.</h3>
-            <span class="artist">Drinks, talk, Q&amp;A &mdash; free with RSVP</span>
-            <span class="btn-link" style="margin-top: 4px;">RSVP</span>
-          </div>
-        </a>
-      </div>
+      <a href="hamburg.html#events" class="event-card reveal">
+        <div class="event-card-image" style="background-image: url('https://img.lumas.com/showimg_wuh128_desktop.jpg');"></div>
+        <div class="event-card-body">
+          <span class="type-pill is-release">Art After Work</span>
+          <span class="when">Hamburg &middot; Thu 26 June, 18:00</span>
+          <h3>First look: Wolfgang&nbsp;Uhlig, Seesaw&nbsp;Seascapes.</h3>
+          <p>A preview of the new limited edition with the artist, over a glass of wine at Gro&szlig;e Bleichen.</p>
+          <span class="btn-link">RSVP</span>
+        </div>
+      </a>
     </div>
 
   </div>
