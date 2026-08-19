@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<!-- ═══════════════════════════════════════════════════════════════════════════
+  PROTO HEADER
+  ID:          PROTO-2026-014  ·  LUMAS Event System
+  Hypothesis:  [ASSUMPTION] For visitors reaching /events/ and gallery pages,
+               replacing hand-built per-gallery event tiles with an
+               occurrence-derived event system will raise event-to-gallery
+               engagement (RSVP clicks + "Anfahrt & Öffnungszeiten" clicks per
+               event session), because one card exposes the visitor's own city
+               instead of forcing them to scan up to 19 near-duplicate tiles,
+               and because publishing one event auto-populates up to 18 gallery
+               pages, where visit intent already lives.
+  Prior:       Ledger not consulted programmatically (no local ledger store).
+               Standing knowledge applied: galleries carry ~56% of B2C revenue
+               at ~13x walk-in conversion; "never deter the online purchase";
+               brandbook s14 du/Sie split (Sie on event landing pages).
+  Goals:       primary [ASSUMPTION: Gallery-CTA click] ·
+               secondary [ASSUMPTION: RSVP outbound click, Newsletter signup]
+               Real names must come from the ABlyft 16-goal library.
+  Variants:    ?v=control (one tile per gallery, today's reality)
+               ?v=system  (occurrence-derived, default)
+  Status:      exploration
+═══════════════════════════════════════════════════════════════════════════ -->
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LUMAS Event System · Prototyp</title>
+<meta name="description" content="Prototyp des LUMAS Event Systems: eine Event-Karte, drei abgeleitete Zustände, fünf CTA-Labels.">
+
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="assets/fonts/utile.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --surface-page: #FFFFFF;
+  --surface-raised: #F7F1E9;
+  --surface-sunken: #F4EDE2;
+  --surface-muted: #F0EBE3;
+  --surface-inverse: #1C1A18;
+  --text-primary: #1C1A18;
+  --text-secondary: #58524B;
+  --text-tertiary: #8F877D;
+  --text-inverse: #F4EDE2;
+  --border-default: rgba(28, 26, 24, 0.10);
+  --border-strong: rgba(28, 26, 24, 0.24);
+  --border-inverse: rgba(244, 237, 226, 0.28);
+  --on-dark-75: rgba(244, 237, 226, 0.75);
+  --on-dark-55: rgba(244, 237, 226, 0.55);
+  --font-display: "Utile Display", "Times New Roman", Georgia, serif;
+  --font-body: Archivo, system-ui, -apple-system, sans-serif;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --z-nav: 50;
+  --z-protochrome: 60;
+  --z-panel: 70;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface-page); color: var(--text-primary); font-family: var(--font-body); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
+
+.container { max-width: 1440px; margin: 0 auto; padding: 0 64px; }
+@media (max-width: 880px) { .container { padding: 0 20px; } }
+
+.display-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 3.6vw, 52px); line-height: 1.06; letter-spacing: 0; margin: 0; text-wrap: balance; }
+.display-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.12; letter-spacing: 0; margin: 0; text-wrap: balance; }
+.display-h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(23px, 1.9vw, 29px); line-height: 1.14; letter-spacing: 0; margin: 0; text-wrap: balance; }
+.display-h4 { font-family: var(--font-display); font-weight: 400; font-size: 21px; line-height: 1.25; margin: 0; }
+.eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.ui-label { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+.lede { font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; color: var(--text-secondary); max-width: 62ch; }
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.btn { display: inline-flex; align-items: center; gap: 9px; padding: 15px 26px; border-radius: 0; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; transition: background 220ms var(--ease-out), color 220ms var(--ease-out), box-shadow 220ms var(--ease-out), transform 160ms var(--ease-out); }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--surface-inverse); color: var(--text-inverse); }
+.btn-primary:hover { background: #322E29; }
+.btn-primary.is-inverse { background: var(--text-inverse); color: var(--text-primary); }
+.btn-primary.is-inverse:hover { background: #FFFFFF; }
+.btn-secondary { box-shadow: inset 0 0 0 1px var(--text-primary); }
+.btn-secondary:hover { background: var(--surface-inverse); color: var(--text-inverse); }
+.btn-ghost { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-body); font-weight: 400; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 0 5px; border-bottom: 1px solid currentColor; transition: opacity 220ms var(--ease-out); }
+.btn-ghost:hover { opacity: 0.6; }
+.btn iconify-icon, .btn-ghost iconify-icon { font-size: 13px; }
+:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 3px; }
+.on-dark :focus-visible { outline-color: var(--text-inverse); }
+
+/* ── Proto chrome (never production UI) ──────────────────────────── */
+.proto-chrome { position: sticky; top: 0; z-index: var(--z-protochrome); background: #14120F; color: var(--on-dark-75); border-bottom: 1px solid rgba(244,237,226,0.12); }
+.proto-chrome-inner { max-width: 1440px; margin: 0 auto; padding: 9px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 12px; }
+.proto-tag { font-family: var(--font-body); font-weight: 700; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #B8AE9F; padding: 4px 8px; box-shadow: inset 0 0 0 1px rgba(244,237,226,0.22); }
+.proto-seg { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
+.proto-seg button { padding: 6px 13px; font-size: 11px; letter-spacing: 0.04em; color: var(--on-dark-55); transition: background 220ms var(--ease-out), color 220ms var(--ease-out); }
+.proto-seg button[aria-pressed="true"] { background: var(--text-inverse); color: #14120F; font-weight: 500; }
+.proto-chrome .spacer { flex: 1; }
+.proto-chrome kbd { font-family: var(--font-body); font-size: 10px; padding: 2px 5px; background: rgba(244,237,226,0.12); border-radius: 2px; }
+@media (max-width: 720px) { .proto-chrome-inner { gap: 10px; padding: 8px 14px; } .proto-hint { display: none; } }
+
+/* ── Site chrome ─────────────────────────────────────────────────── */
+.promo-bar { background: var(--surface-inverse); color: var(--text-inverse); text-align: center; padding: 11px 24px; font-size: 13px; }
+.site-nav { position: sticky; top: 39px; z-index: var(--z-nav); background: var(--surface-page); border-bottom: 1px solid var(--border-default); }
+.site-nav-inner { max-width: 1440px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; gap: 34px; }
+.site-nav-logo svg { height: 20px; width: auto; display: block; }
+.site-nav-links { display: flex; gap: 26px; }
+.site-nav-links a { font-size: 14px; position: relative; padding-bottom: 3px; transition: opacity 220ms var(--ease-out); }
+.site-nav-links a:hover { opacity: 0.55; }
+.site-nav-links a.is-current::after { content: ''; position: absolute; left: 0; right: 0; bottom: -17px; height: 2px; background: var(--text-primary); }
+.site-nav .spacer { flex: 1; }
+.site-nav-utilities { display: flex; gap: 4px; }
+.site-nav-utilities a, .site-nav-utilities button { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 2px; transition: background 220ms var(--ease-out); }
+.site-nav-utilities a:hover, .site-nav-utilities button:hover { background: var(--surface-raised); }
+.site-nav-utilities iconify-icon { font-size: 21px; }
+@media (max-width: 1000px) { .site-nav-links { display: none; } }
+@media (max-width: 720px) { .site-nav-inner { padding: 13px 16px; } }
+
+/* ── Compact page band ───────────────────────────────────────────── */
+.page-band { padding: 52px 0 34px; border-bottom: 1px solid var(--border-default); }
+.page-band-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: end; }
+.page-band .lede { margin: 14px 0 0; }
+.page-band-meta { text-align: right; color: var(--text-tertiary); font-size: 13px; padding-bottom: 4px; }
+@media (max-width: 880px) { .page-band { padding: 32px 0 24px; } .page-band-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; } .page-band-meta { text-align: left; } }
+
+/* ── Filter bar ──────────────────────────────────────────────────── */
+.filter-bar { position: sticky; top: 110px; z-index: 30; background: rgba(255,255,255,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-default); }
+.filter-inner { max-width: 1440px; margin: 0 auto; padding: 14px 64px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.filter-label { color: var(--text-tertiary); }
+.filter-select { position: relative; }
+.filter-select select { appearance: none; padding: 11px 40px 11px 14px; background: var(--surface-page); box-shadow: inset 0 0 0 1px var(--border-strong); border-radius: 4px; font-family: var(--font-body); font-size: 14px; color: var(--text-primary); cursor: pointer; }
+.filter-select select:focus { outline: none; box-shadow: inset 0 0 0 2px var(--text-primary); }
+.filter-select iconify-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-tertiary); font-size: 14px; }
+.filter-status { color: var(--text-secondary); font-size: 13px; }
+.filter-status strong { font-weight: 500; color: var(--text-primary); }
+.filter-inner .spacer { flex: 1; }
+@media (max-width: 880px) { .filter-bar { top: 96px; } .filter-inner { padding: 12px 20px; gap: 10px; } }
+
+/* ── Feed ────────────────────────────────────────────────────────── */
+.feed { padding: 8px 0 40px; }
+.month-divider { display: flex; align-items: baseline; gap: 18px; padding: 44px 0 20px; }
+.month-divider .eyebrow { color: var(--text-tertiary); flex-shrink: 0; }
+.month-divider .rule { flex: 1; height: 1px; background: var(--border-default); }
+
+/* Event card — one component, three derived states */
+.event-card { position: relative; display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 40px; padding: 30px 0; border-top: 1px solid var(--border-default); }
+.event-card:first-of-type { border-top: 0; }
+.event-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-muted); }
+.event-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 520ms var(--ease-out); }
+.event-body { display: flex; flex-direction: column; align-items: flex-start; padding-top: 2px; }
+.event-date { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 13px; }
+.event-title { margin-bottom: 11px; }
+.event-title a { position: relative; }
+.event-title a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 320ms var(--ease-out); }
+.event-place { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.event-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+.event-teaser { font-size: 15px; line-height: 1.6; color: var(--text-secondary); max-width: 56ch; margin: 0 0 22px; }
+.event-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: auto; }
+
+/* Scope is a UI label. Place is prose. They must never look alike. */
+.scope-badge { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-primary); padding: 5px 9px; background: var(--surface-sunken); flex-shrink: 0; }
+.place-prose { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
+.place-prose .more { color: var(--text-tertiary); }
+.place-prose.is-place { color: var(--text-primary); display: inline-flex; align-items: center; gap: 5px; }
+.place-prose.is-place iconify-icon { font-size: 15px; color: var(--text-tertiary); }
+.tag { font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-tertiary); padding: 4px 8px; box-shadow: inset 0 0 0 1px var(--border-default); border-radius: 2px; }
+
+/* Whole card clickable — always the internal canonical destination */
+.card-hit { position: absolute; inset: 0; z-index: 1; }
+.event-actions, .event-title a, .event-disclosure { position: relative; z-index: 2; }
+@media (hover: hover) and (pointer: fine) {
+  .event-card:hover .event-frame img { transform: scale(1.03); }
+  .event-card:hover .event-title a::after { transform: scaleX(1); }
+}
+
+/* Network state: scope encoded in the surface, not only in words */
+.event-card.is-network { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0; margin: 34px 0; border-top: 0; }
+.network-band { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); background: var(--surface-inverse); color: var(--text-inverse); }
+.network-copy { padding: 60px 56px; display: flex; flex-direction: column; align-items: flex-start; }
+.network-copy .event-date { color: var(--text-inverse); }
+.network-copy .event-teaser { color: var(--on-dark-75); font-size: 16px; }
+.network-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
+.network-copy .place-prose { color: var(--on-dark-75); }
+.network-copy .place-prose .more { color: var(--on-dark-55); }
+.on-dark .place-prose { color: var(--on-dark-75); }
+.on-dark .place-prose.is-place { color: var(--text-inverse); }
+.on-dark .place-prose.is-place iconify-icon { color: var(--on-dark-55); }
+.network-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
+.network-frame { position: relative; overflow: hidden; min-height: 380px; background: #14120F; }
+.network-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.92; transition: transform 520ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .event-card.is-network:hover .network-frame img { transform: scale(1.03); } }
+.network-mosaic { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px; }
+.network-mosaic span { background-size: cover; background-position: center; opacity: 0.9; }
+
+@media (max-width: 1000px) {
+  .event-card { grid-template-columns: 240px minmax(0, 1fr); gap: 28px; }
+  .network-band { grid-template-columns: 1fr; }
+  .network-frame { min-height: 240px; order: -1; }
+  .network-copy { padding: 36px 24px 40px; }
+}
+@media (max-width: 720px) {
+  .event-card { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
+  .event-frame { aspect-ratio: 3 / 2; }
+  .event-actions { gap: 16px; }
+  .event-actions .btn { width: 100%; justify-content: center; }
+}
+
+/* ── Occurrence disclosure (inline, desktop) ─────────────────────── */
+.event-disclosure { margin-top: 18px; width: 100%; }
+.disclosure-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; color: var(--text-tertiary); transition: color 220ms var(--ease-out); }
+.disclosure-toggle:hover { color: var(--text-primary); }
+.disclosure-toggle iconify-icon { transition: transform 320ms var(--ease-out); }
+.disclosure-toggle[aria-expanded="true"] iconify-icon { transform: rotate(180deg); }
+.disclosure-region { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+.disclosure-region[data-open="true"] { grid-template-rows: 1fr; }
+.disclosure-region > div { overflow: hidden; }
+/* Collapsed content must leave the tab order, not just disappear */
+.disclosure-region[data-open="false"] > div { visibility: hidden; }
+.disclosure-region[data-open="true"] > div { visibility: visible; }
+
+/* ── Occurrence list ─────────────────────────────────────────────── */
+.occ-list { list-style: none; margin: 16px 0 0; padding: 0; }
+.occ-row { display: grid; grid-template-columns: minmax(0, 1.5fr) 210px minmax(0, 0.8fr) auto; gap: 20px; align-items: center; padding: 15px 0; border-top: 1px solid var(--border-default); }
+.occ-row:hover { background: rgba(28,26,24,0.015); }
+.occ-city { font-size: 15px; color: var(--text-primary); }
+.occ-city small { display: block; font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+.occ-when { font-size: 14px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.occ-part { font-size: 13px; color: var(--text-tertiary); }
+.occ-act { display: flex; gap: 16px; justify-content: flex-end; align-items: center; }
+.on-dark .occ-row { border-top-color: var(--border-inverse); }
+.on-dark .occ-city { color: var(--text-inverse); }
+.on-dark .occ-when { color: var(--on-dark-75); }
+.on-dark .occ-part { color: var(--on-dark-55); }
+@media (max-width: 880px) {
+  .occ-row { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
+  .occ-act { justify-content: flex-start; margin-top: 8px; }
+}
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.empty-state { padding: 72px 0 90px; }
+.empty-inner { max-width: 700px; }
+.empty-inner p { color: var(--text-secondary); font-size: 16px; line-height: 1.65; margin: 16px 0 0; }
+.empty-routes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 34px; }
+.empty-route { display: flex; align-items: center; gap: 14px; padding: 20px 22px; box-shadow: inset 0 0 0 1px var(--border-default); transition: box-shadow 220ms var(--ease-out), background 220ms var(--ease-out); }
+.empty-route:hover { box-shadow: inset 0 0 0 1px var(--text-primary); background: var(--surface-raised); }
+.empty-route iconify-icon { font-size: 21px; flex-shrink: 0; }
+.empty-route span { font-size: 14px; }
+.empty-route small { display: block; color: var(--text-tertiary); font-size: 12px; margin-top: 3px; }
+@media (max-width: 720px) { .empty-routes { grid-template-columns: 1fr; } }
+
+/* ── Newsletter band ─────────────────────────────────────────────── */
+.news-band { background: var(--surface-raised); padding: 84px 0; }
+.news-inner { max-width: 620px; }
+.news-inner p { color: var(--text-secondary); margin: 14px 0 28px; }
+.news-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.news-form input { flex: 1; min-width: 220px; padding: 15px 16px; background: var(--surface-page); box-shadow: inset 0 0 0 1px var(--border-strong); border-radius: 4px; font-family: var(--font-body); font-size: 14px; }
+.news-form input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--text-primary); }
+
+/* ── Detail surface ──────────────────────────────────────────────── */
+.detail-hero { position: relative; background: var(--surface-inverse); color: var(--text-inverse); overflow: hidden; }
+.detail-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.detail-hero-copy { padding: 76px 56px 76px 64px; }
+.detail-hero-copy .event-date { color: var(--text-inverse); }
+.detail-hero-copy .scope-badge { background: rgba(244,237,226,0.14); color: var(--text-inverse); }
+.detail-hero-copy .place-prose { color: var(--on-dark-75); }
+.detail-hero-copy .tag { color: var(--on-dark-55); box-shadow: inset 0 0 0 1px var(--border-inverse); }
+.detail-hero-frame { position: relative; min-height: 420px; }
+.detail-hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.detail-crumb { font-size: 12px; color: var(--on-dark-55); margin-bottom: 26px; display: block; }
+.detail-crumb a:hover { color: var(--text-inverse); }
+.detail-body { padding: 76px 0; }
+.detail-body-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 76px; align-items: start; }
+.detail-prose p { font-size: 17px; line-height: 1.72; color: var(--text-secondary); margin: 0 0 20px; max-width: 62ch; text-wrap: pretty; }
+.detail-prose p:first-child { font-size: 19px; color: var(--text-primary); }
+.detail-aside { padding: 28px 30px; background: var(--surface-raised); }
+.detail-aside h3 { margin: 0 0 16px; }
+.detail-aside dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 9px 18px; font-size: 14px; }
+.detail-aside dt { color: var(--text-tertiary); }
+.detail-aside dd { margin: 0; color: var(--text-primary); }
+.detail-occ { padding: 0 0 76px; }
+.detail-occ-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.provider-note { font-size: 13px; color: var(--text-tertiary); margin: 14px 0 0; }
+@media (max-width: 1000px) {
+  .detail-hero-grid { grid-template-columns: 1fr; }
+  .detail-hero-frame { min-height: 260px; order: -1; }
+  .detail-hero-copy { padding: 40px 20px 48px; }
+  .detail-body-grid { grid-template-columns: 1fr; gap: 40px; }
+  .detail-body, .detail-occ { padding: 44px 0; }
+}
+
+/* ── Works rail (bare artworks, true aspect ratio, never cropped) ── */
+.works-band { background: var(--surface-raised); padding: 76px 0; }
+.works-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 34px; }
+.works-rail { display: flex; gap: 32px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; }
+.work { flex: 0 0 auto; width: 210px; }
+.work-frame { height: 250px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 14px; }
+.work-frame img { max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain; }
+.work-meta { font-size: 13px; }
+.work-meta strong { display: block; font-weight: 500; }
+.work-meta span { color: var(--text-tertiary); }
+.work-meta em { display: block; font-style: normal; color: var(--text-secondary); margin-top: 5px; }
+
+/* ── Gallery-page surface ────────────────────────────────────────── */
+.gal-hero { position: relative; min-height: 330px; display: flex; align-items: flex-end; background: var(--surface-inverse); background-size: cover; background-position: center; color: var(--text-inverse); padding: 56px 0 44px; }
+.gal-hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(28,26,24,0.25), rgba(28,26,24,0.82)); }
+/* .container is a flex item here: without width it shrinks to content and the
+   auto margins centre it into a narrow column. Force it to fill. */
+.gal-hero .container { position: relative; width: 100%; }
+.gal-hero .lede { max-width: 52ch; }
+.gal-visit { padding: 60px 0; }
+.gal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.gal-cell { padding: 26px 30px; background: var(--surface-raised); border-radius: 4px; }
+.gal-cell h3 { color: var(--text-tertiary); margin: 0 0 16px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gal-cell .line { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; padding: 3px 0; }
+.gal-cell .line .label { color: var(--text-secondary); }
+.gal-cell .line .value { font-variant-numeric: tabular-nums; }
+@media (max-width: 720px) { .gal-grid { grid-template-columns: 1fr; } }
+
+/* EventStrip — structured fields only. No event prose (du/Sie firewall). */
+.event-strip { padding: 8px 0 76px; }
+.strip-shell { box-shadow: inset 0 0 0 1px var(--border-default); }
+.strip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 24px 30px; border-bottom: 1px solid var(--border-default); }
+.strip-head .eyebrow { color: var(--text-tertiary); }
+.strip-row { display: grid; grid-template-columns: 116px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 20px 30px; border-top: 1px solid var(--border-default); transition: background 220ms var(--ease-out); }
+.strip-row:first-of-type { border-top: 0; }
+.strip-row:hover { background: var(--surface-raised); }
+.strip-when { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); }
+.strip-when small { display: block; font-weight: 400; letter-spacing: 0.04em; text-transform: none; color: var(--text-tertiary); font-size: 12px; margin-top: 4px; }
+.strip-title { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.25; }
+.strip-title small { display: block; font-family: var(--font-body); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 700; margin-top: 7px; }
+.strip-note { padding: 18px 30px; border-top: 1px solid var(--border-default); font-size: 13px; color: var(--text-tertiary); background: var(--surface-raised); }
+@media (max-width: 720px) { .strip-row { grid-template-columns: 1fr; gap: 10px; padding: 18px 20px; } .strip-head { padding: 20px; } }
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.footer { background: var(--surface-inverse); color: var(--text-inverse); padding: 72px 0 40px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 52px; }
+.footer-brand p { color: var(--on-dark-75); max-width: 320px; font-size: 14px; margin: 18px 0 0; }
+.footer-brand svg { width: 104px; height: auto; }
+.footer-col h3 { color: var(--on-dark-55); margin: 0 0 16px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.footer-col a { display: block; color: var(--on-dark-75); padding: 5px 0; font-size: 14px; }
+.footer-col a:hover { color: var(--text-inverse); }
+.footer-bottom { padding-top: 28px; border-top: 1px solid rgba(244,237,226,0.14); color: var(--on-dark-55); font-size: 13px; }
+@media (max-width: 880px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+/* ── Control variant (today's reality) ───────────────────────────── */
+.control-note { background: #FDECEA; color: #7A241C; padding: 14px 0; font-size: 13px; }
+.control-note .container { display: flex; gap: 12px; align-items: flex-start; }
+.control-note iconify-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.control-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px; padding: 34px 0 60px; }
+.control-tile { display: flex; flex-direction: column; }
+.control-tile .frame { aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-muted); margin-bottom: 16px; }
+.control-tile .frame img { width: 100%; height: 100%; object-fit: cover; }
+.control-tile .meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.control-tile h3 { margin: 0 0 8px; font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.control-tile p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin: 0 0 16px; }
+.control-tile .cta { margin-top: auto; }
+
+/* ── System panel ────────────────────────────────────────────────── */
+.sys-panel { position: fixed; right: 0; bottom: 0; top: auto; width: 384px; max-width: 100vw; max-height: 78vh; z-index: var(--z-panel); background: #14120F; color: var(--on-dark-75); box-shadow: 0 -8px 40px -12px rgba(0,0,0,0.5); transform: translateY(calc(100% - 44px)); transition: transform 320ms var(--ease-out); display: flex; flex-direction: column; }
+.sys-panel[data-open="true"] { transform: translateY(0); }
+.sys-head { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 44px; flex-shrink: 0; cursor: pointer; border-bottom: 1px solid rgba(244,237,226,0.12); }
+.sys-head .eyebrow { color: var(--text-inverse); font-size: 10px; }
+.sys-head .spacer { flex: 1; }
+.sys-head iconify-icon { transition: transform 320ms var(--ease-out); font-size: 16px; }
+.sys-panel[data-open="true"] .sys-head iconify-icon { transform: rotate(180deg); }
+.sys-scroll { overflow-y: auto; padding: 18px 16px 22px; font-size: 12px; line-height: 1.5; }
+.sys-block + .sys-block { margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(244,237,226,0.12); }
+.sys-block h4 { margin: 0 0 12px; font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--on-dark-55); }
+.sys-ctl { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 7px 0; }
+.sys-ctl label { color: var(--text-inverse); }
+.sys-ctl input[type="range"] { width: 130px; accent-color: #F4EDE2; }
+.sys-switch { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
+.sys-switch button { padding: 5px 11px; font-size: 11px; color: var(--on-dark-55); }
+.sys-switch button[aria-pressed="true"] { background: var(--text-inverse); color: #14120F; font-weight: 500; }
+.sys-trace { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.75; background: rgba(244,237,226,0.06); padding: 12px 13px; color: #D9CFC0; white-space: pre-wrap; }
+.sys-trace b { color: #F4EDE2; font-weight: 500; }
+.sys-log { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; line-height: 1.7; max-height: 132px; overflow-y: auto; color: #A79C8C; }
+.sys-log div { padding: 1px 0; }
+.sys-log b { color: #F4EDE2; font-weight: 500; }
+@media (max-width: 720px) { .sys-panel { width: 100%; max-height: 68vh; } }
+
+/* Resolver annotation under each card */
+.resolver-note { grid-column: 1 / -1; margin-top: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.7; color: var(--text-tertiary); background: var(--surface-muted); padding: 10px 13px; }
+.resolver-note b { color: var(--text-primary); font-weight: 500; }
+.is-network .resolver-note { margin: 0; background: rgba(244,237,226,0.08); color: var(--on-dark-55); }
+.is-network .resolver-note b { color: var(--text-inverse); }
+body:not([data-resolver="on"]) .resolver-note { display: none; }
+
+/* ── Reveal (default visible; JS only enhances) ──────────────────── */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); }
+.reveal.is-in { opacity: 1; transform: none; }
+html:not(.js) .reveal { opacity: 1; transform: none; }
+
+/* Stagger on re-render */
+@keyframes feedIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+[data-stagger] > * { animation: feedIn 320ms var(--ease-out) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; }
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}
+</style>
+</head>
+<body data-resolver="off">
+
+<!-- ═══ PROTO CHROME — prototype affordance, not production UI ═══ -->
+<div class="proto-chrome">
+  <div class="proto-chrome-inner">
+    <span class="proto-tag">Proto-2026-014</span>
+    <div class="proto-seg" role="group" aria-label="Variante">
+      <button type="button" data-variant="control" aria-pressed="false">Control (heute)</button>
+      <button type="button" data-variant="system" aria-pressed="true">Event System</button>
+    </div>
+    <div class="proto-seg" role="group" aria-label="Oberfläche">
+      <button type="button" data-surface="overview" aria-pressed="true">Übersicht</button>
+      <button type="button" data-surface="detail" aria-pressed="false">Event-Detail</button>
+      <button type="button" data-surface="gallery" aria-pressed="false">Galerieseite</button>
+    </div>
+    <span class="spacer"></span>
+    <span class="proto-hint"><kbd>v</kbd> Variante · <kbd>r</kbd> Resolver · <kbd>s</kbd> Panel</span>
+  </div>
+</div>
+
+<div class="promo-bar">Signierte, limitierte Editionen. 19 Galerien. Eintritt frei.</div>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-logo" href="index.html" aria-label="LUMAS">
+      <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
+    </a>
+    <div class="site-nav-links">
+      <a href="#">Entdecken</a>
+      <a href="#">Kunstwerke</a>
+      <a href="#">Künstler:innen</a>
+      <a href="index.html">Galerien</a>
+      <a href="#" class="is-current" aria-current="page">Events</a>
+      <a href="#">Beratung</a>
+    </div>
+    <span class="spacer"></span>
+    <div class="site-nav-utilities">
+      <button type="button" aria-label="Suche"><iconify-icon icon="ph:magnifying-glass-light"></iconify-icon></button>
+      <button type="button" aria-label="Merkliste"><iconify-icon icon="ph:heart-light"></iconify-icon></button>
+      <button type="button" aria-label="Konto"><iconify-icon icon="ph:user-light"></iconify-icon></button>
+      <button type="button" aria-label="Warenkorb"><iconify-icon icon="ph:bag-light"></iconify-icon></button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- ════════════ SURFACE 1 · EVENTS OVERVIEW ════════════ -->
+  <section id="surface-overview">
+    <div class="control-note" id="controlNote" hidden>
+      <div class="container">
+        <iconify-icon icon="ph:warning-circle-light"></iconify-icon>
+        <span><strong>Control: heutige Praxis.</strong> Ein Tile pro Galerie. Dieselben sechs Events erzeugen <strong id="controlCount">29</strong> Tiles, fünffach dieselbe Beschreibung, drei verschiedene CTA-Labels für dieselbe Handlung, und in vier Tiles fehlt die Information, dass das Event überhaupt in weiteren Galerien stattfindet.</span>
+      </div>
+    </div>
+
+    <div class="page-band">
+      <div class="container page-band-inner">
+        <div>
+          <h1 class="display-h1">Kunst entdecken. Menschen begegnen.</h1>
+          <p class="lede">Vernissagen, Künstlergespräche und Galerieabende in unseren Galerien. Der Eintritt ist immer frei, eine Anmeldung nur dort nötig, wo die Plätze begrenzt sind.</p>
+        </div>
+        <div class="page-band-meta" id="bandMeta"></div>
+      </div>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+      <div class="filter-inner">
+        <label class="filter-label" for="cityFilter" style="font-size:13px">Galerie</label>
+        <span class="filter-select">
+          <select id="cityFilter"></select>
+          <iconify-icon icon="ph:caret-down"></iconify-icon>
+        </span>
+        <span class="filter-status" id="filterStatus"></span>
+        <span class="spacer"></span>
+        <button type="button" class="btn-ghost" id="emptyToggle">Empty state zeigen</button>
+      </div>
+    </div>
+
+    <div class="feed"><div class="container" id="feed" data-stagger></div></div>
+
+    <div class="empty-state" id="emptyState" hidden>
+      <div class="container empty-inner">
+        <h2 class="display-h2">Zurzeit ist kein Event geplant.</h2>
+        <p>Unsere Galerien sind trotzdem geöffnet, und unsere Art Consultants nehmen sich auch ohne Anlass Zeit für Sie. Sobald das nächste Event steht, kündigen wir es hier und im Newsletter an.</p>
+        <div class="empty-routes">
+          <a class="empty-route" href="index.html"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Galerien und Öffnungszeiten<small>19 Standorte, Eintritt frei</small></span></a>
+          <a class="empty-route" href="#"><iconify-icon icon="ph:calendar-check-light"></iconify-icon><span>Beratungstermin vereinbaren<small>Persönlich oder per Video</small></span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-band">
+      <div class="container news-inner">
+        <h2 class="display-h2">Kein Event verpassen</h2>
+        <p>Wir schreiben Ihnen, sobald in Ihrer Galerie etwas stattfindet. Nicht öfter.</p>
+        <form class="news-form" onsubmit="return false">
+          <label class="ui-label" for="newsEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">E-Mail-Adresse</label>
+          <input id="newsEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email">
+          <!-- ABLYFT-GOAL: [ASSUMPTION] Newsletter signup -->
+          <button type="submit" class="btn btn-primary" data-track="newsletter_signup">Anmelden</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SURFACE 2 · EVENT DETAIL ════════════ -->
+  <section id="surface-detail" hidden></section>
+
+  <!-- ════════════ SURFACE 3 · GALLERY PAGE ════════════ -->
+  <section id="surface-gallery" hidden></section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg viewBox="0 0 200 34" fill="currentColor" aria-hidden="true"><text x="0" y="26" font-family="Archivo, sans-serif" font-size="28" font-weight="400" letter-spacing="6">LUMAS</text></svg>
+        <p>Signierte, limitierte Editionen internationaler Künstler:innen. In 19 Galerien und online.</p>
+      </div>
+      <div class="footer-col"><h3>Galerien</h3><a href="index.html">Alle Standorte</a><a href="#">Berlin Mitte</a><a href="#">Hamburg</a><a href="#">Wien</a></div>
+      <div class="footer-col"><h3>Entdecken</h3><a href="#">Neue Editionen</a><a href="#">Künstler:innen</a><a href="#">Art Finder</a></div>
+      <div class="footer-col"><h3>Service</h3><a href="#">Beratung</a><a href="#">Rahmung</a><a href="#">Sammlerservice</a></div>
+    </div>
+    <div class="footer-bottom">Prototyp · LUMAS Event System · nicht öffentlich</div>
+  </div>
+</footer>
+
+<!-- ═══ SYSTEM PANEL — the resolver, made visible ═══ -->
+<aside class="sys-panel" id="sysPanel" data-open="false" aria-label="System-Panel">
+  <div class="sys-head" id="sysHead" role="button" tabindex="0" aria-expanded="false" aria-controls="sysScroll">
+    <span class="eyebrow">Event System · Resolver</span>
+    <span class="spacer"></span>
+    <iconify-icon icon="ph:caret-up"></iconify-icon>
+  </div>
+  <div class="sys-scroll" id="sysScroll">
+    <div class="sys-block">
+      <h4>Resolver-Playground</h4>
+      <div class="sys-ctl">
+        <label for="occRange">Occurrences <b id="occVal" style="color:#F4EDE2">1</b></label>
+        <input id="occRange" type="range" min="1" max="18" value="1">
+      </div>
+      <div class="sys-ctl">
+        <label>RSVP vorhanden</label>
+        <span class="sys-switch" role="group">
+          <button type="button" data-rsvp="none" aria-pressed="true">keine</button>
+          <button type="button" data-rsvp="some" aria-pressed="false">teilweise</button>
+          <button type="button" data-rsvp="all" aria-pressed="false">alle</button>
+        </span>
+      </div>
+      <div class="sys-ctl">
+        <label>Detailseite</label>
+        <span class="sys-switch" role="group">
+          <button type="button" data-detail="false" aria-pressed="true">nein</button>
+          <button type="button" data-detail="true" aria-pressed="false">ja</button>
+        </span>
+      </div>
+      <div class="sys-trace" id="sysTrace"></div>
+    </div>
+    <div class="sys-block">
+      <h4>Regeln</h4>
+      <div style="color:var(--on-dark-75)">
+        1 Occurrence → <b style="color:#F4EDE2">single</b> · 2–5 → <b style="color:#F4EDE2">multi</b> (alle Städte inline) · 6+ → <b style="color:#F4EDE2">network</b> (Charcoal-Fläche, Anzahl + Beispielstädte).<br><br>
+        Kein Autor:innen-Feld wählt den Zustand. Jeder Zweig liest Daten.
+      </div>
+    </div>
+    <div class="sys-block">
+      <h4>Event-Stubs → Dev-Handoff</h4>
+      <div class="sys-log" id="sysLog"><div style="color:#6F675C">Noch keine Events. Klicken Sie eine Karte oder einen CTA.</div></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* ══════════════════════════════════════════════════════════════════
+   1 · DATA — the content model, verbatim
+   Gallery ─┐
+            └─ Occurrence ─── Event ─── (Series)
+   Occurrence is the ONLY join between Event and Gallery.
+   ══════════════════════════════════════════════════════════════════ */
+
+const MEDIA = 'https://media.lumas.de/galerien/';
+const teaser = (slug) => `${MEDIA}${slug}/galerie-${slug}-teaser-1220x450.jpg`;
+
+const GALLERIES = [
+  // id, city, store, canHost, street, zip, hours, photo
+  { id:'berlin-mitte',  city:'Berlin',      name:'LUMAS Galerie Berlin Mitte',  store:'DE', canHost:true,  street:'Rosenthaler Straße 40/41, Hackesche Höfe, Hof II', zip:'10178', hours:'Mo bis Sa 11 bis 19 Uhr, So 13 bis 18 Uhr', photo:'assets/berlin-mitte/viewing-room.jpg' },
+  { id:'berlin-kudamm', city:'Berlin',      name:'LUMAS Galerie Berlin KuDamm', store:'DE', canHost:true,  street:'Fasanenstraße 73', zip:'10719', hours:'Mo bis Fr 11 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:'assets/photos/DSC06390.jpg' },
+  { id:'hamburg',       city:'Hamburg',     name:'LUMAS Galerie Hamburg',       store:'DE', canHost:true,  street:'Große Bleichen 31, Kaufmannshaus', zip:'20354', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('hamburg') },
+  { id:'muenchen',      city:'München',     name:'LUMAS Galerie München',       store:'DE', canHost:true,  street:'Brienner Straße 3', zip:'80333', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('muenchen') },
+  { id:'koeln',         city:'Köln',        name:'LUMAS Galerie Köln',          store:'DE', canHost:true,  street:'Mittelstraße 15', zip:'50672', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('koeln') },
+  { id:'frankfurt',     city:'Frankfurt',   name:'LUMAS Galerie Frankfurt',     store:'DE', canHost:true,  street:'Kaiserstraße 13', zip:'60311', hours:'Mo bis Fr 10:30 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:teaser('frankfurt') },
+  { id:'duesseldorf',   city:'Düsseldorf',  name:'LUMAS Galerie Düsseldorf',    store:'DE', canHost:true,  street:'Grünstraße 8', zip:'40212', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('duesseldorf') },
+  { id:'stuttgart',     city:'Stuttgart',   name:'LUMAS Galerie Stuttgart',     store:'DE', canHost:true,  street:'Lange Straße 3', zip:'70173', hours:'Mo bis Fr 11 bis 19 Uhr, Sa 10 bis 19 Uhr', photo:teaser('stuttgart') },
+  { id:'hannover',      city:'Hannover',    name:'LUMAS Galerie Hannover',      store:'DE', canHost:true,  street:'Luisenstraße 10-11, Kröpcke-Passage', zip:'30159', hours:'Mo bis Fr 10 bis 19 Uhr, Sa 10 bis 18 Uhr', photo:teaser('hannover') },
+  { id:'mannheim',      city:'Mannheim',    name:'LUMAS Galerie Mannheim',      store:'DE', canHost:true,  street:'N6 3-7, Kunststraße', zip:'68161', hours:'Mo bis Sa 11 bis 18:30 Uhr', photo:teaser('mannheim') },
+  { id:'dortmund',      city:'Dortmund',    name:'LUMAS Galerie Dortmund',      store:'DE', canHost:true,  street:'Schwarze-Brüder-Straße 1', zip:'44137', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('dortmund') },
+  // Airside, non-Schengen, Terminal 3. Cannot host a public event. This is why
+  // "alle Galerien" must never be a literal string.
+  { id:'fraport',       city:'Frankfurt Airport', name:'LUMAS Galerie Frankfurt Airport', store:'DE', canHost:false, street:'Non-Schengen Marktplatz, Terminal 3', zip:'60547', hours:'Mo bis So 6 bis 21:30 Uhr', photo:teaser('frankfurt') },
+  { id:'wien',          city:'Wien',        name:'LUMAS Galerie Wien',          store:'AT', canHost:true,  street:'Tuchlauben 11', zip:'1010', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('wien') },
+  { id:'zuerich',       city:'Zürich',      name:'LUMAS Galerie Zürich',        store:'CH', canHost:true,  street:'Weinplatz 3', zip:'8001', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('zuerich') },
+  { id:'paris',         city:'Paris',       name:'LUMAS Galerie Paris',         store:'FR', canHost:true,  street:'25 rue de Seine', zip:'75006', hours:'Mo bis Sa 11 bis 19 Uhr', photo:teaser('paris') },
+  { id:'london',        city:'London',      name:'LUMAS Galerie London',        store:'UK', canHost:true,  street:'75 Marylebone High Street', zip:'W1U 5JY', hours:'Mo bis Sa 10 bis 18 Uhr', photo:teaser('london') },
+  { id:'budapest',      city:'Budapest',    name:'LUMAS Galerie Budapest',      store:'HU', canHost:true,  street:'Andrássy út 39', zip:'1061', hours:'Mo bis Sa 10 bis 19 Uhr', photo:teaser('budapest') },
+  { id:'new-york',      city:'New York',    name:'LUMAS Galerie New York SoHo', store:'COM', canHost:true, street:'474 West Broadway', zip:'NY 10012', hours:'Mo bis Sa 11 bis 19 Uhr', photo:teaser('new-york-soho') },
+  { id:'miami',         city:'Miami Beach', name:'LUMAS Galerie Miami Beach',   store:'COM', canHost:true,  street:'1052 Lincoln Road', zip:'FL 33139', hours:'Mo bis So 11 bis 20 Uhr', photo:teaser('miami') }
+];
+const G = Object.fromEntries(GALLERIES.map(g => [g.id, g]));
+const HOSTABLE = GALLERIES.filter(g => g.canHost);
+
+const EC = 'https://lumas.eventcreate.com/';
+
+// Helper: build occurrences for every hostable gallery
+const everywhere = (date, time, rsvp = null) =>
+  HOSTABLE.map(g => ({ galleryId: g.id, start: `${date}T${time}`, rsvp }));
+
+const EVENTS = [
+  {
+    id: 'golden-hour',
+    title: 'Golden Hour',
+    format: 'Netzwerk-Happening',
+    scopeLabel: 'LUMAS Galerien weltweit',
+    teaser: 'Eine Woche, in der das schönste Licht des Sommers in jede LUMAS Galerie kommt.',
+    image: teaser('koeln'),
+    detail: true,
+    body: [
+      'Manche Abende brauchen kein Programm, um besonders zu sein, nur den richtigen Moment.',
+      'Das schönste Licht des Sommers holen wir in die Galerie und freuen uns, diese besondere Zeit des Jahres zu genießen, gebündelt in ihrer goldenen Stunde.',
+      'Diesen Moment möchten wir mit Ihnen zusammen genießen: bei einer kuratierten Werkauswahl, erfrischenden Drinks und Eindrücken, die bleiben.',
+      'Kommen Sie einfach vorbei, ganz ohne Anmeldung, ob allein oder in Begleitung. In welcher unserer Galerien, entscheiden Sie.'
+    ],
+    // 18 occurrences. Frankfurt Airport is excluded by canHost, not by hand.
+    occurrences: [
+      ...everywhere('2026-09-02', '18:00').slice(0, 6),
+      ...everywhere('2026-09-03', '18:00').slice(6, 11),
+      ...everywhere('2026-09-04', '18:00').slice(11, 18)
+    ],
+    works: [
+      { code:'ime109', artist:'Isabelle Menin', title:'Sudden Spring III' },
+      { code:'gve30',  artist:'Gavin Evans',    title:'Kate Moss, Contact' },
+      { code:'cdu04',  artist:'Chiron Duong',   title:'Portrait of Áo Dài' },
+      { code:'wuh110', artist:'Wolfgang Uhlig', title:'Colour Field' }
+    ]
+  },
+  {
+    id: 'menin-gespraech',
+    title: 'Isabelle Menin im Gespräch',
+    format: 'Künstlergespräch',
+    teaser: 'Über Blumen, Verfall und die Frage, wann ein Bild fertig ist.',
+    image: 'assets/berlin-mitte/viewing-room.jpg',
+    detail: true,
+    body: [
+      'Isabelle Menin arbeitet mit dem, was schon vergeht. Ihre Kompositionen entstehen am Scanner, aus Blüten, die den Höhepunkt hinter sich haben.',
+      'An diesem Abend spricht sie in Berlin Mitte über ihre Arbeitsweise, über den Moment, in dem ein Bild kippt, und darüber, warum sie Malerei nie gelernt hat und trotzdem malerisch arbeitet.',
+      'Die Plätze sind begrenzt, wir bitten um Anmeldung.'
+    ],
+    occurrences: [
+      { galleryId:'berlin-mitte', start:'2026-08-27T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
+    ],
+    works: [
+      { code:'ime83',  artist:'Isabelle Menin', title:'Tohu Bohu VII' },
+      { code:'ime97',  artist:'Isabelle Menin', title:'Sub Rosa II' },
+      { code:'ime117', artist:'Isabelle Menin', title:'Fugue I' },
+      { code:'ime130', artist:'Isabelle Menin', title:'Nocturne' }
+    ]
+  },
+  {
+    id: 'krautgartner-vernissage',
+    title: 'Terra Incognita: Kevin Krautgartner',
+    format: 'Vernissage',
+    teaser: 'Luftbilder von Orten, die aussehen wie Malerei, und es nicht sind.',
+    image: teaser('hamburg'),
+    detail: true,
+    body: [
+      'Kevin Krautgartner fotografiert aus dem Hubschrauber, was der Bergbau in die Landschaft geschrieben hat. Türkise Becken, ockerfarbene Terrassen, Linien, die niemand gezeichnet hat.',
+      'Wir eröffnen die Serie in drei Galerien innerhalb einer Woche. In Hamburg und München ist der Künstler anwesend, dort bitten wir um Anmeldung. In Zürich können Sie ohne Anmeldung dazukommen.',
+      'Ein Beispiel dafür, dass Anmeldepflicht eine Eigenschaft des Termins ist, nicht des Events.'
+    ],
+    occurrences: [
+      { galleryId:'hamburg',  start:'2026-09-10T19:00', rsvp:{ url:EC, provider:'EventCreate' } },
+      { galleryId:'muenchen', start:'2026-09-11T19:00', rsvp:{ url:EC, provider:'EventCreate' } },
+      { galleryId:'zuerich',  start:'2026-09-12T18:00', rsvp:null }
+    ],
+    works: [
+      { code:'ldr13', artist:'Kevin Krautgartner', title:'Terra Incognita I' },
+      { code:'ldr15', artist:'Kevin Krautgartner', title:'Terra Incognita IV' },
+      { code:'ldr73', artist:'Kevin Krautgartner', title:'Water Colours II' },
+      { code:'ldr80', artist:'Kevin Krautgartner', title:'Above Nazaré' }
+    ]
+  },
+  {
+    id: 'jahns-signierstunde',
+    title: 'Signierstunde mit Robert Jahns',
+    format: 'Signierstunde',
+    // No body copy → no detail page. The system derives that, nobody decides it.
+    teaser: 'Drei Stunden, in denen Robert Jahns signiert und erklärt, wie seine Montagen entstehen.',
+    image: teaser('koeln'),
+    detail: false,
+    occurrences: [
+      { galleryId:'koeln', start:'2026-09-05T14:00', end:'2026-09-05T17:00', rsvp:null }
+    ]
+  },
+  {
+    id: 'beratungstag',
+    title: 'Beratungstag',
+    format: 'Beratungstag',
+    series: 'Beratungstage 2026',
+    teaser: 'Ein Tag, an dem unsere Art Consultants Zeit für Ihre Wand haben. Bringen Sie ein Foto mit.',
+    image: teaser('duesseldorf'),
+    detail: true,
+    body: [
+      'Eine Wand, ein Maß, eine Unsicherheit: welches Werk hält das aus, über Jahre.',
+      'An diesem Tag nehmen sich unsere Art Consultants in fünf Galerien Zeit, ohne Termin und ohne Kaufabsicht. Bringen Sie ein Foto Ihres Raums mit, gerne mit Maßen.',
+      'Der Beratungstag findet monatlich statt. Die nächsten Termine finden Sie unten.'
+    ],
+    occurrences: [
+      { galleryId:'duesseldorf', start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
+      { galleryId:'frankfurt',   start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
+      { galleryId:'stuttgart',   start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
+      { galleryId:'hannover',    start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null },
+      { galleryId:'mannheim',    start:'2026-09-19T11:00', end:'2026-09-19T18:00', rsvp:null }
+    ]
+  },
+  {
+    id: 'kuratorenfuehrung',
+    title: 'Kuratorenführung: die neuen Editionen',
+    format: 'Künstlergespräch',
+    teaser: 'Dreißig Minuten durch die Neuzugänge des Herbstes, live und von überall.',
+    image: 'assets/photos/DSC06554.jpg',
+    detail: true,
+    body: [
+      'Vier Mal im Jahr kommen neue Editionen ins Portfolio. Was davon bleibt, entscheidet sich in den ersten Wochen.',
+      'Unsere Kuratorin führt in dreißig Minuten durch die Neuzugänge, nennt die Gründe für jede Aufnahme und beantwortet Ihre Fragen im Anschluss.',
+      // Occurrence without a gallery: same object, nullable location.
+      'Die Führung findet online statt. Sie erhalten den Zugangslink nach der Anmeldung.'
+    ],
+    occurrences: [
+      { galleryId:null, online:true, start:'2026-09-30T19:00', rsvp:{ url:EC, provider:'EventCreate' } }
+    ]
+  }
+];
+
+/* ══════════════════════════════════════════════════════════════════
+   2 · DERIVED LOGIC — nothing below is authored in the CMS
+   ══════════════════════════════════════════════════════════════════ */
+
+const STORE = 'DE';                       // the shop this feed renders in
+const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+
+const scopeOf = (ev) => {
+  const n = ev.occurrences.length;
+  return n === 1 ? 'single' : n <= 5 ? 'multi' : 'network';
+};
+
+const rsvpStateOf = (ev) => {
+  const withRsvp = ev.occurrences.filter(o => o.rsvp).length;
+  if (withRsvp === 0) return 'none';
+  return withRsvp === ev.occurrences.length ? 'all' : 'some';
+};
+
+/* The CTA resolver. Five labels, no free text, one primary, max one secondary. */
+function resolveCta(ev) {
+  const scope = scopeOf(ev);
+  const rsvp = rsvpStateOf(ev);
+  const detailHref = `#/event/${ev.id}`;
+  const only = ev.occurrences[0];
+
+  if (scope === 'single') {
+    const g = only.galleryId ? G[only.galleryId] : null;
+    if (rsvp !== 'none') {
+      return {
+        primary: { label:'Anmelden', href:only.rsvp.url, external:true, provider:only.rsvp.provider, track:'event_rsvp_click' },
+        secondary: g ? { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' } : null,
+        rule:'single + rsvp'
+      };
+    }
+    if (ev.detail) {
+      return {
+        primary: { label:'Mehr erfahren', href:detailHref, track:'event_detail_click' },
+        secondary: g ? { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' } : null,
+        rule:'single + kein rsvp + Detailseite'
+      };
+    }
+    return {
+      primary: { label:'Anfahrt & Öffnungszeiten', href:`#/galerie/${g.id}`, track:'event_gallery_click' },
+      secondary: null,
+      rule:'single + kein rsvp + keine Detailseite'
+    };
+  }
+
+  // Multi and network never expose a card-level RSVP: which city would it mean?
+  if (rsvp !== 'none') {
+    return {
+      primary: { label:'Termin & Galerie wählen', href:detailHref, track:'event_picker_click' },
+      secondary: null,
+      rule:`${scope} + rsvp (mind. 1)`
+    };
+  }
+  return {
+    primary: { label:'Teilnehmende Galerien', href:detailHref, track:'event_locations_click' },
+    secondary: null,
+    rule:`${scope} + kein rsvp`
+  };
+}
+
+const fmtDate = (iso, withDay = true) => {
+  const d = new Date(iso);
+  return `${withDay ? DAYS[d.getDay()] + ', ' : ''}${d.getDate()}. ${MONTHS[d.getMonth()]}`;
+};
+const fmtTime = (iso) => {
+  const d = new Date(iso);
+  const m = d.getMinutes();
+  return `${d.getHours()}${m ? ':' + String(m).padStart(2, '0') : ''} Uhr`;
+};
+
+/* Cards show dates. Only a single occurrence may show a time. */
+function dateLabel(ev) {
+  const sorted = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start));
+  const first = sorted[0], last = sorted[sorted.length - 1];
+  const sameDay = first.start.slice(0, 10) === last.start.slice(0, 10);
+
+  if (ev.occurrences.length === 1) {
+    const t = first.end
+      ? `${fmtTime(first.start)} bis ${fmtTime(first.end)}`
+      : `ab ${fmtTime(first.start)}`;
+    return `${fmtDate(first.start)} · ${t}`;
+  }
+  if (sameDay) return fmtDate(first.start);
+  // Same month: name it once. "2. bis 4. September", not "2. September bis 4. September".
+  const sameMonth = new Date(first.start).getMonth() === new Date(last.start).getMonth();
+  if (sameMonth) return `${new Date(first.start).getDate()}. bis ${fmtDate(last.start, false)}`;
+  return `${fmtDate(first.start, false)} bis ${fmtDate(last.start, false)}`;
+}
+
+/* Scope label + place prose. Store-relevant cities first, deduplicated. */
+function placeOf(ev) {
+  const scope = scopeOf(ev);
+  const cities = [];
+  ev.occurrences.forEach(o => {
+    const label = o.online ? 'Online' : G[o.galleryId].city;
+    if (!cities.some(c => c.label === label)) {
+      cities.push({ label, store: o.online ? STORE : G[o.galleryId].store });
+    }
+  });
+  cities.sort((a, b) => (a.store === STORE ? 0 : 1) - (b.store === STORE ? 0 : 1));
+
+  // Single: there is no scope to announce, only a place. A place is prose.
+  // Online is a modality, not a place, so it keeps the label treatment.
+  if (scope === 'single') {
+    const o = ev.occurrences[0];
+    if (o.online) return { badge: 'Online', prose: '' };
+    return { badge: null, prose: G[o.galleryId].name, isPlace: true };
+  }
+  if (scope === 'multi') {
+    return { badge: `${cities.length} Galerien`, prose: cities.map(c => c.label).join(', ') };
+  }
+  const shown = cities.slice(0, 4).map(c => c.label).join(', ');
+  return {
+    badge: ev.scopeLabel || `${ev.occurrences.length} Galerien`,
+    prose: `${ev.occurrences.length} Standorte: ${shown}`,
+    more: ` u. a.`
+  };
+}
+
+const participationLabel = (ev) => {
+  const r = rsvpStateOf(ev);
+  return r === 'none' ? 'Ohne Anmeldung' : r === 'all' ? 'Mit Anmeldung' : 'Anmeldung je Galerie';
+};
+
+const sortedEvents = () => [...EVENTS].sort((a, b) => {
+  const ka = [...a.occurrences].sort((x, y) => x.start.localeCompare(y.start))[0].start;
+  const kb = [...b.occurrences].sort((x, y) => x.start.localeCompare(y.start))[0].start;
+  return ka.localeCompare(kb);
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   3 · INSTRUMENTATION — stubs named after the real GA4 events
+   ══════════════════════════════════════════════════════════════════ */
+const logEl = () => document.getElementById('sysLog');
+let logCount = 0;
+function track(name, params = {}) {
+  console.log('[track]', name, params);
+  const el = logEl();
+  if (!el) return;
+  if (!logCount) el.innerHTML = '';
+  logCount++;
+  const row = document.createElement('div');
+  row.innerHTML = `<b>${name}</b> ${Object.entries(params).map(([k, v]) => `${k}=${v}`).join(' ')}`;
+  el.prepend(row);
+}
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-track]');
+  if (!t) return;
+  track(t.dataset.track, JSON.parse(t.dataset.params || '{}'));
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   4 · RENDER
+   ══════════════════════════════════════════════════════════════════ */
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+const params = (o) => esc(JSON.stringify(o));
+
+function ctaHtml(cta, ev, inverse = false) {
+  const p = cta.primary;
+  const ext = p.external
+    ? ` target="_blank" rel="noopener" aria-label="${esc(p.label)} (externe Seite, ${esc(p.provider)})"`
+    : '';
+  const icon = p.external ? '<iconify-icon icon="ph:arrow-up-right"></iconify-icon>' : '';
+  let html = `<a class="btn btn-primary${inverse ? ' is-inverse' : ''}" href="${esc(p.href)}"${ext} data-track="${p.track}" data-params="${params({ event_id: ev.id, scope: scopeOf(ev) })}">${esc(p.label)}${icon}</a>`;
+  if (cta.secondary) {
+    html += `<a class="btn-ghost" href="${esc(cta.secondary.href)}" data-track="${cta.secondary.track}" data-params="${params({ event_id: ev.id })}">${esc(cta.secondary.label)}</a>`;
+  }
+  return html;
+}
+
+function resolverNote(ev) {
+  const cta = resolveCta(ev);
+  return `<div class="resolver-note">occurrences=<b>${ev.occurrences.length}</b> · rsvp=<b>${rsvpStateOf(ev)}</b> · detail=<b>${!!ev.detail}</b> → state=<b>${scopeOf(ev)}</b> · regel=<b>${esc(cta.rule)}</b> → CTA=<b>${esc(cta.primary.label)}</b></div>`;
+}
+
+function placeHtml(ev) {
+  const pl = placeOf(ev);
+  return `<div class="event-place">
+    ${pl.badge ? `<span class="scope-badge">${esc(pl.badge)}</span>` : ''}
+    ${pl.prose ? `<span class="place-prose${pl.isPlace ? ' is-place' : ''}">${pl.isPlace ? '<iconify-icon icon="ph:map-pin-light"></iconify-icon> ' : ''}${esc(pl.prose)}${pl.more ? `<span class="more">${esc(pl.more)}</span>` : ''}</span>` : ''}
+  </div>`;
+}
+
+function tagsHtml(ev) {
+  return `<div class="event-tags">
+    <span class="tag">${esc(ev.format)}</span>
+    <span class="tag">${esc(participationLabel(ev))}</span>
+    ${ev.series ? `<span class="tag">Reihe: ${esc(ev.series)}</span>` : ''}
+  </div>`;
+}
+
+function cardHtml(ev) {
+  const cta = resolveCta(ev);
+  const scope = scopeOf(ev);
+  const internalHref = ev.detail ? `#/event/${ev.id}` : cta.primary.href;
+
+  if (scope === 'network') {
+    const mosaic = ev.occurrences.slice(0, 4)
+      .map(o => `<span style="background-image:url('${G[o.galleryId].photo}')"></span>`).join('');
+    return `<article class="event-card is-network on-dark reveal">
+      <a class="card-hit" href="${esc(internalHref)}" aria-label="${esc(ev.title)}" data-track="event_card_click" data-params="${params({ event_id: ev.id, scope })}"></a>
+      <div class="network-band">
+        <div class="network-copy">
+          <div class="event-date">${esc(dateLabel(ev))}</div>
+          <h2 class="display-h2 event-title"><a href="${esc(internalHref)}">${esc(ev.title)}</a></h2>
+          ${placeHtml(ev)}
+          ${tagsHtml(ev)}
+          <p class="event-teaser">${esc(ev.teaser)}</p>
+          <div class="event-actions">${ctaHtml(cta, ev, true)}</div>
+          ${resolverNote(ev)}
+        </div>
+        <div class="network-frame"><div class="network-mosaic">${mosaic}</div></div>
+      </div>
+    </article>`;
+  }
+
+  const showList = scope === 'multi';
+  return `<article class="event-card reveal">
+    <a class="card-hit" href="${esc(internalHref)}" aria-label="${esc(ev.title)}" data-track="event_card_click" data-params="${params({ event_id: ev.id, scope })}"></a>
+    <div class="event-frame"><img src="${esc(ev.image)}" alt="" loading="lazy"></div>
+    <div class="event-body">
+      <div class="event-date">${esc(dateLabel(ev))}</div>
+      <h2 class="display-h3 event-title"><a href="${esc(internalHref)}">${esc(ev.title)}</a></h2>
+      ${placeHtml(ev)}
+      ${tagsHtml(ev)}
+      <p class="event-teaser">${esc(ev.teaser)}</p>
+      <div class="event-actions">${ctaHtml(cta, ev)}</div>
+      ${showList ? disclosureHtml(ev) : ''}
+      ${resolverNote(ev)}
+    </div>
+  </article>`;
+}
+
+function disclosureHtml(ev) {
+  return `<div class="event-disclosure">
+    <button type="button" class="disclosure-toggle" aria-expanded="false" data-disclosure="${ev.id}">
+      <iconify-icon icon="ph:caret-down"></iconify-icon> Alle Termine zeigen
+    </button>
+    <div class="disclosure-region" data-open="false" inert id="disc-${ev.id}"><div>${occListHtml(ev)}</div></div>
+  </div>`;
+}
+
+function occListHtml(ev) {
+  const rows = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start)).map(o => {
+    const g = o.galleryId ? G[o.galleryId] : null;
+    const when = o.end
+      ? `${fmtDate(o.start)}, ${fmtTime(o.start)} bis ${fmtTime(o.end)}`
+      : `${fmtDate(o.start)}, ab ${fmtTime(o.start)}`;
+    const part = o.rsvp ? 'Anmeldung erforderlich' : 'Ohne Anmeldung';
+    const act = o.rsvp
+      ? `<a class="btn-ghost" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Anmelden (externe Seite, ${o.rsvp.provider})" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g ? g.id : 'online' })}">Anmelden <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+      : '';
+    const gal = g
+      ? `<a class="btn-ghost" href="#/galerie/${g.id}" data-track="event_gallery_click" data-params="${params({ event_id: ev.id, gallery: g.id })}">Galerie</a>`
+      : '';
+    return `<li class="occ-row">
+      <!-- The row is where a visitor picks one room, so it names the gallery,
+           not the city: Berlin has two, and "Berlin" twice is unusable. -->
+      <span class="occ-city">${g ? esc(g.name.replace('LUMAS Galerie ', '')) : 'Online'}${g ? `<small>${esc(g.street)}</small>` : '<small>Zugangslink nach der Anmeldung</small>'}</span>
+      <span class="occ-when">${esc(when)}</span>
+      <span class="occ-part">${esc(part)}</span>
+      <span class="occ-act">${act}${gal}</span>
+    </li>`;
+  }).join('');
+  return `<ul class="occ-list">${rows}</ul>`;
+}
+
+/* ── Feed ────────────────────────────────────────────────────────── */
+let cityFilter = 'all';
+
+/* Filtering happens on OCCURRENCES, so a network event can never be hidden
+   from a city it actually includes. The model makes the filter correct. */
+function visibleEvents() {
+  const all = sortedEvents();
+  if (cityFilter === 'all') return all;
+  return all.filter(ev => ev.occurrences.some(o => o.galleryId === cityFilter));
+}
+
+function renderFeed() {
+  const host = document.getElementById('feed');
+  const list = visibleEvents();
+  let html = '', lastMonth = '';
+
+  list.forEach(ev => {
+    const first = [...ev.occurrences].sort((a, b) => a.start.localeCompare(b.start))[0];
+    const d = new Date(first.start);
+    const month = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    if (month !== lastMonth) {
+      html += `<div class="month-divider"><span class="eyebrow">${month}</span><span class="rule"></span></div>`;
+      lastMonth = month;
+    }
+    html += cardHtml(ev);
+  });
+
+  host.innerHTML = html;
+
+  const total = EVENTS.length;
+  const occTotal = EVENTS.reduce((n, e) => n + e.occurrences.length, 0);
+  document.getElementById('bandMeta').innerHTML =
+    `${total} Events · ${occTotal} Termine<br>19 Galerien, 18 davon eventfähig`;
+
+  const status = document.getElementById('filterStatus');
+  if (cityFilter === 'all') {
+    status.innerHTML = `<strong>${list.length}</strong> von ${total} Events`;
+  } else {
+    status.innerHTML = `Gefiltert: <strong>${G[cityFilter].city}</strong> · ${list.length} Event${list.length === 1 ? '' : 's'} · <button type="button" class="btn-ghost" data-reset-filter style="margin-left:8px">Alle anzeigen</button>`;
+  }
+  observeReveals();
+}
+
+/* ── Detail surface ──────────────────────────────────────────────── */
+function renderDetail(id) {
+  const ev = EVENTS.find(e => e.id === id) || EVENTS[0];
+  const cta = resolveCta(ev);
+  const pl = placeOf(ev);
+  const host = document.getElementById('surface-detail');
+  const heroImg = ev.occurrences[0].galleryId ? G[ev.occurrences[0].galleryId].photo : ev.image;
+
+  const worksHtml = (ev.works || []).map(w => `
+    <figure class="work">
+      <div class="work-frame"><img src="https://img.lumas.com/showimg_${w.code}_desktop.jpg" alt="${esc(w.title)} von ${esc(w.artist)}" loading="lazy"></div>
+      <figcaption class="work-meta"><strong>${esc(w.artist)}</strong><span>${esc(w.title)}</span><em>Werk entdecken →</em></figcaption>
+    </figure>`).join('');
+
+  host.innerHTML = `
+    <div class="detail-hero on-dark">
+      <div class="detail-hero-grid">
+        <div class="detail-hero-copy">
+          <span class="detail-crumb"><a href="#/">Events</a> · ${esc(ev.format)}</span>
+          <div class="event-date">${esc(dateLabel(ev))}</div>
+          <h1 class="display-h1" style="margin:0 0 18px">${esc(ev.title)}</h1>
+          ${placeHtml(ev)}
+          ${tagsHtml(ev)}
+          <div class="event-actions" style="margin-top:14px">${ctaHtml(cta, ev, true)}</div>
+        </div>
+        <div class="detail-hero-frame"><img src="${esc(heroImg)}" alt=""></div>
+      </div>
+    </div>
+
+    <div class="detail-body"><div class="container detail-body-grid">
+      <div class="detail-prose">${(ev.body || [ev.teaser]).map(p => `<p>${esc(p)}</p>`).join('')}</div>
+      <aside class="detail-aside">
+        <h3 class="display-h4">Auf einen Blick</h3>
+        <dl>
+          <dt>Format</dt><dd>${esc(ev.format)}</dd>
+          <dt>Termine</dt><dd>${ev.occurrences.length}</dd>
+          <dt>Umfang</dt><dd>${esc(pl.badge)}</dd>
+          <dt>Anmeldung</dt><dd>${esc(participationLabel(ev))}</dd>
+          <dt>Eintritt</dt><dd>Frei</dd>
+          ${ev.series ? `<dt>Reihe</dt><dd>${esc(ev.series)}</dd>` : ''}
+        </dl>
+      </aside>
+    </div></div>
+
+    <div class="detail-occ"><div class="container">
+      <div class="detail-occ-head">
+        <h2 class="display-h2">${ev.occurrences.length === 1 ? 'Termin' : 'Teilnehmende Galerien'}</h2>
+        <span class="filter-status">${ev.occurrences.length} Termin${ev.occurrences.length === 1 ? '' : 'e'}</span>
+      </div>
+      ${occListHtml(ev)}
+      ${rsvpStateOf(ev) !== 'none' ? `<p class="provider-note">Die Anmeldung läuft über ${esc(ev.occurrences.find(o => o.rsvp).rsvp.provider)}. Sie verlassen dabei lumas.de.</p>` : ''}
+      ${ev.occurrences.length > 5 ? `<p class="provider-note">Frankfurt Airport ist nicht dabei: die Galerie liegt im Non-Schengen-Bereich von Terminal 3 und ist nur mit Bordkarte erreichbar.</p>` : ''}
+    </div></div>
+
+    ${worksHtml ? `<div class="works-band"><div class="container">
+      <div class="works-head">
+        <div><h2 class="display-h2">Werke, die Sie dort sehen</h2><p class="lede" style="margin-top:10px">Falls Sie nicht kommen können: die Auswahl ist auch online verfügbar.</p></div>
+      </div>
+      <div class="works-rail">${worksHtml}</div>
+    </div></div>` : ''}
+  `;
+}
+
+/* ── Gallery-page surface, with the EventStrip in situ ───────────── */
+function renderGallery(id) {
+  const g = G[id] || G['koeln'];
+  const host = document.getElementById('surface-gallery');
+
+  // The only query needed: occurrences at this gallery, upcoming, soonest first.
+  const rows = EVENTS.flatMap(ev =>
+    ev.occurrences.filter(o => o.galleryId === g.id).map(o => ({ ev, o }))
+  ).sort((a, b) => a.o.start.localeCompare(b.o.start)).slice(0, 3);
+
+  const stripRows = rows.map(({ ev, o }) => {
+    const cta = resolveCta(ev);
+    // Structured fields only. No event prose here: the gallery page is "du",
+    // event copy is "Sie", and the brandbook forbids mixing them in one asset.
+    const action = o.rsvp
+      ? `<a class="btn btn-secondary" href="${o.rsvp.url}" target="_blank" rel="noopener" aria-label="Anmelden (externe Seite)" data-track="event_rsvp_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Anmelden <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+      : `<a class="btn btn-secondary" href="#/event/${ev.id}" data-track="event_detail_click" data-params="${params({ event_id: ev.id, gallery: g.id, surface: 'gallery_page' })}">Mehr erfahren</a>`;
+    return `<div class="strip-row">
+      <div class="strip-when">${esc(fmtDate(o.start))}<small>${o.end ? `${fmtTime(o.start)} bis ${fmtTime(o.end)}` : `ab ${fmtTime(o.start)}`}</small></div>
+      <div class="strip-title">${esc(ev.title)}<small>${esc(ev.format)} · ${o.rsvp ? 'Mit Anmeldung' : 'Ohne Anmeldung'}${scopeOf(ev) !== 'single' ? ` · auch in ${ev.occurrences.length - 1} weiteren Galerien` : ''}</small></div>
+      <div>${action}</div>
+    </div>`;
+  }).join('');
+
+  host.innerHTML = `
+    <div class="gal-hero" style="background-image:url('${g.photo}')">
+      <div class="container">
+        <span class="eyebrow" style="color:var(--on-dark-55);display:block;margin-bottom:14px">Galerie</span>
+        <h1 class="display-h1">${esc(g.name.replace('LUMAS Galerie ', ''))}</h1>
+        <p class="lede" style="color:var(--on-dark-75);margin-top:12px">Entdecke limitierte Editionen in ${esc(g.city)}. Eintritt frei, ohne Termin.</p>
+      </div>
+    </div>
+
+    <div class="gal-visit"><div class="container">
+      <div class="gal-grid">
+        <div class="gal-cell"><h3>Adresse</h3>
+          <div class="line"><span class="label">${esc(g.street)}</span></div>
+          <div class="line"><span class="label">${esc(g.zip)} ${esc(g.city)}</span></div>
+        </div>
+        <div class="gal-cell"><h3>Öffnungszeiten</h3>
+          <div class="line"><span class="label">${esc(g.hours)}</span></div>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="event-strip"><div class="container">
+      <div class="strip-shell">
+        <div class="strip-head">
+          <h2 class="display-h3">Bei uns in ${esc(g.city)}</h2>
+          <span class="eyebrow">${rows.length} kommende${rows.length === 1 ? 's' : ''} Event${rows.length === 1 ? '' : 's'}</span>
+        </div>
+        ${rows.length ? stripRows : `<div class="strip-row"><div></div><div class="strip-title" style="font-size:16px;color:var(--text-secondary)">Zurzeit kein Event in ${esc(g.city)}.<small style="text-transform:none;letter-spacing:0;font-weight:300;font-size:13px">Der Beratungstermin ist jederzeit möglich.</small></div><div><a class="btn btn-secondary" href="#">Termin vereinbaren</a></div></div>`}
+        <div class="strip-note">Dieses Modul wird von <code>occurrences WHERE gallery = ${esc(g.id)}</code> befüllt. Kein doppelter Inhalt, kein zusätzlicher redaktioneller Aufwand: ein Netzwerk-Event füllt bis zu 18 Galerieseiten automatisch.</div>
+      </div>
+    </div></div>
+  `;
+}
+
+/* ── Control variant: today's reality, faithfully ────────────────── */
+function renderControl() {
+  const host = document.getElementById('feed');
+  // One tile per gallery per event. Copy duplicated. CTA labels hand-typed.
+  const HAND_TYPED = ['Jetzt anmelden', 'RSVP', 'Anmelden', 'Mehr Infos', 'Zur Galerie'];
+  let tiles = [], i = 0;
+
+  sortedEvents().forEach(ev => {
+    ev.occurrences.forEach(o => {
+      const g = o.galleryId ? G[o.galleryId] : null;
+      const label = o.rsvp ? HAND_TYPED[i % 3] : HAND_TYPED[3 + (i % 2)];
+      i++;
+      tiles.push(`<article class="control-tile reveal">
+        <div class="frame"><img src="${esc(g ? g.photo : ev.image)}" alt="" loading="lazy"></div>
+        <div class="meta">${esc(fmtDate(o.start))} | ab ${esc(fmtTime(o.start))} | ${g ? esc(g.name) : 'Online'}</div>
+        <h3>${esc(ev.title)}</h3>
+        <p>${esc(ev.teaser)}</p>
+        <div class="cta"><a class="btn btn-secondary" href="#" data-track="event_card_click" data-params="${params({ event_id: ev.id, variant: 'control' })}">${esc(label)}</a></div>
+      </article>`);
+    });
+  });
+
+  host.innerHTML = `<div class="control-grid">${tiles.join('')}</div>`;
+  document.getElementById('controlCount').textContent = tiles.length;
+  document.getElementById('bandMeta').innerHTML = `${tiles.length} Tiles für ${EVENTS.length} Events`;
+  document.getElementById('filterStatus').innerHTML = `<strong>${tiles.length}</strong> Tiles`;
+  observeReveals();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   5 · ROUTING, STATE, INTERACTION
+   ══════════════════════════════════════════════════════════════════ */
+let variant = new URLSearchParams(location.search).get('v') === 'control' ? 'control' : 'system';
+
+function setVariant(v) {
+  variant = v;
+  document.querySelectorAll('[data-variant]').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.variant === v)));
+  document.getElementById('controlNote').hidden = v !== 'control';
+  document.getElementById('filterBar').hidden = false;
+  const url = new URL(location.href);
+  v === 'control' ? url.searchParams.set('v', 'control') : url.searchParams.delete('v');
+  history.replaceState(null, '', url);
+  route();
+}
+
+function showSurface(name) {
+  ['overview', 'detail', 'gallery'].forEach(s =>
+    document.getElementById('surface-' + s).hidden = s !== name);
+  document.querySelectorAll('[data-surface]').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.surface === name)));
+}
+
+function route() {
+  const hash = location.hash.replace(/^#\/?/, '');
+  const [kind, id] = hash.split('/');
+
+  if (kind === 'event' && id) { showSurface('detail'); renderDetail(id); window.scrollTo(0, 0); observeReveals(); return; }
+  if (kind === 'galerie' && id) { showSurface('gallery'); renderGallery(id); window.scrollTo(0, 0); observeReveals(); return; }
+
+  showSurface('overview');
+  variant === 'control' ? renderControl() : renderFeed();
+}
+
+/* City filter */
+const sel = document.getElementById('cityFilter');
+sel.innerHTML = `<option value="all">Alle Galerien</option>` +
+  HOSTABLE.map(g => `<option value="${g.id}">${g.city}${g.id.startsWith('berlin') ? ' ' + g.name.split(' ').pop() : ''}</option>`).join('');
+sel.addEventListener('change', () => {
+  cityFilter = sel.value;
+  track('event_filter_apply', { gallery: cityFilter });
+  renderFeed();
+});
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-reset-filter]')) { cityFilter = 'all'; sel.value = 'all'; renderFeed(); }
+});
+
+/* Occurrence disclosure */
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-disclosure]');
+  if (!t) return;
+  e.preventDefault();
+  const region = document.getElementById('disc-' + t.dataset.disclosure);
+  const open = region.dataset.open !== 'true';
+  region.dataset.open = String(open);
+  region.inert = !open;
+  t.setAttribute('aria-expanded', String(open));
+  t.lastChild.textContent = open ? ' Termine ausblenden' : ' Alle Termine zeigen';
+  if (open) track('event_occurrences_expand', { event_id: t.dataset.disclosure });
+});
+
+/* Empty state */
+document.getElementById('emptyToggle').addEventListener('click', (e) => {
+  const es = document.getElementById('emptyState');
+  const on = es.hidden;
+  es.hidden = !on;
+  document.getElementById('feed').parentElement.hidden = on;
+  document.getElementById('filterBar').querySelector('.filter-select').style.opacity = on ? '0.35' : '1';
+  e.target.textContent = on ? 'Empty state ausblenden' : 'Empty state zeigen';
+});
+
+/* Proto chrome */
+document.querySelectorAll('[data-variant]').forEach(b =>
+  b.addEventListener('click', () => setVariant(b.dataset.variant)));
+document.querySelectorAll('[data-surface]').forEach(b =>
+  b.addEventListener('click', () => {
+    const s = b.dataset.surface;
+    location.hash = s === 'overview' ? '#/' : s === 'detail' ? '#/event/golden-hour' : '#/galerie/koeln';
+  }));
+
+/* System panel */
+const panel = document.getElementById('sysPanel');
+const togglePanel = () => {
+  const open = panel.dataset.open !== 'true';
+  panel.dataset.open = String(open);
+  document.getElementById('sysHead').setAttribute('aria-expanded', String(open));
+};
+document.getElementById('sysHead').addEventListener('click', togglePanel);
+document.getElementById('sysHead').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePanel(); }
+});
+
+/* Resolver playground — proves the card is derived, not authored */
+let pg = { occ: 1, rsvp: 'none', detail: false };
+function renderTrace() {
+  const fake = {
+    id: 'playground', title: 'Golden Hour', format: 'Galerieabend',
+    detail: pg.detail, teaser: '', image: '',
+    occurrences: HOSTABLE.slice(0, pg.occ).map((g, i) => ({
+      galleryId: g.id, start: '2026-09-02T18:00',
+      rsvp: pg.rsvp === 'all' || (pg.rsvp === 'some' && i === 0) ? { url: EC, provider: 'EventCreate' } : null
+    }))
+  };
+  const cta = resolveCta(fake);
+  document.getElementById('sysTrace').innerHTML =
+    `occurrences  <b>${pg.occ}</b>\nrsvp         <b>${rsvpStateOf(fake)}</b>\ndetailseite  <b>${pg.detail}</b>\n\n→ zustand    <b>${scopeOf(fake)}</b>\n→ regel      <b>${cta.rule}</b>\n→ primary    <b>${cta.primary.label}</b>${cta.primary.external ? ' ↗ extern' : ''}\n→ secondary  <b>${cta.secondary ? cta.secondary.label : 'keine'}</b>\n→ ziel       <b>${cta.primary.external ? 'externe RSVP' : 'intern'}</b>`;
+}
+document.getElementById('occRange').addEventListener('input', (e) => {
+  pg.occ = +e.target.value;
+  document.getElementById('occVal').textContent = pg.occ;
+  renderTrace();
+});
+document.querySelectorAll('[data-rsvp]').forEach(b => b.addEventListener('click', () => {
+  pg.rsvp = b.dataset.rsvp;
+  document.querySelectorAll('[data-rsvp]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  renderTrace();
+}));
+document.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => {
+  pg.detail = b.dataset.detail === 'true';
+  document.querySelectorAll('[data-detail]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  renderTrace();
+}));
+
+/* Keyboard: no animation on keyboard-initiated actions */
+document.addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+  if (e.key === 'v') setVariant(variant === 'control' ? 'system' : 'control');
+  if (e.key === 'r') document.body.dataset.resolver = document.body.dataset.resolver === 'on' ? 'off' : 'on';
+  if (e.key === 's') togglePanel();
+});
+
+/* Reveal: content is visible by default; JS only adds the entrance.
+   Guard for hidden tabs and headless renderers so nothing ships blank. */
+let io;
+function observeReveals() {
+  const nodes = document.querySelectorAll('.reveal:not(.is-in)');
+  if (document.hidden || !('IntersectionObserver' in window)) {
+    nodes.forEach(n => n.classList.add('is-in'));
+    return;
+  }
+  if (!io) {
+    io = new IntersectionObserver((entries) => {
+      entries.forEach((en, i) => {
+        if (en.isIntersecting) {
+          en.target.style.transitionDelay = `${Math.min(i * 40, 160)}ms`;
+          en.target.classList.add('is-in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+  }
+  nodes.forEach(n => io.observe(n));
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) observeReveals();
+});
+
+window.addEventListener('hashchange', route);
+setVariant(variant);
+renderTrace();
+track('view_item_list', { list_id: 'events_overview', items: EVENTS.length });
+</script>
+</body>
+</html>

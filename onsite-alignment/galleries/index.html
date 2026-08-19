@@ -587,23 +587,29 @@
   }
 
   /* ── All 19 galleries directory ─────────────────── */
-  .all-galleries-section { padding: 96px 0 128px; background: var(--surface-page); border-top: 1px solid var(--border-default); }
-  .all-galleries-head { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: end; margin-bottom: 48px; }
+  .all-galleries-section { padding: 112px 0 128px; background: var(--surface-page); border-top: 1px solid var(--border-default); }
+  .all-galleries-head { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: end; margin-bottom: 56px; }
   .all-galleries-head h2 { color: var(--text-primary); margin: 0; max-width: 14ch; }
   .all-galleries-head p { color: var(--text-secondary); margin: 0; max-width: 56ch; }
-  .all-galleries-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; }
-  .region-group .region-title { display: block; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); padding-bottom: 12px; border-bottom: 1px solid var(--border-default); margin-bottom: 4px; }
-  .region-group a.gallery-row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 16px; padding: 14px 4px; border-bottom: 1px solid var(--border-default); text-decoration: none; transition: background 200ms var(--ease-glide), padding 200ms var(--ease-glide); }
-  .region-group a.gallery-row:hover { background: var(--surface-raised); padding-left: 10px; padding-right: 10px; }
-  .region-group a.gallery-row .name { font-family: var(--font-display); font-weight: 400; font-size: 18px; line-height: 1.2; color: var(--text-primary); display: block; }
-  .region-group a.gallery-row .neighborhood { display: block; font-family: var(--font-body); font-size: 12px; color: var(--text-tertiary); margin-top: 4px; line-height: 1.4; }
-  .region-group a.gallery-row .hours { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .region-block { margin-top: 56px; }
+  .region-block:first-of-type { margin-top: 0; }
+  .region-block .region-head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border-strong); margin-bottom: 4px; }
+  .region-block .region-title { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-primary); }
+  .region-block .region-count { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.04em; color: var(--text-tertiary); }
+  .region-block .region-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 40px; row-gap: 0; }
+  .region-block a.gallery-row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 12px 20px; padding: 20px 0; border-bottom: 1px solid var(--border-default); text-decoration: none; transition: background 200ms var(--ease-glide), padding 200ms var(--ease-glide); }
+  .region-block a.gallery-row:hover { background: var(--surface-raised); padding-left: 12px; padding-right: 12px; margin: 0 -12px; }
+  .region-block a.gallery-row .name { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.2; color: var(--text-primary); display: block; }
+  .region-block a.gallery-row .neighborhood { display: block; font-family: var(--font-body); font-size: 12px; color: var(--text-tertiary); margin-top: 4px; line-height: 1.4; }
+  .region-block a.gallery-row .hours { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); white-space: nowrap; text-align: right; align-self: start; padding-top: 6px; }
   @media (max-width: 1024px) {
     .all-galleries-head { grid-template-columns: 1fr; gap: 20px; }
-    .all-galleries-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .region-block .region-grid { grid-template-columns: 1fr 1fr; column-gap: 32px; }
   }
   @media (max-width: 640px) {
-    .all-galleries-grid { grid-template-columns: 1fr; gap: 32px; }
+    .region-block .region-grid { grid-template-columns: 1fr; column-gap: 0; }
+    .region-block a.gallery-row { grid-template-columns: 1fr; }
+    .region-block a.gallery-row .hours { text-align: left; padding-top: 8px; }
   }
 
   /* ── Inspiration ─────────────────────────────────── */
@@ -1171,42 +1177,46 @@
   <div class="container">
     <div class="all-galleries-head reveal">
       <h2 class="display-h1">All nineteen galleries.</h2>
-      <p class="body-large">Every LUMAS location, one click away. Twelve galleries across Germany, five across Europe, two across the Atlantic. Walk in by the day, or write ahead to arrange a private viewing.</p>
+      <p class="body-large">Every LUMAS location, one click away. Twelve galleries across Germany and seven international. Walk in by the day, or write ahead to arrange a private viewing.</p>
     </div>
-    <div class="all-galleries-grid reveal">
 
-      <div class="region-group">
-        <span class="region-title">Germany &middot; 12</span>
+    <div class="region-block reveal">
+      <div class="region-head">
+        <span class="region-title">Germany</span>
+        <span class="region-count">12 galleries</span>
+      </div>
+      <div class="region-grid">
         <a href="berlin-mitte.html" class="gallery-row"><span><span class="name">Berlin Mitte</span><span class="neighborhood">Rosenthaler 40, Hackeschen Höfe</span></span><span class="hours">Mon–Sat 11–19</span></a>
         <a href="berlin-kudamm.html" class="gallery-row"><span><span class="name">Berlin Kurfürstendamm</span><span class="neighborhood">Fasanenstraße 73, Charlottenburg</span></span><span class="hours">Mon–Sat 10–19</span></a>
-        <a href="hamburg.html" class="gallery-row"><span><span class="name">Hamburg</span><span class="neighborhood">Große Bleichen 31, Kaufmannshaus</span></span><span class="hours">Mon–Sat 10–19</span></a>
-        <a href="hannover.html" class="gallery-row"><span><span class="name">Hannover</span><span class="neighborhood">Luisenstraße 10–11, Kröpcke-Passage</span></span><span class="hours">Mon–Fri 10–19, Sat 10–18</span></a>
-        <a href="duesseldorf.html" class="gallery-row"><span><span class="name">Düsseldorf</span><span class="neighborhood">Grünstraße 8, off Königsallee</span></span><span class="hours">Mon–Sat 10–18</span></a>
+        <a href="hamburg.html" class="gallery-row"><span><span class="name">Hamburg</span><span class="neighborhood">Große Bleichen 31, Neustadt</span></span><span class="hours">Mon–Sat 10–19</span></a>
+        <a href="hannover.html" class="gallery-row"><span><span class="name">Hannover</span><span class="neighborhood">Luisenstraße 10–11, Kröpcke</span></span><span class="hours">Mon–Fri 10–19, Sat 10–18</span></a>
+        <a href="duesseldorf.html" class="gallery-row"><span><span class="name">Düsseldorf</span><span class="neighborhood">Grünstraße 8, off the Kö</span></span><span class="hours">Mon–Sat 10–18</span></a>
         <a href="koeln.html" class="gallery-row"><span><span class="name">Köln</span><span class="neighborhood">Mittelstraße 15</span></span><span class="hours">Mon–Sat 10–19</span></a>
         <a href="dortmund.html" class="gallery-row"><span><span class="name">Dortmund</span><span class="neighborhood">Schwarze-Brüder-Str. 1</span></span><span class="hours">Mon–Sat 10–18</span></a>
         <a href="frankfurt.html" class="gallery-row"><span><span class="name">Frankfurt</span><span class="neighborhood">Kaiserstraße 13, Bahnhofsviertel</span></span><span class="hours">Mon–Fri 10:30–19, Sat 10–19</span></a>
-        <a href="fraport.html" class="gallery-row"><span><span class="name">Frankfurt Airport</span><span class="neighborhood">Terminal 3, Non-Schengen Marktplatz</span></span><span class="hours">Daily 06–21:30</span></a>
+        <a href="fraport.html" class="gallery-row"><span><span class="name">Frankfurt Airport</span><span class="neighborhood">Terminal 3, airside</span></span><span class="hours">Daily 06–21:30</span></a>
         <a href="mannheim.html" class="gallery-row"><span><span class="name">Mannheim</span><span class="neighborhood">N6 3–7 / Kunststraße</span></span><span class="hours">Mon–Sat 11–18:30</span></a>
         <a href="stuttgart.html" class="gallery-row"><span><span class="name">Stuttgart</span><span class="neighborhood">Lange Str. 3, Stuttgart-Mitte</span></span><span class="hours">Mon–Fri 11–19, Sat 10–19</span></a>
         <a href="muenchen.html" class="gallery-row"><span><span class="name">München</span><span class="neighborhood">Brienner Straße 3, Altstadt</span></span><span class="hours">Mon–Sat 10–19</span></a>
       </div>
+    </div>
 
-      <div class="region-group">
-        <span class="region-title">Europe &middot; 5</span>
-        <a href="wien.html" class="gallery-row"><span><span class="name">Wien</span><span class="neighborhood">Wollzeile 1–3, Innere Stadt</span></span><span class="hours">Mon–Fri 10–18:30, Sat 10–18</span></a>
-        <a href="budapest.html" class="gallery-row"><span><span class="name">Budapest</span><span class="neighborhood">Október 6 utca 21, Belváros</span></span><span class="hours">Mon–Sat 10–19</span></a>
-        <a href="zuerich.html" class="gallery-row"><span><span class="name">Zürich</span><span class="neighborhood">Marktgasse 7, Niederdorf</span></span><span class="hours">Mon–Fri 10–19, Sat 10–18</span></a>
-        <a href="paris.html" class="gallery-row"><span><span class="name">Paris</span><span class="neighborhood">40 Rue de Seine, Saint-Germain-des-Prés</span></span><span class="hours">Mon–Sat 10–19, Sun 12–18</span></a>
-        <a href="london.html" class="gallery-row"><span><span class="name">London</span><span class="neighborhood">Seven Dials &middot; relocating</span></span><span class="hours">By appointment</span></a>
+    <div class="region-block reveal">
+      <div class="region-head">
+        <span class="region-title">International</span>
+        <span class="region-count">7 galleries</span>
       </div>
-
-      <div class="region-group">
-        <span class="region-title">Worldwide &middot; 2</span>
+      <div class="region-grid">
+        <a href="paris.html" class="gallery-row"><span><span class="name">Paris</span><span class="neighborhood">40 Rue de Seine, Saint-Germain</span></span><span class="hours">Mon–Sat 10–19, Sun 12–18</span></a>
+        <a href="wien.html" class="gallery-row"><span><span class="name">Wien</span><span class="neighborhood">Wollzeile 1–3, Innere Stadt</span></span><span class="hours">Mon–Fri 10–18:30, Sat 10–18</span></a>
+        <a href="zuerich.html" class="gallery-row"><span><span class="name">Zürich</span><span class="neighborhood">Marktgasse 7, Niederdorf</span></span><span class="hours">Mon–Fri 10–19, Sat 10–18</span></a>
+        <a href="budapest.html" class="gallery-row"><span><span class="name">Budapest</span><span class="neighborhood">Október 6 utca 21, Belváros</span></span><span class="hours">Mon–Sat 10–19</span></a>
+        <a href="london.html" class="gallery-row"><span><span class="name">London</span><span class="neighborhood">Seven Dials &middot; relocating</span></span><span class="hours">By appointment</span></a>
         <a href="new-york.html" class="gallery-row"><span><span class="name">New York</span><span class="neighborhood">474 West Broadway, SoHo</span></span><span class="hours">Mon–Sat 10–19, Sun 12–18</span></a>
         <a href="miami.html" class="gallery-row"><span><span class="name">Miami Beach</span><span class="neighborhood">737 Lincoln Road</span></span><span class="hours">Mon–Sat 11–20, Sun 11–19</span></a>
       </div>
-
     </div>
+
   </div>
 </section>
 
