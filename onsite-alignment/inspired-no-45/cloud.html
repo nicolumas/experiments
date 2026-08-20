@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../assets/gate.js"></script>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inspired No. 45 · The Long Night · LUMAS · as a room</title>
+<meta name="description" content="The autumn issue of the LUMAS magazine Inspired as a room you can walk through. A field of constellations you move through in every direction.">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link rel="stylesheet" href="../assets/v2-tokens.css">
+<link rel="stylesheet" href="inspired.css">
+</head>
+<body>
+
+<div id="ambient"></div>
+
+<main id="viewport" role="application"
+      aria-label="Inspired No. 45, a room you can walk through. Drag to move, scroll to go deeper. Press L for the linear reading view.">
+  <div id="world"></div>
+</main>
+
+<div id="vignette"></div>
+<div id="grain"></div>
+
+<div id="mark"><b>Inspired</b><br>No. 45 · The Long Night</div>
+
+<button id="here" type="button" aria-label="Open the chapter overview">
+  <span class="label">You are at</span>
+  <span class="name"></span>
+</button>
+
+<div id="keys">
+  <button type="button" onclick="location.href='index.html'">Read as a story</button>
+  <button type="button" data-act="map">Chapters<kbd>M</kbd></button>
+  <button type="button" data-act="read">Read<kbd>L</kbd></button>
+  <button type="button" data-act="about">About<kbd>I</kbd></button>
+</div>
+
+<div id="plan-wrap" aria-hidden="true">
+  <span class="cap-label">The field</span>
+  <div id="plan"></div>
+</div>
+
+<div id="cursor"></div>
+
+<div id="map" aria-hidden="true">
+  <div class="inner">
+    <p class="eyebrow">Eight constellations, one night</p>
+    <div class="chapters"></div>
+    <p class="foot">Choose a constellation, or press Escape to go back into the night.</p>
+  </div>
+</div>
+
+<div id="reading"><div class="col"></div></div>
+
+<div id="colophon">
+  <div class="box">
+    <p class="eyebrow">About this prototype</p>
+    <h3>A magazine you can walk through.</h3>
+    <p>This environment is built from the autumn issue of Inspired: the texts, works and imagery
+      come from the layout as it stands. The darkness is not a dark mode, it is the room.
+      The works are the light in it.</p>
+    <p>Drag to move left, right, up and down. Scroll to go deeper in and back out. Clicking a work
+      opens its story as a constellation around the work, which you keep moving through. M shows
+      the chapters, L opens the same issue linear and still, I shows this text.</p>
+    <p>On attribution: the layout still carries placeholder captions in many places. Works are
+      credited here by name only where the running text of the spread names the artist
+      unambiguously. All the others keep the magazine's own line. Nothing was invented.</p>
+    <p>Single room views: montages of photography and AI-generated picture parts, manually
+      finished. The works themselves are unchanged.</p>
+    <button class="close" type="button">Close</button>
+  </div>
+</div>
+
+<div id="overture">
+  <p class="line l1">Inspired · Issue No. 45</p>
+  <p class="line l2">It begins with a window.</p>
+  <p class="line l3">A night in which the works make the light.</p>
+  <button class="line enter" type="button">Enter</button>
+</div>
+
+<script type="module" src="world.js"></script>
+</body>
+</html>
