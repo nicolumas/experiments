@@ -190,13 +190,14 @@ a { color: inherit; }
 .stage-slide{
   flex: 0 0 100%; scroll-snap-align: center;
   display: grid; place-items: center;
+  grid-template-columns: 100%; grid-template-rows: 100%;
   aspect-ratio: 1 / 1; padding: clamp(20px, 6vw, 56px);
 }
 @media (min-width: 1024px){
   /* live behaviour: the stage fills the first viewport (minus chrome + thumb row), art contained inside */
   .stage-slide{
     aspect-ratio: auto;
-    height: clamp(480px, calc(100dvh - 248px), 900px);
+    height: clamp(440px, calc(100dvh - 290px), 820px);
     padding: clamp(36px, 4.5vw, 80px);
   }
 }
@@ -231,11 +232,6 @@ a { color: inherit; }
 .stage-discover{ position: absolute; right: 54px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
 .stage-wish{ position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
 .stage-wish[aria-pressed="true"] svg{ fill: var(--color-charcoal-900, #1C1A18); }
-.stage-caption{
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px var(--gutter) 0; background: var(--page);
-}
-.stage-caption .caption{ color: var(--color-text-tertiary, #908C87); }
 
 /* thumbnail rail — desktop only */
 .thumb-rail{ display: none; }
@@ -243,7 +239,7 @@ a { color: inherit; }
   .stage-dots{ display: none; }
   .thumb-rail{ display: flex; gap: 10px; padding: 14px 0 0; }
   .thumb-rail button{
-    width: 64px; height: 64px; display: grid; place-items: center; padding: 6px;
+    width: 88px; height: 88px; display: grid; place-items: center; padding: 8px;
     border: 1px solid var(--color-border-subtle, #EAE2D8); background: var(--stage);
     transition: border-color var(--dur-2) var(--ease-out);
   }
@@ -259,11 +255,11 @@ a { color: inherit; }
   font-size: clamp(30px, 4.6vw, 37px); font-weight: 400; letter-spacing: -0.04em;
   line-height: 1.15; color: var(--color-text-primary, #1C1A18); text-decoration: none;
 }
-.identity .artist:hover{ text-decoration: underline; text-underline-offset: 3px; }
+.identity .artist:hover{ color: var(--color-charcoal-700, #5A5752); }
 .identity h1{
   font-family: 'Archivo', sans-serif; font-weight: 400;
   font-size: 13px; letter-spacing: 1.3px; text-transform: uppercase;
-  line-height: 1.4; margin: 6px 0 14px;
+  line-height: 1.4; margin: 8px 0 18px;
 }
 .edition-chip{
   display: inline-flex; align-items: center; gap: 8px;
@@ -276,7 +272,7 @@ a { color: inherit; }
 .edition-chip:active{ transform: scale(0.97); }
 .edition-chip .n-left{ color: var(--color-status-warning, #9B6D1E); }
 .edition-chip svg{ width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
-.price-row{ display: flex; align-items: baseline; gap: 10px; margin: 16px 0 0; }
+.price-row{ display: flex; align-items: baseline; gap: 10px; margin: 2px 0 0; }
 .price{
   font-family: 'Archivo', sans-serif; font-weight: 400;
   font-size: clamp(28px, 5vw, 32px); line-height: 1.25;
@@ -289,9 +285,9 @@ a { color: inherit; }
 
 /* ══ zone 2 — configurator ════════════════════════════════════════════ */
 .config{ padding: 20px var(--gutter) 0; }
-@media (min-width: 1024px){ .config{ padding: 24px 0 0; } }
-.config .group{ margin-bottom: 22px; }
-.config .group-label{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+@media (min-width: 1024px){ .config{ padding: 34px 0 0; } }
+.config .group{ margin-bottom: 32px; }
+.config .group-label{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
 .chip-row{ display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .chip-row::-webkit-scrollbar{ display: none; }
 .size-chip{
@@ -341,8 +337,8 @@ a { color: inherit; }
 .options-ghost{ margin-top: 12px; color: var(--color-text-primary, #1C1A18); }
 
 /* ATC + reassurance */
-.atc-wrap{ padding: 8px var(--gutter) 0; }
-@media (min-width: 1024px){ .atc-wrap{ padding: 8px 0 0; } }
+.atc-wrap{ padding: 22px var(--gutter) 0; }
+@media (min-width: 1024px){ .atc-wrap{ padding: 22px 0 0; } }
 .atc-error{
   display: none; margin-top: 10px; padding: 12px 14px;
   background: var(--color-status-error-bg, #FDECEA); color: var(--color-status-error, #B5352A);
@@ -351,12 +347,12 @@ a { color: inherit; }
 .atc-error.on{ display: block; }
 .reassure{
   display: flex; flex-wrap: wrap; gap: 4px 8px; justify-content: center;
-  padding: 14px var(--gutter) 0; font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 18px var(--gutter) 0; font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--color-charcoal-800, #3A3835); text-align: center; text-wrap: balance;
 }
 @media (min-width: 1024px){ .reassure{ padding: 14px 0 0; justify-content: flex-start; text-align: left; } }
 .reassure .dot-sep{ color: var(--color-charcoal-300, #C7C3BE); }
-.gallery-link{ margin-top: 14px; text-align: center; }
+.gallery-link{ margin-top: 20px; text-align: center; }
 @media (min-width: 1024px){ .gallery-link{ text-align: left; } }
 .gallery-link a{ font-size: 12px; letter-spacing: 1.68px; text-transform: uppercase; color: var(--color-text-secondary, #5A5752); text-decoration: none; border-bottom: 1px solid var(--color-border-strong, #C7C3BE); padding-bottom: 2px; }
 
@@ -366,8 +362,8 @@ a { color: inherit; }
 .view-tiles{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 16px var(--gutter) 0; }
 .view-tile{
   border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 4px; background: #fff;
-  min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 9px;
-  font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase;
+  min-height: 54px; display: flex; align-items: center; justify-content: center; gap: 9px;
+  font-size: 12px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase;
   transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
 }
 .view-tile:hover{ background: var(--color-bone-300, #F0EBE3); border-color: var(--color-charcoal-900, #1C1A18); }
@@ -378,7 +374,8 @@ a { color: inherit; }
   .stage-tools .thumb-rail{ padding-top: 0; flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
   .stage-tools .thumb-rail::-webkit-scrollbar{ display: none; }
   .view-tiles{ padding: 0; display: flex; gap: 10px; }
-  .view-tile{ flex-direction: column; gap: 6px; height: 64px; min-width: 92px; padding: 0 14px; font-size: 9.5px; letter-spacing: 0.9px; }
+  .view-tile{ flex-direction: column; gap: 7px; height: 88px; min-width: 124px; padding: 0 18px; font-size: 12px; letter-spacing: 1.1px; }
+  .view-tile svg{ width: 24px; height: 24px; }
 }
 .trust-row{
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 18px;
@@ -483,18 +480,18 @@ a { color: inherit; }
 }
 .sheet-head{
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 18px var(--gutter) 14px; border-bottom: 1px solid var(--color-border-subtle, #EAE2D8);
+  padding: 24px var(--gutter) 18px; border-bottom: 1px solid var(--color-border-subtle, #EAE2D8);
 }
-.sheet-head h2{ font-family: 'Archivo'; font-weight: 700; font-size: 17px; line-height: 1.3; }
-.sheet-body{ overflow-y: auto; padding: 18px var(--gutter) 28px; font-size: 14px; line-height: 1.65; }
-.sheet-body p + p{ margin-top: 10px; }
+.sheet-head h2{ font-family: 'UtileDisplay', sans-serif; font-weight: 400; font-size: clamp(24px, 3vw, 28px); line-height: 1.15; letter-spacing: 0; }
+.sheet-body{ overflow-y: auto; padding: 24px var(--gutter) 40px; font-size: 16px; line-height: 1.6; }
+.sheet-body p + p{ margin-top: 14px; }
 .sheet .x{ width: 44px; height: 44px; display: grid; place-items: center; margin-right: -10px; }
 
 /* provenance sheet specifics */
-.prov-scale{ display: flex; gap: 4px; margin: 16px 0 6px; }
+.prov-scale{ display: flex; gap: 4px; margin: 26px 0 10px; }
 .prov-scale i{ flex: 1; height: 2px; background: var(--color-bone-100, #E2D8CC); }
 .prov-scale i.hot{ background: var(--color-charcoal-900, #1C1A18); }
-.prov-scale-labels{ display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
+.prov-scale-labels{ display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
 
 /* scale viewer */
 .viewer{
@@ -665,10 +662,6 @@ a { color: inherit; }
         <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
       </button>
     </section>
-    <div class="stage-caption">
-      <span class="caption" id="slideCaption">Das Werk · ohne Rahmen</span>
-      <span class="caption" id="slideCount">1 / 4</span>
-    </div>
     <div class="stage-tools">
       <div class="thumb-rail" id="thumbRail" aria-hidden="true"></div>
       <div class="view-tiles">
@@ -696,11 +689,6 @@ a { color: inherit; }
         <span class="n-left" id="nLeft" hidden></span>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
       </button>
-      <div class="price-row">
-        <span class="price" id="price" aria-live="polite">€ 449</span>
-        <span class="price-note">inkl. MwSt.</span>
-      </div>
-      <span class="price-flag caption" id="priceFlag">* Platzhalterpreis, final aus PIM</span>
     </section>
 
     <section class="config" aria-label="Konfiguration">
@@ -727,6 +715,11 @@ a { color: inherit; }
         </div>
       </div>
 
+      <div class="price-row">
+        <span class="price" id="price" aria-live="polite">€ 449</span>
+        <span class="price-note">inkl. MwSt.</span>
+      </div>
+      <span class="price-flag caption" id="priceFlag">* Platzhalterpreis, final aus PIM</span>
       <div class="atc-wrap">
         <!-- ABLYFT-GOAL: ATC (primary goal) -->
         <button class="btn btn-primary" id="atc"><span id="atcLabel">In den Warenkorb</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg></button>
@@ -809,17 +802,17 @@ a { color: inherit; }
   </div>
   <div class="sheet-body">
     <p><strong>Limited Edition, 150 Exemplare.</strong> Jedes Exemplar ist von Marta Contreras Simó signiert und wird mit Echtheitszertifikat ausgeliefert.</p>
-    <dl class="kv" style="display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:14px 0;font-size:13px">
-      <dt style="color:var(--color-text-tertiary)">Auflage</dt><dd>150 Exemplare, limitiert</dd>
-      <dt style="color:var(--color-text-tertiary)">Signatur</dt><dd>Von der Künstlerin signiert</dd>
-      <dt style="color:var(--color-text-tertiary)">Entstanden</dt><dd>2025</dd>
-      <dt style="color:var(--color-text-tertiary)">Ediert</dt><dd>2025</dd>
-      <dt style="color:var(--color-text-tertiary)">Werknummer</dt><dd>MCS36</dd>
-      <dt style="color:var(--color-text-tertiary)">Zertifikat</dt><dd>Echtheitszertifikat inklusive</dd>
+    <dl class="kv" style="display:grid;grid-template-columns:max-content 1fr;gap:11px 32px;margin:22px 0;font-size:16px">
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Auflage</dt><dd>150 Exemplare, limitiert</dd>
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Signatur</dt><dd>Von der Künstlerin signiert</dd>
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Entstanden</dt><dd>2025</dd>
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Ediert</dt><dd>2025</dd>
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Werknummer</dt><dd>MCS36</dd>
+      <dt style="color:var(--color-charcoal-700, #5A5752)">Zertifikat</dt><dd>Echtheitszertifikat inklusive</dd>
     </dl>
     <div class="prov-scale" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></div>
     <div class="prov-scale-labels" aria-hidden="true"><span>Geheimtipp</span><span>Beliebt</span><span>Stark nachgefragt</span><span>Letzte Exemplare</span></div>
-    <p class="body-small" style="margin-top:10px;color:var(--color-text-secondary)">Nachfragestatus: beliebt. Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
+    <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--color-text-secondary)">Nachfragestatus: beliebt. Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
   </div>
 </aside>
 
@@ -1108,7 +1101,6 @@ if ('IntersectionObserver' in window){
 const track_ = document.getElementById('stageTrack');
 const dots = document.getElementById('stageDots');
 const rail = document.getElementById('thumbRail');
-const captions = ['Das Werk · ohne Rahmen', 'Gerahmt · Rahmen Basel', 'Acrylglas · Detail', 'Rahmenecke · Detail'];
 const slides = [...track_.children];
 slides.forEach((_, i) => {
   const d = document.createElement('button');
@@ -1136,8 +1128,6 @@ track_.addEventListener('scroll', () => {
     const i = Math.round(track_.scrollLeft / track_.clientWidth);
     [...dots.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
     [...rail.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
-    document.getElementById('slideCaption').textContent = captions[i] || '';
-    document.getElementById('slideCount').textContent = (i + 1) + ' / ' + slides.length;
   }, 80);
 }, { passive: true });
 
