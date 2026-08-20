@@ -295,6 +295,13 @@ a { color: inherit; }
 .ed-line2{ font-size: 13.5px; color: var(--color-charcoal-700, #5A5752); line-height: 1.4; }
 .edition-chip .n-left{ font-size: 12.5px; font-weight: 600; color: var(--color-status-warning, #9B6D1E); margin-top: 2px; }
 .edition-chip .ed-info{ width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: 0 0 auto; color: var(--color-charcoal-700, #5A5752); }
+@media (max-width: 1023px){
+  .edition-chip{ gap: 12px; padding: 10px 14px; }
+  .ed-num{ font-size: 32px; }
+  .ed-line1{ font-size: 13.5px; }
+  .ed-line2{ font-size: 12px; }
+  .edition-chip .ed-info{ width: 17px; height: 17px; }
+}
 .price-row{ display: flex; align-items: baseline; gap: 10px; margin: 2px 0 0; }
 .price{
   font-family: 'Archivo', sans-serif; font-weight: 400;
