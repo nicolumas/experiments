@@ -136,101 +136,94 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .head p { font-size: 19px; line-height: 1.62; color: var(--ink-2); max-width: 48ch; margin: 26px 0 0; text-wrap: pretty; }
 @media (max-width: 720px) { .head { padding: 44px 0 4px; } .head p { font-size: 17px; margin-top: 20px; } }
 
-/* ── The feed ────────────────────────────────────────────────────── */
-.feed { padding: 20px 0 0; }
-/* V2 eyebrow: Archivo Bold 11px / 0.18em. ink-2, not tertiary: 13px grey at
-   3.3:1 is the contrast failure this page is meant not to have. */
-.month { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); padding: 56px 0 0; }
+/* ── The feed: a grid, not full-width rows ───────────────────────────
+   A row can only hold so much content, so at 1920 a full-width row is
+   structurally mostly empty. A grid fills width with content. One column,
+   two at 720, three at 1240. Cards keep their natural height (align-items:
+   start) so nothing stretches to match its neighbour. */
+.feed { padding: 4px 0 24px; }
+.feed-grid { display: grid; grid-template-columns: 1fr; align-items: start;
+  gap: clamp(40px, 3.6vw, 68px) clamp(24px, 2.4vw, 44px); }
+@media (min-width: 720px)  { .feed-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1240px) { .feed-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-/* ── One card. No variants. No states. ──────────────────────────── */
-/* Mobile first: one column. Two at 760, three at 1400 where the "where"
-   column moves up beside the copy instead of sitting under it, so a wide
-   viewport is filled by content rather than by a growing void. */
-.ev { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 32px 0 40px; border-bottom: 1px solid var(--hair); }
-.ev:first-of-type { padding-top: 24px; }
-@media (min-width: 820px) {
-  .ev { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: clamp(28px, 3vw, 56px); padding: 48px 0; align-items: start; }
-  .ev:first-of-type { padding-top: 32px; }
-  .ev-body { grid-column: 2; }
-  .ev-where { grid-column: 2; }
-}
-@media (min-width: 1400px) {
-  .ev { grid-template-columns: minmax(0, 32%) minmax(0, 1fr) minmax(240px, 28%); gap: clamp(40px, 3.4vw, 72px); }
-  .ev-where { grid-column: 3; grid-row: 1; border-top: 0; padding-top: 0; margin-top: 6px; }
-}
+/* V2 eyebrow: Archivo Bold 11 / 0.18em. On ink-2, never tertiary (3.3:1). */
+.month { grid-column: 1 / -1; font-family: var(--body); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2);
+  padding: clamp(20px, 2vw, 34px) 0 0; }
+.feed-grid > .month:first-child { padding-top: 0; }
 
-/* Event photography. Unlike artworks these MAY be cropped, so one editorial
-   frame gives the feed a steady rhythm and the pictures carry the feeling. */
-.ev-shot { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--bone); }
+/* ── One card ────────────────────────────────────────────────────── */
+.ev { display: flex; flex-direction: column; min-width: 0; }
+.ev-shot { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--bone); margin-bottom: 22px; }
 .ev-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-slow) var(--ease); }
 
-.ev-body { min-width: 0; padding-top: 4px; }
-.ev-title { font-family: var(--display); font-weight: 400; font-size: clamp(29px, 2.9vw, 41px); line-height: 1.08; margin: 0 0 16px; text-wrap: balance; }
-/* Date, scope and the practical fact, in one readable line. Not micro-caps. */
-.ev-facts { font-size: 15px; color: var(--ink-2); margin-bottom: 16px; }
+.ev-date { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-2); margin-bottom: 10px; }
+.ev-title { font-family: var(--display); font-weight: 400; font-size: clamp(24px, 1.9vw, 30px);
+  line-height: 1.14; margin: 0 0 12px; text-wrap: balance; }
+.ev-facts { font-size: 14.5px; color: var(--ink-2); margin-bottom: 14px; }
 .ev-facts b { font-weight: 500; color: var(--ink); }
-.ev-text { font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 54ch; margin: 0 0 24px; text-wrap: pretty; }
+.ev-text { font-size: 15.5px; line-height: 1.68; color: var(--ink-2); max-width: 46ch; margin: 0 0 20px; text-wrap: pretty; }
 
-/* V2 button: Archivo Bold 13px, tracking 1.82px, uppercase, sharp corners. */
-.ev-register { display: inline-flex; align-items: center; gap: 8px; padding: 16px 28px; background: var(--charcoal); color: var(--inverse); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
+/* V2 button: Archivo Bold 13, tracking 1.82px, uppercase, sharp corners. */
+.ev-register { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 26px; background: var(--charcoal); color: var(--inverse); font-size: 13px;
+  font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 22px;
+  transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
 .ev-register:active { transform: scale(0.97); }
 .ev-register iconify-icon { font-size: 13px; }
 
-/* THE ANSWER. Gallery names are links. That is the whole mechanism. */
-.ev-where { border-top: 1px solid var(--hair); padding-top: 20px; }
+/* The where block sits on the card's bottom edge, so cards in a row share a
+   baseline for the one thing the visitor is looking for. */
+.ev-where { margin-top: auto; border-top: 1px solid var(--hair); padding-top: 16px; }
 .ev-where-lead { font-size: 13px; color: var(--ink-2); margin-bottom: 12px; }
-.ev-links { font-size: 15.5px; line-height: 2.05; color: var(--ink-2); }
-/* A gallery name must never wrap away from its own date. */
-.ev-links a { display: inline-block; white-space: nowrap; color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 2px; transition: border-color 220ms var(--ease), color 220ms var(--ease); }
-.ev-links a:hover { border-bottom-color: var(--ink); }
-.ev-links a .d { color: var(--ink-2); font-size: 14px; }
-.ev-links .sep { padding: 0 8px; color: var(--ink-3); }
-.ev-links .street { color: var(--ink-2); font-size: 14px; }
 
-/* One column per evening, INSIDE the copy column. No breakout band: the list
-   shares the card's grid, so every text element has the same left edge and the
-   list fills the void under the copy instead of opening a new region. */
-.ev-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 22px 28px; }
-.ev-col h4 { margin: 0 0 8px; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
-.ev-col a { display: block; font-size: 15.5px; line-height: 1.9; color: var(--ink); }
+/* Shape rule, unchanged: same dates -> one line, differing dates -> a column
+   per evening. */
+.ev-links { font-size: 15px; line-height: 1.95; color: var(--ink-2); }
+.ev-links a { display: inline-block; white-space: nowrap; color: var(--ink); }
+.ev-links a span { border-bottom: 1px solid var(--hair); padding-bottom: 2px; transition: border-color var(--t-fast) var(--ease); }
+.ev-links .sep { padding: 0 7px; color: var(--ink-3); }
+.ev-links .street { color: var(--ink-2); font-size: 13.5px; }
+
+.ev-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 18px 22px; }
+.ev-col h4 { margin: 0 0 6px; font-family: var(--body); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
+.ev-col a { display: block; font-size: 15px; line-height: 1.85; color: var(--ink); }
 .ev-col a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
-/* Declared after the base rule so it actually wins. In the three-column
-   layout the where-column is too narrow for auto-fit to place 3 evenings
-   without going ragged (2 + 1), so stack them and split the names instead. */
-@media (min-width: 1400px) {
-  .ev-cols { grid-template-columns: 1fr; gap: 20px; }
-  .ev-col-list { columns: 2; column-gap: 24px; }
+
+/* ── The feature card ────────────────────────────────────────────────
+   An event across the whole network carries far more location data than a
+   local one, so it gets the full row and a tonal panel. Depth from tone,
+   not shadow, per V2. */
+.ev.is-feature { grid-column: 1 / -1; background: var(--ivory); padding: clamp(22px, 2.2vw, 40px); }
+.ev.is-feature .ev-title { font-size: clamp(30px, 2.7vw, 44px); line-height: 1.08; }
+.ev.is-feature .ev-facts { font-size: 15.5px; }
+.ev.is-feature .ev-text { font-size: 16.5px; max-width: 52ch; }
+.ev.is-feature .ev-where { margin-top: 4px; }
+@media (min-width: 900px) {
+  .ev.is-feature { display: grid; grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+    gap: clamp(32px, 3vw, 56px); align-items: start; }
+  .ev.is-feature .ev-shot { margin-bottom: 0; aspect-ratio: 4 / 3; }
+  .ev.is-feature .ev-body { display: flex; flex-direction: column; }
 }
 
-/* A coarse pointer means touch, at any width, so grow the targets there. */
-@media (pointer: coarse) {
-  .ev-col a { padding: 7px 0; line-height: 1.6; }
-}
-
-/* Hover only where a real pointer exists, so it does not stick on touch. */
+@media (pointer: coarse) { .ev-col a, .ev-links a { padding: 6px 0; } }
 @media (hover: hover) and (pointer: fine) {
   .ev-shot:hover img { transform: scale(1.03); }
   .ev-register:hover { background: var(--charcoal-800); }
-  .ev-col a:hover span { border-bottom-color: var(--ink); }
+  .ev-col a:hover span, .ev-links a:hover span { border-bottom-color: var(--ink); }
 }
-/* Small screens: taller frame, full-width button, and both gallery shapes
-   become tappable lists. */
-@media (max-width: 819px) {
-  /* Capped so the single-column card stays a readable height on a tablet. */
-  .ev-shot { aspect-ratio: 4 / 3; max-width: 620px; }
+/* Single column: both gallery shapes become tappable lists. */
+@media (max-width: 719px) {
+  .ev-cols { grid-template-columns: 1fr; gap: 16px; }
+  .ev-col-list { columns: 2; column-gap: 22px; }
   .ev-register { width: 100%; justify-content: center; }
-  .ev-cols { grid-template-columns: 1fr; gap: 18px; }
-  .ev-col-list { columns: 2; column-gap: 24px; }
-  .ev-col a { line-height: 1.5; padding: 12px 0; }
-  .ev-links { line-height: 1.5; }
   .ev-links .sep { display: none; }
-  .ev-links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; width: 100%; white-space: normal; padding: 13px 0; border-bottom: 1px solid var(--hair); }
-  .ev-links > span { display: block; padding: 13px 0; }
-}
-/* Between 820 and 1100 the copy column is narrow, so two evening columns
-   rather than three squeezed ones. */
-@media (min-width: 820px) and (max-width: 1100px) {
-  .ev-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ev-links a { display: flex; justify-content: space-between; align-items: baseline;
+    gap: 14px; width: 100%; white-space: normal; padding: 12px 0; border-bottom: 1px solid var(--hair); }
+  .ev-links > span { display: block; padding: 12px 0; }
 }
 
 /* ── Empty state ─────────────────────────────────────────────────── */
@@ -588,19 +581,25 @@ function evenings(ev) {
   return [...m.values()];
 }
 
+/* The date line. One date, or a range when the evenings span days. */
+function dateLabel(ev) {
+  const a = first(ev), z = last(ev);
+  if (!datesVary(ev)) return longDate(a.start);
+  const sameMonth = new Date(a.start).getMonth() === new Date(z.start).getMonth();
+  return sameMonth
+    ? `${new Date(a.start).getDate()} to ${new Date(z.start).getDate()} ${MONTHS[new Date(z.start).getMonth()]}`
+    : `${shortDate(a.start)} to ${shortDate(z.start)}`;
+}
+
 /* The one line of facts: when · how many rooms · whether to register. */
 function facts(ev) {
   const a = first(ev), z = last(ev), bits = [];
   if (ev.dates.length === 1) {
-    bits.push(`<b>${longDate(a.start)}</b>, ${timeOf(a)}`);
+    bits.push(timeOf(a));
   } else if (!datesVary(ev)) {
-    bits.push(`<b>${longDate(a.start)}</b>, ${timeOf(a)}`);
+    bits.push(timeOf(a));
     bits.push(`${ev.dates.length} galleries`);
   } else {
-    const sameMonth = new Date(a.start).getMonth() === new Date(z.start).getMonth();
-    bits.push(`<b>${sameMonth
-      ? `${new Date(a.start).getDate()} to ${new Date(z.start).getDate()} ${MONTHS[new Date(z.start).getMonth()]}`
-      : `${shortDate(a.start)} to ${shortDate(z.start)}`}</b>`);
     bits.push(`${ev.dates.length} galleries`);
   }
   bits.push(ev.dates.some(o => o.rsvp) ? 'registration required' : 'no registration');
@@ -670,18 +669,21 @@ function evHtml(ev) {
   const register = rsvp
     ? `<a class="ev-register" href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">Register<iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
     : '';
+  // An event across the whole network needs the full row for its locations.
+  const feature = ev.dates.length > 5;
 
-  return `<article class="ev rv">
+  return `<article class="ev rv${feature ? ' is-feature' : ''}">
     <div class="ev-shot">
       <img src="${shot(ev.photo)}" alt="${esc(ev.alt)}" ${ev.first ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
     </div>
     <div class="ev-body">
+      <div class="ev-date">${esc(dateLabel(ev))}</div>
       <h2 class="ev-title">${esc(ev.title)}</h2>
       <div class="ev-facts">${facts(ev)}</div>
       <p class="ev-text">${esc(ev.text)}</p>
       ${register}
+      ${whereHtml(ev)}
     </div>
-    ${whereHtml(ev)}
   </article>`;
 }
 
@@ -696,7 +698,7 @@ function renderFeed() {
     if (m !== lastMonth) { html += `<div class="month">${m}</div>`; lastMonth = m; }
     html += evHtml(ev);
   });
-  document.getElementById('feed').innerHTML = html;
+  document.getElementById('feed').innerHTML = `<div class="feed-grid">${html}</div>`;
   reveal();
 }
 

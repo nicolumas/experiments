@@ -202,6 +202,8 @@
   }
 
   /* Type scale — V2 spec */
+  /* Typographic safety net — balance display lines, no auto-hyphenation, no widowed single words */
+  .display-xl, .display-h1, .display-h2, .display-h3, .display-h4 { text-wrap: balance; -webkit-hyphens: manual; hyphens: manual; }
   .display-xl { font-family: var(--font-display); font-weight: 300; font-size: clamp(64px, 7vw, 88px); line-height: 1.0; letter-spacing: 0; }
   .display-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(42px, 4.4vw, 62px); line-height: 1.04; letter-spacing: 0; }
   .display-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 3vw, 46px); line-height: 1.12; letter-spacing: 0; }
@@ -298,8 +300,8 @@
     content: '';
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to bottom, rgba(28,26,24,0) 0%, rgba(28,26,24,0.15) 45%, rgba(28,26,24,0.7) 100%),
-      linear-gradient(to right, rgba(28,26,24,0.35) 0%, rgba(28,26,24,0) 55%);
+      linear-gradient(to bottom, rgba(28,26,24,0.45) 0%, rgba(28,26,24,0.60) 55%, rgba(28,26,24,0.88) 100%),
+      linear-gradient(to right, rgba(28,26,24,0.70) 0%, rgba(28,26,24,0.30) 55%, rgba(28,26,24,0) 78%);
   }
   .hero > .container { position: relative; z-index: 1; }
   .hero-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 64px; align-items: end; }
@@ -647,13 +649,15 @@
   /* Reassurance bar (under hero) */
   .reassurance-bar { background: var(--surface-inverse); color: var(--text-inverse); padding: 18px 24px; }
   /* Jump-mark in-page nav */
-  .jump-nav { position: sticky; top: 84px; z-index: 20; background: var(--surface-page); border-bottom: 1px solid var(--border-default); }
-  .jump-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  /* Jump-nav — inline row under the visit-section intro (no longer sticky/full-bleed) */
+  .jump-nav { margin-top: 28px; border-top: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default); }
+  .jump-nav-inner { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
   .jump-nav-inner::-webkit-scrollbar { display: none; }
-  .jump-nav a { display: inline-flex; align-items: center; padding: 14px 16px; font-family: var(--font-body); font-weight: 500; font-size: 13px; letter-spacing: 0.02em; color: var(--text-secondary); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 200ms var(--ease-glide), border-color 200ms var(--ease-glide); }
-  .jump-nav a:hover { color: var(--text-primary); border-bottom-color: var(--border-strong); }
-  .jump-nav a.is-active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
-  @media (max-width: 640px) { .jump-nav-inner { padding: 0 16px; } .jump-nav a { padding: 12px 12px; font-size: 12px; } }
+  .jump-nav a { display: inline-flex; align-items: center; padding: 14px 20px 14px 0; font-family: var(--font-body); font-weight: 500; font-size: 13px; letter-spacing: 0.02em; color: var(--text-secondary); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 200ms var(--ease-glide), border-color 200ms var(--ease-glide); }
+  .jump-nav a + a { padding-left: 20px; }
+  .jump-nav a:hover { color: var(--text-primary); }
+  .jump-nav a.is-active { color: var(--text-primary); }
+  @media (max-width: 640px) { .jump-nav a { padding: 12px 12px 12px 0; font-size: 12px; } .jump-nav a + a { padding-left: 12px; } }
   .reassurance-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
   .reassurance-item { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--on-dark-75); font-weight: 300; }
   .reassurance-item iconify-icon { font-size: 18px; color: var(--text-inverse); }
@@ -850,23 +854,21 @@
   </div>
 </aside>
 
-<!-- Jump-mark in-page navigation -->
-<nav class="jump-nav" aria-label="Sections of this page">
-  <div class="jump-nav-inner">
-    <a href="#visit">Visit</a>
-    <a href="#events">Events</a>
-    <a href="#promises">Your visit</a>
-    <a href="#guidance">Consultation</a>
-    <a href="#catalog">All works</a>
-  </div>
-</nav>
-
 <!-- Visit Information -->
 <section class="visit-section" id="visit">
   <div class="container">
     <div class="reveal">
       <h2 class="display-h1">Find us in Belváros.</h2>
       <p class="body-large intro">Between Parliament and St. Stephen's Basilica, in the historic centre.</p>
+      <nav class="jump-nav" aria-label="Sections of this page">
+        <div class="jump-nav-inner">
+          <a href="#visit">Visit</a>
+          <a href="#events">Events</a>
+          <a href="#promises">Your visit</a>
+          <a href="#guidance">Consultation</a>
+          <a href="#catalog">All works</a>
+        </div>
+      </nav>
     </div>
 
     <div class="visit-info-grid reveal">
@@ -924,7 +926,7 @@
         <p class="director-role">Galerieleiterin, LUMAS Budapest</p>
         <p class="director-quote">"Art lives, enriches, and brings joy. Come and discover our portfolio in Budapest. My team and I will be glad to take the time to find the right work for you."</p>
         <a href="#" class="btn btn-primary">
-          <span class="btn-label">Request a private viewing</span>
+          <span class="btn-label">Book a consultation</span>
         </a>
       </div>
     </div>

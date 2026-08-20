@@ -145,7 +145,6 @@ a{color:inherit;text-decoration:none}
 .match-row + .match-row{border-top:1px solid var(--b-subtle);padding-top:clamp(52px,5vw,84px)}
 .match-row__head{display:grid;grid-template-columns:1.18fr 0.82fr;gap:clamp(40px,4vw,72px);align-items:center;margin-bottom:clamp(28px,3vw,40px)}
 .match-row--flip .match-row__media{order:2}
-@media (min-width:761px){.match-row--flip .match-row__head{grid-template-columns:0.82fr 1.18fr}}
 .match-row--flip .match-row__text{order:1}
 .match-row__img{aspect-ratio:16/9;object-fit:cover;width:100%;border:1px solid var(--b-default);background:var(--sunken)}
 .match-row__text .h3{margin-bottom:14px}
