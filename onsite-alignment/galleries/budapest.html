@@ -380,38 +380,27 @@
   }
 
   /* Director section — editorial pull-quote with small byline portrait */
-  .director-section { padding: 144px 0; background: var(--surface-card); }
-  .director-grid {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 72px;
-    align-items: start;
-    max-width: 1080px;
-    margin: 0 auto;
-  }
-  .director-portrait {
-    width: 220px; height: 220px;
-    background-color: var(--surface-raised);
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    border-radius: 4px;
-    background-image: url('https://media.lumas.de/galerien/budapest/galerieleitung-budapest-168x168.jpg');
-    box-shadow: inset 0 0 0 1px var(--border-default);
-  }
-  .director-copy .eyebrow { color: var(--text-tertiary); display: block; margin-bottom: 24px; }
-  .director-copy h2 { color: var(--text-primary); margin-bottom: 6px; font-size: clamp(30px, 2.8vw, 40px); }
-  .director-role { color: var(--text-secondary); font-family: var(--font-body); font-size: 14px; margin-bottom: 36px; }
-  .director-quote {
-    font-family: var(--font-display); font-weight: 300;
-    font-size: clamp(22px, 1.9vw, 28px); line-height: 1.4; letter-spacing: 0;
-    color: var(--text-primary); margin-bottom: 40px;
-    max-width: 620px;
-  }
-  @media (max-width: 880px) {
-    .director-section { padding: 80px 0; }
-    .director-grid { grid-template-columns: 1fr; gap: 32px; max-width: 480px; }
-    .director-portrait { width: 160px; height: 160px; }
+  /* We're here to help — merged director + free-consultation block */
+  .help-section { padding: 128px 0; background: var(--surface-page); border-top: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default); }
+  .help-grid { display: grid; grid-template-columns: 240px 1fr; gap: 72px; align-items: start; max-width: 1100px; margin: 0 auto; }
+  .help-portrait { width: 240px; height: 240px; background-color: var(--surface-raised); background-size: cover; background-position: center top; background-repeat: no-repeat; border-radius: 4px; background-image: url('https://media.lumas.de/galerien/budapest/galerieleitung-budapest-168x168.jpg'); box-shadow: inset 0 0 0 1px var(--border-default); }
+  .help-copy .eyebrow { color: var(--text-tertiary); display: block; margin-bottom: 22px; }
+  .help-copy h2 { color: var(--text-primary); margin: 0 0 24px; }
+  .help-copy .lede { color: var(--text-primary); font-size: 17px; line-height: 1.65; margin: 0 0 20px; max-width: 60ch; }
+  .help-copy .lede strong { color: var(--text-primary); font-weight: 500; }
+  .help-copy .quote { font-family: var(--font-display); font-weight: 300; font-size: clamp(20px, 1.6vw, 24px); line-height: 1.45; color: var(--text-secondary); margin: 0 0 24px; max-width: 60ch; font-style: italic; }
+  .help-copy .signature { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: 0.04em; color: var(--text-secondary); margin: 0 0 32px; padding-top: 20px; border-top: 1px solid var(--border-default); max-width: 320px; }
+  .help-copy .signature .name { color: var(--text-primary); font-weight: 500; }
+  .help-copy .signature .role { color: var(--text-tertiary); }
+  .help-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 480px; }
+  .help-action { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 18px 24px; background: var(--surface-page); border-radius: 4px; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); text-decoration: none; box-shadow: inset 0 0 0 1px var(--border-default); transition: transform 300ms var(--ease-glide), box-shadow 300ms var(--ease-glide), background 300ms var(--ease-glide); }
+  .help-action:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--text-primary); background: var(--surface-raised); }
+  .help-action iconify-icon { font-size: 20px; }
+  @media (max-width: 900px) {
+    .help-section { padding: 80px 0; }
+    .help-grid { grid-template-columns: 1fr; gap: 32px; max-width: 560px; }
+    .help-portrait { width: 200px; height: 200px; }
+    .help-actions { grid-template-columns: 1fr; max-width: 100%; }
   }
 
   /* Featured selection — 3 hero works (small feature mid-page) */
@@ -703,32 +692,6 @@
   @media (max-width: 880px) { .promises-section { padding: 64px 0; } .promises-grid { grid-template-columns: 1fr; gap: 24px; } }
 
   /* FAQ section (native details/summary) */
-  /* Guidance / free consultation block */
-  .guidance-section { background: var(--surface-page); padding: 112px 0; border-top: 1px solid var(--border-default); }
-  .guidance-inner { max-width: 900px; margin: 0 auto; padding: 0 32px; text-align: center; }
-  .guidance-eyebrow { display: block; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 24px; }
-  .guidance-title { color: var(--text-primary); margin-bottom: 20px; }
-  .guidance-lede { color: var(--text-secondary); font-size: 16px; line-height: 1.6; max-width: 560px; margin: 0 auto 44px; }
-  .guidance-lede strong { color: var(--text-primary); font-weight: 500; }
-  .guidance-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .guidance-action {
-    display: inline-flex; align-items: center; justify-content: center; gap: 14px;
-    padding: 22px 28px;
-    background: var(--surface-page);
-    border-radius: 4px;
-    font-family: var(--font-body); font-weight: 700; font-size: 12px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--text-primary); text-decoration: none;
-    box-shadow: inset 0 0 0 1px var(--border-default);
-    transition: transform 300ms var(--ease-glide), box-shadow 300ms var(--ease-glide), background 300ms var(--ease-glide);
-  }
-  .guidance-action:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--text-primary); background: var(--surface-raised); }
-  .guidance-action iconify-icon { font-size: 20px; color: var(--text-primary); }
-  @media (max-width: 640px) {
-    .guidance-section { padding: 80px 0; }
-    .guidance-actions { grid-template-columns: 1fr; }
-    .guidance-action { padding: 18px 24px; }
-  }
 
   .faq-section { background: var(--surface-page); padding: 128px 0; border-top: 1px solid var(--border-default); }
   .faq-head { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: start; margin-bottom: 56px; }
@@ -915,23 +878,28 @@
   </div>
 </section>
 
-<!-- Director -->
-<section class="director-section">
+<!-- We're here to help — director + free consultation, merged -->
+<section class="help-section" id="guidance">
   <div class="container">
-    <div class="director-grid">
-      <div class="director-portrait reveal" role="img" aria-label="Eva Wikonkal, director of LUMAS Budapest"></div>
-      <div class="director-copy reveal">
-        <span class="eyebrow">Meet the director</span>
-        <h2 class="display-h1">Eva Wikonkal.</h2>
-        <p class="director-role">Galerieleiterin, LUMAS Budapest</p>
-        <p class="director-quote">"Art lives, enriches, and brings joy. Come and discover our portfolio in Budapest. My team and I will be glad to take the time to find the right work for you."</p>
-        <a href="#" class="btn btn-primary">
-          <span class="btn-label">Book a consultation</span>
-        </a>
+    <div class="help-grid">
+      <div class="help-portrait reveal" role="img" aria-label="Eva Wikonkal, director of LUMAS Budapest"></div>
+      <div class="help-copy reveal">
+        <span class="eyebrow">Free consultation &middot; complimentary</span>
+        <h2 class="display-h1">We&rsquo;re here to help.</h2>
+        <p class="lede">Eva Wikonkal and the Budapest team help you choose the <strong>right size, frame, and placement</strong> for the work you love. Free, unhurried, no pressure. Talk to us however works for you.</p>
+        <p class="quote">&ldquo;Art lives, enriches, and brings joy. Come and discover our portfolio in the Hackeschen H&ouml;fe. My team and I will take the time to find the right work for you.&rdquo;</p>
+        <span class="signature"><span class="name">Eva Wikonkal</span> &middot; <span class="role">Gallery Director</span></span>
+        <div class="help-actions">
+          <a href="https://wa.me/36307024330?text=Hi%2C%20I%27d%20love%20some%20guidance%20on%20a%20work%20at%20LUMAS%20Budapest." target="_blank" rel="noopener" class="help-action"><iconify-icon icon="ph:whatsapp-logo-light"></iconify-icon><span>WhatsApp</span></a>
+          <a href="mailto:budapest@lumas.hu?subject=Gallery%20consultation" class="help-action"><iconify-icon icon="ph:envelope-simple-light"></iconify-icon><span>Email</span></a>
+          <a href="tel:+36307024330" class="help-action"><iconify-icon icon="ph:phone-light"></iconify-icon><span>Phone</span></a>
+          <a href="#visit" class="help-action"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Visit gallery</span></a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
 <!-- Events -->
 <section class="events-section" id="events">
   <div class="container">
@@ -1045,19 +1013,6 @@
 </section>
 
 <!-- Guidance / free consultation -->
-<section class="guidance-section" id="guidance">
-  <div class="guidance-inner reveal">
-    <span class="guidance-eyebrow">Gallery consultation &middot; complimentary</span>
-    <h2 class="display-h1 guidance-title">Need guidance?</h2>
-    <p class="body-large guidance-lede">Our team helps you choose the <strong>right size, frame, and placement</strong> for the work you love. Free, unhurried, no pressure. Talk to Eva and the Budapest team however works for you.</p>
-    <div class="guidance-actions">
-      <a href="https://wa.me/36307024330?text=Hi%2C%20I%27d%20love%20some%20guidance%20on%20a%20work%20at%20LUMAS%20Budapest." target="_blank" rel="noopener" class="guidance-action"><iconify-icon icon="ph:whatsapp-logo-light"></iconify-icon><span>WhatsApp</span></a>
-      <a href="mailto:budapest@lumas.hu?subject=Gallery%20consultation" class="guidance-action"><iconify-icon icon="ph:envelope-simple-light"></iconify-icon><span>Email</span></a>
-      <a href="tel:+36307024330" class="guidance-action"><iconify-icon icon="ph:phone-light"></iconify-icon><span>Phone</span></a>
-      <a href="#visit" class="guidance-action"><iconify-icon icon="ph:map-pin-light"></iconify-icon><span>Visit gallery</span></a>
-    </div>
-  </div>
-</section>
 
 <!-- Currently on view — full catalogue grid (bottom of page) -->
 <section class="catalog-section" id="catalog">
