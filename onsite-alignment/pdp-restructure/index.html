@@ -363,13 +363,22 @@ a { color: inherit; }
 /* ══ zone 3 — depth ═══════════════════════════════════════════════════ */
 .zone3{ padding: 28px var(--gutter) 0; }
 @media (min-width: 1024px){ .zone3{ padding: 32px 0 0; } }
-.scale-entry{ padding: 16px var(--gutter) 0; }
+.view-tiles{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 16px var(--gutter) 0; }
+.view-tile{
+  border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 4px; background: #fff;
+  min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 9px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase;
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.view-tile:hover{ background: var(--color-bone-300, #F0EBE3); border-color: var(--color-charcoal-900, #1C1A18); }
+.view-tile:active{ transform: scale(0.97); }
+.view-tile svg{ width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.4; flex: 0 0 auto; }
 @media (min-width: 1024px){
-  .stage-tools{ display: flex; align-items: stretch; justify-content: space-between; gap: 14px; padding-top: 14px; }
-  .stage-tools .thumb-rail{ padding-top: 0; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .stage-tools{ display: flex; align-items: stretch; gap: 14px; padding-top: 14px; }
+  .stage-tools .thumb-rail{ padding-top: 0; flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
   .stage-tools .thumb-rail::-webkit-scrollbar{ display: none; }
-  .scale-entry{ padding: 0; flex: 0 0 auto; display: flex; }
-  .scale-entry .btn{ width: auto; height: 64px; padding: 0 24px; white-space: nowrap; }
+  .view-tiles{ padding: 0; display: flex; gap: 10px; }
+  .view-tile{ flex-direction: column; gap: 6px; height: 64px; min-width: 92px; padding: 0 14px; font-size: 9.5px; letter-spacing: 0.9px; }
 }
 .trust-row{
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 18px;
@@ -662,9 +671,16 @@ a { color: inherit; }
     </div>
     <div class="stage-tools">
       <div class="thumb-rail" id="thumbRail" aria-hidden="true"></div>
-      <div class="scale-entry">
-        <!-- one entry for AR / 3D / Zoom -->
-        <button class="btn btn-secondary" id="scaleBtn">In Größe sehen</button>
+      <div class="view-tiles">
+        <!-- ABLYFT-GOAL: scale-viewer-open [ASSUMPTION] -->
+        <button class="view-tile" id="arTile">
+          <svg viewBox="0 0 24 24"><rect x="7" y="2.8" width="10" height="18.4" rx="2.2"/><path d="M10.4 5h3.2"/><path d="M12 9.4l2.6 1.5v3l-2.6 1.5-2.6-1.5v-3z"/><path d="M12 9.4v3.1m0 0 2.6-1.6m-2.6 1.6-2.6-1.6"/></svg>
+          <span>AR-Ansicht</span>
+        </button>
+        <button class="view-tile" id="threeDTile">
+          <svg viewBox="0 0 24 24"><path d="M12 3l7.5 4.3v8.6L12 20.2l-7.5-4.3V7.3z"/><path d="M12 3v8.6m0 0 7.5 4.3M12 11.6l-7.5 4.3"/></svg>
+          <span>3D-Ansicht</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1255,7 +1271,8 @@ document.querySelectorAll('.mode-chip').forEach(c => c.addEventListener('click',
   setViewerMode(c.dataset.mode);
   track('scale_viewer_open', { modality: c.dataset.mode });
 }));
-document.getElementById('scaleBtn').addEventListener('click', () => openViewer('scale'));
+document.getElementById('threeDTile').addEventListener('click', () => openViewer('scale'));
+document.getElementById('arTile').addEventListener('click', () => openViewer('ar'));
 document.getElementById('zoomBtn').addEventListener('click', () => openViewer('zoom'));
 heroImg.addEventListener('click', () => openViewer('zoom'));
 document.getElementById('arLaunch').addEventListener('click', () => {
