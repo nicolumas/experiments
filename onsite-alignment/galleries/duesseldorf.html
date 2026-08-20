@@ -362,12 +362,12 @@
   @media (max-width: 720px) { .section-head.with-link { flex-direction: column; align-items: flex-start; gap: 24px; } }
 
   /* Visit information section */
-  .visit-section { background: var(--surface-raised); padding: 128px 0; }
+  .visit-section { background: var(--surface-raised); padding: 96px 0 72px; }
   .visit-section .container { display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: start; }
   .visit-section h2 { color: var(--text-primary); margin-bottom: 20px; }
   .visit-section .intro { color: var(--text-secondary); max-width: 420px; }
   .visit-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-  .visit-info-cell { padding: 28px 32px; background: var(--surface-card); border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(28, 26, 24, 0.05); }
+  .visit-info-cell { padding: 22px 26px; background: var(--surface-card); border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(28, 26, 24, 0.05); }
   .visit-info-cell h3 { color: var(--text-tertiary); margin-bottom: 18px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
   .visit-info-cell .line { display: block; color: var(--text-primary); font-size: 15px; line-height: 1.5; padding: 2px 0; }
   .visit-info-cell .line + .line { margin-top: 2px; }
@@ -381,7 +381,7 @@
 
   /* Director section — editorial pull-quote with small byline portrait */
   /* We're here to help — merged director + free-consultation block */
-  .help-section { padding: 128px 0; background: var(--surface-page); border-top: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default); }
+  .help-section { padding: 88px 0 96px; background: var(--surface-page); border-top: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default); }
   .help-grid { display: grid; grid-template-columns: 240px 1fr; gap: 72px; align-items: start; max-width: 1100px; margin: 0 auto; }
   .help-portrait { width: 240px; height: 240px; background-color: var(--surface-raised); background-size: cover; background-position: center top; background-repeat: no-repeat; border-radius: 4px; background-image: url('https://media.lumas.de/galerien/duesseldorf/galerieleitung-duesseldorf-168x168.jpg'); box-shadow: inset 0 0 0 1px var(--border-default); }
   .help-copy .eyebrow { color: var(--text-tertiary); display: block; margin-bottom: 22px; }
@@ -657,9 +657,9 @@
   .reassurance-item strong { color: var(--text-inverse); font-weight: 500; }
 
   /* Map embed + transit strip */
-  .map-embed { margin-top: 32px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--border-default); }
-  .map-embed iframe { display: block; width: 100%; height: 360px; border: 0; filter: grayscale(0.2) saturate(0.85); }
-  .transit-strip { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 20px; padding: 16px 20px; background: var(--surface-card); box-shadow: inset 0 0 0 1px var(--border-default); border-radius: 4px; }
+  .map-embed { margin-top: 20px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--border-default); }
+  .map-embed iframe { display: block; width: 100%; height: 300px; border: 0; filter: grayscale(0.2) saturate(0.85); }
+  .transit-strip { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 12px; padding: 14px 20px; background: var(--surface-card); box-shadow: inset 0 0 0 1px var(--border-default); border-radius: 4px; }
   .transit-strip .transit-info { color: var(--text-primary); font-size: 14px; }
   .transit-strip .transit-info strong { font-weight: 500; }
   .transit-strip .transit-links { display: flex; gap: 18px; }
@@ -918,38 +918,14 @@
     <div class="events-list reveal">
       <div class="event-row">
         <div class="event-meta">
-          <span class="eyebrow">Opening</span>
-          <span class="date">Fri 6 June, 19:00</span>
+          <span class="eyebrow">Open evening</span>
+          <span class="date">Thu 4 September</span>
         </div>
         <div class="event-content">
-          <h3 class="display-h3">Gavin Evans, Lazarus.</h3>
-          <p>An evening with the artist to mark the opening of the new portrait series.</p>
+          <h3 class="display-h3">Golden Hour.</h3>
+          <p>Some evenings need no programme to be special, only the right moment. Cold drinks, a curated selection, and the last of the summer light, in every gallery we have. No registration necessary.</p>
         </div>
-        <a href="#" class="btn-link">RSVP</a>
-      </div>
-
-      <div class="event-row">
-        <div class="event-meta">
-          <span class="eyebrow">Artist talk</span>
-          <span class="date">Thu 20 June, 18:30</span>
-        </div>
-        <div class="event-content">
-          <h3 class="display-h3">In conversation with Massimo Colonna.</h3>
-          <p>On rendering, ruins, and the architecture of the imagined city.</p>
-        </div>
-        <a href="#" class="btn-link">RSVP</a>
-      </div>
-
-      <div class="event-row">
-        <div class="event-meta">
-          <span class="eyebrow">Private viewing</span>
-          <span class="date">By appointment</span>
-        </div>
-        <div class="event-content">
-          <h3 class="display-h3">Limited editions, collector hours.</h3>
-          <p>Step inside outside opening hours for a focused look at the limited works in stock.</p>
-        </div>
-        <a href="#" class="btn-link">Request</a>
+        <a href="#" class="btn-link">Walk in</a>
       </div>
     </div>
   </div>
