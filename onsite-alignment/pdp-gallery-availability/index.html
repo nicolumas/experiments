@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liu von Marta Contreras Simó — LUMAS</title>
+<meta name="description" content="Liu by Marta Contreras Simó. Limited Edition 150, signed. Gallery availability for your exact size and framing.">
+<link rel="preconnect" href="https://img.lumas.com" crossorigin>
+<link rel="preload" as="image" href="https://img.lumas.com/showimg_mcs13_full.jpg" fetchpriority="high">
+<style>
+@view-transition { navigation: auto; }
+
+@font-face{font-family:'archivo';src:url('../assets/fonts/archivo.woff2') format('woff2-variations'),url('../assets/fonts/archivo.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'utile-display';src:url('../assets/fonts/utile/utile-display-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'utile-display';src:url('../assets/fonts/utile/utile-display-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+
+/* Tokens read off the live LUMAS PDP (www.lumas.de/pictures/marta_contreras_simo/liu/) */
+:root{
+  --ink:#1C1A18;          /* text primary, borders, CTA fill      */
+  --ink-soft:#5C5C5C;     /* inactive size label                  */
+  --ink-mute:#6E6A65;
+  --page:#fff;
+  --band:#F7F1E9;         /* demand-indicator background          */
+  --stage:#E2D8CC;        /* .image-wrapper background            */
+  --line:#C7C3BE;
+  --line-2:#E2D8CC;
+  --sunken:#F0EBE3;
+  --cta-text:#F4EDE2;
+  --ease:cubic-bezier(.2,.8,.2,1);--t1:200ms;--t2:320ms;
+  --drawer-w:400px;
+  --promo-h:46px;--hdr-h:70px;--buy-w:clamp(464px,26vw,560px);
+  --pad:clamp(12px,1.4vw,28px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);
+  font-family:'archivo',arial,sans-serif;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;margin:0;padding:0;cursor:pointer}
+h1,h2,h3,p,dl,dd{margin:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.b{font-weight:700}
+svg.ico{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+svg.ico-s{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── promo bar ───────────────────────────────────────── */
+.promo{height:var(--promo-h);background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
+  justify-content:center;gap:24px;padding:0 46px 0 var(--pad);position:relative;font-size:13px;font-weight:700}
+.promo-cta{border:1px solid rgba(244,237,226,.85);padding:8px 18px;font-size:11px;font-weight:700;
+  letter-spacing:1.68px;text-transform:uppercase;transition:background var(--t1) var(--ease)}
+.promo-cta:hover{background:rgba(244,237,226,.12)}
+.promo-x{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:grid;place-items:center}
+body[data-promo="0"] .promo{display:none}
+
+/* ── header ──────────────────────────────────────────── */
+.hdr{position:sticky;top:0;z-index:60;background:var(--page)}
+.hdr-in{height:var(--hdr-h);display:flex;align-items:center;gap:clamp(14px,2vw,30px);padding:0 var(--pad);
+  transition:padding-right var(--t2) var(--ease)}
+.logo{width:118px;flex:none;color:var(--ink)}
+.logo svg{width:100%;height:auto;display:block}
+.nav{display:flex;gap:clamp(12px,1.6vw,24px);font-weight:700;font-size:15px;white-space:nowrap}
+.nav a{padding:4px 0;border-bottom:1px solid transparent;transition:border-color var(--t1) var(--ease)}
+.nav a:hover{border-color:var(--ink)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--sunken);border-radius:20px;
+  height:34px;padding:0 14px;width:clamp(160px,20vw,282px);color:var(--ink-mute);font-size:15px}
+.search input{border:0;background:none;outline:0;font:inherit;color:var(--ink);width:100%}
+.hdr-r{display:flex;align-items:center;gap:2px}
+.ib{width:36px;height:36px;display:grid;place-items:center;border-radius:2px;transition:background var(--t1) var(--ease)}
+.ib:hover{background:var(--sunken)}
+.hdr-rule{height:1px;background:var(--line-2)}
+
+/* ── shell / push drawer ─────────────────────────────── */
+.shell{transition:padding-right var(--t2) var(--ease)}
+@media(min-width:1180px){
+  body.drawer-open .shell{padding-right:var(--drawer-w)}
+  body.drawer-open .hdr-in{padding-right:calc(var(--pad) + var(--drawer-w))}
+  body.drawer-open .search{display:none}
+}
+
+/* ── hero ────────────────────────────────────────────── */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,var(--buy-w));gap:clamp(18px,2vw,34px);
+  padding:0 var(--pad) 40px;align-items:start}
+@media(max-width:1023px){ .hero{grid-template-columns:minmax(0,1fr);gap:0;padding:0 0 24px} }
+
+.stage-col{min-width:0}
+.stage-bar{display:flex;align-items:center;gap:12px;padding:13px 18px;margin-bottom:0;background:var(--band);
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);flex-wrap:wrap;
+  box-shadow:inset 3px 0 0 var(--ink)}
+.stage-bar .pin{display:grid;place-items:center;flex:none}
+.stage-bar .lead{color:var(--ink-soft)}
+.stage-bar .who{font-size:13px;font-weight:700;letter-spacing:1.2px}
+.stage-bar .g-short{display:none}
+.stage-bar .qty{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:1px;color:var(--ink)}
+.stage-bar .qty .sdot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
+.stage-bar[data-in="0"] .qty{color:var(--ink-soft)}
+.stage-bar[data-in="0"] .qty .sdot{background:var(--line)}
+
+/* stage, mirrors .image-wrapper on the live PDP */
+.stage{position:relative;background:var(--stage) url('assets/pdp-background.jpg') center/cover;
+  min-height:0;display:grid;place-items:center;min-width:0;
+  --stage-pad:clamp(24px,3vw,42px);
+  padding:var(--stage-pad) var(--stage-pad) calc(var(--stage-pad) + 50px)}
+.artwrap{width:min(100%,min(64vh,720px));aspect-ratio:1/1;display:grid;place-items:center}
+.frame{width:100%;height:100%;position:relative;display:grid;place-items:center;
+  transition:padding var(--t2) var(--ease),background var(--t2) var(--ease),box-shadow var(--t2) var(--ease)}
+.frame .inner{width:100%;height:100%;display:grid;place-items:center;transition:padding var(--t2) var(--ease),background var(--t2) var(--ease)}
+.frame img{width:100%;height:100%;object-fit:contain}
+.frame::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity var(--t2) var(--ease);
+  background:linear-gradient(118deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 36%)}
+.frame[data-gloss="1"]::after{opacity:1}
+.frame[data-frame="none"]{box-shadow:0 14px 44px -18px rgba(28,26,24,.42)}
+.frame[data-frame="framed"]{box-shadow:0 18px 50px -18px rgba(28,26,24,.45)}
+
+.view{display:none;width:100%;justify-content:center}
+.stage[data-view="work"] .view-work,
+.stage[data-view="kitchen"] .view-kitchen,
+.stage[data-view="living"] .view-living,
+.stage[data-view="ar"] .view-ar,
+.stage[data-view="cert"] .view-cert,
+.stage[data-view="corner"] .view-corner,
+.stage[data-view="back"] .view-back{display:flex}
+.roombox{position:relative;width:100%;max-width:1100px;aspect-ratio:1920/1161;background:var(--sunken);overflow:hidden}
+.roombox > img.bg{width:100%;height:100%;object-fit:cover}
+.roombox > .hang{position:absolute;left:34%;top:41%;width:17%;box-shadow:0 14px 34px -14px rgba(0,0,0,.55)}
+.roombox > .hang img{width:100%;display:block}
+.flat{max-width:820px;width:100%}
+.flat img{width:100%;height:auto;object-fit:contain}
+.view-ar .flat{max-width:340px}
+
+.thumbs{display:flex;gap:8px;padding:10px 0 0;flex-wrap:wrap}
+.thumb{width:74px;height:74px;flex:none;border:1px solid var(--line-2);background:var(--sunken) center/cover;
+  position:relative;overflow:hidden;transition:border-color var(--t1) var(--ease)}
+.thumb:hover{border-color:var(--line)}
+.thumb[aria-current="true"]{border-color:var(--ink)}
+.thumb .t-art{position:absolute;left:29%;top:41%;width:28.1%}
+.thumb .t-art img{width:100%;display:block}
+.thumb > img.full{width:100%;height:100%;object-fit:cover}
+.thumb.work{background:var(--stage) url('assets/pdp-background.jpg') center/cover;display:grid;place-items:center}
+.thumb.work img{width:66%;height:auto}
+@media(max-width:1023px){ .thumbs{display:none} }
+
+.stage-tools{position:absolute;top:14px;right:14px;display:flex;gap:6px}
+.stage-tool{width:34px;height:34px;display:grid;place-items:center;color:var(--ink);
+  transition:background var(--t1) var(--ease)}
+.stage-tool:hover{background:rgba(255,255,255,.5)}
+.stage-actions{position:absolute;right:14px;bottom:14px;display:flex;gap:6px}
+.stage-act{display:flex;align-items:center;gap:7px;background:var(--page);border:1px solid var(--line);
+  padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  transition:border-color var(--t1) var(--ease)}
+.stage-act:hover{border-color:var(--ink)}
+
+/* ── buy box ─────────────────────────────────────────── */
+.buy{position:sticky;top:calc(var(--hdr-h) + 24px);min-width:0;padding-top:clamp(26px,3.1vw,54px)}
+@media(max-width:1023px){ .buy{position:static;padding:18px var(--pad) 0} }
+.artist-holder{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:clamp(28px,2.6vw,37px);
+  line-height:1.08;letter-spacing:-.04em;color:var(--ink)}
+.artwork-title{font-size:13px;letter-spacing:1.3px;text-transform:uppercase;margin-top:7px}
+.edition{margin-top:9px;font-size:15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px}
+.edition .dotsep{color:var(--ink)}
+.edition a{font-style:italic;text-decoration:underline;text-underline-offset:3px}
+
+.sec-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;line-height:1.5;color:var(--ink)}
+.sizes-block{margin-top:18px}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:4px;margin-top:12px}
+.size{position:relative;padding:13px 4px;text-align:center;font-size:15px;line-height:1.15;color:var(--ink-soft);
+  transition:color var(--t1) var(--ease)}
+.size:hover{color:var(--ink)}
+.size + .size::before{content:'';position:absolute;left:0;top:9px;bottom:9px;width:1px;background:var(--line)}
+.size[aria-current="true"]{background:var(--page);color:var(--ink);border:1px solid var(--ink);border-radius:4px;margin:-1px}
+.size[aria-current="true"]::before,.size[aria-current="true"] + .size::before{display:none}
+
+.framing{margin-top:18px}
+.framing-drawer{margin-top:10px}
+.framing-drawer > summary{list-style:none;display:flex;align-items:center;gap:10px;background:var(--page);
+  border:1px solid var(--ink);border-radius:3px;height:36px;padding:0 10px 0 20px;font-size:15px;cursor:pointer}
+.framing-drawer > summary::-webkit-details-marker{display:none}
+.framing-drawer > summary .fname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.framing-drawer > summary .chev{margin-left:auto}
+.framing-drawer > summary .chev{flex:none;display:grid;transition:transform var(--t1) var(--ease)}
+.framing-drawer[open] > summary .chev{transform:rotate(180deg)}
+.framing-list{border:1px solid var(--line);border-top:0;border-radius:0 0 3px 3px;margin-top:-1px}
+.framing-opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border-top:1px solid var(--line-2);
+  transition:background var(--t1) var(--ease)}
+.framing-opt:first-child{border-top:0}
+.framing-opt:hover{background:var(--sunken)}
+.framing-opt[aria-current="true"]{background:var(--sunken)}
+.framing-opt .sw{flex:none;width:34px;height:34px;background:#fff center/cover;background-image:var(--thumb)}
+.sw-none{box-shadow:inset 0 0 0 1px rgba(28,26,24,.2)}
+.sw-slim{box-shadow:inset 0 0 0 3px #24211d}
+.sw-basel{box-shadow:inset 0 0 0 4px #141210,inset 0 0 0 9px #7a5b3f}
+.sw-artbox{box-shadow:inset 0 0 0 1px rgba(28,26,24,.2),4px 4px 0 -1px rgba(28,26,24,.16)}
+.framing-opt .fo-n{font-size:14px;line-height:1.3;min-width:0}
+.framing-opt .fo-n small{display:block;font-size:11px;color:var(--ink-soft);line-height:1.4}
+.framing-opt .fo-p{margin-left:auto;white-space:nowrap;font-size:14px}
+
+.price-container{margin-top:20px;display:grid;gap:4px}
+.price{font-size:32px;line-height:1.1;color:var(--ink)}
+.price-sub{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
+
+/* availability, built on the live demand-indicator band */
+.avail{display:block;background:var(--band);border-radius:2px;margin-top:14px;
+  border:1px solid transparent;transition:border-color var(--t1) var(--ease)}
+.avail:hover{border-color:var(--ink)}
+.avail-in{display:flex;align-items:center;gap:11px;padding:12px 14px}
+.avail .pin{flex:none;display:grid;place-items:center;color:var(--ink)}
+.avail-txt{min-width:0;flex:1}
+.avail-main{font-size:15px;line-height:1.35}
+.avail-main b{font-weight:700}
+.avail-main .g-short{display:none}
+.avail-sub{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
+.avail-act{flex:none;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--ink)}
+.avail[data-state="none"]{background:var(--page);border-color:var(--ink)}
+.avail[data-state="B"]{background:var(--band);box-shadow:inset 3px 0 0 var(--ink)}
+.avail[data-state="C"],.avail[data-state="D"]{background:var(--sunken)}
+.avail-updated{display:none;align-items:center;gap:7px;padding:0 14px 11px;font-size:11px;color:var(--ink-soft)}
+body[data-cfgchanged="1"] .avail-updated{display:flex}
+
+.actions{margin-top:12px;display:grid;gap:10px}
+.btn-primary{height:50px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
+  justify-content:center;font-size:16px;letter-spacing:1px;text-transform:uppercase;
+  transition:background var(--t1) var(--ease)}
+.btn-primary:hover{background:#000}
+.btn-outline{height:52px;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:1.68px;text-transform:uppercase;
+  transition:background var(--t1) var(--ease)}
+.btn-outline:hover{background:var(--sunken)}
+.more-info{margin-top:12px;font-size:9px;line-height:1.5;letter-spacing:.4px;text-transform:uppercase;color:var(--ink)}
+.more-info a{text-decoration:underline;text-underline-offset:2px}
+
+/* ── below the fold ──────────────────────────────────── */
+.section{padding:clamp(34px,3.6vw,58px) var(--pad);border-top:1px solid var(--line-2)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:clamp(22px,2vw,28px);line-height:1.15;letter-spacing:-.02em}
+.sec-head .tag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
+.visit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,52px);align-items:start}
+@media(max-width:860px){ .visit{grid-template-columns:1fr;gap:22px} }
+.visit-photo{margin:0;background:var(--sunken)}
+.visit-photo img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.visit-photo figcaption{margin-top:8px;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft)}
+.visit h3{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:clamp(21px,1.9vw,26px);letter-spacing:-.02em}
+.visit p{margin-top:10px;max-width:46ch;font-size:15px}
+.deets{display:grid;gap:0;margin-top:18px}
+.deet{display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line-2);font-size:15px}
+.deet:last-child{border-bottom:0}
+.deet dt{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);padding-top:4px}
+.ghost{display:inline-flex;align-items:center;gap:9px;padding:4px 0 5px;border-bottom:1px solid var(--ink);
+  font-size:12px;font-weight:700;letter-spacing:1.68px;text-transform:uppercase;margin-top:18px}
+.others{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));border-top:1px solid var(--line-2);border-left:1px solid var(--line-2)}
+.oth{padding:18px 20px 17px;display:grid;gap:8px;align-content:start;border-right:1px solid var(--line-2);
+  border-bottom:1px solid var(--line-2);transition:background var(--t1) var(--ease)}
+.oth:hover{background:var(--sunken)}
+.oth .nm{font-size:15px;font-weight:700}
+.oth .st{display:flex;align-items:center;gap:8px;font-size:13px}
+.oth .ad{font-size:12px;line-height:1.55;color:var(--ink-soft)}
+.dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--ink)}
+.dot.hollow{background:none;box-shadow:inset 0 0 0 1px var(--line)}
+.empty-note{padding:6px 0 0;font-size:15px;max-width:60ch}
+.editionrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));border-top:1px solid var(--line-2)}
+.ed{padding:18px 22px 18px 0;border-bottom:1px solid var(--line-2)}
+.ed + .ed{padding-left:22px;border-left:1px solid var(--line-2)}
+@media(max-width:640px){ .ed + .ed{padding-left:0;border-left:0} .ed{padding-right:0} }
+.ed dt{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.ed dd{font-size:15px}
+.ftr{padding:30px var(--pad) 44px;border-top:1px solid var(--line-2);display:flex;gap:22px;flex-wrap:wrap;
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ── gallery drawer ──────────────────────────────────── */
+.scrim{position:fixed;inset:0;background:rgba(28,26,24,.28);opacity:0;pointer-events:none;
+  transition:opacity var(--t2) var(--ease);z-index:70}
+body.drawer-open .scrim{opacity:1;pointer-events:auto}
+@media(min-width:1180px){ body.drawer-open .scrim{opacity:0;pointer-events:none} }
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(var(--drawer-w),calc(100vw - 40px));background:var(--page);
+  z-index:80;display:flex;flex-direction:column;border-left:1px solid var(--line);
+  transform:translateX(100%);transition:transform var(--t2) var(--ease);visibility:hidden}
+body.drawer-open .drawer{transform:none;visibility:visible}
+.dr-top{padding:16px 20px 14px;border-bottom:1px solid var(--line-2);flex:none}
+.dr-row1{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.dr-title{font-size:11px;font-weight:700;letter-spacing:1.68px;text-transform:uppercase}
+.dr-cfg{margin-top:12px;padding:11px 12px;background:var(--band);border-radius:2px;display:grid;gap:4px}
+.dr-cfg .a{font-size:14px;font-weight:700}
+.dr-cfg .b{font-size:13px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;color:var(--ink)}
+.dr-cfg .pr{margin-left:auto;font-weight:700}
+.dr-list{overflow:auto;flex:1;-webkit-overflow-scrolling:touch}
+.gcard{padding:16px 20px;border-bottom:1px solid var(--line-2);cursor:pointer;transition:background var(--t1) var(--ease)}
+.gcard:hover{background:var(--sunken)}
+.gcard[aria-current="true"]{background:var(--sunken);box-shadow:inset 3px 0 0 var(--ink)}
+.gc-1{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.gc-nm{font-size:15px;font-weight:700}
+.gc-km{font-size:11px;letter-spacing:.6px;color:var(--ink-soft);white-space:nowrap}
+.gc-st{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:13px}
+.gc-ad{margin-top:7px;font-size:12px;line-height:1.55;color:var(--ink-soft)}
+.gc-hr{margin-top:4px;font-size:12px;color:var(--ink-soft)}
+.gc-act{display:flex;gap:16px;margin-top:11px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}
+.gc-act a{border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color var(--t1) var(--ease)}
+.gc-act a:hover{border-color:var(--ink)}
+.dr-foot{flex:none;padding:14px 20px;border-top:1px solid var(--line-2);font-size:11px;line-height:1.6;color:var(--ink-soft)}
+
+/* ── reserve panel, expands under the availability band ─ */
+.rwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t2) var(--ease)}
+body.reserve-open .rwrap{grid-template-rows:1fr}
+.rpanel{overflow:hidden;min-height:0}
+.rpanel-in{background:var(--band);border-top:1px solid rgba(28,26,24,.12);padding:18px}
+.rpanel .rlead{font-size:14px;line-height:1.55}
+.rpanel .rlead b{font-weight:700}
+.gaddr{margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+.rform{margin-top:15px;display:grid;gap:8px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rform input{width:100%;height:44px;padding:0 13px;border:1px solid #E0DDD8;border-radius:2px;background:var(--page);
+  font:inherit;font-size:14px;color:var(--ink);outline:0;transition:border-color var(--t1) var(--ease)}
+.rform input::placeholder{color:#8A8580}
+.rform input:focus{border-color:var(--ink)}
+.rform input:user-invalid{border-color:#C93028}
+.rform .btn-primary{margin-top:2px;height:48px;font-size:14px;letter-spacing:.4px;text-transform:none;font-weight:700}
+.rconsent{margin-top:12px;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
+.rconsent a{text-decoration:underline;text-underline-offset:2px}
+.rdone{display:none;text-align:center;padding:6px 0 2px}
+.rpanel-in[data-done="1"] .rbody{display:none}
+.rpanel-in[data-done="1"] .rdone{display:block}
+.rcheck{width:40px;height:40px;border-radius:50%;background:#2D6A31;color:#fff;display:grid;place-items:center;margin:0 auto 12px}
+.rdone h3{font-size:16px}
+.rdone p{margin-top:7px;font-size:14px;line-height:1.6;color:var(--ink-soft)}
+.rdone .ralt{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:11px;font-weight:700;
+  letter-spacing:1.4px;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:3px}
+.avail-act .chev{display:none}
+body.reserve-open #availRow .avail-act .arw{transform:rotate(90deg)}
+.avail-act .arw{transition:transform var(--t2) var(--ease)}
+@media(max-width:520px){ .frow{grid-template-columns:1fr} }
+
+/* ── mobile ──────────────────────────────────────────── */
+.menu-btn{display:none}
+@media(max-width:1023px){
+  :root{--promo-h:40px;--hdr-h:56px}
+  .nav,.search{display:none}
+  .menu-btn{display:grid;margin-left:-6px}
+  .promo{font-size:11px;gap:12px;padding:0 40px 0 12px}
+  .promo-cta{padding:6px 12px;font-size:10px;letter-spacing:1.2px}
+  .hdr-r .ib[data-hide]{display:none}
+  .stage-bar{padding:10px var(--pad);font-size:10px;gap:8px;flex-wrap:nowrap;overflow:hidden}
+  .stage-bar .lead{display:none}
+  .stage-bar .g-full{display:none}
+  .stage-bar .g-short{display:inline}
+  .stage-bar .who{font-size:11.5px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stage-bar .qty{margin-left:auto;font-size:9.5px;letter-spacing:.8px;white-space:nowrap;flex:none}
+  .stage{--stage-pad:12px}
+  .artwrap{width:min(calc(100% - 24px),31vh)}
+  .stage-tools{top:8px;right:8px}
+  .stage-actions{right:8px;bottom:8px}
+  .stage-act{padding:7px 9px;font-size:9px}
+  .buy{padding:14px var(--pad) 0}
+  .artist-holder{font-size:27px;text-align:center}
+  .artwork-title{text-align:center}
+  .edition{justify-content:center}
+  .edition{margin-top:6px;font-size:14px}
+  .size{padding:8px 3px;font-size:14px}
+  .framing{margin-top:12px}
+  .framing-drawer{margin-top:7px}
+  .framing-drawer > summary{height:42px;padding:0 10px 0 14px}
+  .sizes-block{margin-top:12px}
+  .sizes{margin-top:7px}
+  .price-container{margin-top:12px}
+  .price{font-size:28px}
+  .avail{margin-top:12px}
+  .avail-in{padding:12px 14px;flex-wrap:wrap;gap:10px}
+  .avail-txt{flex:1 1 auto}
+  .avail-main{font-size:14.5px}
+  .avail-main .g-full{display:none}
+  .avail-main .g-short{display:inline}
+  .avail-sub{font-size:10px;letter-spacing:.5px}
+  .avail-act{flex:1 1 100%;justify-content:center;gap:9px;padding-top:11px;
+    border-top:1px solid rgba(28,26,24,.13);font-size:11px;letter-spacing:1.3px}
+  .avail-updated{padding:0 14px 10px;font-size:10.5px}
+  .price-sub .ps-frame{display:none}
+  .more-info{font-size:8.5px}
+  .actions{margin-top:10px}
+  .section{padding:30px var(--pad)}
+}
+
+/* ── prototype states panel ──────────────────────────── */
+.sp{position:fixed;left:14px;bottom:14px;z-index:90;font-size:12px}
+.sp-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--ink);color:var(--cta-text);
+  font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}
+.sp-btn svg{display:none}
+.sp-menu{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:auto;width:292px;background:var(--page);
+  border:1px solid var(--line);box-shadow:0 16px 50px -18px rgba(28,26,24,.4);padding:5px;max-height:64vh;overflow:auto}
+.sp[data-open="1"] .sp-menu{display:block}
+.sp-menu a{display:flex;gap:10px;padding:8px 10px;line-height:1.4;transition:background var(--t1) var(--ease)}
+.sp-menu a:hover{background:var(--sunken)}
+.sp-menu a i{font-style:normal;font-weight:700;color:var(--ink-soft);width:16px;flex:none;font-size:11px}
+.sp-menu hr{border:0;border-top:1px solid var(--line-2);margin:5px 0}
+@media(max-width:1023px){
+  .sp{left:auto;right:10px;bottom:14px}
+  .sp-btn{width:32px;height:32px;padding:0;justify-content:center;border-radius:50%;opacity:.85}
+  .sp-btn svg{display:block}.sp-btn span{display:none}
+  .sp-menu{width:min(292px,calc(100vw - 20px));left:auto;right:0}
+}
+@media print{ .sp{display:none!important} }
+</style>
+</head>
+<body>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   DATA MODEL — inventory belongs to the CONFIGURATION, not the artwork.
+
+     Artwork
+       └── Configuration  (size + frame)
+             ├── price          = print price + framing price
+             └── galleryInventory
+                   ├── gallery, quantity, address, openingHours
+
+   Sizes/prices: DE feed, abstract 18685. Framing prices: PIM option set
+   per SKU, receiver DE. Galleries: live LUMAS gallery pages. Only the
+   per-configuration unit counts are mock.
+
+   RENDERING CONTRACT — the page is one pure function of (URL params +
+   gallery cookie), run synchronously during parse, so price and
+   availability are in the first paint. No post-load rewrite, no
+   "checking availability" skeleton. Changing size, framing or gallery is
+   a real navigation to a new URL.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const ARTWORK = {
+  artist:'Marta Contreras Simó', title:'Liu', series:'ASIA',
+  editionSize:150, signature:'Signed', creationYear:2023, publicationYear:2024,
+  technique:'Archival pigment print on Hahnemühle Photo Rag',
+  image:'https://img.lumas.com/showimg_mcs13_full.jpg'
+};
+
+const SIZES = [
+  { id:'s40',  sku:'MCS15', label:'40 x 40',   cm:40,  pricePrint:230 },
+  { id:'s80',  sku:'MCS14', label:'80 x 80',   cm:80,  pricePrint:610 },
+  { id:'s120', sku:'MCS13', label:'120 x 120', cm:120, pricePrint:790 }
+];
+
+const FRAMES = [
+  { id:'none',   name:'No framing',                     full:'Print only, shipped rolled',      gloss:0, addCm:0,   price:{s40:0,   s80:0,   s120:0  } },
+  { id:'slim',   name:'Acrylic glass, slimline mount',   full:'Matt acrylic glass',              gloss:0, addCm:1.5, price:{s40:149, s80:359, s120:709} },
+  { id:'basel',  name:'Basel frame with shadow gap',     full:'15 mm profile, matt acrylic',     gloss:0, addCm:8,   price:{s40:249, s80:519, s120:879} },
+  { id:'artbox', name:'Luma ArtBox, 50 mm',             full:'Gloss acrylic, 50 mm depth',      gloss:1, addCm:6,   price:{s40:229, s80:509, s120:909} }
+];
+
+const GALLERIES = [
+  { id:'kudamm',      name:'Berlin, Kurfürstendamm',  city:'Berlin',    street:'Fasanenstraße 73',                zip:'10719 Berlin',     km:1.2, phone:'+49 30 88 62 76 01', hours:[['Mon to Fri','11:00','19:00'],['Sat','10:00','19:00']] },
+  { id:'mitte',       name:'Berlin, Hackesche Höfe',  city:'Berlin',    street:'Rosenthaler Str. 40/41, Hof II',  zip:'10178 Berlin',     km:4.8, phone:'+49 30 28 04 03 73', hours:[['Mon to Sat','11:00','19:00']] },
+  { id:'hamburg',     name:'Hamburg, Große Bleichen', city:'Hamburg',   street:'Große Bleichen 31, Kaufmannshaus',zip:'20354 Hamburg',    km:255, phone:'+49 40 38 90 48 60', hours:[['Mon to Sat','10:00','19:00']] },
+  { id:'duesseldorf', name:'Düsseldorf, Grünstraße',  city:'Düsseldorf',street:'Grünstraße 8',                    zip:'40212 Düsseldorf', km:477, phone:'+49 211 82 82 622',  hours:[['Mon to Sat','10:00','18:00']] },
+  { id:'koeln',       name:'Köln, Mittelstraße',      city:'Köln',      street:'Mittelstraße 15',                 zip:'50672 Köln',       km:478, phone:'+49 221 31 06 871',  hours:[['Mon to Sat','10:00','19:00']] },
+  { id:'muenchen',    name:'München, Brienner Straße',city:'München',   street:'Brienner Straße 3',               zip:'80333 München',    km:504, phone:'+49 89 25 54 88 30', hours:[['Mon to Sat','10:00','19:00']] }
+];
+
+/* units of THIS size in THIS framing, per gallery */
+const INVENTORY = {
+  's40:none':{}, 's40:slim':{}, 's40:basel':{ kudamm:2, mitte:1 }, 's40:artbox':{ kudamm:4, hamburg:2, muenchen:1 },
+  's80:none':{}, 's80:slim':{ kudamm:1, duesseldorf:2 }, 's80:basel':{ kudamm:3, hamburg:2, duesseldorf:1 }, 's80:artbox':{ duesseldorf:1, muenchen:2 },
+  's120:none':{}, 's120:slim':{}, 's120:basel':{ hamburg:1, muenchen:1 }, 's120:artbox':{ kudamm:1 }
+};
+
+const GALLERY_PHOTO = '../galleries/assets/berlin-mitte/viewing-room.jpg';
+const byId = (arr,id,fb) => arr.find(x => x.id === id) || fb;
+
+function configure(sizeId, frameId){
+  const size = byId(SIZES, sizeId, SIZES[1]), frame = byId(FRAMES, frameId, FRAMES[2]);
+  const key = size.id + ':' + frame.id, stock = INVENTORY[key] || {};
+  return { key, size, frame,
+    price: size.pricePrint + frame.price[size.id],
+    framePrice: frame.price[size.id],
+    outerCm: size.cm + frame.addCm,
+    stock,
+    holders: GALLERIES.filter(g => (stock[g.id] || 0) > 0).sort((a,b) => a.km - b.km),
+    totalUnits: Object.values(stock).reduce((a,b) => a + b, 0) };
+}
+
+const Q = new URLSearchParams(location.search);
+const COOKIE = 'lumas_gallery';
+const readCookie = () => { const m = document.cookie.match(new RegExp('(?:^|; )'+COOKIE+'=([^;]*)')); return m ? decodeURIComponent(m[1]) : null; };
+const writeCookie = v => { document.cookie = v ? COOKIE+'='+encodeURIComponent(v)+';path=/;max-age=31536000;samesite=lax'
+                                               : COOKIE+'=;path=/;max-age=0;samesite=lax'; };
+
+const CFG = configure(Q.get('size'), Q.get('frame'));
+
+let galleryId = Q.get('gallery');
+if (galleryId === 'none'){ writeCookie(null); galleryId = null; }
+else if (galleryId === 'auto'){ galleryId = (CFG.holders[0] || GALLERIES[0]).id; writeCookie(galleryId); }
+else if (galleryId){ writeCookie(galleryId); }
+else { galleryId = readCookie(); }
+
+const GAL = galleryId ? byId(GALLERIES, galleryId, null) : null;
+
+function availability(){
+  if (!GAL) return { code:'none' };
+  const q = CFG.stock[GAL.id] || 0;
+  if (q >= 3) return { code:'A', qty:q, gallery:GAL };
+  if (q >= 1) return { code:'B', qty:q, gallery:GAL };
+  const alt = CFG.holders[0];
+  if (alt)    return { code:'C', qty:0, gallery:GAL, alt };
+  return { code:'D', qty:0, gallery:GAL };
+}
+const AV = availability();
+
+const money = n => '€ ' + n.toLocaleString('en-US');
+const esc   = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const short = g => (g.name.split(', ')[1] || g.city);
+const stockWord = q => q >= 3 ? 'In stock' : q === 2 ? 'Only 2 left' : 'Last one';
+
+function href(over){
+  const p = new URLSearchParams();
+  p.set('size',  over.size  !== undefined ? over.size  : CFG.size.id);
+  p.set('frame', over.frame !== undefined ? over.frame : CFG.frame.id);
+  const g = over.gallery !== undefined ? over.gallery : galleryId;
+  if (g) p.set('gallery', g);
+  if (over.drawer) p.set('drawer','1');
+  if (over.reserve) p.set('reserve','1');
+  return '?' + p.toString();
+}
+const hoursText = g => g.hours.map(h => h[0] + ' ' + h[1] + ' to ' + h[2]).join(' · ');
+function openState(g){
+  const DAYS = { 'Mon to Fri':[1,5], 'Mon to Sat':[1,6], 'Sat':[6,6], 'Sun':[0,0] };
+  const d = new Date(), day = d.getDay(), mins = d.getHours()*60 + d.getMinutes();
+  const to = t => (+t.slice(0,2))*60 + (+t.slice(3));
+  const today = g.hours.find(h => { const r = DAYS[h[0]]; return r && day >= r[0] && day <= r[1]; });
+  if (!today) return { open:false, text:'Closed today' };
+  if (mins < to(today[1])) return { open:false, text:'Opens today at ' + today[1] };
+  if (mins < to(today[2])) return { open:true,  text:'Open now until ' + today[2] };
+  return { open:false, text:'Opens tomorrow at ' + g.hours[0][1] };
+}
+const mapsUrl = g => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('LUMAS ' + g.name + ', ' + g.street + ', ' + g.zip);
+</script>
+
+<script>
+const ICO = {
+  search:'<svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>',
+  heart:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7.2-4.6-7.2-9.4A4 4 0 0 1 12 8a4 4 0 0 1 7.2 2.6C19.2 15.4 12 20 12 20z"/></svg>',
+  user:'<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c1.3-3.5 3.9-5.2 7-5.2S17.7 16.5 19 20"/></svg>',
+  bag:'<svg class="ico" viewBox="0 0 24 24"><path d="M5 8h14l-1.1 12H6.1z"/><path d="M9 8V6.4A3 3 0 0 1 15 6.4V8"/></svg>',
+  phone:'<svg class="ico" viewBox="0 0 24 24"><path d="M6 4h3l1.6 4-2 1.4a12 12 0 0 0 6 6l1.4-2 4 1.6v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 6.2 2 2 0 0 1 6 4z"/></svg>',
+  chat:'<svg class="ico" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.4-6.5"/><path d="M4.6 19.4 6 15.4"/><path d="M4.6 19.4 8.6 18"/></svg>',
+  menu:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  pin:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  arrow:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="M13.5 6.5 20 12l-6.5 5.5"/></svg>',
+  chev:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M6 9.5 12 15.5 18 9.5"/></svg>',
+  close:'<svg class="ico" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  expand:'<svg class="ico" viewBox="0 0 24 24"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>',
+  room:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M3 20V8l9-4 9 4v12"/><path d="M8.5 20v-6h7v6"/></svg>',
+  cube:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M12 3 4 7.2v9.6L12 21l8-4.2V7.2z"/><path d="M4 7.2 12 11.5l8-4.3M12 11.5V21"/></svg>',
+  refresh:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.4-5.5"/><path d="M19.8 4.6v4.2h-4.2"/></svg>'
+};
+
+/* ── promo bar + header, mirroring the live chrome ─────────────── */
+function renderPromo(){
+  return '<span>10% off your first order, until 23.08.2026</span>'
+    + '<a class="promo-cta" href="#">Claim it</a>'
+    + '<button class="promo-x" id="promoX" aria-label="Close">' + ICO.close + '</button>';
+}
+function renderHeader(){
+  return '<button class="ib menu-btn" aria-label="Menu">' + ICO.menu + '</button>'
+    + '<a class="logo" href="' + href({}) + '" aria-label="LUMAS"><img src="assets/lumas-logo.svg" alt="LUMAS" width="118" height="22"></a>'
+    + '<nav class="nav"><a href="#">Artworks</a><a href="#">Top 20</a><a href="#">Artfinder</a>'
+      + '<a href="#">Inspiration</a><a href="#">Galleries</a><a href="#">About us</a></nav>'
+    + '<label class="search">' + ICO.search + '<input type="search" placeholder="Search" aria-label="Search"></label>'
+    + '<div class="hdr-r">'
+      + '<button class="ib" data-hide aria-label="Contact">' + ICO.chat + '</button>'
+      + '<button class="ib" data-hide aria-label="Call">' + ICO.phone + '</button>'
+      + '<button class="ib" data-hide aria-label="Wishlist">' + ICO.heart + '</button>'
+      + '<button class="ib" data-hide aria-label="Account">' + ICO.user + '</button>'
+      + '<button class="ib" aria-label="Bag">' + ICO.bag + '</button>'
+    + '</div>';
+}
+
+/* ── stage ─────────────────────────────────────────────────────── */
+function renderStageBar(){
+  if (!GAL) return '';
+  const q = CFG.stock[GAL.id] || 0;
+  return '<div class="stage-bar" data-in="' + (q > 0 ? 1 : 0) + '">'
+    + '<span class="pin">' + ICO.pin + '</span>'
+    + '<span class="lead">Your gallery</span>'
+    + '<span class="who"><span class="g-full">' + esc(GAL.name) + '</span>'
+      + '<span class="g-short">' + esc(short(GAL)) + '</span></span>'
+    + '<span class="qty"><i class="sdot"></i>'
+    + (q > 0 ? stockWord(q) + ' in this configuration' : 'Not in this configuration')
+    + '</span></div>';
+}
+
+function renderStage(){
+  const framed = CFG.frame.id !== 'none';
+  const art = framed ? 'assets/liu-framed.jpg' : ARTWORK.image;
+  const alt = esc(ARTWORK.title + ', ' + ARTWORK.artist);
+  const hang = '<span class="hang"><img src="' + art + '" alt="' + alt + '"></span>';
+  return renderStageBar() + '<div class="stage" data-view="work" id="stage">'
+    + '<div class="stage-tools">'
+      + '<button class="stage-tool" aria-label="Enlarge">' + ICO.expand + '</button>'
+      + '<button class="stage-tool" aria-label="Add to wishlist">' + ICO.heart + '</button></div>'
+    + '<div class="view view-work"><div class="artwrap"><div class="frame" data-frame="'
+      + (framed ? 'framed' : 'none') + '"><div class="inner">'
+      + '<img src="' + art + '" alt="' + alt + '" width="1600" height="1600" fetchpriority="high"></div></div></div></div>'
+    + '<div class="view view-kitchen"><div class="roombox">'
+      + '<img class="bg" src="assets/room-kitchen.jpg" alt="A kitchen wall" loading="lazy">' + hang + '</div></div>'
+    + '<div class="view view-living"><div class="roombox">'
+      + '<img class="bg" src="assets/room-livingroom.jpg" alt="A living room wall" loading="lazy">' + hang + '</div></div>'
+    + '<div class="view view-ar"><div class="flat"><img src="assets/pdp-ar.jpg" alt="Preview the work on your own wall" loading="lazy"></div></div>'
+    + '<div class="view view-cert"><div class="flat"><img src="assets/pdp-cert.jpg" alt="Certificate of authenticity" loading="lazy"></div></div>'
+    + '<div class="view view-corner"><div class="flat"><img src="assets/frame-corner.jpg" alt="Framing corner detail" loading="lazy"></div></div>'
+    + '<div class="view view-back"><div class="flat"><img src="assets/frame-back.jpg" alt="Back of the framed work" loading="lazy"></div></div>'
+    + '<div class="stage-actions">'
+      + '<button class="stage-act">' + ICO.room + 'View in your room</button>'
+      + '<button class="stage-act">' + ICO.cube + '3D view</button></div>'
+  + '</div>' + renderThumbs();
+}
+
+function renderThumbs(){
+  const framed = CFG.frame.id !== 'none';
+  const art = framed ? 'assets/liu-framed.jpg' : ARTWORK.image;
+  const t = [
+    ['work',   '<img src="' + art + '" alt="">', 'The work'],
+    ['kitchen','<img class="full" src="assets/room-kitchen.jpg" alt=""><span class="t-art"><img src="' + art + '" alt=""></span>', 'In a kitchen'],
+    ['living', '<img class="full" src="assets/room-livingroom.jpg" alt=""><span class="t-art"><img src="' + art + '" alt=""></span>', 'In a living room'],
+    ['ar',     '<img class="full" src="assets/pdp-ar.jpg" alt="">',       'On your own wall'],
+    ['cert',   '<img class="full" src="assets/pdp-cert.jpg" alt="">',     'Certificate of authenticity'],
+    ['corner', '<img class="full" src="assets/frame-corner.jpg" alt="">', 'Framing detail'],
+    ['back',   '<img class="full" src="assets/frame-back.jpg" alt="">',   'Back view']
+  ];
+  return '<div class="thumbs" id="thumbs">' + t.map((r, i) =>
+    '<button class="thumb' + (r[0] === 'work' ? ' work' : '') + '" data-view="' + r[0] + '" '
+      + 'aria-current="' + (i === 0) + '" aria-label="' + r[2] + '" title="' + r[2] + '">' + r[1] + '</button>'
+  ).join('') + '</div>';
+}
+
+/* ── buy box ───────────────────────────────────────────────────── */
+function renderSizes(){
+  return SIZES.map(z => {
+    const on = z.id === CFG.size.id;
+    return '<a class="size" href="' + href({size:z.id}) + '" aria-current="' + on + '">' + z.label + '</a>';
+  }).join('');
+}
+function renderFraming(){
+  const list = FRAMES.map(f => {
+    const on = f.id === CFG.frame.id, add = f.price[CFG.size.id];
+    return '<a class="framing-opt" href="' + href({frame:f.id}) + '" aria-current="' + on + '">'
+      + '<span class="sw sw-' + f.id + '" style="--thumb:url(' + ARTWORK.image + ')"></span>'
+      + '<span class="fo-n">' + esc(f.name) + '<small>' + esc(f.full) + '</small></span>'
+      + '<span class="fo-p">' + (add ? '+ ' + money(add) : 'included') + '</span></a>';
+  }).join('');
+  return '<details class="framing-drawer">'
+    + '<summary><span class="fname">' + esc(CFG.frame.name) + '</span>'
+      + '<i class="chev">' + ICO.chev + '</i></summary>'
+    + '<div class="framing-list">' + list + '</div></details>';
+}
+
+function renderAvail(){
+  if (AV.code === 'none'){
+    return '<a class="avail" data-state="none" href="' + href({gallery:'auto', drawer:1}) + '" id="availRow">'
+      + '<div class="avail-in"><span class="pin">' + ICO.pin + '</span><div class="avail-txt">'
+        + '<div class="avail-main"><b>Check gallery availability</b></div>'
+        + '<div class="avail-sub">For this exact size and framing</div>'
+      + '</div><span class="avail-act">' + ICO.arrow + '</span></div></a>';
+  }
+  let main, sub;
+  const gName = '<span class="g-full">' + esc(AV.gallery.name) + '</span>'
+    + '<span class="g-short">' + esc(short(AV.gallery)) + '</span>';
+  if (AV.code === 'A'){ main = '<b>In stock</b> · ' + gName; sub = 'Hanging today, ready to collect'; }
+  else if (AV.code === 'B'){ main = '<b>' + stockWord(AV.qty) + '</b> · ' + gName; sub = 'Held in this exact configuration'; }
+  else if (AV.code === 'C'){
+    main = '<b>Unavailable in ' + esc(AV.gallery.city) + '</b>';
+    sub = 'Available to buy online';
+  } else { main = '<b>Not currently in a gallery</b>'; sub = 'Made to order, delivered in 8 to 12 days'; }
+  const reservable = AV.code === 'A' || AV.code === 'B';
+  const inner = '<div class="avail-in"><span class="pin">' + ICO.pin + '</span><div class="avail-txt">'
+      + '<div class="avail-main">' + main + '</div><div class="avail-sub">' + sub + '</div></div>'
+      + (reservable ? '<span class="avail-act">Reserve in gallery<span class="arw">' + ICO.arrow + '</span></span>' : '') + '</div>'
+    + '<div class="avail-updated">' + ICO.refresh + '<span>Updated for ' + CFG.size.label
+      + ' cm · ' + esc(CFG.frame.name) + '</span></div>';
+  const isOpen = Q.get('reserve') === '1';
+  return reservable
+    ? '<a class="avail" data-reserve data-state="' + AV.code + '" href="'
+      + (isOpen ? href({}) : href({reserve:1})) + '" id="availRow">' + inner + '</a>'
+    : '<div class="avail" data-state="' + AV.code + '" id="availRow">' + inner + '</div>';
+}
+
+function renderBuy(){
+  return '<div class="buy">'
+    + '<h1 class="artist-holder">' + esc(ARTWORK.artist) + '</h1>'
+    + '<div class="artwork-title">' + esc(ARTWORK.title) + '</div>'
+    + '<div class="edition"><span>Limited Edition ' + ARTWORK.editionSize + '</span>'
+      + '<span class="dotsep">•</span><span>' + esc(ARTWORK.signature) + '</span>'
+      + '<a href="#">About this work</a></div>'
+    + '<div class="sizes-block"><div class="sec-label">Choose size (cm)</div>'
+      + '<div class="sizes">' + renderSizes() + '</div></div>'
+    + '<div class="framing"><div class="sec-label">Choose framing</div>' + renderFraming() + '</div>'
+    + '<div class="price-container"><div class="price">' + money(CFG.price) + '</div>'
+      + '<div class="price-sub">incl. VAT<span class="ps-frame"> · ' + esc(CFG.frame.name) + '</span>'
+      + (CFG.outerCm > CFG.size.cm ? ' · framed ' + CFG.outerCm + ' × ' + CFG.outerCm + ' cm' : '') + '</div></div>'
+    + renderAvail() + renderReserve()
+    + '<div class="actions"><a class="btn-primary" href="#" id="ctaBtn">Buy online</a></div>'
+    + '<div class="more-info">Ships in 5 days / incl. VAT / plus <a href="#">shipping</a> € 6,90'
+      + '<br>' + ARTWORK.creationYear + ' / ' + ARTWORK.publicationYear + ' / ' + CFG.size.sku + '</div>'
+  + '</div>';
+}
+</script>
+
+<script>
+/* ── below the fold ────────────────────────────────────────────── */
+function renderVisit(){
+  const g = GAL || CFG.holders[0];
+  if (!g) return '';
+  const q = CFG.stock[g.id] || 0, os = openState(g);
+  return '<section class="section"><div class="sec-head"><h2>See it in person</h2>'
+    + '<span class="tag">' + CFG.size.label + ' cm · ' + esc(CFG.frame.name) + '</span></div>'
+    + '<div class="visit">'
+      + '<figure class="visit-photo"><img src="' + GALLERY_PHOTO + '" alt="Inside a LUMAS gallery" loading="lazy">'
+        + '<figcaption>Inside a LUMAS gallery</figcaption></figure>'
+      + '<div><h3>' + esc(g.name) + '</h3>'
+        + '<p>' + (q > 0
+            ? 'This piece is hanging here now, framed exactly as configured. See the print, the paper and the frame at full scale before you decide.'
+            : 'This configuration is not on the wall here today. The team will bring out the edition, mock it up at your size and show you the framing samples in person.') + '</p>'
+        + '<dl class="deets">'
+          + '<div class="deet"><dt>Address</dt><dd>' + esc(g.street) + '<br>' + esc(g.zip) + '</dd></div>'
+          + '<div class="deet"><dt>Opening hours</dt><dd>' + hoursText(g)
+            + '<br><span style="color:' + (os.open ? 'var(--ink)' : 'var(--ink-soft)') + '">' + os.text + '</span></dd></div>'
+          + '<div class="deet"><dt>Phone</dt><dd><a href="tel:' + g.phone.replace(/\s/g,'') + '">' + esc(g.phone) + '</a></dd></div>'
+          + '<div class="deet"><dt>This piece</dt><dd>' + (q > 0
+              ? '<span class="b">' + q + ' available</span> in ' + CFG.size.label + ' cm, ' + esc(CFG.frame.name)
+              : 'Not in stock in this configuration') + '</dd></div>'
+        + '</dl>'
+        + '<a class="ghost" href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Directions' + ICO.arrow + '</a>'
+      + '</div></div></section>';
+}
+
+/* ── drawer ────────────────────────────────────────────────────── */
+function renderDrawer(){
+  const ordered = GALLERIES.slice().sort((a,b) =>
+    ((CFG.stock[b.id] || 0) > 0) - ((CFG.stock[a.id] || 0) > 0) || a.km - b.km);
+  return '<div class="dr-top"><div class="dr-row1"><span class="dr-title">Gallery availability</span>'
+      + '<a class="ib" href="' + href({}) + '" aria-label="Close">' + ICO.close + '</a></div>'
+      + '<div class="dr-cfg"><div class="a">' + esc(ARTWORK.title) + ', ' + esc(ARTWORK.artist) + '</div>'
+      + '<div class="b"><span>' + CFG.size.label + ' cm</span><span class="dotsep">•</span>'
+      + '<span>' + esc(CFG.frame.name) + '</span><span class="pr">' + money(CFG.price) + '</span></div></div></div>'
+    + '<div class="dr-list">' + ordered.map(g => {
+        const q = CFG.stock[g.id] || 0, os = openState(g), on = GAL && g.id === GAL.id;
+        return '<div class="gcard" data-go="' + href({gallery:g.id, drawer:1}) + '" aria-current="' + !!on + '">'
+          + '<div class="gc-1"><span class="gc-nm">' + esc(g.name) + '</span>'
+            + '<span class="gc-km">' + (g.km < 10 ? g.km.toFixed(1) : Math.round(g.km)) + ' km</span></div>'
+          + '<div class="gc-st">' + (q > 0
+              ? '<i class="dot"></i><span class="b">' + stockWord(q) + '</span>'
+              : '<i class="dot hollow"></i><span style="color:var(--ink-soft)">Not in this configuration</span>') + '</div>'
+          + '<div class="gc-ad">' + esc(g.street) + '<br>' + esc(g.zip) + '</div>'
+          + '<div class="gc-hr">' + hoursText(g) + ' · ' + os.text + '</div>'
+          + '<div class="gc-act"><a href="' + href({gallery:g.id, drawer:1}) + '">'
+            + (q > 0 ? 'Reserve here' : on ? 'Selected' : 'Select this gallery') + '</a>'
+            + '<a href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Directions</a>'
+            + '<a href="tel:' + g.phone.replace(/\s/g,'') + '">Call</a></div></div>';
+      }).join('') + '</div>'
+    + '<div class="dr-foot">Stock is shown for the exact configuration above. Change the size or the framing and this list changes with it.</div>';
+}
+
+function renderReserve(){
+  const g = GAL || CFG.holders[0] || GALLERIES[0];
+  const cfgLine = CFG.size.label + ' cm, ' + esc(CFG.frame.name);
+  return '<div class="rwrap"><div class="rpanel"><div class="rpanel-in" id="rCard">'
+    + '<div class="rbody">'
+      + '<p class="rlead">We will hold <b>' + esc(ARTWORK.title) + '</b>, ' + cfgLine
+        + ', at LUMAS ' + esc(g.name) + ' and confirm by email.</p>'
+      + '<p class="gaddr">' + esc(g.street) + ', ' + esc(g.zip) + ' · ' + hoursText(g) + '</p>'
+      + '<form class="rform" id="rForm" novalidate>'
+        + '<input name="name" type="text" placeholder="Name *" required autocomplete="name">'
+        + '<div class="frow">'
+          + '<input name="email" type="email" placeholder="Email address *" required autocomplete="email">'
+          + '<input name="phone" type="tel" placeholder="Phone number (optional)" autocomplete="tel">'
+        + '</div>'
+        + '<button class="btn-primary" type="submit">Reserve this artwork</button>'
+      + '</form>'
+      + '<p class="rconsent">By reserving, you agree to be contacted by LUMAS about this artwork. '
+        + 'See our <a href="#">Privacy Policy</a>.</p>'
+    + '</div>'
+    + '<div class="rdone">'
+      + '<span class="rcheck"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg></span>'
+      + '<h3>Reservation received</h3>'
+      + '<p>Held at LUMAS ' + esc(g.name) + '. We will confirm by email.</p>'
+      + '<a class="ralt" href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Get directions</a>'
+    + '</div>'
+  + '</div></div></div>';
+}
+
+function renderStates(){
+  const S = [
+    ['1','Default, no gallery selected',       '?size=s80&frame=basel&gallery=none'],
+    ['2','Gallery selected, 3+ units',         '?size=s80&frame=basel&gallery=kudamm'],
+    ['3','Gallery selected, last one',         '?size=s80&frame=slim&gallery=kudamm'],
+    ['4','Sold out here, available elsewhere', '?size=s80&frame=artbox&gallery=kudamm'],
+    ['5','Not in any gallery',                 '?size=s80&frame=none&gallery=kudamm'],
+    ['6','Size switched, 80 to 120',           '?size=s120&frame=basel&gallery=kudamm'],
+    ['7','Framing switched, back in stock',    '?size=s40&frame=artbox&gallery=kudamm'],
+    ['8','Gallery drawer open',                '?size=s80&frame=basel&gallery=kudamm&drawer=1'],
+    ['9','Gallery switched in drawer',         '?size=s80&frame=basel&gallery=duesseldorf&drawer=1'],
+    ['R','Reserve pop-up',                     '?size=s80&frame=basel&gallery=kudamm&reserve=1'],
+    ['E','Remembered gallery, no parameter',   '?size=s80&frame=basel']
+  ];
+  return '<button class="sp-btn" id="spBtn" aria-label="Prototype states">'
+    + '<svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
+    + '<circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
+    + '<circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg><span>Prototype states</span></button>'
+    + '<div class="sp-menu">' + S.map(r => '<a href="' + r[2] + '"><i>' + r[0] + '</i><span>' + r[1] + '</span></a>').join('')
+    + '<hr><a href="mobile.html"><i>10</i><span>Mobile, 390 × 844</span></a></div>';
+}
+</script>
+
+<div class="promo" id="promo"></div>
+<script>document.getElementById('promo').innerHTML = renderPromo();</script>
+
+<header class="hdr"><div class="hdr-in" id="hdrIn"></div><div class="hdr-rule"></div></header>
+<script>document.getElementById('hdrIn').innerHTML = renderHeader();</script>
+
+<div class="shell">
+  <main class="hero" id="hero"></main>
+  <script>document.getElementById('hero').innerHTML = '<div class="stage-col">' + renderStage() + '</div>' + renderBuy();</script>
+  <div id="below"></div>
+  <script>document.getElementById('below').innerHTML = renderVisit();</script>
+  <footer class="ftr"><span>LUMAS</span><a href="#">Galleries</a><a href="#">Delivery and returns</a><a href="#">Framing</a><a href="#">Contact</a></footer>
+</div>
+
+<a class="scrim" href="#" id="scrim" aria-label="Close availability panel"></a>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-label="Gallery availability"></aside>
+<div class="sp" id="sp"></div>
+
+<script>
+document.getElementById('drawer').innerHTML = renderDrawer();
+document.getElementById('sp').innerHTML     = renderStates();
+document.getElementById('scrim').setAttribute('href', href({}));
+
+if (Q.get('drawer') === '1') document.body.classList.add('drawer-open');
+if (Q.get('reserve') === '1') document.body.classList.add('reserve-open');
+
+/* the reserve panel expands in place but still owns a URL, so it is
+   linkable and works without JS */
+function setReserve(open, push){
+  document.body.classList.toggle('reserve-open', open);
+  if (push) history.pushState({reserve:open?1:0}, '', open ? href({reserve:1}) : href({}));
+  const row = document.getElementById('availRow');
+  if (row) row.setAttribute('href', open ? href({}) : href({reserve:1}));
+  if (open){
+    const f = document.querySelector('#rForm input');
+    if (f) f.focus({preventScroll:true});
+    const panel = document.querySelector('.rpanel');
+    if (panel) setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'nearest'}), 340);
+  }
+}
+function closeReserve(){
+  if (!document.body.classList.contains('reserve-open')) return false;
+  setReserve(false, true);
+  return true;
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-reserve]')) return;
+  e.preventDefault();
+  setReserve(!document.body.classList.contains('reserve-open'), true);
+});
+const rForm = document.getElementById('rForm');
+if (rForm) rForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (!f.name.value.trim() || !/.+@.+\..+/.test(f.email.value)){ f.reportValidity(); return; }
+  document.getElementById('rCard').dataset.done = '1';
+});
+addEventListener('popstate', () => {
+  setReserve(new URLSearchParams(location.search).get('reserve') === '1', false);
+});
+
+/* gallery=auto is resolved once, then the URL is canonicalised, the way a
+   server would redirect to the resolved configuration URL */
+if (Q.get('gallery') === 'auto' && galleryId){
+  history.replaceState(null, '', href({ gallery:galleryId, drawer: Q.get('drawer') === '1' }));
+}
+
+/* availability changed because the configuration changed */
+try {
+  const prev = sessionStorage.getItem('lumas_cfg');
+  if (prev && prev !== CFG.key) document.body.dataset.cfgchanged = '1';
+  sessionStorage.setItem('lumas_cfg', CFG.key);
+} catch(e){}
+
+
+/* thumbnail rail switches the stage view; this is gallery state, not product state */
+const thumbs = document.getElementById('thumbs'), stage = document.getElementById('stage');
+if (thumbs && stage){
+  thumbs.addEventListener('click', e => {
+    const b = e.target.closest('.thumb');
+    if (!b) return;
+    stage.dataset.view = b.dataset.view;
+    thumbs.querySelectorAll('.thumb').forEach(t => t.setAttribute('aria-current', t === b));
+  });
+}
+
+/* whole gallery card is clickable without nesting links */
+document.getElementById('drawer').addEventListener('click', e => {
+  if (e.target.closest('a')) return;
+  const card = e.target.closest('.gcard');
+  if (card) location.href = card.dataset.go;
+});
+
+document.getElementById('promoX').addEventListener('click', () => { document.body.dataset.promo = '0'; });
+
+const sp = document.getElementById('sp');
+sp.addEventListener('click', e => { if (e.target.closest('#spBtn')) sp.dataset.open = sp.dataset.open === '1' ? '0' : '1'; });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (closeReserve()) return;
+  if (document.body.classList.contains('drawer-open')) location.href = href({});
+  else sp.dataset.open = '0';
+});
+</script>
+</body>
+</html>
