@@ -215,10 +215,17 @@ a { color: inherit; }
   background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
 }
 @keyframes shimmer{ to { background-position: -200% 0; } }
-.stage-dots{
-  position: absolute; left: 0; right: 0; bottom: 10px;
-  display: flex; justify-content: center; gap: 8px; pointer-events: none;
+.stage-dots{ display: none; }
+.stage-line{
+  position: absolute; left: 24%; right: 24%; bottom: 14px; height: 2px;
+  background: rgba(28,26,24,0.16); pointer-events: none;
 }
+.stage-line i{
+  display: block; width: 25%; height: 100%;
+  background: var(--color-charcoal-900, #1C1A18);
+  will-change: transform;
+}
+@media (min-width: 1024px){ .stage-line{ display: none; } }
 .stage-dots button{ pointer-events: auto; width: 32px; height: 32px; display: grid; place-items: center; }
 .stage-dots i{
   width: 6px; height: 6px; border-radius: 50%; background: var(--color-charcoal-300, #C7C3BE);
@@ -226,9 +233,8 @@ a { color: inherit; }
 }
 .stage-dots button[aria-current="true"] i{ background: var(--color-charcoal-900, #1C1A18); transform: scale(1.34); }
 .stage-zoom{
-  position: absolute; right: 10px; bottom: 10px; width: 44px; height: 44px;
-  display: grid; place-items: center; background: rgba(255,255,255,0.85);
-  border: 1px solid var(--color-border-default, #E2D8CC);
+  position: absolute; right: 98px; top: 10px; width: 44px; height: 44px;
+  display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752);
 }
 .stage-discover{ position: absolute; right: 54px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
 .stage-wish{ position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
@@ -250,6 +256,9 @@ a { color: inherit; }
 
 /* ══ zone 1 — identity ════════════════════════════════════════════════ */
 .identity{ padding: 20px var(--gutter) 0; }
+@media (max-width: 1023px){
+  .identity{ text-align: center; }
+}
 @media (min-width: 1024px){ .identity{ padding: 28px 0 0; } }
 .identity .artist{
   display: inline-block; font-family: 'UtileDisplay', 'Archivo', sans-serif;
@@ -365,18 +374,19 @@ a { color: inherit; }
 .view-tile{
   border: 1px solid var(--color-border-strong, #C7C3BE); border-radius: 4px; background: #fff;
   min-height: 54px; display: flex; align-items: center; justify-content: center; gap: 9px;
-  font-size: 12px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase;
+  font-size: 12px; font-weight: 400; letter-spacing: 0.9px; text-transform: uppercase;
+  color: var(--color-charcoal-800, #3A3835);
   transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
 }
 .view-tile:hover{ background: var(--color-bone-300, #F0EBE3); border-color: var(--color-charcoal-900, #1C1A18); }
 .view-tile:active{ transform: scale(0.97); }
-.view-tile svg{ width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.4; flex: 0 0 auto; }
+.view-tile svg{ width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.2; flex: 0 0 auto; }
 @media (min-width: 1024px){
   .stage-tools{ display: flex; align-items: stretch; gap: 14px; padding-top: 14px; }
   .stage-tools .thumb-rail{ padding-top: 0; flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
   .stage-tools .thumb-rail::-webkit-scrollbar{ display: none; }
   .view-tiles{ padding: 0; display: flex; gap: 10px; }
-  .view-tile{ flex-direction: column; gap: 7px; height: 88px; min-width: 124px; padding: 0 18px; font-size: 12px; letter-spacing: 1.1px; }
+  .view-tile{ flex-direction: column; gap: 7px; height: 88px; min-width: 124px; padding: 0 18px; font-size: 12px; letter-spacing: 0.9px; }
   .view-tile svg{ width: 24px; height: 24px; }
 }
 .trust-row{
@@ -669,6 +679,7 @@ a { color: inherit; }
         </div>
       </div>
       <div class="stage-dots" id="stageDots" role="tablist" aria-label="Galerie-Navigation"></div>
+      <div class="stage-line" aria-hidden="true"><i id="stageLineThumb"></i></div>
       <button class="stage-discover" id="discoverBtn" aria-label="Ähnliche Werke entdecken">
         <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M15.5 8.5l-2.2 5-5 2.2 2.2-5z"/></svg>
       </button>
@@ -1137,17 +1148,26 @@ slides.forEach((_, i) => {
   t.addEventListener('click', () => { goSlide(i, 'thumb'); });
   rail.appendChild(t);
 });
+let lastProgNav = 0, lastIdx = 0;
 function goSlide(i, method){
+  lastProgNav = Date.now();
   track_.scrollTo({ left: i * track_.clientWidth, behavior: 'smooth' });
   track('gallery_nav', { index: i, method });
 }
+const lineThumb = document.getElementById('stageLineThumb');
 let slideTimer;
 track_.addEventListener('scroll', () => {
+  const max = track_.scrollWidth - track_.clientWidth;
+  if (max > 0) lineThumb.style.transform = `translateX(${(track_.scrollLeft / max) * 300}%)`;
   clearTimeout(slideTimer);
   slideTimer = setTimeout(() => {
     const i = Math.round(track_.scrollLeft / track_.clientWidth);
     [...dots.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
     [...rail.children].forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
+    if (i !== lastIdx){
+      lastIdx = i;
+      if (Date.now() - lastProgNav > 600) track('gallery_nav', { index: i, method: 'swipe' });
+    }
   }, 80);
 }, { passive: true });
 
