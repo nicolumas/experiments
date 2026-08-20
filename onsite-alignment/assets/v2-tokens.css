@@ -1,0 +1,124 @@
+/* ============================================================
+   LUMAS V2 (2026) design tokens — prototypes shared layer
+   Source of truth: .claude/skills/v2-branding/SKILL.md
+   (NEW-BRANDING_STYLES-2026 Figma, fileKey xSKCLaYdnowiSy7DlBHK6c)
+
+   Tokens only — no component styles. Link prototype/assets/
+   lumas-fonts.css alongside this file for the actual @font-face
+   (self-hosted Utile Display).
+
+   Usage:  <link rel="stylesheet" href="assets/lumas-fonts.css">
+           <link rel="stylesheet" href="assets/v2-tokens.css">
+   ============================================================ */
+:root {
+  /* --- Primitives — "Three colours. Forever." --- */
+  --color-charcoal-900: #1C1A18;
+  --color-charcoal-800: #3A3835;
+  --color-charcoal-700: #5A5752;
+  --color-charcoal-500: #908C87;
+  --color-charcoal-300: #C7C3BE;
+  --color-charcoal-100: #E3E0DB;
+  --color-ivory-100: #F4EDE2;
+  --color-ivory-200: #F7F1E9;
+  --color-ivory-300: #FAF6F1;
+  --color-bone-100: #E2D8CC;
+  --color-bone-200: #EAE2D8;
+  --color-bone-300: #F0EBE3;
+
+  /* Short aliases used across existing prototypes */
+  --charcoal: var(--color-charcoal-900);
+  --ivory: var(--color-ivory-300);
+  --bone: var(--color-bone-100);
+  --ink: var(--color-charcoal-900);   /* text-primary shorthand */
+  --paper: var(--color-ivory-300);    /* page-surface shorthand */
+  --bg: var(--color-ivory-300);
+  --line: var(--color-bone-100);
+  --muted: var(--color-charcoal-500);
+
+  /* --- Semantic aliases (prefer these over primitives) --- */
+  --color-text-primary: #1C1A18;
+  --color-text-secondary: #5A5752;
+  --color-text-tertiary: #908C87;
+  --color-text-disabled: #C7C3BE;
+  --color-text-inverse: #F4EDE2;
+  --color-surface-page: #FAF6F1;
+  --color-surface-card: #FFFFFF;
+  --color-surface-raised: #F7F1E9;
+  --color-surface-sunken: #F4EDE2;
+  --color-surface-inverse: #1C1A18;
+  --color-surface-muted: #F0EBE3;
+  --color-border-default: #E2D8CC;
+  --color-border-subtle: #EAE2D8;
+  --color-border-strong: #C7C3BE;
+  --color-border-focus: #1C1A18;
+  --color-border-inverse: #F4EDE2;
+
+  /* Common prototype spellings of the same semantics */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  --text-inverse: var(--color-text-inverse);
+  --surface-page: var(--color-surface-page);
+  --surface-card: var(--color-surface-card);
+  --surface-raised: var(--color-surface-raised);
+  --surface-sunken: var(--color-surface-sunken);
+  --surface-inverse: var(--color-surface-inverse);
+  --surface-muted: var(--color-surface-muted);
+  --border-default: var(--color-border-default);
+  --border-subtle: var(--color-border-subtle);
+  --border-strong: var(--color-border-strong);
+  --border-focus: var(--color-border-focus);
+
+  /* --- Status — functional UI only, never decorative --- */
+  --color-status-success: #3A6B4A;
+  --color-status-success-bg: #E8F2EB;
+  --color-status-warning: #9B6D1E;
+  --color-status-warning-bg: #FDF5E6;
+  --color-status-error: #B5352A;
+  --color-status-error-bg: #FDECEA;
+
+  /* --- Typography ---
+     Utile Display for display tiers (NOT Fraunces);
+     Archivo for body/UI (wdth axis 100). */
+  --display: 'Utile Display', 'Utile Display Trial', Georgia, serif;
+  --sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--display);
+  --font-body: var(--sans);
+
+  /* Display tiers — clamp(min → max), tracking 0, sentence case */
+  --type-display-xl: clamp(64px, 5vw + 40px, 88px);   /* Light,   line 1.0  */
+  --type-display-h1: clamp(42px, 3vw + 28px, 62px);   /* Regular, line 1.04 */
+  --type-display-h2: clamp(34px, 2vw + 24px, 46px);   /* Regular, line 1.12 */
+  --type-display-h3: clamp(26px, 1.5vw + 18px, 34px); /* Regular, line 1.12 */
+  --type-display-h4: clamp(22px, 1vw + 16px, 26px);   /* Regular, line 1.25 */
+  --tracking-display: 0; /* never letter-space display tiers */
+
+  /* Body / UI — Archivo */
+  --type-body-large: 20px;   /* Light 300, line 1.6 */
+  --type-body: 16px;         /* Regular,   line 1.5 */
+  --type-body-small: 13px;   /* Regular,   line 1.65 */
+  --type-caption: 11px;      /* Regular,   line 1.5, tracking 3% */
+  --type-micro: 10px;        /* Regular,   line 1.5 */
+
+  /* Eyebrow / UI Label — the ONLY all-caps tiers (plus buttons) */
+  --type-eyebrow: 11px;            /* Archivo Bold 700, line 1.5 */
+  --tracking-eyebrow: 0.18em;      /* 18% */
+  --type-ui-label: 10px;           /* Archivo Bold 700, line 1.5 */
+  --tracking-ui-label: 0.18em;     /* 18% */
+  --tracking-button: 1.82px;       /* primary/secondary button labels, 13px */
+
+  /* --- Spacing — base 4 ladder (sp/1 … sp/24) --- */
+  --sp-1: 4px;  --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px;  --sp-8: 32px;  --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
+
+  /* --- Shadows — rare, paper-soft; tonal separation first --- */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 24, 0.08);
+  --shadow-md: 0 2px 8px rgba(28, 26, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(28, 26, 24, 0.10);
+  --shadow-frame: 0 18px 60px -16px rgba(28, 26, 24, 0.35); /* featured artworks only */
+
+  /* --- Radii (only confirmed values) --- */
+  --radius-xs: 2px; /* chips */
+  --radius-sm: 4px; /* inputs */
+}
