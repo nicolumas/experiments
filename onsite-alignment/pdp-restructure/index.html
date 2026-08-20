@@ -400,21 +400,40 @@ a { color: inherit; }
   transition: color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
 .zone4 .tab[aria-selected="true"]{ color: var(--color-text-primary, #1C1A18); border-bottom-color: var(--color-charcoal-900, #1C1A18); }
-.works-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
-@media (min-width: 1024px){ .works-grid{ grid-template-columns: repeat(4, 1fr); gap: 28px 20px; } }
-.work-card{ text-decoration: none; display: block; }
-.work-card .art{
-  background: var(--stage); aspect-ratio: 1/1; display: grid; place-items: center; padding: 12%;
-  overflow: hidden;
+.works-wrap{ position: relative; }
+.works-grid{
+  display: flex; gap: clamp(16px, 2vw, 28px); overflow-x: auto;
+  scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;
 }
+.works-grid::-webkit-scrollbar{ display: none; }
+.work-card{ text-decoration: none; display: block; flex: 0 0 auto; width: min(64vw, 300px); scroll-snap-align: start; }
+@media (min-width: 1024px){ .work-card{ width: clamp(250px, 21vw, 340px); } }
+.work-card .art{
+  aspect-ratio: 1/1; display: grid; place-items: center; overflow: hidden;
+}
+.works-arrow{
+  position: absolute; top: 40%; transform: translateY(-50%); z-index: 2;
+  width: 48px; height: 48px; border-radius: 50%; background: #fff;
+  border: 1px solid var(--color-border-default, #E2D8CC);
+  box-shadow: 0 2px 10px rgba(28,26,24,0.14);
+  display: none; place-items: center;
+  transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.works-arrow:hover{ background: var(--color-bone-300, #F0EBE3); }
+.works-arrow:active{ transform: translateY(-50%) scale(0.94); }
+.works-arrow svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.works-arrow.prev{ left: -10px; }
+.works-arrow.next{ right: -10px; }
+@media (min-width: 1024px){ .works-arrow{ display: grid; } }
 .work-card .art img{
   max-width: 100%; max-height: 100%; object-fit: contain;
   transition: transform 520ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine){ .work-card:hover .art img{ transform: scale(1.03); } }
-.work-card .w-title{ font-size: 13px; font-weight: 600; margin-top: 8px; }
-.work-card .w-artist{ font-size: 12px; color: var(--color-text-tertiary, #908C87); margin-top: 1px; }
-.work-card .w-badge{ font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
+.work-card .w-title{ font-size: 16px; font-weight: 600; margin-top: 6px; }
+.work-card .w-artist{ font-size: 14px; color: var(--color-charcoal-700, #5A5752); margin-top: 2px; }
+.work-card .w-badge{ font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); display: block; margin-top: 14px; }
 .zone4 .all-link{ margin-top: 24px; text-align: center; }
 
 /* ══ sticky ATC ═══════════════════════════════════════════════════════ */
@@ -739,7 +758,15 @@ a { color: inherit; }
     <button class="tab" role="tab" aria-selected="true" id="tabArtist" data-tab="artist">Von Marta Contreras Simó</button>
     <button class="tab" role="tab" aria-selected="false" id="tabSimilar" data-tab="similar">Ähnliche Werke</button>
   </div>
-  <div class="works-grid" id="worksGrid"></div>
+  <div class="works-wrap">
+    <button class="works-arrow prev" id="worksPrev" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="works-grid" id="worksGrid"></div>
+    <button class="works-arrow next" id="worksNext" aria-label="Weiter">
+      <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
   <div class="all-link">
     <a class="btn-ghost" style="display:inline-block" href="https://www.lumas.de/artist/marta_contreras_simo/" id="allWorksLink">Alle Werke der Künstlerin</a>
   </div>
@@ -1196,6 +1223,15 @@ document.querySelectorAll('.zone4 .tab').forEach(t => {
   });
 });
 renderWorks('artist');
+const worksGrid_ = document.getElementById('worksGrid');
+document.getElementById('worksPrev').addEventListener('click', () => {
+  worksGrid_.scrollBy({ left: -worksGrid_.clientWidth * 0.8, behavior: 'smooth' });
+  track('carousel_nav', { direction: 'prev' });
+});
+document.getElementById('worksNext').addEventListener('click', () => {
+  worksGrid_.scrollBy({ left: worksGrid_.clientWidth * 0.8, behavior: 'smooth' });
+  track('carousel_nav', { direction: 'next' });
+});
 
 /* ═══ scale viewer (zoom + room scale + AR in one) ═══ */
 const viewer = document.getElementById('viewer');
