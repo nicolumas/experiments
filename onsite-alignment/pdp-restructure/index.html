@@ -193,7 +193,12 @@ a { color: inherit; }
   aspect-ratio: 1 / 1; padding: clamp(20px, 6vw, 56px);
 }
 @media (min-width: 1024px){
-  .stage-slide{ aspect-ratio: 7 / 6; padding: clamp(48px, 9%, 140px); }
+  /* live behaviour: the stage fills the first viewport (minus chrome + thumb row), art contained inside */
+  .stage-slide{
+    aspect-ratio: auto;
+    height: clamp(480px, calc(100dvh - 248px), 900px);
+    padding: clamp(36px, 4.5vw, 80px);
+  }
 }
 .stage-slide img{
   max-width: 100%; max-height: 100%; width: auto; height: auto;
@@ -516,8 +521,7 @@ a { color: inherit; }
 .zoom-pane img{ position: absolute; max-width: none; transform-origin: 0 0; will-change: transform; user-select: none; -webkit-user-drag: none; }
 .ar-pane{ position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 32px; background: var(--page); }
 #arQrPane{ display: flex; align-items: center; justify-content: center; gap: clamp(32px, 6vw, 96px); flex-wrap: wrap; }
-.qr-visual{ background: var(--stage); padding: clamp(24px, 4vw, 56px); }
-.qr-visual img{ max-width: min(38vw, 380px); max-height: 52vh; object-fit: contain; }
+.qr-visual img{ max-width: min(36vw, 400px); max-height: 62vh; object-fit: contain; }
 .qr-info{ max-width: 400px; }
 .qr-head{ font-weight: 700; font-size: clamp(20px, 2.4vw, 26px); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px; }
 .qr-sub{ font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-charcoal-800, #3A3835); margin-bottom: 24px; line-height: 1.7; }
@@ -822,7 +826,7 @@ a { color: inherit; }
       </div>
       <div id="arQrPane" hidden>
         <div class="qr-visual">
-          <img src="https://www.lumas.de/product/image-with-default-frame/?abstractId=6437864&amp;sku=MCS36" alt="Mina&amp;Sena an einer Wand">
+          <img src="https://media.lumas.de/pdp/ar-cta.jpg" alt="Mina&amp;Sena auf dem iPhone im Raum betrachtet">
         </div>
         <div class="qr-info">
           <p class="qr-head">Preview an deiner Wand</p>
