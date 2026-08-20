@@ -134,6 +134,37 @@ a { color: inherit; }
   display: flex; align-items: center; gap: 6px;
   height: 56px; padding: 0 8px;
 }
+.desktop-only{ display: none !important; }
+@media (min-width: 1024px){
+  .site-head{ height: 76px; padding: 0 16px; gap: 4px; }
+  .site-head .wordmark img{ height: 24px; }
+  .desktop-only{ display: flex !important; }
+  .mobile-only{ display: none !important; }
+  .head-nav{ display: flex; gap: 4px; margin-left: clamp(16px, 4vw, 56px); }
+  .head-nav a{
+    display: block; padding: 10px 14px; text-decoration: none;
+    font-size: 16px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap;
+  }
+  .head-nav a:hover{ text-decoration: underline; text-underline-offset: 4px; }
+  .head-search{
+    position: relative; margin-left: clamp(12px, 2.5vw, 40px);
+    width: clamp(200px, 22vw, 320px);
+  }
+  .head-search input{
+    width: 100%; height: 44px; border: 0; border-radius: 4px;
+    background: var(--color-bone-300, #F0EBE3); padding: 0 44px 0 16px;
+    font: inherit; font-size: 15px; color: var(--color-text-primary, #1C1A18);
+  }
+  .head-search input::placeholder{ color: var(--color-charcoal-700, #5A5752); }
+  .head-search svg{
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    width: 19px; height: 19px; stroke: var(--color-charcoal-800, #3A3835); fill: none; stroke-width: 1.5;
+  }
+  .head-locale{
+    display: flex; align-items: center; gap: 5px; padding: 10px 8px;
+    font-size: 15px; font-weight: 600;
+  }
+}
 .site-head .wordmark{ display: flex; align-items: center; padding: 8px; }
 .site-head .wordmark img{ height: 19px; width: auto; display: block; }
 .site-head .spacer{ flex: 1; }
@@ -143,8 +174,10 @@ a { color: inherit; }
 /* ══ layout shell ═════════════════════════════════════════════════════ */
 .shell{ max-width: var(--maxw); margin: 0 auto; }
 @media (min-width: 1024px){
-  .shell.pdp{ display: grid; grid-template-columns: minmax(0, 7fr) minmax(380px, 5fr); gap: clamp(32px, 4vw, 72px); padding: 0 var(--gutter); align-items: start; }
-  .col-stage{ position: sticky; top: 72px; }
+  .shell{ max-width: none; }
+  .shell.pdp{ display: grid; grid-template-columns: minmax(0, 1fr) clamp(420px, 32vw, 540px); gap: 32px; padding: 0 16px; align-items: start; }
+  .col-stage{ position: sticky; top: 88px; }
+  .col-buy{ padding-right: clamp(0px, 2vw, 40px); }
 }
 
 /* ══ zone 1 — stage / gallery ═════════════════════════════════════════ */
@@ -158,6 +191,9 @@ a { color: inherit; }
   flex: 0 0 100%; scroll-snap-align: center;
   display: grid; place-items: center;
   aspect-ratio: 1 / 1; padding: clamp(20px, 6vw, 56px);
+}
+@media (min-width: 1024px){
+  .stage-slide{ aspect-ratio: 7 / 6; padding: clamp(48px, 9%, 140px); }
 }
 .stage-slide img{
   max-width: 100%; max-height: 100%; width: auto; height: auto;
@@ -350,7 +386,7 @@ a { color: inherit; }
 }
 
 /* ══ zone 4 — continue ════════════════════════════════════════════════ */
-.zone4{ padding: 44px var(--gutter) 72px; max-width: var(--maxw); margin: 0 auto; }
+.zone4{ padding: 44px 16px 72px; max-width: none; }
 .zone4 .tabs{ display: flex; gap: 22px; border-bottom: 1px solid var(--color-border-default, #E2D8CC); margin-bottom: 20px; }
 .zone4 .tab{
   padding: 10px 2px 12px; font-family: 'UtileDisplay', sans-serif; font-size: clamp(19px, 2.4vw, 24px);
@@ -442,20 +478,50 @@ a { color: inherit; }
 }
 .mode-chip[aria-selected="true"]{ background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); border-color: var(--color-surface-inverse, #1C1A18); }
 .viewer-stage{ flex: 1; position: relative; overflow: hidden; }
-.wall{
-  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center;
+.obj-pane{
+  position: absolute; inset: 0; display: none;
+  background: radial-gradient(120% 90% at 50% 32%, #F1F0EE 0%, #E3E1DE 55%, #D3D1CD 100%);
 }
-.wall-floor{ position: absolute; left: 0; right: 0; bottom: 0; height: 18%; border-top: 1px solid var(--color-bone-100, #E2D8CC); background: var(--color-ivory-100, #F4EDE2); }
-.wall-art{ position: absolute; box-shadow: 0 18px 60px -16px rgba(28,26,24,0.3); }
-.wall-art img{ width: 100%; height: 100%; object-fit: contain; }
-.wall-sofa{ position: absolute; border: 1.5px solid var(--color-charcoal-500, #908C87); border-bottom: 0; opacity: 0.75; }
-.wall-sofa::before{ content: ""; position: absolute; left: -7%; right: -7%; bottom: 0; height: 34%; border: 1.5px solid var(--color-charcoal-500, #908C87); background: var(--color-ivory-300, #FAF6F1); }
-.wall-legend{ position: absolute; left: var(--gutter); bottom: 12px; font-size: 11px; color: var(--color-text-tertiary, #908C87); }
-.viewer-sizes{ display: flex; gap: 8px; justify-content: center; padding: 12px var(--gutter) calc(16px + env(safe-area-inset-bottom)); }
+.obj-pane.on{ display: block; }
+.obj-toolbar{
+  position: absolute; left: 16px; top: 16px; z-index: 2;
+  display: flex; gap: 2px; background: #fff; border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(28,26,24,0.14); padding: 4px;
+}
+.obj-toolbar button{ width: 44px; height: 44px; display: grid; place-items: center; border-radius: 6px; }
+.obj-toolbar button:hover{ background: var(--color-bone-300, #F0EBE3); }
+.obj-toolbar button[aria-pressed="true"]{ background: var(--color-charcoal-900, #1C1A18); color: #fff; }
+.obj-toolbar svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.obj-scene{
+  position: absolute; inset: 0; display: grid; place-items: center;
+  perspective: 1600px; cursor: grab; touch-action: none;
+}
+.obj-scene:active{ cursor: grabbing; }
+.obj3d{
+  position: relative; transform-style: preserve-3d; will-change: transform;
+  width: min(56vmin, 560px); aspect-ratio: 1 / 1;
+}
+.obj-face{
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  backface-visibility: hidden;
+  box-shadow: 0 40px 80px -30px rgba(28,26,24,0.35);
+}
+.obj-edge{ position: absolute; background: #26241f; }
+.obj-edge.e-r{ width: 12px; height: 100%; right: 0; top: 0; transform-origin: right center; transform: rotateY(90deg) translateX(6px); background: linear-gradient(#1d1b17, #33302a); }
+.obj-edge.e-l{ width: 12px; height: 100%; left: 0; top: 0; transform-origin: left center; transform: rotateY(-90deg) translateX(-6px); background: linear-gradient(#1d1b17, #33302a); }
+.obj-edge.e-t{ width: 100%; height: 12px; top: 0; left: 0; transform-origin: center top; transform: rotateX(90deg) translateY(-6px); }
+.obj-edge.e-b{ width: 100%; height: 12px; bottom: 0; left: 0; transform-origin: center bottom; transform: rotateX(-90deg) translateY(6px); }
 .zoom-pane{ position: absolute; inset: 0; overflow: hidden; display: none; cursor: grab; touch-action: none; }
 .zoom-pane.on{ display: block; }
 .zoom-pane img{ position: absolute; max-width: none; transform-origin: 0 0; will-change: transform; user-select: none; -webkit-user-drag: none; }
-.ar-pane{ position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 32px; }
+.ar-pane{ position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 32px; background: var(--page); }
+#arQrPane{ display: flex; align-items: center; justify-content: center; gap: clamp(32px, 6vw, 96px); flex-wrap: wrap; }
+.qr-visual{ background: var(--stage); padding: clamp(24px, 4vw, 56px); }
+.qr-visual img{ max-width: min(38vw, 380px); max-height: 52vh; object-fit: contain; }
+.qr-info{ max-width: 400px; }
+.qr-head{ font-weight: 700; font-size: clamp(20px, 2.4vw, 26px); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px; }
+.qr-sub{ font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-charcoal-800, #3A3835); margin-bottom: 24px; line-height: 1.7; }
+.qr-code{ margin: 0 auto; }
 .ar-pane.on{ display: grid; }
 
 /* ══ debug console ════════════════════════════════════════════════════ */
@@ -492,19 +558,43 @@ a { color: inherit; }
 </div>
 
 <header class="site-head">
-  <button class="icon-btn" aria-label="Zurück zur Übersicht">
+  <button class="icon-btn mobile-only" aria-label="Zurück zur Übersicht">
     <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
   </button>
   <a class="wordmark" href="https://www.lumas.de/" aria-label="LUMAS Startseite"><img src="../assets/lumas-logo-black.svg" alt="LUMAS"></a>
-  <div class="spacer"></div>
-  <button class="icon-btn" aria-label="Suche">
+  <nav class="head-nav desktop-only" aria-label="Hauptnavigation">
+    <a href="https://www.lumas.de/search/?q=">Kunstwerke</a>
+    <a href="https://www.lumas.de/alle-kuenstler/">Top 20</a>
+    <a href="https://www.lumas.de/artfinder/">Artfinder</a>
+    <a href="https://www.lumas.de/inspired-art-magazine/">Inspiration</a>
+    <a href="https://www.lumas.de/galerien/">Galerien</a>
+    <a href="https://www.lumas.de/warum-lumas/">Über uns</a>
+  </nav>
+  <div class="head-search desktop-only">
+    <input type="search" placeholder="Suche" aria-label="Produktsuche">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  </div>
+  <div class="spacer"></div>
+  <button class="icon-btn mobile-only" aria-label="Suche">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  </button>
+  <button class="icon-btn desktop-only" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><path d="M8.8 9.2c.3 2.6 3.4 5.5 6 6l1.4-1.4-2-1.3-1 .7c-.8-.4-1.9-1.5-2.3-2.3l.7-1-1.3-2-1.5 1.3z"/></svg>
+  </button>
+  <button class="icon-btn desktop-only" aria-label="Telefon">
+    <svg viewBox="0 0 24 24"><path d="M5 4h4l1.5 4.5-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2L20 15v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
   </button>
   <button class="icon-btn" aria-label="Wunschliste">
     <svg viewBox="0 0 24 24"><path d="M12 21C7 16.6 3 13.3 3 9.3 3 6.4 5.2 4.5 7.7 4.5c1.7 0 3.3.9 4.3 2.4 1-1.5 2.6-2.4 4.3-2.4 2.5 0 4.7 1.9 4.7 4.8 0 4-4 7.3-9 11.7z"/></svg>
   </button>
+  <button class="icon-btn desktop-only" aria-label="Konto">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/></svg>
+  </button>
   <button class="icon-btn" aria-label="Warenkorb">
     <svg viewBox="0 0 24 24"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+  </button>
+  <button class="head-locale desktop-only" aria-label="Land wählen">DE
+    <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
   </button>
 </header>
 
@@ -699,29 +789,49 @@ a { color: inherit; }
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Werk in Größe sehen">
   <div class="viewer-head">
     <div class="viewer-modes" role="tablist">
-      <button class="mode-chip" role="tab" data-mode="ar" aria-selected="false" id="arChip" hidden>AR-Ansicht</button>
+      <button class="mode-chip" role="tab" data-mode="ar" aria-selected="false" id="arChip">Im Raum betrachten</button>
       <button class="mode-chip" role="tab" data-mode="scale" aria-selected="true">3D-Ansicht</button>
       <button class="mode-chip" role="tab" data-mode="zoom" aria-selected="false">Zoom</button>
     </div>
     <button class="x" data-close aria-label="Schließen" style="width:44px;height:44px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <div class="viewer-stage">
-    <div class="wall" id="wallPane">
-      <div class="wall-floor"></div>
-      <div class="wall-sofa" id="wallSofa" title="Sofa, 180 cm, zum Größenvergleich"></div>
-      <div class="wall-art" id="wallArt"><img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt=""></div>
-      <div class="wall-legend" id="wallLegend">Sofa 180 cm breit als Maßstab</div>
+    <div class="obj-pane" id="objPane">
+      <div class="obj-toolbar" role="toolbar" aria-label="3D-Steuerung">
+        <button id="objReset" aria-label="Ansicht zurücksetzen"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="2.4"/></svg></button>
+        <button id="objZoomIn" aria-label="Vergrößern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+        <button id="objZoomOut" aria-label="Verkleinern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+        <button id="objSpin" aria-label="Automatisch drehen" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4.9 11a7.2 7.2 0 0 1 12.4-3.9L20 9.7M20 9.7V5m0 4.7h-4.6M19.1 13a7.2 7.2 0 0 1-12.4 3.9L4 14.3m0 0V19m0-4.7h4.6"/></svg></button>
+      </div>
+      <div class="obj-scene" id="objScene">
+        <div class="obj3d" id="obj3d">
+          <img class="obj-face" src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena als Objekt in 3D" draggable="false">
+          <div class="obj-edge e-r"></div>
+          <div class="obj-edge e-l"></div>
+          <div class="obj-edge e-t"></div>
+          <div class="obj-edge e-b"></div>
+        </div>
+      </div>
     </div>
     <div class="zoom-pane" id="zoomPane"><img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena in hoher Auflösung" id="zoomImg" draggable="false"></div>
     <div class="ar-pane" id="arPane">
-      <div>
-        <p class="display" style="font-size:24px;margin-bottom:10px">Im eigenen Raum betrachten</p>
+      <div id="arLaunchPane">
+        <p class="display" style="font-size:24px;margin-bottom:10px">Im Raum betrachten</p>
         <p class="body-small" style="max-width:42ch;margin:0 auto 20px;color:var(--color-text-secondary)">Öffnet die Augmented-Reality-Ansicht deines Geräts und projiziert das Werk in Originalgröße an deine Wand.</p>
         <button class="btn btn-primary" style="width:auto" id="arLaunch">AR starten</button>
       </div>
+      <div id="arQrPane" hidden>
+        <div class="qr-visual">
+          <img src="https://www.lumas.de/product/image-with-default-frame/?abstractId=6437864&amp;sku=MCS36" alt="Mina&amp;Sena an einer Wand">
+        </div>
+        <div class="qr-info">
+          <p class="qr-head">Preview an deiner Wand</p>
+          <p class="qr-sub">Scan den QR-Code<br>(nur für iPhone / Safari)</p>
+          <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&amp;data=https%3A%2F%2Fwww.lumas.de%2Fpictures%2Fmarta_contreras_simo%2Fminasena%2F" alt="QR-Code: Werk auf dem iPhone im Raum betrachten" width="220" height="220">
+        </div>
+      </div>
     </div>
   </div>
-  <div class="viewer-sizes" id="viewerSizes" role="radiogroup" aria-label="Größe im Raum wählen"></div>
 </div>
 
 <!-- debug console -->
@@ -1086,20 +1196,19 @@ renderWorks('artist');
 /* ═══ scale viewer (zoom + room scale + AR in one) ═══ */
 const viewer = document.getElementById('viewer');
 const isTouch = matchMedia('(pointer: coarse)').matches;
-if (isTouch) document.getElementById('arChip').hidden = false; // AR mobile only — no dead entry on desktop
+document.getElementById('arLaunchPane').hidden = !isTouch;
+document.getElementById('arQrPane').hidden = isTouch; // desktop: QR handoff to the phone — no dead entry
 function openViewer(mode){
   viewer.classList.add('on');
   setViewerMode(mode);
-  renderViewerSizes();
   track('scale_viewer_open', { modality: mode });
 }
 function setViewerMode(mode){
   document.querySelectorAll('.mode-chip').forEach(c => c.setAttribute('aria-selected', String(c.dataset.mode === mode)));
-  document.getElementById('wallPane').style.display = mode === 'scale' ? 'flex' : 'none';
+  document.getElementById('objPane').classList.toggle('on', mode === 'scale');
   document.getElementById('zoomPane').classList.toggle('on', mode === 'zoom');
   document.getElementById('arPane').classList.toggle('on', mode === 'ar');
-  document.getElementById('viewerSizes').style.visibility = mode === 'scale' ? 'visible' : 'hidden';
-  if (mode === 'scale') layoutWall();
+  if (mode === 'scale') resetObj();
   if (mode === 'zoom') initZoom();
 }
 document.querySelectorAll('.mode-chip').forEach(c => c.addEventListener('click', () => {
@@ -1113,35 +1222,34 @@ document.getElementById('arLaunch').addEventListener('click', () => {
   track('ar_preview', { supported: isTouch });
   alert('Prototyp: hier startet die native AR-Ansicht (Quick Look / Scene Viewer).');
 });
-function renderViewerSizes(){
-  const el = document.getElementById('viewerSizes'); el.innerHTML = '';
-  PRODUCT.sizes.forEach(s => {
-    const b = document.createElement('button');
-    b.className = 'mode-chip'; b.setAttribute('role', 'radio');
-    b.setAttribute('aria-selected', String(s === state.size));
-    b.textContent = s.dim + ' cm';
-    b.addEventListener('click', () => { state.size = s; update('viewer_size'); renderViewerSizes(); layoutWall(); });
-    el.appendChild(b);
-  });
-}
-function layoutWall(){
-  // true scale: sofa 180 cm wide against artwork edge length
-  const pane = document.getElementById('wallPane');
-  const W = pane.clientWidth, H = pane.clientHeight;
-  // scene: sofa 180 cm wide, art up to 120 cm hung 30 cm above it → ~230 cm tall
-  const pxPerCm = Math.min(W * 0.85 / 190, H * 0.62 / 232);
-  const sofaW = 180 * pxPerCm, sofaH = 78 * pxPerCm;
-  const artCm = parseInt(state.size.key, 10);
-  const artPx = artCm * pxPerCm;
-  const sofa = document.getElementById('wallSofa');
-  const floorY = H * 0.86;
-  sofa.style.cssText += `;width:${sofaW}px;height:${sofaH}px;left:${(W - sofaW) / 2}px;top:${floorY - sofaH}px`;
-  const art = document.getElementById('wallArt');
-  const artBottom = floorY - sofaH - 30 * pxPerCm; // 30 cm over sofa
-  art.style.cssText += `;width:${artPx}px;height:${artPx}px;left:${(W - artPx) / 2}px;top:${artBottom - artPx}px`;
-  document.getElementById('wallLegend').textContent = `Maßstabsansicht · Sofa 180 cm · Werk ${state.size.dim} cm`;
-}
-addEventListener('resize', () => { if (viewer.classList.contains('on')) layoutWall(); });
+/* 3D object viewer — drag to rotate, toolbar for zoom / recenter / auto-spin */
+const obj3d = document.getElementById('obj3d');
+const objScene = document.getElementById('objScene');
+let oRy = -24, oRx = 4, oScale = 1, spinning = false, spinRaf = null;
+function applyObj(){ obj3d.style.transform = `scale(${oScale}) rotateX(${oRx}deg) rotateY(${oRy}deg)`; }
+function resetObj(){ oRy = -24; oRx = 4; oScale = 1; stopSpin(); applyObj(); }
+let oDrag = false, oLx = 0, oLy = 0;
+objScene.addEventListener('pointerdown', e => { oDrag = true; oLx = e.clientX; oLy = e.clientY; stopSpin(); objScene.setPointerCapture(e.pointerId); });
+objScene.addEventListener('pointermove', e => {
+  if (!oDrag) return;
+  oRy = Math.max(-85, Math.min(85, oRy + (e.clientX - oLx) * 0.35));
+  oRx = Math.max(-25, Math.min(25, oRx - (e.clientY - oLy) * 0.2));
+  oLx = e.clientX; oLy = e.clientY; applyObj();
+});
+objScene.addEventListener('pointerup', () => oDrag = false);
+document.getElementById('objZoomIn').addEventListener('click', () => { oScale = Math.min(1.8, oScale * 1.15); applyObj(); });
+document.getElementById('objZoomOut').addEventListener('click', () => { oScale = Math.max(0.5, oScale * 0.87); applyObj(); });
+document.getElementById('objReset').addEventListener('click', resetObj);
+function stopSpin(){ spinning = false; document.getElementById('objSpin').setAttribute('aria-pressed', 'false'); if (spinRaf) cancelAnimationFrame(spinRaf); }
+document.getElementById('objSpin').addEventListener('click', () => {
+  spinning = !spinning;
+  document.getElementById('objSpin').setAttribute('aria-pressed', String(spinning));
+  if (spinning && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const step = () => { if (!spinning) return; oRy += 0.35; if (oRy > 180) oRy -= 360; applyObj(); spinRaf = requestAnimationFrame(step); };
+    spinRaf = requestAnimationFrame(step);
+  } else stopSpin();
+});
+applyObj();
 
 /* zoom pane: drag + wheel + double-tap */
 let zx = 0, zy = 0, zs = 1, dragging = false, lx = 0, ly = 0;
