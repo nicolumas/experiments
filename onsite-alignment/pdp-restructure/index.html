@@ -508,7 +508,7 @@ a { color: inherit; }
 .prov-scale i.hot{ background: var(--color-charcoal-900, #1C1A18); }
 .prov-scale-labels{ display: flex; justify-content: space-between; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
 .prov-scale-labels span{ white-space: nowrap; }
-@media (max-width: 1023px){ .prov-scale-labels{ font-size: 9px; letter-spacing: 0.08em; gap: 8px; } }
+@media (max-width: 1023px){ .prov-scale-labels{ display: none; } .prov-scale{ margin-bottom: 2px; } }
 
 /* scale viewer */
 .viewer{
@@ -831,7 +831,7 @@ a { color: inherit; }
     </dl>
     <div class="prov-scale" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></div>
     <div class="prov-scale-labels" aria-hidden="true"><span>Geheimtipp</span><span>Beliebt</span><span>Stark nachgefragt</span><span>Letzte Exemplare</span></div>
-    <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--color-text-secondary)">Nachfragestatus: beliebt. Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
+    <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--color-text-secondary)"><strong>Nachfragestatus: beliebt.</strong> Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
   </div>
 </aside>
 
