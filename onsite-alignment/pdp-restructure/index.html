@@ -232,13 +232,19 @@ a { color: inherit; }
   transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out); display: block;
 }
 .stage-dots button[aria-current="true"] i{ background: var(--color-charcoal-900, #1C1A18); transform: scale(1.34); }
-.stage-zoom{
-  position: absolute; right: 98px; top: 10px; width: 44px; height: 44px;
-  display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752);
+.stage-actions{
+  position: absolute; top: 12px; right: 12px;
+  display: flex; flex-direction: column; gap: 8px;
 }
-.stage-discover{ position: absolute; right: 54px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
-.stage-wish{ position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--color-charcoal-700, #5A5752); }
-.stage-wish[aria-pressed="true"] svg{ fill: var(--color-charcoal-900, #1C1A18); }
+.stage-actions button{
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--color-border-subtle, #EAE2D8); border-radius: 4px;
+  color: var(--color-charcoal-700, #5A5752);
+  transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.stage-actions button:hover{ background: var(--color-bone-300, #F0EBE3); }
+.stage-actions button:active{ transform: scale(0.94); }
+#wishBtn[aria-pressed="true"] svg{ fill: var(--color-charcoal-900, #1C1A18); }
 
 /* thumbnail rail — desktop only */
 .thumb-rail{ display: none; }
@@ -687,16 +693,18 @@ a { color: inherit; }
       </div>
       <div class="stage-dots" id="stageDots" role="tablist" aria-label="Galerie-Navigation"></div>
       <div class="stage-line" aria-hidden="true"><i id="stageLineThumb"></i></div>
-      <button class="stage-discover" id="discoverBtn" aria-label="Ähnliche Werke entdecken">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M15.5 8.5l-2.2 5-5 2.2 2.2-5z"/></svg>
-      </button>
-      <button class="stage-wish" id="wishBtn" aria-pressed="false" aria-label="Auf die Wunschliste">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M12 21C7 16.6 3 13.3 3 9.3 3 6.4 5.2 4.5 7.7 4.5c1.7 0 3.3.9 4.3 2.4 1-1.5 2.6-2.4 4.3-2.4 2.5 0 4.7 1.9 4.7 4.8 0 4-4 7.3-9 11.7z"/></svg>
-      </button>
-      <!-- ABLYFT-GOAL: scale-viewer-open [ASSUMPTION: closest goal name] -->
-      <button class="stage-zoom" id="zoomBtn" aria-label="Werk vergrößern">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
-      </button>
+      <div class="stage-actions">
+        <!-- ABLYFT-GOAL: scale-viewer-open [ASSUMPTION: closest goal name] -->
+        <button id="zoomBtn" aria-label="Werk vergrößern">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+        </button>
+        <button id="discoverBtn" aria-label="Ähnliche Werke entdecken">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M15.5 8.5l-2.2 5-5 2.2 2.2-5z"/></svg>
+        </button>
+        <button id="wishBtn" aria-pressed="false" aria-label="Auf die Wunschliste">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M12 21C7 16.6 3 13.3 3 9.3 3 6.4 5.2 4.5 7.7 4.5c1.7 0 3.3.9 4.3 2.4 1-1.5 2.6-2.4 4.3-2.4 2.5 0 4.7 1.9 4.7 4.8 0 4-4 7.3-9 11.7z"/></svg>
+        </button>
+      </div>
     </section>
     <div class="stage-tools">
       <div class="thumb-rail" id="thumbRail" aria-hidden="true"></div>
