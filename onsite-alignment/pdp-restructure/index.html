@@ -401,6 +401,11 @@ a { color: inherit; }
 .view-tile:hover{ background: var(--color-bone-300, #F0EBE3); border-color: var(--color-charcoal-900, #1C1A18); }
 .view-tile:active{ transform: scale(0.97); }
 .view-tile svg{ width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.2; flex: 0 0 auto; }
+@media (max-width: 1023px){
+  .view-tiles{ display: flex; justify-content: center; gap: 32px; padding: 4px var(--gutter) 0; }
+  .view-tile{ border: 0; background: none; min-height: 44px; padding: 0 4px; }
+  .view-tile:hover{ background: none; }
+}
 @media (min-width: 1024px){ .view-tile svg{ width: 24px; height: 24px; } }
 @media (min-width: 1024px){
   .stage-tools{ display: flex; align-items: stretch; gap: 14px; padding-top: 14px; }
