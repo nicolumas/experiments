@@ -272,16 +272,23 @@ a { color: inherit; }
   line-height: 1.4; margin: 8px 0 18px;
 }
 .edition-chip{
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--color-charcoal-900, #1C1A18); border-radius: 4px;
-  padding: 8px 12px; min-height: 40px;
-  font-size: 14px; font-weight: 400; letter-spacing: 0; text-transform: none;
-  transition: border-color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  display: flex; align-items: center; gap: 16px; width: 100%;
+  background: var(--color-ivory-100, #F4EDE2); border: 0; border-radius: 4px;
+  padding: 14px 18px; text-align: left;
+  transition: background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
 }
-.edition-chip:hover{ background: var(--color-surface-raised, #F7F1E9); }
-.edition-chip:active{ transform: scale(0.97); }
-.edition-chip .n-left{ color: var(--color-status-warning, #9B6D1E); }
-.edition-chip svg{ width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+.edition-chip:hover{ background: var(--color-bone-200, #EAE2D8); }
+.edition-chip:active{ transform: scale(0.99); }
+.ed-num{
+  font-family: 'UtileDisplay', sans-serif; font-weight: 300;
+  font-size: 46px; line-height: 0.9; letter-spacing: -0.02em; flex: 0 0 auto;
+}
+.ed-sep{ width: 1px; align-self: stretch; background: var(--color-bone-100, #E2D8CC); flex: 0 0 auto; }
+.ed-text{ display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.ed-line1{ font-size: 15px; font-weight: 600; line-height: 1.35; }
+.ed-line2{ font-size: 13.5px; color: var(--color-charcoal-700, #5A5752); line-height: 1.4; }
+.edition-chip .n-left{ font-size: 12.5px; font-weight: 600; color: var(--color-status-warning, #9B6D1E); margin-top: 2px; }
+.edition-chip .ed-info{ width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: 0 0 auto; color: var(--color-charcoal-700, #5A5752); }
 .price-row{ display: flex; align-items: baseline; gap: 10px; margin: 2px 0 0; }
 .price{
   font-family: 'Archivo', sans-serif; font-weight: 400;
@@ -713,10 +720,15 @@ a { color: inherit; }
       <a class="artist" href="https://www.lumas.de/artist/marta_contreras_simo/">Marta Contreras Simó</a>
       <h1>Mina&amp;Sena</h1>
       <!-- ABLYFT-GOAL: edition-info-open [ASSUMPTION] -->
-      <button class="edition-chip" id="editionChip" aria-haspopup="dialog">
-        <span>Limited Edition 150 • Signiert</span>
-        <span class="n-left" id="nLeft" hidden></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
+      <button class="edition-chip" id="editionChip" aria-haspopup="dialog" aria-label="Edition und Provenienz öffnen">
+        <span class="ed-num" aria-hidden="true">150</span>
+        <span class="ed-sep" aria-hidden="true"></span>
+        <span class="ed-text">
+          <span class="ed-line1">Limitierte Edition, handsigniert</span>
+          <span class="ed-line2">Inklusive Echtheitszertifikat</span>
+          <span class="n-left" id="nLeft" hidden></span>
+        </span>
+        <svg class="ed-info" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
       </button>
     </section>
 
