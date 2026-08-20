@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <!-- ═══════════════════════════════════════════════════════════════════════════
   PROTO HEADER
-  ID:          PROTO-2026-014 rev F  ·  LUMAS Event System
+  ID:          PROTO-2026-014 rev H  ·  LUMAS Event System
   Hypothesis:  [ASSUMPTION] The visitor's only question is "is this on near me,
                and where is that gallery". Naming every participating gallery as
-               a plain link answers it with no controls to operate, and will
-               beat today's one-tile-per-gallery feed on gallery-CTA clicks.
+               a plain link answers it with no controls to operate.
 
-  THE WHOLE SYSTEM, in three rules:
-    1. Every participating gallery is a link.
-    2. A Register button appears only where registration is required.
-    3. Dates all the same -> one line of links.
+  THE SYSTEM
+    1. Every participating gallery is a link. That is the action.
+    2. Dates all the same -> one line of links.
        Dates differ       -> one column per evening.
+    3. The largest event leads, full width, photograph beside the copy.
+       Everything else is a card in the grid beneath it.
 
-  Rule 3 replaced an earlier count threshold plus a full-width breakout band.
-  The band was the mistake: it opened a third region with its own left edge, so
-  the card had four different text alignments, and it repeated the date on all
-  eighteen rows. Now the list sits in the copy column like every other element,
-  fills the void that used to sit under the copy, and states each date once.
-  Golden Hour gets three columns because it runs on three evenings, not because
-  it has eighteen galleries: the layout follows the event's shape, not its size.
+  Layout: a GRID, not full-width rows. A row can only carry so much content, so
+  at 1920 a full-width row is structurally mostly empty; that was the cause of
+  every "void" in revisions A to G, and moving the void around never fixed it.
+  One column under 720, two to 1239, three above. Verified across eighteen
+  widths from 360 to 2560: no overflow, no partial rows mid-feed, reading
+  measure held, no broken images.
 
-  Images are real LUMAS event photography at 5:4 (4:3 on mobile). Earlier passes
-  used empty gallery interiors, which described the property, then bare
-  artworks, which described the catalogue. An events page has to show events.
+  Registration has no button. It was a filled charcoal block dominating a card
+  whose real action is the gallery link, so the phrase "registration required"
+  is the link instead.
 
-  V2 compliance: tokens bound to real primitives, Archivo 700 loaded so
-  eyebrows and buttons carry the specified weight, hover gated behind
-  (hover: hover), and all small copy kept off text/tertiary, which measures
-  3.3:1 on white and fails WCAG AA.
+  Images are real LUMAS event photography. Earlier passes used empty gallery
+  interiors (which described the property) and bare artworks (which described
+  the catalogue). An events page has to show events.
+
+  V2: tokens bound to real primitives, Archivo 700 loaded for eyebrows, tonal
+  ivory panel on the feature rather than a shadow, motion 220/320/520 on one
+  curve, and all small copy kept off text/tertiary, which is 3.3:1 on white
+  and fails WCAG AA.
   Goals:       primary [ASSUMPTION: Gallery-CTA click] ·
                secondary [ASSUMPTION: RSVP outbound click, Newsletter signup]
   Variants:    ?v=control (one tile per gallery, today) · ?v=system (default)
@@ -101,17 +104,6 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
    viewport and the grid takes the width, rather than white space taking it. */
 .wrap { width: 100%; max-width: 2000px; margin: 0 auto; padding: 0 clamp(20px, 4.6vw, 88px); }
 
-/* ── Proto chrome (not production UI) ────────────────────────────── */
-.proto { background: #14120F; color: var(--on-dark-75); }
-.proto-inner { max-width: 2000px; margin: 0 auto; padding: 8px clamp(20px, 4.6vw, 88px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; }
-.proto-tag { font-weight: 500; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #B8AE9F; padding: 4px 8px; box-shadow: inset 0 0 0 1px rgba(244,237,226,0.22); }
-.proto-seg { display: inline-flex; gap: 2px; background: rgba(244,237,226,0.08); padding: 2px; }
-.proto-seg button { padding: 6px 12px; font-size: 11px; color: var(--on-dark-55); transition: background 220ms var(--ease), color 220ms var(--ease); }
-.proto-seg button[aria-pressed="true"] { background: var(--inverse); color: #14120F; font-weight: 500; }
-.proto .sp { flex: 1; }
-.proto kbd { font-size: 10px; padding: 2px 5px; background: rgba(244,237,226,0.12); border-radius: 2px; }
-@media (max-width: 760px) { .proto-hint { display: none; } }
-
 /* ── Site chrome ─────────────────────────────────────────────────── */
 .promo { background: var(--charcoal); color: var(--inverse); text-align: center; padding: 11px 22px; font-size: 13px; }
 .nav { border-bottom: 1px solid var(--hair); }
@@ -131,10 +123,10 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 @media (max-width: 430px) { .nav-util button { width: 34px; } .nav-util { gap: 0; } }
 
 /* ── Editorial head ─────────────────────────────────────────────── */
-.head { padding: 72px 0 8px; }
-.head h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 4.4vw, 62px); line-height: 1.02; margin: 0; }
-.head p { font-size: 19px; line-height: 1.62; color: var(--ink-2); max-width: 48ch; margin: 26px 0 0; text-wrap: pretty; }
-@media (max-width: 720px) { .head { padding: 44px 0 4px; } .head p { font-size: 17px; margin-top: 20px; } }
+.head { padding: clamp(48px, 5vw, 84px) 0 clamp(28px, 3vw, 44px); text-align: center; }
+.head h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 4.4vw, 62px); line-height: 1.02; margin: 0; text-wrap: balance; }
+.head p { font-size: 19px; line-height: 1.62; color: var(--ink-2); max-width: 46ch; margin: 24px auto 0; text-wrap: pretty; }
+@media (max-width: 720px) { .head p { font-size: 17px; } }
 
 /* ── The feed: a grid, not full-width rows ───────────────────────────
    A row can only hold so much content, so at 1920 a full-width row is
@@ -146,12 +138,6 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
   gap: clamp(40px, 3.6vw, 68px) clamp(24px, 2.4vw, 44px); }
 @media (min-width: 720px)  { .feed-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 1240px) { .feed-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-
-/* V2 eyebrow: Archivo Bold 11 / 0.18em. On ink-2, never tertiary (3.3:1). */
-.month { grid-column: 1 / -1; font-family: var(--body); font-weight: 700; font-size: 11px;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2);
-  padding: clamp(20px, 2vw, 34px) 0 0; }
-.feed-grid > .month:first-child { padding-top: 0; }
 
 /* ── One card ────────────────────────────────────────────────────── */
 .ev { display: flex; flex-direction: column; min-width: 0; }
@@ -166,17 +152,15 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-facts b { font-weight: 500; color: var(--ink); }
 .ev-text { font-size: 15.5px; line-height: 1.68; color: var(--ink-2); max-width: 46ch; margin: 0 0 20px; text-wrap: pretty; }
 
-/* V2 button: Archivo Bold 13, tracking 1.82px, uppercase, sharp corners. */
-.ev-register { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
-  padding: 15px 26px; background: var(--charcoal); color: var(--inverse); font-size: 13px;
-  font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 22px;
-  transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
-.ev-register:active { transform: scale(0.97); }
-.ev-register iconify-icon { font-size: 13px; }
+/* The registration link. Was a filled charcoal button; it dominated a card
+   whose real action is the gallery link, so the fact itself is the link. */
+.ev-facts a { color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 1px;
+  transition: border-color var(--t-fast) var(--ease); }
+.ev-facts a iconify-icon { font-size: 11px; }
 
 /* The where block sits on the card's bottom edge, so cards in a row share a
    baseline for the one thing the visitor is looking for. */
-.ev-where { margin-top: auto; border-top: 1px solid var(--hair); padding-top: 16px; }
+.ev-where { margin-top: 20px; border-top: 1px solid var(--hair); padding-top: 16px; }
 .ev-where-lead { font-size: 13px; color: var(--ink-2); margin-bottom: 12px; }
 
 /* Shape rule, unchanged: same dates -> one line, differing dates -> a column
@@ -194,32 +178,33 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-col a span { border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color var(--t-fast) var(--ease); }
 
 /* ── The feature card ────────────────────────────────────────────────
-   An event across the whole network carries far more location data than a
-   local one, so it gets the full row and a tonal panel. Depth from tone,
-   not shadow, per V2. */
-.ev.is-feature { grid-column: 1 / -1; background: var(--ivory); padding: clamp(22px, 2.2vw, 40px); }
-.ev.is-feature .ev-title { font-size: clamp(30px, 2.7vw, 44px); line-height: 1.08; }
+   The largest event leads the page: it spans the full width with the
+   photograph beside the copy, which is the only shape that gives eighteen
+   locations room to sit in three real columns. Tonal panel, not a shadow. */
+.ev.is-feature { grid-column: 1 / -1; background: var(--ivory); padding: clamp(20px, 2vw, 36px); }
+.ev.is-feature .ev-shot { aspect-ratio: 3 / 2; }
+.ev.is-feature .ev-title { font-size: clamp(32px, 2.8vw, 46px); line-height: 1.06; }
 .ev.is-feature .ev-facts { font-size: 15.5px; }
-.ev.is-feature .ev-text { font-size: 16.5px; max-width: 52ch; }
-.ev.is-feature .ev-where { margin-top: 4px; }
+.ev.is-feature .ev-text { font-size: 17px; max-width: 54ch; }
+.ev.is-feature .ev-where { margin-top: 24px; }
 @media (min-width: 900px) {
   .ev.is-feature { display: grid; grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
-    gap: clamp(32px, 3vw, 56px); align-items: start; }
-  .ev.is-feature .ev-shot { margin-bottom: 0; aspect-ratio: 4 / 3; }
+    gap: clamp(32px, 2.8vw, 56px); align-items: start; }
+  .ev.is-feature .ev-shot { margin-bottom: 0; }
   .ev.is-feature .ev-body { display: flex; flex-direction: column; }
+  .ev.is-feature .ev-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (pointer: coarse) { .ev-col a, .ev-links a { padding: 6px 0; } }
 @media (hover: hover) and (pointer: fine) {
   .ev-shot:hover img { transform: scale(1.03); }
-  .ev-register:hover { background: var(--charcoal-800); }
+  .ev-facts a:hover { border-bottom-color: var(--ink); }
   .ev-col a:hover span, .ev-links a:hover span { border-bottom-color: var(--ink); }
 }
 /* Single column: both gallery shapes become tappable lists. */
 @media (max-width: 719px) {
   .ev-cols { grid-template-columns: 1fr; gap: 16px; }
   .ev-col-list { columns: 2; column-gap: 22px; }
-  .ev-register { width: 100%; justify-content: center; }
   .ev-links .sep { display: none; }
   .ev-links a { display: flex; justify-content: space-between; align-items: baseline;
     gap: 14px; width: 100%; white-space: normal; padding: 12px 0; border-bottom: 1px solid var(--hair); }
@@ -325,22 +310,6 @@ html:not(.js) .rv { opacity: 1; transform: none; }
 </head>
 <body>
 
-<div class="proto">
-  <div class="proto-inner">
-    <span class="proto-tag">Proto-2026-014 · rev C</span>
-    <div class="proto-seg" role="group" aria-label="Variant">
-      <button type="button" data-variant="control" aria-pressed="false">Control (today)</button>
-      <button type="button" data-variant="system" aria-pressed="true">Rev C</button>
-    </div>
-    <div class="proto-seg" role="group" aria-label="Surface">
-      <button type="button" data-surface="events" aria-pressed="true">Events</button>
-      <button type="button" data-surface="gallery" aria-pressed="false">Gallery page</button>
-    </div>
-    <span class="sp"></span>
-    <span class="proto-hint"><kbd>v</kbd> variant · <kbd>e</kbd> empty · <kbd>s</kbd> notes</span>
-  </div>
-</div>
-
 <div class="promo">Signed, limited editions. 19 galleries. Free entry.</div>
 
 <nav class="nav">
@@ -425,7 +394,7 @@ html:not(.js) .rv { opacity: 1; transform: none; }
 
 <aside class="panel" id="panel" data-open="false" aria-label="System notes">
   <div class="panel-head" id="panelHead" role="button" tabindex="0" aria-expanded="false" aria-controls="panelScroll">
-    <span>Event System · rev C</span><span class="sp"></span>
+    <span>Event System · notes</span><span class="sp"></span>
     <iconify-icon icon="ph:caret-up"></iconify-icon>
   </div>
   <div class="panel-scroll" id="panelScroll">
@@ -602,7 +571,10 @@ function facts(ev) {
   } else {
     bits.push(`${ev.dates.length} galleries`);
   }
-  bits.push(ev.dates.some(o => o.rsvp) ? 'registration required' : 'no registration');
+  const rsvp = ev.dates.find(o => o.rsvp);
+  bits.push(rsvp
+    ? `<a href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">registration required <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+    : 'no registration');
   return bits.join(' · ');
 }
 
@@ -664,11 +636,6 @@ function whereHtml(ev) {
 }
 
 function evHtml(ev) {
-  const rsvp = ev.dates.find(o => o.rsvp);
-  // RULE 2 - a Register button, only when registration is required.
-  const register = rsvp
-    ? `<a class="ev-register" href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">Register<iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
-    : '';
   // An event across the whole network needs the full row for its locations.
   const feature = ev.dates.length > 5;
 
@@ -681,24 +648,20 @@ function evHtml(ev) {
       <h2 class="ev-title">${esc(ev.title)}</h2>
       <div class="ev-facts">${facts(ev)}</div>
       <p class="ev-text">${esc(ev.text)}</p>
-      ${register}
       ${whereHtml(ev)}
     </div>
   </article>`;
 }
 
 function renderFeed() {
-  const list = [...EVENTS].sort((a, b) => first(a).start.localeCompare(first(b).start));
-  let html = '', lastMonth = '';
+  // The biggest event leads, then everything else in date order.
+  const size = (ev) => (ev.dates.length > 5 ? 0 : 1);
+  const list = [...EVENTS].sort((a, b) =>
+    size(a) - size(b) || first(a).start.localeCompare(first(b).start));
   // The first photograph is the LCP element, so it must not be lazy.
   list.forEach((ev, i) => { ev.first = i === 0; });
-  list.forEach(ev => {
-    const d = new Date(first(ev).start);
-    const m = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-    if (m !== lastMonth) { html += `<div class="month">${m}</div>`; lastMonth = m; }
-    html += evHtml(ev);
-  });
-  document.getElementById('feed').innerHTML = `<div class="feed-grid">${html}</div>`;
+  document.getElementById('feed').innerHTML =
+    `<div class="feed-grid">${list.map(evHtml).join('')}</div>`;
   reveal();
 }
 
@@ -765,7 +728,6 @@ let variant = new URLSearchParams(location.search).get('v') === 'control' ? 'con
 
 function setVariant(v) {
   variant = v;
-  document.querySelectorAll('[data-variant]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.variant === v)));
   document.getElementById('ctlNote').hidden = v !== 'control';
   const u = new URL(location.href);
   v === 'control' ? u.searchParams.set('v', 'control') : u.searchParams.delete('v');
@@ -778,16 +740,12 @@ function route() {
   const gallery = kind === 'gallery' && id;
   document.getElementById('s-events').hidden = !!gallery;
   document.getElementById('s-gallery').hidden = !gallery;
-  document.querySelectorAll('[data-surface]').forEach(b =>
-    b.setAttribute('aria-pressed', String(b.dataset.surface === (gallery ? 'gallery' : 'events'))));
   if (gallery) { renderGallery(id); window.scrollTo(0, 0); reveal(); return; }
   variant === 'control' ? renderControl() : renderFeed();
 }
 
-document.querySelectorAll('[data-variant]').forEach(b => b.addEventListener('click', () => setVariant(b.dataset.variant)));
-document.querySelectorAll('[data-surface]').forEach(b => b.addEventListener('click', () => {
-  location.hash = b.dataset.surface === 'events' ? '#/' : '#/gallery/hamburg';
-}));
+/* No on-page switchers. Variant via ?v=control, surfaces via the hash,
+   plus the keyboard shortcuts below. */
 
 const panel = document.getElementById('panel');
 const togglePanel = () => {
@@ -811,6 +769,7 @@ document.addEventListener('keydown', (e) => {
   if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
   if (e.key === 'v') setVariant(variant === 'control' ? 'system' : 'control');
   if (e.key === 'e') toggleEmpty();
+  if (e.key === 'g') location.hash = location.hash.startsWith('#/gallery') ? '#/' : '#/gallery/hamburg';
   if (e.key === 's') togglePanel();
 });
 
