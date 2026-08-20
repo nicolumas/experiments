@@ -20,9 +20,9 @@
   widths from 360 to 2560: no overflow, no partial rows mid-feed, reading
   measure held, no broken images.
 
-  Registration has no button. It was a filled charcoal block dominating a card
-  whose real action is the gallery link, so the phrase "registration required"
-  is the link instead.
+  Registration keeps its button (Nico's call, overruling a pass that had made
+  the phrase "registration required" the link instead). The facts line stays
+  plain text so there is only one registration CTA per card.
 
   Images are real LUMAS event photography. Earlier passes used empty gallery
   interiors (which described the property) and bare artworks (which described
@@ -152,11 +152,13 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 .ev-facts b { font-weight: 500; color: var(--ink); }
 .ev-text { font-size: 15.5px; line-height: 1.68; color: var(--ink-2); max-width: 46ch; margin: 0 0 20px; text-wrap: pretty; }
 
-/* The registration link. Was a filled charcoal button; it dominated a card
-   whose real action is the gallery link, so the fact itself is the link. */
-.ev-facts a { color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 1px;
-  transition: border-color var(--t-fast) var(--ease); }
-.ev-facts a iconify-icon { font-size: 11px; }
+/* V2 button: Archivo Bold 13px, tracking 1.82px, uppercase, sharp corners. */
+.ev-register { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 26px; background: var(--charcoal); color: var(--inverse); font-size: 13px;
+  font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  transition: background var(--t-fast) var(--ease), transform 160ms var(--ease); }
+.ev-register:active { transform: scale(0.97); }
+.ev-register iconify-icon { font-size: 13px; }
 
 /* The where block sits on the card's bottom edge, so cards in a row share a
    baseline for the one thing the visitor is looking for. */
@@ -198,11 +200,12 @@ button { font: inherit; border: 0; background: none; color: inherit; cursor: poi
 @media (pointer: coarse) { .ev-col a, .ev-links a { padding: 6px 0; } }
 @media (hover: hover) and (pointer: fine) {
   .ev-shot:hover img { transform: scale(1.03); }
-  .ev-facts a:hover { border-bottom-color: var(--ink); }
+  .ev-register:hover { background: var(--charcoal-800); }
   .ev-col a:hover span, .ev-links a:hover span { border-bottom-color: var(--ink); }
 }
 /* Single column: both gallery shapes become tappable lists. */
 @media (max-width: 719px) {
+  .ev-register { width: 100%; justify-content: center; }
   .ev-cols { grid-template-columns: 1fr; gap: 16px; }
   .ev-col-list { columns: 2; column-gap: 22px; }
   .ev-links .sep { display: none; }
@@ -571,10 +574,7 @@ function facts(ev) {
   } else {
     bits.push(`${ev.dates.length} galleries`);
   }
-  const rsvp = ev.dates.find(o => o.rsvp);
-  bits.push(rsvp
-    ? `<a href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">registration required <iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
-    : 'no registration');
+  bits.push(ev.dates.some(o => o.rsvp) ? 'registration required' : 'no registration');
   return bits.join(' · ');
 }
 
@@ -638,6 +638,10 @@ function whereHtml(ev) {
 function evHtml(ev) {
   // An event across the whole network needs the full row for its locations.
   const feature = ev.dates.length > 5;
+  const rsvp = ev.dates.find(o => o.rsvp);
+  const register = rsvp
+    ? `<a class="ev-register" href="${rsvp.rsvp}" target="_blank" rel="noopener" aria-label="Register (external site, EventCreate)" data-track="event_rsvp_click" data-params="${prm({ event_id: ev.id })}">Register<iconify-icon icon="ph:arrow-up-right"></iconify-icon></a>`
+    : '';
 
   return `<article class="ev rv${feature ? ' is-feature' : ''}">
     <div class="ev-shot">
@@ -648,6 +652,7 @@ function evHtml(ev) {
       <h2 class="ev-title">${esc(ev.title)}</h2>
       <div class="ev-facts">${facts(ev)}</div>
       <p class="ev-text">${esc(ev.text)}</p>
+      ${register}
       ${whereHtml(ev)}
     </div>
   </article>`;
