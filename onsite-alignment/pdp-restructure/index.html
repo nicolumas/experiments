@@ -562,11 +562,10 @@ a { color: inherit; }
 }
 .mode-chip[aria-selected="true"]{ background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); border-color: var(--color-surface-inverse, #1C1A18); }
 .viewer-stage{ flex: 1; position: relative; overflow: hidden; }
-.obj-pane{
-  position: absolute; inset: 0; display: none;
+.slide-3d{
+  padding: 0; position: relative;
   background: radial-gradient(120% 90% at 50% 32%, #F1F0EE 0%, #E3E1DE 55%, #D3D1CD 100%);
 }
-.obj-pane.on{ display: block; }
 .obj-toolbar{
   position: absolute; left: 16px; top: 16px; z-index: 2;
   display: flex; gap: 2px; background: #fff; border-radius: 8px;
@@ -578,9 +577,10 @@ a { color: inherit; }
 .obj-toolbar svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 .obj-scene{
   position: absolute; inset: 0; display: grid; place-items: center;
-  perspective: 1600px; cursor: grab; touch-action: none;
+  perspective: 1600px;
 }
-.obj-scene:active{ cursor: grabbing; }
+.obj3d{ cursor: grab; touch-action: none; }
+.obj3d:active{ cursor: grabbing; }
 .obj3d{
   position: relative; transform-style: preserve-3d; will-change: transform;
   width: min(56vmin, 560px); aspect-ratio: 1 / 1;
@@ -688,20 +688,42 @@ a { color: inherit; }
       <div class="skel" id="stageSkel" hidden></div>
       <div class="stage-track" id="stageTrack">
         <!-- slide 1: the work, bare, true ratio -->
-        <div class="stage-slide" role="group" aria-label="Ansicht 1 von 4: Das Werk">
+        <div class="stage-slide" role="group" aria-label="Ansicht 1 von 6: Das Werk">
           <img id="heroImg" src="https://img.lumas.com/showimg_mcs35_full.jpg" srcset="https://img.lumas.com/showimg_mcs35_desktop.webp 1000w, https://img.lumas.com/showimg_mcs35_full.jpg 1600w" sizes="(min-width: 1024px) 62vw, 100vw" alt="Mina&amp;Sena von Marta Contreras Simó: zwei Frauen in historisierender Kleidung mit skulpturalen Hauben und roten Blüten" fetchpriority="high">
         </div>
         <!-- slide 2: framed (live default-frame render) -->
-        <div class="stage-slide" role="group" aria-label="Ansicht 2 von 4: Gerahmt">
+        <div class="stage-slide" role="group" aria-label="Ansicht 2 von 6: Gerahmt">
           <img loading="lazy" src="https://www.lumas.de/product/image-with-default-frame/?abstractId=6437864&amp;sku=MCS36" alt="Mina&amp;Sena im Rahmen Basel mit Schattenfuge">
         </div>
         <!-- slide 3: acrylic finish detail -->
-        <div class="stage-slide detail" role="group" aria-label="Ansicht 3 von 4: Acrylglas im Detail">
+        <div class="stage-slide detail" role="group" aria-label="Ansicht 3 von 6: Acrylglas im Detail">
           <img loading="lazy" src="https://img.lumas.com/fileadmin/images/rahmenbilder/lumasec_2mm_matt.jpg" alt="Detail: Kaschierung unter mattem Acrylglas, 2 mm">
         </div>
         <!-- slide 4: frame corner detail -->
-        <div class="stage-slide detail" role="group" aria-label="Ansicht 4 von 4: Rahmenecke">
+        <div class="stage-slide detail" role="group" aria-label="Ansicht 4 von 6: Rahmenecke">
           <img loading="lazy" src="https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg" alt="Detail: Rahmen Basel mit Schattenfuge, Kanadischer Ahorn braun" id="cornerImg">
+        </div>
+        <!-- slide 5: AR preview (live composite) -->
+        <div class="stage-slide detail" role="group" aria-label="Ansicht 5 von 6: Im Raum betrachten">
+          <img loading="lazy" src="https://media.lumas.de/pdp/ar-cta.jpg" alt="Mina&amp;Sena auf dem iPhone im Raum betrachtet">
+        </div>
+        <!-- slide 6: interactive 3D view -->
+        <div class="stage-slide slide-3d" role="group" aria-label="Ansicht 6 von 6: 3D-Ansicht">
+      <div class="obj-toolbar" role="toolbar" aria-label="3D-Steuerung">
+        <button id="objReset" aria-label="Ansicht zurücksetzen"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="2.4"/></svg></button>
+        <button id="objZoomIn" aria-label="Vergrößern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+        <button id="objZoomOut" aria-label="Verkleinern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+        <button id="objSpin" aria-label="Automatisch drehen" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4.9 11a7.2 7.2 0 0 1 12.4-3.9L20 9.7M20 9.7V5m0 4.7h-4.6M19.1 13a7.2 7.2 0 0 1-12.4 3.9L4 14.3m0 0V19m0-4.7h4.6"/></svg></button>
+      </div>
+      <div class="obj-scene" id="objScene">
+        <div class="obj3d" id="obj3d">
+          <img class="obj-face" src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena als Objekt in 3D" draggable="false">
+          <div class="obj-edge e-r"></div>
+          <div class="obj-edge e-l"></div>
+          <div class="obj-edge e-t"></div>
+          <div class="obj-edge e-b"></div>
+        </div>
+      </div>
         </div>
       </div>
       <div class="stage-dots" id="stageDots" role="tablist" aria-label="Galerie-Navigation"></div>
@@ -894,29 +916,11 @@ a { color: inherit; }
   <div class="viewer-head">
     <div class="viewer-modes" role="tablist">
       <button class="mode-chip" role="tab" data-mode="ar" aria-selected="false" id="arChip">Im Raum betrachten</button>
-      <button class="mode-chip" role="tab" data-mode="scale" aria-selected="true">3D-Ansicht</button>
-      <button class="mode-chip" role="tab" data-mode="zoom" aria-selected="false">Zoom</button>
+      <button class="mode-chip" role="tab" data-mode="zoom" aria-selected="true">Zoom</button>
     </div>
     <button class="x" data-close aria-label="Schließen" style="width:44px;height:44px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <div class="viewer-stage">
-    <div class="obj-pane" id="objPane">
-      <div class="obj-toolbar" role="toolbar" aria-label="3D-Steuerung">
-        <button id="objReset" aria-label="Ansicht zurücksetzen"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="2.4"/></svg></button>
-        <button id="objZoomIn" aria-label="Vergrößern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
-        <button id="objZoomOut" aria-label="Verkleinern"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
-        <button id="objSpin" aria-label="Automatisch drehen" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4.9 11a7.2 7.2 0 0 1 12.4-3.9L20 9.7M20 9.7V5m0 4.7h-4.6M19.1 13a7.2 7.2 0 0 1-12.4 3.9L4 14.3m0 0V19m0-4.7h4.6"/></svg></button>
-      </div>
-      <div class="obj-scene" id="objScene">
-        <div class="obj3d" id="obj3d">
-          <img class="obj-face" src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena als Objekt in 3D" draggable="false">
-          <div class="obj-edge e-r"></div>
-          <div class="obj-edge e-l"></div>
-          <div class="obj-edge e-t"></div>
-          <div class="obj-edge e-b"></div>
-        </div>
-      </div>
-    </div>
     <div class="zoom-pane" id="zoomPane"><img src="https://img.lumas.com/showimg_mcs35_full.jpg" alt="Mina&amp;Sena in hoher Auflösung" id="zoomImg" draggable="false"></div>
     <div class="ar-pane" id="arPane">
       <div id="arLaunchPane">
@@ -1176,8 +1180,12 @@ slides.forEach((_, i) => {
   const t = document.createElement('button');
   t.setAttribute('aria-label', `Ansicht ${i + 1}`);
   t.setAttribute('aria-current', String(i === 0));
-  const src = slides[i].querySelector('img').src;
-  t.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+  if (slides[i].classList.contains('slide-3d')){
+    t.innerHTML = '<svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" fill="none" stroke-width="1.2"><path d="M12 3l7.5 4.3v8.6L12 20.2l-7.5-4.3V7.3z"/><path d="M12 3v8.6m0 0 7.5 4.3M12 11.6l-7.5 4.3"/></svg>';
+  } else {
+    const src = slides[i].querySelector('img').src;
+    t.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+  }
   t.addEventListener('click', () => { goSlide(i, 'thumb'); });
   rail.appendChild(t);
 });
@@ -1188,10 +1196,11 @@ function goSlide(i, method){
   track('gallery_nav', { index: i, method });
 }
 const lineThumb = document.getElementById('stageLineThumb');
+lineThumb.style.width = (100 / slides.length) + '%';
 let slideTimer;
 track_.addEventListener('scroll', () => {
   const max = track_.scrollWidth - track_.clientWidth;
-  if (max > 0) lineThumb.style.transform = `translateX(${(track_.scrollLeft / max) * 300}%)`;
+  if (max > 0) lineThumb.style.transform = `translateX(${(track_.scrollLeft / max) * (slides.length - 1) * 100}%)`;
   clearTimeout(slideTimer);
   slideTimer = setTimeout(() => {
     const i = Math.round(track_.scrollLeft / track_.clientWidth);
@@ -1347,18 +1356,17 @@ function openViewer(mode){
 }
 function setViewerMode(mode){
   document.querySelectorAll('.mode-chip').forEach(c => c.setAttribute('aria-selected', String(c.dataset.mode === mode)));
-  document.getElementById('objPane').classList.toggle('on', mode === 'scale');
   document.getElementById('zoomPane').classList.toggle('on', mode === 'zoom');
   document.getElementById('arPane').classList.toggle('on', mode === 'ar');
-  if (mode === 'scale') resetObj();
   if (mode === 'zoom') initZoom();
 }
 document.querySelectorAll('.mode-chip').forEach(c => c.addEventListener('click', () => {
   setViewerMode(c.dataset.mode);
   track('scale_viewer_open', { modality: c.dataset.mode });
 }));
-document.getElementById('threeDTile').addEventListener('click', () => openViewer('scale'));
-document.getElementById('arTile').addEventListener('click', () => openViewer('ar'));
+const AR_SLIDE = 4, D3_SLIDE = 5;
+document.getElementById('threeDTile').addEventListener('click', () => goSlide(D3_SLIDE, '3d_tile'));
+document.getElementById('arTile').addEventListener('click', () => goSlide(AR_SLIDE, 'ar_tile'));
 document.getElementById('zoomBtn').addEventListener('click', () => openViewer('zoom'));
 heroImg.addEventListener('click', () => openViewer('zoom'));
 document.getElementById('arLaunch').addEventListener('click', () => {
@@ -1372,14 +1380,14 @@ let oRy = -24, oRx = 4, oScale = 1, spinning = false, spinRaf = null;
 function applyObj(){ obj3d.style.transform = `scale(${oScale}) rotateX(${oRx}deg) rotateY(${oRy}deg)`; }
 function resetObj(){ oRy = -24; oRx = 4; oScale = 1; stopSpin(); applyObj(); }
 let oDrag = false, oLx = 0, oLy = 0;
-objScene.addEventListener('pointerdown', e => { oDrag = true; oLx = e.clientX; oLy = e.clientY; stopSpin(); objScene.setPointerCapture(e.pointerId); });
-objScene.addEventListener('pointermove', e => {
+obj3d.addEventListener('pointerdown', e => { oDrag = true; oLx = e.clientX; oLy = e.clientY; stopSpin(); obj3d.setPointerCapture(e.pointerId); });
+obj3d.addEventListener('pointermove', e => {
   if (!oDrag) return;
   oRy = Math.max(-85, Math.min(85, oRy + (e.clientX - oLx) * 0.35));
   oRx = Math.max(-25, Math.min(25, oRx - (e.clientY - oLy) * 0.2));
   oLx = e.clientX; oLy = e.clientY; applyObj();
 });
-objScene.addEventListener('pointerup', () => oDrag = false);
+obj3d.addEventListener('pointerup', () => oDrag = false);
 document.getElementById('objZoomIn').addEventListener('click', () => { oScale = Math.min(1.8, oScale * 1.15); applyObj(); });
 document.getElementById('objZoomOut').addEventListener('click', () => { oScale = Math.max(0.5, oScale * 0.87); applyObj(); });
 document.getElementById('objReset').addEventListener('click', resetObj);
