@@ -1,0 +1,96 @@
+/* ---------------------------------------------------------------------------------------
+   LUMAS nav kit — host-page bridge layer.  Load LAST, after nav-core.css.
+
+   The live nav is authored against the shop's main.css, which this kit does not ship.
+   Everything below either restores a base rule main.css would have supplied, or resets a
+   live rule that only makes sense inside the full shop. Each one is a bug that was actually
+   observed, so do not "tidy" them away without checking the nav again.
+
+   Host page requirements
+   ----------------------
+   1. Root font-size MUST be 62.5%. site-header.css sizes everything in rem against a 10px
+      root; at the browser default 16px the whole nav renders ~1.6x oversized. The rule is
+      below, but if your page sets its own root size, reconcile them deliberately.
+   2. If your page has a `* { margin: 0 }` reset, keep the `whats-app-contact dialog` rule in
+      nav-widgets.css: that reset also kills the UA `margin:auto` that centres a modal dialog.
+   3. Set --nav-z if the nav needs a different stacking layer (default 70).
+   4. The nav publishes its measured height to nothing by itself. If your layout needs it,
+      read `document.querySelector('site-header').getBoundingClientRect().height` and set
+      --nav-h; nav-core.css and the mega-menu max-height read it (fallback 64px).
+   --------------------------------------------------------------------------------------- */
+
+/* requirement 1 — see above */
+html{font-size:62.5%}
+
+/* A long list (Collections, 15 entries) runs as one tall column here because the rule that
+     widens it lives in the site's main.css, which this prototype does not import. Reproduce it:
+     give long lists twice the grid span and flow them in two columns under one heading. */
+  /* In such a menu the remaining lists get a wider span too, so entries like
+     "Christoph Bamberg, Executive Curator" sit on one line as they do on the site. */
+  site-header.desktop .nav-container .menu.artworks:has(dl:not([class]) dd:nth-of-type(n+12)) dl:not([class]){
+    grid-column:span 3}
+  site-header.desktop .nav-container .menu.artworks:has(dl:not([class]) dd:nth-of-type(n+12)) dl:not([class]):has(dd:nth-of-type(n+12)){
+    grid-column:span 4;columns:2;column-gap:var(--sp-5,2rem)}
+  site-header.desktop .nav-container .menu.artworks dl:not([class]):has(dd:nth-of-type(n+12)) dt{column-span:all}
+  site-header.desktop .nav-container .menu.artworks dl:not([class]) dd{break-inside:avoid}
+  /* The nav markup leans on utility classes from the site's main.css, which this prototype does
+     not import. Without them the Artfinder illustrations keep their height attribute while the
+     width stretches (the SVG letterboxes and the bone background shows as bars), and every
+     responsive variant of a link renders at once. Restore just the ones the nav uses. */
+  site-header .width-full{width:100%}
+  site-header .height-auto{height:auto}
+  site-header .max-w-full{max-width:100%}
+  site-header .mb-1{margin-bottom:1rem}
+  /* The utility row is already flex/align-items:center. The live markup adds .-mt-1 to the
+     phone link to compensate for something in main.css we do not load, and applying it here
+     lifts the icon out of line, so neutralise it and let the row centre the icon itself. */
+  /* centre the whole details>summary>a chain, otherwise the phone icon hangs ~5px below
+     its neighbours. .-mt-1 in the live markup compensates for main.css we do not load. */
+  site-header details.contact,
+  site-header details.contact > summary,
+  site-header details.contact > summary a{display:flex;align-items:center;margin-top:0}
+  /* the icon itself carries margin-top:3px and is taller than its 20px anchor, so it hung
+     below the row even once the anchor was centred */
+  /* site-header.css uses a doubled class, details.contact.contact > summary svg, to set
+     margin-block:.3rem -.5rem. That asymmetric margin is what tips the icon below the row,
+     so the reset has to match that specificity. */
+  site-header details.contact.contact > summary svg{margin:0;flex:none}
+  site-header .text-1_8rem{font-size:1.8rem}
+  site-header .text-2rem{font-size:2rem}
+  @media (max-width:575px){ site-header .hidden-xs{display:none !important} }
+  @media (min-width:576px) and (max-width:767px){ site-header .hidden-sm{display:none !important} }
+  @media (min-width:768px) and (max-width:991px){ site-header .hidden-md{display:none !important} }
+  @media (min-width:992px){ site-header .hidden-lg{display:none !important} }
+  /* the nav must not inherit the stage's ivory text colour onto its white surfaces */
+  site-header,site-header.desktop,site-header.mobile{position:fixed;top:0;left:0;right:0;z-index:var(--nav-z,70)}
+  /* site-header.css sets .desktop{position:sticky;z-index:33}; the rule above matches that
+     specificity so the header stays fixed and sits over the intro veil */
+  site-header{--icon-max-size:2.2rem;
+    /* the live header ships --link-color:#364153, a slate that reads as blue on the contact
+       and search dropdown headings. This page wants header links charcoal like the rest. */
+    --link-color:var(--color-text-primary,#1c1a18);
+    color:var(--color-text-primary,#1c1a18)}
+  /* main.css supplies the base link/button reset that this page does not import, so bare
+     anchors in the contact and search dropdowns fell back to UA link blue, and iOS Safari
+     paints an unstyled button's label with the system accent, which the hamburger, the
+     drawer close and the search icons inherit through fill:currentColor.
+     :where() keeps this at element specificity so every .btn / hover colour still wins. */
+  site-header :where(a,button,summary,header,aside){color:inherit}
+  site-header header{background:var(--color-surface-page,#fff)}
+  /* the mega-menu needs to scroll on short viewports even though the page itself never scrolls */
+  site-header .menu-container{max-height:calc(100vh - var(--nav-h,64px));overflow-y:auto}
+  /* the live header pairs Contact with a search/account row that this standalone clone omits,
+     so on narrow screens the stray label runs off the edge: keep the icon, drop the word.
+     Scoped to the chrome instance (parent .nav-container). appendSecondaryElements() clones
+     the same details into the drawer (parent nav), where the label is what you want, and an
+     unscoped rule left that row as a bare chevron. */
+  @media (max-width:600px){
+    site-header .nav-container > details.contact > summary span{display:none} }
+
+/* nav-core.css redefines --font-display to the Typekit family `utile-display`, and it loads
+   before this file, so without the line below every host-page headline silently falls back.
+   Lead with the self-hosted UtileDisplay from nav-utile-display.css: a machine can have a
+   locally installed family literally called "Utile Display" whose italic renders nothing, and
+   font matching does not fall through once a family name matches, so naming it first turns
+   every italic into tofu boxes. Ask before reordering this. */
+:root{--font-display:'UtileDisplay',utile-display,"Archivo",system-ui,sans-serif}

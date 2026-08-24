@@ -149,7 +149,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0820", kicker: "Latest · today",        weekday: "Thursday",  date: "20 August", year: "2026", short: "20 Aug", upcoming: true },
+      { id: "s0825", kicker: "Latest · today",        weekday: "Tuesday",   date: "25 August", year: "2026", short: "25 Aug", upcoming: true },
+      { id: "s0820", kicker: "Previous",              weekday: "Thursday",  date: "20 August", year: "2026", short: "20 Aug" },
       { id: "s0819", kicker: "Previous",              weekday: "Wednesday", date: "19 August", year: "2026", short: "19 Aug" },
       { id: "s0815", kicker: "Previous",              weekday: "Saturday",  date: "15 August", year: "2026", short: "15 Aug" },
       { id: "s0803", kicker: "Previous",              weekday: "Wednesday", date: "5 August", year: "2026", short: "5 Aug" },
@@ -163,6 +164,16 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Tuesday 25 August ──────────────────────────────────────
+      { s: "s0825", feature: true, title: "Meta ads → landing pages — call and answer",
+        href: "meta-landing-pages/",
+        desc: "Five landing pages built as the destinations the top-performing Meta ads never had, straight from the ad-alignment analysis: the Art-Infused Living room films land on a room-first browse hub, the gallery-journey films get an evergreen gallery-proof page, Power of XL art gets a scale-demonstrating museum-format page, the 20% window gets a permanent collector-advantage destination with a live and an empty state, and the founder film gets the brand story. Real works, real USD prices and live PDP links from the lumas.com feed, the actual ad films as heroes, the real site navigation on every page." },
+      { s: "s0825", cluster: "Meta ads → landing pages", title: "Art in the room", href: "meta-landing-pages/art-in-the-room.html" },
+      { s: "s0825", cluster: "Meta ads → landing pages", title: "The gallery, always open", href: "meta-landing-pages/gallery.html" },
+      { s: "s0825", cluster: "Meta ads → landing pages", title: "Museum format", href: "meta-landing-pages/museum-format.html" },
+      { s: "s0825", cluster: "Meta ads → landing pages", title: "The collector advantage", href: "meta-landing-pages/collector-advantage.html" },
+      { s: "s0825", cluster: "Meta ads → landing pages", title: "Why these editions exist", href: "meta-landing-pages/our-story.html" },
+
       // ── Thursday 20 August ─────────────────────────────────────
       { s: "s0820", feature: true, title: "Inspired No. 45 — the magazine as a story",
         href: "inspired-no-45/",
