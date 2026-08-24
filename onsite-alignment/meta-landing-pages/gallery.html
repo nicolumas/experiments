@@ -5,11 +5,12 @@
 <script src="../assets/gate.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery quality - how a LUMAS edition is made</title>
-<meta name="description" content="What gallery quality means: Diasec, hand framing, signature, certificate. Seen in 19 galleries - discover works that actually hang there.">
+<title>The galleries, always open | LUMAS</title>
+<meta name="description" content="Nineteen rooms in nine countries where LUMAS editions hang, lit and framed, and the Art Consultants who hang them. See a work in person, or discover every edition online.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
 <style>
 
   @font-face {
@@ -50,6 +51,8 @@
     --display-h2: clamp(3.4rem, 3vw, 4.6rem);
     --display-h3: clamp(2.6rem, 2.5vw, 3.4rem);
     --display-h4: clamp(2.2rem, 2vw, 2.6rem);
+    --place-name: clamp(3.0rem, 3.4vw, 4.8rem);
+    --portrait-size: clamp(7.2rem, 22vw, 16.8rem);
 
     --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -80,6 +83,7 @@
     font-family: 'Utile Display', serif;
     font-weight: 400;
     letter-spacing: 0;
+    text-wrap: balance;
   }
 
   .eyebrow, .ui-label {
@@ -102,6 +106,8 @@
 
   .body-small { font-size: 1.3rem; line-height: 1.65; }
   .body-large { font-size: 2.0rem; font-weight: 300; line-height: 1.6; }
+
+  .figure { font-family: 'Utile Display', serif; font-weight: 400; }
 
   .ghost-link {
     display: inline-block;
@@ -129,180 +135,290 @@
     padding-inline: 3.2rem;
   }
 
-  /* HERO */
-  .hero-media {
+  /* SCROLL REVEAL: .js gated, IntersectionObserver driven, prefers-reduced-motion safe */
+  .reveal { opacity: 1; transform: none; }
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(1.6rem);
+    transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* CONTINUE: full-bleed interior, headline picks the film up mid-sentence */
+  .continue-media {
     width: 100%;
-    max-height: 52vh;
+    max-height: 56vh;
     overflow: hidden;
   }
-  .hero-media img {
+  .continue-media img {
     width: 100%;
-    height: 52vh;
-    max-height: 52vh;
+    height: 56vh;
+    max-height: 56vh;
     object-fit: cover;
   }
-  .hero-text {
-    padding-block: 4.0rem 4.8rem;
-    max-width: 76rem;
+  .continue-text {
+    padding-block: 4.8rem 6.4rem;
   }
-  .hero-text .eyebrow { margin-bottom: 1.6rem; }
-  .hero-text h1 {
+  .continue-text .eyebrow { margin-bottom: 1.6rem; }
+  .continue-text h1 {
     font-size: var(--display-h1);
     line-height: 1.04;
-    margin-bottom: 2.0rem;
+    max-width: 52rem;
+    margin-bottom: 2.8rem;
   }
-  .hero-text .dek {
+  .continue-text .dek {
     font-size: 2.0rem;
     font-weight: 300;
     line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 62rem;
+    max-width: 42rem;
+    margin: 0 0 0 8rem;
   }
 
-  /* INTERIORS GRID */
-  .interiors { padding-block: 0 6.4rem; }
-  .interiors-grid {
+  /* THE WALK: alternating full-bleed / 7:5 split room sequence, never a grid */
+  .walk-room + .walk-room { margin-top: 6.4rem; }
+  .walk { padding-block: 6.4rem 0; }
+
+  .walk-full-media { width: 100%; overflow: hidden; }
+  .walk-full-media img {
+    width: 100%;
+    height: 52vh;
+    object-fit: cover;
+    transition: transform 520ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .walk-full-media:hover img { transform: scale(1.02); }
+  }
+  .walk-full-caption {
+    padding-top: 2.8rem;
+    max-width: 56rem;
+  }
+  .walk-full-caption.at-right { margin-left: auto; }
+
+  .walk-split {
+    display: flex;
+    flex-direction: column;
+    gap: 2.8rem;
+  }
+  .walk-split-media { overflow: hidden; }
+  .walk-split-media img {
+    width: 100%;
+    height: 44vh;
+    object-fit: cover;
+    transition: transform 520ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .walk-split-media:hover img { transform: scale(1.02); }
+  }
+  .walk-split-text { align-self: center; }
+
+  .place-name {
+    font-family: 'Utile Display', serif;
+    font-weight: 400;
+    font-size: var(--place-name);
+    line-height: 1.1;
+    margin: 0 0 1.2rem;
+  }
+  .walk-line {
+    font-size: 1.6rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .walk-split {
+      flex-direction: row;
+      align-items: center;
+      gap: 4.8rem;
+    }
+    .walk-split--reverse { flex-direction: row-reverse; }
+    .walk-split-media { flex: 7 1 0; }
+    .walk-split-text { flex: 5 1 0; }
+  }
+
+  /* WHAT HANGS THERE: editorial stagger, the one deliberate grid on this page */
+  .works {
+    padding-block: 8rem 6.4rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .works h2 {
+    font-size: var(--display-h2);
+    line-height: 1.12;
+    max-width: 62rem;
+    margin-bottom: 4.8rem;
+  }
+  .works-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 3.2rem 2.4rem;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4rem 2.4rem;
   }
-  .interiors-grid li { margin: 0; }
-  .interior-frame {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: var(--surface-sunken);
+  .works-grid li { grid-column: span 12; }
+  .work-item {
+    display: block;
+    transition: border-color 220ms var(--ease-out);
   }
-  .interior-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .interiors-grid .ui-label { margin-top: 1.2rem; color: var(--text-secondary); }
-
-  /* CRAFT */
-  .craft { padding-block: 6.4rem; border-top: 1px solid var(--border-subtle); }
-  .craft-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4.0rem;
-  }
-  .craft-img-frame {
+  .work-frame {
     background: var(--surface-card);
     border: 1px solid var(--border-default);
-    aspect-ratio: 4 / 5;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2.4rem;
     margin-bottom: 1.6rem;
-  }
-  .craft-img-frame img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  .craft-col .ui-label { margin-bottom: 0.8rem; }
-  .craft-col .body-small { color: var(--text-secondary); }
-
-  /* CURRENTLY HANGING */
-  .hanging { padding-block: 6.4rem; border-top: 1px solid var(--border-subtle); }
-  .section-header {
-    font-size: var(--display-h2);
-    line-height: 1.12;
-    margin-bottom: 4.0rem;
-    max-width: 60rem;
-  }
-  .hanging-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3.2rem 2.4rem;
-  }
-  .hanging-grid li { margin: 0; }
-  .hanging-card {
-    display: block;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    padding: 2.0rem;
-    height: 100%;
     transition: border-color 220ms var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
-    .hanging-card:hover { border-color: var(--border-strong); }
+    .work-item:hover .work-frame { border-color: var(--border-strong); }
   }
-  .hanging-img-frame {
-    aspect-ratio: 4 / 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.6rem;
-  }
-  .hanging-img-frame img {
+  .work-frame img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: transform 520ms var(--ease-out);
   }
-  @media (hover: hover) and (pointer: fine) {
-    .hanging-card:hover .hanging-img-frame img { transform: scale(1.02); }
-  }
-  .hanging-card .eyebrow { color: var(--text-secondary); margin-bottom: 0.8rem; }
-  .hanging-title {
+  .work-item .eyebrow { color: var(--text-secondary); margin-bottom: 0.8rem; }
+  .work-title {
     font-size: 1.6rem;
     font-weight: 400;
     margin: 0 0 0.8rem;
   }
-  .hanging-card .caption { margin-bottom: 1.2rem; }
-  .hanging-price {
+  .work-item .caption { margin-bottom: 1.2rem; }
+  .work-price {
     font-weight: 700;
     font-size: 1.3rem;
     margin: 0 0 1.2rem;
     font-variant-numeric: tabular-nums;
   }
-  .hanging-card .ghost-link {
-    font-size: 1.1rem;
-    padding-bottom: 4px;
+  .work-item .ghost-link { font-size: 1.1rem; }
+
+  @media (min-width: 640px) {
+    .works-grid li { grid-column: span 6; }
+  }
+  @media (min-width: 1024px) {
+    .work-frame { aspect-ratio: 4 / 5; }
+    .work-item--a { grid-column: span 5; }
+    .work-item--b { grid-column: span 4; margin-top: 6.4rem; }
+    .work-item--b .work-frame { aspect-ratio: 1 / 1; }
+    .work-item--c { grid-column: span 3; margin-top: 3.2rem; }
+    .work-item--c .work-frame { aspect-ratio: 3 / 4; }
+    .work-item--d { grid-column: span 4; margin-top: 4.8rem; }
+    .work-item--d .work-frame { aspect-ratio: 1 / 1; }
+    .work-item--e { grid-column: span 5; }
+    .work-item--f { grid-column: span 3; margin-top: 7.2rem; }
+    .work-item--f .work-frame { aspect-ratio: 3 / 4; }
   }
 
-  /* FACT BAND */
-  .fact-band {
-    background: var(--surface-inverse);
-    color: var(--text-inverse);
-    padding-block: 6.4rem;
+  /* THE CONSULTANT WALL: the page's signature moment */
+  .consultant-wall {
+    padding-block: 8rem;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
   }
-  .fact-list {
+  .consultant-wall h2 {
+    font-size: var(--display-h2);
+    line-height: 1.12;
+    max-width: 54rem;
+    margin-bottom: 4rem;
+  }
+  .consultant-copy { margin-bottom: 4.8rem; }
+  .consultant-copy .body-small {
+    max-width: 58ch;
+    color: var(--text-secondary);
+    margin: 0 0 2.4rem;
+  }
+  .consultant-copy .body-large {
+    max-width: 50ch;
+    margin: 0 0 2.8rem;
+  }
+  .channel-links {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3.2rem;
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem 3.2rem;
   }
-  .fact-list li {
-    font-family: 'Utile Display', serif;
-    font-size: var(--display-h4);
-    line-height: 1.25;
+  .consultant-scene {
+    margin-bottom: 5.6rem;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .consultant-scene img { width: 100%; height: 100%; object-fit: cover; }
+
+  .portrait-wall {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3.2rem 2.4rem;
+  }
+  .portrait-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    width: var(--portrait-size);
+  }
+  .portrait-photo {
+    width: var(--portrait-size);
+    height: var(--portrait-size);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--surface-sunken);
+  }
+  .portrait-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .portrait-city {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0;
   }
 
-  /* VISIT BAND */
-  .visit-band {
+  /* SECURE: the trust fact, in prose, where the doubt lands */
+  .secure {
     padding-block: 6.4rem;
-    text-align: center;
+    border-top: 1px solid var(--border-subtle);
   }
-  .visit-band .kompass-line {
+  .secure p {
     font-size: 2.0rem;
     font-weight: 300;
     line-height: 1.6;
-    max-width: 56rem;
-    margin: 0 auto 2.4rem;
+    max-width: 64rem;
+    margin: 0;
   }
-  .visit-band .ghost-link { padding-top: 2.4rem; }
+
+  /* ACT: never resolves as "visit a gallery" only */
+  .act {
+    padding-block: 6.4rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .act p {
+    font-size: 2.0rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0 0 3.2rem;
+    max-width: 56rem;
+  }
+  .act-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem 4.8rem;
+  }
 
   /* FOOTER */
   .site-footer {
@@ -330,24 +446,16 @@
     .footer-links a:hover { border-bottom-color: var(--border-strong); }
   }
 
-  @media (min-width: 640px) {
-    .interiors-grid { grid-template-columns: repeat(2, 1fr); }
-    .hanging-grid { grid-template-columns: repeat(2, 1fr); }
-    .craft-grid { grid-template-columns: repeat(3, 1fr); }
-    .fact-list { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  @media (min-width: 1024px) {
-    .interiors-grid { grid-template-columns: repeat(3, 1fr); }
-    .hanging-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   }
 
   @media (max-width: 1219px) {
     body { padding-top: 128px; }
+  }
+
+  @media (max-width: 767px) {
+    .continue-text .dek { margin-left: 0; }
   }
 </style>
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
@@ -1199,199 +1307,264 @@
 <!-- LUMAS-NAV-KIT:MARKUP:END -->
 <!-- HYPOTHESIS: Evergreen gallery-proof page inherits the account's best creative (EUR 198 CPA) after /artweek/ went dark · KPI: ATC-rate proxy = pdp_click rate -->
 
-<section class="hero">
-  <div class="hero-media">
-    <img src="https://media.lumas.de/galerien/london/galerie-london-teaser-1220x450.jpg" alt="Inside the LUMAS gallery, London">
+<section class="continue">
+  <div class="continue-media">
+    <img src="https://media.lumas.de/galerien/london/galerie-london-teaser-1220x450.jpg" alt="Inside a LUMAS gallery" loading="eager">
   </div>
-  <div class="wrap hero-text">
-    <p class="eyebrow">The galleries</p>
-    <h1>Every edition here has hung on a gallery wall we own</h1>
-    <p class="dek">Diasec, hand framing, documented editions, and 19 galleries where you can see the result.</p>
+  <div class="wrap continue-text" data-reveal-group>
+    <p class="eyebrow reveal">The galleries</p>
+    <h1 class="reveal">The film walked you out.<br>The doors are still open.</h1>
+    <p class="dek reveal">Nineteen rooms in nine countries where these editions hang, lit, framed, on real walls.</p>
   </div>
 </section>
 
-<section class="interiors wrap">
-  <ul class="interiors-grid">
-    <li>
-      <div class="interior-frame">
-        <img src="https://media.lumas.de/galerien/london/galerie-london-raum-01.jpg" alt="LUMAS gallery interior, London" loading="lazy">
+<section class="walk">
+  <div class="walk-room">
+    <div class="walk-full-media">
+      <img src="https://media.lumas.de/galerien/london/galerie-london-raum-01.jpg" alt="LUMAS gallery interior, London" loading="lazy">
+    </div>
+    <div class="wrap">
+      <div class="walk-full-caption" data-reveal-group>
+        <p class="place-name reveal">London</p>
+        <p class="walk-line reveal">Daylight and gallery track lighting together, the same balance the edition will meet on your own wall.</p>
       </div>
-      <p class="ui-label">London</p>
-    </li>
-    <li>
-      <div class="interior-frame">
+    </div>
+  </div>
+
+  <div class="walk-room wrap">
+    <div class="walk-split" data-reveal-group>
+      <div class="walk-split-media reveal">
         <img src="https://media.lumas.de/galerien/paris/galerie-paris-raum-01.jpg" alt="LUMAS gallery interior, Paris" loading="lazy">
       </div>
-      <p class="ui-label">Paris</p>
-    </li>
-    <li>
-      <div class="interior-frame">
-        <img src="https://media.lumas.de/galerien/new-york-soho/galerie-new-york-soho-raum-01.jpg" alt="LUMAS gallery interior, New York SoHo" loading="lazy">
+      <div class="walk-split-text reveal">
+        <p class="place-name">Paris</p>
+        <p class="walk-line">Every work on this wall left the same workshop as the one that would arrive at your door.</p>
       </div>
-      <p class="ui-label">New York SoHo</p>
-    </li>
-    <li>
-      <div class="interior-frame">
+    </div>
+  </div>
+
+  <div class="walk-room">
+    <div class="walk-full-media">
+      <img src="https://media.lumas.de/galerien/new-york-soho/galerie-new-york-soho-raum-01.jpg" alt="LUMAS gallery interior, New York SoHo" loading="lazy">
+    </div>
+    <div class="wrap">
+      <div class="walk-full-caption at-right" data-reveal-group>
+        <p class="place-name reveal">New York SoHo</p>
+        <p class="walk-line reveal">Cast-iron windows and high ceilings, editions hung at the height a person actually looks.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="walk-room wrap">
+    <div class="walk-split walk-split--reverse" data-reveal-group>
+      <div class="walk-split-media reveal">
         <img src="https://media.lumas.de/galerien/london/galerie-london-raum-02.jpg" alt="LUMAS gallery interior, London" loading="lazy">
       </div>
-      <p class="ui-label">London</p>
-    </li>
-    <li>
-      <div class="interior-frame">
-        <img src="https://media.lumas.de/galerien/paris/galerie-paris-raum-02.jpg" alt="LUMAS gallery interior, Paris" loading="lazy">
+      <div class="walk-split-text reveal">
+        <p class="place-name">London</p>
+        <p class="walk-line">A second room in the same gallery, where the larger formats get the wall space they need.</p>
       </div>
-      <p class="ui-label">Paris</p>
-    </li>
-    <li>
-      <div class="interior-frame">
+    </div>
+  </div>
+
+  <div class="walk-room">
+    <div class="walk-full-media">
+      <img src="https://media.lumas.de/galerien/paris/galerie-paris-raum-02.jpg" alt="LUMAS gallery interior, Paris" loading="lazy">
+    </div>
+    <div class="wrap">
+      <div class="walk-full-caption" data-reveal-group>
+        <p class="place-name reveal">Paris</p>
+        <p class="walk-line reveal">Around the corner from the first room, where the smaller editions hold their own against the ceiling height.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="walk-room wrap">
+    <div class="walk-split" data-reveal-group>
+      <div class="walk-split-media reveal">
         <img src="https://media.lumas.de/galerien/new-york-soho/galerie-new-york-soho-raum-02.jpg" alt="LUMAS gallery interior, New York SoHo" loading="lazy">
       </div>
-      <p class="ui-label">New York SoHo</p>
-    </li>
-  </ul>
-</section>
-
-<section class="craft wrap">
-  <div class="craft-grid">
-    <div class="craft-col">
-      <div class="craft-img-frame">
-        <img src="https://img.lumas.com/fileadmin/lumas_rahmen/corner/frameless/acrylic-photo-print-under-acrylic-2mm-matt-glossy.jpg" alt="Diasec edge detail" loading="lazy">
+      <div class="walk-split-text reveal">
+        <p class="place-name">New York SoHo</p>
+        <p class="walk-line">The back gallery, quieter, where most people take the longest to decide.</p>
       </div>
-      <p class="ui-label">Diasec</p>
-      <p class="body-small">Sealed under acrylic glass. Colours stay stable for decades.</p>
-    </div>
-    <div class="craft-col">
-      <div class="craft-img-frame">
-        <img src="https://img.lumas.com/fileadmin/lumas_rahmen/corner/hamburg/massivholz-schwarz.jpg" alt="Hand-framing detail, solid wood" loading="lazy">
-      </div>
-      <p class="ui-label">Hand framing</p>
-      <p class="body-small">Solid-wood profiles, mounted by hand in Germany.</p>
-    </div>
-    <div class="craft-col">
-      <div class="craft-img-frame">
-        <img src="https://img.lumas.com/fileadmin/lumas_rahmen/corner/hamburg/passepartout_braun.jpg" alt="Documented edition, passepartout mounting detail" loading="lazy">
-      </div>
-      <p class="ui-label">Documented edition</p>
-      <p class="body-small">Numbered run, signed or estate-stamped, certificate included.</p>
     </div>
   </div>
 </section>
 
-<section class="hanging wrap">
-  <h2 class="section-header">What is on our walls right now</h2>
-  <ul class="hanging-grid">
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/massimo_colonna/serene_garden/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
+<section class="works wrap">
+  <h2>These are hanging in the rooms you just walked through.</h2>
+  <ul class="works-grid" data-reveal-group>
+    <li class="work-item--a">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/massimo_colonna/serene_garden/" data-goal="pdp_click">
+        <div class="work-frame">
           <img src="https://img.lumas.com/showimg_mcn07_desktop.webp" alt="Massimo Colonna, Serene Garden" loading="lazy">
         </div>
         <p class="eyebrow">Massimo Colonna</p>
-        <p class="hanging-title">Serene Garden</p>
+        <p class="work-title">Serene Garden</p>
         <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $790</p>
+        <p class="work-price">from $790</p>
         <span class="ghost-link">Discover</span>
       </a>
     </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/luc_dratwa/noras_sight/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
+    <li class="work-item--b">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/luc_dratwa/noras_sight/" data-goal="pdp_click">
+        <div class="work-frame">
           <img src="https://img.lumas.com/showimg_ldr06_desktop.webp" alt="Luc Dratwa, Nora's Sight" loading="lazy">
         </div>
         <p class="eyebrow">Luc Dratwa</p>
-        <p class="hanging-title">Nora's Sight</p>
+        <p class="work-title">Nora's Sight</p>
         <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $930</p>
+        <p class="work-price">from $930</p>
         <span class="ghost-link">Discover</span>
       </a>
     </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/wolfgang_uhlig/cordoama/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
-          <img src="https://img.lumas.com/showimg_wuh73_desktop.webp" alt="Wolfgang Uhlig, Cordoama" loading="lazy">
-        </div>
-        <p class="eyebrow">Wolfgang Uhlig</p>
-        <p class="hanging-title">Cordoama</p>
-        <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $1,620</p>
-        <span class="ghost-link">Discover</span>
-      </a>
-    </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/beatrice_hug/manzanillo/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
-          <img src="https://img.lumas.com/showimg_bhu53_desktop.webp" alt="Beatrice Hug, Manzanillo" loading="lazy">
-        </div>
-        <p class="eyebrow">Beatrice Hug</p>
-        <p class="hanging-title">Manzanillo</p>
-        <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $370</p>
-        <span class="ghost-link">Discover</span>
-      </a>
-    </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/isabelle_menin/etude_pour_un_apres_midi_03/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
-          <img src="https://img.lumas.com/showimg_ime40_desktop.webp" alt="Isabelle Menin, Etude Pour Un Après Midi 03" loading="lazy">
-        </div>
-        <p class="eyebrow">Isabelle Menin</p>
-        <p class="hanging-title">Etude Pour Un Après Midi 03</p>
-        <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $490</p>
-        <span class="ghost-link">Discover</span>
-      </a>
-    </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/guachinarte/palm_springs/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
-          <img src="https://img.lumas.com/showimg_gua01_desktop.webp" alt="Guachinarte, Palm Springs" loading="lazy">
-        </div>
-        <p class="eyebrow">Guachinarte</p>
-        <p class="hanging-title">Palm Springs</p>
-        <p class="caption">Bestseller · hangs in our galleries</p>
-        <p class="hanging-price">from $1,270</p>
-        <span class="ghost-link">Discover</span>
-      </a>
-    </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
+    <li class="work-item--c">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click">
+        <div class="work-frame">
           <img src="https://img.lumas.com/showimg_gri04_desktop.webp" alt="Gerhard Richter, Landschaft mit Wolke" loading="lazy">
         </div>
         <p class="eyebrow">Gerhard Richter</p>
-        <p class="hanging-title">Landschaft mit Wolke</p>
+        <p class="work-title">Landschaft mit Wolke</p>
         <p class="caption">Certified edition · Master</p>
-        <p class="hanging-price">$1,990</p>
+        <p class="work-price">$1,990</p>
         <span class="ghost-link">Discover</span>
       </a>
     </li>
-    <li>
-      <a class="hanging-card" href="https://www.lumas.com/pictures/gavin_evans/lazarus_i/" data-goal="pdp_click">
-        <div class="hanging-img-frame">
+    <li class="work-item--d">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/wolfgang_uhlig/cordoama/" data-goal="pdp_click">
+        <div class="work-frame">
+          <img src="https://img.lumas.com/showimg_wuh73_desktop.webp" alt="Wolfgang Uhlig, Cordoama" loading="lazy">
+        </div>
+        <p class="eyebrow">Wolfgang Uhlig</p>
+        <p class="work-title">Cordoama</p>
+        <p class="caption">Bestseller · hangs in our galleries</p>
+        <p class="work-price">from $1,620</p>
+        <span class="ghost-link">Discover</span>
+      </a>
+    </li>
+    <li class="work-item--e">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/guachinarte/palm_springs/" data-goal="pdp_click">
+        <div class="work-frame">
+          <img src="https://img.lumas.com/showimg_gua01_desktop.webp" alt="Guachinarte, Palm Springs" loading="lazy">
+        </div>
+        <p class="eyebrow">Guachinarte</p>
+        <p class="work-title">Palm Springs</p>
+        <p class="caption">Bestseller · hangs in our galleries</p>
+        <p class="work-price">from $1,270</p>
+        <span class="ghost-link">Discover</span>
+      </a>
+    </li>
+    <li class="work-item--f">
+      <a class="work-item reveal" href="https://www.lumas.com/pictures/gavin_evans/lazarus_i/" data-goal="pdp_click">
+        <div class="work-frame">
           <img src="https://img.lumas.com/showimg_gve31_desktop.webp" alt="Gavin Evans, Lazarus I" loading="lazy">
         </div>
         <p class="eyebrow">Gavin Evans</p>
-        <p class="hanging-title">Lazarus I</p>
+        <p class="work-title">Lazarus I</p>
         <p class="caption">Lenticular · gallery piece</p>
-        <p class="hanging-price">from $660</p>
+        <p class="work-price">from $660</p>
         <span class="ghost-link">Discover</span>
       </a>
     </li>
   </ul>
 </section>
 
-<section class="fact-band">
+<section class="consultant-wall">
   <div class="wrap">
-    <ul class="fact-list">
-      <li>19 galleries</li>
-      <li>Since 2004</li>
-      <li>Handcrafted in Germany</li>
+    <h2 class="reveal">Nineteen rooms. The people in them.</h2>
+    <div class="consultant-copy" data-reveal-group>
+      <p class="body-small reveal">An Art Consultant works the gallery floor: hanging the editions, choosing the frames, meeting collectors. The same person answers when you get in touch.</p>
+      <p class="body-large reveal">A named Art Consultant replies within two working days with a direction. Free, and without obligation.</p>
+      <ul class="channel-links reveal">
+        <li><a class="ghost-link" href="https://wa.me/493030306969" data-goal="cta_primary">WhatsApp</a></li>
+        <li><a class="ghost-link" href="tel:+493030306969">Phone: 030 30 30 69 69</a></li>
+        <li><a class="ghost-link" href="https://direct.lc.chat/8792761/1">Live chat</a></li>
+        <li><a class="ghost-link" href="https://lumas.atlassian.net/servicedesk/customer/portal/2">Write to us</a></li>
+      </ul>
+    </div>
+
+    <div class="consultant-scene reveal">
+      <img src="assets/people/consultant-dialogue.jpg" alt="A LUMAS Art Consultant in conversation with a collector" loading="lazy">
+    </div>
+
+    <ul class="portrait-wall" data-reveal-group>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/berlin.webp" alt="LUMAS Art Consultant, Berlin Mitte" loading="lazy"></div>
+        <p class="portrait-city">Berlin Mitte</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/berlin-kudamm.webp" alt="LUMAS Art Consultant, Berlin Kurfürstendamm" loading="lazy"></div>
+        <p class="portrait-city">Berlin Kurfürstendamm</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/hamburg.webp" alt="LUMAS Art Consultant, Hamburg" loading="lazy"></div>
+        <p class="portrait-city">Hamburg</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/munich.webp" alt="LUMAS Art Consultant, Munich" loading="lazy"></div>
+        <p class="portrait-city">Munich</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/frankfurt.webp" alt="LUMAS Art Consultant, Frankfurt" loading="lazy"></div>
+        <p class="portrait-city">Frankfurt</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/stuttgart.webp" alt="LUMAS Art Consultant, Stuttgart" loading="lazy"></div>
+        <p class="portrait-city">Stuttgart</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/hannover.webp" alt="LUMAS Art Consultant, Hannover" loading="lazy"></div>
+        <p class="portrait-city">Hannover</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/mannheim.webp" alt="LUMAS Art Consultant, Mannheim" loading="lazy"></div>
+        <p class="portrait-city">Mannheim</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/dortmund.webp" alt="LUMAS Art Consultant, Dortmund" loading="lazy"></div>
+        <p class="portrait-city">Dortmund</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/vienna.webp" alt="LUMAS Art Consultant, Vienna" loading="lazy"></div>
+        <p class="portrait-city">Vienna</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/zurich.webp" alt="LUMAS Art Consultant, Zürich" loading="lazy"></div>
+        <p class="portrait-city">Zürich</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/budapest.webp" alt="LUMAS Art Consultant, Budapest" loading="lazy"></div>
+        <p class="portrait-city">Budapest</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/new-york.webp" alt="LUMAS Art Consultant, New York SoHo" loading="lazy"></div>
+        <p class="portrait-city">New York SoHo</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/miami.webp" alt="LUMAS Art Consultant, Miami" loading="lazy"></div>
+        <p class="portrait-city">Miami</p>
+      </li>
+      <li class="portrait-item reveal">
+        <div class="portrait-photo"><img src="assets/people/frankfurt-airport.webp" alt="LUMAS Art Consultant, Frankfurt Airport" loading="lazy"></div>
+        <p class="portrait-city">Frankfurt Airport</p>
+      </li>
     </ul>
   </div>
 </section>
 
-<section class="visit-band wrap">
-  <p class="kompass-line">See any wall in person, or discover every work right here.</p>
-  <a class="ghost-link" href="https://www.lumas.com/" data-goal="cta_primary">Discover the collection</a>
+<section class="secure wrap">
+  <p class="reveal"><span class="figure">19</span> galleries, since <span class="figure">2004</span>, everything handcrafted in Germany. If the room disagrees once the work is hung, there are <span class="figure">30</span> days to send it back.</p>
+</section>
+
+<section class="act wrap">
+  <div data-reveal-group>
+    <p class="reveal">The walk does not end at the door.</p>
+    <div class="act-links reveal">
+      <a class="ghost-link" href="https://www.lumas.com/galerien/">See it in person</a>
+      <a class="ghost-link" href="https://www.lumas.com/" data-goal="cta_primary">Or discover every work online</a>
+    </div>
+  </div>
 </section>
 
 <footer class="site-footer wrap">
@@ -1406,6 +1579,37 @@
 </footer>
 
 <script>document.addEventListener('click',e=>{const g=e.target.closest('[data-goal]');if(g)console.log('[goal]',g.dataset.goal,g.href||'')});</script>
+<script>
+(function(){
+  var reveals = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    reveals.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var groups = new Map();
+  reveals.forEach(function(el){
+    var group = el.closest('[data-reveal-group]');
+    if (group) {
+      if (!groups.has(group)) groups.set(group, []);
+      groups.get(group).push(el);
+    }
+  });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var group = el.closest('[data-reveal-group]');
+      if (group && groups.has(group)) {
+        var idx = groups.get(group).indexOf(el);
+        el.style.transitionDelay = (Math.min(idx, 8) * 70) + 'ms';
+      }
+      el.classList.add('is-visible');
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el){ obs.observe(el); });
+})();
+</script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->

@@ -4,6 +4,7 @@
 <meta name="robots" content="noindex,nofollow">
 <script src="../assets/gate.js"></script>
 <meta charset="utf-8">
+<script>if(!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){document.documentElement.classList.add('js');}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Museum format - oversized wall art | LUMAS</title>
 <meta name="description" content="Some works are meant to be seen from across the room: large-scale editions with size comparison, framing, and hanging guidance.">
@@ -80,7 +81,7 @@ a { color: inherit; text-decoration: none; }
 p { margin: 0; }
 
 a:focus-visible,
-.work-tile:focus-visible {
+.more-work:focus-visible {
   outline: 2px solid var(--color-border-focus);
   outline-offset: 4px;
 }
@@ -103,15 +104,15 @@ a:focus-visible,
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin: 0 0 var(--sp-2);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
-.link-cta {
+.ghost-link {
   display: inline-block;
   font-family: 'Archivo', sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 13px;
   line-height: 1.5;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-border-focus);
@@ -119,7 +120,7 @@ a:focus-visible,
   transition: opacity 220ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .link-cta:hover { opacity: 0.6; }
+  .ghost-link:hover { opacity: 0.6; }
 }
 
 .display-h1 {
@@ -136,7 +137,7 @@ a:focus-visible,
   font-size: clamp(34px, 3vw, 46px);
   line-height: 1.12;
   letter-spacing: 0;
-  margin: 0 0 var(--sp-8);
+  margin: 0 0 var(--sp-6);
 }
 .display-h4 {
   font-family: 'Utile Display', serif;
@@ -146,6 +147,7 @@ a:focus-visible,
   letter-spacing: 0;
   margin: 0;
 }
+.body { font-family: 'Archivo', sans-serif; font-weight: 400; font-size: 16px; line-height: 1.5; }
 .body-large {
   font-family: 'Archivo', sans-serif;
   font-weight: 300;
@@ -176,7 +178,18 @@ a:focus-visible,
 section { padding-block: clamp(48px, 8vw, 96px); }
 section + section { border-top: 1px solid var(--color-border-subtle); }
 
-.hero { padding-top: clamp(40px, 6vw, 72px); }
+/* Orchestrated scroll-reveal. No-JS and reduced-motion both render fully visible. */
+.reveal { opacity: 1; transform: none; }
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+  transition-delay: var(--rd, 0ms);
+}
+.js .reveal.is-in { opacity: 1; transform: translateY(0); }
+
+/* HERO */
+.hero { padding-top: clamp(40px, 6vw, 72px); border-top: none; }
 .hero .wrap {
   display: grid;
   grid-template-columns: 7fr 5fr;
@@ -194,71 +207,114 @@ section + section { border-top: 1px solid var(--color-border-subtle); }
 }
 .hero__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.scale-rows { display: flex; flex-direction: column; gap: var(--sp-6); margin: var(--sp-8) 0 var(--sp-5); }
-.scale-row__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); margin-bottom: var(--sp-2); }
-.scale-row__label { color: var(--color-text-secondary); }
-.scale-row__value { color: var(--color-text-primary); }
-.scale-row__track {
-  height: 12px;
-  border: 1px solid var(--color-border-default);
-}
-.scale-row__fill {
-  height: 100%;
-  background: var(--color-surface-muted);
-  border-right: 1px solid var(--color-border-default);
-}
-
-.works__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-8);
-}
-.work-tile {
-  display: block;
-  background: var(--color-surface-card);
-  border: 1px solid var(--color-border-default);
-  padding: var(--sp-8);
-}
-.work-tile__frame { display: block; overflow: hidden; margin-bottom: var(--sp-6); }
-.work-tile__frame img {
+/* THE LADDER */
+.ladder { padding-block: clamp(56px, 8vw, 96px) 0; }
+.ladder__head { max-width: 46rem; margin-bottom: clamp(40px, 6vw, 72px); }
+.ladder__step { margin: 0 auto clamp(56px, 8vw, 96px); }
+.ladder__media { margin: 0 auto; overflow: hidden; }
+.ladder__media img {
   display: block;
   width: 100%;
   height: auto;
   transition: transform 520ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .work-tile:hover .work-tile__frame img { transform: scale(1.02); }
+  .ladder__step:hover .ladder__media img { transform: scale(1.02); }
 }
-.work-tile__class { display: block; margin-bottom: var(--sp-4); }
-.work-tile__artist { display: block; margin-bottom: var(--sp-1); }
-.work-tile__title { display: block; margin-bottom: var(--sp-1); }
-.work-tile__group { display: block; color: var(--color-text-secondary); margin-bottom: var(--sp-4); }
-.work-tile__price { display: block; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ladder__info { margin-top: var(--sp-6); max-width: 36rem; text-align: left; }
+.ladder__cm {
+  font-family: 'Utile Display', serif;
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 var(--sp-3);
+}
+.ladder__place {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--sp-2);
+}
+.ladder__work { font-size: 16px; margin: 0 0 var(--sp-3); }
+.ladder__note { color: var(--color-text-secondary); max-width: 38ch; margin: 0 0 var(--sp-4); }
+.ladder__price { font-weight: 700; font-variant-numeric: tabular-nums; margin: 0 0 var(--sp-4); }
 
-.practicalities__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--sp-8);
-  margin-bottom: var(--sp-8);
-}
-.practicalities__col p:last-child { color: var(--color-text-primary); }
+.ladder__step--1 .ladder__media { max-width: 38%; }
+.ladder__step--1 .ladder__cm { font-size: clamp(28px, 3vw, 40px); }
+.ladder__step--2 .ladder__media { max-width: 52%; }
+.ladder__step--2 .ladder__cm { font-size: clamp(34px, 4vw, 56px); }
+.ladder__step--3 .ladder__media { max-width: 68%; }
+.ladder__step--3 .ladder__cm { font-size: clamp(40px, 5.5vw, 72px); }
+.ladder__step--4 .ladder__media { max-width: 84%; }
+.ladder__step--4 .ladder__cm { font-size: clamp(48px, 7vw, 96px); }
 
-.cross-link__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-8);
+.ladder__step--5 {
+  margin: 0;
+  padding-block: clamp(64px, 10vw, 140px) clamp(56px, 8vw, 96px);
 }
-.cross-link__card {
+.ladder__step--5 .ladder__media { width: 100%; max-width: none; }
+.ladder__step--5 .ladder__media img { width: 100%; height: 78vh; object-fit: cover; }
+.ladder__step--5 .ladder__info { margin-top: clamp(32px, 5vw, 56px); }
+.ladder__step--5 .ladder__cm { font-size: clamp(56px, 8vw, 120px); }
+
+/* SIZE REFERENCE */
+.size-ref { padding-block: clamp(40px, 6vw, 72px); }
+.size-ref__text { max-width: 46ch; }
+
+/* MORE WORKS - editorial stagger, not a grid */
+.more-works__list {
+  columns: 3 320px;
+  column-gap: var(--sp-8);
+  margin-top: clamp(32px, 5vw, 56px);
+}
+.more-work {
   display: block;
-  padding: var(--sp-8);
-  border: 1px solid var(--color-border-default);
-  transition: background-color 220ms var(--ease-out);
+  break-inside: avoid;
+  margin-bottom: var(--sp-10);
+}
+.more-work__frame { display: block; margin-bottom: var(--sp-4); }
+.more-work__frame img { display: block; width: 100%; height: auto; }
+.more-work__class { display: block; margin-bottom: var(--sp-3); }
+.more-work__artist { display: block; margin-bottom: var(--sp-1); }
+.more-work__title { display: block; margin-bottom: var(--sp-1); }
+.more-work__group { display: block; margin-bottom: var(--sp-3); }
+.more-work__price { display: block; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: var(--sp-3); }
+@media (max-width: 1023px) { .more-works__list { columns: 2 260px; } }
+@media (max-width: 640px) { .more-works__list { columns: 1; } }
+
+/* THE ART CONSULTANT */
+.consultant__grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: var(--sp-16);
+  align-items: center;
+}
+.consultant__media { overflow: hidden; }
+.consultant__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 520ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .cross-link__card:hover { background: var(--color-surface-raised); }
+  .consultant__media:hover img { transform: scale(1.02); }
 }
-.cross-link__title { display: block; margin-bottom: var(--sp-2); }
-.cross-link__desc { display: block; color: var(--color-text-secondary); }
+.consultant__body .display-h2 { max-width: 22ch; }
+.consultant__lead { color: var(--color-text-secondary); max-width: 42ch; margin-bottom: var(--sp-5); }
+.consultant__promise { max-width: 42ch; margin-bottom: var(--sp-6); }
+.consultant__channels { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-8); }
+
+/* SECURE */
+.secure__returns { margin: var(--sp-2) 0 var(--sp-8); max-width: 32ch; }
+.secure__grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-8); margin-bottom: var(--sp-6); }
+.secure__fact .body-small { color: var(--color-text-secondary); }
+
+/* ACT */
+.act__inner { max-width: 40rem; }
+.act__inner .display-h2 { margin-bottom: var(--sp-6); }
 
 .site-footer { padding-block: var(--sp-8); }
 .site-footer .wrap {
@@ -277,16 +333,23 @@ section + section { border-top: 1px solid var(--color-border-subtle); }
 @media (max-width: 860px) {
   .hero .wrap { grid-template-columns: 1fr; gap: var(--sp-10); }
   .hero__video-wrap { max-height: 60vh; }
-  .works__grid { grid-template-columns: 1fr; }
-  .practicalities__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .consultant__grid { grid-template-columns: 1fr; gap: var(--sp-10); }
+  .secure__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
 }
 @media (max-width: 640px) {
-  .cross-link__grid { grid-template-columns: 1fr; }
-  .site-footer .wrap { justify-content: flex-start; }
+  .ladder__step--1 .ladder__media { max-width: 62%; }
+  .ladder__step--2 .ladder__media { max-width: 72%; }
+  .ladder__step--3 .ladder__media { max-width: 82%; }
+  .ladder__step--4 .ladder__media { max-width: 92%; }
+  .ladder__step--5 .ladder__media img { height: 56vh; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+@media (max-width: 1219px) {
+  body { padding-top: 128px; }
 }
 </style>
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
@@ -1143,10 +1206,10 @@ section + section { border-top: 1px solid var(--color-border-subtle); }
 <section class="hero" aria-label="Museum format introduction">
   <div class="wrap">
     <div class="hero__text">
-      <p class="eyebrow">Museum format</p>
-      <h1 class="display-h1">Some works are meant to be seen from across the room</h1>
-      <p class="body-large hero__dek">Large-scale editions with size comparison, framing facts, and hanging guidance.</p>
-      <a class="link-cta" href="#works" data-goal="cta_primary">See the works</a>
+      <p class="eyebrow reveal">Museum format</p>
+      <h1 class="display-h1 reveal" style="--rd:70ms">You saw it fill the frame. Now put it on a wall.</h1>
+      <p class="body-large hero__dek reveal" style="--rd:140ms">Five real rooms, five real sizes, from sixty centimetres to two hundred and sixty.</p>
+      <a class="ghost-link reveal" style="--rd:210ms" href="#ladder" data-goal="cta_primary">See the ladder</a>
     </div>
     <div class="hero__media">
       <div class="hero__video-wrap">
@@ -1158,169 +1221,258 @@ section + section { border-top: 1px solid var(--color-border-subtle); }
   </div>
 </section>
 
-<section class="scale" aria-labelledby="scale-heading">
+<section class="ladder" id="ladder" aria-labelledby="ladder-heading">
   <div class="wrap">
-    <p class="ui-label" id="scale-heading">Scale</p>
-    <div class="scale-rows">
-      <div class="scale-row">
-        <div class="scale-row__head">
-          <span class="body-small scale-row__label">Room door</span>
-          <span class="body scale-row__value tabular">200 cm</span>
-        </div>
-        <div class="scale-row__track"><div class="scale-row__fill" style="width:83.33%"></div></div>
+    <div class="ladder__head">
+      <p class="eyebrow reveal">The ladder</p>
+      <h2 class="display-h2 reveal" id="ladder-heading">Five sizes, five rooms, each larger than the one before it.</h2>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="ladder__step ladder__step--1">
+      <div class="ladder__media reveal">
+        <img src="assets/interiors/madrid-seaside-60.jpg" alt="Guachinarte, Seaside Glass House, 60 × 60 cm in a Madrid room" loading="lazy">
       </div>
-      <div class="scale-row">
-        <div class="scale-row__head">
-          <span class="body-small scale-row__label">Three-seat sofa</span>
-          <span class="body scale-row__value tabular">220 cm</span>
-        </div>
-        <div class="scale-row__track"><div class="scale-row__fill" style="width:91.67%"></div></div>
-      </div>
-      <div class="scale-row">
-        <div class="scale-row__head">
-          <span class="body-small scale-row__label">Museum-format edition</span>
-          <span class="body scale-row__value tabular">150&ndash;180 cm</span>
-        </div>
-        <div class="scale-row__track"><div class="scale-row__fill" style="width:68.75%"></div></div>
+      <div class="ladder__info reveal" style="--rd:90ms">
+        <p class="ladder__cm">60 &times; 60 cm</p>
+        <p class="ladder__place">Madrid</p>
+        <p class="body-large ladder__work">Guachinarte, Seaside Glass House</p>
+        <p class="body-small ladder__note">Reads from two metres. A work you notice when you are already in the room.</p>
+        <p class="body ladder__price">from $380</p>
+        <a class="ghost-link" href="https://www.lumas.com/pictures/guachinarte/seaside_glass_house/" data-goal="pdp_click">Discover</a>
       </div>
     </div>
-    <p class="caption">Exact dimensions per work on each edition page.</p>
   </div>
-</section>
 
-<section class="works" id="works" aria-labelledby="works-heading">
   <div class="wrap">
-    <p class="eyebrow">The editions</p>
-    <h2 class="display-h2" id="works-heading">Museum format works</h2>
-    <div class="works__grid">
+    <div class="ladder__step ladder__step--2">
+      <div class="ladder__media reveal">
+        <img src="assets/interiors/andalusian-cortijo-seaside.jpg" alt="Guachinarte, Seaside Glass House, 90 × 90 cm in an Andalusian room" loading="lazy">
+      </div>
+      <div class="ladder__info reveal" style="--rd:90ms">
+        <p class="ladder__cm">90 &times; 90 cm</p>
+        <p class="ladder__place">Andalusia</p>
+        <p class="body-large ladder__work">Guachinarte, Seaside Glass House</p>
+        <p class="body-small ladder__note">Holds a chimney breast or a stretch of hallway on its own.</p>
+        <p class="body ladder__price">from $380</p>
+        <a class="ghost-link" href="https://www.lumas.com/pictures/guachinarte/seaside_glass_house/" data-goal="pdp_click">Discover</a>
+      </div>
+    </div>
+  </div>
 
-      <a class="work-tile" href="https://www.lumas.com/pictures/wolfgang_uhlig/mar_tirreno-1/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_wuh52_desktop.webp" alt="Wolfgang Uhlig, Mar Tirreno" loading="lazy"></span>
-        <span class="work-tile__class body">Museum format &middot; last editions</span>
-        <span class="eyebrow work-tile__artist">Wolfgang Uhlig</span>
-        <span class="body-large work-tile__title">Mar Tirreno</span>
-        <span class="caption work-tile__group">By the sea</span>
-        <span class="body work-tile__price">$5,590</span>
-      </a>
+  <div class="wrap">
+    <div class="ladder__step ladder__step--3">
+      <div class="ladder__media reveal">
+        <img src="assets/interiors/zurich-mylanswave.jpg" alt="Matthew Cusick, Mylan's Wave, 152 × 100 cm in a Zürich room" loading="lazy">
+      </div>
+      <div class="ladder__info reveal" style="--rd:90ms">
+        <p class="ladder__cm">152 &times; 100 cm</p>
+        <p class="ladder__place">Z&uuml;rich</p>
+        <p class="body-large ladder__work">Matthew Cusick, Mylan's Wave</p>
+        <p class="body-small ladder__note">Wider than an armchair. This is where a work begins to set the room's temperature.</p>
+        <p class="body ladder__price">from $780</p>
+        <a class="ghost-link" href="https://www.lumas.com/pictures/matthew_cusick/mylans_wave/" data-goal="pdp_click">Discover</a>
+      </div>
+    </div>
+  </div>
 
-      <a class="work-tile" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ime97_desktop.webp" alt="Isabelle Menin, Only In Your Heart 03" loading="lazy"></span>
-        <span class="work-tile__class body">Museum format edition</span>
-        <span class="eyebrow work-tile__artist">Isabelle Menin</span>
-        <span class="body-large work-tile__title">Only In Your Heart 03</span>
-        <span class="caption work-tile__group">Distorted Nature</span>
-        <span class="body work-tile__price">from $850</span>
-      </a>
+  <div class="wrap">
+    <div class="ladder__step ladder__step--4">
+      <div class="ladder__media reveal">
+        <img src="assets/interiors/capetown-seesaw.jpg" alt="Wolfgang Uhlig, Seesaw Seascape XV, 180 × 90 cm in a Cape Town room" loading="lazy">
+      </div>
+      <div class="ladder__info reveal" style="--rd:90ms">
+        <p class="ladder__cm">180 &times; 90 cm</p>
+        <p class="ladder__place">Cape Town</p>
+        <p class="body-large ladder__work">Wolfgang Uhlig, Seesaw Seascape XV</p>
+        <p class="body-small ladder__note">Two-thirds of a three-seat sofa. The proportion that always works, at the size most people never dare.</p>
+        <p class="body ladder__price">$2,330</p>
+        <a class="ghost-link" href="https://www.lumas.com/pictures/wolfgang_uhlig/seesaw_seascape_xv/" data-goal="pdp_click">Discover</a>
+      </div>
+    </div>
+  </div>
 
-      <a class="work-tile" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_gua53_desktop.webp" alt="Guachinarte, Hollywood Hills" loading="lazy"></span>
-        <span class="work-tile__class body">Museum format edition</span>
-        <span class="eyebrow work-tile__artist">Guachinarte</span>
-        <span class="body-large work-tile__title">Hollywood Hills</span>
-        <span class="caption work-tile__group">Mid-Century Modern Architecture</span>
-        <span class="body work-tile__price">from $810</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/wolfgang_uhlig/cordoama/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_wuh73_desktop.webp" alt="Wolfgang Uhlig, Cordoama" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $5,750</span>
-        <span class="eyebrow work-tile__artist">Wolfgang Uhlig</span>
-        <span class="body-large work-tile__title">Cordoama</span>
-        <span class="caption work-tile__group">Ocean</span>
-        <span class="body work-tile__price">from $1,620</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/luc_dratwa/new_york_voilage/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ldr76_desktop.webp" alt="Luc Dratwa, New York Voilage" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $3,040</span>
-        <span class="eyebrow work-tile__artist">Luc Dratwa</span>
-        <span class="body-large work-tile__title">New York Voilage</span>
-        <span class="caption work-tile__group">Windows</span>
-        <span class="body work-tile__price">from $650</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/isabelle_menin/les_fonds_angliques/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ime133_desktop.webp" alt="Isabelle Menin, Les fonds ang&eacute;liques" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $5,450</span>
-        <span class="eyebrow work-tile__artist">Isabelle Menin</span>
-        <span class="body-large work-tile__title">Les fonds ang&eacute;liques</span>
-        <span class="caption work-tile__group">Distorted Nature</span>
-        <span class="body work-tile__price">from $470</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/luc_dratwa/new_york_five/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ldr80_desktop.webp" alt="Luc Dratwa, New York Five" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $3,980</span>
-        <span class="eyebrow work-tile__artist">Luc Dratwa</span>
-        <span class="body-large work-tile__title">New York Five</span>
-        <span class="caption work-tile__group">Windows</span>
-        <span class="body work-tile__price">from $290</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/isabelle_menin/up_to_the_sky_03/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ime83_desktop.webp" alt="Isabelle Menin, Up To The Sky 03" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $2,270</span>
-        <span class="eyebrow work-tile__artist">Isabelle Menin</span>
-        <span class="body-large work-tile__title">Up To The Sky 03</span>
-        <span class="caption work-tile__group">Distorted Nature</span>
-        <span class="body work-tile__price">from $1,080</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/wolfgang_uhlig/sea_14/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_wuh76_desktop.webp" alt="Wolfgang Uhlig, Sea #14" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $4,120</span>
-        <span class="eyebrow work-tile__artist">Wolfgang Uhlig</span>
-        <span class="body-large work-tile__title">Sea #14</span>
-        <span class="caption work-tile__group">Ocean</span>
-        <span class="body work-tile__price">from $1,090</span>
-      </a>
-
-      <a class="work-tile" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click">
-        <span class="work-tile__frame"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" alt="Isabelle Menin, The Tender Land 2" loading="lazy"></span>
-        <span class="work-tile__class body">Largest edition $4,390</span>
-        <span class="eyebrow work-tile__artist">Isabelle Menin</span>
-        <span class="body-large work-tile__title">The Tender Land 2</span>
-        <span class="caption work-tile__group">Distorted Nature</span>
-        <span class="body work-tile__price">from $620</span>
-      </a>
-
+  <div class="ladder__step ladder__step--5">
+    <div class="ladder__media reveal">
+      <img src="assets/interiors/berlin-mylanswave-260.jpg" alt="Matthew Cusick, Mylan's Wave, 260 × 170 cm in a Berlin room" loading="lazy">
+    </div>
+    <div class="wrap">
+      <div class="ladder__info reveal" style="--rd:120ms">
+        <p class="ladder__cm">260 &times; 170 cm</p>
+        <p class="ladder__place">Berlin</p>
+        <p class="body-large ladder__work">Matthew Cusick, Mylan's Wave</p>
+        <p class="body-small ladder__note">Taller than a door and wider than the credenza beneath it. The wall stops being a wall.</p>
+        <p class="body ladder__price">from $780</p>
+        <a class="ghost-link" href="https://www.lumas.com/pictures/matthew_cusick/mylans_wave/" data-goal="pdp_click">Discover</a>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="practicalities" aria-labelledby="practicalities-heading">
+<section class="size-ref" aria-label="Size reference">
   <div class="wrap">
-    <p class="eyebrow" id="practicalities-heading">Practicalities</p>
-    <div class="practicalities__grid">
-      <div class="practicalities__col">
+    <p class="body-large size-ref__text reveal">A door is about 200 cm tall. A three-seat sofa runs about 220 cm wide. The rule that always works: two-thirds of the furniture beneath. Exact dimensions live on each edition page.</p>
+  </div>
+</section>
+
+<section class="more-works" aria-labelledby="more-works-heading">
+  <div class="wrap">
+    <p class="eyebrow reveal">Beyond the ladder</p>
+    <h2 class="display-h2 reveal" id="more-works-heading">Ten more editions built for this scale.</h2>
+    <div class="more-works__list">
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/wolfgang_uhlig/mar_tirreno-1/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_wuh52_desktop.webp" alt="Wolfgang Uhlig, Mar Tirreno" loading="lazy"></span>
+        <span class="caption more-work__class">Museum format &middot; last editions</span>
+        <span class="eyebrow more-work__artist">Wolfgang Uhlig</span>
+        <span class="body-large more-work__title">Mar Tirreno</span>
+        <span class="caption more-work__group">By the sea</span>
+        <span class="body more-work__price">$5,590</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ime97_desktop.webp" alt="Isabelle Menin, Only In Your Heart 03" loading="lazy"></span>
+        <span class="caption more-work__class">Museum format edition</span>
+        <span class="eyebrow more-work__artist">Isabelle Menin</span>
+        <span class="body-large more-work__title">Only In Your Heart 03</span>
+        <span class="caption more-work__group">Distorted Nature</span>
+        <span class="body more-work__price">from $850</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_gua53_desktop.webp" alt="Guachinarte, Hollywood Hills" loading="lazy"></span>
+        <span class="caption more-work__class">Museum format edition</span>
+        <span class="eyebrow more-work__artist">Guachinarte</span>
+        <span class="body-large more-work__title">Hollywood Hills</span>
+        <span class="caption more-work__group">Mid-Century Modern Architecture</span>
+        <span class="body more-work__price">from $810</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/wolfgang_uhlig/cordoama/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_wuh73_desktop.webp" alt="Wolfgang Uhlig, Cordoama" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $5,750</span>
+        <span class="eyebrow more-work__artist">Wolfgang Uhlig</span>
+        <span class="body-large more-work__title">Cordoama</span>
+        <span class="caption more-work__group">Ocean</span>
+        <span class="body more-work__price">from $1,620</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/luc_dratwa/new_york_voilage/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ldr76_desktop.webp" alt="Luc Dratwa, New York Voilage" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $3,040</span>
+        <span class="eyebrow more-work__artist">Luc Dratwa</span>
+        <span class="body-large more-work__title">New York Voilage</span>
+        <span class="caption more-work__group">Windows</span>
+        <span class="body more-work__price">from $650</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/isabelle_menin/les_fonds_angliques/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ime133_desktop.webp" alt="Isabelle Menin, Les fonds ang&eacute;liques" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $5,450</span>
+        <span class="eyebrow more-work__artist">Isabelle Menin</span>
+        <span class="body-large more-work__title">Les fonds ang&eacute;liques</span>
+        <span class="caption more-work__group">Distorted Nature</span>
+        <span class="body more-work__price">from $470</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/luc_dratwa/new_york_five/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ldr80_desktop.webp" alt="Luc Dratwa, New York Five" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $3,980</span>
+        <span class="eyebrow more-work__artist">Luc Dratwa</span>
+        <span class="body-large more-work__title">New York Five</span>
+        <span class="caption more-work__group">Windows</span>
+        <span class="body more-work__price">from $290</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/isabelle_menin/up_to_the_sky_03/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ime83_desktop.webp" alt="Isabelle Menin, Up To The Sky 03" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $2,270</span>
+        <span class="eyebrow more-work__artist">Isabelle Menin</span>
+        <span class="body-large more-work__title">Up To The Sky 03</span>
+        <span class="caption more-work__group">Distorted Nature</span>
+        <span class="body more-work__price">from $1,080</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/wolfgang_uhlig/sea_14/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_wuh76_desktop.webp" alt="Wolfgang Uhlig, Sea #14" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $4,120</span>
+        <span class="eyebrow more-work__artist">Wolfgang Uhlig</span>
+        <span class="body-large more-work__title">Sea #14</span>
+        <span class="caption more-work__group">Ocean</span>
+        <span class="body more-work__price">from $1,090</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+      <a class="more-work reveal" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click">
+        <span class="more-work__frame"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" alt="Isabelle Menin, The Tender Land 2" loading="lazy"></span>
+        <span class="caption more-work__class">Largest edition $4,390</span>
+        <span class="eyebrow more-work__artist">Isabelle Menin</span>
+        <span class="body-large more-work__title">The Tender Land 2</span>
+        <span class="caption more-work__group">Distorted Nature</span>
+        <span class="body more-work__price">from $620</span>
+        <span class="ghost-link">Discover</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="consultant" aria-labelledby="consultant-heading">
+  <div class="wrap consultant__grid">
+    <div class="consultant__media reveal">
+      <img src="assets/people/consultants-hanging.jpg" alt="Two LUMAS Art Consultants hanging a work in a gallery" loading="lazy">
+    </div>
+    <div class="consultant__body reveal" style="--rd:80ms">
+      <p class="eyebrow">Before you decide</p>
+      <h2 class="display-h2" id="consultant-heading">Large formats are where a consultant earns their keep.</h2>
+      <p class="body-large consultant__lead">Hanging weight, wall fixings, delivery access, and whether the size is right for the room, answered before you order.</p>
+      <p class="body consultant__promise">A named Art Consultant replies within two working days with a direction. Free, and without obligation.</p>
+      <ul class="consultant__channels">
+        <li><a class="ghost-link" href="https://wa.me/493030306969" data-goal="cta_primary">WhatsApp</a></li>
+        <li><a class="ghost-link" href="tel:+493030306969">Phone: 030 30 30 69 69</a></li>
+        <li><a class="ghost-link" href="https://direct.lc.chat/8792761/1">Live chat</a></li>
+        <li><a class="ghost-link" href="https://lumas.atlassian.net/servicedesk/customer/portal/2">Write to us</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="secure" aria-labelledby="secure-heading">
+  <div class="wrap">
+    <p class="eyebrow reveal" id="secure-heading">Before you order</p>
+    <p class="display-h4 secure__returns reveal" style="--rd:70ms">If the room disagrees, 30 days to send it back.</p>
+    <div class="secure__grid">
+      <div class="secure__fact reveal">
         <p class="ui-label">Weight</p>
-        <p class="body-small">Large Diasec editions are professionally packed; weight stated on each edition page.</p>
+        <p class="body-small">Professionally packed. Exact weight stated on each edition page.</p>
       </div>
-      <div class="practicalities__col">
+      <div class="secure__fact reveal" style="--rd:70ms">
         <p class="ui-label">Mounting</p>
-        <p class="body-small">Delivered ready to hang with a rail system suited to the format.</p>
+        <p class="body-small">Delivered ready to hang, with a rail suited to the format.</p>
       </div>
-      <div class="practicalities__col">
+      <div class="secure__fact reveal" style="--rd:140ms">
         <p class="ui-label">Delivery</p>
-        <p class="body-small">Large formats ship insured, in custom crates.</p>
+        <p class="body-small">Insured, in custom crates.</p>
       </div>
     </div>
     <p class="caption">Facts to verify with the product team before production.</p>
   </div>
 </section>
 
-<section class="cross-link" aria-label="Continue exploring">
+<section class="act" aria-label="Continue to the collection">
   <div class="wrap">
-    <p class="eyebrow">Continue exploring</p>
-    <div class="cross-link__grid">
-      <a class="cross-link__card" href="art-in-the-room.html">
-        <span class="display-h4 cross-link__title">Art in the room &rarr;</span>
-        <span class="body-small cross-link__desc">See museum format editions in real interiors.</span>
-      </a>
-      <a class="cross-link__card" href="collector-advantage.html">
-        <span class="display-h4 cross-link__title">Collector advantage &rarr;</span>
-        <span class="body-small cross-link__desc">Pricing and access for returning collectors.</span>
-      </a>
+    <div class="act__inner">
+      <h2 class="display-h2 reveal">Every room on this page is real. So is the work waiting for yours.</h2>
+      <a class="ghost-link reveal" style="--rd:80ms" href="https://www.lumas.com/" data-goal="cta_primary">Discover the collection</a>
     </div>
   </div>
 </section>
@@ -1346,6 +1498,20 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
 }
 </script>
 <script>document.addEventListener('click',e=>{const g=e.target.closest('[data-goal]');if(g)console.log('[goal]',g.dataset.goal,g.href||'')});</script>
+<script>
+if (document.documentElement.classList.contains('js')) {
+  var lumasReveal = document.querySelectorAll('.reveal');
+  var lumasIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        lumasIO.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  lumasReveal.forEach(function (el) { lumasIO.observe(el); });
+}
+</script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
