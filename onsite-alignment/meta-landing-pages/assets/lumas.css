@@ -1,0 +1,162 @@
+/* ─────────────────────────────────────────────────────────────
+   LUMAS · shared foundation for the meta-lp set
+   Tokens from the live brand showcase (de.prelive.kunsteditionen.com/brandshowcase).
+   Root font-size 10px → 1rem = 10px, per project convention.
+
+   TWO LOAD-BEARING RULES, enforced structurally so they cannot be
+   violated by a component author:
+     1. Artworks and room renders are NEVER cropped. No aspect-ratio
+        box, no object-fit:cover. Images size by their own ratio,
+        bounded by max-height so tall works stay on screen.
+     2. Content is visible by default. Reveals only enhance.
+   ───────────────────────────────────────────────────────────── */
+
+@font-face{font-family:'Utile Display';src:url('fonts/utile-display-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Utile Display';src:url('fonts/utile-display-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+
+:root{
+  /* surfaces — page is WHITE. ivory tiers are raised/sunken accents only. */
+  --surface-page:#FFFFFF;
+  --surface-card:#FFFFFF;
+  --surface-raised:#F7F1E9;
+  --surface-sunken:#F4EDE2;
+  --surface-muted:#F0EBE3;
+  --surface-inverse:#1C1A18;
+
+  --text-primary:#1C1A18;
+  --text-secondary:#5A5752;
+  --text-tertiary:#908C87;   /* decorative only — never small body copy (3.3:1) */
+  --text-inverse:#F4EDE2;
+
+  --border-default:#E2D8CC;
+  --border-subtle:#EAE2D8;
+  --border-strong:#C7C3BE;
+  --border-focus:#1C1A18;
+
+  /* base-4 ladder */
+  --sp-1:.4rem; --sp-2:.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem;
+  --sp-6:2.4rem; --sp-8:3.2rem; --sp-10:4rem; --sp-12:4.8rem; --sp-16:6.4rem;
+  --sp-20:8rem; --sp-24:9.6rem;
+
+  --measure:66ch;
+  --gutter:clamp(2rem,5vw,7.2rem);
+  --maxw:150rem;
+
+  /* motion — brand curve for reveals, Emil's curve for UI feedback */
+  --ease-brand:cubic-bezier(.2,.8,.2,1);
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --dur-ui:180ms;      /* UI feedback stays under 300ms */
+  --dur-hover:220ms;
+  --dur-reveal:520ms;  /* not UI feedback; a reveal may breathe */
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:62.5%}                 /* 1rem = 10px */
+body{
+  margin:0;
+  background:var(--surface-page);
+  color:var(--text-primary);
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  font-size:1.6rem; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding-top:7.2rem;                  /* fixed site nav */
+}
+@media (max-width:1219px){body{padding-top:12.8rem}}
+
+h1,h2,h3,h4,p,figure,blockquote{margin:0}
+img{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--border-focus);outline-offset:3px}
+
+/* ── type ──────────────────────────────────────────────────── */
+.d1,.d2,.d3,.d4{font-family:'Utile Display',Georgia,serif;font-weight:400;letter-spacing:0;text-wrap:balance}
+.d1{font-size:clamp(4.2rem,5.4vw,6.2rem);line-height:1.04}
+.d2{font-size:clamp(3.4rem,4vw,4.6rem);line-height:1.12}
+.d3{font-size:clamp(2.6rem,3vw,3.4rem);line-height:1.12}
+.d4{font-size:clamp(2.2rem,2.4vw,2.6rem);line-height:1.25}
+.d1-light{font-weight:300}
+
+.lede{font-weight:300;font-size:2rem;line-height:1.6;color:var(--text-secondary);max-width:52ch;text-wrap:pretty}
+.body{font-size:1.6rem;line-height:1.5;max-width:var(--measure);text-wrap:pretty}
+.small{font-size:1.3rem;line-height:1.65;color:var(--text-secondary)}
+.caption{font-size:1.1rem;line-height:1.5;letter-spacing:.03em;color:var(--text-secondary)}
+.eyebrow{font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--text-secondary)}
+.num{font-family:'Utile Display',Georgia,serif;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:0}
+
+/* ── layout ────────────────────────────────────────────────── */
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.stack>*+*{margin-top:var(--sp-6)}
+.section{padding-block:clamp(6.4rem,9vw,12rem)}
+.section--tight{padding-block:clamp(4.8rem,6vw,8rem)}
+.rule{border:0;border-top:1px solid var(--border-subtle)}
+
+/* ── THE IMAGE RULE ────────────────────────────────────────────
+   One class for every artwork and every room render.
+   No aspect-ratio, no cover. Height-bounded so tall works fit.
+   Any author who adds a ratio box has to fight this, by design. */
+.fig{margin:0}
+.fig img{
+  display:block;
+  width:auto; height:auto;
+  max-width:100%;
+  max-height:var(--fig-max,78vh);
+  object-fit:contain;           /* belt and braces: never crops */
+  margin-inline:auto;
+}
+.fig--wide img{--fig-max:72vh}
+.fig--tall img{--fig-max:84vh}
+.fig figcaption{margin-top:var(--sp-4)}
+/* room renders and scene photographs: same no-crop contract */
+.room img,.scene img{display:block;width:auto;height:auto;max-width:100%;max-height:var(--fig-max,78vh);object-fit:contain;margin-inline:auto}
+
+/* ── caption block ─────────────────────────────────────────── */
+.meta{display:flex;flex-direction:column;gap:var(--sp-2)}
+.meta__artist{font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--text-secondary)}
+.meta__title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:2.2rem;line-height:1.25}
+.meta__size{font-family:'Utile Display',Georgia,serif;font-weight:300;font-size:clamp(2.8rem,3.4vw,4rem);line-height:1;font-variant-numeric:tabular-nums}
+.meta__price{font-size:1.6rem;font-variant-numeric:tabular-nums}
+.meta__note{font-size:1.6rem;color:var(--text-secondary);max-width:44ch;text-wrap:pretty}
+
+/* ── links & buttons ───────────────────────────────────────── */
+.ghost{
+  display:inline-block;
+  font-size:1.3rem;line-height:1.5;letter-spacing:.13rem;text-transform:uppercase;
+  font-weight:400;text-decoration:none;
+  padding:.4rem 0 .6rem;
+  border-bottom:1px solid currentColor;
+  transition:opacity var(--dur-hover) var(--ease-out);
+}
+.btn{
+  display:inline-block;
+  font-size:1.3rem;line-height:1.5;letter-spacing:.182rem;text-transform:uppercase;
+  font-weight:700;text-decoration:none;
+  padding:1.6rem 2.8rem;
+  border-radius:0;border:0;
+  background:var(--surface-inverse);color:var(--text-inverse);
+  transition:background var(--dur-hover) var(--ease-out),transform var(--dur-ui) var(--ease-out);
+}
+.btn:active,.ghost:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){
+  .ghost:hover{opacity:.6}
+  .btn:hover{background:#3A3835}
+}
+
+/* ── inverse band ──────────────────────────────────────────── */
+.inverse{background:var(--surface-inverse);color:var(--text-inverse)}
+.inverse .eyebrow{color:rgba(244,237,226,.55)}
+.inverse .body,.inverse .lede,.inverse .meta__note{color:rgba(244,237,226,.75)}
+
+/* ── reveal: enhancement only, never a visibility gate ─────── */
+@media (prefers-reduced-motion:no-preference){
+  .js .reveal{opacity:.001;transform:translateY(1.2rem)}
+  .js .reveal.in{opacity:1;transform:none;
+    transition:opacity var(--dur-reveal) var(--ease-brand),transform var(--dur-reveal) var(--ease-brand)}
+}
+/* if JS never runs, or motion is reduced, content is simply visible */
+
+/* ── footer ────────────────────────────────────────────────── */
+.foot{border-top:1px solid var(--border-subtle);padding-block:var(--sp-10) var(--sp-16);font-size:1.3rem;color:var(--text-secondary)}
+.foot a{color:inherit}
+.foot nav{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-6);margin-top:var(--sp-4)}
+.foot nav a{padding:.6rem 0;text-decoration:none;border-bottom:1px solid transparent;transition:border-color var(--dur-hover) var(--ease-out)}
+@media (hover:hover){.foot nav a:hover{border-color:currentColor}}

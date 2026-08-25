@@ -3,41 +3,37 @@
 <head>
 <meta name="robots" content="noindex,nofollow">
 <script src="../assets/gate.js"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
 <title>Meta ads to landing pages | LUMAS prototypes</title>
+<meta name="description" content="Five landing pages built as the destinations the top-performing Meta ads never had. Real editions, real prices, live links, and the rooms that prove it." />
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/lumas.css" />
 <style>
-@font-face{font-family:'Utile Display';src:url('../assets/fonts/utile/utile-display-light.woff2') format('woff2');font-weight:300;font-display:swap}
-@font-face{font-family:'Utile Display';src:url('../assets/fonts/utile/utile-display-regular.woff2') format('woff2');font-weight:400;font-display:swap}
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap');
-:root{--page:#FAF6F1;--card:#FFFFFF;--sunken:#F4EDE2;--ink:#1C1A18;--ink2:#5A5752;--line:#E2D8CC;--ease:cubic-bezier(.2,.8,.2,1)}
-*{box-sizing:border-box}
-body,figure,p,h1,h2,h3,ol,li{margin:0}
-body{background:var(--page);color:var(--ink);font:400 16px/1.5 'Archivo',system-ui,sans-serif;padding-top:72px;-webkit-font-smoothing:antialiased}
-@media (max-width:1219px){body{padding-top:128px}}
-.wrap{max-width:1360px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
-.masthead{padding:clamp(48px,7vw,96px) 0 clamp(32px,4vw,56px)}
-.eyebrow{font:700 11px/1.5 'Archivo';letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
-h1{font:300 clamp(38px,6vw,76px)/1.02 'Utile Display',Georgia,serif;letter-spacing:-.02em;margin:20px 0 0;max-width:16ch}
-.dek{color:var(--ink2);max-width:56ch;margin-top:20px;font-size:18px;line-height:1.55}
-.entries{list-style:none;padding:0;display:flex;flex-direction:column;gap:clamp(48px,6vw,88px);padding-bottom:clamp(64px,8vw,120px)}
-.entry a{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(24px,4vw,56px);align-items:center;text-decoration:none;color:inherit}
-.entry:nth-child(even) a{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
-.entry:nth-child(even) .shot{order:2}
-.shot{overflow:hidden;background:var(--sunken);aspect-ratio:4/3}
-.shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 520ms var(--ease)}
-@media (hover:hover){.entry a:hover .shot img{transform:scale(1.02)}}
-.n{font:400 13px/1 'Utile Display',Georgia,serif;color:var(--ink2);letter-spacing:.08em}
-.entry h2{font:400 clamp(26px,3.2vw,44px)/1.08 'Utile Display',Georgia,serif;letter-spacing:-.015em;margin:14px 0 12px}
-.entry p{color:var(--ink2);max-width:46ch;line-height:1.55}
-.go{display:inline-block;margin-top:18px;font:700 13px/1.5 'Archivo';letter-spacing:.14em;text-transform:uppercase;padding:4px 0 6px;border-bottom:1px solid var(--ink);transition:opacity 220ms var(--ease)}
-.entry a:hover .go{opacity:.6}
-.entry a:focus-visible{outline:2px solid var(--ink);outline-offset:6px}
-.note{border-top:1px solid var(--line);padding:28px 0 72px;font-size:13px;line-height:1.65;color:var(--ink2);max-width:80ch}
-.js .rv{opacity:0;transform:translateY(16px)}
-.js .rv.in{opacity:1;transform:none;transition:opacity 520ms var(--ease),transform 520ms var(--ease)}
-@media (prefers-reduced-motion:reduce){.js .rv,.js .rv.in{opacity:1;transform:none;transition:none}}
-@media (max-width:860px){.entry a,.entry:nth-child(even) a{grid-template-columns:1fr}.entry:nth-child(even) .shot{order:0}}
+  /* page-local composition only. Tokens and the image rule live in lumas.css */
+  .masthead{padding-block:clamp(4.8rem,7vw,9.6rem) clamp(3.2rem,4vw,5.6rem)}
+  .entries{list-style:none;margin:0;padding:0 0 clamp(6.4rem,8vw,12rem)}
+  .entry{padding-block:clamp(4.8rem,6vw,8rem)}
+  .entry + .entry{border-top:1px solid var(--border-subtle)}
+  .entry a{display:grid;gap:var(--sp-8);text-decoration:none;align-items:center}
+  @media (min-width:1000px){
+    .entry a{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--sp-16)}
+    .entry:nth-child(even) a{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
+    .entry:nth-child(even) .fig{order:2}
+  }
+  .entry .fig img{--fig-max:56vh}
+  .entry__label{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-4)}
+  .entry__n{font-family:'Utile Display',Georgia,serif;font-weight:300;font-size:1.4rem;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+  .entry h2{margin-bottom:var(--sp-4)}
+  .entry p{color:var(--text-secondary);max-width:44ch;text-wrap:pretty}
+  .entry .ghost{margin-top:var(--sp-6)}
+  @media (hover:hover) and (pointer:fine){.entry a:hover .ghost{opacity:.6}}
+  .entry a:focus-visible{outline:2px solid var(--border-focus);outline-offset:1.2rem}
+  .note{border-top:1px solid var(--border-subtle);padding-block:var(--sp-8) var(--sp-16);font-size:1.3rem;line-height:1.65;color:var(--text-secondary);max-width:80ch}
 </style>
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
 <link rel="stylesheet" href="../_nav/nav-fonts.css" />
@@ -886,45 +882,101 @@ h1{font:300 clamp(38px,6vw,76px)/1.02 'Utile Display',Georgia,serif;letter-spaci
 </template>
 
 <!-- LUMAS-NAV-KIT:MARKUP:END -->
-<main>
-  <div class="wrap">
-    <header class="masthead rv">
-      <p class="eyebrow">Prototype set &middot; 25 August 2026</p>
-      <h1>The ad promised it. The page answers it.</h1>
-      <p class="dek">Five destinations for the Meta ads that were sending their best traffic to a homepage. Real editions, real prices, live links, and the rooms that prove it.</p>
-    </header>
-    <ol class="entries">
-      <li class="entry rv"><a href="art-in-the-room.html" data-goal="cta_primary">
-        <figure class="shot"><img src="assets/interiors/kyoto-sukiya-swan.jpg" alt="Massimo Colonna, Swan, in a sukiya house in Kyoto" loading="lazy" /></figure>
-        <div><span class="n">01</span><h2>Art in the room</h2><p>Twelve real interiors, from a Kyoto sukiya house to a Berlin works, each with a real edition at a real size and the reason it hangs there.</p><span class="go">Open the page</span></div>
-      </a></li>
-      <li class="entry rv"><a href="gallery.html" data-goal="cta_primary">
-        <figure class="shot"><img src="assets/people/gallery-event.jpg" alt="A LUMAS gallery during an evening event" loading="lazy" /></figure>
-        <div><span class="n">02</span><h2>The gallery, always open</h2><p>The gallery-journey film continues into the rooms themselves, and ends on the fifteen Art Consultants who hang the work and answer the phone.</p><span class="go">Open the page</span></div>
-      </a></li>
-      <li class="entry rv"><a href="museum-format.html" data-goal="cta_primary">
-        <figure class="shot"><img src="assets/interiors/berlin-mylanswave-260.jpg" alt="Matthew Cusick, Mylan's Wave, 260 by 170 centimetres, in a converted works in Berlin" loading="lazy" /></figure>
-        <div><span class="n">03</span><h2>Museum format</h2><p>A page that grows as you read it: sixty centimetres to two hundred and sixty, each step larger on the screen than the last.</p><span class="go">Open the page</span></div>
-      </a></li>
-      <li class="entry rv"><a href="collector-advantage.html" data-goal="cta_primary">
-        <figure class="shot"><img src="assets/interiors/edinburgh-newtown-pinkpalace.jpg" alt="Massimo Colonna, Pink Palace, in a New Town flat in Edinburgh" loading="lazy" /></figure>
-        <div><span class="n">04</span><h2>The collector advantage</h2><p>A window rather than a sale: what a collector advantage is, why editions close, and the works it applies to, with a live and an empty state.</p><span class="go">Open the page</span></div>
-      </a></li>
-      <li class="entry rv"><a href="our-story.html" data-goal="cta_primary">
-        <figure class="shot"><img src="assets/people/consultants-hanging.jpg" alt="Two LUMAS Art Consultants hanging a work" loading="lazy" /></figure>
-        <div><span class="n">05</span><h2>Why these editions exist</h2><p>Three chapters that each close on evidence: the idea, the making, and a work that ends up on a wall in Kyoto.</p><span class="go">Open the page</span></div>
-      </a></li>
-    </ol>
-    <p class="note">Works, prices and links come live from the lumas.com feed (USD). Interiors are real LUMAS room renders; the advantage prices on page 04 are demonstration values for the prototype window. Built from the &ldquo;Ad promise, page answer&rdquo; analysis and the briefs in landing-page-briefs/.</p>
-  </div>
+
+<main class="wrap">
+
+  <header class="masthead">
+    <h1 class="d1 d1-light reveal">The ad promised it.<br />The page answers it.</h1>
+    <p class="lede reveal" style="margin-top:var(--sp-6)">Five destinations for the Meta ads that were sending their best traffic to a homepage. Real editions, real prices, live links, and the rooms that prove it.</p>
+  </header>
+
+  <ol class="entries">
+    <li class="entry reveal">
+      <a href="art-in-the-room.html" data-goal="cta_primary">
+        <figure class="fig room"><img src="assets/interiors/kyoto-sukiya-swan.jpg" alt="Massimo Colonna, Swan, in a sukiya house in Kyoto" loading="lazy" /></figure>
+        <div>
+          <p class="entry__label"><span class="entry__n">01</span></p>
+          <h2 class="d2">Art in the room</h2>
+          <p>Six real interiors, from a sukiya house in Kyoto to a converted works in Berlin, each with an edition on the wall at a stated size and the reason it hangs there.</p>
+          <span class="ghost">Open the page</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="entry reveal">
+      <a href="gallery.html" data-goal="cta_primary">
+        <figure class="fig scene"><img src="assets/people/gallery-event.jpg" alt="A LUMAS gallery during an evening event" loading="lazy" /></figure>
+        <div>
+          <p class="entry__label"><span class="entry__n">02</span></p>
+          <h2 class="d2">The gallery, always open</h2>
+          <p>The gallery film continues into the rooms themselves, and resolves on the fifteen Art Consultants who hang the work and answer the phone.</p>
+          <span class="ghost">Open the page</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="entry reveal">
+      <a href="museum-format.html" data-goal="cta_primary">
+        <figure class="fig room"><img src="assets/interiors/berlin-mylanswave-260.jpg" alt="Matthew Cusick, Mylan's Wave, 260 by 170 centimetres, in a converted works in Berlin" loading="lazy" /></figure>
+        <div>
+          <p class="entry__label"><span class="entry__n">03</span></p>
+          <h2 class="d2">Museum format</h2>
+          <p>A page that grows as you read it: sixty centimetres to two hundred and sixty, each step larger on the screen than the one before.</p>
+          <span class="ghost">Open the page</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="entry reveal">
+      <a href="collector-advantage.html" data-goal="cta_primary">
+        <figure class="fig room"><img src="assets/interiors/edinburgh-newtown-pinkpalace.jpg" alt="Massimo Colonna, Pink Palace, in a New Town flat in Edinburgh" loading="lazy" /></figure>
+        <div>
+          <p class="entry__label"><span class="entry__n">04</span></p>
+          <h2 class="d2">The collector advantage</h2>
+          <p>A window rather than a sale: what a collector advantage is, why editions close, and the works it applies to, with a live and an empty state.</p>
+          <span class="ghost">Open the page</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="entry reveal">
+      <a href="our-story.html" data-goal="cta_primary">
+        <figure class="fig scene"><img src="assets/people/consultants-hanging.jpg" alt="Two LUMAS Art Consultants hanging a work" loading="lazy" /></figure>
+        <div>
+          <p class="entry__label"><span class="entry__n">05</span></p>
+          <h2 class="d2">Why these editions exist</h2>
+          <p>Three chapters that each close on evidence rather than assertion: the idea, the making, and a work that ends up on a wall in Kyoto.</p>
+          <span class="ghost">Open the page</span>
+        </div>
+      </a>
+    </li>
+  </ol>
+
+  <p class="note">Works, prices and links come live from the lumas.com feed (USD). Interiors are real LUMAS room renders. The advantage prices on page 04 are demonstration values for the prototype window. Built from the &ldquo;Ad promise, page answer&rdquo; analysis and the briefs in landing-page-briefs/.</p>
+
 </main>
+
 <script>
-document.documentElement.classList.add('js');
-addEventListener('DOMContentLoaded',()=>{
-  const io=new IntersectionObserver((es)=>es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*70);io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(e){ e.classList.add('in'); }); return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e,i){
+      if (!e.isIntersecting) return;
+      setTimeout(function(){ e.target.classList.add('in'); }, Math.min(i,4)*60);
+      io.unobserve(e.target);
+    });
+  }, { rootMargin:'0px 0px -6% 0px' });
+  els.forEach(function(e){ io.observe(e); });
+  addEventListener('load', function(){ setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 2500); });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) els.forEach(function(e){ e.classList.add('in'); }); });
+})();
+document.addEventListener('click', function(e){
+  var g = e.target.closest('[data-goal]');
+  if (g) console.log('[goal]', g.dataset.goal, g.href || '');
 });
-document.addEventListener('click',e=>{const g=e.target.closest('[data-goal]');if(g)console.log('[goal]',g.dataset.goal,g.href||'')});
 </script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>

@@ -1,193 +1,92 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-window="live">
 <head>
 <meta name="robots" content="noindex,nofollow">
 <script src="../assets/gate.js"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
 <title>The collector advantage | LUMAS</title>
-<meta name="description" content="A window, not a sale. Selected limited editions, priced for a stated few days, shown in real rooms, one click from the edition.">
+<meta name="description" content="Selected limited editions priced for a stated window: why editions are finite, what happens once it closes, and an Art Consultant to help you choose in time." />
 <script>
 const WINDOW_LIVE = true;
 document.documentElement.setAttribute('data-window', WINDOW_LIVE ? 'live' : 'empty');
 document.documentElement.classList.add('js');
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/lumas.css" />
 <style>
-@font-face{font-family:'Utile Display';src:url('../assets/fonts/utile/utile-display-light.woff2') format('woff2');font-weight:300;font-display:swap}
-@font-face{font-family:'Utile Display';src:url('../assets/fonts/utile/utile-display-regular.woff2') format('woff2');font-weight:400;font-display:swap}
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap');
+  /* page-local composition only . tokens, type scale and the image rule live in lumas.css */
 
-:root{
-  --bg:#FAF6F1;
-  --card:#FFFFFF;
-  --raised:#F7F1E9;
-  --text:#1C1A18;
-  --text-2:#5A5752;
-  --text-3:#908C87;
-  --text-inverse:#F4EDE2;
-  --border:#E2D8CC;
-  --border-strong:#C7C3BE;
-  --surface-inverse-hover:#3A3835;
-  --ease-out:cubic-bezier(0.2,0.8,0.2,1);
-}
+  /* CONTINUE: compact offer band */
+  .band{background:var(--surface-raised)}
+  .band__grid{display:grid;gap:var(--sp-8)}
+  @media (min-width:900px){
+    .band__grid{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--sp-16);align-items:center}
+  }
+  .band__intro{display:flex;flex-direction:column;gap:var(--sp-4)}
+  .band__intro .btn{margin-top:var(--sp-2);align-self:flex-start}
+  .band__lead{--fig-max:42vh}
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;padding-top:72px;background:var(--bg);color:var(--text);font:400 16px/1.5 'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-@media (max-width:1219px){body{padding-top:128px}}
-img{display:block;max-width:100%}
-a{color:inherit}
-p{margin:0}
+  /* two states, one attribute */
+  html[data-window="empty"] .live-only{display:none}
+  html[data-window="live"] .empty-only{display:none}
 
-.eyebrow{font:700 11px/1.5 'Archivo';letter-spacing:.18em;text-transform:uppercase;color:var(--text-2);margin:0 0 8px}
-h1{font:400 clamp(42px,4vw,62px)/1.04 'Utile Display',Georgia,serif;margin:0 0 16px;color:var(--text)}
-h2{font:400 clamp(34px,3vw,46px)/1.12 'Utile Display',Georgia,serif;margin:0;color:var(--text)}
-h3{font:400 clamp(26px,2.5vw,34px)/1.12 'Utile Display',Georgia,serif;margin:0;color:var(--text)}
-.body-l{font:300 20px/1.6 'Archivo';color:var(--text-2);margin:0}
+  /* WHY A WINDOW */
+  #why p{margin-top:var(--sp-6)}
 
-.wrap{max-width:1320px;margin:0 auto;padding:0 40px}
-.wrap-wide{max-width:1600px;margin:0 auto;padding:0 24px}
+  /* PROVE: two lead works, asymmetric, then a restrained row-list */
+  #selection{scroll-margin-top:7.2rem}
+  @media (max-width:1219px){#selection{scroll-margin-top:12.8rem}}
+  .lead-two{display:grid;gap:var(--sp-10)}
+  @media (min-width:900px){
+    .lead-two{grid-template-columns:minmax(0,5fr) minmax(0,4fr);gap:var(--sp-16);align-items:start}
+    .lead-two__item--offset{margin-top:var(--sp-16)}
+  }
+  .lead-two__item .fig{--fig-max:52vh}
+  .lead-two__item--offset .fig{--fig-max:40vh}
+  .lead-two__item .meta{margin-top:var(--sp-4)}
+  .lead-two__item .price-row{margin-top:var(--sp-3)}
+  .lead-two__item .ghost{margin-top:var(--sp-4);display:inline-block}
 
-/* scroll reveal, .js-gated, no-JS renders fully visible */
-.reveal{opacity:1;transform:none}
-.js .reveal{opacity:0;transform:translateY(16px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out);transition-delay:calc(var(--i,0) * 70ms)}
-.js .reveal.is-visible{opacity:1;transform:translateY(0)}
+  .price-row{display:flex;align-items:baseline;gap:var(--sp-3);font-variant-numeric:tabular-nums}
+  .price-list{color:var(--text-secondary);text-decoration:line-through}
+  .price-adv{font-weight:700;color:var(--text-primary)}
+  html[data-window="empty"] .price-list{color:var(--text-primary);text-decoration:none;font-weight:700}
 
-/* offer band */
-.offer{background:var(--raised);border-bottom:1px solid var(--border)}
-.offer .wrap{display:grid;grid-template-columns:8fr 4fr;gap:48px;align-items:center;padding-top:48px;padding-bottom:48px}
-.offer-line{font:400 16px/1.5 'Archivo';color:var(--text-2);margin:0 0 24px;max-width:46ch}
-.btn-primary{display:inline-block;background:var(--text);color:var(--text-inverse);font:700 13px/1.5 'Archivo';letter-spacing:.14em;text-transform:uppercase;padding:16px 28px;text-decoration:none;transition:transform 160ms var(--ease-out),background 160ms var(--ease-out)}
-.btn-primary:hover{background:var(--surface-inverse-hover)}
-.btn-primary:active{transform:scale(.97)}
+  .row-list{list-style:none;margin:var(--sp-16) 0 0;padding:0}
+  .row-list__item{display:grid;grid-template-columns:7.2rem 1fr auto;gap:var(--sp-5);align-items:center;padding-block:var(--sp-5)}
+  .row-list__item + .row-list__item{border-top:1px solid var(--border-subtle)}
+  .row-list__thumb{--fig-max:7.2rem;width:7.2rem}
+  .row-list__text{display:flex;flex-direction:column;gap:.4rem;min-width:0}
+  .row-list__price{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;text-align:right}
+  @media (max-width:640px){
+    .row-list__item{grid-template-columns:6rem 1fr;row-gap:var(--sp-2)}
+    .row-list__thumb{width:6rem;--fig-max:6rem}
+    .row-list__price{grid-column:1 / -1;flex-direction:row;align-items:baseline;justify-content:space-between;text-align:left;margin-top:var(--sp-2)}
+  }
 
-.offer-art a{display:block;text-decoration:none}
-.art-frame{display:block;background:var(--card);border:1px solid var(--border);padding:16px;box-shadow:0 18px 60px -16px rgba(28,26,24,.25)}
-.art-frame img{width:100%;height:auto}
-.art-caption{display:block;margin-top:12px;font:400 13px/1.5 'Archivo';color:var(--text-2)}
+  /* PROVE IN A ROOM: two named interiors, split composition */
+  .spread{padding-block:var(--sp-16)}
+  .spread + .spread{border-top:1px solid var(--border-subtle)}
+  .spread__inner{display:grid;gap:var(--sp-8)}
+  @media (min-width:1000px){
+    .spread--split .spread__inner{grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:var(--sp-16);align-items:center}
+    .spread--split-r .spread__inner{grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:var(--sp-16);align-items:center}
+    .spread--split-r .spread__fig{order:2}
+  }
+  .spread__place{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-5)}
+  .spread__sub{font-size:1.6rem;color:var(--text-secondary)}
+  .spread__meta{display:flex;flex-direction:column;gap:var(--sp-4)}
+  .spread__meta .ghost{margin-top:var(--sp-2);display:inline-block}
 
-/* why a window */
-.why{border-bottom:1px solid var(--border)}
-.why .wrap{max-width:760px;padding-top:80px;padding-bottom:80px}
-.why h2{margin-bottom:20px}
-
-/* selection */
-.selection .wrap{padding-top:80px;padding-bottom:80px}
-.selection-head{margin-bottom:40px;max-width:56ch}
-.selection-head h2{margin-top:8px}
-
-/* lead trio, asymmetric, generous scale */
-.lead-grid{display:grid;grid-template-columns:7fr 5fr;gap:32px;margin-bottom:56px;align-items:start}
-.lead-stack{display:flex;flex-direction:column;gap:32px}
-.lead-card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border)}
-.lead-card-img{display:block;padding:24px}
-.lead-card--small .lead-card-img{padding:20px}
-.lead-card-img img{width:100%;height:auto}
-.lead-card-body{padding:0 24px 24px}
-.lead-card--small .lead-card-body{padding:0 20px 20px}
-.lead-card-title{display:block;font:400 clamp(26px,2.2vw,34px)/1.12 'Utile Display',Georgia,serif;margin-top:6px;color:var(--text)}
-.lead-card--small .lead-card-title{font-size:clamp(22px,1.8vw,26px);line-height:1.25}
-.lead-card-price{display:block;margin-top:16px}
-.price-list{font:400 13px/1.65 'Archivo';font-variant-numeric:tabular-nums;color:var(--text-2);text-decoration:line-through}
-.price-adv{font:700 16px/1.5 'Archivo';font-variant-numeric:tabular-nums;color:var(--text);margin-left:8px}
-.card-note{display:block;margin-top:6px;font:400 11px/1.5 'Archivo';letter-spacing:.03em;color:var(--text-2)}
-.cta-link{display:inline-block;margin-top:14px;font:700 13px/1.5 'Archivo';letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--border-strong);padding:4px 0 6px;transition:border-color 220ms var(--ease-out);text-decoration:none;color:var(--text)}
-.lead-card:hover .cta-link,.remainder-item:hover .cta-link{border-color:var(--text)}
-a.cta-link:hover{border-color:var(--text)}
-
-/* remainder, restrained row-set, not a card grid */
-.remainder-list{border-top:1px solid var(--border)}
-.remainder-item{display:grid;grid-template-columns:88px 1fr auto;gap:24px;align-items:center;padding:20px 0;border-bottom:1px solid var(--border);text-decoration:none;color:inherit}
-.remainder-thumb{width:88px;height:88px;flex:none;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:8px}
-.remainder-thumb img{max-width:100%;max-height:100%;width:auto;height:auto}
-.remainder-info{min-width:0}
-.remainder-title{display:block;font:400 20px/1.3 'Utile Display',Georgia,serif;color:var(--text);margin-top:2px}
-.remainder-price{text-align:right;white-space:nowrap}
-.remainder-price .price-list{display:block}
-.remainder-price .price-adv{display:block;margin-left:0;margin-top:2px}
-
-/* live / empty state */
-[data-when]{display:none}
-[data-window="live"] [data-when="live"]{display:block}
-[data-window="empty"] [data-when="empty"]{display:block}
-[data-window="empty"] .price-adv{display:none}
-[data-window="empty"] .price-list{text-decoration:none;color:var(--text);font-weight:700;font-size:16px}
-
-/* in a room, near-full-bleed, alternating */
-.in-room{padding:96px 0;border-bottom:1px solid var(--border)}
-.room-spread{display:grid;grid-template-columns:3fr 2fr;gap:56px;align-items:center}
-.room-spread + .room-spread{margin-top:80px}
-.room-spread--reverse{grid-template-columns:2fr 3fr}
-.room-media{order:1;overflow:hidden;aspect-ratio:4/5}
-.room-copy{order:2}
-.room-spread--reverse .room-media{order:2}
-.room-spread--reverse .room-copy{order:1}
-.room-media img{width:100%;height:100%;object-fit:cover;transition:transform 520ms var(--ease-out)}
-@media (hover:hover) and (pointer:fine){
-  .room-media:hover img{transform:scale(1.02)}
-}
-.place-display{display:block;font:400 clamp(34px,4vw,56px)/1.04 'Utile Display',Georgia,serif;color:var(--text)}
-.place-sub{display:block;margin-top:4px;font:400 13px/1.5 'Archivo';color:var(--text-2)}
-.room-attrib{display:block;margin-top:16px;font:400 13px/1.5 'Archivo';color:var(--text-2)}
-.size-display{display:block;margin-top:24px;font:300 clamp(24px,2.4vw,32px)/1.15 'Utile Display',Georgia,serif;font-variant-numeric:tabular-nums;color:var(--text)}
-.room-reason{margin-top:16px;max-width:46ch;font:400 16px/1.6 'Archivo';color:var(--text-2)}
-
-/* solve, the Art Consultant */
-.solve{background:var(--raised);border-bottom:1px solid var(--border)}
-.solve .wrap{padding-top:80px;padding-bottom:80px}
-.solve-head{max-width:640px}
-.solve-head h3{margin-bottom:20px}
-.solve-photo{margin-top:48px;width:100%;aspect-ratio:21/9;overflow:hidden;background:var(--card)}
-.solve-photo img{width:100%;height:100%;object-fit:cover}
-.solve-resolve{margin-top:48px;display:flex;flex-wrap:wrap;gap:40px 64px;align-items:flex-start}
-.solve-promise{max-width:44ch;font:300 20px/1.6 'Archivo';color:var(--text-2);margin:0}
-.consult-links{display:flex;flex-direction:column;gap:14px;margin:0}
-.consult-link{display:inline-block;align-self:flex-start;font:700 13px/1.5 'Archivo';letter-spacing:.13em;text-transform:uppercase;text-decoration:none;color:var(--text);border-bottom:1px solid var(--border-strong);padding:4px 0 6px;transition:border-color 220ms var(--ease-out)}
-.consult-link:hover{border-color:var(--text)}
-
-/* secure, trust in prose, not a badge row */
-.secure{padding:80px 0}
-.secure .wrap{max-width:640px}
-.secure p+p{margin-top:20px}
-.secure p{font:400 16px/1.6 'Archivo';color:var(--text-2)}
-
-/* footer */
-.site-footer{border-top:1px solid var(--border)}
-.site-footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between;padding-top:24px;padding-bottom:24px;font:400 13px/1.5 'Archivo';color:var(--text-2)}
-.site-footer nav{display:flex;gap:20px;flex-wrap:wrap}
-.site-footer a{display:inline-block;padding:4px 0;color:var(--text-2);text-decoration:none;transition:color 220ms var(--ease-out)}
-.site-footer a:hover{color:var(--text)}
-
-a:focus-visible,button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
-
-#selection{scroll-margin-top:64px}
-
-@media (max-width:1024px){
-  .offer .wrap{grid-template-columns:1fr;gap:32px}
-  .offer-art{max-width:360px}
-  .lead-grid{grid-template-columns:1fr}
-  .lead-stack{flex-direction:row}
-  .room-spread,.room-spread--reverse{grid-template-columns:1fr;gap:32px}
-  .room-spread--reverse .room-media,.room-media{order:1}
-  .room-spread--reverse .room-copy,.room-copy{order:2}
-  .solve-photo{aspect-ratio:16/10}
-}
-@media (max-width:680px){
-  .wrap,.wrap-wide{padding:0 20px}
-  .lead-stack{flex-direction:column}
-  .remainder-item{grid-template-columns:64px 1fr;row-gap:8px}
-  .remainder-thumb{width:64px;height:64px}
-  .remainder-price{grid-column:1/-1;text-align:left;padding-left:88px}
-  .solve-resolve{gap:32px}
-  .solve-photo{aspect-ratio:4/5}
-  .in-room{padding:64px 0}
-  .room-spread + .room-spread{margin-top:56px}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .btn-primary,.room-media img{transition:none}
-  .js .reveal{opacity:1;transform:none;transition:none}
-}
+  /* SOLVE: the Art Consultant */
+  .consult{background:var(--surface-raised)}
+  .consult__grid{display:grid;gap:var(--sp-10)}
+  @media (min-width:1000px){.consult__grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:var(--sp-16);align-items:center}}
+  .channels{display:flex;flex-wrap:wrap;gap:var(--sp-3) var(--sp-8);margin-top:var(--sp-6)}
 </style>
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
 <link rel="stylesheet" href="../_nav/nav-fonts.css" />
@@ -1036,278 +935,309 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--text);outline-offse
 </template>
 
 <!-- LUMAS-NAV-KIT:MARKUP:END -->
-<!-- HYPOTHESIS: Permanent offer page inherits Art Week's structure (best campaign CPA EUR 251) between windows · KPI: ATC-rate proxy = pdp_click rate -->
+<!-- HYPOTHESIS: a permanent offer page inherits Art Week's structure (best campaign CPA EUR 251) between windows · KPI: pdp_click rate -->
+
 <main>
-  <section class="offer">
+
+  <!-- CONTINUE -->
+  <section class="band section--tight">
+    <div class="wrap band__grid">
+      <div class="band__intro">
+        <span class="eyebrow live-only reveal">Collector's week</span>
+        <h1 class="d1 d1-light reveal">A window, not a sale.</h1>
+        <p class="body band__copy live-only reveal">20% off selected limited editions, until 24 August.</p>
+        <p class="body band__copy empty-only reveal">No window is running right now. The selection stays, and the next window will be announced here.</p>
+        <a class="btn reveal" href="#selection">Discover the selection</a>
+      </div>
+      <figure class="fig band__lead reveal">
+        <a class="hit" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click">
+          <img src="https://img.lumas.com/showimg_gri04_desktop.webp" alt="Gerhard Richter, Landschaft mit Wolke" />
+        </a>
+        <figcaption class="caption">Gerhard Richter, Landschaft mit Wolke</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- WHY A WINDOW -->
+  <section id="why" class="section--tight wrap">
+    <h2 class="d2 reveal">When an edition closes, it closes.</h2>
+    <p class="body reveal">Editions are finite by design. Once a run ends, it does not return. Named windows are the short, honest moments when we open the price on selected work, not a permanent sale wearing an event's name. The advantage belongs to the collector who was already going to collect this year, simply handed a better week to do it in.</p>
+  </section>
+
+  <!-- PROVE -->
+  <section id="selection" class="section">
     <div class="wrap">
-      <div class="offer-copy reveal" style="--i:0">
-        <p class="eyebrow" data-when="live">Collector's week</p>
-        <p class="eyebrow" data-when="empty">Between windows</p>
-        <h1>A window, not a sale.</h1>
-        <p class="offer-line" data-when="live">20% off selected limited editions, until 24 August.</p>
-        <p class="offer-line" data-when="empty">No window is running right now. The selection stays, and the next window will be announced here.</p>
-        <a class="btn-primary" href="#selection" data-goal="cta_primary">Discover the selection</a>
+      <div class="lead-two">
+        <div class="lead-two__item reveal">
+          <figure class="fig">
+            <a class="hit" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click">
+              <img src="https://img.lumas.com/showimg_gri04_desktop.webp" alt="Gerhard Richter, Landschaft mit Wolke" />
+            </a>
+          </figure>
+          <div class="meta">
+            <span class="meta__artist">Gerhard Richter</span>
+            <span class="meta__title">Landschaft mit Wolke</span>
+          </div>
+          <p class="price-row"><span class="price-list">$1,990</span><span class="price-adv live-only">$1,590</span></p>
+          <a class="ghost" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click">Secure your edition</a>
+        </div>
+        <div class="lead-two__item lead-two__item--offset reveal">
+          <figure class="fig">
+            <a class="hit" href="https://www.lumas.com/pictures/gerhard_richter/voegel/" data-goal="pdp_click">
+              <img src="https://img.lumas.com/showimg_gri05_desktop.webp" alt="Gerhard Richter, Vögel" />
+            </a>
+          </figure>
+          <div class="meta">
+            <span class="meta__artist">Gerhard Richter</span>
+            <span class="meta__title">Vögel</span>
+          </div>
+          <p class="price-row"><span class="price-list">$1,990</span><span class="price-adv live-only">$1,590</span></p>
+          <a class="ghost" href="https://www.lumas.com/pictures/gerhard_richter/voegel/" data-goal="pdp_click">Secure your edition</a>
+        </div>
       </div>
-      <div class="offer-art reveal" style="--i:1">
-        <a href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click" aria-label="Gerhard Richter, Landschaft mit Wolke">
-          <span class="art-frame"><img src="https://img.lumas.com/showimg_gri04_desktop.webp" alt="Gerhard Richter, Landschaft mit Wolke" loading="eager"></span>
-          <span class="art-caption">Gerhard Richter, Landschaft mit Wolke</span>
+
+      <ul class="row-list">
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/pedro_blas/chromatic_bars_01/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_pbl31_desktop.webp" alt="Pedro Blas, Chromatic Bars 01" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Pedro Blas</span>
+            <span class="meta__title">Chromatic Bars 01</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$1,030</span><span class="price-adv live-only">$820</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/pedro_blas/chromatic_bars_01/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/beatrice_hug/red_sphaera/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_bhu87_desktop.webp" alt="Beatrice Hug, Red Sphaera" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Beatrice Hug</span>
+            <span class="meta__title">Red Sphaera</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$1,090</span><span class="price-adv live-only">$870</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/beatrice_hug/red_sphaera/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_ime97_desktop.webp" alt="Isabelle Menin, Only In Your Heart 03" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Isabelle Menin</span>
+            <span class="meta__title">Only In Your Heart 03</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$850</span><span class="price-adv live-only">$680</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/gavin_evans/lazarus_i/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_gve31_desktop.webp" alt="Gavin Evans, Lazarus I" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Gavin Evans</span>
+            <span class="meta__title">Lazarus I</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$660</span><span class="price-adv live-only">$530</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/gavin_evans/lazarus_i/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_gua53_desktop.webp" alt="Guachinarte, Hollywood Hills" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Guachinarte</span>
+            <span class="meta__title">Hollywood Hills</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$810</span><span class="price-adv live-only">$650</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_mcn55_desktop.webp" alt="Massimo Colonna, Swan" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Massimo Colonna</span>
+            <span class="meta__title">Swan</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$580</span><span class="price-adv live-only">$460</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/luc_dratwa/dream_is_not_over/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_ldr03_desktop.webp" alt="Luc Dratwa, Dream Is Not Over" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Luc Dratwa</span>
+            <span class="meta__title">Dream Is Not Over</span>
+            <span class="small">Last editions</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$780</span><span class="price-adv live-only">$620</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/luc_dratwa/dream_is_not_over/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/wolfgang_uhlig/saint_raphael/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_wuh63_desktop.webp" alt="Wolfgang Uhlig, Saint-Raphaël" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Wolfgang Uhlig</span>
+            <span class="meta__title">Saint-Raphaël</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$320</span><span class="price-adv live-only">$260</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/wolfgang_uhlig/saint_raphael/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_mcn04_desktop.webp" alt="Massimo Colonna, Pink Palace" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Massimo Colonna</span>
+            <span class="meta__title">Pink Palace</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$950</span><span class="price-adv live-only">$760</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+        <li class="row-list__item reveal">
+          <div class="row-list__thumb fig">
+            <a class="hit" href="https://www.lumas.com/pictures/margarete_schruefer/fruehling_in_simulacrum_xvi/" data-goal="pdp_click"><img src="https://img.lumas.com/showimg_msr10_desktop.webp" alt="Margarete Schrüfer, Frühling in Simulacrum XVI" /></a>
+          </div>
+          <div class="row-list__text">
+            <span class="meta__artist">Margarete Schrüfer</span>
+            <span class="meta__title">Frühling in Simulacrum XVI</span>
+          </div>
+          <div class="row-list__price">
+            <p class="price-row"><span class="price-list">$380</span><span class="price-adv live-only">$300</span></p>
+            <a class="ghost" href="https://www.lumas.com/pictures/margarete_schruefer/fruehling_in_simulacrum_xvi/" data-goal="pdp_click">Secure your edition</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROVE IN A ROOM -->
+  <section class="spread spread--split">
+    <div class="wrap spread__inner">
+      <figure class="fig fig--tall room spread__fig reveal">
+        <a class="hit" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click">
+          <img src="assets/interiors/kyoto-sukiya-swan.jpg" alt="Massimo Colonna, Swan, in a sukiya house in Kyoto" />
         </a>
+      </figure>
+      <div class="spread__meta reveal">
+        <div class="spread__place"><h2 class="d2">Kyoto</h2><span class="spread__sub">a sukiya house</span></div>
+        <p class="meta__size num">105 &times; 140 cm</p>
+        <div class="meta">
+          <span class="meta__artist">Massimo Colonna</span>
+          <span class="meta__title">Swan</span>
+        </div>
+        <p class="meta__note">Hung at seated height above a low bench, because this is a room you sit down in. It reads at 105 by 140 from the tatami, not from the door.</p>
+        <a class="ghost" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click">Secure your edition</a>
       </div>
     </div>
   </section>
 
-  <section class="why">
-    <div class="wrap reveal">
-      <h2>Editions are finite. When one closes, it closes.</h2>
-      <p class="body-l">A named window is the short, honest stretch when we open prices on works still available, not a permanent event dressed up as news. Outside it, the works remain and the terms return to standard. The advantage is for the collector who was already going to choose one of these, not urgency manufactured for anyone else.</p>
-    </div>
-  </section>
-
-  <section id="selection" class="selection">
-    <div class="wrap">
-      <div class="selection-head reveal">
-        <p class="eyebrow">The selection</p>
-        <h2 data-when="live">Every work here was already worth collecting. The window only changes the price.</h2>
-        <h2 data-when="empty">Every work here is still worth collecting. The price has returned to standard.</h2>
-      </div>
-
-      <div class="lead-grid">
-        <a class="lead-card lead-card--primary reveal" style="--i:0" href="https://www.lumas.com/pictures/gerhard_richter/landschaft_mit_wolke/" data-goal="pdp_click" aria-label="Gerhard Richter, Landschaft mit Wolke">
-          <span class="lead-card-img"><img src="https://img.lumas.com/showimg_gri04_desktop.webp" alt="Gerhard Richter, Landschaft mit Wolke" loading="lazy"></span>
-          <span class="lead-card-body">
-            <span class="eyebrow">Gerhard Richter</span>
-            <span class="lead-card-title">Landschaft mit Wolke</span>
-            <span class="lead-card-price"><span class="price-list">$1,990</span><span class="price-adv">$1,590</span></span>
-            <span class="cta-link">Secure your edition</span>
-          </span>
+  <section class="spread spread--split-r">
+    <div class="wrap spread__inner">
+      <figure class="fig fig--tall room spread__fig reveal">
+        <a class="hit" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click">
+          <img src="assets/interiors/edinburgh-newtown-pinkpalace.jpg" alt="Massimo Colonna, Pink Palace, in a New Town flat in Edinburgh" />
         </a>
-
-        <div class="lead-stack">
-          <a class="lead-card lead-card--small reveal" style="--i:1" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click" aria-label="Guachinarte, Hollywood Hills">
-            <span class="lead-card-img"><img src="https://img.lumas.com/showimg_gua53_desktop.webp" alt="Guachinarte, Hollywood Hills" loading="lazy"></span>
-            <span class="lead-card-body">
-              <span class="eyebrow">Guachinarte</span>
-              <span class="lead-card-title">Hollywood Hills</span>
-              <span class="lead-card-price"><span class="price-list">$810</span><span class="price-adv">$650</span></span>
-              <span class="cta-link">Secure your edition</span>
-            </span>
-          </a>
-
-          <a class="lead-card lead-card--small reveal" style="--i:2" href="https://www.lumas.com/pictures/luc_dratwa/dream_is_not_over/" data-goal="pdp_click" aria-label="Luc Dratwa, Dream Is Not Over">
-            <span class="lead-card-img"><img src="https://img.lumas.com/showimg_ldr03_desktop.webp" alt="Luc Dratwa, Dream Is Not Over" loading="lazy"></span>
-            <span class="lead-card-body">
-              <span class="eyebrow">Luc Dratwa</span>
-              <span class="lead-card-title">Dream Is Not Over</span>
-              <span class="lead-card-price"><span class="price-list">$780</span><span class="price-adv">$620</span></span>
-              <span class="card-note">Last editions</span>
-              <span class="cta-link">Secure your edition</span>
-            </span>
-          </a>
+      </figure>
+      <div class="spread__meta reveal">
+        <div class="spread__place"><h2 class="d2">Edinburgh</h2><span class="spread__sub">New Town</span></div>
+        <p class="meta__size num">130 &times; 88 cm</p>
+        <div class="meta">
+          <span class="meta__artist">Massimo Colonna</span>
+          <span class="meta__title">Pink Palace</span>
         </div>
-      </div>
-
-      <div class="remainder-list">
-        <a class="remainder-item reveal" style="--i:0" href="https://www.lumas.com/pictures/gerhard_richter/voegel/" data-goal="pdp_click" aria-label="Gerhard Richter, Vögel">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_gri05_desktop.webp" alt="Gerhard Richter, Vögel" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Gerhard Richter</span>
-            <span class="remainder-title">Vögel</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$1,990</span>
-            <span class="price-adv">$1,590</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:1" href="https://www.lumas.com/pictures/pedro_blas/chromatic_bars_01/" data-goal="pdp_click" aria-label="Pedro Blas, Chromatic Bars 01">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_pbl31_desktop.webp" alt="Pedro Blas, Chromatic Bars 01" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Pedro Blas</span>
-            <span class="remainder-title">Chromatic Bars 01</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$1,030</span>
-            <span class="price-adv">$820</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:2" href="https://www.lumas.com/pictures/beatrice_hug/red_sphaera/" data-goal="pdp_click" aria-label="Beatrice Hug, Red Sphaera">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_bhu87_desktop.webp" alt="Beatrice Hug, Red Sphaera" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Beatrice Hug</span>
-            <span class="remainder-title">Red Sphaera</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$1,090</span>
-            <span class="price-adv">$870</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:3" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click" aria-label="Isabelle Menin, Only In Your Heart 03">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_ime97_desktop.webp" alt="Isabelle Menin, Only In Your Heart 03" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Isabelle Menin</span>
-            <span class="remainder-title">Only In Your Heart 03</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$850</span>
-            <span class="price-adv">$680</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:4" href="https://www.lumas.com/pictures/gavin_evans/lazarus_i/" data-goal="pdp_click" aria-label="Gavin Evans, Lazarus I">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_gve31_desktop.webp" alt="Gavin Evans, Lazarus I" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Gavin Evans</span>
-            <span class="remainder-title">Lazarus I</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$660</span>
-            <span class="price-adv">$530</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:5" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click" aria-label="Massimo Colonna, Swan">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_mcn55_desktop.webp" alt="Massimo Colonna, Swan" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Massimo Colonna</span>
-            <span class="remainder-title">Swan</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$580</span>
-            <span class="price-adv">$460</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:6" href="https://www.lumas.com/pictures/wolfgang_uhlig/saint_raphael/" data-goal="pdp_click" aria-label="Wolfgang Uhlig, Saint-Raphaël">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_wuh63_desktop.webp" alt="Wolfgang Uhlig, Saint-Raphaël" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Wolfgang Uhlig</span>
-            <span class="remainder-title">Saint-Raphaël</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$320</span>
-            <span class="price-adv">$260</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:7" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click" aria-label="Massimo Colonna, Pink Palace">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_mcn04_desktop.webp" alt="Massimo Colonna, Pink Palace" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Massimo Colonna</span>
-            <span class="remainder-title">Pink Palace</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$950</span>
-            <span class="price-adv">$760</span>
-          </span>
-        </a>
-
-        <a class="remainder-item reveal" style="--i:8" href="https://www.lumas.com/pictures/margarete_schruefer/fruehling_in_simulacrum_xvi/" data-goal="pdp_click" aria-label="Margarete Schrüfer, Frühling in Simulacrum XVI">
-          <span class="remainder-thumb"><img src="https://img.lumas.com/showimg_msr10_desktop.webp" alt="Margarete Schrüfer, Frühling in Simulacrum XVI" loading="lazy"></span>
-          <span class="remainder-info">
-            <span class="eyebrow">Margarete Schrüfer</span>
-            <span class="remainder-title">Frühling in Simulacrum XVI</span>
-          </span>
-          <span class="remainder-price">
-            <span class="price-list">$380</span>
-            <span class="price-adv">$300</span>
-          </span>
-        </a>
+        <p class="meta__note">Georgian proportion, warm pink. The work brings the one colour the room does not already have.</p>
+        <a class="ghost" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click">Secure your edition</a>
       </div>
     </div>
   </section>
 
-  <section class="in-room">
-    <div class="wrap-wide">
-      <div class="room-spread reveal">
-        <div class="room-media">
-          <img src="assets/interiors/kyoto-sukiya-swan.jpg" alt="Massimo Colonna's Swan hung above a low bench in a Kyoto sukiya house" loading="lazy">
-        </div>
-        <div class="room-copy">
-          <span class="place-display">Kyoto</span>
-          <span class="place-sub">a sukiya house</span>
-          <span class="room-attrib">Massimo Colonna, Swan</span>
-          <span class="size-display">105 × 140 cm</span>
-          <p class="room-reason">Hung at seated height above a low bench, because this is a room you sit down in. It reads at 105 × 140 from the tatami, not from the door.</p>
-          <a class="cta-link" href="https://www.lumas.com/pictures/massimo_colonna/swan/" data-goal="pdp_click">Discover the edition</a>
-        </div>
-      </div>
-
-      <div class="room-spread room-spread--reverse reveal">
-        <div class="room-copy">
-          <span class="place-display">Edinburgh</span>
-          <span class="place-sub">New Town</span>
-          <span class="room-attrib">Massimo Colonna, Pink Palace</span>
-          <span class="size-display">130 × 88 cm</span>
-          <p class="room-reason">Georgian proportion, warm pink. The work brings the one colour the room does not already have.</p>
-          <a class="cta-link" href="https://www.lumas.com/pictures/massimo_colonna/pink_palace/" data-goal="pdp_click">Discover the edition</a>
-        </div>
-        <div class="room-media">
-          <img src="assets/interiors/edinburgh-newtown-pinkpalace.jpg" alt="Massimo Colonna's Pink Palace hung in a New Town Edinburgh apartment" loading="lazy">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="solve">
-    <div class="wrap">
-      <div class="solve-head reveal">
-        <h3>Choosing under a deadline is the worst way to choose.</h3>
-        <p class="body-l">An Art Consultant will tell you which of these suits your room, your light and your wall, before the window closes.</p>
-      </div>
-      <div class="solve-photo reveal">
-        <img src="assets/people/conversation.jpg" alt="A LUMAS Art Consultant in conversation with a collector" loading="lazy">
-      </div>
-      <div class="solve-resolve reveal">
-        <p class="solve-promise">A named Art Consultant replies within two working days with a direction. Free, and without obligation.</p>
-        <div class="consult-links">
-          <a class="consult-link" href="https://wa.me/493030306969" data-goal="cta_primary">WhatsApp</a>
-          <a class="consult-link" href="tel:+493030306969">Phone: 030 30 30 69 69</a>
-          <a class="consult-link" href="https://direct.lc.chat/8792761/1">Live chat</a>
-          <a class="consult-link" href="https://lumas.atlassian.net/servicedesk/customer/portal/2">Write to us</a>
+  <!-- SOLVE -->
+  <section class="consult section">
+    <div class="wrap consult__grid">
+      <figure class="fig scene reveal">
+        <img src="assets/people/consultant-dialogue.jpg" alt="An Art Consultant talking through a client's room" />
+      </figure>
+      <div class="reveal">
+        <h2 class="d2">Choosing under a deadline is the worst way to choose.</h2>
+        <p class="body" style="margin-top:var(--sp-6)">An Art Consultant will tell you which of these suits your room, your light and your wall, before the window closes.</p>
+        <p class="body" style="margin-top:var(--sp-4)">A named Art Consultant replies within two working days with a direction. Free, and without obligation.</p>
+        <div class="channels">
+          <a class="ghost" href="https://wa.me/493030306969" data-goal="cta_primary">WhatsApp</a>
+          <a class="ghost" href="tel:+493030306969">Phone: 030 30 30 69 69</a>
+          <a class="ghost" href="https://direct.lc.chat/8792761/1">Live chat</a>
+          <a class="ghost" href="https://lumas.atlassian.net/servicedesk/customer/portal/2">Write to us</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="secure">
-    <div class="wrap reveal">
-      <p data-when="live">The list price is the real price for the rest of the year. The advantage shown here applies only to the works in this selection, and only while this window is open. If the room disagrees once a piece is hung, there are 30 days to send it back.</p>
-      <p data-when="empty">The list price is the real price all year. It returns here, at an advantage, only when a window is open. If the room disagrees once a piece is hung, there are 30 days to send it back.</p>
-    </div>
+  <!-- SECURE -->
+  <section class="section--tight wrap">
+    <p class="body reveal">The list price shown here is the real price for the rest of the year. This window closes on 24 August, and when it does, these works return to it. The advantage applies only to the editions shown on this page. If the room disagrees, you have thirty days to send it back.</p>
   </section>
-</main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <p>LUMAS · Prototype · Collector advantage · Prices and works live from lumas.com · Aug 2026</p>
-    <nav aria-label="Prototype pages">
-      <a href="art-in-the-room.html">Art in the room</a>
+  <footer class="foot wrap">
+    <p>LUMAS &middot; Prototype &middot; The collector advantage &middot; Works and prices live from lumas.com &middot; August 2026</p>
+    <nav>
+      <a href="index.html">All five pages</a>
       <a href="gallery.html">The gallery, always open</a>
       <a href="museum-format.html">Museum format</a>
+      <a href="art-in-the-room.html">Art in the room</a>
       <a href="our-story.html">Why these editions exist</a>
-      <a href="index.html">All prototypes</a>
     </nav>
-  </div>
-</footer>
+  </footer>
 
-<script>document.addEventListener('click',e=>{const g=e.target.closest('[data-goal]');if(g)console.log('[goal]',g.dataset.goal,g.href||'')});</script>
+</main>
+
 <script>
 (function(){
   var els = document.querySelectorAll('.reveal');
-  if(!('IntersectionObserver' in window) || !els.length) return;
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
   var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
-      }
+    entries.forEach(function(e, i){
+      if (!e.isIntersecting) return;
+      setTimeout(function(){ e.target.classList.add('in'); }, Math.min(i,4) * 60);
+      io.unobserve(e.target);
     });
-  }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
-  els.forEach(function(el){ io.observe(el); });
+  }, { rootMargin: '0px 0px -6% 0px' });
+  els.forEach(function(e){ io.observe(e); });
+  // safety: never leave content hidden
+  addEventListener('load', function(){
+    setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 2500);
+  });
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) els.forEach(function(e){ e.classList.add('in'); });
+  });
 })();
+document.addEventListener('click', function(e){
+  var g = e.target.closest('[data-goal]');
+  if (g) console.log('[goal]', g.dataset.goal, g.href || '');
+});
 </script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
