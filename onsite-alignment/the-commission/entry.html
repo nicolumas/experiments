@@ -68,6 +68,7 @@
 html{height:100%}
 body{background:var(--surface);color:var(--text-1);font-family:var(--arch);font-variation-settings:"wdth" 100;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 img{max-width:100%}
+a{color:inherit;text-decoration:none}
 ::selection{background:var(--charcoal-900);color:var(--ivory-100)}
 h1,h2,h3{text-wrap:balance}
 button{font-variation-settings:"wdth" 100}
@@ -85,10 +86,24 @@ button{font-variation-settings:"wdth" 100}
 .ui-label{font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;line-height:1.5}
 
 /* ── mock page chrome ─────────────────────────────── */
-header.site{display:flex;align-items:center;gap:var(--sp8);padding:var(--sp5) clamp(20px,4vw,56px);border-bottom:1px solid var(--b-sub)}
-.wordmark{font-weight:900;font-size:22px;letter-spacing:.14em}
-nav{display:flex;gap:var(--sp6);color:var(--text-2);font-size:15px}
-nav span{cursor:pointer}
+/* real site header: logo 120/140/170px, nav = Archivo Bold, sentence case, no tracking */
+header.site{display:flex;align-items:center;padding:0 clamp(16px,3vw,32px);border-bottom:1px solid var(--b-sub);background:var(--card)}
+.main-logo{display:flex;align-items:center;color:var(--text-1);flex-shrink:0}
+.main-logo svg{width:120px;height:auto;display:block}
+@media(min-width:981px){.main-logo svg{width:140px}}
+@media(min-width:1220px){.main-logo svg{width:170px}}
+.nav-container{display:flex;margin-inline:3rem;gap:0}
+.nav-container a{font-family:var(--arch);font-weight:700;font-size:15px;line-height:2;padding:var(--sp5) 10px;white-space:nowrap;color:var(--text-1);transition:opacity var(--motion-fast) var(--ease-out)}
+.nav-container a:hover{opacity:.6}
+.head-actions{display:flex;align-items:center;gap:var(--sp4);margin-left:auto}
+.head-search{display:flex;align-items:center;gap:var(--sp2);background:var(--raised);padding:9px 14px;min-width:210px;color:var(--text-3)}
+.head-search input{border:0;background:none;outline:none;font:400 15px/1.5 var(--arch);color:var(--text-1);width:100%}
+.head-search input::placeholder{color:var(--text-3)}
+.head-ico{display:flex;color:var(--text-1);transition:opacity var(--motion-fast) var(--ease-out)}
+.head-ico:hover{opacity:.6}
+.head-locale{font-family:var(--arch);font-weight:700;font-size:15px;color:var(--text-1)}
+@media(max-width:1100px){.nav-container{margin-inline:1.5rem}.head-search{min-width:0;width:44px;padding:9px}.head-search input{display:none}}
+@media(max-width:900px){.nav-container{display:none}}
 .hero{position:relative;min-height:clamp(260px,38vw,420px);background:linear-gradient(160deg,#8fa3b4,#e4ddd0);display:flex;align-items:flex-end;padding:clamp(24px,4vw,56px)}
 .hero h1{color:#fff;text-shadow:0 1px 30px rgba(28,26,24,.25);max-width:14em}
 section.rail{padding:clamp(48px,7vw,96px) clamp(20px,4vw,56px) clamp(32px,4vw,48px);max-width:1320px;margin:0 auto}
@@ -144,19 +159,19 @@ footer.site{border-top:1px solid var(--b-sub);padding:var(--sp10) clamp(20px,4vw
 /* ── overlay flow: full-bleed atelier split ───────── */
 .ovl{position:fixed;inset:0;background:rgba(28,26,24,.44);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:var(--z-backdrop)}
 .ovl.on{opacity:1;pointer-events:auto}
-.sheet{position:fixed;inset:0;background:var(--surface);transform:translateY(3.5%);opacity:0;pointer-events:none;transition:transform .42s var(--ease-drawer),opacity .3s ease-out;z-index:var(--z-sheet);overflow-y:auto;overscroll-behavior:contain}
+.sheet{position:fixed;inset:0;background:var(--surface);transform:translateY(3.5%);opacity:0;pointer-events:none;transition:transform .42s var(--ease-drawer),opacity .3s ease-out;z-index:var(--z-sheet);overflow:hidden;overscroll-behavior:contain}
 .sheet.on{transform:none;opacity:1;pointer-events:auto}
 .sheet.closing{transform:translateY(2.5%);opacity:0;transition:transform .24s var(--ease-out),opacity .2s ease}
 
-.flow{display:grid;grid-template-columns:minmax(0,1fr) clamp(440px,36vw,780px);min-height:100dvh;align-items:stretch}
-.steps-col{padding:clamp(24px,3vw,56px) clamp(28px,5vw,112px) clamp(64px,8vw,120px);width:100%;min-width:0}
-.sheet-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:clamp(40px,6vh,88px)}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) clamp(440px,36vw,780px);height:100dvh;align-items:stretch}
+.steps-col{position:relative;display:flex;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,104px) clamp(28px,5vw,112px) clamp(28px,4vh,48px);width:100%;min-width:0;height:100dvh;overflow-y:auto;overscroll-behavior:contain}
+.sheet-top{position:absolute;top:clamp(24px,3vh,36px);left:clamp(28px,5vw,112px);right:clamp(28px,5vw,112px);display:flex;justify-content:space-between;align-items:baseline}
 .sheet-top .wordmark{font-size:16px}
 .xclose{background:none;border:none;cursor:pointer;font:700 11px/1 var(--arch);letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);padding:var(--sp2);transition:color .16s ease}
 .xclose:hover{color:var(--text-1)}
 
 /* atelier: the persistent right pane */
-.atelier{position:sticky;top:0;height:100dvh;overflow-y:auto;overscroll-behavior:contain;background:var(--sunken);border-left:1px solid var(--b-sub);display:flex;flex-direction:column;justify-content:center;gap:var(--sp6);padding:clamp(32px,4vw,72px)}
+.atelier{height:100dvh;overflow-y:auto;overscroll-behavior:contain;background:var(--sunken);border-left:1px solid var(--b-sub);display:flex;flex-direction:column;justify-content:center;gap:var(--sp6);padding:clamp(72px,9vh,104px) clamp(32px,4vw,72px) clamp(28px,4vh,48px)}
 .atelier .eyebrow{color:var(--text-3)}
 .wp-stage{width:100%;overflow:hidden}  /* the frame animates its size; never let a transient paint outside the pane */
 .wp-frame{position:relative;margin:0 auto;transition:width .38s var(--ease-io),height .38s var(--ease-io)}
@@ -202,16 +217,16 @@ footer.site{border-top:1px solid var(--b-sub);padding:var(--sp10) clamp(20px,4vw
 .step{display:none}
 .step.on{display:block;animation:stepin .34s var(--ease-out) both}
 @keyframes stepin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.step .eyebrow{color:var(--text-3);margin-bottom:var(--sp4)}
-.step h2{margin-bottom:var(--sp4)}
-.step .t-lead{color:var(--text-2);max-width:56ch;margin-bottom:clamp(28px,4vh,48px)}
+.step .eyebrow{color:var(--text-3);margin-bottom:var(--sp3)}
+.step h2{margin-bottom:var(--sp3)}
+.step .t-lead{color:var(--text-2);max-width:54ch;margin-bottom:clamp(20px,3vh,32px)}
 .stagger>*{animation:rise .4s var(--ease-out) both;animation-delay:calc(var(--i,0)*45ms)}
 .stagger>*:nth-child(1){--i:0}
 .stagger>*:nth-child(2){--i:1}
 .stagger>*:nth-child(3){--i:2}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-.f-label{display:block;font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-2);margin:clamp(28px,3.6vh,44px) 0 var(--sp2)}
+.f-label{display:block;font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-2);margin:clamp(18px,2.6vh,28px) 0 var(--sp2)}
 .f-label small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--text-3);font-size:13px}
 .f-input,textarea.f-input,select.f-input{width:100%;max-width:440px;min-height:50px;padding:12px 16px;border:1px solid var(--b-def);border-radius:4px;background:var(--card);font:400 16px/1.5 var(--arch);color:var(--text-1);transition:border-color var(--motion-fast) var(--ease-out)}
 .f-input::placeholder{color:var(--charcoal-700);opacity:.72}
@@ -220,7 +235,7 @@ footer.site{border-top:1px solid var(--b-sub);padding:var(--sp10) clamp(20px,4vw
 .f-input.err{border-color:var(--err)}
 .f-help{font-size:13px;line-height:1.65;color:var(--text-3);margin-top:var(--sp2)}
 .f-help.err{color:var(--err)}
-textarea.f-input{max-width:760px;min-height:82px;resize:vertical}
+textarea.f-input{max-width:760px;min-height:64px;resize:vertical}
 .dims{display:flex;gap:var(--sp4);flex-wrap:wrap}
 .dims .dim1{width:200px;position:relative}
 .dims .dim1 .f-input{max-width:200px;padding-right:76px;font-variant-numeric:tabular-nums}
@@ -236,34 +251,36 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .chip.on{background:var(--inverse);border-color:var(--inverse);color:var(--ivory-100)}
 @media (pointer:coarse){.chip{padding:11px 16px}}
 
-.dirs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--sp4);max-width:1080px}
-.dir{border:1px solid var(--b-def);border-radius:2px;background:var(--card);cursor:pointer;padding:0 0 var(--sp4);text-align:left;font-family:var(--arch);transition:border-color .16s ease,transform .14s var(--ease-out)}
-.dir .sw{height:clamp(104px,10vw,150px);margin-bottom:var(--sp4)}
+.dirs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--sp3);max-width:1040px}
+@media(max-width:1200px){.dirs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.dirs{grid-template-columns:1fr}}
+.dir{border:1px solid var(--b-def);border-radius:2px;background:var(--card);cursor:pointer;padding:0 0 var(--sp3);text-align:left;font-family:var(--arch);transition:border-color .16s ease,transform .14s var(--ease-out)}
+.dir .sw{height:clamp(74px,7vw,104px);margin-bottom:var(--sp3)}
 .dir b{display:block;padding:0 var(--sp4);font-size:15px;font-weight:700}
 .dir span{display:block;padding:2px var(--sp4) 0;font-size:13px;line-height:1.65;color:var(--text-3)}
 @media (hover:hover) and (pointer:fine){.dir:hover{border-color:var(--b-str)}}
 .dir:active{transform:scale(.985)}
 .dir.on{border:2px solid var(--b-foc)}
 
-.upl{display:block;position:relative;max-width:760px;border:1.5px dashed var(--b-str);border-radius:2px;padding:var(--sp8);text-align:center;color:var(--text-2);font-size:13px;cursor:pointer;background:var(--card);transition:border-color .16s ease,color .16s ease}
+.upl{display:block;position:relative;max-width:760px;border:1.5px dashed var(--b-str);border-radius:2px;padding:var(--sp6);text-align:center;color:var(--text-2);font-size:13px;cursor:pointer;background:var(--card);transition:border-color .16s ease,color .16s ease}
 .upl:hover{border-color:var(--charcoal-700);color:var(--text-1)}
 .upl.has{border-style:solid;color:var(--text-1)}
 .upl input{position:absolute;width:1px;height:1px;opacity:0}
 .upl .thumb{max-height:130px;border-radius:2px;margin-bottom:var(--sp2)}
 
-.nav-row{display:flex;gap:var(--sp5);align-items:center;margin-top:clamp(36px,5vh,64px)}
+.nav-row{display:flex;gap:var(--sp5);align-items:center;margin-top:clamp(24px,3.4vh,40px)}
 .backlink{background:none;border:none;cursor:pointer;font:700 11px/1 var(--arch);letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);padding:var(--sp3) 0;transition:color .16s ease}
 .backlink:hover{color:var(--text-1)}
 .consent{display:flex;gap:var(--sp4);align-items:flex-start;max-width:620px;margin-top:clamp(24px,3vh,40px);font-size:13px;line-height:1.65;color:var(--text-2)}
 .consent input{margin-top:4px;accent-color:var(--charcoal-900);width:20px;height:20px;flex-shrink:0}
 
 /* confirmation (left column) */
-.crt{display:flex;gap:var(--sp6);align-items:center;background:var(--card);border:1px solid var(--b-sub);border-radius:2px;padding:var(--sp8);margin:clamp(28px,4vh,48px) 0;max-width:680px}
+.crt{display:flex;gap:var(--sp5);align-items:center;background:var(--card);border:1px solid var(--b-sub);border-radius:2px;padding:var(--sp5);margin:clamp(20px,3vh,32px) 0;max-width:680px}
 .ava{width:64px;height:64px;border-radius:50%;background:var(--charcoal-900);color:var(--ivory-100);font:400 22px/64px var(--disp);text-align:center;flex-shrink:0}
 .crt b{font-size:15px;font-weight:700;display:block}
 .crt span{font-size:13px;color:var(--text-2)}
 .tl{margin:0;padding-left:var(--sp8);border-left:1px solid var(--b-def);max-width:68ch}
-.tl li{list-style:none;margin-bottom:var(--sp6);position:relative;font-size:15px;line-height:1.5;color:var(--text-2)}
+.tl li{list-style:none;margin-bottom:var(--sp4);position:relative;font-size:15px;line-height:1.5;color:var(--text-2)}
 .tl li::before{content:"";position:absolute;left:calc(-1*var(--sp8) - 3.5px);top:7px;width:6px;height:6px;border-radius:50%;background:var(--charcoal-900)}
 .tl li b{color:var(--text-1);font-weight:600}
 
@@ -277,8 +294,10 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 /* ── responsive: the atelier collapses to a sticky reading bar ── */
 @media(max-width:960px){
   .flow{grid-template-columns:1fr}
-  .steps-col{padding:var(--sp5) var(--sp5) var(--sp20)}
-  .atelier{order:-1;position:sticky;top:0;height:auto;flex-direction:row;align-items:center;gap:var(--sp4);padding:var(--sp3) var(--sp5);border-left:none;border-bottom:1px solid var(--b-sub);justify-content:flex-start;z-index:var(--z-sticky)}
+  .steps-col{height:auto;overflow:visible;justify-content:flex-start;padding:var(--sp16) var(--sp5) var(--sp20)}
+  .sheet{overflow-y:auto}
+  .flow{height:auto}
+  .atelier{order:-1;position:sticky;top:0;height:auto;padding:var(--sp3) var(--sp5);flex-direction:row;align-items:center;gap:var(--sp4);padding:var(--sp3) var(--sp5);border-left:none;border-bottom:1px solid var(--b-sub);justify-content:flex-start;z-index:var(--z-sticky)}
   .atelier .eyebrow,.at-div,.at-note,.wp-read{display:none}
   .wp-stage{width:120px;flex-shrink:0}
   .wp-dim{display:none}
@@ -306,9 +325,23 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 </head>
 <body>
 
-<header class="site">
-  <div class="wordmark">LUMAS</div>
-  <nav><span>Artworks</span><span>New</span><span>Artists</span><span>Galleries</span></nav>
+<header class="site" role="banner">
+  <a href="/" class="main-logo" title="Fotokunst online kaufen bei LUMAS"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 30"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg></a>
+  <nav class="nav-container" aria-label="Main">
+    <a href="/search/?q=">Artworks</a>
+    <a href="/artists/">Top 20</a>
+    <a href="/artfinder/">Artfinder</a>
+    <a href="/inspired-art-magazine/">Inspiration</a>
+    <a href="/galleries/">Galleries</a>
+    <a href="/why-lumas/">About us</a>
+  </nav>
+  <div class="head-actions">
+    <label class="head-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" width="18" height="18" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg><input type="search" placeholder="Search" aria-label="Search"></label>
+    <a class="head-ico" href="/wishlist/" aria-label="Wishlist"><svg viewBox="0 0 21 20" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M15.849 11.6667C17.0918 10.45 18.3514 8.99167 18.3514 7.08333C18.3514 5.86776 17.868 4.70197 17.0077 3.84243C16.1473 2.98289 14.9804 2.5 13.7636 2.5C12.2955 2.5 11.2611 2.91667 10.0099 4.16667C8.75871 2.91667 7.72437 2.5 6.25627 2.5C5.0395 2.5 3.87258 2.98289 3.0122 3.84243C2.15181 4.70197 1.66846 5.86776 1.66846 7.08333C1.66846 9 2.91968 10.4583 4.1709 11.6667L10.0099 17.5L15.849 11.6667Z"/></svg></a>
+    <a class="head-ico" href="/login/" aria-label="Account"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M15.83 17.5v-1.67a3.33 3.33 0 0 0-3.33-3.33h-5a3.33 3.33 0 0 0-3.33 3.33v1.67M10 9.17a3.33 3.33 0 1 0 0-6.67 3.33 3.33 0 0 0 0 6.67"/></svg></a>
+    <a class="head-ico" href="/cart/" aria-label="Cart"><svg viewBox="0 0 21 20" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M7 18.33c.48 0 .88-.37.88-.83s-.4-.83-.88-.83a.85.85 0 0 0-.87.83c0 .46.39.83.87.83M16.63 18.33c.48 0 .87-.37.87-.83s-.4-.83-.87-.83a.85.85 0 0 0-.88.83c0 .46.4.83.88.83M1.8 1.7h1.74l2.33 10.36q.13.59.63.96.5.36 1.12.36h8.56q.61-.01 1.1-.37.46-.37.6-.94l1.45-6.2H4.48"/></svg></a>
+    <span class="head-locale">EN</span>
+  </div>
 </header>
 
 <div class="hero"><h1 class="t-h1">Signed and limited editions, made to be lived with</h1></div>
