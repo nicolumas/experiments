@@ -24,7 +24,7 @@
     --radius-xs:2px; --radius-sm:4px;
     --shadow-sm:0 1px 2px; --shadow-md:0 2px 8px; --shadow-lg:0 8px 32px;
     --font-body:'Archivo', system-ui, -apple-system, sans-serif;
-    --font-display:'Utile Display','Hanken Grotesk','Archivo', sans-serif;
+    --font-display:'Utile Display', Georgia, serif;
     --pad:clamp(2.4rem, 4.5vw, 8rem);
     --z-header:100; --z-toast:400; --ease:cubic-bezier(0.2,0.8,0.2,1);
   }
@@ -36,7 +36,7 @@
   /* True full-bleed: content spans the page width with responsive gutters */
   .wrap{ width:100%; max-width:100%; margin-inline:auto; padding-inline:var(--pad); }
   .display{ font-family:var(--font-display); font-weight:400; letter-spacing:-0.01em; text-wrap:balance; }
-  .eyebrow{ font-family:var(--font-body); font-weight:700; font-size:1.1rem; letter-spacing:.198rem; text-transform:uppercase; color:var(--color-text-tertiary); }
+  .eyebrow{ font-family:var(--font-body); font-weight:700; font-size:1.1rem; letter-spacing:.18em; text-transform:uppercase; color:var(--color-text-secondary); }
   .lead{ font-weight:300; font-size:2rem; line-height:1.6; color:var(--color-text-secondary); max-width:46ch; }
   .site-header{ background:var(--color-surface-page); border-bottom:1px solid var(--color-border-subtle); }
   /* Promo bar */
@@ -122,7 +122,7 @@
   .channel .meta{ margin-top:auto; font-size:1.25rem; color:var(--color-text-tertiary); display:flex; align-items:center; gap:.6rem; }
   .channel .meta strong{ color:var(--color-text-primary); font-weight:600; }
   .channel .meta{ font-size:1.5rem; }
-  .channel .cta-line{ font-family:var(--font-body); font-weight:700; font-size:1.3rem; letter-spacing:.182rem; text-transform:uppercase; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; }
+  .channel .cta-line{ font-family:var(--font-body); font-weight:400; font-size:1.3rem; letter-spacing:.13rem; text-transform:uppercase; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; }
   .channel .cta-line svg{ width:1.3rem; height:1.3rem; transition:transform .3s var(--ease); }
   .channel:hover .cta-line svg{ transform:translateX(4px); }
   .channel--primary{ border-color:var(--color-border-strong); }
@@ -151,7 +151,7 @@
   .field .err{ font-size:1.1rem; color:var(--color-status-error); display:none; }
   .field.invalid .err{ display:block; }
   .btn{ font-family:var(--font-body); font-weight:700; font-size:1.3rem; letter-spacing:.182rem; text-transform:uppercase; display:inline-flex; align-items:center; justify-content:center; gap:1rem; padding:1.6rem 2.8rem; border-radius:0; border:1px solid var(--color-surface-inverse); background:var(--color-surface-inverse); color:var(--color-text-inverse); cursor:pointer; transition:transform .2s var(--ease), opacity .2s var(--ease); width:100%; }
-  .btn:hover{ transform:translateY(-1px); } .btn:active{ transform:translateY(0) scale(.99); }
+  .btn:hover{ background:#3A3835; border-color:#3A3835; } .btn:active{ transform:scale(.97); }
   .btn[disabled]{ background:var(--color-surface-muted); border-color:var(--color-border-default); color:var(--color-text-disabled); cursor:not-allowed; transform:none; }
   .btn .spinner{ width:1.6rem; height:1.6rem; border:2px solid color-mix(in srgb,var(--color-text-inverse) 40%,transparent); border-top-color:var(--color-text-inverse); border-radius:50%; animation:spin .7s linear infinite; display:none; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
@@ -183,7 +183,7 @@
   .tool:hover{ transform:translateY(-2px); background:var(--color-surface-card); border-color:var(--color-border-default); }
   .tool h3{ font-family:var(--font-display); font-weight:400; font-size:2.2rem; letter-spacing:0; line-height:1.2; }
   .tool p{ color:var(--color-text-secondary); font-size:1.6rem; line-height:1.5; }
-  .tool .go{ margin-top:auto; font-weight:700; font-size:1.3rem; letter-spacing:.13em; text-transform:uppercase; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; }
+  .tool .go{ margin-top:auto; font-weight:400; font-size:1.3rem; letter-spacing:.13rem; text-transform:uppercase; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; }
   .tool .go svg{ width:1.3rem; height:1.3rem; transition:transform .3s var(--ease); } .tool:hover .go svg{ transform:translateX(4px); }
   .consult-panel{ background:var(--color-surface-raised); border:1px solid var(--color-border-subtle); border-radius:var(--radius-sm); padding:clamp(4rem,6vw,8rem) 2.4rem; text-align:center; }
   .consult-panel .eyebrow{ display:block; margin-bottom:1.8rem; }
