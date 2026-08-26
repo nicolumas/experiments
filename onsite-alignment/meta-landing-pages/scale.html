@@ -1,39 +1,308 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lang="en" data-h1="a" data-cta="v1">
 <head>
 <meta name="robots" content="noindex,nofollow">
 <script src="../assets/gate.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="robots" content="noindex,nofollow" />
-<title>Meta ads to landing pages | LUMAS prototypes</title>
-<meta name="description" content="Five landing pages built as the destinations the top-performing Meta ads never had. Real editions, real prices, live links, and the rooms that prove it." />
+<title>Museum format, to scale | LUMAS</title>
+<meta name="description" content="Large-scale editions shown in the rooms they were hung in, with the size made measurable: a wall comparator at 2.5, 3.5 and 5 metres, one work at four sizes, and twelve editions at 120 cm and above." />
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/lumas.css" />
 <style>
-  /* page-local composition only. Tokens and the image rule live in lumas.css */
-  .masthead{padding-block:clamp(4.8rem,7vw,9.6rem) clamp(3.2rem,4vw,5.6rem)}
-  .entries{list-style:none;margin:0;padding:0 0 clamp(6.4rem,8vw,12rem)}
-  .entry{padding-block:clamp(4.8rem,6vw,8rem)}
-  .entry + .entry{border-top:1px solid var(--border-subtle)}
-  .entry a{display:grid;gap:var(--sp-8);text-decoration:none;align-items:center}
-  @media (min-width:1000px){
-    .entry a{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--sp-16)}
-    .entry:nth-child(even) a{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
-    .entry:nth-child(even) .fig{order:2}
+  /* page-local composition only. Tokens, type and the image rule live in lumas.css */
+
+  /* bilingual: both languages ship in the DOM, CSS chooses. No JS gate. */
+  [data-lang="en"] .de{display:none}
+  [data-lang="de"] .en{display:none}
+  [data-h1="a"] .h1-b,[data-h1="b"] .h1-a{display:none}
+  [data-cta="v1"] .cta-v2,[data-cta="v2"] .cta-v1{display:none}
+
+  .ui-label{font-family:var(--font-body-bold);font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin:0}
+  .slot{color:var(--color-text-secondary);border-bottom:.1rem dashed var(--color-border-strong);padding-bottom:.1rem}
+  .dim{color:var(--color-text-secondary)}
+  /* 1.1rem is reserved for uppercase labels. Small prose runs at 1.3rem, so the page
+     never shows two different sizes of the same kind of text. The only exceptions are
+     the annotations inside the scale drawings, which belong to the drawing. */
+  .head__meta,#scale-caption,.filter__count,.band__slotnote{font-size:1.3rem;letter-spacing:0}
+  .unit{font-size:.55em}
+  .line{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-2) var(--sp-6);margin:0}
+
+  /* ── hero: a compact band, then the room ───────────────────────────── */
+  /* ── hero: one block. The photograph is full-bleed and the type sits on a
+     charcoal text frame overlaid on it, always clear of the artwork (which
+     occupies 46%-84% of this crop). Below 1000px the frame stacks under the
+     image and reads as one unit. */
+  .hero-block{padding-bottom:var(--sp-10)}
+  .hero__frame{position:relative}
+  .hero__scene a{display:block}
+  .hero__scene picture{display:block}
+  .hero__scene img{display:block;width:100%;height:auto;max-height:none}
+  .hero__panel{
+    padding:var(--sp-8) var(--gutter) var(--sp-10);
+    display:flex;flex-direction:column;gap:var(--sp-5);align-items:flex-start;
   }
-  .entry .fig img{--fig-max:56vh}
-  .entry__label{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-4)}
-  .entry__n{font-family:'Utile Display',Georgia,serif;font-weight:300;font-size:1.4rem;color:var(--text-secondary);font-variant-numeric:tabular-nums}
-  .entry h2{margin-bottom:var(--sp-4)}
-  .entry p{color:var(--text-secondary);max-width:44ch;text-wrap:pretty}
-  .entry .ghost{margin-top:var(--sp-6)}
-  @media (hover:hover) and (pointer:fine){.entry a:hover .ghost{opacity:.6}}
-  .entry a:focus-visible{outline:2px solid var(--border-focus);outline-offset:1.2rem}
-  .note{border-top:1px solid var(--border-subtle);padding-block:var(--sp-8) var(--sp-16);font-size:1.3rem;line-height:1.65;color:var(--text-secondary);max-width:80ch}
+  .hero__panel .d1{max-width:21ch}
+  .hero__panel .lede{max-width:38ch}
+  .hero__acts{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-5) var(--sp-8);margin:0;padding-top:var(--sp-2)}
+  .hero__veil{display:none}
+  /* below 1000px the type is charcoal on white, so the inverse CTA has to come back
+     to the standard fill or it is ivory-on-white */
+  @media (max-width:999px){
+    .hero__panel .btn-primary-inverse{background-color:var(--color-surface-inverse);color:var(--color-text-inverse)}
+  }
+
+  @media (min-width:1000px){
+    /* the veil: strongest under the type, gone before the artwork */
+    .hero__veil{
+      display:block;position:absolute;inset:0 auto 0 0;width:46%;pointer-events:none;
+      background:linear-gradient(to top,
+        rgba(28,26,24,.60) 0%,
+        rgba(28,26,24,.56) 55%,
+        rgba(28,26,24,.48) 70%,
+        rgba(28,26,24,.18) 86%,
+        rgba(28,26,24,0) 100%);
+      -webkit-mask-image:linear-gradient(to right,#000 0%,#000 74%,transparent 100%);
+      mask-image:linear-gradient(to right,#000 0%,#000 74%,transparent 100%);
+    }
+    .hero__panel{
+      position:absolute;left:0;bottom:0;width:min(44%,68rem);
+      padding:var(--sp-10) var(--sp-12) var(--sp-10) var(--gutter);
+      color:var(--color-text-inverse);
+    }
+    /* over a photograph the on-dark alpha rhythm drops below 4.5:1, so hierarchy
+       comes from size and family here, not from transparency */
+    .hero__panel .eyebrow,.hero__panel .lede{color:var(--color-text-inverse)}
+    .hero__panel .ghost{color:var(--color-text-inverse);border-bottom-color:var(--color-border-inverse)}
+  }
+  @media (min-width:1500px){
+    .hero__panel{width:min(42%,74rem)}
+  }
+  .scene__cap,.bridge__cap{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-2) var(--sp-6);margin-top:var(--sp-5)}
+
+  /* ── section head: label beside the headline, never stacked above ──── */
+  .head{display:grid;gap:var(--sp-4)}
+  @media (min-width:900px){
+    .head{grid-template-columns:minmax(0,3fr) minmax(0,9fr);gap:var(--sp-12);align-items:start}
+    .head__label{padding-top:.9rem}
+  }
+  .head__label{margin:0}
+  .head__body>*+*{margin-top:var(--sp-5)}
+  .head__dek{color:var(--text-secondary);max-width:52ch}
+  .head__meta{margin-top:var(--sp-3)}
+
+  /* ── the three rooms ───────────────────────────────────────────────── */
+  .rooms{padding-bottom:clamp(4.8rem,6vw,8rem)}
+  .room-spread{padding-block:clamp(4.8rem,6vw,8rem)}
+  .room-spread__inner{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter);display:grid;gap:var(--sp-8)}
+  @media (min-width:1000px){
+    /* the photograph runs to the page edge on its own side, which buys it ~13% */
+    .room-spread__inner{
+      grid-template-columns:minmax(0,1fr) minmax(32rem,26%);
+      gap:var(--sp-12);align-items:center;padding-inline:0 var(--gutter);
+    }
+    .room-spread--r .room-spread__inner{
+      grid-template-columns:minmax(32rem,26%) minmax(0,1fr);
+      padding-inline:var(--gutter) 0;
+    }
+    .room-spread--r .room-spread__fig{order:2}
+  }
+  .room-spread__fig{margin:0}
+  .room-spread__fig a{display:block}
+  .room-spread__fig img{display:block;width:100%;height:auto;max-height:none}
+  .room-spread__meta{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-3)}
+  .room__title{margin:0}
+  .room-spread__meta .meta__size{margin-top:calc(var(--sp-1) * -1)}
+  .room-spread__meta .meta__note{margin-top:var(--sp-3)}
+  .room-spread__meta .line{margin-top:var(--sp-3)}
+
+  /* ── the scale stage. 1 unit = 1 cm, span = 500 cm across. ─────────── */
+  .scale__grid{display:grid;gap:var(--sp-10);margin-top:var(--sp-10)}
+  @media (min-width:1100px){
+    .scale__grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--sp-12);align-items:start}
+  }
+  .scale__photo{margin:0}
+  .scale__photo a{display:block}
+  .scale__photo img{display:block;width:100%;height:auto;max-height:none}
+  .scale__photocap{margin-top:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-2)}
+  .scale__photocap .body{max-width:40ch}
+  .scale__diagram{display:flex;flex-direction:column;gap:var(--sp-4)}
+  .scale__diagram .stage{margin-top:0}
+
+  .chips{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+  .chip{
+    font-family:var(--font-body-bold);font-size:1.2rem;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;
+    padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-xs);border:.1rem solid var(--color-border-strong);
+    background:transparent;color:var(--color-text-primary);cursor:pointer;
+    transition:background-color var(--motion-fast) var(--motion-easing),color var(--motion-fast) var(--motion-easing),border-color var(--motion-fast) var(--motion-easing);
+  }
+  @media (hover:hover) and (pointer:fine){.chip:hover{background-color:var(--color-surface-raised);border-color:transparent}}
+  .chip[aria-pressed="true"]{background-color:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse)}
+
+  .stage{
+    --span:500;--wallh:260;
+    position:relative;margin-block:var(--sp-2) var(--sp-6);
+    aspect-ratio:var(--span) / var(--wallh);
+  }
+  .stage__wall{
+    position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:calc(var(--wall) / var(--span) * 100%);height:100%;
+    background:var(--surface-sunken);border:.1rem solid var(--color-border-default);border-bottom:0;
+    transition:width var(--dur-reveal) var(--ease-brand);
+  }
+  .stage__floor{position:absolute;left:0;right:0;bottom:0;border-top:.1rem solid var(--color-border-strong)}
+  .stage__art{
+    position:absolute;left:50%;transform:translateX(-50%);display:block;text-decoration:none;
+    width:calc(var(--aw) / var(--span) * 100%);
+    bottom:calc((150 - var(--ah) / 2) / var(--wallh) * 100%);
+    box-shadow:var(--shadow-frame);
+  }
+  .stage__art img{display:block;width:100%;height:auto;max-height:none}
+  .figure{position:absolute;bottom:0;left:calc(50% + (var(--aw) / 2 + 30) / var(--span) * 100%);height:calc(175 / var(--wallh) * 100%)}
+  .figure__svg{display:block;height:100%;width:auto;fill:var(--border-strong);opacity:.85}
+  .figure__cm{position:absolute;left:calc(100% + .8rem);bottom:0;white-space:nowrap;color:var(--text-secondary)}
+  .stage__dim{
+    position:absolute;left:50%;transform:translateX(-50%);top:calc(100% + 1.2rem);
+    width:calc(var(--wall) / var(--span) * 100%);height:1px;background:var(--border-strong);
+    transition:width var(--dur-reveal) var(--ease-brand);
+  }
+  .stage__dim::before,.stage__dim::after{content:"";position:absolute;top:-.4rem;width:1px;height:.9rem;background:var(--border-strong)}
+  .stage__dim::before{left:0}.stage__dim::after{right:0}
+  .stage__dimlabel{position:absolute;left:50%;transform:translateX(-50%);top:.8rem;background:var(--surface-page);padding-inline:.8rem;color:var(--text-secondary)}
+  #scale-caption{margin:var(--sp-4) 0 0;font-variant-numeric:tabular-nums}
+  #scale-caption b{font-weight:400;color:var(--text-primary)}
+
+  /* ── the ladder: one work, four sizes, one 4 m wall each ───────────── */
+  .ladder .steps{list-style:none;margin:var(--sp-16) 0 0;padding:0;display:grid;gap:var(--sp-12) var(--sp-6)}
+  @media (min-width:640px){.ladder .steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (min-width:1100px){.ladder .steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--sp-6)}}
+  .step{display:flex;flex-direction:column;gap:var(--sp-3)}
+  .step .meta__size{color:var(--color-text-primary)}
+  .step__stage{
+    --span:400;--wallh:260;
+    position:relative;display:block;text-decoration:none;
+    aspect-ratio:var(--span) / var(--wallh);
+  }
+  .step__stage .stage__wall{width:100%;left:0;transform:none}
+  .step__stage .stage__art{
+    position:absolute;left:50%;transform:translateX(-50%);display:block;
+    width:calc(var(--aw) / var(--span) * 100%);
+    bottom:calc((150 - var(--ah) / 2) / var(--wallh) * 100%);
+    box-shadow:none;
+  }
+  .step__stage .figure{left:auto;right:2%;height:calc(175 / var(--wallh) * 100%)}
+  .ladder__note{margin-top:var(--sp-12);max-width:62ch}
+
+  /* ── editorial strip ───────────────────────────────────────────────── */
+  .strip{padding-block:clamp(8rem,10vw,12rem)}
+  .strip__inner{max-width:76rem;margin-inline:auto;padding-inline:var(--gutter);text-align:center;display:flex;flex-direction:column;gap:var(--sp-6);align-items:center}
+  .strip__display{letter-spacing:-.0084em;max-width:20ch}
+  .strip__body{max-width:58ch}
+  .strip .ghost{margin-top:var(--sp-2)}
+
+  /* ── the bridge photograph: from the dark strip into the catalogue ─── */
+  .bridge{margin:0}
+  .bridge a{display:block}
+  .bridge img{display:block;width:100%;height:auto;max-height:none}
+
+  /* ── filter rail: LUMAS's own subject sections ─────────────────────── */
+  .filter{margin-top:var(--sp-12);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--sp-4) var(--sp-8)}
+  .filter__count{margin:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .filter__count b{font-weight:400;color:var(--text-primary)}
+  .filter__deks{margin-top:var(--sp-5);min-height:2.4rem}
+  .dek{margin:0;font-size:1.5rem;line-height:1.5;color:var(--color-text-secondary);max-width:56ch;display:none}
+  .editions[data-filter="all"]    .dek--all,
+  .editions[data-filter="nature"] .dek--nature,
+  .editions[data-filter="cities"] .dek--cities,
+  .editions[data-filter="form"]   .dek--form,
+  .editions[data-filter="ideas"]  .dek--ideas{display:block}
+
+  /* ── the catalogue: tile width tracks the work's real width ────────── */
+  .grid{
+    --cols:1;--gap:var(--sp-12);
+    list-style:none;margin:var(--sp-10) 0 0;padding:0;
+    display:grid;grid-auto-flow:row dense;
+    grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+    gap:var(--sp-16) var(--gap);
+  }
+  @media (min-width:760px){.grid{--cols:2;--gap:var(--sp-12)}}
+  @media (min-width:1200px){.grid{--cols:3;--gap:var(--sp-16)}}
+  .tile{display:flex;flex-direction:column;gap:var(--sp-2)}
+  .tile .meta__size{color:var(--color-text-primary)}
+  .tile .meta__note{margin:0}
+  /* a shared floor line across the row, so widths stay comparable and captions align.
+     The box has the ratio, never the image: the image is width-set, height auto. */
+  .tile__hit{display:flex;align-items:flex-end;justify-content:flex-start;text-decoration:none;
+    aspect-ratio:260 / 195;margin-bottom:var(--sp-3)}
+  .tile--wide .tile__hit{aspect-ratio:auto}
+  .tile__figbox{display:block;width:calc(var(--aw) / 260 * 100%)}
+  .tile__figbox img{display:block;width:100%;height:auto;max-height:none}
+  /* the 5.5 m work needs the whole row, but stays on the grid's own px-per-cm */
+  .tile--wide{grid-column:1 / -1}
+  .tile--wide .tile__figbox{
+    width:min(100%, calc(var(--aw) / 260 * ((100% - (var(--cols) - 1) * var(--gap)) / var(--cols))));
+  }
+  .tile .meta__artist,.tile .meta__title,.tile .meta__sub{margin:0}
+  .tile .line{margin-top:var(--sp-3)}
+
+  /* filtering hides, it never rebuilds: with JS off every work stays visible */
+  .editions[data-filter="nature"] .tile:not([data-theme="nature"]),
+  .editions[data-filter="cities"] .tile:not([data-theme="cities"]),
+  .editions[data-filter="form"]   .tile:not([data-theme="form"]),
+  .editions[data-filter="ideas"]  .tile:not([data-theme="ideas"]){display:none}
+
+  .empty{margin-top:var(--sp-16);display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-6)}
+
+  /* ── craft + logistics band ────────────────────────────────────────── */
+  .band{background:var(--surface-raised);padding-block:clamp(6.4rem,8vw,10rem)}
+  .craft{display:grid;gap:var(--sp-10)}
+  @media (min-width:820px){.craft{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-12)}}
+  .col>*+*{margin-top:var(--sp-4)}
+  .band__rule{margin-block:clamp(4.8rem,6vw,8rem)}
+  .logistics__head{max-width:16ch}
+  .logistics__cols{margin-top:var(--sp-10);display:grid;gap:var(--sp-10)}
+  @media (min-width:820px){
+    .logistics{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:var(--sp-16);align-items:start}
+    .logistics__head{grid-column:1}
+    .logistics__cols{grid-column:2;margin-top:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-12)}
+    .band__slotnote{grid-column:2}
+  }
+  .ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .ticks li{padding-block:var(--sp-4);border-top:.1rem solid var(--color-border-default);font-size:1.5rem;line-height:1.5}
+  .ticks li:last-child{border-bottom:.1rem solid var(--color-border-default)}
+  .band__slotnote{margin-top:var(--sp-8);color:var(--text-secondary)}
+
+  /* ── close ─────────────────────────────────────────────────────────── */
+  .close__inner{display:grid;gap:var(--sp-8)}
+  @media (min-width:900px){.close__inner{grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:var(--sp-16);align-items:center}}
+  .close__fig{margin:0}
+  .close__fig a{display:block}
+  .close__fig img{display:block;width:100%;height:auto;max-height:none}
+  .close__cap{margin-top:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-1)}
+  .close__side{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-5)}
+  .close__side .btn{margin-top:var(--sp-2)}
+
+  /* ── prototype controls (not part of the design) ───────────────────── */
+  .proto{
+    position:fixed;right:1.6rem;bottom:1.6rem;z-index:60;
+    background:var(--color-surface-card);border:.1rem solid var(--color-border-default);
+    padding:1.2rem 1.6rem;display:flex;flex-direction:column;gap:.8rem;
+  }
+  .proto__title{color:var(--color-text-tertiary)}
+  .proto__row{display:flex;align-items:center;gap:.6rem}
+  .proto__key{min-width:6.4rem}
+  .proto__btn{
+    font-family:var(--font-body-bold);font-size:1rem;letter-spacing:.18em;text-transform:uppercase;
+    padding:.5rem .9rem;border:.1rem solid var(--color-border-strong);background:transparent;color:var(--color-text-primary);cursor:pointer;border-radius:var(--radius-xs);
+    transition:background-color var(--motion-fast) var(--motion-easing),color var(--motion-fast) var(--motion-easing);
+  }
+  .proto__btn[aria-pressed="true"]{background-color:var(--color-surface-inverse);color:var(--color-text-inverse);border-color:var(--color-surface-inverse)}
+  @media (max-width:760px){.proto{left:.8rem;right:.8rem;bottom:.8rem;flex-direction:row;flex-wrap:wrap;gap:.8rem 1.6rem;padding:1rem 1.2rem}.proto__key{min-width:0}}
+  @media print{.proto{display:none}}
 </style>
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
 <link rel="stylesheet" href="../_nav/nav-fonts.css" />
@@ -882,108 +1151,793 @@
 </template>
 
 <!-- LUMAS-NAV-KIT:MARKUP:END -->
+<!-- HYPOTHESIS: rooms first, measurement second - showing the format in real interiors before explaining it converts the XL film's promise into carts, where the old format page returned 0 ATC on 5,494 impressions - KPI: ATC-rate proxy = pdp_click rate -->
 
-<main class="wrap">
+<main>
 
-  <header class="masthead">
-    <h1 class="d1 d1-light reveal">The ad promised it.<br />The page answers it.</h1>
-    <p class="lede reveal" style="margin-top:var(--sp-6)">Six destinations for the Meta ads that were sending their best traffic to a homepage. Real editions, real prices, live links, and the rooms that prove it.</p>
-  </header>
+  <section class="hero-block">
+    <div class="hero__frame">
+      <figure class="hero__scene scene">
+        <a href="https://www.lumas.com/pictures/ysabel_lemay-3/life_goes_on/" data-pdp="https://www.lumas.de/pictures/ysabel_lemay-3/life_goes_on/" data-goal="pdp_click"
+           aria-label="Ysabel Lemay, Life goes on, 260 &times; 180 cm, in a room">
+          <picture>
+            <source media="(max-width:759px)" srcset="assets/rooms-format/lemay-life-goes-on-narrow.jpg" width="1200" height="1030" />
+            <img src="assets/rooms-format/lemay-life-goes-on-hero.jpg" width="2400" height="1095" alt="Ysabel Lemay, Life goes on, 260 by 180 centimetres, on the wall of a living room" />
+          </picture>
+        </a>
+      </figure>
 
-  <ol class="entries">
-    <li class="entry reveal">
-      <a href="art-in-the-room.html" data-goal="cta_primary">
-        <figure class="fig room"><img src="assets/interiors/kyoto-sukiya-swan.jpg" alt="Massimo Colonna, Swan, in a sukiya house in Kyoto" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">01</span></p>
-          <h2 class="d2">Art in the room</h2>
-          <p>Six real interiors, from a sukiya house in Kyoto to a converted works in Berlin, each with an edition on the wall at a stated size and the reason it hangs there.</p>
-          <span class="ghost">Open the page</span>
+      <!-- Type sits directly on the photograph. The veil below is the minimum that carries
+           ivory at 4.5:1 over this room (measured: p95 of the text zone is 200, a .50 veil
+           brings it to 100 -> 5.05:1). It is masked to fade out by 46% of the frame, so it
+           never reaches the artwork, which starts at 46.5%. -->
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="hero__panel">
+        <p class="eyebrow reveal"><span class="en">Museum format</span><span class="de">Museumsformat</span></p>
+        <h1 class="d1 reveal">
+          <span class="h1-a"><span class="en">A photograph shows the work. Not what it does to the room.</span><span class="de">Ein Foto zeigt das Werk. Nicht, was es mit dem Raum macht.</span></span><span class="h1-b"><span class="en">There are walls you walk past. And walls you stop at.</span><span class="de">Es gibt W&auml;nde, an denen man vorbeigeht. Und W&auml;nde, an denen man stehen bleibt.</span></span>
+        </h1>
+        <p class="lede reveal"><span class="en">Editions from 120 &times; 180 cm. Large enough that the room stops being a room with a picture in it.</span><span class="de">Editionen ab 120 &times; 180 cm. Gro&szlig; genug, dass der Raum aufh&ouml;rt, ein Raum mit einem Bild darin zu sein.</span></p>
+        <p class="hero__acts reveal">
+          <a class="btn btn-primary-inverse" href="#scale" data-goal="cta_primary"><span class="en">See it to scale</span><span class="de">Gr&ouml;&szlig;e vergleichen</span></a>
+          <a class="ghost" href="#editions" data-goal="cta_primary"><span class="en">Browse the editions</span><span class="de">Editionen ansehen</span></a>
+        </p>
+      </div>
+    </div>
+
+    <p class="wrap scene__cap">
+      <span class="meta__artist">Ysabel Lemay</span>
+      <span class="meta__title">Life goes on</span>
+      <span class="meta__size">260 &times; 180 <span class="unit">cm</span></span>
+      <span class="meta__sub"><span class="en">Edition of 100, last prints</span><span class="de">Edition von 100, letzte Exemplare</span></span>
+      <span class="meta__price"><span class="en">$7,670</span><span class="de">5.590 &euro;</span></span>
+      <a class="ghost" href="https://www.lumas.com/pictures/ysabel_lemay-3/life_goes_on/" data-pdp="https://www.lumas.de/pictures/ysabel_lemay-3/life_goes_on/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+    </p>
+  </section>
+
+  <section class="section rooms">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow head__label"><span class="en">In the room</span><span class="de">Im Raum</span></p>
+        <div class="head__body">
+          <h2 class="d2"><span class="en">Three rooms that were finished the day the work went up.</span><span class="de">Drei R&auml;ume, die an dem Tag fertig waren, an dem das Werk h&auml;ngen blieb.</span></h2>
+          <p class="caption head__meta"><span class="en">Each work shown at the size it was hung, in centimetres.</span><span class="de">Jedes Werk in der Gr&ouml;&szlig;e gezeigt, in der es h&auml;ngt, in Zentimetern.</span></p>
+          
         </div>
-      </a>
-    </li>
-
-    <li class="entry reveal">
-      <a href="gallery.html" data-goal="cta_primary">
-        <figure class="fig scene"><img src="assets/people/gallery-event.jpg" alt="A LUMAS gallery during an evening event" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">02</span></p>
-          <h2 class="d2">The gallery, always open</h2>
-          <p>The gallery film continues into the rooms themselves, and resolves on the fifteen Art Consultants who hang the work and answer the phone.</p>
-          <span class="ghost">Open the page</span>
+      </div>
+    </div>
+      <article class="room-spread">
+        <div class="room-spread__inner">
+          <figure class="scene room-spread__fig reveal">
+            <a href="https://www.lumas.com/pictures/luc_dratwa/new_york_five/" data-pdp="https://www.lumas.de/pictures/luc_dratwa/new_york_five/" data-goal="pdp_click"
+               aria-label="Luc Dratwa, New York Five, 240 &times; 160 cm, in a room">
+              <img src="assets/rooms-format/dratwa-new-york-five-library.jpg" loading="lazy" alt="Luc Dratwa, New York Five, 240 by 160 centimetres, hanging in a room" />
+            </a>
+          </figure>
+          <div class="room-spread__meta reveal">
+            <p class="meta__artist">Luc Dratwa</p>
+            <h3 class="d3 room__title">New York Five</h3>
+            <p class="meta__size">240 &times; 160 <span class="unit">cm</span></p>
+            <p class="meta__note"><span class="en">Two metres forty of Manhattan at the end of a room made of concrete and books. At this size the skyline stops being a picture of a city. It behaves like a window, and you catch yourself looking out of it.</span><span class="de">Zwei Meter vierzig Manhattan am Ende eines Raums aus Beton und Büchern. In dieser Größe ist die Skyline kein Bild einer Stadt mehr. Sie verhält sich wie ein Fenster, und du ertappst dich dabei, hinauszusehen.</span></p>
+            <p class="meta__sub"><span class="en">A library in concrete</span><span class="de">Eine Bibliothek aus Beton</span> &middot; <span class="en">Edition of 150</span><span class="de">Edition von 150</span></p>
+            <p class="line">
+              <span class="meta__price"><span class="en">$3,980</span><span class="de">2.900 &euro;</span></span>
+              <a class="ghost" href="https://www.lumas.com/pictures/luc_dratwa/new_york_five/" data-pdp="https://www.lumas.de/pictures/luc_dratwa/new_york_five/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+            </p>
+          </div>
         </div>
-      </a>
-    </li>
-
-    <li class="entry reveal">
-      <a href="museum-format.html" data-goal="cta_primary">
-        <figure class="fig room"><img src="assets/interiors/berlin-mylanswave-260.jpg" alt="Matthew Cusick, Mylan's Wave, 260 by 170 centimetres, in a converted works in Berlin" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">03</span></p>
-          <h2 class="d2">Museum format</h2>
-          <p>A page that grows as you read it: sixty centimetres to two hundred and sixty, each step larger on the screen than the one before.</p>
-          <span class="ghost">Open the page</span>
+      </article>
+      <article class="room-spread room-spread--r">
+        <div class="room-spread__inner">
+          <figure class="scene room-spread__fig reveal">
+            <a href="https://www.lumas.com/pictures/claudio_gotsch/ying_yang/" data-pdp="https://www.lumas.de/pictures/claudio_gotsch/ying_yang/" data-goal="pdp_click"
+               aria-label="Claudio Gotsch, Ying &amp; Yang, 150 &times; 105 cm, in a room">
+              <img src="assets/rooms-format/gotsch-ying-yang-kitchen.jpg" loading="lazy" alt="Claudio Gotsch, Ying &amp; Yang, 150 by 105 centimetres, hanging in a room" />
+            </a>
+          </figure>
+          <div class="room-spread__meta reveal">
+            <p class="meta__artist">Claudio Gotsch</p>
+            <h3 class="d3 room__title">Ying &amp; Yang</h3>
+            <p class="meta__size">150 &times; 105 <span class="unit">cm</span></p>
+            <p class="meta__note"><span class="en">A kitchen is not a gallery, and that is the point. At 150 × 105 the two of them hold the wall above the counter, close enough to read every hair. You will see them more often than anything you hang in a hallway.</span><span class="de">Eine Küche ist keine Galerie, und genau das ist der Punkt. Mit 150 × 105 halten die beiden die Wand über der Arbeitsfläche, nah genug, um jedes Haar zu erkennen. Du wirst sie öfter sehen als alles, was im Flur hängt.</span></p>
+            <p class="meta__sub"><span class="en">A kitchen in raw plaster</span><span class="de">Eine Küche im Rohputz</span> &middot; <span class="en">Edition of 100</span><span class="de">Edition von 100</span></p>
+            <p class="line">
+              <span class="meta__price"><span class="en">$1,460</span><span class="de">1.180 &euro;</span></span>
+              <a class="ghost" href="https://www.lumas.com/pictures/claudio_gotsch/ying_yang/" data-pdp="https://www.lumas.de/pictures/claudio_gotsch/ying_yang/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+            </p>
+          </div>
         </div>
-      </a>
-    </li>
-
-    <li class="entry reveal">
-      <a href="collector-advantage.html" data-goal="cta_primary">
-        <figure class="fig room"><img src="assets/interiors/edinburgh-newtown-pinkpalace.jpg" alt="Massimo Colonna, Pink Palace, in a New Town flat in Edinburgh" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">04</span></p>
-          <h2 class="d2">The collector advantage</h2>
-          <p>A window rather than a sale: what a collector advantage is, why editions close, and the works it applies to, with a live and an empty state.</p>
-          <span class="ghost">Open the page</span>
+      </article>
+      <article class="room-spread">
+        <div class="room-spread__inner">
+          <figure class="scene room-spread__fig reveal">
+            <a href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-pdp="https://www.lumas.de/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click"
+               aria-label="Guachinarte, Hollywood Hills, 240 &times; 120 cm, in a room">
+              <img src="assets/rooms-format/guachinarte-hollywood-hills-room.jpg" loading="lazy" alt="Guachinarte, Hollywood Hills, 240 by 120 centimetres, hanging in a room" />
+            </a>
+          </figure>
+          <div class="room-spread__meta reveal">
+            <p class="meta__artist">Guachinarte</p>
+            <h3 class="d3 room__title">Hollywood Hills</h3>
+            <p class="meta__size">240 &times; 120 <span class="unit">cm</span></p>
+            <p class="meta__note"><span class="en">Two metres forty across, on the one uninterrupted surface the room has. The wall was always the largest thing here. Now it is the reason the chairs face this way.</span><span class="de">Zwei Meter vierzig breit, an der einzigen ununterbrochenen Fläche, die der Raum hat. Die Wand war hier immer das Größte. Jetzt ist sie der Grund, warum die Sessel in diese Richtung stehen.</span></p>
+            <p class="meta__sub"><span class="en">A room of concrete and glass</span><span class="de">Ein Raum aus Beton und Glas</span> &middot; <span class="en">Edition of 100</span><span class="de">Edition von 100</span></p>
+            <p class="line">
+              <span class="meta__price"><span class="en">$2,960</span><span class="de">2.160 &euro;</span></span>
+              <a class="ghost" href="https://www.lumas.com/pictures/guachinarte/hollywood_hills/" data-pdp="https://www.lumas.de/pictures/guachinarte/hollywood_hills/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+            </p>
+          </div>
         </div>
-      </a>
-    </li>
+      </article>
+  </section>
 
-    <li class="entry reveal">
-      <a href="our-story.html" data-goal="cta_primary">
-        <figure class="fig scene"><img src="assets/people/consultants-hanging.jpg" alt="Two LUMAS Art Consultants hanging a work" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">05</span></p>
-          <h2 class="d2">Why these editions exist</h2>
-          <p>Three chapters that each close on evidence rather than assertion: the idea, the making, and a work that ends up on a wall in Kyoto.</p>
-          <span class="ghost">Open the page</span>
+  <section class="section scale" id="scale">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow head__label"><span class="en">To scale</span><span class="de">Im Ma&szlig;stab</span></p>
+        <div class="head__body">
+          <h2 class="d2"><span class="en">Your wall, to scale.</span><span class="de">Deine Wand, im Ma&szlig;stab.</span></h2>
+          <p class="body head__dek"><span class="en">Choose your wall width. The work stays the same size. The room changes around it.</span><span class="de">W&auml;hle deine Wandbreite. Das Werk bleibt gleich gro&szlig;. Der Raum ver&auml;ndert sich darum herum.</span></p>
+          <div class="chips" role="group">
+          <button type="button" class="chip" data-wall="250" aria-pressed="false"><span class="en">2.5&nbsp;m</span><span class="de">2,5&nbsp;m</span></button>
+          <button type="button" class="chip" data-wall="350" aria-pressed="true"><span class="en">3.5&nbsp;m</span><span class="de">3,5&nbsp;m</span></button>
+          <button type="button" class="chip" data-wall="500" aria-pressed="false"><span class="en">5&nbsp;m</span><span class="de">5&nbsp;m</span></button>
         </div>
-      </a>
-    </li>
-    <li class="entry reveal">
-      <a href="scale.html" data-goal="cta_primary">
-        <figure class="fig room"><img src="assets/interiors/capetown-seesaw.jpg" alt="Wolfgang Uhlig, Seesaw Seascape XV, 180 by 90 centimetres, in a house in Cape Town" loading="lazy" /></figure>
-        <div>
-          <p class="entry__label"><span class="entry__n">06</span></p>
-          <h2 class="d2">Your wall, to scale</h2>
-          <p>Rooms first, measurement second: real interiors with the size stated, then a wall comparator at 2.5, 3.5 and 5 metres, one work at four real sizes, and twenty editions you can filter by subject. English and German.</p>
-          <span class="ghost">Open the page</span>
         </div>
-      </a>
-    </li>
+      </div>
 
-  </ol>
+      <div class="scale__grid">
+        <figure class="scene scale__photo reveal">
+          <a href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click"
+             aria-label="Isabelle Menin, Only In Your Heart 03, 180 &times; 90 cm, above a kitchen counter">
+            <img src="assets/rooms-format/menin-only-in-your-heart-kitchen.jpg" loading="lazy" alt="Isabelle Menin, Only In Your Heart 03, 180 by 90 centimetres, above a kitchen counter" />
+          </a>
+          <figcaption class="scale__photocap">
+            <span class="body"><span class="en">180 &times; 90 cm above a kitchen counter. Not the wall you would plan a work for, which is exactly why it lands. The diagram beside it is the same work, on a wall you choose.</span><span class="de">180 &times; 90 cm &uuml;ber einer K&uuml;chenzeile. Nicht die Wand, f&uuml;r die du ein Werk planen w&uuml;rdest, und genau deshalb funktioniert es. Das Diagramm daneben zeigt dasselbe Werk an einer Wand deiner Wahl.</span></span>
+            <span class="caption dim"><span class="en">A collector's kitchen</span><span class="de">Die Küche eines Sammlers</span></span>
+          </figcaption>
+        </figure>
 
-  <p class="note">Works, prices and links come live from the lumas.com feed (USD). Interiors are real LUMAS room renders. The advantage prices on page 04 are demonstration values for the prototype window. Built from the &ldquo;Ad promise, page answer&rdquo; analysis and the briefs in landing-page-briefs/.</p>
+        <div class="scale__diagram reveal">
+          <div class="stage" style="--wall:350;--aw:180;--ah:90">
+            <div class="stage__wall"></div>
+            <div class="stage__floor"></div>
+            <a class="stage__art" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click"
+               aria-label="Isabelle Menin, Only In Your Heart 03, 180 &times; 90 cm">
+              <img src="https://img.lumas.com/showimg_ime97_desktop.webp" width="1800" height="900" alt="Isabelle Menin, Only In Your Heart 03" />
+            </a>
+            <div class="figure"><svg class="figure__svg" viewBox="0 0 50 175" aria-hidden="true" focusable="false"><circle cx="25" cy="11" r="9.5"/><path d="M25 22c-8 0-12.4 3.5-13 10L14 90h22l2-58c-.6-6.5-5-10-13-10Z"/><rect x="6.6" y="30" width="5" height="58" rx="2.5"/><rect x="38.4" y="30" width="5" height="58" rx="2.5"/><path d="M14.5 88h9.6l.8 87h-9.4Z"/><path d="M25.9 88h9.6l-1 87h-9.4Z"/></svg><span class="figure__cm caption">175&nbsp;cm</span></div>
+            <div class="stage__dim"><span class="stage__dimlabel caption"><span class="en">3.5&nbsp;m</span><span class="de">3,5&nbsp;m</span></span></div>
+          </div>
+          <p class="caption" id="scale-caption">
+            <span class="en">180 &times; 90 cm &middot; covers <b class="scale__pct">51%</b> of a <b class="scale__wall">3.5&nbsp;m</b> wall. Reference figure: 175&nbsp;cm.</span><span class="de">180 &times; 90 cm &middot; nimmt <b class="scale__pct">51&nbsp;%</b> einer <b class="scale__wall">3,5-m</b>-Wand ein. Referenzfigur: 175&nbsp;cm.</span>
+          </p>
+          <p class="line scale__credit">
+            <span class="meta__artist">Isabelle Menin</span>
+            <span class="meta__title">Only In Your Heart 03</span>
+            <span class="meta__sub"><span class="en">Edition of 150</span><span class="de">Edition von 150</span></span>
+            <span class="meta__price"><span class="en">$1,810</span><span class="de">1.460 &euro;</span></span>
+            <a class="ghost" href="https://www.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/only_in_your_heart_03/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ladder">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow head__label"><span class="en">The same work, four sizes</span><span class="de">Ein Werk, vier Formate</span></p>
+        <div class="head__body">
+          <h3 class="d3"><span class="en">Below 120 cm, a wide wall never quite settles.</span><span class="de">Unter 120 cm kommt eine breite Wand nie ganz zur Ruhe.</span></h3>
+          <p class="caption head__meta"><span class="en">Isabelle Menin &middot; The Tender Land 2 &middot; shown against a 4 m wall</span><span class="de">Isabelle Menin &middot; The Tender Land 2 &middot; gezeigt an einer 4-m-Wand</span></p>
+          
+        </div>
+      </div>
+      <ol class="steps">
+        <li class="step reveal" style="--aw:67;--ah:50">
+          <p class="meta__size">67 &times; 50 <span class="unit">cm</span></p>
+          <a class="step__stage" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click"
+             aria-label="Isabelle Menin, The Tender Land 2, 67 &times; 50 cm">
+            <span class="stage__wall"></span>
+            <span class="stage__floor"></span>
+            <span class="stage__art"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" width="670" height="500" loading="lazy" alt="Isabelle Menin, The Tender Land 2" /></span>
+            <span class="figure"><svg class="figure__svg" viewBox="0 0 50 175" aria-hidden="true" focusable="false"><circle cx="25" cy="11" r="9.5"/><path d="M25 22c-8 0-12.4 3.5-13 10L14 90h22l2-58c-.6-6.5-5-10-13-10Z"/><rect x="6.6" y="30" width="5" height="58" rx="2.5"/><rect x="38.4" y="30" width="5" height="58" rx="2.5"/><path d="M14.5 88h9.6l.8 87h-9.4Z"/><path d="M25.9 88h9.6l-1 87h-9.4Z"/></svg></span>
+          </a>
+          <p class="line">
+            <span class="meta__price"><span class="en">$620</span><span class="de">500 &euro;</span></span>
+            <span class="meta__sub"><span class="en">Edition of 150</span><span class="de">Edition von 150</span></span>
+          </p>
+        </li>
+        <li class="step reveal" style="--aw:94;--ah:70">
+          <p class="meta__size">94 &times; 70 <span class="unit">cm</span></p>
+          <a class="step__stage" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click"
+             aria-label="Isabelle Menin, The Tender Land 2, 94 &times; 70 cm">
+            <span class="stage__wall"></span>
+            <span class="stage__floor"></span>
+            <span class="stage__art"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" width="940" height="700" loading="lazy" alt="Isabelle Menin, The Tender Land 2" /></span>
+            <span class="figure"><svg class="figure__svg" viewBox="0 0 50 175" aria-hidden="true" focusable="false"><circle cx="25" cy="11" r="9.5"/><path d="M25 22c-8 0-12.4 3.5-13 10L14 90h22l2-58c-.6-6.5-5-10-13-10Z"/><rect x="6.6" y="30" width="5" height="58" rx="2.5"/><rect x="38.4" y="30" width="5" height="58" rx="2.5"/><path d="M14.5 88h9.6l.8 87h-9.4Z"/><path d="M25.9 88h9.6l-1 87h-9.4Z"/></svg></span>
+          </a>
+          <p class="line">
+            <span class="meta__price"><span class="en">$850</span><span class="de">680 &euro;</span></span>
+            <span class="meta__sub"><span class="en">Edition of 150</span><span class="de">Edition von 150</span></span>
+          </p>
+        </li>
+        <li class="step reveal" style="--aw:135;--ah:100">
+          <p class="meta__size">135 &times; 100 <span class="unit">cm</span></p>
+          <a class="step__stage" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click"
+             aria-label="Isabelle Menin, The Tender Land 2, 135 &times; 100 cm">
+            <span class="stage__wall"></span>
+            <span class="stage__floor"></span>
+            <span class="stage__art"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" width="1350" height="1000" loading="lazy" alt="Isabelle Menin, The Tender Land 2" /></span>
+            <span class="figure"><svg class="figure__svg" viewBox="0 0 50 175" aria-hidden="true" focusable="false"><circle cx="25" cy="11" r="9.5"/><path d="M25 22c-8 0-12.4 3.5-13 10L14 90h22l2-58c-.6-6.5-5-10-13-10Z"/><rect x="6.6" y="30" width="5" height="58" rx="2.5"/><rect x="38.4" y="30" width="5" height="58" rx="2.5"/><path d="M14.5 88h9.6l.8 87h-9.4Z"/><path d="M25.9 88h9.6l-1 87h-9.4Z"/></svg></span>
+          </a>
+          <p class="line">
+            <span class="meta__price"><span class="en">$1,510</span><span class="de">1.220 &euro;</span></span>
+            <span class="meta__sub"><span class="en">Edition of 150</span><span class="de">Edition von 150</span></span>
+          </p>
+        </li>
+        <li class="step reveal" style="--aw:243;--ah:180">
+          <p class="meta__size">243 &times; 180 <span class="unit">cm</span></p>
+          <a class="step__stage" href="https://www.lumas.com/pictures/isabelle_menin/the_tender_land_2/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_tender_land_2/" data-goal="pdp_click"
+             aria-label="Isabelle Menin, The Tender Land 2, 243 &times; 180 cm">
+            <span class="stage__wall"></span>
+            <span class="stage__floor"></span>
+            <span class="stage__art"><img src="https://img.lumas.com/showimg_ime75_desktop.webp" width="2430" height="1800" loading="lazy" alt="Isabelle Menin, The Tender Land 2" /></span>
+            <span class="figure"><svg class="figure__svg" viewBox="0 0 50 175" aria-hidden="true" focusable="false"><circle cx="25" cy="11" r="9.5"/><path d="M25 22c-8 0-12.4 3.5-13 10L14 90h22l2-58c-.6-6.5-5-10-13-10Z"/><rect x="6.6" y="30" width="5" height="58" rx="2.5"/><rect x="38.4" y="30" width="5" height="58" rx="2.5"/><path d="M14.5 88h9.6l.8 87h-9.4Z"/><path d="M25.9 88h9.6l-1 87h-9.4Z"/></svg></span>
+          </a>
+          <p class="line">
+            <span class="meta__price"><span class="en">$4,390</span><span class="de">3.200 &euro;</span></span>
+            <span class="meta__sub"><span class="en">Edition of 75</span><span class="de">Edition von 75</span></span>
+          </p>
+        </li>
+      </ol>
+      <p class="body ladder__note reveal"><span class="en">A work is judged against the wall it hangs on, not against other pictures. On four metres, 67 &times; 50 reads as a note someone left on the way out. The same image at 243 &times; 180 is the reason you came into the room.</span><span class="de">Ein Werk wird an der Wand gemessen, an der es h&auml;ngt, nicht an anderen Bildern. Auf vier Metern wirken 67 &times; 50 wie eine Notiz, die jemand im Hinausgehen hinterlassen hat. Dasselbe Bild mit 243 &times; 180 ist der Grund, warum du in den Raum gekommen bist.</span></p>
+    </div>
+  </section>
+
+  <section class="strip inverse">
+    <div class="strip__inner reveal">
+      <p class="eyebrow"><span class="en">On format</span><span class="de">Zum Format</span></p>
+      <p class="d2 strip__display"><span class="en">Format is a decision, not an upgrade.</span><span class="de">Das Format ist eine Entscheidung, kein Upgrade.</span></p>
+      <p class="lede strip__body"><span class="en">In museum format a photograph stops being an image on a wall and becomes part of the room you live in. It shifts with the daylight, and you are still finding things in it years later. That is why we produce these editions in small numbers, and why the size is chosen before the frame.</span><span class="de">Im Museumsformat h&ouml;rt eine Fotografie auf, ein Bild an der Wand zu sein, und wird Teil des Raums, in dem du lebst. Sie ver&auml;ndert sich mit dem Tageslicht, und du entdeckst noch nach Jahren Neues darin. Deshalb produzieren wir diese Editionen in kleiner Zahl. Und deshalb wird die Gr&ouml;&szlig;e vor dem Rahmen gew&auml;hlt.</span></p>
+      <a class="ghost" href="#craft"><span class="en">How we print at this scale</span><span class="de">Herstellung im Gro&szlig;format</span></a>
+    </div>
+  </section>
+
+  <figure class="bridge scene reveal">
+    <a href="https://www.lumas.com/pictures/guachinarte/palm_springs/" data-pdp="https://www.lumas.de/pictures/guachinarte/palm_springs/" data-goal="pdp_click"
+       aria-label="Guachinarte, Palm Springs, 252 &times; 160 cm, in a room">
+      <img src="assets/rooms-format/guachinarte-palm-springs-walnut.jpg" loading="lazy" alt="Guachinarte, Palm Springs, 252 by 160 centimetres, in a living room" />
+    </a>
+    <figcaption class="wrap bridge__cap">
+      <span class="meta__artist">Guachinarte</span>
+      <span class="meta__title">Palm Springs</span>
+      <span class="meta__size">252 &times; 160 <span class="unit">cm</span></span>
+      <span class="meta__sub"><span class="en">A living room in walnut</span><span class="de">Ein Wohnraum in Nussbaum</span> &middot; <span class="en">Edition of 150</span><span class="de">Edition von 150</span></span>
+      <span class="meta__price"><span class="en">$3,730</span><span class="de">3.000 &euro;</span></span>
+      <a class="ghost" href="https://www.lumas.com/pictures/guachinarte/palm_springs/" data-pdp="https://www.lumas.de/pictures/guachinarte/palm_springs/" data-goal="pdp_click"><span class="en">Secure your edition</span><span class="de">Edition sichern</span></a>
+    </figcaption>
+  </figure>
+
+  <section class="section editions" id="editions" data-filter="all">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow head__label"><span class="en">Available at scale</span><span class="de">Verf&uuml;gbar im Gro&szlig;format</span></p>
+        <div class="head__body">
+          <h2 class="d2"><span class="en">Twenty works at 120 cm and above.</span><span class="de">Zwanzig Werke ab 120 cm.</span></h2>
+          <p class="body head__dek"><span class="en">Each is a numbered edition. Dimensions are given for the printed sheet; framing adds <span class="slot">[4 cm]</span> on each side.</span><span class="de">Jedes Werk ist eine nummerierte Edition. Die Ma&szlig;e beziehen sich auf das Blatt; die Rahmung erg&auml;nzt <span class="slot">[4 cm]</span> pro Seite.</span></p>
+          
+        </div>
+      </div>
+
+      <div class="filter">
+        <div class="chips" role="group" aria-label="Filter by subject">
+          <button type="button" class="chip" data-theme-filter="all" aria-pressed="true"><span class="en">All</span><span class="de">Alle</span></button>
+          <button type="button" class="chip" data-theme-filter="nature" aria-pressed="false"><span class="en">Nature</span><span class="de">Natur</span></button>
+          <button type="button" class="chip" data-theme-filter="cities" aria-pressed="false"><span class="en">Cities</span><span class="de">Metropolen</span></button>
+          <button type="button" class="chip" data-theme-filter="form" aria-pressed="false"><span class="en">Colour and form</span><span class="de">Farbe und Form</span></button>
+          <button type="button" class="chip" data-theme-filter="ideas" aria-pressed="false"><span class="en">Ideas</span><span class="de">Große Ideen</span></button>
+        </div>
+        <p class="caption dim filter__count"><span class="en"><b id="grid-count">20</b> works</span><span class="de"><b id="grid-count-de">20</b> Werke</span></p>
+      </div>
+      <div class="filter__deks">
+        <p class="dek dek--all"><span class="en">Every work here has a side of 120 cm or more.</span><span class="de">Jedes Werk hier hat eine Kantenlänge von 120 cm oder mehr.</span></p>
+        <p class="dek dek--nature"><span class="en">Landscape and flora at a size that lets you stand close and keep finding things.</span><span class="de">Landschaft und Flora, groß genug, um nah heranzugehen und immer wieder Neues zu finden.</span></p>
+        <p class="dek dek--cities"><span class="en">Cities, and the buildings people travel to photograph.</span><span class="de">Städte, und die Bauten, für die Menschen reisen, um sie zu fotografieren.</span></p>
+        <p class="dek dek--form"><span class="en">Colour and form, where the subject is what the surface does to the light.</span><span class="de">Farbe und Form, wo das Motiv ist, was die Fläche mit dem Licht macht.</span></p>
+        <p class="dek dek--ideas"><span class="en">Works that were an idea before they were a picture.</span><span class="de">Werke, die eine Idee waren, bevor sie ein Bild wurden.</span></p>
+      </div>
+
+      <ol class="grid">
+        <li class="tile reveal" data-theme="nature" style="--aw:238">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/isabelle_menin/the_beautiful_morning/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_beautiful_morning/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_ime142_desktop.webp" width="2380" height="1800" alt="Isabelle Menin, The Beautiful Morning" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">238 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Isabelle Menin</p>
+          <p class="meta__title">The Beautiful Morning</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$4,940</span><span class="de">3.980 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/isabelle_menin/the_beautiful_morning/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/the_beautiful_morning/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="cities" style="--aw:260">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/rafael_neff/la_scala_milan_italy/" data-pdp="https://www.lumas.de/pictures/rafael_neff/la_scala_milan_italy/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_rne131_desktop.webp" width="2600" height="1800" alt="Rafael Neff, La Scala, Milan, Italy" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">260 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Rafael Neff</p>
+          <p class="meta__title">La Scala, Milan, Italy</p>
+          <p class="meta__sub"><span class="en">Edition of 50 &middot; Lambda colour photograph</span><span class="de">Edition von 50 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$4,070</span><span class="de">2.970 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/rafael_neff/la_scala_milan_italy/" data-pdp="https://www.lumas.de/pictures/rafael_neff/la_scala_milan_italy/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="form" style="--aw:224">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/niki_hare/its_not_one_thing/" data-pdp="https://www.lumas.de/pictures/niki_hare/its_not_one_thing/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_nha21_desktop.webp" width="2240" height="1200" alt="Niki Hare, It's Not One Thing" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">224 &times; 120 <span class="unit">cm</span></p>
+          <p class="meta__artist">Niki Hare</p>
+          <p class="meta__title">It's Not One Thing</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,500</span><span class="de">2.010 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/niki_hare/its_not_one_thing/" data-pdp="https://www.lumas.de/pictures/niki_hare/its_not_one_thing/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="ideas" style="--aw:250">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/wolfgang_uhlig/mar_tirreno-1/" data-pdp="https://www.lumas.de/pictures/wolfgang_uhlig/mar_tirreno-1/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_wuh52_desktop.webp" width="2500" height="1500" alt="Wolfgang Uhlig, Mar Tirreno" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">250 &times; 150 <span class="unit">cm</span></p>
+          <p class="meta__artist">Wolfgang Uhlig</p>
+          <p class="meta__title">Mar Tirreno</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$5,590</span><span class="de">4.080 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/wolfgang_uhlig/mar_tirreno-1/" data-pdp="https://www.lumas.de/pictures/wolfgang_uhlig/mar_tirreno-1/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="nature" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/wolfgang_uhlig/amoreira/" data-pdp="https://www.lumas.de/pictures/wolfgang_uhlig/amoreira/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_wuh116_desktop.webp" width="2400" height="1800" alt="Wolfgang Uhlig, Amoreira" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Wolfgang Uhlig</p>
+          <p class="meta__title">Amoreira</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Fine-art pigment print</span><span class="de">Edition von 150 &middot; Fine-Art-Pigmentdruck</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$4,450</span><span class="de">3.250 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/wolfgang_uhlig/amoreira/" data-pdp="https://www.lumas.de/pictures/wolfgang_uhlig/amoreira/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="cities" style="--aw:222">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/christopher_woodcock/nomad_new_york/" data-pdp="https://www.lumas.de/pictures/christopher_woodcock/nomad_new_york/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_cwd13_desktop.webp" width="2220" height="1600" alt="Christopher Woodcock, NoMad, New York" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">222 &times; 160 <span class="unit">cm</span></p>
+          <p class="meta__artist">Christopher Woodcock</p>
+          <p class="meta__title">NoMad, New York</p>
+          <p class="meta__sub"><span class="en">Edition of 100 &middot; Lambda colour photograph</span><span class="de">Edition von 100 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,640</span><span class="de">1.930 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/christopher_woodcock/nomad_new_york/" data-pdp="https://www.lumas.de/pictures/christopher_woodcock/nomad_new_york/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="form" style="--aw:134">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/andre_monet/kate-2/" data-pdp="https://www.lumas.de/pictures/andre_monet/kate-2/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_amn25_desktop.webp" width="1340" height="1800" alt="André Monet, Kate" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">134 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">André Monet</p>
+          <p class="meta__title">Kate</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,660</span><span class="de">1.940 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/andre_monet/kate-2/" data-pdp="https://www.lumas.de/pictures/andre_monet/kate-2/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="ideas" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/jirko_bannas/astronaut/" data-pdp="https://www.lumas.de/pictures/jirko_bannas/astronaut/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_jir01_desktop.webp" width="2400" height="1800" alt="Jirko Bannas, Astronaut" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Jirko Bannas</p>
+          <p class="meta__title">Astronaut</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$3,540</span><span class="de">2.580 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/jirko_bannas/astronaut/" data-pdp="https://www.lumas.de/pictures/jirko_bannas/astronaut/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="nature" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/erik_chmil/52_or_53/" data-pdp="https://www.lumas.de/pictures/erik_chmil/52_or_53/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_ech49_desktop.webp" width="2400" height="1600" alt="Erik Chmil, 52 or 53" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 160 <span class="unit">cm</span></p>
+          <p class="meta__artist">Erik Chmil</p>
+          <p class="meta__title">52 or 53</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$3,690</span><span class="de">2.690 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/erik_chmil/52_or_53/" data-pdp="https://www.lumas.de/pictures/erik_chmil/52_or_53/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="cities" style="--aw:120">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/guachinarte/desert_fallingwater/" data-pdp="https://www.lumas.de/pictures/guachinarte/desert_fallingwater/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_gua50_desktop.webp" width="1200" height="1840" alt="Guachinarte, Desert Fallingwater" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">120 &times; 184 <span class="unit">cm</span></p>
+          <p class="meta__artist">Guachinarte</p>
+          <p class="meta__title">Desert Fallingwater</p>
+          <p class="meta__sub"><span class="en">Edition of 100 &middot; Lambda colour photograph</span><span class="de">Edition von 100 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,270</span><span class="de">1.660 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/guachinarte/desert_fallingwater/" data-pdp="https://www.lumas.de/pictures/guachinarte/desert_fallingwater/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="form" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/beatrice_hug/purple_heart/" data-pdp="https://www.lumas.de/pictures/beatrice_hug/purple_heart/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_bhu27_desktop.webp" width="2400" height="800" alt="Beatrice Hug, Purple Heart" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 80 <span class="unit">cm</span></p>
+          <p class="meta__artist">Beatrice Hug</p>
+          <p class="meta__title">Purple Heart</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,030</span><span class="de">1.480 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/beatrice_hug/purple_heart/" data-pdp="https://www.lumas.de/pictures/beatrice_hug/purple_heart/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="ideas" style="--aw:180">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/heiko_hellwig/butterfly_iii-1/" data-pdp="https://www.lumas.de/pictures/heiko_hellwig/butterfly_iii-1/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_hhl17_desktop.webp" width="1800" height="1800" alt="Heiko Hellwig, Butterfly III" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">180 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Heiko Hellwig</p>
+          <p class="meta__title">Butterfly III</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$3,130</span><span class="de">2.280 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/heiko_hellwig/butterfly_iii-1/" data-pdp="https://www.lumas.de/pictures/heiko_hellwig/butterfly_iii-1/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile tile--wide reveal" data-theme="ideas" style="--aw:550">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/horst_daniel_zielske/the_variety_of_life-1/" data-pdp="https://www.lumas.de/pictures/horst_daniel_zielske/the_variety_of_life-1/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_hdz184_desktop.webp" width="5500" height="1800" alt="Horst &amp; Daniel Zielske, The variety of life" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">550 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Horst &amp; Daniel Zielske</p>
+          <p class="meta__title">The variety of life</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$8,040</span><span class="de">5.870 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/horst_daniel_zielske/the_variety_of_life-1/" data-pdp="https://www.lumas.de/pictures/horst_daniel_zielske/the_variety_of_life-1/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="nature" style="--aw:260">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/juan_fortes/florescence_vii/" data-pdp="https://www.lumas.de/pictures/juan_fortes/florescence_vii/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_jfo16_desktop.webp" width="2600" height="1480" alt="Juan Fortes, Florescence VII" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">260 &times; 148 <span class="unit">cm</span></p>
+          <p class="meta__artist">Juan Fortes</p>
+          <p class="meta__title">Florescence VII</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$3,380</span><span class="de">2.470 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/juan_fortes/florescence_vii/" data-pdp="https://www.lumas.de/pictures/juan_fortes/florescence_vii/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="cities" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/jens_hausmann/case_study_house/" data-pdp="https://www.lumas.de/pictures/jens_hausmann/case_study_house/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_jha23_desktop.webp" width="2400" height="1200" alt="Jens Hausmann, Case study house" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 120 <span class="unit">cm</span></p>
+          <p class="meta__artist">Jens Hausmann</p>
+          <p class="meta__title">Case study house</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,770</span><span class="de">2.020 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/jens_hausmann/case_study_house/" data-pdp="https://www.lumas.de/pictures/jens_hausmann/case_study_house/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="form" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/andrew_soria/forgotten_vegas/" data-pdp="https://www.lumas.de/pictures/andrew_soria/forgotten_vegas/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_asi07_desktop.webp" width="2400" height="1200" alt="Andrew Soria, Forgotten Vegas" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 120 <span class="unit">cm</span></p>
+          <p class="meta__artist">Andrew Soria</p>
+          <p class="meta__title">Forgotten Vegas</p>
+          <p class="meta__sub"><span class="en">Edition of 75 &middot; Lambda colour photograph</span><span class="de">Edition von 75 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,960</span><span class="de">2.160 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/andrew_soria/forgotten_vegas/" data-pdp="https://www.lumas.de/pictures/andrew_soria/forgotten_vegas/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="ideas" style="--aw:240">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/peter_funch/panorama01/" data-pdp="https://www.lumas.de/pictures/peter_funch/panorama01/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_pfu56_desktop.webp" width="2400" height="820" alt="Peter Funch, Panorama 01" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">240 &times; 82 <span class="unit">cm</span></p>
+          <p class="meta__artist">Peter Funch</p>
+          <p class="meta__title">Panorama 01</p>
+          <p class="meta__sub"><span class="en">Edition of 250 &middot; Lambda colour photograph</span><span class="de">Edition von 250 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,220</span><span class="de">1.790 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/peter_funch/panorama01/" data-pdp="https://www.lumas.de/pictures/peter_funch/panorama01/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="nature" style="--aw:180">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/alex_strohl/norway_i/" data-pdp="https://www.lumas.de/pictures/alex_strohl/norway_i/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_aso01_desktop.webp" width="1800" height="1200" alt="Alex Strohl, Norway I" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">180 &times; 120 <span class="unit">cm</span></p>
+          <p class="meta__artist">Alex Strohl</p>
+          <p class="meta__title">Norway I</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$1,570</span><span class="de">1.260 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/alex_strohl/norway_i/" data-pdp="https://www.lumas.de/pictures/alex_strohl/norway_i/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="cities" style="--aw:230">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/gabriele_croppi/manhattan_bridge/" data-pdp="https://www.lumas.de/pictures/gabriele_croppi/manhattan_bridge/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_gcr01_desktop.webp" width="2300" height="900" alt="Gabriele Croppi, Manhattan Bridge" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">230 &times; 90 <span class="unit">cm</span></p>
+          <p class="meta__artist">Gabriele Croppi</p>
+          <p class="meta__title">Manhattan Bridge</p>
+          <p class="meta__sub"><span class="en">Edition of 100 &middot; Black-and-white photographic print</span><span class="de">Edition von 100 &middot; Fotografischer S/W-Abzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$2,500</span><span class="de">1.830 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/gabriele_croppi/manhattan_bridge/" data-pdp="https://www.lumas.de/pictures/gabriele_croppi/manhattan_bridge/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+        <li class="tile reveal" data-theme="form" style="--aw:243">
+          <a class="tile__hit" href="https://www.lumas.com/pictures/isabelle_menin/les_fonds_angliques/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/les_fonds_angliques/" data-goal="pdp_click">
+            <span class="tile__figbox"><img src="https://img.lumas.com/showimg_ime133_desktop.webp" width="2430" height="1800" alt="Isabelle Menin, Les fonds angéliques" loading="lazy" /></span>
+          </a>
+          <p class="meta__size">243 &times; 180 <span class="unit">cm</span></p>
+          <p class="meta__artist">Isabelle Menin</p>
+          <p class="meta__title">Les fonds angéliques</p>
+          <p class="meta__sub"><span class="en">Edition of 150 &middot; Lambda colour photograph</span><span class="de">Edition von 150 &middot; Lambda Farb-Fotoabzug</span></p>
+          <p class="line">
+            <span class="meta__price"><span class="en">$5,450</span><span class="de">3.980 &euro;</span></span>
+            <a class="ghost tile__cta" href="https://www.lumas.com/pictures/isabelle_menin/les_fonds_angliques/" data-pdp="https://www.lumas.de/pictures/isabelle_menin/les_fonds_angliques/" data-goal="pdp_click">
+              <span class="cta-v1"><span class="en">View work</span><span class="de">Werk ansehen</span></span><span class="cta-v2"><span class="en">Add to cart</span><span class="de">In den Warenkorb</span></span>
+            </a>
+          </p>
+        </li>
+      </ol>
+      <div class="empty" hidden>
+        <p class="body"><span class="en">Nothing at this scale is currently available. Register to hear about the next release.</span><span class="de">Derzeit ist kein Werk in diesem Format verf&uuml;gbar. Lass dich &uuml;ber die n&auml;chste Edition informieren.</span></p>
+        <a class="btn" href="https://www.lumas.com/newsletter/" data-goal="cta_primary"><span class="en">Notify me</span><span class="de">Benachrichtigen</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="craft">
+    <div class="wrap band__inner">
+      <div class="craft reveal">
+        <div class="col">
+          <h3 class="ui-label"><span class="en">Edition</span><span class="de">Edition</span></h3>
+          <p class="body"><span class="en">Editions of 75 to 150 numbered prints, set per work and stated on every one. Signed by the artist. No reprints, at any size.</span><span class="de">Editionen von 75 bis 150 nummerierten Exemplaren, pro Werk festgelegt und an jedem Werk ausgewiesen. Vom K&uuml;nstler signiert. Keine Neuauflage, in keinem Format.</span></p>
+        </div>
+        <div class="col">
+          <h3 class="ui-label"><span class="en">Print &amp; mount</span><span class="de">Druck &amp; Kaschierung</span></h3>
+          <p class="body"><span class="en">Each work is printed in the process its artist chose: Lambda colour photograph, fine-art pigment print, or black-and-white photographic print. Mounted on <span class="slot">[ ]</span> to stop the long edge waving, the failure large prints are prone to.</span><span class="de">Jedes Werk wird in dem Verfahren gedruckt, das der K&uuml;nstler gew&auml;hlt hat: Lambda Farb-Fotoabzug, Fine-Art-Pigmentdruck oder fotografischer S/W-Abzug. Kaschiert auf <span class="slot">[ ]</span>, damit die lange Kante nicht wellt: der typische Fehler gro&szlig;er Drucke.</span></p>
+        </div>
+        <div class="col">
+          <h3 class="ui-label"><span class="en">Frame</span><span class="de">Rahmen</span></h3>
+          <p class="body"><span class="en"><span class="slot">[ ]</span> cm profile depth, chosen for the weight the format carries. Museum glass optional.</span><span class="de"><span class="slot">[ ]</span> cm Profiltiefe, abgestimmt auf das Gewicht des Formats. Museumsglas optional.</span></p>
+        </div>
+      </div>
+
+      <hr class="rule band__rule" />
+
+      <div class="logistics reveal">
+        <h3 class="d3 logistics__head"><span class="en">Getting it there, and getting it up.</span><span class="de">Ankommen. Und an die Wand kommen.</span></h3>
+        <div class="logistics__cols">
+          <div class="col">
+            <h4 class="ui-label"><span class="en">What arrives</span><span class="de">Was ankommt</span></h4>
+            <ul class="ticks">
+              <li><span class="en">Crated, two-person delivery to the room you choose.</span><span class="de">Verkistet, Lieferung durch zwei Personen in den Raum deiner Wahl.</span></li>
+              <li><span class="en">Delivery window confirmed by phone before dispatch.</span><span class="de">Der Liefertermin wird vor dem Versand telefonisch best&auml;tigt.</span></li>
+              <li><span class="en">Or collect from any of our 19 galleries.</span><span class="de">Oder Abholung in einer unserer 19 Galerien.</span></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h4 class="ui-label"><span class="en">How it hangs</span><span class="de">Wie es h&auml;ngt</span></h4>
+            <ul class="ticks">
+              <li><span class="en">Ships with the hanging hardware the weight requires.</span><span class="de">Wird mit der f&uuml;r das Gewicht passenden Aufh&auml;ngung geliefert.</span></li>
+              <li><span class="en">Hanging instructions for solid and plasterboard walls.</span><span class="de">Anleitung f&uuml;r Massiv- und Trockenbauw&auml;nde.</span></li>
+              <li><span class="en">Installation service available in <span class="slot">[ ]</span> cities.</span><span class="de">Montageservice in <span class="slot">[ ]</span> St&auml;dten verf&uuml;gbar.</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="caption band__slotnote"><span class="en">[[TXT-01]] &middot; Weights, mounting and the large-format delivery process are awaiting verification. Bracketed figures are unbound.</span><span class="de">[[TXT-01]] &middot; Gewichte, Montage und der Ablauf der Gro&szlig;formatlieferung sind noch zu verifizieren. Werte in Klammern sind ungebunden.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section close">
+    <div class="wrap close__inner">
+      <figure class="scene close__fig reveal">
+        <a href="https://www.lumas.com/pictures/marta_contreras_simo/alikasiara/" data-pdp="https://www.lumas.de/pictures/marta_contreras_simo/alikasiara/" data-goal="pdp_click"
+           aria-label="Marta Contreras Simó, Alika&amp;Siara, 120 &times; 120 cm, in a salon">
+          <img src="assets/rooms-format/contreras-simo-alika-siara-milan.jpg" loading="lazy" alt="Marta Contreras Simó, Alika&amp;Siara, 120 by 120 centimetres, in a vaulted salon" />
+        </a>
+        <figcaption class="close__cap">
+          <span class="meta__artist">Marta Contreras Simó</span>
+          <span class="meta__title">Alika&amp;Siara</span>
+          <span class="meta__sub">120 &times; 120 cm &middot; <span class="en">A vaulted salon in Milan</span><span class="de">Ein Gewölbesalon in Mailand</span></span>
+        </figcaption>
+      </figure>
+      <div class="close__side">
+        <p class="eyebrow reveal"><span class="en">Before you decide</span><span class="de">Vor der Entscheidung</span></p>
+        <h2 class="d2 reveal"><span class="en">Stand in front of one.</span><span class="de">Stell dich davor.</span></h2>
+        <p class="body reveal"><span class="en">Scale is easier to trust in person than on a screen. Several of these works hang at full size in our galleries, and you are welcome to stand in front of one for as long as you like.</span><span class="de">Ma&szlig;stab &uuml;berzeugt im Raum schneller als auf dem Bildschirm. Mehrere dieser Werke h&auml;ngen in unseren Galerien im Originalformat, und du darfst so lange davorstehen, wie du m&ouml;chtest.</span></p>
+        <a class="btn reveal" href="https://www.lumas.com/galleries/" data-gallery-de="https://www.lumas.de/galerien/" data-goal="cta_primary"><span class="en">Find a gallery</span><span class="de">Galerie finden</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot wrap">
+    <p><span class="en">LUMAS &middot; Prototype &middot; Museum format, to scale &middot; Works and prices live from lumas.com &middot; August 2026</span><span class="de">LUMAS &middot; Prototyp &middot; Museumsformat, im Ma&szlig;stab &middot; Werke und Preise live von lumas.de &middot; August 2026</span></p>
+    <nav>
+      <a href="index.html"><span class="en">All pages</span><span class="de">Alle Seiten</span></a>
+      <a href="art-in-the-room.html"><span class="en">Art in the room</span><span class="de">Kunst im Raum</span></a>
+      <a href="museum-format.html"><span class="en">Museum format</span><span class="de">Museumsformat</span></a>
+      <a href="gallery.html"><span class="en">The gallery, always open</span><span class="de">Die Galerie, immer offen</span></a>
+      <a href="collector-advantage.html"><span class="en">The collector advantage</span><span class="de">Der Sammlervorteil</span></a>
+      <a href="our-story.html"><span class="en">Why these editions exist</span><span class="de">Warum es diese Editionen gibt</span></a>
+    </nav>
+  </footer>
 
 </main>
 
+  <aside class="proto" aria-label="Prototype controls">
+    <p class="proto__title ui-label">Prototype</p>
+    <div class="proto__row">
+      <span class="proto__key ui-label">Lang</span>
+      <button type="button" class="proto__btn" data-set="lang" data-val="en" aria-pressed="true">EN</button>
+      <button type="button" class="proto__btn" data-set="lang" data-val="de" aria-pressed="false">DE</button>
+    </div>
+    <div class="proto__row">
+      <span class="proto__key ui-label">H1</span>
+      <button type="button" class="proto__btn" data-set="h1" data-val="a" aria-pressed="true">A</button>
+      <button type="button" class="proto__btn" data-set="h1" data-val="b" aria-pressed="false">B</button>
+    </div>
+    <div class="proto__row">
+      <span class="proto__key ui-label">Tile CTA</span>
+      <button type="button" class="proto__btn" data-set="cta" data-val="v1" aria-pressed="true">V1</button>
+      <button type="button" class="proto__btn" data-set="cta" data-val="v2" aria-pressed="false">V2</button>
+    </div>
+  </aside>
+
 <script>
 (function(){
+  /* reveals enhance, never gate: no-IO and reduced-motion fall straight through */
   var els = document.querySelectorAll('.reveal');
+  function showAll(){ els.forEach(function(e){ e.classList.add('in'); }); }
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches){
-    els.forEach(function(e){ e.classList.add('in'); }); return;
+    showAll();
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e, i){
+        if (!e.isIntersecting) return;
+        setTimeout(function(){ e.target.classList.add('in'); }, Math.min(i,4) * 60);
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -6% 0px' });
+    els.forEach(function(e){ io.observe(e); });
+    addEventListener('load', function(){ setTimeout(showAll, 2500); });
+    document.addEventListener('visibilitychange', function(){ if (document.hidden) showAll(); });
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e,i){
-      if (!e.isIntersecting) return;
-      setTimeout(function(){ e.target.classList.add('in'); }, Math.min(i,4)*60);
-      io.unobserve(e.target);
+
+  /* wall comparator */
+  var stage = document.querySelector('.stage');
+  /* scope to the wall chips: the catalogue filter reuses the same .chip component */
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.scale .chip[data-wall]'));
+  var LABEL = { 250:['2.5\u00a0m','2,5\u00a0m'], 350:['3.5\u00a0m','3,5\u00a0m'], 500:['5\u00a0m','5\u00a0m'] };
+  /* German compounds the measure into the noun: "einer 3,5-m-Wand" */
+  var CAPLABEL = { 250:['2.5\u00a0m','2,5-m'], 350:['3.5\u00a0m','3,5-m'], 500:['5\u00a0m','5-m'] };
+  function setWall(cm){
+    var aw = parseFloat(getComputedStyle(stage).getPropertyValue('--aw')) || 180;
+    stage.style.setProperty('--wall', cm);
+    var pct = Math.round(aw / cm * 100);
+    document.querySelectorAll('#scale-caption .scale__pct').forEach(function(el, i){
+      el.innerHTML = i === 0 ? pct + '%' : pct + '\u00a0%';
     });
-  }, { rootMargin:'0px 0px -6% 0px' });
-  els.forEach(function(e){ io.observe(e); });
-  addEventListener('load', function(){ setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 2500); });
-  document.addEventListener('visibilitychange', function(){ if (document.hidden) els.forEach(function(e){ e.classList.add('in'); }); });
+    document.querySelectorAll('#scale-caption .scale__wall').forEach(function(el, i){ el.innerHTML = CAPLABEL[cm][i]; });
+    document.querySelectorAll('.stage__dimlabel .en').forEach(function(el){ el.innerHTML = LABEL[cm][0]; });
+    document.querySelectorAll('.stage__dimlabel .de').forEach(function(el){ el.innerHTML = LABEL[cm][1]; });
+    chips.forEach(function(c){ c.setAttribute('aria-pressed', String(+c.dataset.wall === cm)); });
+  }
+  chips.forEach(function(c){ c.addEventListener('click', function(){ setWall(+c.dataset.wall); }); });
+
+  /* subject filter: LUMAS's own rails, applied by attribute so nothing is rebuilt */
+  var editions = document.querySelector('.editions');
+  var themeChips = Array.prototype.slice.call(document.querySelectorAll('[data-theme-filter]'));
+  function setFilter(key){
+    editions.setAttribute('data-filter', key);
+    themeChips.forEach(function(c){ c.setAttribute('aria-pressed', String(c.dataset.themeFilter === key)); });
+    var n = key === 'all'
+      ? editions.querySelectorAll('.tile').length
+      : editions.querySelectorAll('.tile[data-theme="' + key + '"]').length;
+    ['grid-count','grid-count-de'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.textContent = n;
+    });
+  }
+  themeChips.forEach(function(c){ c.addEventListener('click', function(){ setFilter(c.dataset.themeFilter); }); });
+
+  /* prototype switches: language, H1 variant, tile CTA variant */
+  var root = document.documentElement;
+  function applyLang(v){
+    root.setAttribute('data-lang', v);
+    root.setAttribute('lang', v === 'de' ? 'de' : 'en');
+    document.querySelectorAll('[data-pdp]').forEach(function(a){
+      if (!a.dataset.pdpEn) a.dataset.pdpEn = a.getAttribute('href');
+      a.setAttribute('href', v === 'de' ? a.dataset.pdp : a.dataset.pdpEn);
+    });
+    document.querySelectorAll('[data-gallery-de]').forEach(function(a){
+      if (!a.dataset.galleryEn) a.dataset.galleryEn = a.getAttribute('href');
+      a.setAttribute('href', v === 'de' ? a.dataset.galleryDe : a.dataset.galleryEn);
+    });
+  }
+  var SET = { lang: applyLang,
+              h1: function(v){ root.setAttribute('data-h1', v); },
+              cta: function(v){ root.setAttribute('data-cta', v); } };
+  document.querySelectorAll('.proto__btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      SET[b.dataset.set](b.dataset.val);
+      document.querySelectorAll('.proto__btn[data-set="' + b.dataset.set + '"]').forEach(function(o){
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+    });
+  });
 })();
 document.addEventListener('click', function(e){
   var g = e.target.closest('[data-goal]');

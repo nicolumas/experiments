@@ -1,7 +1,12 @@
 /* ─────────────────────────────────────────────────────────────
    LUMAS · shared foundation for the meta-lp set
-   Tokens from the live brand showcase (de.prelive.kunsteditionen.com/brandshowcase).
-   Root font-size 10px → 1rem = 10px, per project convention.
+
+   ALIGNED to the live brand showcase, de.prelive.kunsteditionen.com/brandshowcase/
+   (read 25 Aug 2026). Token names, values, component specs and font families below
+   are the shop's own; where this file used to differ it has been corrected, not
+   re-derived. The nav kit (nav-core.css) declares the same --color-*/--shadow-*/
+   --radius-*/--motion-* set from the same primitives, so either source resolves to
+   the same value and the page still works with the kit absent.
 
    TWO LOAD-BEARING RULES, enforced structurally so they cannot be
    violated by a component author:
@@ -11,53 +16,100 @@
      2. Content is visible by default. Reveals only enhance.
    ───────────────────────────────────────────────────────────── */
 
+/* Fallback faces for standalone use. The nav kit ships the shop's own
+   archivo / archivo-bold / utile-display; these only fill gaps. */
 @font-face{font-family:'Utile Display';src:url('fonts/utile-display-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
 @font-face{font-family:'Utile Display';src:url('fonts/utile-display-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 
 :root{
-  /* surfaces — page is WHITE. ivory tiers are raised/sunken accents only. */
-  --surface-page:#FFFFFF;
-  --surface-card:#FFFFFF;
-  --surface-raised:#F7F1E9;
-  --surface-sunken:#F4EDE2;
-  --surface-muted:#F0EBE3;
-  --surface-inverse:#1C1A18;
+  /* ── primitives (brandshowcase) ───────────────────────────── */
+  --primitive-charcoal-900:#1c1a18; --primitive-charcoal-800:#3a3835;
+  --primitive-charcoal-700:#5a5752; --primitive-charcoal-500:#908c87;
+  --primitive-charcoal-300:#c7c3be; --primitive-charcoal-100:#e3e0db;
+  --primitive-ivory-100:#f4ede2; --primitive-ivory-200:#f7f1e9; --primitive-ivory-300:#faf6f1;
+  --primitive-bone-100:#e2d8cc; --primitive-bone-200:#eae2d8; --primitive-bone-300:#f0ebe3;
 
-  --text-primary:#1C1A18;
-  --text-secondary:#5A5752;
-  --text-tertiary:#908C87;   /* decorative only — never small body copy (3.3:1) */
-  --text-inverse:#F4EDE2;
+  /* ── semantic colour (brandshowcase names and values) ─────── */
+  --color-surface-page:#fff;
+  --color-surface-card:#fff;
+  --color-surface-raised:var(--primitive-ivory-200);
+  --color-surface-sunken:var(--primitive-ivory-100);
+  --color-surface-muted:var(--primitive-bone-300);
+  --color-surface-subtle:var(--primitive-bone-200);
+  --color-surface-inverse:var(--primitive-charcoal-900);
 
-  --border-default:#E2D8CC;
-  --border-subtle:#EAE2D8;
-  --border-strong:#C7C3BE;
-  --border-focus:#1C1A18;
+  --color-text-primary:var(--primitive-charcoal-900);
+  --color-text-secondary:var(--primitive-charcoal-700);
+  --color-text-tertiary:var(--primitive-charcoal-500);   /* decorative labels only (3.3:1) */
+  --color-text-disabled:var(--primitive-charcoal-300);
+  --color-text-inverse:var(--primitive-ivory-100);
+  --color-text-link:var(--primitive-charcoal-900);
 
-  /* base-4 ladder */
+  --color-border-default:var(--primitive-bone-100);
+  --color-border-subtle:var(--primitive-bone-200);
+  --color-border-strong:var(--primitive-charcoal-300);
+  --color-border-focus:var(--primitive-charcoal-900);
+  --color-border-inverse:var(--primitive-ivory-100);
+
+  /* ── type (brandshowcase families) ────────────────────────── */
+  --font-display:utile-display,UtileDisplay,'Utile Display',utile-display-fallback,Georgia,serif;
+  --font-body:archivo,Archivo,medium-fallback,arial,sans-serif;
+  --font-body-light:archivo-light,Archivo,medium-fallback,arial,sans-serif;
+  --font-body-bold:archivo-bold,Archivo,semibold-fallback,arial,sans-serif;
+
+  /* ── shadows, radii, motion (brandshowcase) ───────────────── */
+  --shadow-sm:0 0.1rem 0.2rem 0 rgb(28 26 24/4%);
+  --shadow-md:0 0.2rem 0.8rem 0 rgb(28 26 24/6%);
+  --shadow-lg:0 0.8rem 3.2rem 0 rgb(28 26 24/8%);
+  --shadow-frame:0 1.8rem 6rem -1.6rem rgba(28,26,24,.22);
+  --shadow-popup:0 2.4rem 7rem -2rem rgba(28,26,24,.35);
+
+  --radius-none:0; --radius-xs:0.2rem; --radius-sm:0.4rem; --radius-md:0.6rem;
+
+  --motion-fast:220ms; --motion-default:320ms; --motion-slow:520ms;
+  --motion-easing:cubic-bezier(0.2,0.8,0.2,1);
+
+  /* ── base-4 ladder (brandshowcase) ────────────────────────── */
   --sp-1:.4rem; --sp-2:.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem;
   --sp-6:2.4rem; --sp-8:3.2rem; --sp-10:4rem; --sp-12:4.8rem; --sp-16:6.4rem;
   --sp-20:8rem; --sp-24:9.6rem;
 
+  /* ── prototype-local layout, not part of the shop system ──── */
   --measure:66ch;
   --gutter:clamp(2rem,5vw,7.2rem);
   --maxw:150rem;
 
-  /* motion — brand curve for reveals, Emil's curve for UI feedback */
-  --ease-brand:cubic-bezier(.2,.8,.2,1);
-  --ease-out:cubic-bezier(.23,1,.32,1);
-  --dur-ui:180ms;      /* UI feedback stays under 300ms */
-  --dur-hover:220ms;
-  --dur-reveal:520ms;  /* not UI feedback; a reveal may breathe */
+  /* ── short aliases used across these pages ────────────────── */
+  --surface-page:var(--color-surface-page);
+  --surface-card:var(--color-surface-card);
+  --surface-raised:var(--color-surface-raised);
+  --surface-sunken:var(--color-surface-sunken);
+  --surface-muted:var(--color-surface-muted);
+  --surface-inverse:var(--color-surface-inverse);
+  --text-primary:var(--color-text-primary);
+  --text-secondary:var(--color-text-secondary);
+  --text-tertiary:var(--color-text-tertiary);
+  --text-inverse:var(--color-text-inverse);
+  --border-default:var(--color-border-default);
+  --border-subtle:var(--color-border-subtle);
+  --border-strong:var(--color-border-strong);
+  --border-focus:var(--color-border-focus);
+  --border-inverse:var(--color-border-inverse);
+  --ease-brand:var(--motion-easing);
+  --ease-out:var(--motion-easing);
+  --dur-ui:var(--motion-fast);
+  --dur-hover:var(--motion-fast);
+  --dur-reveal:var(--motion-slow);
 }
 
 *,*::before,*::after{box-sizing:border-box}
 html{font-size:62.5%}                 /* 1rem = 10px */
 body{
   margin:0;
-  background:var(--surface-page);
-  color:var(--text-primary);
-  font-family:'Archivo',system-ui,-apple-system,sans-serif;
-  font-size:1.6rem; line-height:1.5;
+  background:var(--color-surface-page);
+  color:var(--color-text-primary);
+  font-family:var(--font-body);
+  font-size:1.5rem; line-height:1.5;   /* shop body size */
   -webkit-font-smoothing:antialiased;
   padding-top:7.2rem;                  /* fixed site nav */
 }
@@ -66,29 +118,32 @@ body{
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 img{max-width:100%}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--border-focus);outline-offset:3px}
+:focus-visible{outline:.2rem solid var(--color-border-focus);outline-offset:.2rem}
 
-/* ── type ──────────────────────────────────────────────────── */
-.d1,.d2,.d3,.d4{font-family:'Utile Display',Georgia,serif;font-weight:400;letter-spacing:0;text-wrap:balance}
+/* ── type ──────────────────────────────────────────────────────
+   Sizes, line-heights and tracking are the shop's h1–h4. The shop steps
+   between two sizes at a breakpoint; these clamp between the same two,
+   so both ends land on the same value. */
+.d1,.d2,.d3,.d4{font-family:var(--font-display);font-weight:400;letter-spacing:0;text-wrap:balance}
 .d1{font-size:clamp(4.2rem,5.4vw,6.2rem);line-height:1.04}
 .d2{font-size:clamp(3.4rem,4vw,4.6rem);line-height:1.12}
 .d3{font-size:clamp(2.6rem,3vw,3.4rem);line-height:1.12}
 .d4{font-size:clamp(2.2rem,2.4vw,2.6rem);line-height:1.25}
 .d1-light{font-weight:300}
 
-.lede{font-weight:300;font-size:2rem;line-height:1.6;color:var(--text-secondary);max-width:52ch;text-wrap:pretty}
-.body{font-size:1.6rem;line-height:1.5;max-width:var(--measure);text-wrap:pretty}
-.small{font-size:1.3rem;line-height:1.65;color:var(--text-secondary)}
-.caption{font-size:1.1rem;line-height:1.5;letter-spacing:.03em;color:var(--text-secondary)}
-.eyebrow{font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--text-secondary)}
-.num{font-family:'Utile Display',Georgia,serif;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:0}
+.lede{font-family:var(--font-body-light);font-weight:300;font-size:1.8rem;line-height:1.6;color:var(--color-text-secondary);max-width:52ch;text-wrap:pretty}
+.body{font-size:1.5rem;line-height:1.5;max-width:var(--measure);text-wrap:pretty}
+.small{font-size:1.3rem;line-height:1.65;color:var(--color-text-secondary)}
+.caption{font-size:1.1rem;line-height:1.5;letter-spacing:.03em;color:var(--color-text-secondary)}
+.eyebrow{font-family:var(--font-body-bold);font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.num{font-family:var(--font-display);font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:0}
 
 /* ── layout ────────────────────────────────────────────────── */
 .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
 .stack>*+*{margin-top:var(--sp-6)}
 .section{padding-block:clamp(6.4rem,9vw,12rem)}
 .section--tight{padding-block:clamp(4.8rem,6vw,8rem)}
-.rule{border:0;border-top:1px solid var(--border-subtle)}
+.rule{border:0;border-top:.1rem solid var(--color-border-subtle)}
 
 /* ── THE IMAGE RULE ────────────────────────────────────────────
    One class for every artwork and every room render.
@@ -110,53 +165,67 @@ a{color:inherit}
 .room img,.scene img{display:block;width:auto;height:auto;max-width:100%;max-height:var(--fig-max,78vh);object-fit:contain;margin-inline:auto}
 
 /* ── caption block ─────────────────────────────────────────── */
+/* ── caption blocks: five treatments, page-wide ────────────────
+   label 1.1rem caps  ·  sub 1.3rem  ·  body 1.5rem  ·  display d4 2.6rem  ·  display d3 3.4rem
+   Emphasis inside a block comes from colour and weight, never from a new size. */
 .meta{display:flex;flex-direction:column;gap:var(--sp-2)}
-.meta__artist{font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--text-secondary)}
-.meta__title{font-family:'Utile Display',Georgia,serif;font-weight:400;font-size:2.2rem;line-height:1.25}
-.meta__size{font-family:'Utile Display',Georgia,serif;font-weight:300;font-size:clamp(2.8rem,3.4vw,4rem);line-height:1;font-variant-numeric:tabular-nums}
-.meta__price{font-size:1.6rem;font-variant-numeric:tabular-nums}
-.meta__note{font-size:1.6rem;color:var(--text-secondary);max-width:44ch;text-wrap:pretty}
+.meta__artist{font-family:var(--font-body-bold);font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-primary)}
+.meta__title{font-family:var(--font-display);font-weight:400;font-size:clamp(2.2rem,2.4vw,2.6rem);line-height:1.25}
+.meta__size{font-family:var(--font-display);font-weight:300;font-size:clamp(2.2rem,2.4vw,2.6rem);line-height:1.2;font-variant-numeric:tabular-nums;color:var(--color-text-secondary)}
+.meta__price{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.meta__note{font-size:1.5rem;line-height:1.6;max-width:44ch;text-wrap:pretty}
+.meta__sub{font-size:1.3rem;line-height:1.6;color:var(--color-text-secondary)}
 
-/* ── links & buttons ───────────────────────────────────────── */
+/* ── links & buttons — the shop's .btn / .btn-ghost, verbatim ── */
 .ghost{
   display:inline-block;
-  font-size:1.3rem;line-height:1.5;letter-spacing:.13rem;text-transform:uppercase;
-  font-weight:400;text-decoration:none;
-  padding:.4rem 0 .6rem;
-  border-bottom:1px solid currentColor;
-  transition:opacity var(--dur-hover) var(--ease-out);
+  font-family:var(--font-body);
+  font-size:1.3rem;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:none;color:var(--color-text-primary);
+  padding:var(--sp-1) 0 .6rem;
+  border:0;border-bottom:.1rem solid var(--color-border-focus);
+  border-radius:var(--radius-none);
+  background:transparent;
+  transition:opacity var(--motion-fast) var(--motion-easing);
 }
 .btn{
   display:inline-block;
-  font-size:1.3rem;line-height:1.5;letter-spacing:.182rem;text-transform:uppercase;
-  font-weight:700;text-decoration:none;
-  padding:1.6rem 2.8rem;
-  border-radius:0;border:0;
-  background:var(--surface-inverse);color:var(--text-inverse);
-  transition:background var(--dur-hover) var(--ease-out),transform var(--dur-ui) var(--ease-out);
+  font-family:var(--font-body-bold);
+  font-size:1.2rem;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;
+  text-align:center;text-decoration:none;white-space:nowrap;
+  padding:var(--sp-4) 2.8rem;
+  border:0;border-radius:var(--radius-none);
+  background-color:var(--color-surface-inverse);color:var(--color-text-inverse);
+  cursor:pointer;
+  transition:background-color var(--motion-fast) var(--motion-easing);
 }
-.btn:active,.ghost:active{transform:scale(.97)}
+.btn:visited{color:var(--color-text-inverse);text-decoration:none}
+/* showcase variant: primary CTA sitting on a charcoal surface */
+.btn-primary-inverse{background-color:var(--color-text-inverse);color:var(--color-text-primary)}
+.btn-primary-inverse:visited{color:var(--color-text-primary)}
 @media (hover:hover) and (pointer:fine){
-  .ghost:hover{opacity:.6}
-  .btn:hover{background:#3A3835}
+  .ghost:hover{opacity:.7}
+  .btn:hover{background-color:color-mix(in srgb,var(--color-surface-inverse) 82%,transparent);color:var(--color-text-inverse)}
+  .btn-primary-inverse:hover{background-color:color-mix(in srgb,var(--color-text-inverse) 82%,transparent);color:var(--color-text-primary)}
 }
 
 /* ── inverse band ──────────────────────────────────────────── */
-.inverse{background:var(--surface-inverse);color:var(--text-inverse)}
+.inverse{background:var(--color-surface-inverse);color:var(--color-text-inverse)}
 .inverse .eyebrow{color:rgba(244,237,226,.55)}
 .inverse .body,.inverse .lede,.inverse .meta__note{color:rgba(244,237,226,.75)}
+.inverse .ghost{color:var(--color-text-inverse);border-bottom-color:var(--color-border-inverse)}
 
 /* ── reveal: enhancement only, never a visibility gate ─────── */
 @media (prefers-reduced-motion:no-preference){
   .js .reveal{opacity:.001;transform:translateY(1.2rem)}
   .js .reveal.in{opacity:1;transform:none;
-    transition:opacity var(--dur-reveal) var(--ease-brand),transform var(--dur-reveal) var(--ease-brand)}
+    transition:opacity var(--motion-slow) var(--motion-easing),transform var(--motion-slow) var(--motion-easing)}
 }
 /* if JS never runs, or motion is reduced, content is simply visible */
 
 /* ── footer ────────────────────────────────────────────────── */
-.foot{border-top:1px solid var(--border-subtle);padding-block:var(--sp-10) var(--sp-16);font-size:1.3rem;color:var(--text-secondary)}
+.foot{border-top:.1rem solid var(--color-border-subtle);padding-block:var(--sp-10) var(--sp-16);font-size:1.3rem;color:var(--color-text-secondary)}
 .foot a{color:inherit}
 .foot nav{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-6);margin-top:var(--sp-4)}
-.foot nav a{padding:.6rem 0;text-decoration:none;border-bottom:1px solid transparent;transition:border-color var(--dur-hover) var(--ease-out)}
+.foot nav a{padding:.6rem 0;text-decoration:none;border-bottom:.1rem solid transparent;transition:border-color var(--motion-fast) var(--motion-easing)}
 @media (hover:hover){.foot nav a:hover{border-color:currentColor}}
