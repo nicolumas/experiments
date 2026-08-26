@@ -1,0 +1,701 @@
+/**
+ * LUMAS homepage - new sections.
+ *
+ * Everything here is built on the shop's own V2 tokens (--color-*, --sp-*, --motion-*,
+ * --font-*) and its existing grid/utility classes. No new colour, type or breakpoint
+ * conventions are introduced. All selectors are namespaced `lx-` so they cannot collide
+ * with the shop's stylesheets.
+ *
+ * Breakpoints reuse the ones already in main.css: 550 (image sources), 760, 992 (content
+ * layout switch), 1200.
+ */
+
+/* ------------------------------------------------------------------ shared primitives */
+
+.lx-section {
+  /* sections breathe; the page's own rhythm is 1rem = 10px */
+  margin-bottom: var(--sp-16);
+}
+
+.lx-eyebrow {
+  color: var(--color-text-secondary);
+  font-family: var(--font-body-bold);
+  font-size: 1.1rem;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  margin: 0 0 var(--sp-3);
+  text-transform: uppercase;
+}
+
+.lx-intro,
+.lx-body {
+  color: var(--color-text-secondary);
+  font-size: 1.6rem;
+  line-height: 1.65;
+  margin: 0 0 var(--sp-5);
+  max-width: 62ch;
+}
+
+.lx-intro {
+  margin-inline: auto;
+}
+
+/* One shared CTA row so buttons and text links align on every section */
+.lx-cta-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin: var(--sp-6) 0 0;
+}
+
+.lx-secondary-link {
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+}
+
+.lx-secondary-link:hover { color: var(--color-text-primary); }
+
+/* Touch targets: every interactive element clears 44px even when the label is small */
+.lx-secondary-link,
+.lx-trust-link,
+.lx-room-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 4.4rem;
+}
+
+.lx-stars { display: inline-flex; gap: 0.3rem; }
+
+.lx-star {
+  display: block;
+  height: 1.6rem;
+  width: 1.6rem;
+}
+
+/* Charcoal stars rather than Trustpilot green: the brand runs on three colours and the
+   attribution is carried by the wordmark and the link instead. */
+.lx-star svg { fill: var(--color-text-primary); display: block; }
+
+/* --------------------------------------------------------------------- 1. trust band */
+
+.lx-trust {
+  background-color: var(--color-surface-sunken);
+  padding: var(--sp-12) 0;
+}
+
+.lx-trust-inner {
+  display: grid;
+  gap: var(--sp-10);
+  grid-template-columns: 1fr;
+}
+
+.lx-trust-score { text-align: center; }
+
+.lx-trust-verdict {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  margin: 0 0 var(--sp-3);
+}
+
+.lx-trust-figure {
+  font-size: 1.6rem;
+  margin: var(--sp-3) 0 0;
+}
+
+.lx-trust-figure strong { font-family: var(--font-body-bold); }
+
+.lx-trust-count {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  margin: var(--sp-1) 0 0;
+}
+
+.lx-trust-link { font-size: 1.4rem; }
+
+/* Review rail: swipeable on small screens, a quiet three-up on desktop.
+   Hairline separators instead of cards keeps it from reading as a widget. */
+.lx-review-rail {
+  display: grid;
+  gap: var(--sp-6);
+  grid-auto-columns: 78vw;
+  grid-auto-flow: column;
+  list-style: none;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0 var(--sp-4) var(--sp-4);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lx-review-rail::-webkit-scrollbar { display: none; }
+
+.lx-review {
+  border-top: 0.1rem solid var(--color-border-default);
+  padding-top: var(--sp-4);
+  scroll-snap-align: start;
+}
+
+.lx-review-quote {
+  border: 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.45;
+  margin: var(--sp-3) 0 var(--sp-4);
+  padding: 0;
+  quotes: none;
+  white-space: normal;
+}
+
+.lx-review-author {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.lx-review-context::before { content: '\00b7'; margin: 0 0.5rem; }
+
+@media (min-width: 760px) {
+  .lx-trust-inner {
+    align-items: start;
+    grid-template-columns: minmax(20rem, 24rem) 1fr;
+  }
+  .lx-trust-score { text-align: left; }
+  .lx-review-rail {
+    grid-auto-columns: unset;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+    padding: 0;
+  }
+  /* a fourth review is extra content the CMS may add; it wraps rather than breaking */
+  .lx-review:nth-child(n + 4) { display: none; }
+}
+
+@media (min-width: 1200px) {
+  .lx-review:nth-child(n + 4) { display: block; }
+  .lx-review-rail { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------------------------------------------------------------- 2. artworks just sold */
+
+/* Reuses .product-carousel-container so it inherits the shop's arrows, scroll-snap and
+   disabled-state logic. Only the card meta is restyled, a little taller and calmer. */
+.lx-sold-rail { --item-height: 32rem; }
+
+@media (min-width: 992px) {
+  .lx-sold-rail { --item-height: 36rem; }
+}
+
+.lx-sold-item .artwork-container { padding-top: var(--sp-3); }
+
+.lx-sold-item .artwork {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  white-space: normal;
+}
+
+.lx-sold-item .artist {
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Deliberately understated: no red, no countdown, no "hurry". A record, not a pressure cue.
+   text-transform is reset because the shop lowercases meta text in this container, which
+   would otherwise silently override whatever label the CMS supplies. */
+.lx-sold-meta {
+  align-items: center;
+  color: var(--color-text-secondary);
+  display: flex;
+  font-size: 1.2rem;
+  gap: 0.6rem;
+  margin: var(--sp-2) 0 0;
+  text-transform: none;
+}
+
+.lx-sold-dot {
+  background: var(--color-status-success);
+  border-radius: 50%;
+  flex: none;
+  height: 0.6rem;
+  width: 0.6rem;
+}
+
+.lx-sold-time { white-space: nowrap; }
+
+.lx-sold-price {
+  color: var(--color-text-primary);
+  font-size: 1.3rem;
+  margin: var(--sp-1) 0 0;
+}
+
+/* ---------------------------------------------------------------- 3. digital tools */
+
+/* On phones the three tools swipe rather than stack. Stacking them costs roughly 1,100px
+   of scroll and buries the third tool; a rail keeps each visual large and all three
+   discoverable, and matches the swipe pattern already used elsewhere on the page. */
+.lx-tool-grid {
+  display: grid;
+  gap: var(--sp-6);
+  grid-auto-columns: 78vw;
+  grid-auto-flow: column;
+  list-style: none;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0 var(--sp-4) var(--sp-4) 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lx-tool-grid::-webkit-scrollbar { display: none; }
+
+.lx-tool { scroll-snap-align: start; }
+
+@media (min-width: 760px) {
+  .lx-tool-grid {
+    gap: var(--sp-12) var(--sp-8);
+    grid-auto-columns: unset;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+    padding: 0;
+  }
+}
+
+.lx-tool-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+/* The visual is the differentiator, so it gets a generous fixed frame and the copy
+   sits quietly beneath it. No borders, no icon chips, no card. */
+.lx-visual {
+  aspect-ratio: 4 / 3;
+  background: var(--color-surface-sunken);
+  margin-bottom: var(--sp-5);
+  overflow: hidden;
+  position: relative;
+}
+
+.lx-tool-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0 0 var(--sp-3);
+}
+
+.lx-tool-copy {
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-4);
+}
+
+.lx-tool-cta {
+  align-items: center;
+  display: inline-flex;
+  font-family: var(--font-body-bold);
+  font-size: 1.4rem;
+  gap: 0.8rem;
+  min-height: 4.4rem;
+}
+
+.lx-arrow {
+  border-bottom: 0.1rem solid currentColor;
+  border-right: 0.1rem solid currentColor;
+  display: inline-block;
+  height: 0.7rem;
+  transform: rotate(-45deg);
+  transition: transform var(--motion-fast) var(--motion-easing);
+  width: 0.7rem;
+}
+
+.lx-tool-link:hover .lx-arrow { transform: rotate(-45deg) translate(0.25rem, 0.25rem); }
+
+/* -- Art Finder: a mood moving across real editions ------------------------------- */
+
+.lx-visual-mood { display: grid; place-items: center; }
+
+.lx-mood-stack {
+  height: 62%;
+  position: relative;
+  width: 62%;
+}
+
+/* Default state shows the first edition, so the frame is never empty before the script
+   runs. Once home-sections.js has booted (html.lx-ready) it owns which one is visible. */
+.lx-mood-art {
+  height: 100%;
+  inset: 0;
+  object-fit: contain;
+  opacity: 0;
+  position: absolute;
+  transition: opacity var(--motion-slow) var(--motion-easing);
+  width: 100%;
+}
+
+.lx-mood-art:first-child { opacity: 1; }
+.lx-ready .lx-mood-art:first-child { opacity: 0; }
+.lx-ready .lx-mood-art.is-active { opacity: 1; }
+
+.lx-mood-track {
+  background: var(--color-border-default);
+  bottom: 4.6rem;
+  height: 0.1rem;
+  left: 12%;
+  position: absolute;
+  width: 76%;
+}
+
+.lx-mood-thumb {
+  background: var(--color-text-primary);
+  border-radius: 50%;
+  height: 0.9rem;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left var(--motion-slow) var(--motion-easing);
+  width: 0.9rem;
+}
+
+.lx-mood-chips {
+  bottom: 1.6rem;
+  display: flex;
+  gap: var(--sp-4);
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.lx-mood-chip {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  opacity: 0.45;
+  text-transform: uppercase;
+  transition: opacity var(--motion-default) var(--motion-easing);
+}
+
+.lx-mood-chip.is-active { color: var(--color-text-primary); opacity: 1; }
+
+/* -- Art Cloud: editions drifting on a canvas --------------------------------------- */
+
+.lx-visual-cloud { background: var(--color-surface-raised); }
+
+.lx-cloud-art {
+  box-shadow: 0 0.6rem 2rem rgba(28, 26, 24, 0.12);
+  object-fit: cover;
+  position: absolute;
+  transition: transform var(--motion-slow) var(--motion-easing);
+  will-change: transform;
+}
+
+/* Positions are deliberate rather than random so the cluster always reads as a cloud */
+.lx-cloud-art[data-i="0"] { height: 30%; left: 8%;  top: 16%; width: 22%; }
+.lx-cloud-art[data-i="1"] { height: 26%; left: 36%; top: 6%;  width: 18%; }
+.lx-cloud-art[data-i="2"] { height: 34%; left: 62%; top: 14%; width: 24%; }
+.lx-cloud-art[data-i="3"] { height: 28%; left: 18%; top: 54%; width: 20%; }
+.lx-cloud-art[data-i="4"] { height: 32%; left: 45%; top: 46%; width: 26%; }
+.lx-cloud-art[data-i="5"] { height: 24%; left: 74%; top: 58%; width: 17%; }
+.lx-cloud-art[data-i="6"] { height: 22%; left: 2%;  top: 40%; width: 15%; }
+/* anything beyond the seven placed slots is surplus CMS content and stays hidden */
+.lx-cloud-art:nth-child(n + 8) { display: none; }
+
+.lx-visual-cloud.is-live .lx-cloud-art { animation: lx-drift 9s ease-in-out infinite alternate; }
+.lx-cloud-art[data-i="1"] { animation-delay: -1.4s; }
+.lx-cloud-art[data-i="2"] { animation-delay: -2.8s; }
+.lx-cloud-art[data-i="3"] { animation-delay: -4.2s; }
+.lx-cloud-art[data-i="4"] { animation-delay: -0.7s; }
+.lx-cloud-art[data-i="5"] { animation-delay: -3.5s; }
+.lx-cloud-art[data-i="6"] { animation-delay: -2.1s; }
+
+@keyframes lx-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0.8rem, -1.1rem, 0); }
+}
+
+/* -- Upload Your Room: the wall, then the work ------------------------------------- */
+
+.lx-visual-room { background: var(--color-surface-muted); }
+
+.lx-room-photo {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+}
+
+/* a single sweep that reads as "we are reading your wall" */
+.lx-room-scan {
+  background: linear-gradient(180deg, transparent, rgba(244, 237, 226, 0.55), transparent);
+  height: 30%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: -30%;
+}
+
+.lx-visual-room.is-live .lx-room-scan { animation: lx-scan 2.6s var(--motion-easing) 0.2s; }
+
+@keyframes lx-scan {
+  0%   { opacity: 0; top: -30%; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; top: 100%; }
+}
+
+/* Visible by default so the demo still reads with no JS; the script hides it only to
+   play the reveal once the visual is actually on screen. */
+.lx-room-art {
+  background: #fff;
+  box-shadow: 0 1.2rem 3rem rgba(28, 26, 24, 0.28);
+  left: 50%;
+  max-height: 42%;
+  max-width: 34%;
+  padding: 0.6rem;
+  position: absolute;
+  top: 38%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity var(--motion-slow) var(--motion-easing),
+              transform var(--motion-slow) var(--motion-easing);
+}
+
+.lx-ready .lx-visual-room:not(.is-live) .lx-room-art {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+.lx-visual-room.is-live .lx-room-art { transition-delay: 1.6s; }
+
+/* ------------------------------------------------------------------ 4. art by room */
+
+.lx-room-grid {
+  display: grid;
+  gap: var(--sp-10) var(--sp-6);
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 760px) {
+  /* two-up keeps the photography large; four-across would shrink it to a nav thumbnail */
+  .lx-room-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.lx-room-tile a { color: inherit; display: block; text-decoration: none; }
+
+.lx-room-frame {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+.lx-room-frame img {
+  aspect-ratio: 1220 / 686;
+  display: block;
+  height: auto;
+  object-fit: cover;
+  transition: transform var(--motion-slow) var(--motion-easing);
+  width: 100%;
+}
+
+/* 1.02 lift inside a fixed frame, per the V2 motion rules */
+.lx-room-tile a:hover .lx-room-frame img { transform: scale(1.02); }
+
+.lx-room-copy { padding-top: var(--sp-4); }
+
+.lx-room-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--sp-2);
+}
+
+.lx-room-body {
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-2);
+  max-width: 44ch;
+}
+
+.lx-room-link { font-size: 1.4rem; }
+
+/* --------------------------------------------------------------- 5. galleries & people */
+
+.lx-galleries { padding-top: var(--sp-4); }
+
+.lx-gal-inner {
+  display: grid;
+  gap: var(--sp-8);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  /* asymmetric editorial split rather than a centred column */
+  .lx-gal-inner {
+    align-items: center;
+    gap: var(--sp-16);
+    grid-template-columns: 1.05fr 1fr;
+  }
+}
+
+.lx-gal-media {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 550px) {
+  .lx-gal-media { grid-template-columns: 1.35fr 1fr; align-items: end; }
+}
+
+.lx-gal-primary,
+.lx-gal-square,
+.lx-gal-wide {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.lx-gal-primary { aspect-ratio: 820 / 1081; object-fit: cover; }
+.lx-gal-square { aspect-ratio: 1 / 1; object-fit: cover; }
+
+.lx-gal-wide {
+  aspect-ratio: 1220 / 450;
+  margin-top: var(--sp-10);
+  object-fit: cover;
+}
+
+/* .like-h3 is centred by the shop's stylesheet because it is used on full-width section
+   headers. In these two asymmetric layouts the heading sits in a text column, so it is
+   reset to align with the copy beneath it. */
+.lx-gal-copy .like-h3,
+.lx-consult-copy .like-h3 {
+  margin: 0 0 var(--sp-4);
+  text-align: left;
+}
+
+.lx-figures {
+  border-top: 0.1rem solid var(--color-border-default);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  list-style: none;
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-5) 0 0;
+}
+
+.lx-figure { display: flex; flex-direction: column; }
+
+.lx-figure-value {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
+
+.lx-figure-label {
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------- 6. consultation */
+
+.lx-consult {
+  background-color: var(--color-surface-raised);
+  padding: var(--sp-12) 0;
+}
+
+.lx-consult-inner {
+  display: grid;
+  gap: var(--sp-8);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  .lx-consult-inner {
+    align-items: center;
+    gap: var(--sp-16);
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lx-consult-media { display: block; }
+
+.lx-consult-media img {
+  aspect-ratio: 500 / 390;
+  display: block;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+@media (min-width: 760px) {
+  .lx-consult-media img { aspect-ratio: 1220 / 450; }
+}
+
+@media (min-width: 992px) {
+  .lx-consult-media img { aspect-ratio: 4 / 3; }
+}
+
+/* An editorial list, not a feature grid with icons */
+.lx-topics {
+  list-style: none;
+  margin: 0 0 var(--sp-5);
+  padding: 0;
+}
+
+.lx-topics li {
+  border-bottom: 0.1rem solid var(--color-border-default);
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+  padding: var(--sp-3) 0;
+}
+
+.lx-topics li:first-child { border-top: 0.1rem solid var(--color-border-default); }
+
+.lx-reassurance {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  margin: var(--sp-4) 0 0;
+}
+
+/* ------------------------------------------------------------------- accessibility */
+
+/* Visible keyboard focus on every new interactive element */
+.lx-tool-link:focus-visible,
+.lx-room-tile a:focus-visible,
+.lx-sold-item a:focus-visible,
+.lx-trust-link:focus-visible,
+.lx-secondary-link:focus-visible {
+  outline: 0.2rem solid var(--color-border-focus);
+  outline-offset: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-visual-cloud.is-live .lx-cloud-art,
+  .lx-visual-room.is-live .lx-room-scan { animation: none; }
+  .lx-mood-art,
+  .lx-mood-thumb,
+  .lx-mood-chip,
+  .lx-room-art,
+  .lx-room-frame img,
+  .lx-arrow { transition: none; }
+  /* With reduced motion the script marks both visuals live immediately, so the artwork
+     and the room are simply present rather than revealed. */
+}

@@ -1,0 +1,20 @@
+/**
+ * LUMAS homepage clone - overrides.
+ *
+ * Deliberately tiny. The clone renders with the shop's own stylesheets; this file
+ * only restores things the stripped JS bundles used to do at runtime, so the page
+ * matches the live render instead of drifting.
+ */
+
+/* The hero stage is rebuilt by clone-behaviours.js; keep the track from flashing
+   its pre-script transform before the script positions it. */
+.block-tiles.stage .slick-track {
+  will-change: transform;
+}
+
+/* Components that gate themselves on their own async CSS load. The behaviour layer
+   sets data-css-ready, this is only a safety net for a JS-disabled render. */
+whats-app-contact[data-css-ready],
+edition-finder[data-css-ready] {
+  visibility: visible;
+}
