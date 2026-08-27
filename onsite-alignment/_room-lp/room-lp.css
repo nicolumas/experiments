@@ -1,9 +1,11 @@
 /* ============================================================================
    LUMAS "Art by room" landing pages — shared hero + page furniture
    ----------------------------------------------------------------------------
-   One hero, one breadcrumb, one eyebrow, one button pair, one credit line for
-   every room spoke off /art-by-room/. Section content stays page-specific; only
-   the things a visitor reads as "branding" are unified here.
+   One hero, one eyebrow, one button pair, one credit line for every room spoke
+   off /art-by-room/. Section content stays page-specific; only the things a
+   visitor reads as "branding" are unified here.
+
+   No breadcrumb: the hero meets the nav directly.
 
    Values are the LUMAS V2 (2026) system as recorded in
    prototype/lumas-art-by-room-spec.md and .claude/skills/v2-branding.
@@ -29,57 +31,47 @@
   --rlp-display: 'UtileDisplay', 'Utile Display', 'utile-display', Georgia, serif;
   --rlp-body: Archivo, archivo, 'Helvetica Neue', Arial, sans-serif;
 
-  --rlp-gutter: clamp(20px, 4vw, 64px);
   --rlp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* The one hero ratio. Every source render is 16:9, so 3:2 is a modest centre
      crop that keeps the mounted work in frame at every width. Per-page nudges
      go through --rlp-hero-focus, never through a different ratio. */
   --rlp-hero-ratio: 3 / 2;
-  --rlp-hero-media: 48%;
-}
 
-/* ── Breadcrumb ─────────────────────────────────────────────────────────── */
+  /* The text column, and the only thing that bounds the image. Everything left
+     over after the copy has what it needs goes to the artwork. */
+  --rlp-text-col: 39%;
+  --rlp-text-min: 340px;
+  --rlp-hero-gap: clamp(28px, 3vw, 56px);
+  --rlp-hero-pad: clamp(20px, 2.4vw, 40px);
 
-.rlp-crumb {
-  background: var(--rlp-page);
+  /* The hero's vertical rhythm, in one place, because between roughly 940 and
+     1340 the copy is what decides whether the image gets letterboxed. */
+  --rlp-text-pad-y: clamp(28px, 3.5vw, 56px);
+  --rlp-lede-gap: 20px;
+  --rlp-cta-gap: 32px;
+  --rlp-credit-gap: 24px;
 }
-.rlp-crumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 20px var(--rlp-gutter);
-  font-family: var(--rlp-body);
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 1.65;
-  color: var(--rlp-ink-2);
-}
-.rlp-crumb li { margin: 0; }
-.rlp-crumb a {
-  color: var(--rlp-ink-2);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color .22s var(--rlp-ease), border-color .22s var(--rlp-ease);
-}
-.rlp-crumb a:hover { color: var(--rlp-ink); border-bottom-color: var(--rlp-ink); }
-.rlp-crumb [aria-current="page"] { color: var(--rlp-ink); }
-.rlp-crumb [aria-hidden="true"] { color: var(--rlp-line); }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
 
+/* The image is sized by subtraction, not by a share of the page: the text
+   column takes a bounded, readable measure and the media column takes the
+   whole remainder. No page gutter on the image side — it bleeds to the edge —
+   and only enough on the right to keep the copy off the glass. */
 .rlp-hero {
   display: grid;
-  grid-template-columns: var(--rlp-hero-media) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(var(--rlp-text-min), var(--rlp-text-col));
   align-items: center;
-  column-gap: clamp(32px, 4vw, 72px);
+  column-gap: var(--rlp-hero-gap);
   background: var(--rlp-page);
   border-bottom: 1px solid var(--rlp-line);
 }
 
+/* Do NOT stretch the media instead of centring it. As a stretched grid item an
+   aspect-ratio box resolves its width from the row height and then inflates the
+   1fr track, which squeezes the text column past its own minimum. Keep the
+   ratio definite and make the copy fit it (see the mid-width rule below). */
 .rlp-hero__media {
   margin: 0;
   aspect-ratio: var(--rlp-hero-ratio);
@@ -95,8 +87,7 @@
 }
 
 .rlp-hero__text {
-  padding: clamp(32px, 4vw, 64px) var(--rlp-gutter) clamp(32px, 4vw, 64px) 0;
-  max-width: 660px;
+  padding: var(--rlp-text-pad-y) var(--rlp-hero-pad) var(--rlp-text-pad-y) 0;
 }
 
 .rlp-eyebrow,
@@ -128,15 +119,16 @@
   font-size: clamp(17px, 1.2vw, 20px);
   line-height: 1.6;
   color: var(--rlp-ink-2);
-  margin: 20px 0 0;
-  max-width: 46ch;
+  margin: var(--rlp-lede-gap) 0 0;
+  /* The column is already the measure — it lands around 55 characters at every
+     desktop width. A tighter cap here would only put the white space back. */
 }
 
 .rlp-hero__cta {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin: 32px 0 0;
+  margin: var(--rlp-cta-gap) 0 0;
 }
 
 .rlp-hero__credit {
@@ -146,7 +138,7 @@
   line-height: 1.5;
   letter-spacing: .03em;
   color: var(--rlp-ink-2);
-  margin: 24px 0 0;
+  margin: var(--rlp-credit-gap) 0 0;
 }
 .rlp-hero__credit a {
   color: var(--rlp-ink-2);
@@ -155,16 +147,52 @@
 }
 .rlp-hero__credit a:hover { color: var(--rlp-ink); }
 
-@media (max-width: 900px) {
+/* 1000-1340: the image is at its narrowest while still sharing the row, so its
+   3:2 height is at its shortest, while the H1 is wrapping to more lines than it
+   does at 1440. Without this the copy outgrows the frame and the image picks up
+   white bands above and below. Tighten the rhythm rather than shrink the type. */
+/* 1400 down: give the copy a little more column so a two-button CTA row does
+   not wrap on some pages and not others. */
+@media (max-width: 1400px) {
+  :root { --rlp-text-col: 41%; }
+}
+
+/* Below 1300 the longest CTA pair no longer fits the column while the shortest
+   still does, so the row would wrap on two pages and not the other three. Stack
+   them on all five instead: uniform beats marginally tighter. */
+@media (max-width: 1300px) {
+  .rlp-hero__cta > * { flex: 1 1 100%; }
+}
+
+@media (max-width: 1340px) {
+  :root {
+    /* 4:3, not 3:2. Same frame on all five pages at any given width, which is
+       the consistency that matters; a 3:2 box this narrow is simply shorter
+       than the copy beside it, and the difference comes back as white bands. */
+    --rlp-hero-ratio: 4 / 3;
+    --rlp-text-pad-y: 24px;
+    --rlp-lede-gap: 16px;
+    --rlp-cta-gap: 24px;
+    --rlp-credit-gap: 18px;
+  }
+}
+
+/* Below the split, the image goes full width and back to 3:2 (nothing is
+   competing for the row any more) with the copy
+   sits under it, edge to edge minus a hair of gutter. Stacking at 940 rather
+   than 940 keeps the split from ever squaring the image up. */
+@media (max-width: 1000px) {
   .rlp-hero {
     grid-template-columns: 1fr;
     column-gap: 0;
   }
   .rlp-hero__text {
-    padding: 28px var(--rlp-gutter) 36px;
-    max-width: none;
+    padding: 28px clamp(20px, 5vw, 32px) 36px;
   }
-  .rlp-hero__lede { max-width: none; }
+  :root {
+    --rlp-hero-ratio: 3 / 2;
+    --rlp-lede-gap: 20px; --rlp-cta-gap: 32px; --rlp-credit-gap: 24px;
+  }
   .rlp-hero__cta > * { flex: 1 1 100%; }
 }
 
@@ -199,7 +227,6 @@
 /* ── Focus ──────────────────────────────────────────────────────────────── */
 
 .rlp-hero a:focus-visible,
-.rlp-crumb a:focus-visible,
 .rlp-btn:focus-visible {
   outline: 2px solid var(--rlp-ink);
   outline-offset: 2px;

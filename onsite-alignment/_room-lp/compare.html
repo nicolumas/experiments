@@ -14,7 +14,7 @@
     --display:'UtileDisplay','Utile Display',Georgia,serif;
     --body:Archivo,archivo,'Helvetica Neue',Arial,sans-serif;
     --frame-w:1440px;   /* the width each page is rendered at */
-    --frame-h:640px;    /* how much of the top of each page to show */
+    --frame-h:660px;    /* how much of the top of each page to show */
     --scale:.5;
   }
   *,*::before,*::after{box-sizing:border-box}
@@ -39,7 +39,7 @@
   /* The alignment ruler: one line every page's hero must meet. */
   .ruler{position:relative}
   .ruler::after{
-    content:'';position:absolute;left:0;right:0;top:calc(134.4px * var(--scale));
+    content:'';position:absolute;left:0;right:0;top:calc(73px * var(--scale));
     border-top:1px dashed rgba(181,53,42,.55);pointer-events:none;
   }
   footer{padding:32px 40px 64px;color:var(--ink-2);font-size:13px;max-width:80ch}
@@ -51,10 +51,10 @@
 <header>
   <p class="eyebrow">Art by room &middot; alignment</p>
   <h1>One hero, five rooms</h1>
-  <p>Each page rendered at 1440px and scaled to half. The dashed line marks 134.4px, where
-  every hero now begins: nav 73, breadcrumb 61.4. The media column is 691.2 &times; 460.8 on
-  all five, a 3:2 frame bleeding to the left page edge, with the H1 at 46.08px Utile Display
-  Regular beside it.</p>
+  <p>Each page rendered at 1440px and scaled to half. The dashed line marks 73px, the nav
+  height: with no breadcrumb the hero meets the nav directly. The media column is 835
+  &times; 557 on all five, 58% of the page, bleeding to the left edge, with the H1 at
+  46.08px Utile Display Regular beside it and 34.5px of gutter to its right.</p>
 </header>
 
 <div class="row">
@@ -84,8 +84,11 @@
 
 <footer>
   Rendered live from the pages themselves, so this sheet cannot drift from what actually
-  ships. If a row stops meeting the dashed line, that page has picked up its own nav offset
-  or breadcrumb padding again. The shared layer is <code>_room-lp/room-lp.css</code>.
+  ships. If a row stops meeting the dashed line, that page has picked up a nav offset of its
+  own again. The image is sized by subtraction: the copy takes a bounded column, everything
+  left over goes to the artwork. 3:2 above 1340px, 4:3 down to 1000 where the frame is
+  narrowest, then full width and back to 3:2 with the copy stacked beneath.
+  The shared layer is <code>_room-lp/room-lp.css</code>.
 </footer>
 
 </body>

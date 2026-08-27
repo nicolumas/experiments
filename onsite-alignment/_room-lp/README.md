@@ -2,8 +2,8 @@
 
 The five room landing pages (kitchen, office & study, bedroom, living room, hallway) were
 built independently and each invented its own hero layout, class vocabulary and type scale.
-This kit is the shared layer that makes them read as one page type: one hero, one breadcrumb,
-one eyebrow, one button pair, one artwork credit.
+This kit is the shared layer that makes them read as one page type: one hero, one eyebrow,
+one button pair, one artwork credit.
 
 Section content stays page-specific. Only the things a visitor reads as branding are unified.
 
@@ -24,9 +24,10 @@ styles and wins at equal specificity. That is the whole mechanism. Do not move i
 
 | File | What it is |
 |---|---|
-| `room-lp.css` | The hero, the breadcrumb, the buttons, and the furniture aliases. |
+| `room-lp.css` | The hero, the buttons, and the furniture aliases. |
 | `room-lp.js` | Measures the fixed nav into `--nav-h`. Nothing else. |
 | `inline.py` | The only thing you run. |
+| `compare.html` | All five heroes rendered live in one sheet, with an alignment ruler. |
 
 ## What it does NOT ship
 
@@ -34,18 +35,12 @@ styles and wins at equal specificity. That is the whole mechanism. Do not move i
 so it lives in the page between `LUMAS-ROOM-LP:HERO` markers, hand-authored against the
 classes below. The kit styles it; it does not write it.
 
+There is no breadcrumb: the hero meets the nav directly. The `BreadcrumbList` JSON-LD is
+still in the pages' `<head>` and still drives the SERP trail — that is a separate decision
+from the on-page element.
+
 ```html
 <!-- LUMAS-ROOM-LP:HERO:BEGIN -->
-<nav class="rlp-crumb" aria-label="Breadcrumb">
-  <ol>
-    <li><a href="…">Home</a></li>
-    <li aria-hidden="true">/</li>
-    <li><a href="…/art-by-room/">Art by room</a></li>
-    <li aria-hidden="true">/</li>
-    <li aria-current="page">Kitchen</li>
-  </ol>
-</nav>
-
 <header class="rlp-hero" id="m1">
   <figure class="rlp-hero__media">
     <img src="assets/kitchen-wall-art-hero.jpg" alt="…" width="1920" height="1080" fetchpriority="high">
@@ -66,11 +61,21 @@ classes below. The kit styles it; it does not write it.
 
 ## The rules the hero encodes
 
-- **Image left, text right, on white.** The media column bleeds to the left page edge and is
-  48% of the viewport. Below 900px it stacks: image first, then text.
-- **One ratio: 3:2.** Every source render is 16:9, so this is a modest centre crop that keeps
-  the mounted work in frame. Nudge the crop per page with `--rlp-hero-focus` on the
-  `.rlp-hero` element. Never with a different ratio — the ratio is the thing being shared.
+- **Image left, text right, on white.** The image is sized by *subtraction*, not by a share
+  of the page: the copy takes a bounded, readable column (`--rlp-text-col`, 38% falling to
+  41% at mid widths, never under `--rlp-text-min`) and the media column takes the entire
+  remainder — about 59% of the viewport at 1440, bleeding to the left edge, with only
+  `--rlp-hero-pad` of gutter on the right. Below 1000px it stacks: image full width, then
+  text.
+- **One frame, identical on all five pages at any given width.** 3:2 above 1340px, 4:3 from
+  1340 down to 1000 where the frame is at its narrowest and a 3:2 box would be shorter than
+  the copy beside it, then 3:2 again once the image goes full width. Nudge the crop per page
+  with `--rlp-hero-focus` on the `.rlp-hero` element, never with a different ratio — what is
+  shared is that all five agree at every width.
+- **Keep the copy inside the frame.** `--rlp-text-pad-y`, `--rlp-lede-gap`, `--rlp-cta-gap`
+  and `--rlp-credit-gap` exist so the mid-width band can tighten the vertical rhythm. If a
+  hero starts showing white bands above and below its image, the copy has outgrown the frame:
+  tighten the rhythm or cut a line, do not shrink the type.
 - **Sentence-case H1**, Utile Display Regular, `clamp(34px, 3.2vw, 52px)`. Uppercase is for
   eyebrows, UI labels and button text only.
 - **Two CTAs**, primary solid + secondary outline, in that order. Keep each label to about
@@ -113,3 +118,7 @@ carry the right contrast.
 - Small copy is `#5A5752` (7.19:1). `#908C87` is 3.34:1 and fails AA at 11px, so it is not
   used anywhere in this kit.
 - The kit does not touch artwork cards, carousels, or module layout. Those are per-page.
+- Grid tracks written as two percentages summing to 100 (`grid-template-columns: 40% 60%`)
+  overflow their container by exactly the column-gap. Use `fr` — it divides what is left
+  after the gap. This shipped on two of the five pages and cost a horizontal scrollbar
+  between 1000 and 1300px.
