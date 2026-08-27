@@ -179,6 +179,41 @@
     start();
   }
 
+  /**
+   * Tile rows (the editorial tiles, the format tiles, the logo strips).
+   *
+   * These are slick sliders without arrows. Slick sizes them in JS, so the captured DOM
+   * carries the pixel widths from the viewport it was captured at: a 1440px track that
+   * never grows, leaving dead space on the right of any wider screen. Recompute the way
+   * slick would, from the row's own data-columns, and keep it in step on resize.
+   */
+  function initTileRow(root) {
+    if (root.querySelector('.slick-prev')) return;   // the hero stage, handled by initStage
+    var list = root.querySelector('.slick-list');
+    var track = root.querySelector('.slick-track');
+    if (!list || !track) return;
+
+    var cols = parseInt(root.getAttribute('data-columns'), 10);
+    if (!(cols > 0)) return;
+
+    var slides = Array.prototype.slice.call(track.children);
+    if (!slides.length) return;
+
+    function layout() {
+      var avail = list.clientWidth;
+      if (!avail) return;
+      var slideW = avail / cols;
+      track.style.width = (slideW * slides.length) + 'px';
+      slides.forEach(function (s) { s.style.width = slideW + 'px'; });
+    }
+
+    window.addEventListener('resize', layout);
+    // images settling can change the row's height but not its width; a load hook keeps
+    // the first paint honest on slow connections
+    window.addEventListener('load', layout);
+    layout();
+  }
+
   /* ------------------------------------------------------- product rails etc. */
 
   // the accordeon rail keeps its arrows inside the scroller, so they must never be
@@ -327,6 +362,8 @@
     // then rebuild only sliders that ship their own arrow controls
     document.querySelectorAll('.block-tiles.stage').forEach(ensureStageMarkup);
     document.querySelectorAll('.slick-slider').forEach(initStage);
+    // the arrow-less tile rows carry frozen pixel widths from the capture viewport
+    document.querySelectorAll('.slick-slider').forEach(initTileRow);
     initProductRails();
     initAccordeonCarousels();
     initEditionFinder();
