@@ -52,10 +52,10 @@
   --color-border-inverse:var(--primitive-ivory-100);
 
   /* ── type (brandshowcase families) ────────────────────────── */
-  --font-display:utile-display,UtileDisplay,'Utile Display',utile-display-fallback,Georgia,serif;
-  --font-body:archivo,Archivo,medium-fallback,arial,sans-serif;
-  --font-body-light:archivo-light,Archivo,medium-fallback,arial,sans-serif;
-  --font-body-bold:archivo-bold,Archivo,semibold-fallback,arial,sans-serif;
+  --font-display:utile-display,'Utile Display',utile-display-fallback,arial,sans-serif;
+  --font-body:archivo,Archivo,medium-fallback,arial;
+  --font-body-light:archivo-light,Archivo,medium-fallback,arial;
+  --font-body-bold:archivo-bold,Archivo,semibold-fallback,arial;
 
   /* ── shadows, radii, motion (brandshowcase) ───────────────── */
   --shadow-sm:0 0.1rem 0.2rem 0 rgb(28 26 24/4%);
@@ -70,7 +70,7 @@
   --motion-easing:cubic-bezier(0.2,0.8,0.2,1);
 
   /* ── base-4 ladder (brandshowcase) ────────────────────────── */
-  --sp-1:.4rem; --sp-2:.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem;
+  --sp-1:0.4rem; --sp-2:0.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem;
   --sp-6:2.4rem; --sp-8:3.2rem; --sp-10:4rem; --sp-12:4.8rem; --sp-16:6.4rem;
   --sp-20:8rem; --sp-24:9.6rem;
 

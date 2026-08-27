@@ -15,9 +15,11 @@
 <link rel="stylesheet" href="assets/lumas.css" />
 <style>
   /* page-local composition only. Tokens and the image rule live in lumas.css */
-  .hero{padding-block:var(--sp-10) 0}
-  .hero video{display:block;width:100%;height:auto}
-  .hero__copy{margin-top:var(--sp-12);display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-6)}
+  /* full-bleed hero: the film spans the viewport, the copy sits in the grid */
+  .hero{padding-block:0}
+  .hero__media{width:100%;margin:0;background:var(--color-surface-sunken)}
+  .hero__media video{display:block;width:100%;height:auto;max-height:72vh;object-fit:cover;object-position:center}
+  .hero__copy{padding-block:clamp(4rem,5vw,var(--sp-12)) 0;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-6)}
   @media (min-width:900px){
     .hero__copy{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--sp-16);align-items:end}
   }
@@ -905,9 +907,11 @@
 <main>
 
   <!-- CONTINUE -->
-  <section class="hero wrap">
-    <video src="assets/video/living-room.mp4" autoplay muted loop playsinline preload="metadata" aria-label="A living room with a LUMAS edition on the wall"></video>
-    <div class="hero__copy">
+  <section class="hero">
+    <figure class="hero__media">
+      <video src="assets/video/living-room.mp4" autoplay muted loop playsinline preload="metadata" aria-label="A living room with a LUMAS edition on the wall"></video>
+    </figure>
+    <div class="hero__copy wrap">
       <h1 class="d1 d1-light reveal">The film ends.<br />The room keeps going.</h1>
       <p class="lede reveal">Six rooms in six countries. Each with a real edition on the wall, at a size you can measure, for a reason you can borrow.</p>
     </div>
