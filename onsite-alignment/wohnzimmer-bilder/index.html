@@ -10,25 +10,25 @@
 
 <!-- SEO -->
 <title>Living Room Wall Art: Ideas, Hanging Tips & Curated Prints | LUMAS</title>
-<meta name="description" content="Choose art for your living room with confidence. Expert hanging tips, wall-type ideas, and curated fine-art prints — plus a free visualisation service.">
+<meta name="description" content="Choose art for your living room with confidence. Expert hanging tips, wall-type ideas, and curated fine-art prints, plus a free visualisation service.">
 <link rel="canonical" href="https://www.lumas.com/living-room-wall-art/">
 
 <!--
-  NOTE ON FONTS – Production display face is "Utile Display" (LUMAS V2).
-  It is not a Google Font, so this prototype loads Fraunces purely as a local
-  rendering stand-in. The font stack lists 'Utile Display' first; in the live
-  shop the real face is picked up automatically.
+  NOTE ON FONTS – the display face is Utile Display (LUMAS V2), self-hosted by
+  the nav kit (_nav/nav-utile-display.css) under the family name UtileDisplay.
+  Lead the stack with that name: a machine can carry a family called "Utile
+  Display" whose italic renders tofu, and matching does not fall through.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&family=Fraunces:opsz,wght@9..144,300;9..144,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#FFFFFF; --card:#FFFFFF; --raised:#FAF7F3; --sunken:#F4EDE2; --inverse-bg:#1C1A18;
   --t-primary:#1C1A18; --t-secondary:#5A5752; --t-tertiary:#908C87; --t-disabled:#C7C3BE; --t-inverse:#F4EDE2;
   --b-default:#E2D8CC; --b-subtle:#EAE2D8; --b-strong:#C7C3BE; --b-focus:#1C1A18;
-  --display:"Utile Display","Fraunces",Georgia,serif;
+  --display:'UtileDisplay','Utile Display',Georgia,serif;
   --body:"Archivo",system-ui,-apple-system,sans-serif;
   --frame-shadow:0 18px 60px -16px rgba(28,26,24,.45);
 }
@@ -346,60 +346,886 @@ html{scroll-behavior:smooth}
   .closing__cta .btn{width:100%;white-space:normal}
 }
 </style>
+<!-- LUMAS-NAV-KIT:CSS:BEGIN -->
+<link rel="stylesheet" href="../_nav/nav-fonts.css" />
+<link rel="stylesheet" href="../_nav/nav-utile-display.css" />
+<link rel="stylesheet" href="../_nav/nav-core.css" />
+<link rel="stylesheet" href="../_nav/nav-widgets.css" />
+<link rel="stylesheet" href="../_nav/nav-standalone.css" />
+<!-- LUMAS-NAV-KIT:CSS:END -->
+<!-- LUMAS-ROOM-LP:CSS:BEGIN -->
+<link rel="stylesheet" href="../_room-lp/room-lp.css" />
+<!-- LUMAS-ROOM-LP:CSS:END -->
 </head>
 <body>
+<!-- LUMAS-NAV-KIT:MARKUP:BEGIN -->
+<!-- LUMAS navigation — UK market. Markup only: chrome (logo, search, wishlist,
+     account, cart, WhatsApp, contact) + <template id="main-navigation"> holding the
+     mega-menu, + the icon sprites. Sourced from the live shop. Paste into <body>;
+     the CSS and nav.js in this folder do the rest. -->
+<site-header class="" style="--icon-max-size: 2.2rem">
+ 
+ <header role="banner">
+ <a href="https://uk.lumas.com/" class="main-logo" title="LUMAS | Art for Sale">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 30"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg>
+  <style>
+ .main-logo svg { width: 120px; }
+ @media (min-width: 981px) {
+ .main-logo svg { width: 140px; }
+ }
+ @media (min-width: 1220px) {
+ .main-logo svg { width: 170px; }
+ }
+ </style>
+</a> <div class="nav-container">
+ <button type="button" class="navigation-mobile-toggle" aria-label="Open menu">
+ <svg viewBox="0 0 1024 1024"><path fill="currentColor" d="M0 840.448h1024v-102.4h-1024v102.4zM0 499.2h1024v-102.4h-1024v102.4zM0 157.952h1024v-102.4h-1024v102.4z"></path></svg>
+ </button>
+ <button type="button" class="navigation-mobile-toggle" aria-label="Close Menu">
+ <svg viewBox="0 0 1024 1024"><path fill="currentColor" d="M1008.193 870.992l-74.933 74.733-420.267-421.429-420.267 421.429-74.933-74.733 420.471-421.633-420.471-421.633 74.933-74.733 420.267 421.429 420.267-421.429 74.933 74.733-420.471 421.633z"></path></svg>
+ </button>
+ <nav>
+ </nav>
+</div> <svg xmlns="http://www.w3.org/2000/svg" style="display: none"><symbol id="all-editions" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="m17.5 17.5-3.62-3.62M9.17 15.83a6.67 6.67 0 1 0 0-13.33 6.67 6.67 0 0 0 0 13.33"/></symbol><symbol id="artists-to-watch" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M16.051 12.616C16.1171 12.4133 16.2462 12.2371 16.4194 12.113C16.5927 11.9888 16.8012 11.9233 17.0143 11.926C17.2275 11.9287 17.4342 11.9994 17.6043 12.1279C17.7744 12.2563 17.899 12.4357 17.96 12.64L18.697 14.092C18.7687 14.2332 18.8729 14.3553 19.001 14.4483C19.1292 14.5413 19.2776 14.6025 19.434 14.627L21.068 14.883C21.2784 14.8838 21.4832 14.951 21.6532 15.075C21.8232 15.1989 21.9498 15.3733 22.015 15.5734C22.0801 15.7735 22.0805 15.989 22.016 16.1893C21.9516 16.3896 21.8256 16.5645 21.656 16.689L20.484 17.857C20.3718 17.9687 20.2877 18.1055 20.2387 18.256C20.1896 18.4066 20.1771 18.5666 20.202 18.723L20.461 20.336C20.5322 20.5382 20.5366 20.7579 20.4735 20.9627C20.4104 21.1676 20.2832 21.3468 20.1105 21.4738C19.9379 21.6009 19.729 21.6691 19.5146 21.6684C19.3003 21.6677 19.0918 21.5982 18.92 21.47L17.455 20.72C17.3139 20.6477 17.1576 20.61 16.999 20.61C16.8404 20.61 16.6841 20.6477 16.543 20.72L15.078 21.47C14.9062 21.5971 14.6981 21.6658 14.4844 21.666C14.2707 21.6663 14.0625 21.5981 13.8904 21.4713C13.7183 21.3446 13.5913 21.1661 13.5281 20.962C13.4648 20.7579 13.4687 20.5388 13.539 20.337L13.797 18.724C13.8219 18.5676 13.8093 18.4076 13.7603 18.257C13.7113 18.1065 13.6272 17.9697 13.515 17.858L12.359 16.705C12.1836 16.5835 12.0517 16.4092 11.9825 16.2074C11.9133 16.0056 11.9105 15.787 11.9744 15.5835C12.0383 15.38 12.1656 15.2022 12.3377 15.0762C12.5098 14.9502 12.7177 14.8825 12.931 14.883L14.564 14.627C14.7204 14.6025 14.8688 14.5413 14.9969 14.4483C15.1251 14.3553 15.2293 14.2332 15.301 14.092L16.051 12.616Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M8 15H7C5.93913 15 4.92172 15.4214 4.17157 16.1716C3.42143 16.9217 3 17.9391 3 19V21"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M10 11C12.2091 11 14 9.20914 14 7C14 4.79086 12.2091 3 10 3C7.79086 3 6 4.79086 6 7C6 9.20914 7.79086 11 10 11Z"/></symbol><symbol id="artliker" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M15.83 11.67c1.25-1.22 2.5-2.68 2.5-4.59a4.6 4.6 0 0 0-4.58-4.58c-1.47 0-2.5.42-3.75 1.67C8.75 2.92 7.72 2.5 6.25 2.5a4.6 4.6 0 0 0-4.58 4.58c0 1.92 1.25 3.38 2.5 4.59L10 17.5z"/></symbol><symbol id="bestseller" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M15.477 12.89L16.992 21.416C17.009 21.5164 16.9949 21.6196 16.9516 21.7118C16.9084 21.8039 16.838 21.8807 16.7499 21.9318C16.6619 21.9829 16.5603 22.0059 16.4588 21.9977C16.3573 21.9895 16.2607 21.9506 16.182 21.886L12.602 19.199C12.4292 19.0699 12.2192 19.0001 12.0035 19.0001C11.7878 19.0001 11.5778 19.0699 11.405 19.199L7.819 21.885C7.74032 21.9494 7.64386 21.9883 7.54249 21.9965C7.44112 22.0047 7.33967 21.9818 7.25166 21.9309C7.16365 21.8799 7.09327 21.8033 7.04991 21.7113C7.00656 21.6193 6.99228 21.5163 7.009 21.416L8.523 12.89"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14Z"/></symbol><symbol id="consult" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M13.83 16.57a1 1 0 0 0 1.22-.3l.35-.47A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.47.35a1 1 0 0 0-.29 1.23 14 14 0 0 0 6.4 6.39"/></symbol><symbol id="cut-outs" viewBox="0 0 15 15"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M7.20312 1.43437C7.23051 1.37903 7.27282 1.33245 7.32528 1.29989C7.37774 1.26732 7.43825 1.25006 7.5 1.25006C7.56174 1.25006 7.62226 1.26732 7.67471 1.29989C7.72717 1.33245 7.76948 1.37903 7.79687 1.43437L9.24062 4.35874C9.33573 4.55122 9.47613 4.71775 9.64976 4.84403C9.82339 4.97031 10.0251 5.05257 10.2375 5.08374L13.4662 5.55624C13.5274 5.56511 13.5849 5.59091 13.6322 5.63074C13.6795 5.67057 13.7146 5.72284 13.7338 5.78162C13.7529 5.84041 13.7552 5.90337 13.7404 5.96339C13.7256 6.02341 13.6943 6.07809 13.65 6.12124L11.315 8.39499C11.161 8.54506 11.0458 8.7303 10.9793 8.93476C10.9127 9.13923 10.8969 9.3568 10.9331 9.56875L11.4844 12.7812C11.4952 12.8424 11.4886 12.9053 11.4653 12.9629C11.4421 13.0205 11.4031 13.0704 11.3528 13.1069C11.3026 13.1434 11.2431 13.165 11.1812 13.1693C11.1192 13.1736 11.0573 13.1604 11.0025 13.1312L8.11625 11.6137C7.92607 11.5139 7.71448 11.4617 7.49968 11.4617C7.28488 11.4617 7.0733 11.5139 6.88312 11.6137L3.9975 13.1312C3.9427 13.1603 3.88087 13.1733 3.81903 13.1689C3.75719 13.1645 3.69782 13.1428 3.64768 13.1064C3.59754 13.0699 3.55864 13.0201 3.53541 12.9626C3.51217 12.9052 3.50553 12.8423 3.51625 12.7812L4.06687 9.56937C4.10324 9.35733 4.08749 9.13962 4.02096 8.93502C3.95443 8.73043 3.83913 8.54509 3.685 8.39499L1.35 6.12187C1.30537 6.07876 1.27374 6.02399 1.25872 5.96379C1.2437 5.90359 1.24589 5.84038 1.26504 5.78136C1.2842 5.72235 1.31954 5.6699 1.36704 5.62998C1.41455 5.59007 1.47231 5.56431 1.53375 5.55562L4.76187 5.08374C4.97453 5.05281 5.17649 4.97066 5.35036 4.84436C5.52423 4.71807 5.66481 4.55141 5.76 4.35874L7.20312 1.43437Z"/></symbol><symbol id="darlings" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M8 14.6667C6.23189 14.6667 4.53619 13.9643 3.28595 12.714C2.03571 11.4638 1.33333 9.76811 1.33333 8C1.33333 6.23189 2.03571 4.53619 3.28595 3.28595C4.53619 2.03571 6.23189 1.33333 8 1.33333C9.76811 1.33333 11.4638 1.96547 12.714 3.09069C13.9643 4.21591 14.6667 5.74203 14.6667 7.33333C14.6667 8.21738 14.3155 9.06523 13.6904 9.69035C13.0652 10.3155 12.2174 10.6667 11.3333 10.6667H9.83333C9.61666 10.6667 9.40428 10.727 9.21998 10.8409C9.03567 10.9548 8.88673 11.1178 8.78983 11.3116C8.69294 11.5054 8.65192 11.7223 8.67138 11.9381C8.69083 12.1539 8.77 12.36 8.9 12.5333L9.09999 12.8C9.22999 12.9733 9.30916 13.1794 9.32861 13.3952C9.34807 13.611 9.30706 13.828 9.21016 14.0217C9.11327 14.2155 8.96432 14.3785 8.78001 14.4924C8.59571 14.6063 8.38333 14.6667 8.16666 14.6667H8Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M9.00001 4.66667C9.1841 4.66667 9.33334 4.51743 9.33334 4.33333C9.33334 4.14924 9.1841 4 9.00001 4C8.81591 4 8.66667 4.14924 8.66667 4.33333C8.66667 4.51743 8.81591 4.66667 9.00001 4.66667Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M11.6667 7.33334C11.8508 7.33334 12 7.1841 12 7.00001C12 6.81591 11.8508 6.66667 11.6667 6.66667C11.4826 6.66667 11.3333 6.81591 11.3333 7.00001C11.3333 7.1841 11.4826 7.33334 11.6667 7.33334Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M4.33333 8.66667C4.51743 8.66667 4.66667 8.51743 4.66667 8.33333C4.66667 8.14924 4.51743 8 4.33333 8C4.14924 8 4 8.14924 4 8.33333C4 8.51743 4.14924 8.66667 4.33333 8.66667Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M5.66666 5.33334C5.85076 5.33334 5.99999 5.1841 5.99999 5.00001C5.99999 4.81591 5.85076 4.66667 5.66666 4.66667C5.48257 4.66667 5.33333 4.81591 5.33333 5.00001C5.33333 5.1841 5.48257 5.33334 5.66666 5.33334Z"/></symbol><symbol id="email" viewBox="0 -64 1024 1024"><path fill="currentColor" d="M0 83.7v736.6h1024V83.7H0zm979.46 655.26-354.58-290.1L979.46 153.4v585.56zm-392.4-258.6L948.39 776H70.93l362.02-296.2-7.2-8.81 86.28 71.88 75.03-62.5zm353.21-352.28-428.24 357.1-428.57-357.1h856.81zM396.83 446.9 44.48 735.14V153.4l352.35 293.51z"/></symbol><symbol id="events" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M6.66602 1.66666V4.99999"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.334 1.66666V4.99999"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M15.8333 3.33334H4.16667C3.24619 3.33334 2.5 4.07954 2.5 5.00001V16.6667C2.5 17.5872 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5872 17.5 16.6667V5.00001C17.5 4.07954 16.7538 3.33334 15.8333 3.33334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M2.5 8.33334H17.5"/></symbol><symbol id="inspired" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M10.8267 5.17334L9.624 8.78067C9.55854 8.97706 9.44826 9.15551 9.30188 9.30189C9.1555 9.44827 8.97705 9.55855 8.78067 9.62401L5.17333 10.8267L6.376 7.21934C6.44145 7.02295 6.55174 6.8445 6.69812 6.69812C6.84449 6.55175 7.02294 6.44146 7.21933 6.37601L10.8267 5.17334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8.00001C14.6667 4.31811 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33333 4.31811 1.33333 8.00001C1.33333 11.6819 4.3181 14.6667 8 14.6667Z"/></symbol><symbol id="last-prints" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"/></symbol><symbol id="magazine" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8 4.66666V14"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M2 12C1.82319 12 1.65362 11.9298 1.52859 11.8047C1.40357 11.6797 1.33333 11.5101 1.33333 11.3333V2.66667C1.33333 2.48986 1.40357 2.32029 1.52859 2.19526C1.65362 2.07024 1.82319 2 2 2H5.33333C6.04058 2 6.71885 2.28095 7.21895 2.78105C7.71905 3.28115 8 3.95942 8 4.66667C8 3.95942 8.28095 3.28115 8.78105 2.78105C9.28114 2.28095 9.95942 2 10.6667 2H14C14.1768 2 14.3464 2.07024 14.4714 2.19526C14.5964 2.32029 14.6667 2.48986 14.6667 2.66667V11.3333C14.6667 11.5101 14.5964 11.6797 14.4714 11.8047C14.3464 11.9298 14.1768 12 14 12H10C9.46957 12 8.96086 12.2107 8.58578 12.5858C8.21071 12.9609 8 13.4696 8 14C8 13.4696 7.78928 12.9609 7.41421 12.5858C7.03914 12.2107 6.53043 12 6 12H2Z"/></symbol><symbol id="masters" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7.00004 2L5.33337 6L8.00004 14.6667L10.6667 6L9.00004 2"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.3334 2C11.5403 2 11.7445 2.04819 11.9296 2.14076C12.1148 2.23333 12.2758 2.36774 12.4 2.53333L14.4 5.2C14.5715 5.42878 14.665 5.70663 14.6665 5.99257C14.6681 6.2785 14.5777 6.55737 14.4087 6.788L9.08202 14.112C8.95852 14.2837 8.79597 14.4235 8.60777 14.5199C8.41958 14.6164 8.21115 14.6667 7.99968 14.6667C7.78822 14.6667 7.57979 14.6164 7.39159 14.5199C7.2034 14.4235 7.04085 14.2837 6.91735 14.112L1.59068 6.788C1.42176 6.55729 1.33147 6.27839 1.33315 5.99246C1.33483 5.70652 1.42839 5.4287 1.60002 5.2L3.59868 2.53533C3.72281 2.36919 3.88397 2.23429 4.06937 2.14136C4.25477 2.04843 4.4593 2.00003 4.66668 2H11.3334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M1.33337 6H14.6667"/></symbol><symbol id="mood" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M17.5 3.33h-5.83M8.33 3.33H2.5M17.5 10H10M6.67 10H2.5M17.5 16.67h-4.17M10 16.67H2.5M11.67 1.67V5M6.67 8.33v3.34M13.33 15v3.33"/></symbol><symbol id="multiphase" viewBox="0 0 15 15"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M11.875 1.875H3.125C2.43464 1.875 1.875 2.43464 1.875 3.125V11.875C1.875 12.5654 2.43464 13.125 3.125 13.125H11.875C12.5654 13.125 13.125 12.5654 13.125 11.875V3.125C13.125 2.43464 12.5654 1.875 11.875 1.875Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M5.625 6.875C6.31536 6.875 6.875 6.31536 6.875 5.625C6.875 4.93464 6.31536 4.375 5.625 4.375C4.93464 4.375 4.375 4.93464 4.375 5.625C4.375 6.31536 4.93464 6.875 5.625 6.875Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.125 9.37499L11.1962 7.44624C10.9618 7.21191 10.644 7.08026 10.3125 7.08026C9.98104 7.08026 9.66316 7.21191 9.42875 7.44624L3.75 13.125"/></symbol><symbol id="new-releases" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M6.62467 10.3333C6.56515 10.1026 6.44489 9.89206 6.27641 9.72358C6.10793 9.5551 5.89738 9.43485 5.66667 9.37533L1.57667 8.32066C1.50689 8.30085 1.44547 8.25883 1.40174 8.20096C1.35801 8.14309 1.33435 8.07253 1.33435 7.99999C1.33435 7.92746 1.35801 7.8569 1.40174 7.79903C1.44547 7.74116 1.50689 7.69913 1.57667 7.67933L5.66667 6.62399C5.8973 6.56453 6.1078 6.44438 6.27627 6.27602C6.44474 6.10766 6.56504 5.89725 6.62467 5.66666L7.67933 1.57666C7.69894 1.50661 7.74092 1.44489 7.79888 1.40092C7.85684 1.35696 7.92759 1.33316 8.00033 1.33316C8.07308 1.33316 8.14383 1.35696 8.20179 1.40092C8.25974 1.44489 8.30173 1.50661 8.32133 1.57666L9.37533 5.66666C9.43485 5.89737 9.55511 6.10792 9.72359 6.27641C9.89207 6.44489 10.1026 6.56514 10.3333 6.62466L14.4233 7.67866C14.4937 7.69806 14.5557 7.74 14.5999 7.79804C14.6441 7.85609 14.668 7.92703 14.668 7.99999C14.668 8.07295 14.6441 8.1439 14.5999 8.20194C14.5557 8.25999 14.4937 8.30193 14.4233 8.32133L10.3333 9.37533C10.1026 9.43485 9.89207 9.5551 9.72359 9.72358C9.55511 9.89206 9.43485 10.1026 9.37533 10.3333L8.32067 14.4233C8.30106 14.4934 8.25908 14.5551 8.20112 14.5991C8.14316 14.643 8.07241 14.6668 7.99967 14.6668C7.92692 14.6668 7.85617 14.643 7.79821 14.5991C7.74026 14.5551 7.69827 14.4934 7.67867 14.4233L6.62467 10.3333Z"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M13.3333 2V4.66667"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14.6667 3.33333H12"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M2.66667 11.3333V12.6667"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M3.33333 12H2"/></symbol><symbol id="petites" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M5.25 1.75H2.33333C2.01117 1.75 1.75 2.01117 1.75 2.33333V11.6667C1.75 11.9888 2.01117 12.25 2.33333 12.25H5.25C5.57217 12.25 5.83333 11.9888 5.83333 11.6667V2.33333C5.83333 2.01117 5.57217 1.75 5.25 1.75Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M11.6667 1.75H8.75001C8.42784 1.75 8.16667 2.01117 8.16667 2.33333V5.25C8.16667 5.57217 8.42784 5.83333 8.75001 5.83333H11.6667C11.9888 5.83333 12.25 5.57217 12.25 5.25V2.33333C12.25 2.01117 11.9888 1.75 11.6667 1.75Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M11.6667 8.16667H8.75001C8.42784 8.16667 8.16667 8.42784 8.16667 8.75001V11.6667C8.16667 11.9888 8.42784 12.25 8.75001 12.25H11.6667C11.9888 12.25 12.25 11.9888 12.25 11.6667V8.75001C12.25 8.42784 11.9888 8.16667 11.6667 8.16667Z"/></symbol><symbol id="rising" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></symbol><symbol id="room" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M10 2.5v10M14.17 6.67 10 2.5 5.83 6.67M17.5 12.5v3.33a1.67 1.67 0 0 1-1.67 1.67H4.17a1.67 1.67 0 0 1-1.67-1.67V12.5"/></symbol><symbol id="sale" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M8.39071 1.72399C8.14072 1.47393 7.80163 1.3334 7.44804 1.33333H2.66671C2.31309 1.33333 1.97395 1.4738 1.7239 1.72385C1.47385 1.9739 1.33337 2.31304 1.33337 2.66666V7.448C1.33345 7.80159 1.47397 8.14067 1.72404 8.39066L7.52671 14.1933C7.82972 14.4944 8.23954 14.6634 8.66671 14.6634C9.09388 14.6634 9.5037 14.4944 9.80671 14.1933L14.1934 9.80666C14.4945 9.50365 14.6635 9.09383 14.6635 8.66666C14.6635 8.23949 14.4945 7.82967 14.1934 7.52666L8.39071 1.72399Z"/><path fill="currentColor" fill-opacity="0.8" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M4.99996 5.33334C5.18405 5.33334 5.33329 5.1841 5.33329 5.00001C5.33329 4.81591 5.18405 4.66667 4.99996 4.66667C4.81586 4.66667 4.66663 4.81591 4.66663 5.00001C4.66663 5.1841 4.81586 5.33334 4.99996 5.33334Z"/></symbol><symbol id="similar"><use href="#all-editions"/></symbol><symbol id="string-art" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M4.66667 2.33333C8 0.999993 9.33334 3.99999 6.66667 4.99999C1 6.66666 1.33334 9.99999 3.33334 10.6667C6.66667 12 9.33334 3.99999 12.6667 5.99999C16 7.99999 13 15 10 14C6.66667 12.3333 10.3333 6.66666 14 12.6667"/></symbol><symbol id="value-increase" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M10.6666 4.66666H14.6666V8.66666"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14.6667 4.66666L9.00004 10.3333L5.66671 6.99999L1.33337 11.3333"/></symbol><symbol id="visit" viewBox="0 0 20 20"><g fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M16.67 8.33c0 4.16-4.62 8.5-6.17 9.84a.8.8 0 0 1-1 0c-1.55-1.34-6.17-5.68-6.17-9.84a6.67 6.67 0 0 1 13.34 0"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M10 10.83a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></g></symbol><symbol id="artcloud" viewBox="0 0 20 20"><path  fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M14.58 15.83H7.5a5.83 5.83 0 1 1 5.6-7.5h1.48a3.75 3.75 0 0 1 0 7.5"/></symbol>
+ <symbol id="user" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M15.83 17.5v-1.67a3.33 3.33 0 0 0-3.33-3.33h-5a3.33 3.33 0 0 0-3.33 3.33v1.67M10 9.17a3.33 3.33 0 1 0 0-6.67 3.33 3.33 0 0 0 0 6.67"/></symbol>
+ <symbol id="cart" viewBox="0 0 21 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M7 18.33c.48 0 .88-.37.88-.83s-.4-.83-.88-.83a.85.85 0 0 0-.87.83c0 .46.39.83.87.83M16.63 18.33c.48 0 .87-.37.87-.83s-.4-.83-.87-.83a.85.85 0 0 0-.88.83c0 .46.4.83.88.83M1.8 1.7h1.74l2.33 10.36q.13.59.63.96.5.36 1.12.36h8.56q.61-.01 1.1-.37.46-.37.6-.94l1.45-6.2H4.48"/></symbol>
+</svg>
+<aside>
+ <label class="search-toggle">
+ <input type="checkbox" name="search-toggle">
+ <svg><use href="#search"/></svg>
+ <svg><use href="#close"/></svg>
+ </label>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+ <symbol id="chat" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M6.58 16.67a7.5 7.5 0 1 0-3.25-3.25l-1.66 4.91z"/></symbol>
+ <symbol id="mail" viewBox="0 0 20 20"><g fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="m18.33 5.83-7.49 4.78a1.7 1.7 0 0 1-1.67 0l-7.5-4.78"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M16.67 3.33H3.33c-.92 0-1.66.75-1.66 1.67v10c0 .92.74 1.67 1.66 1.67h13.34c.92 0 1.66-.75 1.66-1.67V5c0-.92-.74-1.67-1.66-1.67"/></g></symbol>
+ <symbol id="phone" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M11.53 13.8a.8.8 0 0 0 1-.25l.3-.38a1.7 1.7 0 0 1 1.34-.67h2.5a1.67 1.67 0 0 1 1.66 1.67v2.5a1.67 1.67 0 0 1-1.66 1.66 15 15 0 0 1-15-15 1.67 1.67 0 0 1 1.66-1.66h2.5A1.67 1.67 0 0 1 7.5 3.33v2.5a1.7 1.7 0 0 1-.67 1.34l-.39.29a.8.8 0 0 0-.24 1.03 11.7 11.7 0 0 0 5.33 5.32"/></symbol>
+ <symbol id="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M20 10c0 5-5.54 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+</svg>
+ <div class="nav-container"> <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
+ 
 
-<!-- ====================== HEADER ====================== -->
-<header class="site-header">
-  <div class="promo">
-    <span class="promo__text">10% off your first order – only until 31 August 2026</span>
-    <a class="promo__cta" href="#">Register now</a>
+<whats-app-contact data-css-ready data-phone="442036087590" style="--wa-icon-color: black;"><button type="button" class="icon-whatsapp contact" data-tooltip="chat with us on WhatsApp"><span class="sr-only">whatsApp</span></button><dialog closedby="any"><div class="content"><form method="dialog"><button class="icon-close" aria-label="close"></button></form><p>Scan QR code to open Whatsapp</p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOSIgaGVpZ2h0PSIyOSIgY2xhc3M9InNlZ25vIj48cGF0aCBjbGFzcz0icXJsaW5lIiBzdHJva2U9IiMxYzFhMTgiIGQ9Ik0yIDIuNWg3bTEgMGgxbTQgMGgxbTIgMGgxbTEgMGg3bS0yNSAxaDFtNSAwaDFtMSAwaDFtMiAwaDRtMyAwaDFtNSAwaDFtLTI1IDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoMW0yIDBoMW0yIDBoMW0xIDBoMW0xIDBoM20xIDBoMW0tMjUgMWgxbTEgMGgzbTEgMGgxbTIgMGgxbTEgMGgxbTEgMGgybTMgMGgxbTEgMGgzbTEgMGgxbS0yNSAxaDFtMSAwaDNtMSAwaDFtMSAwaDVtNSAwaDFtMSAwaDNtMSAwaDFtLTI1IDFoMW01IDBoMW01IDBoMm0yIDBoMW0xIDBoMW01IDBoMW0tMjUgMWg3bTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGg3bS0xMiAxaDFtMiAwaDFtLTE3IDFoMW0yIDBoNm0xIDBoM20yIDBoMW0xIDBoMW0yIDBoMW0xIDBoM20tMjUgMWgybTIgMGgybTUgMGgybTIgMGgybTIgMGg1bS0yMiAxaDFtMiAwaDJtMiAwaDFtMiAwaDJtMSAwaDFtMSAwaDNtMSAwaDFtMiAwaDFtLTI1IDFoMW0xIDBoMm0xIDBoMW02IDBoMW01IDBoMm0xIDBoNG0tMjQgMWgybTEgMGgxbTEgMGgzbTEgMGgxbTEgMGgxbTEgMGgybTEgMGgybTUgMGgxbS0yNSAxaDFtMiAwaDNtMyAwaDJtMSAwaDJtMSAwaDFtNCAwaDFtMiAwaDFtLTI0IDFoM20zIDBoMm0xIDBoMW0yIDBoMm0xIDBoMW0xIDBoMW0yIDBoNW0tMjUgMWgxbTcgMGgzbTEgMGgxbTEgMGgybTMgMGgxbTEgMGgybTEgMGgxbS0yNSAxaDFtMiAwaDJtMSAwaDNtMiAwaDFtMSAwaDJtMSAwaDVtMSAwaDJtLTE2IDFoM20xIDBoM20xIDBoMW0zIDBoMW0xIDBoMm0tMjQgMWg3bTEgMGgybTEgMGgxbTEgMGgybTEgMGgxbTEgMGgxbTEgMGgxbTMgMGgxbS0yNSAxaDFtNSAwaDFtMSAwaDJtMiAwaDNtMSAwaDFtMyAwaDFtLTIxIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoMm0zIDBoNm0tMjEgMWgxbTEgMGgzbTEgMGgxbTEgMGgybTEgMGgybTIgMGg0bTQgMGgybS0yNSAxaDFtMSAwaDNtMSAwaDFtMyAwaDJtMSAwaDFtMyAwaDFtMiAwaDVtLTI1IDFoMW01IDBoMW0yIDBoM20yIDBoMW00IDBoMm0xIDBoM20tMjUgMWg3bTEgMGg0bTIgMGgxbTEgMGgxbTEgMGgxbTIgMGgxbTIgMGgxIi8+PC9zdmc+Cg==" class="qr-code" alt="whatsapp qr code" width="220" height="220" /><a href="https://wa.me/442036087590" target="_blank" rel="noopener" class="btn btn-primary">Click here if you have Whatsapp installed on this device</a></div></dialog></whats-app-contact><details class="contact">
+    <summary>
+        <a href="https://uk.lumas.com/contact/" class="-mt-1">
+            <svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#phone"/></svg><span>Contact</span>
+        </a>
+    </summary>
+    <div class="menu-container">
+        <div class="menu">
+            <dl>
+                <dd>
+                    <a href="https://direct.lc.chat/8792761/4">
+                        <svg><use href="#chat"/></svg>
+                        <header>Chat</header>
+                        <aside>Instant Support</aside>
+                        <button type="button">Start Chat &#8594;</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://lumas.atlassian.net/servicedesk/customer/portal/2">
+                        <svg><use href="#mail"/></svg>
+                        <header>Email</header>
+                        <aside>Detailed Inquiries</aside>
+                        <button type="button">Send Email &#8594;</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="tel:+442036087590">
+                        <svg><use href="#phone"/></svg>
+                        <header>Phone</header>
+                        <aside>+44 20 3608 7590</aside>
+                        <button type="button">Call Now &#8594;</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/">
+                        <svg><use href="#pin"/></svg>
+                        <header>Gallery Visit</header>
+                        <aside>Physical Locations</aside>
+                        <button type="button">Find Gallery &#8594;</button>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</details>
+</div>   <div class="wishlist-wrapper">
+ <a href="https://uk.lumas.com/wishlist/" class="wishlist-link">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><path fill="currentColor" d="M8 15.16c-.65 0-1.2-.56-1.72-1.1l-4.73-4.8A4.86 4.86 0 010 5.7V5.7v-.05A4.8 4.8 0 014.78.84c1.24 0 2.38.49 3.22 1.28A4.7 4.7 0 0111.22.84 4.8 4.8 0 0116 5.64v.07c0 1.4-.6 2.68-1.56 3.58l-4.72 4.8c-.52.52-1.07 1.07-1.72 1.07zm-1.12-1.68c.4.4.82.83 1.12.83s.74-.44 1.12-.83l4.73-4.8c.8-.75 1.3-1.8 1.31-2.98v-.03a3.97 3.97 0 00-3.93-3.97c-1.16 0-2.2.5-2.91 1.3L8 3.34 7.69 3a3.9 3.9 0 00-2.91-1.31A3.97 3.97 0 00.84 5.65v.03c0 1.17.5 2.23 1.3 2.97z"/></svg>
+ <header-counter class="wishlist-count" hidden>0</header-counter>
+ </a>
+ </div>
+        <a  href="https://uk.lumas.com/login/"  class="auth-link">
+  <svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#user"/></svg>
+ <span class="label" hidden>Log In</span>
+  </a>
+  <div class="cart-wrapper">
+ <a href="https://uk.lumas.com/cart/" class="cart-link">
+ <svg viewBox="0 0 16 16" style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#cart"/></svg>
+ <header-counter class="cart-count" hidden>0</header-counter>
+ </a>
+ <div class="cart-overlay"></div>
+ </div>
+  </aside>
+ <search-focus>
+ <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+ <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></symbol>
+ <symbol id="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+ </svg>
+ <form action="https://uk.lumas.com/search/" method="get" role="search">
+ <input type="search" name="q" value="" placeholder="Search" aria-label="Product Search" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off">
+ <button type="button" class="clear-search" aria-label="Clear search"><svg><use href="#close"/></svg></button>
+ <button type="submit"><svg><use href="#search"/></svg>
+ </button>
+ <div class="autocomplete-container" hidden>
+ <div class="search-terms"></div>
+ </div>
+ </form>
+ <script type="application/json">
+ {"translations":{"seeAll":"See all _amount_ results","termsHeader":"Top results","product.status.2":"New","product.status.4":"Bestseller","product.status.6":"Last prints","product.status.8":"Sold Out","product.status.12":"Price Will Increase Soon"}}
+ </script>
+</search-focus> </header>
+ <div class="search-dropdown" hidden>
+ <div class="search-dropdown-content">
+ <div class="suggestion-container">
+ <div class="close"><button><svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#close"/></svg></button></div>
+ <div class="suggestions">
+  <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
+ <dl>
+    <dt>Most wanted</dt>
+    <dd>
+        <a href="https://uk.lumas.com/collections/new-york-pictures/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/nyc-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/nyc-220x220.jpg" alt="New York" class="max-w-full">
+            </picture>
+            <span>New York</span>
+        </a>        
+    </dd>
+    <dd>
+        <a href="https://uk.lumas.com/david-bowie-pictures/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/bowie-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/bowie-220x220.jpg" alt="David Bowie" class="max-w-full">
+            </picture>
+            <span>David Bowie</span>
+        </a>        
+    </dd>
+    <dd>
+        <a href="https://uk.lumas.com/themes/abstract-graphic/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/abstrakt-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/abstrakt-220x220.jpg" alt="Abstract" class="max-w-full">
+            </picture>
+            <span>Abstract</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/nature/landscape/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/landschaften-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/landschaften-220x220.jpg" alt="Landscapes" class="max-w-full">
+            </picture>
+            <span>Landscapes</span>
+        </a>        
+    </dd>   
+    <dd>
+        <a href="https://uk.lumas.com/nature/water/">        
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/wasser-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/wasser-220x220.jpg" alt="Water" class="max-w-full">
+            </picture>
+            <span>Water</span>
+        </a>        
+    </dd>
+    <dd>
+        <a href="https://uk.lumas.com/artist/guachinarte/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/guachinarte-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/guachinarte-220x220.jpg" alt="Guachinarte" class="max-w-full">
+            </picture>
+            <span>Guachinarte</span>
+        </a>        
+    </dd>
+    <dd>
+        <a href="https://uk.lumas.com/collections/black-and-white-art/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/schwarz-weiss-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/schwarz-weiss-220x220.jpg" alt="Black and White" class="max-w-full">
+            </picture>
+            <span>Black and White</span>
+        </a>        
+    </dd>
+    <dd>
+        <a href="https://uk.lumas.com/artist/luc_dratwa/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/dratwa-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/dratwa-220x220.jpg" alt="Luc Dratwa" class="max-w-full">
+            </picture>
+            <span>Luc Dratwa</span>
+        </a>        
+    </dd>    
+</dl>
+   
+<dl>
+    <dt>Popular pages</dt>
+    <dd>
+        <a href="https://uk.lumas.com/highlights/bestseller/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/bestseller-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/bestseller-220x220.jpg" alt="Bestsellers" class="max-w-full">
+            </picture>
+            <span>Bestsellers</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/new/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/neuheiten-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/neuheiten-220x220.jpg" alt="New" class="max-w-full">
+            </picture>
+            <span>New</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/multi-phase/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/multi-phase-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/multi-phase-220x220.jpg" alt="Multi-Phase" class="max-w-full">
+            </picture>
+            <span>Multi-Phase</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/artists/masters/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/masters-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/masters-220x220.jpg" alt="Master Editions" class="max-w-full" loading="lazy">
+            </picture>
+            <span>Master Editions</span>
+        </a>        
+    </dd>    
+</dl>
+    
+<dl>
+    <dt>Popular categories</dt>
+    <dd>
+        <a href="https://uk.lumas.com/themes/people/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/menschen-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/menschen-220x220.jpg" alt="People" class="max-w-full">
+            </picture>
+            <span>People</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/collections/flowerart/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/blumen-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/blumen-220x220.jpg" alt="Flowers" class="max-w-full">
+            </picture>
+            <span>Flowers</span>
+        </a>        
+    </dd>    
+    <dd>
+        <a href="https://uk.lumas.com/ai-art/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/digital-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/digital-220x220.jpg" alt="AI Art" class="max-w-full">
+            </picture>
+            <span>AI Art</span>
+        </a>        
+    </dd>  
+    <dd>
+        <a href="https://uk.lumas.com/collections/urban-art/">
+            <picture>
+                <source srcset="https://media.lumas.com/search-suggestions/city-220x220.webp" media="all" type="image/webp">
+                <img property="schema:image" src="https://media.lumas.com/search-suggestions/city-220x220.jpg" alt="Cities" class="max-w-full">
+            </picture>
+            <span>Cities</span>
+        </a>        
+    </dd>    
+</dl>
+
+ </div>
+ </div>
+ <div class="help-bar">
+ <div></div>
+ <div><svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#phone"/></svg> <a href="tel:+442036087590">+44 20 3608 7590</a></div>
+ <div><svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#email"/></svg> <a href="https://lumas.atlassian.net/servicedesk/customer/portal/2">E-MAIL</a></div>
+ </div>
+ </div>
+</div>
+</site-header>
+<template id="main-navigation"> <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
+ <details>
+    <summary><a href="https://uk.lumas.com/search/?q=">Artworks</a></summary>
+    <div class="menu-container">
+        <div class="menu artworks">
+            <dl class="highlights open">
+                <dt><header>Highlights</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/new/"><svg aria-hidden="true"><use href="#new-releases"/></svg>New</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/gifts/gift-voucher/"><svg aria-hidden="true"><use href="#magazine"/></svg>LUMAS Gift Certificates</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/highlights/bestprice/"><svg aria-hidden="true"><use href="#rising"/></svg>Price will increase soon</a>
+                </dd>     
+                <dd>
+                    <a href="https://uk.lumas.com/masters/"><svg aria-hidden="true"><use href="#masters"/></svg>Master Editions</a>
+                </dd>           
+                <dd>
+                    <a href="https://uk.lumas.com/highlights/bestseller/"><svg aria-hidden="true"><use href="#bestseller"/></svg>Bestseller</a>
+                </dd> 
+                <dd>
+                    <a href="https://uk.lumas.com/archive-sale/"><svg aria-hidden="true"><use href="#sale"/></svg>SALE</a>
+                </dd>               
+                <dd>
+                    <a href="https://uk.lumas.com/highlights/last-prints/"><svg aria-hidden="true"><use href="#last-prints"/></svg>Selling out</a>
+                </dd>                
+                <dd>
+                    <a href="https://uk.lumas.com/our-editions/"><svg aria-hidden="true"><use href="#all-editions"/></svg>Our Editions</a>
+                </dd>
+            </dl>
+            <dl>
+                <dt><header>By Category</header></dt>
+                <dd><a href="https://uk.lumas.com/technique/photography/">Photography</a></dd>
+                <dd><a href="https://uk.lumas.com/technique/painting/">Painting</a></dd>
+                <dd><a href="https://uk.lumas.com/digital-art/">Digital Art</a></dd>
+                <dd><a href="https://uk.lumas.com/multi-phase/">Multi-Phase</a></dd>
+                <dd><a href="https://uk.lumas.com/painting-illustration/">Illustration</a></dd>
+                <dd><a href="https://uk.lumas.com/objects/">Sculptures & Objects</a></dd>
+                <dd><a href="https://uk.lumas.com/lightbox/">Light Boxes</a></dd>
+            </dl>
+            <dl>
+                <dt><header>By Theme</header></dt>
+                <dd><a href="https://uk.lumas.com/themes/abstract-graphic/">Abstract</a></dd>
+                <dd><a href="https://uk.lumas.com/nature/water/">Seascapes</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/flowerart/">Floral Worlds</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/black-and-white-art/">Black &amp; White</a></dd>
+                <dd><a href="https://uk.lumas.com/nature/landscape/">Nature &amp; Landscapes</a></dd>
+                <dd><a href="https://uk.lumas.com/themes/architecture/">Architecture & City</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/new-york-pictures/">New York</a></dd>
+            </dl>
+            <dl>
+                <dt><header>By Size</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/search/?width=from0-to550&height=from0-to600&sort=revenue_product_desc&price=from0-to50000">Small</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/search/?width=from550-to1400&amp;height=from600-to1430">Medium</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/search/?width=from740-to2000">Large</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/search/?width=from2000-to5500">XXL</a>
+                </dd>
+            </dl>
+            <dl>
+                <dt><header>By Format</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/format/portrait/">Portrait</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/format/landscape/">Landscape</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/format/square/">Square</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/format/round/">Round</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/format/panoramic/">Panorama</a>
+                </dd>
+            </dl>
+            <dl>
+                <dt><header>By Price</header></dt>
+                <dd>
+                    <div data-price-block="from0-to25000" data-style-override="cursor:pointer;">under £250</div>
+                </dd>
+                <dd>
+                    <div data-price-block="from25000-to50000" data-style-override="cursor:pointer;">under £500</div>
+                </dd>
+                <dd>
+                    <div data-price-block="from75000-to100000" data-style-override="cursor:pointer;">under £1000</div>
+                </dd>
+                <dd>
+                    <div data-price-block="from100000-to200000" data-style-override="cursor:pointer;">under £2000</div>
+                </dd>
+                <dd>
+                    <div data-price-block="from200000-to500000" data-style-override="cursor:pointer;">under £5000</div>
+                </dd>
+                <dd>
+                    <div data-price-block="from500000-to2000000" data-style-override="cursor:pointer;">from £5000</div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</details>
+<details>
+    <summary><a href="https://uk.lumas.com/artists/">Top 20</a></summary>
+    <div class="menu-container">
+        <div class="menu tiles">
+            <dl>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/beatrice_hug/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-bhu.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-bhu.jpg" width="220" height="220" alt="Beatrice Hug" title="Beatrice Hug" class="max-w-full width-full height-auto">
+                        </picture>
+                        Beatrice Hug
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/isabelle_menin/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-ime.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-ime.jpg" width="220" height="220" alt="Isabelle Menin" title="Isabelle Menin" class="max-w-full width-full height-auto">
+                        </picture>
+                        Isabelle Menin
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/marta_contreras_simo/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-mcs.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-mcs.jpg" width="220" height="220" alt="Marta Contreras Simó" title="Marta Contreras Simó" class="max-w-full width-full height-auto">
+                        </picture>
+                        Marta Contreras Simó
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/gavin_evans/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-gve.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-gve.jpg" width="220" height="220" alt="Gavin Evans" title="Gavin Evans" class="max-w-full width-full height-auto">
+                        </picture>
+                        Gavin Evans
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/wolfgang_uhlig/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-wuh.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-wuh.jpg" width="220" height="220" alt="Wolfgang Uhlig" title="Wolfgang Uhlig" class="max-w-full width-full height-auto">
+                        </picture>
+                        Wolfgang Uhlig
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/luc_dratwa/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-ldr.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-ldr.jpg" width="220" height="220" alt="Luc Dratwa" title="Luc Dratwa" class="max-w-full width-full height-auto">
+                        </picture>
+                        Luc Dratwa
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/massimo_colonna/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-mcn.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-mcn.jpg" width="220" height="220" alt="Massimo Colonna" title="Massimo Colonna" class="max-w-full width-full height-auto">
+                        </picture>
+                        Massimo Colonna
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/guachinarte/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-gua.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-gua.jpg" width="220" height="220" alt="Guachinarte" title="Guachinarte" class="max-w-full width-full height-auto">
+                        </picture>
+                        Guachinarte
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/slim_aarons-1/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-saa.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-saa.jpg" width="220" height="220" alt="Slim Aarons" title="Slim Aarons" class="max-w-full width-full height-auto">
+                        </picture>
+                        Slim Aarons
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/werner_pawlok/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-wpa.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-wpa.jpg" width="220" height="220" alt="Werner Pawlok" title="Werner Pawlok" class="max-w-full width-full height-auto">
+                        </picture>
+                        Werner Pawlok
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/bert_stern-1/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-bse.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-bse.jpg" width="220" height="220" alt="Bert Stern" title="Bert Stern" class="max-w-full width-full height-auto">
+                        </picture>
+                        Bert Stern
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/ysabel_lemay-3/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-yle.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-yle.jpg" width="220" height="220" alt="Ysabel Lemay" title="Ysabel Lemay" class="max-w-full width-full height-auto">
+                        </picture>
+                        Ysabel Lemay
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/claudio_gotsch/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-cgo.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-cgo.jpg" width="220" height="220" alt="Claudio Gotsch" title="Claudio Gotsch" class="max-w-full width-full height-auto">
+                        </picture>
+                        Claudio Gotsch
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/heiko_hellwig/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-hhl.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-hhl.jpg" width="220" height="220" alt="Heiko Hellwig" title="Heiko Hellwig" class="max-w-full width-full height-auto">
+                        </picture>
+                        Heiko Hellwig
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artist/carol_muthiga_oyekunle/">
+                        <picture>
+                            <source srcset="https://media.lumas.com/site-navigation/top20-220x220-cmu.webp" width="220" height="220" media="all" type="image/webp">
+                            <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-cmu.jpg" width="220" height="220" alt="Carol Muthiga-Oyekunle" title="Carol Muthiga-Oyekunle" class="max-w-full width-full height-auto">
+                        </picture>
+                        Carol Muthiga-Oyekunle
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artists/" class="text-1_8rem hidden-xs hidden-sm hidden-md">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="text-2rem hidden-xs hidden-sm hidden-lg">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="hidden-lg hidden-md hidden-sm">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="hidden-lg hidden-md hidden-xs">View all Top 20 Artists</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</details>
+<details>
+    <summary><a href="https://uk.lumas.com/artfinder/">Artfinder</a></summary>
+    <div class="menu-container">
+        <div class="menu discovery">
+            <dl>
+                <dd>
+                    <a href="https://uk.lumas.com/artfinder/">
+                        <img src="https://media.lumas.com/site-navigation/artfinder-mood-slider.svg" title="ART FINDER" alt="ART FINDER" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#mood"/></svg>
+                        <header>Set&nbsp;your&nbsp;preferences</header>
+                        <aside>8 sliders for art in your style</aside>
+                        <button type="button">Start ART FINDER</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/room-upload/">
+                        <img src="https://media.lumas.com/site-navigation/artfinder-room-upload.svg" title="Room upload" alt="Room upload" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#room"/></svg>
+                        <header>Upload&nbsp;your&nbsp;room&nbsp;</header>
+                        <aside>Curated works for your space</aside>
+                        <button type="button">Select room</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/similarity-search/">
+                        <img src="https://media.lumas.com/site-navigation/artfinder-similarity-search.svg" title="Similiarity search" alt="Similiarity search" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#similar"/></svg>
+                        <header>Upload&nbsp;an&nbsp;artwork&nbsp;</header>
+                        <aside>Curated works based on your taste</aside>
+                        <button type="button">Select artwork</button>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/artliker/">
+                        <img src="https://media.lumas.com/site-navigation/artfinder-artliker.svg" title="ART LIKER" alt="ART LIKER" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#artliker"/></svg>
+                        <header>Rate&nbsp;artworks</header>
+                        <aside>Thumbs up or down to art in your style</aside>   
+                        <button type="button">Start ART LIKER</button>
+                    </a>
+                </dd>                
+                <dd class="hidden-lg hidden-md">
+                    <a href="https://uk.lumas.com/contact/">
+                        <img src="https://media.lumas.com/site-navigation/artfinder-contact.svg" title="Contact" alt="Contact" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#consult"/></svg>
+                        <header>Art&nbsp;Consultation</header>
+                        <aside>Get in touch and let us help you</aside>
+                        <button type="button">Contact Us</button>
+                    </a>
+                </dd>
+                <dd class="hidden-sm hidden-xs">
+                    <a data-art-cloud-trigger>
+                        <img src="https://media.lumas.com/site-navigation/artfinder-artcloud.svg" title="ART CLOUD" alt="ART CLOUD" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
+                        <svg class="hidden-lg hidden-md"><use href="#artcloud"/></svg>
+                        <header>ART CLOUD</header>
+                        <aside>An Immersive Visual Universe</aside>
+                        <button type="button" data-art-cloud-trigger>Enter ART CLOUD</button>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</details>
+<details>
+    <summary><a href="https://uk.lumas.com/inspired-art-magazine/">Inspiration</a></summary>
+    <div class="menu-container">
+        <div class="menu artworks">
+            <dl class="highlights open">
+                <dt><header>Highlights</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/magazine/"><svg aria-hidden="true"><use href="#magazine"/></svg>Order LUMAS Art Magazine</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/petites/"><svg aria-hidden="true"><use href="#petites"/></svg>Petites</a>
+                </dd>               
+                <dd>
+                    <a href="https://uk.lumas.com/top-artists/"><svg aria-hidden="true"><use href="#artists-to-watch"/></svg>10 Artists to Watch</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/darlings/"><svg aria-hidden="true"><use href="#darlings"/></svg>Darlings</a>
+                </dd>  
+                <dd>
+                    <a href="https://uk.lumas.com/limited-art/"><svg aria-hidden="true"><use href="#value-increase"/></svg>Value Increase Guide</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/technique/string-art/"><svg aria-hidden="true"><use href="#string-art"/></svg>String Art</a>
+                </dd>                
+                <dd>
+                    <a href="https://uk.lumas.com/collections/artists-of-the-year/"><svg aria-hidden="true"><use href="#new-releases"/></svg>Artist Highlights 2026</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/multi-phase/"><svg aria-hidden="true"><use href="#multiphase"/></svg>Multi-Phase</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/inspired-art-magazine/"><svg aria-hidden="true"><use href="#inspired"/></svg>Inspired Stories</a>
+                </dd>    
+                <dd>
+                    <a href="https://uk.lumas.com/format/cut-out/"><svg aria-hidden="true"><use href="#cut-outs"/></svg>Cut-Outs</a>
+                </dd>                                
+            </dl>
+            <dl>
+                <dt><header>Collections</header></dt>
+                <dd><a href="https://uk.lumas.com/collections/curators-favorites/">Curator’s Favourites</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/urban-art/">Urban Spirit</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/summer-art/">Endless Summer</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/evergreens/">Timeless Classics</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/perfect-pairs/">Perfect Pairs</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/affordable-art/">Affordable Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/sci-fi-art/">Futuristic Art</a></dd>                
+                <dd><a href="https://uk.lumas.com/collections/winter-art/">Winter Wonderland</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/nude-photography/">Nudes</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/african-art/">African Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/trends-in-painting/">Trends in Painting</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/botanical-art/">Botanical Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/artists-usa/">Artists from the USA</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/artists-from-germany/">Artists from Germany</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/">All Collections</a></dd>
+            </dl>
+            <dl>
+                <dt><header>Artists in Focus</header></dt>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/marta-contreras-simo/">Marta Contreras Simó</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/slim-aarons/">Slim Aarons</a></dd>
+                <dd><a href="https://uk.lumas.com/artist/gerhard_richter/">Gerhard Richter</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/bert-stern/">Bert Stern</a></dd>
+                <dd><a href="https://uk.lumas.com/inspired-art-magazine/manu-grinspan/">Manu Grinspan</a></dd>
+                <dd><a href="https://uk.lumas.com/inspired-art-magazine/craig-alan/">Craig Alan</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/margarete-schruefer/">Margarete Schüfer</a></dd>
+                <dd><a href="https://uk.lumas.com/artists-in-focus/">All Artists</a></dd>
+            </dl>
+            <dl>
+                <dt><header>LUMAS Voices</header></dt>
+                <dd><a href="https://uk.lumas.com/lumas-voices/marc/">Marc Ullrich, LUMAS Founder</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/christoph/">Christoph Bamberg, Executive Curator</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/stefanie/">Stefanie Harig, LUMAS Founder</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/anika/">Anika Aberle, Portfolio Manager</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/alexander-herrmann/">Alexander Herrmann, Michelin Starred Chef</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/maurizio-pellizzoni/">Maurizio Pellizzoni, Interior Designer</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/gisela/">Gisela, Gallerist New York</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/lumas-voices/">All LUMAS Voices</a></dd>                                             
+            </dl>
+        </div>
+    </div>
+</details>
+<details>
+    <summary><a href="https://uk.lumas.com/galleries/">Galleries</a></summary>
+    <div class="menu-container">
+        <div class="menu galleries">
+            <dl>
+                <dt><header>Our galleries</header></dt>
+                <dd><strong>UK</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/london/">London</a>
+                </dd>                    
+                <dd><strong>USA</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/new-york-soho/">New York</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/miami/">Miami Beach</a>
+                </dd>
+            </dl>
+            <dl>
+                <dt><header>&nbsp;</header></dt>
+                <dd><strong>Germany</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/berlin-mitte/">Berlin - Mitte</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/berlin-kurfuerstendamm/">Berlin - Kudamm</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/cologne/">Cologne</a>
+                </dd>                
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/dortmund/">Dortmund</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/duesseldorf/">Düsseldorf</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/frankfurt/">Frankfurt</a>
+                </dd>
+            </dl>            
+            <dl>
+                <dt><header>&nbsp;</header></dt>
+                <dd><strong>&nbsp;</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/fraport/">Frankfurt Airport</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/hamburg/">Hamburg</a>
+                </dd>                
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/hanover/">Hanover</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/mannheim/">Mannheim</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/munich/">Munich</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/stuttgart/">Stuttgart</a>
+                </dd>
+            </dl>
+            <dl>
+                <dt><header>&nbsp;</header></dt>
+                <dd><strong>France</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/paris-saint-germain/">Paris</a>
+                </dd>
+                <dd><strong>Switzerland</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/zurich/">Zurich</a>
+                </dd>
+                <dd><strong>Austria</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/vienna/">Vienna</a>
+                </dd>
+                <dd><strong>Hungary</strong></dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/budapest/">Budapest</a>
+                </dd>
+            </dl>
+            <dl class="services">
+                <dt><header>Service</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/contact/"><svg><use href="#consult"/></svg>Contact</a>
+                </dd>
+                <dd>
+                    <a href="https://uk.lumas.com/galleries/"><svg><use href="#visit"/></svg>All&nbsp;Galleries</a>
+                </dd>
+                <dt><header>Events</header></dt>
+                <dd>
+                    <a href="https://uk.lumas.com/events/"><svg><use href="#events"/></svg>Events</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</details>
+<details>
+    <summary>
+        <a href="https://uk.lumas.com/why-lumas/">About us</a>
+    </summary>
+</details>
+
+ <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
+ <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <symbol id="new-releases" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M6.62467 10.3333C6.56515 10.1026 6.44489 9.89206 6.27641 9.72358C6.10793 9.5551 5.89738 9.43485 5.66667 9.37533L1.57667 8.32066C1.50689 8.30085 1.44547 8.25883 1.40174 8.20096C1.35801 8.14309 1.33435 8.07253 1.33435 7.99999C1.33435 7.92746 1.35801 7.8569 1.40174 7.79903C1.44547 7.74116 1.50689 7.69913 1.57667 7.67933L5.66667 6.62399C5.8973 6.56453 6.1078 6.44438 6.27627 6.27602C6.44474 6.10766 6.56504 5.89725 6.62467 5.66666L7.67933 1.57666C7.69894 1.50661 7.74092 1.44489 7.79888 1.40092C7.85684 1.35696 7.92759 1.33316 8.00033 1.33316C8.07308 1.33316 8.14383 1.35696 8.20179 1.40092C8.25974 1.44489 8.30173 1.50661 8.32133 1.57666L9.37533 5.66666C9.43485 5.89737 9.55511 6.10792 9.72359 6.27641C9.89207 6.44489 10.1026 6.56514 10.3333 6.62466L14.4233 7.67866C14.4937 7.69806 14.5557 7.74 14.5999 7.79804C14.6441 7.85609 14.668 7.92703 14.668 7.99999C14.668 8.07295 14.6441 8.1439 14.5999 8.20194C14.5557 8.25999 14.4937 8.30193 14.4233 8.32133L10.3333 9.37533C10.1026 9.43485 9.89207 9.5551 9.72359 9.72358C9.55511 9.89206 9.43485 10.1026 9.37533 10.3333L8.32067 14.4233C8.30106 14.4934 8.25908 14.5551 8.20112 14.5991C8.14316 14.643 8.07241 14.6668 7.99967 14.6668C7.92692 14.6668 7.85617 14.643 7.79821 14.5991C7.74026 14.5551 7.69827 14.4934 7.67867 14.4233L6.62467 10.3333Z"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M13.3333 2V4.66667"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14.6667 3.33333H12"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M2.66667 11.3333V12.6667"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M3.33333 12H2"/></symbol>
+    <symbol id="petites" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M5.25 1.75H2.33333C2.01117 1.75 1.75 2.01117 1.75 2.33333V11.6667C1.75 11.9888 2.01117 12.25 2.33333 12.25H5.25C5.57217 12.25 5.83333 11.9888 5.83333 11.6667V2.33333C5.83333 2.01117 5.57217 1.75 5.25 1.75Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M11.6667 1.75H8.75001C8.42784 1.75 8.16667 2.01117 8.16667 2.33333V5.25C8.16667 5.57217 8.42784 5.83333 8.75001 5.83333H11.6667C11.9888 5.83333 12.25 5.57217 12.25 5.25V2.33333C12.25 2.01117 11.9888 1.75 11.6667 1.75Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M11.6667 8.16667H8.75001C8.42784 8.16667 8.16667 8.42784 8.16667 8.75001V11.6667C8.16667 11.9888 8.42784 12.25 8.75001 12.25H11.6667C11.9888 12.25 12.25 11.9888 12.25 11.6667V8.75001C12.25 8.42784 11.9888 8.16667 11.6667 8.16667Z"/></symbol>
+    <symbol id="room-upload" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M10 2.5V12.5"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14.1663 6.66667L9.99967 2.5L5.83301 6.66667"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5"/></symbol>
+    <symbol id="sale" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M8.39071 1.72399C8.14072 1.47393 7.80163 1.3334 7.44804 1.33333H2.66671C2.31309 1.33333 1.97395 1.4738 1.7239 1.72385C1.47385 1.9739 1.33337 2.31304 1.33337 2.66666V7.448C1.33345 7.80159 1.47397 8.14067 1.72404 8.39066L7.52671 14.1933C7.82972 14.4944 8.23954 14.6634 8.66671 14.6634C9.09388 14.6634 9.5037 14.4944 9.80671 14.1933L14.1934 9.80666C14.4945 9.50365 14.6635 9.09383 14.6635 8.66666C14.6635 8.23949 14.4945 7.82967 14.1934 7.52666L8.39071 1.72399Z"/><path fill="currentColor" fill-opacity="0.8" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M4.99996 5.33334C5.18405 5.33334 5.33329 5.1841 5.33329 5.00001C5.33329 4.81591 5.18405 4.66667 4.99996 4.66667C4.81586 4.66667 4.66663 4.81591 4.66663 5.00001C4.66663 5.1841 4.81586 5.33334 4.99996 5.33334Z"/></symbol>
+    <symbol id="search" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14 14L11.1067 11.1067"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"/></symbol>
+    <symbol id="string-art" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M4.66667 2.33333C8 0.999993 9.33334 3.99999 6.66667 4.99999C1 6.66666 1.33334 9.99999 3.33334 10.6667C6.66667 12 9.33334 3.99999 12.6667 5.99999C16 7.99999 13 15 10 14C6.66667 12.3333 10.3333 6.66666 14 12.6667"/></symbol>
+    <symbol id="top-20-artists" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M7.70796 2.17734C7.73673 2.12508 7.77901 2.08149 7.83037 2.05114C7.88173 2.02079 7.9403 2.00478 7.99996 2.00478C8.05962 2.00478 8.11819 2.02079 8.16955 2.05114C8.22091 2.08149 8.26318 2.12508 8.29196 2.17734L10.26 5.91334C10.3069 5.99985 10.3724 6.07489 10.4518 6.13308C10.5311 6.19128 10.6224 6.23117 10.719 6.24991C10.8156 6.26865 10.9152 6.26576 11.0106 6.24146C11.106 6.21715 11.1948 6.17203 11.2706 6.10934L14.122 3.66667C14.1767 3.62215 14.2441 3.59615 14.3146 3.59241C14.3851 3.58866 14.4549 3.60737 14.514 3.64584C14.5732 3.6843 14.6186 3.74055 14.6437 3.80647C14.6689 3.87239 14.6725 3.94459 14.654 4.01267L12.7646 10.8433C12.7261 10.9831 12.643 11.1065 12.528 11.1948C12.413 11.2831 12.2723 11.3315 12.1273 11.3327H3.87329C3.72818 11.3317 3.58736 11.2833 3.47222 11.195C3.35707 11.1067 3.27389 10.9832 3.23529 10.8433L1.34662 4.01334C1.32812 3.94525 1.3317 3.87305 1.35685 3.80713C1.382 3.74121 1.42741 3.68497 1.48656 3.6465C1.5457 3.60804 1.61553 3.58933 1.68598 3.59307C1.75644 3.59682 1.82389 3.62282 1.87862 3.66734L4.72929 6.11001C4.80516 6.1727 4.89396 6.21782 4.98933 6.24212C5.0847 6.26643 5.18427 6.26932 5.28089 6.25058C5.37751 6.23184 5.46878 6.19194 5.54815 6.13375C5.62752 6.07556 5.69303 6.00051 5.73996 5.91401L7.70796 2.17734Z"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M3.33337 14H12.6667"/></symbol>
+    <symbol id="trending" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M5.66671 9.66667C6.10873 9.66667 6.53266 9.49107 6.84522 9.17851C7.15778 8.86595 7.33337 8.44203 7.33337 8C7.33337 7.08 7.00004 6.66667 6.66671 6C5.95204 4.57133 6.51737 3.29733 8.00004 2C8.33337 3.66667 9.33337 5.26667 10.6667 6.33333C12 7.4 12.6667 8.66667 12.6667 10C12.6667 10.6128 12.546 11.2197 12.3115 11.7859C12.077 12.352 11.7332 12.8665 11.2999 13.2998C10.8665 13.7332 10.3521 14.0769 9.7859 14.3114C9.21971 14.546 8.61288 14.6667 8.00004 14.6667C7.38721 14.6667 6.78037 14.546 6.21418 14.3114C5.648 14.0769 5.13355 13.7332 4.70021 13.2998C4.26687 12.8665 3.92312 12.352 3.6886 11.7859C3.45408 11.2197 3.33337 10.6128 3.33337 10C3.33337 9.23133 3.62204 8.47067 4.00004 8C4.00004 8.44203 4.17564 8.86595 4.4882 9.17851C4.80076 9.49107 5.22468 9.66667 5.66671 9.66667Z"/></symbol>
+    <symbol id="value-increase" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M10.6666 4.66666H14.6666V8.66666"/><path fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M14.6667 4.66666L9.00004 10.3333L5.66671 6.99999L1.33337 11.3333"/></symbol>
+    <symbol id="wishlist" viewBox="0 0 21 20"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M15.849 11.6667C17.0918 10.45 18.3514 8.99167 18.3514 7.08333C18.3514 5.86776 17.868 4.70197 17.0077 3.84243C16.1473 2.98289 14.9804 2.5 13.7636 2.5C12.2955 2.5 11.2611 2.91667 10.0099 4.16667C8.75871 2.91667 7.72437 2.5 6.25627 2.5C5.0395 2.5 3.87258 2.98289 3.0122 3.84243C2.15181 4.70197 1.66846 5.86776 1.66846 7.08333C1.66846 9 2.91968 10.4583 4.1709 11.6667L10.0099 17.5L15.849 11.6667Z"/></symbol>
+    <symbol id="cut-outs" viewBox="0 0 15 15"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M7.20312 1.43437C7.23051 1.37903 7.27282 1.33245 7.32528 1.29989C7.37774 1.26732 7.43825 1.25006 7.5 1.25006C7.56174 1.25006 7.62226 1.26732 7.67471 1.29989C7.72717 1.33245 7.76948 1.37903 7.79687 1.43437L9.24062 4.35874C9.33573 4.55122 9.47613 4.71775 9.64976 4.84403C9.82339 4.97031 10.0251 5.05257 10.2375 5.08374L13.4662 5.55624C13.5274 5.56511 13.5849 5.59091 13.6322 5.63074C13.6795 5.67057 13.7146 5.72284 13.7338 5.78162C13.7529 5.84041 13.7552 5.90337 13.7404 5.96339C13.7256 6.02341 13.6943 6.07809 13.65 6.12124L11.315 8.39499C11.161 8.54506 11.0458 8.7303 10.9793 8.93476C10.9127 9.13923 10.8969 9.3568 10.9331 9.56875L11.4844 12.7812C11.4952 12.8424 11.4886 12.9053 11.4653 12.9629C11.4421 13.0205 11.4031 13.0704 11.3528 13.1069C11.3026 13.1434 11.2431 13.165 11.1812 13.1693C11.1192 13.1736 11.0573 13.1604 11.0025 13.1312L8.11625 11.6137C7.92607 11.5139 7.71448 11.4617 7.49968 11.4617C7.28488 11.4617 7.0733 11.5139 6.88312 11.6137L3.9975 13.1312C3.9427 13.1603 3.88087 13.1733 3.81903 13.1689C3.75719 13.1645 3.69782 13.1428 3.64768 13.1064C3.59754 13.0699 3.55864 13.0201 3.53541 12.9626C3.51217 12.9052 3.50553 12.8423 3.51625 12.7812L4.06687 9.56937C4.10324 9.35733 4.08749 9.13962 4.02096 8.93502C3.95443 8.73043 3.83913 8.54509 3.685 8.39499L1.35 6.12187C1.30537 6.07876 1.27374 6.02399 1.25872 5.96379C1.2437 5.90359 1.24589 5.84038 1.26504 5.78136C1.2842 5.72235 1.31954 5.6699 1.36704 5.62998C1.41455 5.59007 1.47231 5.56431 1.53375 5.55562L4.76187 5.08374C4.97453 5.05281 5.17649 4.97066 5.35036 4.84436C5.52423 4.71807 5.66481 4.55141 5.76 4.35874L7.20312 1.43437Z"/></symbol>
+    <symbol id="darlings" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M8 14.6667C6.23189 14.6667 4.53619 13.9643 3.28595 12.714C2.03571 11.4638 1.33333 9.76811 1.33333 8C1.33333 6.23189 2.03571 4.53619 3.28595 3.28595C4.53619 2.03571 6.23189 1.33333 8 1.33333C9.76811 1.33333 11.4638 1.96547 12.714 3.09069C13.9643 4.21591 14.6667 5.74203 14.6667 7.33333C14.6667 8.21738 14.3155 9.06523 13.6904 9.69035C13.0652 10.3155 12.2174 10.6667 11.3333 10.6667H9.83333C9.61666 10.6667 9.40428 10.727 9.21998 10.8409C9.03567 10.9548 8.88673 11.1178 8.78983 11.3116C8.69294 11.5054 8.65192 11.7223 8.67138 11.9381C8.69083 12.1539 8.77 12.36 8.9 12.5333L9.09999 12.8C9.22999 12.9733 9.30916 13.1794 9.32861 13.3952C9.34807 13.611 9.30706 13.828 9.21016 14.0217C9.11327 14.2155 8.96432 14.3785 8.78001 14.4924C8.59571 14.6063 8.38333 14.6667 8.16666 14.6667H8Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M9.00001 4.66667C9.1841 4.66667 9.33334 4.51743 9.33334 4.33333C9.33334 4.14924 9.1841 4 9.00001 4C8.81591 4 8.66667 4.14924 8.66667 4.33333C8.66667 4.51743 8.81591 4.66667 9.00001 4.66667Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M11.6667 7.33334C11.8508 7.33334 12 7.1841 12 7.00001C12 6.81591 11.8508 6.66667 11.6667 6.66667C11.4826 6.66667 11.3333 6.81591 11.3333 7.00001C11.3333 7.1841 11.4826 7.33334 11.6667 7.33334Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M4.33333 8.66667C4.51743 8.66667 4.66667 8.51743 4.66667 8.33333C4.66667 8.14924 4.51743 8 4.33333 8C4.14924 8 4 8.14924 4 8.33333C4 8.51743 4.14924 8.66667 4.33333 8.66667Z"/><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" fill-opacity="0.8" d="M5.66666 5.33334C5.85076 5.33334 5.99999 5.1841 5.99999 5.00001C5.99999 4.81591 5.85076 4.66667 5.66666 4.66667C5.48257 4.66667 5.33333 4.81591 5.33333 5.00001C5.33333 5.1841 5.48257 5.33334 5.66666 5.33334Z"/></symbol>
+    <symbol id="events" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M6.66602 1.66666V4.99999"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.334 1.66666V4.99999"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M15.8333 3.33334H4.16667C3.24619 3.33334 2.5 4.07954 2.5 5.00001V16.6667C2.5 17.5872 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5872 17.5 16.6667V5.00001C17.5 4.07954 16.7538 3.33334 15.8333 3.33334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M2.5 8.33334H17.5"/></symbol>
+    <symbol id="gallery" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M16.6673 8.33334C16.6673 12.4942 12.0515 16.8275 10.5015 18.1658C10.3571 18.2744 10.1813 18.3331 10.0007 18.3331C9.81999 18.3331 9.64421 18.2744 9.49982 18.1658C7.94982 16.8275 3.33398 12.4942 3.33398 8.33334C3.33398 6.56523 4.03636 4.86954 5.28661 3.61929C6.53685 2.36905 8.23254 1.66667 10.0007 1.66667C11.7688 1.66667 13.4645 2.36905 14.7147 3.61929C15.9649 4.86954 16.6673 6.56523 16.6673 8.33334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M10 10.8333C11.3807 10.8333 12.5 9.71404 12.5 8.33333C12.5 6.95262 11.3807 5.83333 10 5.83333C8.61929 5.83333 7.5 6.95262 7.5 8.33333C7.5 9.71404 8.61929 10.8333 10 10.8333Z"/></symbol>
+    <symbol id="inspired" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M10.8267 5.17334L9.624 8.78067C9.55854 8.97706 9.44826 9.15551 9.30188 9.30189C9.1555 9.44827 8.97705 9.55855 8.78067 9.62401L5.17333 10.8267L6.376 7.21934C6.44145 7.02295 6.55174 6.8445 6.69812 6.69812C6.84449 6.55175 7.02294 6.44146 7.21933 6.37601L10.8267 5.17334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8.00001C14.6667 4.31811 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33333 4.31811 1.33333 8.00001C1.33333 11.6819 4.3181 14.6667 8 14.6667Z"/></symbol>
+    <symbol id="last-prints" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" stroke-opacity="0.8" d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"/></symbol>
+    <symbol id="magazine" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8 4.66666V14"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M2 12C1.82319 12 1.65362 11.9298 1.52859 11.8047C1.40357 11.6797 1.33333 11.5101 1.33333 11.3333V2.66667C1.33333 2.48986 1.40357 2.32029 1.52859 2.19526C1.65362 2.07024 1.82319 2 2 2H5.33333C6.04058 2 6.71885 2.28095 7.21895 2.78105C7.71905 3.28115 8 3.95942 8 4.66667C8 3.95942 8.28095 3.28115 8.78105 2.78105C9.28114 2.28095 9.95942 2 10.6667 2H14C14.1768 2 14.3464 2.07024 14.4714 2.19526C14.5964 2.32029 14.6667 2.48986 14.6667 2.66667V11.3333C14.6667 11.5101 14.5964 11.6797 14.4714 11.8047C14.3464 11.9298 14.1768 12 14 12H10C9.46957 12 8.96086 12.2107 8.58578 12.5858C8.21071 12.9609 8 13.4696 8 14C8 13.4696 7.78928 12.9609 7.41421 12.5858C7.03914 12.2107 6.53043 12 6 12H2Z"/></symbol>
+    <symbol id="masters" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7.00004 2L5.33337 6L8.00004 14.6667L10.6667 6L9.00004 2"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.3334 2C11.5403 2 11.7445 2.04819 11.9296 2.14076C12.1148 2.23333 12.2758 2.36774 12.4 2.53333L14.4 5.2C14.5715 5.42878 14.665 5.70663 14.6665 5.99257C14.6681 6.2785 14.5777 6.55737 14.4087 6.788L9.08202 14.112C8.95852 14.2837 8.79597 14.4235 8.60777 14.5199C8.41958 14.6164 8.21115 14.6667 7.99968 14.6667C7.78822 14.6667 7.57979 14.6164 7.39159 14.5199C7.2034 14.4235 7.04085 14.2837 6.91735 14.112L1.59068 6.788C1.42176 6.55729 1.33147 6.27839 1.33315 5.99246C1.33483 5.70652 1.42839 5.4287 1.60002 5.2L3.59868 2.53533C3.72281 2.36919 3.88397 2.23429 4.06937 2.14136C4.25477 2.04843 4.4593 2.00003 4.66668 2H11.3334Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M1.33337 6H14.6667"/></symbol>
+    <symbol id="mood-slider" viewBox="0 0 20 20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M17.5003 3.33333H11.667"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8.33333 3.33333H2.5"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M17.5 10H10"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M6.66667 10H2.5"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M17.4997 16.6667H13.333"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M10 16.6667H2.5"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M11.667 1.66667V5.00001"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M6.66699 8.33333V11.6667"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.333 15V18.3333"/></symbol>
+    <symbol id="multiphase" viewBox="0 0 15 15"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M11.875 1.875H3.125C2.43464 1.875 1.875 2.43464 1.875 3.125V11.875C1.875 12.5654 2.43464 13.125 3.125 13.125H11.875C12.5654 13.125 13.125 12.5654 13.125 11.875V3.125C13.125 2.43464 12.5654 1.875 11.875 1.875Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M5.625 6.875C6.31536 6.875 6.875 6.31536 6.875 5.625C6.875 4.93464 6.31536 4.375 5.625 4.375C4.93464 4.375 4.375 4.93464 4.375 5.625C4.375 6.31536 4.93464 6.875 5.625 6.875Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.125 9.37499L11.1962 7.44624C10.9618 7.21191 10.644 7.08026 10.3125 7.08026C9.98104 7.08026 9.66316 7.21191 9.42875 7.44624L3.75 13.125"/></symbol>
+    <symbol id="cloudscape" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M17.5 19H9.00004C7.7019 18.9997 6.42943 18.6384 5.32481 17.9565C4.2202 17.2746 3.32696 16.2989 2.74491 15.1386C2.16286 13.9783 1.91493 12.679 2.02883 11.3858C2.14273 10.0927 2.61397 8.85671 3.38988 7.81598C4.1658 6.77526 5.21583 5.97079 6.42264 5.49249C7.62944 5.01418 8.94548 4.88087 10.2237 5.10747C11.5019 5.33406 12.6919 5.91162 13.6608 6.77561C14.6296 7.6396 15.3391 8.75598 15.71 10H17.5C18.6935 10 19.8381 10.4741 20.682 11.318C21.5259 12.1619 22 13.3065 22 14.5C22 15.6935 21.5259 16.8381 20.682 17.682C19.8381 18.5259 18.6935 19 17.5 19Z"/></symbol>
+    <symbol id="contact" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M13.832 16.568C14.0385 16.6628 14.2712 16.6845 14.4917 16.6294C14.7122 16.5744 14.9073 16.4458 15.045 16.265L15.4 15.8C15.5863 15.5516 15.8279 15.35 16.1056 15.2111C16.3833 15.0723 16.6895 15 17 15H20C20.5304 15 21.0391 15.2107 21.4142 15.5858C21.7893 15.9609 22 16.4696 22 17V20C22 20.5304 21.7893 21.0391 21.4142 21.4142C21.0391 21.7893 20.5304 22 20 22C15.2261 22 10.6477 20.1036 7.27208 16.7279C3.89642 13.3523 2 8.7739 2 4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H7C7.53043 2 8.03914 2.21071 8.41421 2.58579C8.78929 2.96086 9 3.46957 9 4V7C9 7.31049 8.92771 7.61672 8.78885 7.89443C8.65 8.17214 8.44839 8.41371 8.2 8.6L7.732 8.951C7.54842 9.09118 7.41902 9.29059 7.36579 9.51535C7.31256 9.74012 7.33878 9.97638 7.44 10.184C8.80668 12.9599 11.0544 15.2048 13.832 16.568Z"/></symbol>
+    <symbol id="cart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M8 22C8.55228 22 9 21.5523 9 21C9 20.4477 8.55228 20 8 20C7.44772 20 7 20.4477 7 21C7 21.5523 7.44772 22 8 22Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M19 22C19.5523 22 20 21.5523 20 21C20 20.4477 19.5523 20 19 20C18.4477 20 18 20.4477 18 21C18 21.5523 18.4477 22 19 22Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M2.05005 2.05H4.05005L6.71005 14.47C6.80763 14.9249 7.06072 15.3315 7.42576 15.6199C7.7908 15.9082 8.24495 16.0603 8.71005 16.05H18.49C18.9452 16.0493 19.3865 15.8933 19.7411 15.6078C20.0956 15.3224 20.3422 14.9245 20.4401 14.48L22.09 7.05H5.12005"/></symbol>
+    <symbol id="account" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"/></symbol>
+    <symbol id="bestseller" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M15.477 12.89L16.992 21.416C17.009 21.5164 16.9949 21.6196 16.9516 21.7118C16.9084 21.8039 16.838 21.8807 16.7499 21.9318C16.6619 21.9829 16.5603 22.0059 16.4588 21.9977C16.3573 21.9895 16.2607 21.9506 16.182 21.886L12.602 19.199C12.4292 19.0699 12.2192 19.0001 12.0035 19.0001C11.7878 19.0001 11.5778 19.0699 11.405 19.199L7.819 21.885C7.74032 21.9494 7.64386 21.9883 7.54249 21.9965C7.44112 22.0047 7.33967 21.9818 7.25166 21.9309C7.16365 21.8799 7.09327 21.8033 7.04991 21.7113C7.00656 21.6193 6.99228 21.5163 7.009 21.416L8.523 12.89"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14Z"/></symbol>
+    <symbol id="artists-to-watch" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M16.051 12.616C16.1171 12.4133 16.2462 12.2371 16.4194 12.113C16.5927 11.9888 16.8012 11.9233 17.0143 11.926C17.2275 11.9287 17.4342 11.9994 17.6043 12.1279C17.7744 12.2563 17.899 12.4357 17.96 12.64L18.697 14.092C18.7687 14.2332 18.8729 14.3553 19.001 14.4483C19.1292 14.5413 19.2776 14.6025 19.434 14.627L21.068 14.883C21.2784 14.8838 21.4832 14.951 21.6532 15.075C21.8232 15.1989 21.9498 15.3733 22.015 15.5734C22.0801 15.7735 22.0805 15.989 22.016 16.1893C21.9516 16.3896 21.8256 16.5645 21.656 16.689L20.484 17.857C20.3718 17.9687 20.2877 18.1055 20.2387 18.256C20.1896 18.4066 20.1771 18.5666 20.202 18.723L20.461 20.336C20.5322 20.5382 20.5366 20.7579 20.4735 20.9627C20.4104 21.1676 20.2832 21.3468 20.1105 21.4738C19.9379 21.6009 19.729 21.6691 19.5146 21.6684C19.3003 21.6677 19.0918 21.5982 18.92 21.47L17.455 20.72C17.3139 20.6477 17.1576 20.61 16.999 20.61C16.8404 20.61 16.6841 20.6477 16.543 20.72L15.078 21.47C14.9062 21.5971 14.6981 21.6658 14.4844 21.666C14.2707 21.6663 14.0625 21.5981 13.8904 21.4713C13.7183 21.3446 13.5913 21.1661 13.5281 20.962C13.4648 20.7579 13.4687 20.5388 13.539 20.337L13.797 18.724C13.8219 18.5676 13.8093 18.4076 13.7603 18.257C13.7113 18.1065 13.6272 17.9697 13.515 17.858L12.359 16.705C12.1836 16.5835 12.0517 16.4092 11.9825 16.2074C11.9133 16.0056 11.9105 15.787 11.9744 15.5835C12.0383 15.38 12.1656 15.2022 12.3377 15.0762C12.5098 14.9502 12.7177 14.8825 12.931 14.883L14.564 14.627C14.7204 14.6025 14.8688 14.5413 14.9969 14.4483C15.1251 14.3553 15.2293 14.2332 15.301 14.092L16.051 12.616Z"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M8 15H7C5.93913 15 4.92172 15.4214 4.17157 16.1716C3.42143 16.9217 3 17.9391 3 19V21"/><path fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" d="M10 11C12.2091 11 14 9.20914 14 7C14 4.79086 12.2091 3 10 3C7.79086 3 6 4.79086 6 7C6 9.20914 7.79086 11 10 11Z"/></symbol>
+</svg>
+
+</template>
+
+<!-- LUMAS-NAV-KIT:MARKUP:END -->
+
+<!-- LUMAS-ROOM-LP:HERO:BEGIN -->
+<nav class="rlp-crumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="https://www.lumas.com/">Home</a></li>
+    <li aria-hidden="true">/</li>
+    <li><a href="https://www.lumas.com/art-by-room/">Art by room</a></li>
+    <li aria-hidden="true">/</li>
+    <li aria-current="page">Living room</li>
+  </ol>
+</nav>
+
+<header class="rlp-hero" id="hero">
+  <figure class="rlp-hero__media">
+    <img src="img/living-room-wall-art-hero-gotsch-ying-yang.jpg"
+         alt="A collector&#39;s living room with tall shuttered windows, a curved cream sofa and a wide black and white work by Claudio Gotsch on the far wall."
+         width="1920" height="1080" fetchpriority="high">
+  </figure>
+  <div class="rlp-hero__text">
+    <p class="rlp-eyebrow">Art by room &middot; Living room</p>
+    <h1 class="rlp-hero__title" id="hero-h1">Living room wall art</h1>
+    <p class="rlp-hero__lede">A gallery curator's guide to choosing, sizing and hanging art you'll live with for years.</p>
+    <div class="rlp-hero__cta">
+      <a class="rlp-btn rlp-btn--primary" href="#edit">Explore living room art</a>
+      <a class="rlp-btn rlp-btn--secondary" href="#consult">Free visualisation</a>
+    </div>
+    <p class="rlp-hero__credit">Shown: Claudio Gotsch, <a href="https://www.lumas.de/pictures/claudio_gotsch/ying_yang/">Ying &amp; Yang</a></p>
   </div>
-  <nav class="nav">
-    <button class="nav__burger" aria-label="Menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-    </button>
-    <a class="nav__logo" href="#" aria-label="LUMAS">
-      <svg viewBox="0 0 160 30" fill="currentColor" role="img" aria-label="LUMAS"><path d="M8.1,0.9v20.5h12.1v6.8H0.4V0.9H8.1z"/><path d="M34.9,28.9c-3.6,0-6.6-1-8.8-2.9c-2.3-1.9-3.5-4.7-3.5-8.2V0.9h7.7v17c0,1.4,0.4,2.5,1.2,3.3c0.8,0.8,1.9,1.2,3.4,1.2 s2.6-0.4,3.4-1.2c0.8-0.8,1.2-1.9,1.2-3.3v-17h7.7v16.9c0,3.6-1.1,6.4-3.3,8.3C41.6,28,38.6,28.9,34.9,28.9z"/><path d="M68.1,11.3l2.6-10.4h11.8v27.4h-7.3v-7.8c0-5,0.1-9.3,0.2-12.8c-0.6,2.3-1.1,4.3-1.6,6.1l-4,14.5h-6.2l-4-14.5 C59.1,12,58.6,10,58,7.7c0.2,3.5,0.2,7.8,0.2,12.8v7.8h-7.3V0.9h11.8l2.6,10.4c0.7,2.7,1.1,4.6,1.4,5.9 C66.9,15.9,67.4,14,68.1,11.3z"/><path d="M114.1,28.3h-8.2l-1.2-3.6H94l-1.2,3.6H85l9.7-27.4h9.2L114.1,28.3z M98,12.1l-2,6.3h6.7l-2-6.3c-0.7-2.2-1.2-3.7-1.3-4.3 C98.7,9.9,98.3,11.3,98,12.1z"/><path d="M126.1,28.9c-3.9,0-6.9-0.9-9.1-2.6c-2.1-1.7-3.2-4.1-3.2-7h7.4c0,1.4,0.4,2.4,1.3,3c0.8,0.5,2.1,0.8,3.9,0.8 c2.6,0,3.8-0.8,3.8-2.5c0-0.8-0.3-1.3-0.9-1.7c-0.6-0.4-1.7-0.7-3.4-1l-2.2-0.3c-6.3-1-9.5-4-9.5-8.8c0-2.6,1-4.6,2.9-6.2 c1.9-1.5,4.7-2.3,8.3-2.3c3.6,0,6.5,0.8,8.5,2.3c2,1.5,3.1,3.8,3.2,6.8H130c-0.1-1.1-0.4-1.9-1.1-2.4c-0.7-0.5-1.8-0.8-3.2-0.8 c-2.3,0-3.5,0.8-3.5,2.3c0,0.8,0.3,1.3,0.9,1.7c0.6,0.4,1.6,0.7,3.1,1l2.3,0.4c3.4,0.6,5.9,1.5,7.4,2.9c1.6,1.3,2.3,3.2,2.3,5.7 c0,2.9-1.1,5.1-3.2,6.6C132.8,28.2,129.9,28.9,126.1,28.9z"/><path d="M140.7,6.6V0.7H159v11.9h-6.4v-6H140.7z"/></svg>
-    </a>
-    <ul class="nav__links">
-      <li><a href="#" aria-current="page">Artworks</a></li>
-      <li><a href="#">Top 20</a></li>
-      <li><a href="#">ArtFinder</a></li>
-      <li><a href="#">Inspiration</a></li>
-      <li><a href="#">Galleries</a></li>
-      <li><a href="#">About us</a></li>
-    </ul>
-    <div class="nav__search">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <input type="search" placeholder="Search" aria-label="Search">
-    </div>
-    <div class="nav__icons">
-      <a class="nav__ic--mobile" href="#" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></a>
-      <a class="nav__ic--desktop" href="#consult" aria-label="Chat"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></a>
-      <a class="nav__ic--desktop" href="#consult" aria-label="Phone advice"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></a>
-      <a href="#" aria-label="Wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1z"/></svg></a>
-      <a class="nav__ic--desktop" href="#" aria-label="Account"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></a>
-      <a href="#" aria-label="Cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></a>
-    </div>
-    <span class="nav__locale">EN<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
-  </nav>
 </header>
-
-<!-- ====================== 1 · HERO ====================== -->
-<section class="hero">
-  <img class="hero__img" src="img/living-room-wall-art-hero.jpg" alt="Living room with a single large framed artwork above a low leather sofa in natural light">
-  <div class="hero__overlay"></div>
-  <div class="hero__inner">
-    <p class="eyebrow">Living Room</p>
-    <h1 class="h1">Living Room Wall Art</h1>
-    <p class="hero__lock">A gallery curator's guide to choosing, sizing and hanging art you'll live with for years.</p>
-    <div class="hero__cta">
-      <a class="btn btn--light" href="#edit">Explore living room art →</a>
-      <a class="btn btn--ghost-inv" href="#consult">Request a free visualisation</a>
-    </div>
-  </div>
-</section>
+<!-- LUMAS-ROOM-LP:HERO:END -->
 
 <!-- ====================== ON THIS PAGE (index / jumpmarks) ====================== -->
 <nav class="toc" aria-label="On this page">
@@ -425,9 +1251,9 @@ html{scroll-behavior:smooth}
     <div class="intro">
       <p class="eyebrow intro__eyebrow">Why the living room is different</p>
       <div class="intro__grid">
-        <p class="intro__lead">The living room is the one space everyone sees — and the one wall you look at most. The right piece doesn't just fill it; it sets the temperature of the whole room.</p>
+        <p class="intro__lead">The living room is the one space everyone sees, and the one wall you look at most. The right piece doesn't just fill it; it sets the temperature of the whole room.</p>
         <div class="intro__body">
-          <p>Most rooms have a job. The kitchen feeds you; the bedroom rests you. The living room has to do everything — host, relax, impress, disappear into the background on a quiet Sunday. That makes it the hardest room to get right and the most rewarding when you do.</p>
+          <p>Most rooms have a job. The kitchen feeds you; the bedroom rests you. The living room has to do everything: host, relax, impress, disappear into the background on a quiet Sunday. That makes it the hardest room to get right and the most rewarding when you do.</p>
           <p>Art is what tips a living room from <strong>furnished</strong> to <strong>considered</strong>. A single well-chosen piece can anchor a sofa, balance a tall window, or carry an entire wall that paint and shelving never could. The trick is matching the work not just to your taste, but to the <strong>scale, light and rhythm</strong> of the room itself.</p>
           <p>Below, we've broken it down the way we'd advise a collector in one of our galleries: first the approach, then the practical rules, then the pieces themselves.</p>
         </div>
@@ -450,7 +1276,7 @@ html{scroll-behavior:smooth}
         </div>
         <span class="approach__n">01</span>
         <h3 class="approach__title">The Statement Piece</h3>
-        <p>One large work, given room to breathe. The cleanest, most confident choice — and the most forgiving, because there's nothing to balance. Aim for roughly two-thirds the width of the furniture beneath it.</p>
+        <p>One large work, given room to breathe. The cleanest, most confident choice, and the most forgiving, because there's nothing to balance. Aim for roughly two-thirds the width of the furniture beneath it.</p>
         <p class="approach__best"><b>Best for:</b> high ceilings, minimalist interiors, a wall you want to define in one move.</p>
         <a class="txt-link" href="#edit">Shop large-format prints →</a>
       </div>
@@ -460,7 +1286,7 @@ html{scroll-behavior:smooth}
         </div>
         <span class="approach__n">02</span>
         <h3 class="approach__title">The Gallery Wall</h3>
-        <p>A curated cluster of smaller works that reads as one composition. More personal, more flexible — and more demanding. Keep consistent spacing (5–8 cm) and let one piece lead.</p>
+        <p>A curated cluster of smaller works that reads as one composition. More personal, more flexible, and more demanding. Keep consistent spacing (5–8 cm) and let one piece lead.</p>
         <p class="approach__best"><b>Best for:</b> collectors, characterful rooms, walls that flank a TV or run along a sofa.</p>
         <a class="txt-link" href="#edit">See gallery wall sets →</a>
       </div>
@@ -480,7 +1306,7 @@ html{scroll-behavior:smooth}
         </div>
         <span class="approach__n">04</span>
         <h3 class="approach__title">The Leaning Edit</h3>
-        <p>Unhung and intentional — pieces leaned on a console, shelf or floor, often layered. Reads as relaxed and gallery-like, and lets you rotate works without touching the wall.</p>
+        <p>Unhung and intentional: pieces leaned on a console, shelf or floor, often layered. Reads as relaxed and gallery-like, and lets you rotate works without touching the wall.</p>
         <p class="approach__best"><b>Best for:</b> renters, evolving collections, softer, eclectic interiors.</p>
         <a class="txt-link" href="#edit">Shop framed prints →</a>
       </div>
@@ -579,7 +1405,7 @@ html{scroll-behavior:smooth}
         <div class="match-row__media"><img class="match-row__img" loading="lazy" src="img/living-room-wall-art-bold-colourful-interior.jpg" alt="Bold, colourful living room with a vivid artwork"></div>
         <div class="match-row__text">
           <h3 class="h3">Bold, colourful interiors</h3>
-          <p>Counter-intuitively, go quieter on the wall — or commit fully to one statement work that joins the conversation rather than competing.</p>
+          <p>Counter-intuitively, go quieter on the wall, or commit fully to one statement work that joins the conversation rather than competing.</p>
           <a class="txt-link match-row__shop" href="#edit">Shop pop & contemporary →</a>
         </div>
       </div>
@@ -665,7 +1491,7 @@ html{scroll-behavior:smooth}
       <div class="rules__list">
         <div class="rule"><span class="rule__n">1</span><div><h3>Eye level is 145–150 cm to the centre.</h3><p>The standard gallery height. Measure to the centre of the work, not the top. In a living room where you're mostly seated, you can drop slightly lower.</p></div></div>
         <div class="rule"><span class="rule__n">2</span><div><h3>Above a sofa, hang 15–25 cm above the back.</h3><p>Close enough to relate to the furniture, high enough to clear heads. The art should feel connected to the sofa, not floating above it.</p></div></div>
-        <div class="rule"><span class="rule__n">3</span><div><h3>Match width to the furniture.</h3><p>A piece or arrangement should span roughly two-thirds to three-quarters of the sofa or console beneath it. Too small is the single most common mistake — and the easiest to avoid.</p></div></div>
+        <div class="rule"><span class="rule__n">3</span><div><h3>Match width to the furniture.</h3><p>A piece or arrangement should span roughly two-thirds to three-quarters of the sofa or console beneath it. Too small is the single most common mistake, and the easiest to avoid.</p></div></div>
         <div class="rule"><span class="rule__n">4</span><div><h3>Leave breathing room.</h3><p>Don't crowd the ceiling, a corner or a light switch. Negative space is part of the composition.</p></div></div>
       </div>
       <div class="rules__aside">
@@ -834,7 +1660,7 @@ html{scroll-behavior:smooth}
     <div class="consult__col">
       <p class="eyebrow">Visualisation</p>
       <h2 class="h2">See it on your wall before you decide</h2>
-      <p class="consult__intro">Choosing art online comes down to one question: will it work in my room? So let us answer it for you. Send us a photo of your space and a sense of what you're drawn to — one of our art advisors will come back with a personal selection, visualised on your actual wall.</p>
+      <p class="consult__intro">Choosing art online comes down to one question: will it work in my room? So let us answer it for you. Send us a photo of your space and a sense of what you're drawn to. One of our art advisors will come back with a personal selection, visualised on your actual wall.</p>
       <ul class="cc__list">
         <li>A curated shortlist matched to your room, light and style</li>
         <li>Each piece visualised on your wall, to scale</li>
@@ -886,8 +1712,8 @@ html{scroll-behavior:smooth}
         <div class="answer">Hang it 15–25 cm above the top of the sofa back, with the centre of the work around 145–150 cm from the floor. This keeps the art connected to the furniture while clearing the heads of anyone seated.</div>
       </details>
       <details>
-        <summary>Statement piece or gallery wall — which is better?</summary>
-        <div class="answer">A statement piece suits minimalist rooms and high walls and is the easiest to get right. A gallery wall suits characterful, personal spaces but needs consistent spacing and a unifying thread. Neither is "better" — it depends on your room and how hands-on you want to be.</div>
+        <summary>Statement piece or gallery wall: which is better?</summary>
+        <div class="answer">A statement piece suits minimalist rooms and high walls and is the easiest to get right. A gallery wall suits characterful, personal spaces but needs consistent spacing and a unifying thread. Neither is "better": it depends on your room and how hands-on you want to be.</div>
       </details>
       <details>
         <summary>What kind of art works best in a living room?</summary>
@@ -895,7 +1721,7 @@ html{scroll-behavior:smooth}
       </details>
       <details>
         <summary>Can you help me choose art for my room?</summary>
-        <div class="answer">Yes — send us a photo of your space and our advisors will return a personal selection visualised on your actual wall, to scale, with framing recommendations. It's free and comes with no obligation.<br><a class="txt-link" href="#consult">Request a free visualisation</a></div>
+        <div class="answer">Yes, send us a photo of your space and our advisors will return a personal selection visualised on your actual wall, to scale, with framing recommendations. It's free and comes with no obligation.<br><a class="txt-link" href="#consult">Free visualisation</a></div>
       </details>
     </div>
   </div>
@@ -989,7 +1815,6 @@ html{scroll-behavior:smooth}
 }
 </script>
 
-
 <script>
 (function () {
   document.querySelectorAll('.carousel').forEach(function (root) {
@@ -1022,5 +1847,11 @@ html{scroll-behavior:smooth}
   });
 })();
 </script>
+<!-- LUMAS-NAV-KIT:JS:BEGIN -->
+<script src="../_nav/nav.js"></script>
+<!-- LUMAS-NAV-KIT:JS:END -->
+<!-- LUMAS-ROOM-LP:JS:BEGIN -->
+<script src="../_room-lp/room-lp.js"></script>
+<!-- LUMAS-ROOM-LP:JS:END -->
 </body>
 </html>

@@ -178,7 +178,8 @@ button{font:inherit;color:inherit;background:none;border:0;margin:0;padding:0;
 /* The real LUMAS nav is position:fixed and the kit deliberately sets no --nav-h,
    so the page measures it (see syncNavHeight). Fallback is its desktop height so
    nothing hides under the nav before JS runs. */
-main{padding-top:var(--nav-h,73px)}
+/* nav offset now lives on <body>, in _room-lp/room-lp.css. Keeping it here
+   too double-offsets the page by a full nav height. */
 [id]{scroll-margin-top:calc(var(--nav-h,73px) + 8px)}
 
 /* ─── BUTTONS ───────────────────────────────────────────────────────── */
@@ -434,10 +435,12 @@ main{padding-top:var(--nav-h,73px)}
 .c-seo__body{margin-top:24px;color:var(--color-text-secondary);max-width:76ch}
 .c-seo__body p+p{margin-top:16px}
 
+.vswitch:not([data-shown]){display:none}
 .vswitch{position:fixed;right:12px;bottom:12px;z-index:50;background:var(--color-surface-inverse);
   color:var(--color-text-inverse);padding:8px 12px;font-size:10px;font-weight:700;
   letter-spacing:0.18em;text-transform:uppercase}
 </style>
+
 <!-- LUMAS-NAV-KIT:CSS:BEGIN -->
 <link rel="stylesheet" href="../_nav/nav-fonts.css" />
 <link rel="stylesheet" href="../_nav/nav-utile-display.css" />
@@ -445,6 +448,9 @@ main{padding-top:var(--nav-h,73px)}
 <link rel="stylesheet" href="../_nav/nav-widgets.css" />
 <link rel="stylesheet" href="../_nav/nav-standalone.css" />
 <!-- LUMAS-NAV-KIT:CSS:END -->
+<!-- LUMAS-ROOM-LP:CSS:BEGIN -->
+<link rel="stylesheet" href="../_room-lp/room-lp.css" />
+<!-- LUMAS-ROOM-LP:CSS:END -->
 </head>
 <body>
 <!-- LUMAS-NAV-KIT:MARKUP:BEGIN -->
@@ -455,7 +461,7 @@ main{padding-top:var(--nav-h,73px)}
 <site-header class="" style="--icon-max-size: 2.2rem">
  
  <header role="banner">
- <a href="https://eu.lumas.com/" class="main-logo" title="LUMAS | Art for Sale">
+ <a href="https://uk.lumas.com/" class="main-logo" title="LUMAS | Art for Sale">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 30"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg>
   <style>
  .main-logo svg { width: 120px; }
@@ -496,7 +502,7 @@ main{padding-top:var(--nav-h,73px)}
 
 <whats-app-contact data-css-ready data-phone="442036087590" style="--wa-icon-color: black;"><button type="button" class="icon-whatsapp contact" data-tooltip="chat with us on WhatsApp"><span class="sr-only">whatsApp</span></button><dialog closedby="any"><div class="content"><form method="dialog"><button class="icon-close" aria-label="close"></button></form><p>Scan QR code to open Whatsapp</p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOSIgaGVpZ2h0PSIyOSIgY2xhc3M9InNlZ25vIj48cGF0aCBjbGFzcz0icXJsaW5lIiBzdHJva2U9IiMxYzFhMTgiIGQ9Ik0yIDIuNWg3bTEgMGgxbTQgMGgxbTIgMGgxbTEgMGg3bS0yNSAxaDFtNSAwaDFtMSAwaDFtMiAwaDRtMyAwaDFtNSAwaDFtLTI1IDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoMW0yIDBoMW0yIDBoMW0xIDBoMW0xIDBoM20xIDBoMW0tMjUgMWgxbTEgMGgzbTEgMGgxbTIgMGgxbTEgMGgxbTEgMGgybTMgMGgxbTEgMGgzbTEgMGgxbS0yNSAxaDFtMSAwaDNtMSAwaDFtMSAwaDVtNSAwaDFtMSAwaDNtMSAwaDFtLTI1IDFoMW01IDBoMW01IDBoMm0yIDBoMW0xIDBoMW01IDBoMW0tMjUgMWg3bTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGg3bS0xMiAxaDFtMiAwaDFtLTE3IDFoMW0yIDBoNm0xIDBoM20yIDBoMW0xIDBoMW0yIDBoMW0xIDBoM20tMjUgMWgybTIgMGgybTUgMGgybTIgMGgybTIgMGg1bS0yMiAxaDFtMiAwaDJtMiAwaDFtMiAwaDJtMSAwaDFtMSAwaDNtMSAwaDFtMiAwaDFtLTI1IDFoMW0xIDBoMm0xIDBoMW02IDBoMW01IDBoMm0xIDBoNG0tMjQgMWgybTEgMGgxbTEgMGgzbTEgMGgxbTEgMGgxbTEgMGgybTEgMGgybTUgMGgxbS0yNSAxaDFtMiAwaDNtMyAwaDJtMSAwaDJtMSAwaDFtNCAwaDFtMiAwaDFtLTI0IDFoM20zIDBoMm0xIDBoMW0yIDBoMm0xIDBoMW0xIDBoMW0yIDBoNW0tMjUgMWgxbTcgMGgzbTEgMGgxbTEgMGgybTMgMGgxbTEgMGgybTEgMGgxbS0yNSAxaDFtMiAwaDJtMSAwaDNtMiAwaDFtMSAwaDJtMSAwaDVtMSAwaDJtLTE2IDFoM20xIDBoM20xIDBoMW0zIDBoMW0xIDBoMm0tMjQgMWg3bTEgMGgybTEgMGgxbTEgMGgybTEgMGgxbTEgMGgxbTEgMGgxbTMgMGgxbS0yNSAxaDFtNSAwaDFtMSAwaDJtMiAwaDNtMSAwaDFtMyAwaDFtLTIxIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoMm0zIDBoNm0tMjEgMWgxbTEgMGgzbTEgMGgxbTEgMGgybTEgMGgybTIgMGg0bTQgMGgybS0yNSAxaDFtMSAwaDNtMSAwaDFtMyAwaDJtMSAwaDFtMyAwaDFtMiAwaDVtLTI1IDFoMW01IDBoMW0yIDBoM20yIDBoMW00IDBoMm0xIDBoM20tMjUgMWg3bTEgMGg0bTIgMGgxbTEgMGgxbTEgMGgxbTIgMGgxbTIgMGgxIi8+PC9zdmc+Cg==" class="qr-code" alt="whatsapp qr code" width="220" height="220" /><a href="https://wa.me/442036087590" target="_blank" rel="noopener" class="btn btn-primary">Click here if you have Whatsapp installed on this device</a></div></dialog></whats-app-contact><details class="contact">
     <summary>
-        <a href="https://eu.lumas.com/contact/" class="-mt-1">
+        <a href="https://uk.lumas.com/contact/" class="-mt-1">
             <svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#phone"/></svg><span>Contact</span>
         </a>
     </summary>
@@ -528,7 +534,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/">
+                    <a href="https://uk.lumas.com/galleries/">
                         <svg><use href="#pin"/></svg>
                         <header>Gallery Visit</header>
                         <aside>Physical Locations</aside>
@@ -540,17 +546,17 @@ main{padding-top:var(--nav-h,73px)}
     </div>
 </details>
 </div>   <div class="wishlist-wrapper">
- <a href="https://eu.lumas.com/wishlist/" class="wishlist-link">
+ <a href="https://uk.lumas.com/wishlist/" class="wishlist-link">
  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><path fill="currentColor" d="M8 15.16c-.65 0-1.2-.56-1.72-1.1l-4.73-4.8A4.86 4.86 0 010 5.7V5.7v-.05A4.8 4.8 0 014.78.84c1.24 0 2.38.49 3.22 1.28A4.7 4.7 0 0111.22.84 4.8 4.8 0 0116 5.64v.07c0 1.4-.6 2.68-1.56 3.58l-4.72 4.8c-.52.52-1.07 1.07-1.72 1.07zm-1.12-1.68c.4.4.82.83 1.12.83s.74-.44 1.12-.83l4.73-4.8c.8-.75 1.3-1.8 1.31-2.98v-.03a3.97 3.97 0 00-3.93-3.97c-1.16 0-2.2.5-2.91 1.3L8 3.34 7.69 3a3.9 3.9 0 00-2.91-1.31A3.97 3.97 0 00.84 5.65v.03c0 1.17.5 2.23 1.3 2.97z"/></svg>
  <header-counter class="wishlist-count" hidden>0</header-counter>
  </a>
  </div>
-        <a  href="https://eu.lumas.com/login/"  class="auth-link">
+        <a  href="https://uk.lumas.com/login/"  class="auth-link">
   <svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#user"/></svg>
  <span class="label" hidden>Log In</span>
   </a>
   <div class="cart-wrapper">
- <a href="https://eu.lumas.com/cart/" class="cart-link">
+ <a href="https://uk.lumas.com/cart/" class="cart-link">
  <svg viewBox="0 0 16 16" style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#cart"/></svg>
  <header-counter class="cart-count" hidden>0</header-counter>
  </a>
@@ -562,7 +568,7 @@ main{padding-top:var(--nav-h,73px)}
  <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></symbol>
  <symbol id="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></symbol>
  </svg>
- <form action="https://eu.lumas.com/search/" method="get" role="search">
+ <form action="https://uk.lumas.com/search/" method="get" role="search">
  <input type="search" name="q" value="" placeholder="Search" aria-label="Product Search" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off">
  <button type="button" class="clear-search" aria-label="Clear search"><svg><use href="#close"/></svg></button>
  <button type="submit"><svg><use href="#search"/></svg>
@@ -584,7 +590,7 @@ main{padding-top:var(--nav-h,73px)}
  <dl>
     <dt>Most wanted</dt>
     <dd>
-        <a href="https://eu.lumas.com/collections/new-york-pictures/">
+        <a href="https://uk.lumas.com/collections/new-york-pictures/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/nyc-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/nyc-220x220.jpg" alt="New York" class="max-w-full">
@@ -593,7 +599,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>
     <dd>
-        <a href="https://eu.lumas.com/david-bowie-pictures/">
+        <a href="https://uk.lumas.com/david-bowie-pictures/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/bowie-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/bowie-220x220.jpg" alt="David Bowie" class="max-w-full">
@@ -602,7 +608,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>
     <dd>
-        <a href="https://eu.lumas.com/themes/abstract-graphic/">
+        <a href="https://uk.lumas.com/themes/abstract-graphic/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/abstrakt-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/abstrakt-220x220.jpg" alt="Abstract" class="max-w-full">
@@ -611,7 +617,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/nature/landscape/">
+        <a href="https://uk.lumas.com/nature/landscape/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/landschaften-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/landschaften-220x220.jpg" alt="Landscapes" class="max-w-full">
@@ -620,7 +626,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>   
     <dd>
-        <a href="https://eu.lumas.com/nature/water/">        
+        <a href="https://uk.lumas.com/nature/water/">        
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/wasser-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/wasser-220x220.jpg" alt="Water" class="max-w-full">
@@ -629,7 +635,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>
     <dd>
-        <a href="https://eu.lumas.com/artist/guachinarte/">
+        <a href="https://uk.lumas.com/artist/guachinarte/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/guachinarte-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/guachinarte-220x220.jpg" alt="Guachinarte" class="max-w-full">
@@ -638,7 +644,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>
     <dd>
-        <a href="https://eu.lumas.com/collections/black-and-white-art/">
+        <a href="https://uk.lumas.com/collections/black-and-white-art/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/schwarz-weiss-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/schwarz-weiss-220x220.jpg" alt="Black and White" class="max-w-full">
@@ -647,7 +653,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>
     <dd>
-        <a href="https://eu.lumas.com/artist/luc_dratwa/">
+        <a href="https://uk.lumas.com/artist/luc_dratwa/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/dratwa-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/dratwa-220x220.jpg" alt="Luc Dratwa" class="max-w-full">
@@ -660,7 +666,7 @@ main{padding-top:var(--nav-h,73px)}
 <dl>
     <dt>Popular pages</dt>
     <dd>
-        <a href="https://eu.lumas.com/highlights/bestseller/">
+        <a href="https://uk.lumas.com/highlights/bestseller/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/bestseller-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/bestseller-220x220.jpg" alt="Bestsellers" class="max-w-full">
@@ -669,7 +675,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/new/">
+        <a href="https://uk.lumas.com/new/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/neuheiten-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/neuheiten-220x220.jpg" alt="New" class="max-w-full">
@@ -678,7 +684,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/multi-phase/">
+        <a href="https://uk.lumas.com/multi-phase/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/multi-phase-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/multi-phase-220x220.jpg" alt="Multi-Phase" class="max-w-full">
@@ -687,7 +693,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/artists/masters/">
+        <a href="https://uk.lumas.com/artists/masters/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/masters-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/masters-220x220.jpg" alt="Master Editions" class="max-w-full" loading="lazy">
@@ -700,7 +706,7 @@ main{padding-top:var(--nav-h,73px)}
 <dl>
     <dt>Popular categories</dt>
     <dd>
-        <a href="https://eu.lumas.com/themes/people/">
+        <a href="https://uk.lumas.com/themes/people/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/menschen-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/menschen-220x220.jpg" alt="People" class="max-w-full">
@@ -709,7 +715,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/collections/flowerart/">
+        <a href="https://uk.lumas.com/collections/flowerart/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/blumen-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/blumen-220x220.jpg" alt="Flowers" class="max-w-full">
@@ -718,7 +724,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>    
     <dd>
-        <a href="https://eu.lumas.com/ai-art/">
+        <a href="https://uk.lumas.com/ai-art/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/digital-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/digital-220x220.jpg" alt="AI Art" class="max-w-full">
@@ -727,7 +733,7 @@ main{padding-top:var(--nav-h,73px)}
         </a>        
     </dd>  
     <dd>
-        <a href="https://eu.lumas.com/collections/urban-art/">
+        <a href="https://uk.lumas.com/collections/urban-art/">
             <picture>
                 <source srcset="https://media.lumas.com/search-suggestions/city-220x220.webp" media="all" type="image/webp">
                 <img property="schema:image" src="https://media.lumas.com/search-suggestions/city-220x220.jpg" alt="Cities" class="max-w-full">
@@ -749,120 +755,120 @@ main{padding-top:var(--nav-h,73px)}
 </site-header>
 <template id="main-navigation"> <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
  <details>
-    <summary><a href="https://eu.lumas.com/search/?q=">Artworks</a></summary>
+    <summary><a href="https://uk.lumas.com/search/?q=">Artworks</a></summary>
     <div class="menu-container">
         <div class="menu artworks">
             <dl class="highlights open">
                 <dt><header>Highlights</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/new/"><svg aria-hidden="true"><use href="#new-releases"/></svg>New</a>
+                    <a href="https://uk.lumas.com/new/"><svg aria-hidden="true"><use href="#new-releases"/></svg>New</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/gifts/gift-voucher/"><svg aria-hidden="true"><use href="#magazine"/></svg>LUMAS Gift Certificates</a>
+                    <a href="https://uk.lumas.com/gifts/gift-voucher/"><svg aria-hidden="true"><use href="#magazine"/></svg>LUMAS Gift Certificates</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/highlights/bestprice/"><svg aria-hidden="true"><use href="#rising"/></svg>Price will increase soon</a>
+                    <a href="https://uk.lumas.com/highlights/bestprice/"><svg aria-hidden="true"><use href="#rising"/></svg>Price will increase soon</a>
                 </dd>     
                 <dd>
-                    <a href="https://eu.lumas.com/masters/"><svg aria-hidden="true"><use href="#masters"/></svg>Master Editions</a>
+                    <a href="https://uk.lumas.com/masters/"><svg aria-hidden="true"><use href="#masters"/></svg>Master Editions</a>
                 </dd>           
                 <dd>
-                    <a href="https://eu.lumas.com/highlights/bestseller/"><svg aria-hidden="true"><use href="#bestseller"/></svg>Bestseller</a>
+                    <a href="https://uk.lumas.com/highlights/bestseller/"><svg aria-hidden="true"><use href="#bestseller"/></svg>Bestseller</a>
                 </dd> 
                 <dd>
-                    <a href="https://eu.lumas.com/archive-sale/"><svg aria-hidden="true"><use href="#sale"/></svg>SALE</a>
+                    <a href="https://uk.lumas.com/archive-sale/"><svg aria-hidden="true"><use href="#sale"/></svg>SALE</a>
                 </dd>               
                 <dd>
-                    <a href="https://eu.lumas.com/highlights/last-prints/"><svg aria-hidden="true"><use href="#last-prints"/></svg>Selling out</a>
+                    <a href="https://uk.lumas.com/highlights/last-prints/"><svg aria-hidden="true"><use href="#last-prints"/></svg>Selling out</a>
                 </dd>                
                 <dd>
-                    <a href="https://eu.lumas.com/our-editions/"><svg aria-hidden="true"><use href="#all-editions"/></svg>Our Editions</a>
+                    <a href="https://uk.lumas.com/our-editions/"><svg aria-hidden="true"><use href="#all-editions"/></svg>Our Editions</a>
                 </dd>
             </dl>
             <dl>
                 <dt><header>By Category</header></dt>
-                <dd><a href="https://eu.lumas.com/technique/photography/">Photography</a></dd>
-                <dd><a href="https://eu.lumas.com/technique/painting/">Painting</a></dd>
-                <dd><a href="https://eu.lumas.com/digital-art/">Digital Art</a></dd>
-                <dd><a href="https://eu.lumas.com/multi-phase/">Multi-Phase</a></dd>
-                <dd><a href="https://eu.lumas.com/painting-illustration/">Illustration</a></dd>
-                <dd><a href="https://eu.lumas.com/objects/">Sculptures & Objects</a></dd>
-                <dd><a href="https://eu.lumas.com/lightbox/">Light Boxes</a></dd>
+                <dd><a href="https://uk.lumas.com/technique/photography/">Photography</a></dd>
+                <dd><a href="https://uk.lumas.com/technique/painting/">Painting</a></dd>
+                <dd><a href="https://uk.lumas.com/digital-art/">Digital Art</a></dd>
+                <dd><a href="https://uk.lumas.com/multi-phase/">Multi-Phase</a></dd>
+                <dd><a href="https://uk.lumas.com/painting-illustration/">Illustration</a></dd>
+                <dd><a href="https://uk.lumas.com/objects/">Sculptures & Objects</a></dd>
+                <dd><a href="https://uk.lumas.com/lightbox/">Light Boxes</a></dd>
             </dl>
             <dl>
                 <dt><header>By Theme</header></dt>
-                <dd><a href="https://eu.lumas.com/themes/abstract-graphic/">Abstract</a></dd>
-                <dd><a href="https://eu.lumas.com/nature/water/">Seascapes</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/flowerart/">Floral Worlds</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/black-and-white-art/">Black &amp; White</a></dd>
-                <dd><a href="https://eu.lumas.com/nature/landscape/">Nature &amp; Landscapes</a></dd>
-                <dd><a href="https://eu.lumas.com/themes/architecture/">Architecture & City</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/new-york-pictures/">New York</a></dd>
+                <dd><a href="https://uk.lumas.com/themes/abstract-graphic/">Abstract</a></dd>
+                <dd><a href="https://uk.lumas.com/nature/water/">Seascapes</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/flowerart/">Floral Worlds</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/black-and-white-art/">Black &amp; White</a></dd>
+                <dd><a href="https://uk.lumas.com/nature/landscape/">Nature &amp; Landscapes</a></dd>
+                <dd><a href="https://uk.lumas.com/themes/architecture/">Architecture & City</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/new-york-pictures/">New York</a></dd>
             </dl>
             <dl>
                 <dt><header>By Size</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/search/?width=from0-to550&height=from0-to600&sort=revenue_product_desc&price=from0-to50000">Small</a>
+                    <a href="https://uk.lumas.com/search/?width=from0-to550&height=from0-to600&sort=revenue_product_desc&price=from0-to50000">Small</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/search/?width=from550-to1400&amp;height=from600-to1430">Medium</a>
+                    <a href="https://uk.lumas.com/search/?width=from550-to1400&amp;height=from600-to1430">Medium</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/search/?width=from740-to2000">Large</a>
+                    <a href="https://uk.lumas.com/search/?width=from740-to2000">Large</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/search/?width=from2000-to5500">XXL</a>
+                    <a href="https://uk.lumas.com/search/?width=from2000-to5500">XXL</a>
                 </dd>
             </dl>
             <dl>
                 <dt><header>By Format</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/format/portrait/">Portrait</a>
+                    <a href="https://uk.lumas.com/format/portrait/">Portrait</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/format/landscape/">Landscape</a>
+                    <a href="https://uk.lumas.com/format/landscape/">Landscape</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/format/square/">Square</a>
+                    <a href="https://uk.lumas.com/format/square/">Square</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/format/round/">Round</a>
+                    <a href="https://uk.lumas.com/format/round/">Round</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/format/panoramic/">Panorama</a>
+                    <a href="https://uk.lumas.com/format/panoramic/">Panorama</a>
                 </dd>
             </dl>
             <dl>
                 <dt><header>By Price</header></dt>
                 <dd>
-                    <div data-price-block="from0-to25000" data-style-override="cursor:pointer;">under €250</div>
+                    <div data-price-block="from0-to25000" data-style-override="cursor:pointer;">under £250</div>
                 </dd>
                 <dd>
-                    <div data-price-block="from25000-to50000" data-style-override="cursor:pointer;">under €500</div>
+                    <div data-price-block="from25000-to50000" data-style-override="cursor:pointer;">under £500</div>
                 </dd>
                 <dd>
-                    <div data-price-block="from75000-to100000" data-style-override="cursor:pointer;">under €1000</div>
+                    <div data-price-block="from75000-to100000" data-style-override="cursor:pointer;">under £1000</div>
                 </dd>
                 <dd>
-                    <div data-price-block="from100000-to200000" data-style-override="cursor:pointer;">under €2000</div>
+                    <div data-price-block="from100000-to200000" data-style-override="cursor:pointer;">under £2000</div>
                 </dd>
                 <dd>
-                    <div data-price-block="from200000-to500000" data-style-override="cursor:pointer;">under €5000</div>
+                    <div data-price-block="from200000-to500000" data-style-override="cursor:pointer;">under £5000</div>
                 </dd>
                 <dd>
-                    <div data-price-block="from500000-to2000000" data-style-override="cursor:pointer;">from €5000</div>
+                    <div data-price-block="from500000-to2000000" data-style-override="cursor:pointer;">from £5000</div>
                 </dd>
             </dl>
         </div>
     </div>
 </details>
 <details>
-    <summary><a href="https://eu.lumas.com/artists/">Top 20</a></summary>
+    <summary><a href="https://uk.lumas.com/artists/">Top 20</a></summary>
     <div class="menu-container">
         <div class="menu tiles">
             <dl>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/beatrice_hug/">
+                    <a href="https://uk.lumas.com/artist/beatrice_hug/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-bhu.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-bhu.jpg" width="220" height="220" alt="Beatrice Hug" title="Beatrice Hug" class="max-w-full width-full height-auto">
@@ -871,7 +877,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/isabelle_menin/">
+                    <a href="https://uk.lumas.com/artist/isabelle_menin/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-ime.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-ime.jpg" width="220" height="220" alt="Isabelle Menin" title="Isabelle Menin" class="max-w-full width-full height-auto">
@@ -880,7 +886,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/marta_contreras_simo/">
+                    <a href="https://uk.lumas.com/artist/marta_contreras_simo/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-mcs.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-mcs.jpg" width="220" height="220" alt="Marta Contreras Simó" title="Marta Contreras Simó" class="max-w-full width-full height-auto">
@@ -889,7 +895,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/gavin_evans/">
+                    <a href="https://uk.lumas.com/artist/gavin_evans/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-gve.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-gve.jpg" width="220" height="220" alt="Gavin Evans" title="Gavin Evans" class="max-w-full width-full height-auto">
@@ -898,7 +904,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/wolfgang_uhlig/">
+                    <a href="https://uk.lumas.com/artist/wolfgang_uhlig/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-wuh.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-wuh.jpg" width="220" height="220" alt="Wolfgang Uhlig" title="Wolfgang Uhlig" class="max-w-full width-full height-auto">
@@ -907,7 +913,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/luc_dratwa/">
+                    <a href="https://uk.lumas.com/artist/luc_dratwa/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-ldr.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-ldr.jpg" width="220" height="220" alt="Luc Dratwa" title="Luc Dratwa" class="max-w-full width-full height-auto">
@@ -916,7 +922,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/massimo_colonna/">
+                    <a href="https://uk.lumas.com/artist/massimo_colonna/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-mcn.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-mcn.jpg" width="220" height="220" alt="Massimo Colonna" title="Massimo Colonna" class="max-w-full width-full height-auto">
@@ -925,7 +931,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/guachinarte/">
+                    <a href="https://uk.lumas.com/artist/guachinarte/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-gua.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-gua.jpg" width="220" height="220" alt="Guachinarte" title="Guachinarte" class="max-w-full width-full height-auto">
@@ -934,7 +940,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/slim_aarons-1/">
+                    <a href="https://uk.lumas.com/artist/slim_aarons-1/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-saa.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-saa.jpg" width="220" height="220" alt="Slim Aarons" title="Slim Aarons" class="max-w-full width-full height-auto">
@@ -943,7 +949,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/werner_pawlok/">
+                    <a href="https://uk.lumas.com/artist/werner_pawlok/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-wpa.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-wpa.jpg" width="220" height="220" alt="Werner Pawlok" title="Werner Pawlok" class="max-w-full width-full height-auto">
@@ -952,7 +958,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/bert_stern-1/">
+                    <a href="https://uk.lumas.com/artist/bert_stern-1/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-bse.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-bse.jpg" width="220" height="220" alt="Bert Stern" title="Bert Stern" class="max-w-full width-full height-auto">
@@ -961,7 +967,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/ysabel_lemay-3/">
+                    <a href="https://uk.lumas.com/artist/ysabel_lemay-3/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-yle.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-yle.jpg" width="220" height="220" alt="Ysabel Lemay" title="Ysabel Lemay" class="max-w-full width-full height-auto">
@@ -970,7 +976,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/claudio_gotsch/">
+                    <a href="https://uk.lumas.com/artist/claudio_gotsch/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-cgo.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-cgo.jpg" width="220" height="220" alt="Claudio Gotsch" title="Claudio Gotsch" class="max-w-full width-full height-auto">
@@ -979,7 +985,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/heiko_hellwig/">
+                    <a href="https://uk.lumas.com/artist/heiko_hellwig/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-hhl.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-hhl.jpg" width="220" height="220" alt="Heiko Hellwig" title="Heiko Hellwig" class="max-w-full width-full height-auto">
@@ -988,7 +994,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artist/carol_muthiga_oyekunle/">
+                    <a href="https://uk.lumas.com/artist/carol_muthiga_oyekunle/">
                         <picture>
                             <source srcset="https://media.lumas.com/site-navigation/top20-220x220-cmu.webp" width="220" height="220" media="all" type="image/webp">
                             <img property="schema:image" src="https://media.lumas.com/site-navigation/top20-220x220-cmu.jpg" width="220" height="220" alt="Carol Muthiga-Oyekunle" title="Carol Muthiga-Oyekunle" class="max-w-full width-full height-auto">
@@ -997,22 +1003,22 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artists/" class="text-1_8rem hidden-xs hidden-sm hidden-md">View all Top 20 Artists</a>
-                    <a href="https://eu.lumas.com/artists/" class="text-2rem hidden-xs hidden-sm hidden-lg">View all Top 20 Artists</a>
-                    <a href="https://eu.lumas.com/artists/" class="hidden-lg hidden-md hidden-sm">View all Top 20 Artists</a>
-                    <a href="https://eu.lumas.com/artists/" class="hidden-lg hidden-md hidden-xs">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="text-1_8rem hidden-xs hidden-sm hidden-md">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="text-2rem hidden-xs hidden-sm hidden-lg">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="hidden-lg hidden-md hidden-sm">View all Top 20 Artists</a>
+                    <a href="https://uk.lumas.com/artists/" class="hidden-lg hidden-md hidden-xs">View all Top 20 Artists</a>
                 </dd>
             </dl>
         </div>
     </div>
 </details>
 <details>
-    <summary><a href="https://eu.lumas.com/artfinder/">Artfinder</a></summary>
+    <summary><a href="https://uk.lumas.com/artfinder/">Artfinder</a></summary>
     <div class="menu-container">
         <div class="menu discovery">
             <dl>
                 <dd>
-                    <a href="https://eu.lumas.com/artfinder/">
+                    <a href="https://uk.lumas.com/artfinder/">
                         <img src="https://media.lumas.com/site-navigation/artfinder-mood-slider.svg" title="ART FINDER" alt="ART FINDER" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
                         <svg class="hidden-lg hidden-md"><use href="#mood"/></svg>
                         <header>Set&nbsp;your&nbsp;preferences</header>
@@ -1021,7 +1027,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/room-upload/">
+                    <a href="https://uk.lumas.com/room-upload/">
                         <img src="https://media.lumas.com/site-navigation/artfinder-room-upload.svg" title="Room upload" alt="Room upload" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
                         <svg class="hidden-lg hidden-md"><use href="#room"/></svg>
                         <header>Upload&nbsp;your&nbsp;room&nbsp;</header>
@@ -1030,7 +1036,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/similarity-search/">
+                    <a href="https://uk.lumas.com/similarity-search/">
                         <img src="https://media.lumas.com/site-navigation/artfinder-similarity-search.svg" title="Similiarity search" alt="Similiarity search" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
                         <svg class="hidden-lg hidden-md"><use href="#similar"/></svg>
                         <header>Upload&nbsp;an&nbsp;artwork&nbsp;</header>
@@ -1039,7 +1045,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/artliker/">
+                    <a href="https://uk.lumas.com/artliker/">
                         <img src="https://media.lumas.com/site-navigation/artfinder-artliker.svg" title="ART LIKER" alt="ART LIKER" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
                         <svg class="hidden-lg hidden-md"><use href="#artliker"/></svg>
                         <header>Rate&nbsp;artworks</header>
@@ -1048,7 +1054,7 @@ main{padding-top:var(--nav-h,73px)}
                     </a>
                 </dd>                
                 <dd class="hidden-lg hidden-md">
-                    <a href="https://eu.lumas.com/contact/">
+                    <a href="https://uk.lumas.com/contact/">
                         <img src="https://media.lumas.com/site-navigation/artfinder-contact.svg" title="Contact" alt="Contact" width="214" height="86" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" style="aspect-ratio:auto;">
                         <svg class="hidden-lg hidden-md"><use href="#consult"/></svg>
                         <header>Art&nbsp;Consultation</header>
@@ -1070,177 +1076,177 @@ main{padding-top:var(--nav-h,73px)}
     </div>
 </details>
 <details>
-    <summary><a href="https://eu.lumas.com/inspired-art-magazine/">Inspiration</a></summary>
+    <summary><a href="https://uk.lumas.com/inspired-art-magazine/">Inspiration</a></summary>
     <div class="menu-container">
         <div class="menu artworks">
             <dl class="highlights open">
                 <dt><header>Highlights</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/magazine/"><svg aria-hidden="true"><use href="#magazine"/></svg>Order LUMAS Art Magazine</a>
+                    <a href="https://uk.lumas.com/magazine/"><svg aria-hidden="true"><use href="#magazine"/></svg>Order LUMAS Art Magazine</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/petites/"><svg aria-hidden="true"><use href="#petites"/></svg>Petites</a>
+                    <a href="https://uk.lumas.com/petites/"><svg aria-hidden="true"><use href="#petites"/></svg>Petites</a>
                 </dd>               
                 <dd>
-                    <a href="https://eu.lumas.com/top-artists/"><svg aria-hidden="true"><use href="#artists-to-watch"/></svg>10 Artists to Watch</a>
+                    <a href="https://uk.lumas.com/top-artists/"><svg aria-hidden="true"><use href="#artists-to-watch"/></svg>10 Artists to Watch</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/darlings/"><svg aria-hidden="true"><use href="#darlings"/></svg>Darlings</a>
+                    <a href="https://uk.lumas.com/darlings/"><svg aria-hidden="true"><use href="#darlings"/></svg>Darlings</a>
                 </dd>  
                 <dd>
-                    <a href="https://eu.lumas.com/limited-art/"><svg aria-hidden="true"><use href="#value-increase"/></svg>Value Increase Guide</a>
+                    <a href="https://uk.lumas.com/limited-art/"><svg aria-hidden="true"><use href="#value-increase"/></svg>Value Increase Guide</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/technique/string-art/"><svg aria-hidden="true"><use href="#string-art"/></svg>String Art</a>
+                    <a href="https://uk.lumas.com/technique/string-art/"><svg aria-hidden="true"><use href="#string-art"/></svg>String Art</a>
                 </dd>                
                 <dd>
-                    <a href="https://eu.lumas.com/collections/artists-of-the-year/"><svg aria-hidden="true"><use href="#new-releases"/></svg>Artist Highlights 2026</a>
+                    <a href="https://uk.lumas.com/collections/artists-of-the-year/"><svg aria-hidden="true"><use href="#new-releases"/></svg>Artist Highlights 2026</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/multi-phase/"><svg aria-hidden="true"><use href="#multiphase"/></svg>Multi-Phase</a>
+                    <a href="https://uk.lumas.com/multi-phase/"><svg aria-hidden="true"><use href="#multiphase"/></svg>Multi-Phase</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/inspired-art-magazine/"><svg aria-hidden="true"><use href="#inspired"/></svg>Inspired Stories</a>
+                    <a href="https://uk.lumas.com/inspired-art-magazine/"><svg aria-hidden="true"><use href="#inspired"/></svg>Inspired Stories</a>
                 </dd>    
                 <dd>
-                    <a href="https://eu.lumas.com/format/cut-out/"><svg aria-hidden="true"><use href="#cut-outs"/></svg>Cut-Outs</a>
+                    <a href="https://uk.lumas.com/format/cut-out/"><svg aria-hidden="true"><use href="#cut-outs"/></svg>Cut-Outs</a>
                 </dd>                                
             </dl>
             <dl>
                 <dt><header>Collections</header></dt>
-                <dd><a href="https://eu.lumas.com/collections/curators-favorites/">Curator’s Favourites</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/urban-art/">Urban Spirit</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/summer-art/">Endless Summer</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/evergreens/">Timeless Classics</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/perfect-pairs/">Perfect Pairs</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/affordable-art/">Affordable Art</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/sci-fi-art/">Futuristic Art</a></dd>                
-                <dd><a href="https://eu.lumas.com/collections/winter-art/">Winter Wonderland</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/nude-photography/">Nudes</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/african-art/">African Art</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/trends-in-painting/">Trends in Painting</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/botanical-art/">Botanical Art</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/artists-usa/">Artists from the USA</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/artists-from-germany/">Artists from Germany</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/">All Collections</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/curators-favorites/">Curator’s Favourites</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/urban-art/">Urban Spirit</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/summer-art/">Endless Summer</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/evergreens/">Timeless Classics</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/perfect-pairs/">Perfect Pairs</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/affordable-art/">Affordable Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/sci-fi-art/">Futuristic Art</a></dd>                
+                <dd><a href="https://uk.lumas.com/collections/winter-art/">Winter Wonderland</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/nude-photography/">Nudes</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/african-art/">African Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/trends-in-painting/">Trends in Painting</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/botanical-art/">Botanical Art</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/artists-usa/">Artists from the USA</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/artists-from-germany/">Artists from Germany</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/">All Collections</a></dd>
             </dl>
             <dl>
                 <dt><header>Artists in Focus</header></dt>
-                <dd><a href="https://eu.lumas.com/artist-in-focus/marta-contreras-simo/">Marta Contreras Simó</a></dd>
-                <dd><a href="https://eu.lumas.com/artist-in-focus/slim-aarons/">Slim Aarons</a></dd>
-                <dd><a href="https://eu.lumas.com/artist/gerhard_richter/">Gerhard Richter</a></dd>
-                <dd><a href="https://eu.lumas.com/artist-in-focus/bert-stern/">Bert Stern</a></dd>
-                <dd><a href="https://eu.lumas.com/inspired-art-magazine/manu-grinspan/">Manu Grinspan</a></dd>
-                <dd><a href="https://eu.lumas.com/inspired-art-magazine/craig-alan/">Craig Alan</a></dd>
-                <dd><a href="https://eu.lumas.com/artist-in-focus/margarete-schruefer/">Margarete Schüfer</a></dd>
-                <dd><a href="https://eu.lumas.com/artists-in-focus/">All Artists</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/marta-contreras-simo/">Marta Contreras Simó</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/slim-aarons/">Slim Aarons</a></dd>
+                <dd><a href="https://uk.lumas.com/artist/gerhard_richter/">Gerhard Richter</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/bert-stern/">Bert Stern</a></dd>
+                <dd><a href="https://uk.lumas.com/inspired-art-magazine/manu-grinspan/">Manu Grinspan</a></dd>
+                <dd><a href="https://uk.lumas.com/inspired-art-magazine/craig-alan/">Craig Alan</a></dd>
+                <dd><a href="https://uk.lumas.com/artist-in-focus/margarete-schruefer/">Margarete Schüfer</a></dd>
+                <dd><a href="https://uk.lumas.com/artists-in-focus/">All Artists</a></dd>
             </dl>
             <dl>
                 <dt><header>LUMAS Voices</header></dt>
-                <dd><a href="https://eu.lumas.com/lumas-voices/marc/">Marc Ullrich, LUMAS Founder</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/christoph/">Christoph Bamberg, Executive Curator</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/stefanie/">Stefanie Harig, LUMAS Founder</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/anika/">Anika Aberle, Portfolio Manager</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/alexander-herrmann/">Alexander Herrmann, Michelin Starred Chef</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/maurizio-pellizzoni/">Maurizio Pellizzoni, Interior Designer</a></dd>
-                <dd><a href="https://eu.lumas.com/lumas-voices/gisela/">Gisela, Gallerist New York</a></dd>
-                <dd><a href="https://eu.lumas.com/collections/lumas-voices/">All LUMAS Voices</a></dd>                                             
+                <dd><a href="https://uk.lumas.com/lumas-voices/marc/">Marc Ullrich, LUMAS Founder</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/christoph/">Christoph Bamberg, Executive Curator</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/stefanie/">Stefanie Harig, LUMAS Founder</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/anika/">Anika Aberle, Portfolio Manager</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/alexander-herrmann/">Alexander Herrmann, Michelin Starred Chef</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/maurizio-pellizzoni/">Maurizio Pellizzoni, Interior Designer</a></dd>
+                <dd><a href="https://uk.lumas.com/lumas-voices/gisela/">Gisela, Gallerist New York</a></dd>
+                <dd><a href="https://uk.lumas.com/collections/lumas-voices/">All LUMAS Voices</a></dd>                                             
             </dl>
         </div>
     </div>
 </details>
 <details>
-    <summary><a href="https://eu.lumas.com/galleries/">Galleries</a></summary>
+    <summary><a href="https://uk.lumas.com/galleries/">Galleries</a></summary>
     <div class="menu-container">
         <div class="menu galleries">
             <dl>
                 <dt><header>Our galleries</header></dt>
                 <dd><strong>UK</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/london/">London</a>
+                    <a href="https://uk.lumas.com/galleries/london/">London</a>
                 </dd>                    
                 <dd><strong>USA</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/new-york-soho/">New York</a>
+                    <a href="https://uk.lumas.com/galleries/new-york-soho/">New York</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/miami/">Miami Beach</a>
+                    <a href="https://uk.lumas.com/galleries/miami/">Miami Beach</a>
                 </dd>
             </dl>
             <dl>
                 <dt><header>&nbsp;</header></dt>
                 <dd><strong>Germany</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/berlin-mitte/">Berlin - Mitte</a>
+                    <a href="https://uk.lumas.com/galleries/berlin-mitte/">Berlin - Mitte</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/berlin-kurfuerstendamm/">Berlin - Kudamm</a>
+                    <a href="https://uk.lumas.com/galleries/berlin-kurfuerstendamm/">Berlin - Kudamm</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/cologne/">Cologne</a>
+                    <a href="https://uk.lumas.com/galleries/cologne/">Cologne</a>
                 </dd>                
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/dortmund/">Dortmund</a>
+                    <a href="https://uk.lumas.com/galleries/dortmund/">Dortmund</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/duesseldorf/">Düsseldorf</a>
+                    <a href="https://uk.lumas.com/galleries/duesseldorf/">Düsseldorf</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/frankfurt/">Frankfurt</a>
+                    <a href="https://uk.lumas.com/galleries/frankfurt/">Frankfurt</a>
                 </dd>
             </dl>            
             <dl>
                 <dt><header>&nbsp;</header></dt>
                 <dd><strong>&nbsp;</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/fraport/">Frankfurt Airport</a>
+                    <a href="https://uk.lumas.com/galleries/fraport/">Frankfurt Airport</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/hamburg/">Hamburg</a>
+                    <a href="https://uk.lumas.com/galleries/hamburg/">Hamburg</a>
                 </dd>                
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/hanover/">Hanover</a>
+                    <a href="https://uk.lumas.com/galleries/hanover/">Hanover</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/mannheim/">Mannheim</a>
+                    <a href="https://uk.lumas.com/galleries/mannheim/">Mannheim</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/munich/">Munich</a>
+                    <a href="https://uk.lumas.com/galleries/munich/">Munich</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/stuttgart/">Stuttgart</a>
+                    <a href="https://uk.lumas.com/galleries/stuttgart/">Stuttgart</a>
                 </dd>
             </dl>
             <dl>
                 <dt><header>&nbsp;</header></dt>
                 <dd><strong>France</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/paris-saint-germain/">Paris</a>
+                    <a href="https://uk.lumas.com/galleries/paris-saint-germain/">Paris</a>
                 </dd>
                 <dd><strong>Switzerland</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/zurich/">Zurich</a>
+                    <a href="https://uk.lumas.com/galleries/zurich/">Zurich</a>
                 </dd>
                 <dd><strong>Austria</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/vienna/">Vienna</a>
+                    <a href="https://uk.lumas.com/galleries/vienna/">Vienna</a>
                 </dd>
                 <dd><strong>Hungary</strong></dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/budapest/">Budapest</a>
+                    <a href="https://uk.lumas.com/galleries/budapest/">Budapest</a>
                 </dd>
             </dl>
             <dl class="services">
                 <dt><header>Service</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/contact/"><svg><use href="#consult"/></svg>Contact</a>
+                    <a href="https://uk.lumas.com/contact/"><svg><use href="#consult"/></svg>Contact</a>
                 </dd>
                 <dd>
-                    <a href="https://eu.lumas.com/galleries/"><svg><use href="#visit"/></svg>All&nbsp;Galleries</a>
+                    <a href="https://uk.lumas.com/galleries/"><svg><use href="#visit"/></svg>All&nbsp;Galleries</a>
                 </dd>
                 <dt><header>Events</header></dt>
                 <dd>
-                    <a href="https://eu.lumas.com/events/"><svg><use href="#events"/></svg>Events</a>
+                    <a href="https://uk.lumas.com/events/"><svg><use href="#events"/></svg>Events</a>
                 </dd>
             </dl>
         </div>
@@ -1248,7 +1254,7 @@ main{padding-top:var(--nav-h,73px)}
 </details>
 <details>
     <summary>
-        <a href="https://eu.lumas.com/why-lumas/">About us</a>
+        <a href="https://uk.lumas.com/why-lumas/">About us</a>
     </summary>
 </details>
 
@@ -1290,23 +1296,35 @@ main{padding-top:var(--nav-h,73px)}
 <div id="v1">
 
   <!-- ── 1 · HERO ────────────────────────────────────────────────── -->
-  <section class="hero" id="top">
-    <div class="hero__media frame">
-      <img src="assets/rooms/bedroom-hero-morning-from-the-bed.jpg"
-           alt="Bedroom seen low from the bed at morning, pillow and linen in the foreground, a single photographic work on the far wall above a wooden dresser."
-           width="1600" height="900" fetchpriority="high">
+<!-- LUMAS-ROOM-LP:HERO:BEGIN -->
+<nav class="rlp-crumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="https://eu.lumas.com/">Home</a></li>
+    <li aria-hidden="true">/</li>
+    <li><a href="https://eu.lumas.com/art-by-room/">Art by room</a></li>
+    <li aria-hidden="true">/</li>
+    <li aria-current="page">Bedroom</li>
+  </ol>
+</nav>
+
+<header class="rlp-hero" id="top">
+  <figure class="rlp-hero__media">
+    <img src="assets/rooms/bedroom-hero-morning-from-the-bed.jpg"
+         alt="Bedroom seen low from the bed at morning, pillow and linen in the foreground, a single photographic work on the far wall above a wooden dresser."
+         width="1600" height="900" fetchpriority="high">
+  </figure>
+  <div class="rlp-hero__text">
+    <p class="rlp-eyebrow">Art by room &middot; Bedroom</p>
+    <h1 class="rlp-hero__title" id="hero-h1">Art for the room you return to</h1>
+    <p class="rlp-hero__lede">The bedroom is the one room you don't decorate for anyone else. What hangs here is the last thing you see at night and the first thing you see in the morning, so it should be something you actually want to look at.</p>
+    <div class="rlp-hero__cta">
+      <a class="rlp-btn rlp-btn--primary" href="#mood">Choose by feeling</a>
+      <a class="rlp-btn rlp-btn--secondary" href="#see-it">See it on your wall</a>
     </div>
-    <div class="hero__text">
-      <p class="eyebrow hero__eyebrow">Art by room · Bedroom</p>
-      <h1 class="display-h1">Art for the room you return to</h1>
-      <p class="body-large hero__body">The bedroom is the one room you don't decorate for anyone else. What hangs here is the last thing you see at night and the first thing you see in the morning, so it should be something you actually want to look at.</p>
-      <div class="cta-row">
-        <a class="btn btn--primary" href="#mood">Choose by feeling</a>
-        <a class="btn btn--secondary" href="#see-it">See it on your wall</a>
-      </div>
-      <p class="caption credit">Shown: Hugo Pondz, <a href="https://eu.lumas.com/pictures/hugo_pondz/the_bright_moment/" target="_blank" rel="noopener">The Bright Moment</a></p>
-    </div>
-  </section>
+    <p class="rlp-hero__credit">Shown: Hugo Pondz, <a href="https://eu.lumas.com/pictures/hugo_pondz/the_bright_moment/" target="_blank" rel="noopener">The Bright Moment</a></p>
+  </div>
+</header>
+<!-- LUMAS-ROOM-LP:HERO:END -->
 
   <!-- ── 2 · MOOD ────────────────────────────────────────────────── -->
   <section class="module mood" id="mood">
@@ -1528,7 +1546,7 @@ main{padding-top:var(--nav-h,73px)}
      Static examples. Not part of the page. -->
 <section class="states" id="states">
   <div class="container">
-    <p class="ui-label states__title">Prototype states — not part of the page</p>
+    <p class="ui-label states__title">Prototype states &middot; not part of the page</p>
     <div class="states__grid">
 
       <div>
@@ -1977,9 +1995,11 @@ function setVariant(v){
     if(!closing.parentNode){document.querySelector('main').appendChild(closing);}
   }
   badge.textContent = 'Variant: ' + v + ' · press V';
+  if(param || switched){badge.setAttribute('data-shown','');}
   document.documentElement.setAttribute('data-variant', v);
 }
 
+var switched = false;
 var param = new URLSearchParams(location.search).get('v');
 setVariant(param === 'control' ? 'control' : 'v1');
 
@@ -1988,6 +2008,7 @@ document.addEventListener('keydown', function(e){
   if(e.metaKey || e.ctrlKey || e.altKey){return;}
   var t = e.target;
   if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)){return;}
+  switched = true;
   setVariant(current === 'v1' ? 'control' : 'v1');
 });
 
@@ -1996,8 +2017,12 @@ track('view_item_list', {list_name: 'bedroom_lp_mood_calm'});
 
 })();
 </script>
+
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
+<!-- LUMAS-ROOM-LP:JS:BEGIN -->
+<script src="../_room-lp/room-lp.js"></script>
+<!-- LUMAS-ROOM-LP:JS:END -->
 </body>
 </html>

@@ -1,0 +1,295 @@
+/* ============================================================================
+   LUMAS "Art by room" landing pages — shared hero + page furniture
+   ----------------------------------------------------------------------------
+   One hero, one breadcrumb, one eyebrow, one button pair, one credit line for
+   every room spoke off /art-by-room/. Section content stays page-specific; only
+   the things a visitor reads as "branding" are unified here.
+
+   Values are the LUMAS V2 (2026) system as recorded in
+   prototype/lumas-art-by-room-spec.md and .claude/skills/v2-branding.
+
+   Load LAST in <head> — this file is written to win against the page's own
+   styles at equal specificity. inline.py handles the placement.
+
+   The page ground is #FFFFFF. Not #FAF6F1.
+   Small copy is #5A5752 (7.19:1). #908C87 fails AA at 11px, so it is not used.
+============================================================================ */
+
+:root {
+  --rlp-ink: #1C1A18;          /* text/primary   */
+  --rlp-ink-2: #5A5752;        /* text/secondary */
+  --rlp-inverse: #F4EDE2;      /* text/inverse   */
+  --rlp-line: #E2D8CC;         /* border/default */
+  --rlp-sunken: #F4EDE2;       /* surface/sunken — image placeholder ground */
+  --rlp-page: #FFFFFF;
+
+  /* Lead with the self-hosted names. A machine can have a family called
+     "Utile Display" whose italic renders tofu, and font matching does not fall
+     through once a family matches. */
+  --rlp-display: 'UtileDisplay', 'Utile Display', 'utile-display', Georgia, serif;
+  --rlp-body: Archivo, archivo, 'Helvetica Neue', Arial, sans-serif;
+
+  --rlp-gutter: clamp(20px, 4vw, 64px);
+  --rlp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* The one hero ratio. Every source render is 16:9, so 3:2 is a modest centre
+     crop that keeps the mounted work in frame at every width. Per-page nudges
+     go through --rlp-hero-focus, never through a different ratio. */
+  --rlp-hero-ratio: 3 / 2;
+  --rlp-hero-media: 48%;
+}
+
+/* ── Breadcrumb ─────────────────────────────────────────────────────────── */
+
+.rlp-crumb {
+  background: var(--rlp-page);
+}
+.rlp-crumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 20px var(--rlp-gutter);
+  font-family: var(--rlp-body);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--rlp-ink-2);
+}
+.rlp-crumb li { margin: 0; }
+.rlp-crumb a {
+  color: var(--rlp-ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .22s var(--rlp-ease), border-color .22s var(--rlp-ease);
+}
+.rlp-crumb a:hover { color: var(--rlp-ink); border-bottom-color: var(--rlp-ink); }
+.rlp-crumb [aria-current="page"] { color: var(--rlp-ink); }
+.rlp-crumb [aria-hidden="true"] { color: var(--rlp-line); }
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+
+.rlp-hero {
+  display: grid;
+  grid-template-columns: var(--rlp-hero-media) auto;
+  align-items: center;
+  column-gap: clamp(32px, 4vw, 72px);
+  background: var(--rlp-page);
+  border-bottom: 1px solid var(--rlp-line);
+}
+
+.rlp-hero__media {
+  margin: 0;
+  aspect-ratio: var(--rlp-hero-ratio);
+  overflow: hidden;
+  background: var(--rlp-sunken);
+}
+.rlp-hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--rlp-hero-focus, 50% 50%);
+}
+
+.rlp-hero__text {
+  padding: clamp(32px, 4vw, 64px) var(--rlp-gutter) clamp(32px, 4vw, 64px) 0;
+  max-width: 660px;
+}
+
+.rlp-eyebrow,
+.rlp-hero__eyebrow {
+  font-family: var(--rlp-body);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rlp-ink-2);
+  margin: 0 0 16px;
+}
+
+.rlp-hero__title {
+  font-family: var(--rlp-display);
+  font-weight: 400;
+  font-size: clamp(34px, 3.2vw, 52px);
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  color: var(--rlp-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.rlp-hero__lede {
+  font-family: var(--rlp-body);
+  font-weight: 300;
+  font-size: clamp(17px, 1.2vw, 20px);
+  line-height: 1.6;
+  color: var(--rlp-ink-2);
+  margin: 20px 0 0;
+  max-width: 46ch;
+}
+
+.rlp-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 32px 0 0;
+}
+
+.rlp-hero__credit {
+  font-family: var(--rlp-body);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .03em;
+  color: var(--rlp-ink-2);
+  margin: 24px 0 0;
+}
+.rlp-hero__credit a {
+  color: var(--rlp-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rlp-hero__credit a:hover { color: var(--rlp-ink); }
+
+@media (max-width: 900px) {
+  .rlp-hero {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+  .rlp-hero__text {
+    padding: 28px var(--rlp-gutter) 36px;
+    max-width: none;
+  }
+  .rlp-hero__lede { max-width: none; }
+  .rlp-hero__cta > * { flex: 1 1 100%; }
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+
+.rlp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 16px 28px;
+  border: 1px solid var(--rlp-ink);
+  border-radius: 0;
+  font-family: var(--rlp-body);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  cursor: pointer;
+  transition: background-color .22s var(--rlp-ease), color .22s var(--rlp-ease),
+              border-color .22s var(--rlp-ease);
+}
+.rlp-btn--primary { background: var(--rlp-ink); color: var(--rlp-inverse); }
+.rlp-btn--primary:hover { background: #3A3835; border-color: #3A3835; }
+.rlp-btn--secondary { background: transparent; color: var(--rlp-ink); }
+.rlp-btn--secondary:hover { background: var(--rlp-ink); color: var(--rlp-inverse); }
+
+/* ── Focus ──────────────────────────────────────────────────────────────── */
+
+.rlp-hero a:focus-visible,
+.rlp-crumb a:focus-visible,
+.rlp-btn:focus-visible {
+  outline: 2px solid var(--rlp-ink);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   FURNITURE ALIASES
+   The five pages were built independently and each invented its own class
+   vocabulary for the same three things. Rather than rewrite five sets of
+   section markup, the existing names are mapped onto the canonical values.
+
+   Inverse and light variants are excluded throughout: they sit on charcoal
+   bands and already carry the correct contrast.
+============================================================================ */
+
+/* Eyebrows — everywhere except artwork-card artist lines, which are 10px by
+   design and belong to the card component, not the section header. */
+.eyebrow:not(.artist):not(.artcard__artist),
+.t-eyebrow {
+  font-family: var(--rlp-body);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.eyebrow:not(.artist):not(.artcard__artist):not([class*="inv"]),
+.t-eyebrow:not([class*="inv"]) {
+  color: var(--rlp-ink-2);
+}
+
+/* Section headings — one display face, one tracking, sentence case. Sizes stay
+   inside the page's own clamp where it already matches the V2 scale. */
+h2.d-h2, h2.t-h2, h2.display-h2, h2.h2, h2.strip__h2, h2.rlp-h2 {
+  font-family: var(--rlp-display);
+  font-weight: 400;
+  font-size: clamp(30px, 2.8vw, 44px);
+  line-height: 1.12;
+  letter-spacing: -.015em;
+}
+
+/* Buttons — same metrics and the same two roles on every page. */
+.btn:not([class*="inverse"]):not([class*="inv"]):not(.btn--light) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 16px 28px;
+  border: 1px solid var(--rlp-ink);
+  border-radius: 0;
+  font-family: var(--rlp-body);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: normal;
+  transition: background-color .22s var(--rlp-ease), color .22s var(--rlp-ease),
+              border-color .22s var(--rlp-ease);
+}
+.btn.btn--primary, .btn.btn-primary {
+  background: var(--rlp-ink);
+  color: var(--rlp-inverse);
+  border-color: var(--rlp-ink);
+}
+.btn.btn--primary:hover, .btn.btn-primary:hover {
+  background: #3A3835;
+  border-color: #3A3835;
+}
+.btn.btn--secondary, .btn.btn-secondary,
+.btn.btn--ghost:not(.btn--ghost-inv), .btn.btn-ghost:not(.btn-ghost-inverse) {
+  background: transparent;
+  color: var(--rlp-ink);
+  border-color: var(--rlp-ink);
+}
+.btn.btn--secondary:hover, .btn.btn-secondary:hover,
+.btn.btn--ghost:not(.btn--ghost-inv):hover, .btn.btn-ghost:not(.btn-ghost-inverse):hover {
+  background: var(--rlp-ink);
+  color: var(--rlp-inverse);
+}
+
+/* The nav is position:fixed and nothing in the kit sets its height. room-lp.js
+   measures it into --nav-h; this is the fallback for first paint. Offset the
+   page ONCE, here — a page that also offsets its own <main> double-counts it. */
+body { padding-top: var(--nav-h, 64px); }
+
+/* The nav inherits the host page's body font-size, and the five pages disagree
+   (15px vs 16px). That moves the measured nav height by 2px and every offset
+   below it with it. Pin it to the shop's own 1.6rem (16px at the 62.5% root
+   nav-standalone.css sets). */
+site-header { font-size: 1.6rem; }
+[id] { scroll-margin-top: calc(var(--nav-h, 64px) + 16px); }
