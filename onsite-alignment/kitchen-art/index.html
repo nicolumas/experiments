@@ -219,8 +219,16 @@ section{padding-block:80px}
 .shot{
   position:relative;background:var(--color-surface-muted);
   border:1px solid var(--color-border-default);overflow:hidden;
+  max-width:100%;
 }
-.shot > img.ph{width:100%;height:100%;object-fit:cover;opacity:0}
+.shot > img.room-img{width:100%;height:100%;object-fit:cover;display:block}
+/* Credits sit BELOW the photograph. Brandbook s09 forbids any darkening layer
+   over an artwork or a room, so no type is ever set over one. */
+.room-credit{margin-top:12px;color:var(--color-text-secondary)}
+.room-credit a{border-bottom:1px solid var(--color-border-strong);transition:border-color var(--t)}
+.room-credit a:hover{border-bottom-color:var(--color-text-primary)}
+.m3 .room-credit,.m5 .room-credit{margin-top:10px}
+.m5 .mood-shot{margin:0;min-width:0}
 .dir{
   color:var(--color-text-secondary);
   font-weight:700;font-size:10px;line-height:1.5;letter-spacing:0.18em;text-transform:uppercase;
@@ -363,6 +371,9 @@ section{padding-block:80px}
 
 /* ══════════ M8 open plan ══════════ */
 .m8 .bleed{margin-bottom:64px;width:100vw;margin-left:calc(50% - 50vw)}
+.m8 .bleed .room-credit{padding-inline:24px}
+@media (min-width:760px){ .m8 .bleed .room-credit{padding-inline:48px} }
+@media (min-width:1280px){ .m8 .bleed .room-credit{padding-inline:96px} }
 .m8 .bleed .shot{height:clamp(300px,40vw,520px);border-inline:0}
 .m8 .body{max-width:640px;color:var(--color-text-secondary)}
 .m8 .acts{margin-top:40px;display:flex;flex-wrap:wrap;gap:24px;align-items:center}
@@ -1324,14 +1335,10 @@ section{padding-block:80px}
 
       <article>
         <div class="shot" data-placement="between-cabinets">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Small colourful still life by Sonja L. hung between kitchen cabinets above a wooden worktop">
-          <span class="line" style="bottom:22%"></span>
-          <figure class="hung" style="left:16%;bottom:30%;width:34%">
-            <img src="https://img.lumas.com/showimg_sol07_full.jpg" width="600" height="400" alt="">
-          </figure>
-          <span class="dir">Between the cabinets · rental kitchen · morning</span>
+          <img class="room-img" src="assets/kitchen-between-the-cabinets.jpg" width="1200" height="900"
+               loading="lazy" alt="Flower lady by Tadaomi Kawasaki hung in the strip above the worktop, below the upper cabinets of a pale-wood kitchen">
         </div>
+        <p class="room-credit t-cap">On the wall: Tadaomi Kawasaki, <a href="https://eu.lumas.com/pictures/tadaomi_kawasaki/flower_lady/" data-id="tkw11" data-module="M3">Flower lady</a> &middot; 90 &times; 90 cm &middot; &euro;570</p>
         <p class="num ui-label">01</p>
         <h3 class="d-h4">Between the cabinets</h3>
         <p class="body t-sm">The strip above the counter, below the upper units. Everyone has one and nobody uses it.</p>
@@ -1341,14 +1348,13 @@ section{padding-block:80px}
 
       <article>
         <div class="shot" data-placement="shelf-lean">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Small square botanical painting by An Doan Nguyen leaning on an open kitchen shelf beside a stack of bowls">
-          <span class="line" style="bottom:34%"></span>
-          <figure class="hung" style="left:30%;bottom:34%;width:28%">
-            <img src="https://img.lumas.com/showimg_adn04_full.jpg" width="400" height="400" alt="">
+          <img class="room-img" src="assets/kitchen-leaning-on-the-shelf.jpg" width="1000" height="750"
+               loading="lazy" alt="Jasmine Flowers 02 by An Doan Nguyen leaning against the wall on a long kitchen shelf, between a stoneware jar and a folded cloth">
+          <figure class="hung" style="left:45%;bottom:29%;width:14%;transform:rotate(-1.5deg);transform-origin:bottom left">
+            <img src="https://img.lumas.com/showimg_adn04_full.jpg" width="400" height="400" loading="lazy" alt="">
           </figure>
-          <span class="dir">Leaning on the shelf · slightly cluttered · evening lamp</span>
         </div>
+        <p class="room-credit t-cap">On the shelf: An Doan Nguyen, <a href="https://eu.lumas.com/pictures/an_doan_nguyen/jasmine_flowers_02/" data-id="adn04" data-module="M3">Jasmine Flowers 02</a> &middot; 40 &times; 40 cm &middot; &euro;260</p>
         <p class="num ui-label">02</p>
         <h3 class="d-h4">Leaning on the shelf</h3>
         <p class="body t-sm">No drilling, no commitment. Move it whenever the mood changes.</p>
@@ -1358,14 +1364,10 @@ section{padding-block:80px}
 
       <article>
         <div class="shot" data-placement="breakfast-table">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Medium colour abstract by Isabelle Menin hung on the breakfast-table wall of a small kitchen, seen from a seated height">
-          <span class="line" style="bottom:16%"></span>
-          <figure class="hung" style="left:24%;bottom:36%;width:44%">
-            <img src="https://img.lumas.com/showimg_ime142_full.jpg" width="680" height="500" alt="">
-          </figure>
-          <span class="dir">Breakfast-table wall · sat at, not walked past</span>
+          <img class="room-img" src="assets/kitchen-breakfast-table-wall.jpg" width="1024" height="768"
+               loading="lazy" alt="Only In Your Heart 03 by Isabelle Menin on the wall above a green marble breakfast table with stools">
         </div>
+        <p class="room-credit t-cap">On the wall: Isabelle Menin, <a href="https://eu.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-id="ime99" data-module="M3">Only In Your Heart 03</a> &middot; 120 &times; 60 cm &middot; &euro;930</p>
         <p class="num ui-label">03</p>
         <h3 class="d-h4">The breakfast-table wall</h3>
         <p class="body t-sm">Sat at, not walked past. This is where a work actually gets studied.</p>
@@ -1375,14 +1377,10 @@ section{padding-block:80px}
 
       <article>
         <div class="shot" data-placement="beside-fridge">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Upright black and white animal portrait by Mikhail Kirakosyan hung on the narrow wall beside a fridge">
-          <span class="line" style="bottom:8%"></span>
-          <figure class="hung" style="left:58%;bottom:22%;width:22%">
-            <img src="https://img.lumas.com/showimg_mki31_full.jpg" width="600" height="800" alt="">
-          </figure>
-          <span class="dir">Beside the fridge · narrow strip · hard afternoon light</span>
+          <img class="room-img" src="assets/kitchen-beside-the-fridge.jpg" width="1024" height="768"
+               loading="lazy" alt="Long Way Home 1 by Stefanie Schneider on the narrow wall between a tall cabinet run and the window of a white kitchen">
         </div>
+        <p class="room-credit t-cap">On the wall: Stefanie Schneider, <a href="https://eu.lumas.com/pictures/stefanie_schneider-2/long_way_home_1-1/" data-id="ssn26" data-module="M3">Long Way Home 1</a> &middot; 180 &times; 180 cm &middot; &euro;2,580</p>
         <p class="num ui-label">04</p>
         <h3 class="d-h4">Beside the fridge or the door</h3>
         <p class="body t-sm">Narrow, vertical, usually ignored. The easiest win in the room.</p>
@@ -1392,14 +1390,10 @@ section{padding-block:80px}
 
       <article>
         <div class="shot" data-placement="above-island">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Large colour photograph by Peter Stewart hung above a kitchen island in an open-plan room">
-          <span class="line" style="bottom:20%"></span>
-          <figure class="hung" style="left:22%;bottom:38%;width:52%">
-            <img src="https://img.lumas.com/showimg_pse19_full.jpg" width="1200" height="800" alt="">
-          </figure>
-          <span class="dir">Above the island · high-end kitchen · evening</span>
+          <img class="room-img" src="assets/kitchen-above-the-island.jpg" width="1024" height="768"
+               loading="lazy" alt="bell by Carol Muthiga-Oyekunle hung above a dark kitchen island with bar stools">
         </div>
+        <p class="room-credit t-cap">On the wall: Carol Muthiga-Oyekunle, <a href="https://eu.lumas.com/pictures/carol_muthiga_oyekunle/bell/" data-id="cmu42" data-module="M3">bell</a> &middot; 60 &times; 60 cm &middot; &euro;860</p>
         <p class="num ui-label">05</p>
         <h3 class="d-h4">Above the island or the bar</h3>
         <p class="body t-sm">The one place a kitchen can take something bold.</p>
@@ -1563,10 +1557,13 @@ section{padding-block:80px}
     <p class="line t-bd" data-mood-line="bw" hidden>Dark cabinetry, hard light, no colour needed.</p>
 
     <div class="row on" role="tabpanel" id="row-colour" aria-labelledby="tab-colour">
-      <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'/%3E" alt="Bright colour work hung against pale kitchen cabinetry in morning light">
-        <span class="dir">Colour · bright · pale cabinetry</span>
-      </div>
+      <figure class="mood-shot">
+        <div class="shot">
+          <img class="room-img" src="assets/kitchen-mood-colour.jpg" width="760" height="1013"
+               loading="lazy" alt="Parasol by Claire Denarie-Soffietti bringing colour to a pale Mediterranean kitchen">
+        </div>
+        <figcaption class="room-credit t-cap">On the wall: Claire Denari&eacute;-Soffietti, <a href="https://eu.lumas.com/pictures/claire_denarie_soffietti/parasol/" data-id="cso02" data-module="M5">Parasol</a> &middot; 90 &times; 90 cm &middot; &euro;570</figcaption>
+      </figure>
         <a class="card" href="https://eu.lumas.com/pictures/heiko_hellwig/golden_rhapsody/" data-price="340" data-f="colour" data-id="hhl128" data-module="M5">
           <span class="fig"><img src="https://img.lumas.com/showimg_hhl128_full.jpg" width="600" height="600" loading="lazy" alt="Golden Rhapsody by Heiko Hellwig, colour work for a kitchen wall"></span>
           <span class="artist eyebrow">Heiko Hellwig</span>
@@ -1605,10 +1602,13 @@ section{padding-block:80px}
     </div>
     <p class="foot" data-mood-foot="colour"><a class="ghost" href="/en/artfinder/?categories_pairs[muted_bold]=5">See all colour and energy</a></p>
     <div class="row" role="tabpanel" id="row-quiet" aria-labelledby="tab-quiet" hidden>
-      <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'/%3E" alt="Quiet still life leaning on an open kitchen shelf in evening lamplight">
-        <span class="dir">Quiet · warm lamp · window gone blue</span>
-      </div>
+      <figure class="mood-shot">
+        <div class="shot">
+          <img class="room-img" src="assets/kitchen-mood-quiet.jpg" width="760" height="1013"
+               loading="lazy" alt="Palazzo di Alvise I by Werner Pawlok on the wall of a dark-timber kitchen in warm evening light">
+        </div>
+        <figcaption class="room-credit t-cap">On the wall: Werner Pawlok, <a href="https://eu.lumas.com/pictures/werner_pawlok/palazzo_di_alvise_i/" data-id="wpa158" data-module="M5">Palazzo di Alvise I</a> &middot; 187 &times; 140 cm &middot; &euro;2,130</figcaption>
+      </figure>
         <a class="card" href="https://eu.lumas.com/pictures/werner_pawlok/palazzo_di_victoria_iii/" data-price="300" data-f="quiet" data-id="wpa164" data-module="M5">
           <span class="fig"><img src="https://img.lumas.com/showimg_wpa164_full.jpg" width="670" height="500" loading="lazy" alt="Palazzo di Victoria III by Werner Pawlok, a quiet interior photograph for a kitchen wall"></span>
           <span class="artist eyebrow">Werner Pawlok</span>
@@ -1647,10 +1647,13 @@ section{padding-block:80px}
     </div>
     <p class="foot" data-mood-foot="quiet" hidden><a class="ghost" href="/en/themes/still-life/">See all quiet and still</a></p>
     <div class="row" role="tabpanel" id="row-wit" aria-labelledby="tab-wit" hidden>
-      <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'/%3E" alt="A witty work hung deadpan above a kitchen counter beside the kettle">
-        <span class="dir">Wit · deadpan · normal good home</span>
-      </div>
+      <figure class="mood-shot">
+        <div class="shot">
+          <img class="room-img" src="assets/kitchen-mood-wit.jpg" width="760" height="1013"
+               loading="lazy" alt="Long Way Home 1 by Stefanie Schneider hung deadpan in a plain everyday kitchen">
+        </div>
+        <figcaption class="room-credit t-cap">On the wall: Stefanie Schneider, <a href="https://eu.lumas.com/pictures/stefanie_schneider-2/long_way_home_1-1/" data-id="ssn26" data-module="M5">Long Way Home 1</a> &middot; 180 &times; 180 cm &middot; &euro;2,580</figcaption>
+      </figure>
         <a class="card" href="https://eu.lumas.com/pictures/craig_alan/social_media_soup/" data-price="260" data-f="wit" data-id="caa10" data-module="M5">
           <span class="fig"><img src="https://img.lumas.com/showimg_caa10_full.jpg" width="480" height="600" loading="lazy" alt="Social Media Soup by Craig Alan, an upright work for the narrow wall beside a fridge"></span>
           <span class="artist eyebrow">Craig Alan</span>
@@ -1689,10 +1692,13 @@ section{padding-block:80px}
     </div>
     <p class="foot" data-mood-foot="wit" hidden><a class="ghost" href="/en/themes/concept-creation/">See all wit</a></p>
     <div class="row" role="tabpanel" id="row-botanical" aria-labelledby="tab-botanical" hidden>
-      <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'/%3E" alt="Botanical work above an open kitchen shelf, green without a houseplant">
-        <span class="dir">Botanical · green · daylight</span>
-      </div>
+      <figure class="mood-shot">
+        <div class="shot">
+          <img class="room-img" src="assets/kitchen-mood-botanical.jpg" width="760" height="1013"
+               loading="lazy" alt="Only In Your Heart 03 by Isabelle Menin, a large botanical work in a daylit kitchen with a marble island">
+        </div>
+        <figcaption class="room-credit t-cap">On the wall: Isabelle Menin, <a href="https://eu.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-id="ime98" data-module="M5">Only In Your Heart 03</a> &middot; 180 &times; 90 cm &middot; &euro;1,590</figcaption>
+      </figure>
         <a class="card" href="https://eu.lumas.com/pictures/jesper_krijgsman/summer_breeze/" data-price="260" data-f="botanical" data-id="jkr22" data-module="M5">
           <span class="fig"><img src="https://img.lumas.com/showimg_jkr22_full.jpg" width="420" height="600" loading="lazy" alt="Summer breeze by Jesper Krijgsman, an upright botanical for the wall beside a kitchen door"></span>
           <span class="artist eyebrow">Jesper Krijgsman</span>
@@ -1731,10 +1737,13 @@ section{padding-block:80px}
     </div>
     <p class="foot" data-mood-foot="botanical" hidden><a class="ghost" href="/en/nature/flowers/">See all botanical</a></p>
     <div class="row" role="tabpanel" id="row-bw" aria-labelledby="tab-bw" hidden>
-      <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'/%3E" alt="Black and white photograph against dark kitchen cabinetry in hard side light">
-        <span class="dir">Mono · hard shadow · dark cabinetry</span>
-      </div>
+      <figure class="mood-shot">
+        <div class="shot">
+          <img class="room-img" src="assets/kitchen-mood-mono.jpg" width="760" height="1013"
+               loading="lazy" alt="Ying and Yang by Claudio Gotsch, a monochrome work on raw plaster above a compact dark kitchen counter">
+        </div>
+        <figcaption class="room-credit t-cap">On the wall: Claudio Gotsch, <a href="https://eu.lumas.com/pictures/claudio_gotsch/ying_yang/" data-id="cgo155" data-module="M5">Ying &amp; Yang</a> &middot; 150 &times; 105 cm &middot; &euro;1,280</figcaption>
+      </figure>
         <a class="card" href="https://eu.lumas.com/pictures/christian_popkes/manhattan_bridge/" data-price="260" data-f="bw" data-id="cpo01" data-module="M5">
           <span class="fig"><img src="https://img.lumas.com/showimg_cpo01_full.jpg" width="430" height="600" loading="lazy" alt="Manhattan Bridge by Christian Popkes, an upright black and white photograph for the wall beside a fridge"></span>
           <span class="artist eyebrow">Christian Popkes</span>
@@ -1853,14 +1862,13 @@ section{padding-block:80px}
 
       <article class="tool">
         <div class="shot">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="A phone photograph of a real kitchen with a work by Craig Alan overlaid at true scale on the wall between the cabinets">
-          <span class="line" style="bottom:26%"></span>
-          <figure class="hung" style="left:20%;bottom:34%;width:32%;transform:rotate(-0.8deg)">
-            <img src="https://img.lumas.com/showimg_caa23_full.jpg" width="600" height="600" loading="lazy" alt="">
+          <img class="room-img" src="assets/kitchen-tool-room-upload.jpg" width="1000" height="750"
+               loading="lazy" alt="A photograph of a real kitchen wall with Ginkgo by Riccardo Lorenzo Fornoni placed on it at true scale">
+          <figure class="hung" style="left:26%;bottom:42%;width:30%;transform:rotate(-0.8deg)">
+            <img src="https://img.lumas.com/showimg_rlf01_full.jpg" width="600" height="340" loading="lazy" alt="">
           </figure>
-          <span class="dir">Phone camera · deliberately imperfect · not a render</span>
         </div>
+        <p class="room-credit t-cap">On the wall: Riccardo Lorenzo Fornoni, <a href="https://eu.lumas.com/pictures/riccardo_lorenzo_fornoni/ginkgo/" data-id="rlf01" data-module="M7">Ginkgo</a> &middot; 60 &times; 34 cm &middot; &euro;240</p>
         <h3 class="d-h4">Room Upload</h3>
         <p class="t-sm">Photograph your kitchen. See the work at true scale.</p>
         <!-- ABLYFT-GOAL: room-upload-start (secondary) · UNBOUND -->
@@ -1869,9 +1877,8 @@ section{padding-block:80px}
 
       <article class="tool">
         <div class="shot">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="Six question cards from the LUMAS Art Finder laid out against a kitchen worktop">
-          <span class="dir">Six questions · the finder, on a worktop</span>
+          <img class="room-img" src="assets/kitchen-tool-art-finder.jpg" width="1000" height="750"
+               loading="lazy" alt="A bare kitchen worktop and empty wall, the starting point the Art Finder asks its six questions about">
         </div>
         <h3 class="d-h4">Art Finder</h3>
         <p class="t-sm">Six questions. A selection that matches how you actually live.</p>
@@ -1880,14 +1887,10 @@ section{padding-block:80px}
 
       <article class="tool">
         <div class="shot">
-          <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'/%3E"
-               alt="One work by Isabelle Menin shown beside its closest relatives found by LUMAS similarity search">
-          <span class="line" style="bottom:20%"></span>
-          <figure class="hung" style="left:34%;bottom:28%;width:30%">
-            <img src="https://img.lumas.com/showimg_ime166_full.jpg" width="500" height="500" loading="lazy" alt="">
-          </figure>
-          <span class="dir">One work, then its relatives</span>
+          <img class="room-img" src="assets/kitchen-tool-similar-art.jpg" width="1000" height="750"
+               loading="lazy" alt="Only In Your Heart 03 by Isabelle Menin in a pale kitchen, the starting point for finding its closest relatives">
         </div>
+        <p class="room-credit t-cap">On the wall: Isabelle Menin, <a href="https://eu.lumas.com/pictures/isabelle_menin/only_in_your_heart_03/" data-id="ime98" data-module="M7">Only In Your Heart 03</a> &middot; 180 &times; 90 cm &middot; &euro;1,590</p>
         <h3 class="d-h4">Similar Art</h3>
         <p class="t-sm">Found one you like? Find its relatives.</p>
         <a class="btn" href="/en/similarity-search/" data-tool="similar-art" data-module="M7">Explore similar works</a>
@@ -1902,14 +1905,10 @@ section{padding-block:80px}
   <div class="wrap">
     <div class="bleed">
       <div class="shot">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'/%3E"
-             alt="An open-plan kitchen and dining room mid-meal, with one large work by Isabelle Menin hung between the cooking and eating zones">
-        <span class="line" style="bottom:22%"></span>
-        <figure class="hung" style="left:57%;bottom:32%;width:min(15vw,210px)">
-          <img src="https://img.lumas.com/showimg_ime130_full.jpg" width="800" height="1200" loading="lazy" alt="">
-        </figure>
-        <span class="dir">Open-plan kitchen and dining · table laid, mid-meal · evening</span>
-      </div>
+          <img class="room-img" src="assets/kitchen-open-plan-dining.jpg" width="1800" height="1012"
+               loading="lazy" alt="Midnight 01 by Isabelle Menin hung between the cooking and eating zones of an open-plan kitchen and dining room in the evening">
+        </div>
+        <p class="room-credit t-cap">On the wall: Isabelle Menin, <a href="https://eu.lumas.com/pictures/isabelle_menin/midnight_01/" data-id="ime119" data-module="M8">Midnight 01</a> &middot; 120 &times; 60 cm &middot; &euro;930</p>
     </div>
 
     <header class="s-head">
@@ -1973,7 +1972,7 @@ section{padding-block:80px}
 <!-- ══════════ M9 · Real kitchens (P1 · blocked on UGC rights) ══════════ -->
 <!-- data-state="ready" renders the designed masonry. data-state="no-ugc" renders the
      single gallery-sourced installation photograph instead of faking customer photos. -->
-<section class="m9" id="m9" data-state="ready">
+<section class="m9" id="m9" data-state="no-ugc">
   <div class="wrap">
     <header class="s-head">
       <p class="eyebrow">In other people&rsquo;s kitchens</p>
@@ -1993,11 +1992,10 @@ section{padding-block:80px}
 
     <div class="fallback">
       <div class="shot" style="aspect-ratio:16/9;min-height:280px">
-        <img class="ph" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'/%3E"
-             alt="A LUMAS gallery installation photograph showing small formats hung as a group at kitchen height">
-        <span class="dir">Gallery-sourced installation photograph · used until UGC rights are cleared</span>
-      </div>
-      <p class="t-sm muted" style="margin-top:12px">LUMAS Berlin Mitte, small formats hung at kitchen height.</p>
+          <img class="room-img" src="assets/kitchen-installation.jpg" width="1365" height="768"
+               loading="lazy" alt="A LUMAS room reference: WINDA by Marta Contreras Simo hung beside an arched shelf of pottery in a warm kitchen">
+        </div>
+      <p class="t-sm muted" style="margin-top:12px">Marta Contreras Sim&oacute;, <a href="https://eu.lumas.com/pictures/marta_contreras_simo/winda/" data-id="mcs42" data-module="M9">WINDA</a> &middot; 80 &times; 80 cm. A LUMAS room reference, not a customer photograph. This module stays in its fallback state until image rights are cleared; the designed masonry is on <code>data-state="ready"</code>.</p>
     </div>
 
     <p class="foot"><a class="ghost" href="https://www.instagram.com/lumas_gallery/" rel="noopener">Share yours &middot; @lumas_gallery</a></p>
@@ -2179,14 +2177,27 @@ section{padding-block:80px}
   var ORDER = ['control', 'reno', 'advice', 'crm'];
   var variant = 'control';
 
+  /* Resolve the hero hooks through a fallback chain so the switcher survives
+     a re-run of _room-lp/inline.py, which replaces the hero markup. */
+  function pick() {
+    for (var i = 0; i < arguments.length; i++) {
+      var el = document.querySelector(arguments[i]);
+      if (el) { return el; }
+    }
+    return null;
+  }
+
   function applyVariant(v) {
     if (!VARIANTS[v]) { v = 'control'; }
     variant = v;
     var def = VARIANTS[v];
-    document.querySelector('[data-v="h1"]').textContent = def.h1;
-    var cta = document.querySelector('[data-v="cta"]');
-    cta.textContent = def.cta;
-    cta.setAttribute('href', def.href);
+    var h1 = pick('[data-v="h1"]', '.rlp-hero__title', '#hero-h1', 'h1');
+    var cta = pick('[data-v="cta"]', '.rlp-hero__cta .rlp-btn--primary', '[data-cta="see-the-selection"]');
+    if (h1) { h1.textContent = def.h1; }
+    if (cta) {
+      cta.textContent = def.cta;
+      cta.setAttribute('href', def.href);
+    }
     document.documentElement.setAttribute('data-variant', v);
     track('view_promotion', { promotion_name: 'kitchen_hero', variant: v });
   }
