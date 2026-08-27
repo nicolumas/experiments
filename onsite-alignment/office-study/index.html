@@ -163,6 +163,11 @@ a{color:inherit}
 .r-1-1{aspect-ratio:1/1}
 .r-7-5{aspect-ratio:7/5}
 
+/* room photography — the shot brief, realised */
+.room{position:relative;overflow:hidden;background:var(--surface-sunken);margin:0}
+.room img{width:100%;height:100%;object-fit:cover;display:block}
+.room figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px 16px;margin:0}
+
 /* artwork: always the whole work, true ratio, bare */
 .art-slot{position:relative;aspect-ratio:4/5;background:transparent;overflow:hidden}
 .art-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
@@ -177,14 +182,16 @@ a{color:inherit}
 .crumb [aria-current]{color:var(--text-primary)}
 
 /* ── M1 hero ─────────────────────────────────────────────────────────────── */
-.hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;
-  background:var(--surface-sunken);border-bottom:1px solid var(--border-default)}
-.hero .shot{position:absolute;inset:0;border:0;justify-content:flex-end;align-items:flex-end;
-  padding:48px;text-align:right}
-.hero .shot .t-cap,.closing .shot .t-cap{max-width:34ch}
-.hero .shot::after{inset:20px}
-.hero-inner{position:relative;padding:64px 0 72px;width:min(1280px,100% - 160px);margin-inline:auto}
-.hero-panel{max-width:780px}
+/* Split hero. The brandbook forbids a darkening layer over a room and the art
+   direction requires the type to survive without a scrim, so the type sits on the
+   page ground beside the photograph rather than on top of it. */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,47fr) minmax(0,53fr);
+  align-items:center;background:var(--surface-page);border-bottom:1px solid var(--border-default)}
+.hero-inner{padding:96px 64px 96px max(80px,calc(50vw - 640px))}
+.hero-panel{max-width:640px}
+.hero-fig{margin:0;align-self:stretch;min-height:78vh;background:var(--surface-sunken)}
+.hero-fig img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-credit{display:block;margin-top:40px;color:var(--text-secondary)}
 .hero h1{margin:16px 0 20px}
 .hero .sub{color:var(--text-secondary)}
 
@@ -331,12 +338,11 @@ a{color:inherit}
 .linkblock a:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* ── M15 closing ─────────────────────────────────────────────────────────── */
-.closing{position:relative;min-height:72vh;display:flex;align-items:center;justify-content:center;
-  text-align:center;background:var(--surface-sunken)}
-.closing .shot{position:absolute;inset:0;border:0;justify-content:flex-start;align-items:flex-end;
-  padding:48px;text-align:right}
-.closing .shot::after{inset:20px}
-.closing .inner{position:relative;padding:96px 24px;max-width:620px}
+/* Full-bleed room, type beneath it on the page ground: same reason as the hero,
+   no layer of any kind over a photograph of a room. */
+.closing{background:var(--surface-page);text-align:center}
+.closing .room.bleed{height:62vh;min-height:420px}
+.closing .inner{padding:72px 24px 0;max-width:620px;margin-inline:auto}
 .closing p{margin:20px 0 0;color:var(--text-secondary)}
 
 /* ── siblings ────────────────────────────────────────────────────────────── */
@@ -363,17 +369,18 @@ body[data-v="v2"] #m8{display:none}
 @media (max-width:1023px){
   :root{--rhythm:72px;--gutter:20px}
   .wrap{width:min(1280px,100% - 40px)}
-  .hero-inner{width:min(1280px,100% - 40px);padding:40px 0 44px}
-  .hero{min-height:62vh}
+  .hero{grid-template-columns:1fr;align-items:start}
+  .hero-fig{min-height:0;height:30vh;order:-1}
+  .hero-inner{padding:28px 20px 40px}
+  .hero-panel{max-width:none}
+  .hero-credit{margin-top:24px}
   /* display/xl clamps to its 64px floor at 375px, which pushes the CTA below the
      fold. modules.md requires H1 + one CTA above the fold at 62vh, so the hero
      H1 and sub step down one tier on small screens. */
   .hero h1{font-size:clamp(40px,10.5vw,56px);margin:12px 0 16px}
   .hero .sub{font-size:16px;line-height:1.5}
-  .hero .shot{justify-content:flex-start;align-items:flex-start;text-align:left;padding:20px}
-  .hero .shot .t-cap{display:none}
-  .hero-inner{padding-top:84px}
-  .closing .shot{padding:20px}
+  .closing .room.bleed{height:38vh;min-height:260px}
+  .closing .inner{padding:40px 20px 0}
   .sight-cols,.scale-cols,.behind-cols,.room-cols,.adv-cols,.spotlight{grid-template-columns:1fr;gap:40px}
   .states{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
     margin-inline:-20px;padding:0 20px 8px;scroll-padding-left:20px}
@@ -425,10 +432,7 @@ body[data-v="v2"] #m8{display:none}
 
 <!-- ══ M1 · Hero ════════════════════════════════════════════════════════════ -->
 <header class="hero" id="m1">
-  <div class="shot" aria-hidden="true">
-    <span class="ui-label" id="hero-shot-label">M01 · CALM STUDY · FROM BEHIND THE DESK CHAIR</span>
-    <span class="t-cap" id="hero-shot-note">Morning side light, no ceiling fixture. Seated eye height, at or slightly behind the chair. Artwork in the natural sightline opposite the desk. 16:9 desktop crop, 4:5 mobile crop authored separately.</span>
-  </div>
+  <figure class="hero-fig"><img id="hero-shot-img" src="assets/m01-hero-calm-study-from-the-desk.jpg" alt="Calm study with Jonathan Chritchley&#39;s Li River, Guilin, Study 2 hung on the wall the desk faces, morning light from the window to the right" width="1376" height="768" fetchpriority="high"></figure>
   <div class="hero-inner">
     <div class="hero-panel">
       <span class="eyebrow">Office &amp; study</span>
@@ -439,6 +443,7 @@ body[data-v="v2"] #m8{display:none}
         <a class="btn btn-primary" href="https://eu.lumas.com/collections/office-study/" data-ev="select_promotion" data-p='{"promotion_name":"hero","creative_slot":"office_study_lp"}'>Explore office &amp; study art</a>
         <a class="link" href="#m3" data-ev="select_content" data-p='{"content_type":"anchor","item_id":"sightlines"}'>Where should art go in a workspace? &rarr;</a>
       </div>
+      <span class="t-cap hero-credit" id="hero-shot-label">Jonathan Chritchley &middot; Li River, Guilin, Study 2</span>
     </div>
   </div>
 </header>
@@ -576,42 +581,42 @@ body[data-v="v2"] #m8{display:none}
     </div>
     <div class="states">
       <article class="state-card" data-list="office_states" data-mood="focus">
-        <div class="shot r-3-2"><span class="ui-label">M04 · FOCUS</span><span class="t-cap">Calm study, from the desk. Grey daylight, single tonal work.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-focus-grey-ash-study.jpg" alt="Grey-ash study with Hengki Koentjoro&#39;s Soaring hung at seated eye level on the wall the desk faces" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Focus</h3>
         <p>Fewer things to look at, and one of them worth it. Reduction, tone, quiet structure.</p>
         <!-- ABLYFT-GOAL: collection entry -->
         <a class="link" href="https://eu.lumas.com/collections/office-focus/?mood=focus" data-ev="select_item_list" data-p='{"item_list_name":"office_focus","mood":"focus"}'>Explore the focus edit &rarr;</a>
       </article>
       <article class="state-card" data-list="office_states" data-mood="escape">
-        <div class="shot r-3-2"><span class="ui-label">M04 · ESCAPE</span><span class="t-cap">Desk facing a wall with distance on it. Window light from the side.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-escape-coastal-study.jpg" alt="Coastal home study with Dean West&#39;s St. Pete Beach II above the desk and the sea horizon through the window beside it" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Escape</h3>
         <p>A window where the architecture didn't give you one. Distance, horizon, elsewhere.</p>
         <!-- ABLYFT-GOAL: collection entry -->
         <a class="link" href="https://eu.lumas.com/collections/office-escape/?mood=escape" data-ev="select_item_list" data-p='{"item_list_name":"office_escape","mood":"escape"}'>Explore the escape edit &rarr;</a>
       </article>
       <article class="state-card" data-list="office_states" data-mood="ideas">
-        <div class="shot r-3-2"><span class="ui-label">M04 · IDEAS</span><span class="t-cap">Studio, materials out, expressive work past the mess.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-ideas-altbau-studio.jpg" alt="Altbau workspace with Pep Ventosa&#39;s Henry Kaiser Park, a blurred multi-exposure tree, on the wall behind the trestle desk" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Ideas</h3>
         <p>Something in the room that refuses to settle. Colour, collision, deliberate friction.</p>
         <!-- ABLYFT-GOAL: collection entry -->
         <a class="link" href="https://eu.lumas.com/collections/office-ideas/?mood=ideas" data-ev="select_item_list" data-p='{"item_list_name":"office_ideas","mood":"ideas"}'>Explore the ideas edit &rarr;</a>
       </article>
       <article class="state-card" data-list="office_states" data-mood="ambition">
-        <div class="shot r-3-2"><span class="ui-label">M04 · AMBITION</span><span class="t-cap">Executive study, from the visitor's chair. One large work behind the desk.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-ambition-rosewood-office.jpg" alt="Rosewood office with Reinhart Wolf&#39;s Flatiron Building hung above the credenza, seen across the desk" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Ambition</h3>
         <p>A wall with weight behind it. Scale, structure, work that holds a room.</p>
         <!-- ABLYFT-GOAL: collection entry -->
         <a class="link" href="https://eu.lumas.com/collections/office-ambition/?mood=ambition" data-ev="select_item_list" data-p='{"item_list_name":"office_ambition","mood":"ambition"}'>Explore the ambition edit &rarr;</a>
       </article>
       <article class="state-card" data-list="office_states" data-mood="personality">
-        <div class="shot r-3-2"><span class="ui-label">M04 · PERSONALITY</span><span class="t-cap">Warm, lived-in corner. Jacket on the chair, cup already drunk from.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-personality-work-corner.jpg" alt="Work corner in an Altbau living room with Claudio Gotsch&#39;s Albula (Heimat) hung large on the wall the desk faces" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Personality</h3>
         <p>The moment the room stops being an office. Wit, warmth, a subject that is yours.</p>
         <!-- ABLYFT-GOAL: collection entry -->
         <a class="link" href="https://eu.lumas.com/collections/office-personality/?mood=personality" data-ev="select_item_list" data-p='{"item_list_name":"office_personality","mood":"personality"}'>Explore the personality edit &rarr;</a>
       </article>
       <article class="state-card" data-list="office_states" data-mood="endurance">
-        <div class="shot r-3-2"><span class="ui-label">M04 · ENDURANCE</span><span class="t-cap">Same wall, late afternoon. Detail arriving with the changed light.</span></div>
+        <figure class="room r-3-2"><img src="assets/m04-endurance-late-afternoon.jpg" alt="Study in late afternoon with Isabelle Menin&#39;s From a Dream 04 on the wall opposite the desk, raking light across the plaster" loading="lazy" width="1264" height="848"></figure>
         <h3 class="t-h4">Endurance</h3>
         <p>Art built to survive being seen every day: the piece that is still interesting in its third year.</p>
         <!-- ABLYFT-GOAL: collection entry -->
@@ -631,7 +636,7 @@ body[data-v="v2"] #m8{display:none}
       <h2 class="t-h2">Five workspaces, five different problems</h2>
     </div>
     <div class="typo-row">
-      <div class="fig"><div class="shot r-3-2"><span class="ui-label">M05 · CALM STUDY · FROM THE DESK, LOOKING UP</span><span class="t-cap">Plaster, oak, low bookshelf, grey daylight. The whole point of the looking wall.</span></div></div>
+      <div class="fig"><figure class="room r-3-2"><img src="assets/m05-calm-study-oak-desk.jpg" alt="Calm oak study with Daniel Martinek&#39;s Piz Pal&uuml; on the wall directly above the desk, bookshelves to the left" loading="lazy" width="1264" height="848"></figure></div>
       <div class="txt">
         <span class="eyebrow">One of five</span>
         <h3 class="t-h4">The calm study</h3>
@@ -640,7 +645,7 @@ body[data-v="v2"] #m8{display:none}
       </div>
     </div>
     <div class="typo-row rev">
-      <div class="fig"><div class="shot r-3-2"><span class="ui-label">M05 · STUDIO · WIDE, FROM THE DOORWAY</span><span class="t-cap">Concrete floor, worktable, materials out. Work visible past the mess.</span></div></div>
+      <div class="fig"><figure class="room r-3-2"><img src="assets/m05-studio-from-the-doorway.jpg" alt="Artist studio seen from the doorway, worktable and materials in the foreground, Beatrice Hug&#39;s Body Light IV on the far wall under north light" loading="lazy" width="1264" height="848"></figure></div>
       <div class="txt">
         <span class="eyebrow">Two of five</span>
         <h3 class="t-h4">The studio</h3>
@@ -649,7 +654,7 @@ body[data-v="v2"] #m8{display:none}
       </div>
     </div>
     <div class="typo-row typo-hide">
-      <div class="fig"><div class="shot r-3-2"><span class="ui-label">M05 · ARCHITECTURAL OFFICE · LOW AND WIDE</span><span class="t-cap">Concrete, glass, steel, hard light. The work scaled to the architecture.</span></div></div>
+      <div class="fig"><figure class="room r-3-2"><img src="assets/m05-architectural-office-low-and-wide.jpg" alt="Concrete and glass architectural office with Heinrich Heidersberger&#39;s Bankhaus Nikolai, Braunschweig scaled to the wall behind the desk" loading="lazy" width="1264" height="848"></figure></div>
       <div class="txt">
         <span class="eyebrow">Three of five</span>
         <h3 class="t-h4">The architectural office</h3>
@@ -658,7 +663,7 @@ body[data-v="v2"] #m8{display:none}
       </div>
     </div>
     <div class="typo-row rev">
-      <div class="fig"><div class="shot r-3-2"><span class="ui-label">M05 · WORK CORNER · FROM THE SOFA</span><span class="t-cap">A desk against a living-room wall, domestic life adjacent. The corner reading as intentional.</span></div></div>
+      <div class="fig"><figure class="room r-3-2"><img src="assets/m05-work-corner-desk-in-a-living-room.jpg" alt="Work corner in a living room with Hugo Pondz&#39;s The Bright Moment hung above the desk, sofa in the foreground" loading="lazy" width="1800" height="1012"></figure></div>
       <div class="txt">
         <span class="eyebrow">Four of five</span>
         <h3 class="t-h4">The work corner</h3>
@@ -667,7 +672,7 @@ body[data-v="v2"] #m8{display:none}
       </div>
     </div>
     <div class="typo-row typo-hide">
-      <div class="fig"><div class="shot r-3-2"><span class="ui-label">M05 · EXECUTIVE STUDY · FROM THE VISITOR'S CHAIR</span><span class="t-cap">Dark timber, rug, upholstered chair. One significant edition behind the desk.</span></div></div>
+      <div class="fig"><figure class="room r-3-2"><img src="assets/m05-executive-study-from-the-visitors-chair.jpg" alt="Executive study with Werner Pawlok&#39;s Palazzo di Alvise I on the wall behind the desk, seen from the visitor&#39;s chair" loading="lazy" width="1800" height="1012"></figure></div>
       <div class="txt">
         <span class="eyebrow">Five of five</span>
         <h3 class="t-h4">The executive study</h3>
@@ -689,9 +694,9 @@ body[data-v="v2"] #m8{display:none}
       <p class="t-lg">Work that resolves immediately does not survive that. It becomes furniture by the second week. What survives is work with something still in reserve: a detail you hadn't noticed, a tonal shift that changes with the hour, a composition that reads differently when you are tired.</p>
       <p class="t-lg">It is a different criterion from <em>do I like it</em>. It is: <em>will I still be looking at it in a year?</em></p>
       <div class="tod">
-        <figure><div class="shot r-3-2"><span class="ui-label">M06 · SAME WALL · 07:40</span><span class="t-cap">Locked-off tripod</span></div><figcaption class="t-cap">07:40</figcaption></figure>
-        <figure><div class="shot r-3-2"><span class="ui-label">M06 · SAME WALL · 12:15</span><span class="t-cap">Identical framing</span></div><figcaption class="t-cap">12:15</figcaption></figure>
-        <figure><div class="shot r-3-2"><span class="ui-label">M06 · SAME WALL · 18:50</span><span class="t-cap">Light is the only variable</span></div><figcaption class="t-cap">18:50</figcaption></figure>
+        <figure><figure class="room r-3-2"><img src="assets/m06-same-wall-0740.jpg" alt="The study wall at 07:40, cool morning light across Werner Pawlok&#39;s Palazzo di Alvise I" loading="lazy" width="1200" height="675"></figure><figcaption class="t-cap">07:40</figcaption></figure>
+        <figure><figure class="room r-3-2"><img src="assets/m06-same-wall-1215.jpg" alt="The same wall and the same work at 12:15, flat midday light" loading="lazy" width="1200" height="675"></figure><figcaption class="t-cap">12:15</figcaption></figure>
+        <figure><figure class="room r-3-2"><img src="assets/m06-same-wall-1850.jpg" alt="The same wall and the same work at 18:50, warm low evening light" loading="lazy" width="1200" height="675"></figure><figcaption class="t-cap">18:50</figcaption></figure>
       </div>
       <div class="cta-row">
         <a class="btn btn-secondary" href="https://eu.lumas.com/collections/office-endurance/?mood=endurance" data-ev="select_content" data-p='{"content_type":"editorial","item_id":"endurance"}'>See the endurance edit</a>
@@ -761,7 +766,7 @@ body[data-v="v2"] #m8{display:none}
 <section class="module-bleed band band-inverse" id="m8">
   <div class="wrap">
     <div class="behind-cols">
-      <div class="shot r-7-5"><span class="ui-label">M08 · CAMERA POV · SEATED THREE-QUARTER, WORK BEHIND</span><span class="t-cap">Frame as a video call sees it. Figure slightly soft, work behind sharp and correctly cropped.</span></div>
+      <figure class="room r-7-5"><img src="assets/m08-seen-wall-camera-pov.jpg" alt="Home office with a seated figure at the desk and Sabine Wild&#39;s Empire, a tall vertical work, on the wall behind them clearing the shoulder line" loading="lazy" width="1376" height="768"></figure>
       <div>
         <span class="eyebrow">On camera</span>
         <h2 class="t-h2" style="margin:8px 0 24px">The wall everyone else sees</h2>
@@ -812,7 +817,7 @@ body[data-v="v2"] #m8{display:none}
   <div class="wrap">
     <div class="room-cols">
       <div>
-        <div class="shot r-3-2"><span class="ui-label">M10 · ORDINARY WALL · PHONE-HELD</span><span class="t-cap">A plain, slightly imperfect wall with the work composited at true scale. Its credibility depends on it not being beautiful.</span></div>
+        <figure class="room r-3-2"><img src="assets/m10-your-own-wall-before.jpg" alt="An empty study wall above a credenza, photographed from the desk position before any work is placed on it" loading="lazy" width="1800" height="1012"></figure>
       </div>
       <div>
         <span class="eyebrow">Before you decide</span>
@@ -1380,7 +1385,7 @@ body[data-v="v2"] #m8{display:none}
 <section class="module" id="m13">
   <div class="wrap">
     <div class="adv-cols">
-      <div class="shot r-3-2"><span class="ui-label">M13 · GALLERY INTERIOR · PERSON AND WORK AT SCALE</span><span class="t-cap">Human, not architectural. Or an advisor's hands with a print and a frame corner.</span></div>
+      <figure class="room r-3-2"><img src="assets/m13-gallery-hamburg.jpg" alt="Two people holding a large red edition against the wall in the LUMAS gallery in Hamburg" loading="lazy" width="820" height="820"></figure>
       <div>
         <span class="eyebrow">If you'd rather talk to someone</span>
         <h2 class="t-h2" style="margin:8px 0 24px">A room like this is worth getting right</h2>
@@ -1472,10 +1477,7 @@ body[data-v="v2"] #m8{display:none}
 
 <!-- ══ M15 · Closing ════════════════════════════════════════════════════════ -->
 <section class="module-bleed closing" id="m15">
-  <div class="shot" aria-hidden="true">
-    <span class="ui-label">M15 · CLOSING · CALMEST ROOM, WORK CENTRED IN THE SIGHTLINE</span>
-    <span class="t-cap">Full bleed, no person, wide margins. End quietly.</span>
-  </div>
+  <figure class="room bleed" aria-hidden="true"><img src="assets/m15-closing-study-work-centred.jpg" alt="" loading="lazy" width="1800" height="1012"></figure>
   <div class="inner">
     <h2 class="t-h1">Choose what surrounds your mind while it works</h2>
     <p class="t-lg">A wall you will look at every working day of the next ten years.</p>
@@ -1586,32 +1588,35 @@ body[data-v="v2"] #m8{display:none}
   });
 
   /* ── deep links · message match (strategy.md §5) ────────────────────────── */
+  /* [image, credit, alt, h1 override (or null), first rail] */
   var HERO = {
-    focus:       ['M01 · MINIMAL STUDY · SINGLE TONAL WORK OPPOSITE THE DESK', null, 'office_focus'],
-    escape:      ['M01 · STUDY · DISTANCE ON THE LOOKING WALL', null, 'office_escape'],
-    ideas:       ['M01 · STUDIO · MATERIAL MESS, EXPRESSIVE WORK', 'A room that<br>argues back', 'office_ideas'],
-    ambition:    ['M01 · EXECUTIVE STUDY · ONE SIGNIFICANT EDITION AT SCALE', null, 'office_ambition'],
-    personality: ['M01 · WARM, LIVED-IN, CHARACTERFUL', 'Neutral is<br>also a choice', 'office_personality'],
-    endurance:   ['M01 · SAME WALL, LATE AFTERNOON · DETAIL ARRIVING', null, 'office_endurance']
+    focus:       ['m04-focus-grey-ash-study.jpg', 'Hengki Koentjoro · Soaring', 'Grey-ash study with Hengki Koentjoro\u2019s Soaring at seated eye level on the wall the desk faces', null, 'office_focus'],
+    escape:      ['m04-escape-coastal-study.jpg', 'Dean West · St. Pete Beach II', 'Coastal study with Dean West\u2019s St. Pete Beach II above the desk', null, 'office_escape'],
+    ideas:       ['m04-ideas-altbau-studio.jpg', 'Pep Ventosa · Henry Kaiser Park', 'Altbau workspace with Pep Ventosa\u2019s Henry Kaiser Park behind the trestle desk', 'A room that<br>argues back', 'office_ideas'],
+    ambition:    ['m05-architectural-office-low-and-wide.jpg', 'Heinrich Heidersberger · Bankhaus Nikolai, Braunschweig', 'Concrete and glass office with Heidersberger\u2019s Bankhaus Nikolai scaled to the wall', null, 'office_ambition'],
+    personality: ['m04-personality-work-corner.jpg', 'Claudio Gotsch · Albula (Heimat)', 'Work corner with Claudio Gotsch\u2019s Albula (Heimat) on the wall the desk faces', 'Neutral is<br>also a choice', 'office_personality'],
+    endurance:   ['m04-endurance-late-afternoon.jpg', 'Isabelle Menin · From a Dream 04', 'Study in late afternoon with Isabelle Menin\u2019s From a Dream 04 opposite the desk', null, 'office_endurance']
   };
   var WSP = {
-    study:         ['M01 · CALM STUDY · FROM BEHIND THE DESK CHAIR', null, 'office_focus'],
-    studio:        ['M01 · STUDIO · WIDE, FROM THE DOORWAY', null, 'office_ideas'],
-    corner:        ['M01 · WORK CORNER IN A LIVING ROOM · ONE CONSIDERED PIECE', 'The corner stops<br>being a corner', 'office_focus'],
-    executive:     ['M01 · EXECUTIVE STUDY · FROM THE VISITOR’S CHAIR', null, 'office_ambition'],
-    architectural: ['M01 · CONCRETE AND GLASS OFFICE · LARGE MONOCHROME', 'Structure, at the<br>scale of the room', 'office_ambition']
+    study:         ['m05-calm-study-from-the-desk.jpg', 'Werner Pawlok · Palazzo di Alvise I', 'Calm study with Werner Pawlok\u2019s Palazzo di Alvise I opposite the desk', null, 'office_focus'],
+    studio:        ['m05-studio-from-the-doorway.jpg', 'Beatrice Hug · Body Light IV', 'Artist studio with Beatrice Hug\u2019s Body Light IV on the far wall', null, 'office_ideas'],
+    corner:        ['m05-work-corner-desk-in-a-living-room.jpg', 'Hugo Pondz · The Bright Moment', 'Work corner in a living room with Hugo Pondz\u2019s The Bright Moment above the desk', 'The corner stops<br>being a corner', 'office_focus'],
+    executive:     ['m05-executive-study-from-the-visitors-chair.jpg', 'Werner Pawlok · Palazzo di Alvise I', 'Executive study with Werner Pawlok\u2019s Palazzo di Alvise I behind the desk', null, 'office_ambition'],
+    architectural: ['m05-architectural-office-low-and-wide.jpg', 'Heinrich Heidersberger · Bankhaus Nikolai, Braunschweig', 'Concrete and glass office with Heidersberger\u2019s Bankhaus Nikolai scaled to the wall', 'Structure, at the<br>scale of the room', 'office_ambition']
   };
   var SIGHT = {
-    opposite:   ['M01 · FROM THE DESK, LOOKING UP AT THE LOOKING WALL', null, 'office_escape'],
-    behind:     ['M01 · CAMERA POV · SEATED FIGURE, ART BEHIND', 'The wall<br>everyone else sees', 'office_ambition'],
-    peripheral: ['M01 · DESK WITH THE FELT WALL IN THE CORNER OF THE EYE', null, 'office_focus']
+    opposite:   ['m01-hero-calm-study-from-the-desk.jpg', 'Jonathan Chritchley · Li River, Guilin, Study 2', 'Study with Jonathan Chritchley\u2019s Li River, Guilin, Study 2 on the wall the desk faces', null, 'office_escape'],
+    behind:     ['m08-seen-wall-camera-pov.jpg', 'Sabine Wild · Empire', 'Home office from the video-call camera position, Sabine Wild\u2019s Empire on the wall behind the seat', 'The wall<br>everyone else sees', 'office_ambition'],
+    peripheral: ['m04-focus-grey-ash-study.jpg', 'Hengki Koentjoro · Soaring', 'Study with Hengki Koentjoro\u2019s Soaring on a quiet wall beside the working position', null, 'office_focus']
   };
 
   function applyEntry(spec, name, value) {
     if (!spec) return null;
-    document.getElementById('hero-shot-label').textContent = spec[0];
-    if (spec[1]) document.getElementById('hero-h1').innerHTML = spec[1];
-    var edit = document.querySelector('.edit[data-list="' + spec[2] + '"]');
+    var img = document.getElementById('hero-shot-img');
+    if (img) { img.src = 'assets/' + spec[0]; img.alt = spec[2]; }
+    document.getElementById('hero-shot-label').textContent = spec[1];
+    if (spec[3]) document.getElementById('hero-h1').innerHTML = spec[3];
+    var edit = document.querySelector('.edit[data-list="' + spec[4] + '"]');
     if (edit) edit.parentNode.insertBefore(edit, edit.parentNode.querySelector('.edit'));
     track('view_promotion', { promotion_name: 'hero', creative_slot: name + '=' + value });
     return spec;
