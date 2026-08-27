@@ -149,7 +149,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0826", kicker: "Latest · today",        weekday: "Wednesday", date: "26 August", year: "2026", short: "26 Aug", upcoming: true },
+      { id: "s0827", kicker: "Latest · today",        weekday: "Thursday",  date: "27 August", year: "2026", short: "27 Aug", upcoming: true },
+      { id: "s0826", kicker: "Previous",              weekday: "Wednesday", date: "26 August", year: "2026", short: "26 Aug" },
       { id: "s0825", kicker: "Previous",              weekday: "Tuesday",   date: "25 August", year: "2026", short: "25 Aug" },
       { id: "s0820", kicker: "Previous",              weekday: "Thursday",  date: "20 August", year: "2026", short: "20 Aug" },
       { id: "s0819", kicker: "Previous",              weekday: "Wednesday", date: "19 August", year: "2026", short: "19 Aug" },
@@ -165,6 +166,11 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Thursday 27 August ─────────────────────────────────────
+      { s: "s0827", feature: true, title: "Buy art online with confidence",
+        href: "buy-art-online/",
+        desc: "A reassurance-led SEO landing page for “buy art online” intent, routing search arrivals to the limited-edition collection instead of hard-selling. It answers a first-time online buyer’s hesitations in order: see it in a gallery, talk to a consultant, gallery-standard framing by hand, 30-day returns, then hands them to the works our curators are showing now. Real LUMAS editions shown bare at true ratio (no mat, no crop), a guided room-and-feeling chip module, and reserved room-view slots through the page for in-situ renders to follow. Responsive at 375 and 1280." },
+
       // ── Wednesday 26 August ────────────────────────────────────
       { s: "s0826", feature: true, title: "Homepage, six new sections",
         href: "homepage-evolution/" },
