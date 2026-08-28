@@ -212,6 +212,10 @@ body{
 .frame[data-compact] .pay{padding:var(--sp-2)}
 /* on a 553px viewport the confirmation flourish goes; the confirmation itself stays */
 .frame[data-compact] .band-sub{display:none}
+/* option 01 on a 553px viewport: the last 20px come out of the rhythm */
+.frame[data-compact] .item{padding:var(--sp-2) 0}
+.frame[data-compact] .ov-head{padding:var(--sp-3) var(--sp-5) var(--sp-2)}
+.frame[data-compact] .pill{padding:2px var(--sp-2)}
 .ov-close{
   background:none;border:0;cursor:pointer;color:var(--color-text-primary);
   font-size:20px;line-height:1;padding:var(--sp-1);
@@ -235,6 +239,7 @@ body{
 .frame[data-compact] .exit-bar--titled .back{font-size:10px;letter-spacing:.6px}
 .frame[data-tight] .item{padding:var(--sp-2) 0}
 .frame[data-tight] .ov-trust{padding:var(--sp-3) var(--sp-5)}
+.frame[data-compact] .ov-trust{padding:var(--sp-2) var(--sp-5)}
 .frame[data-tight] .totals{margin:var(--sp-2) 0}
 .frame[data-tight] .ov-foot{padding:var(--sp-3) var(--sp-5)}
 .ov-foot{padding:var(--sp-6);border-top:1px solid var(--color-border-subtle)}
@@ -268,7 +273,6 @@ body{
   flex:none;padding:var(--sp-4) var(--sp-6);background:var(--color-surface-card);
   border-top:1px solid var(--color-border-subtle);
 }
-.frame[data-tight] .ov-trust{padding:var(--sp-3) var(--sp-5)}
 
 .band{display:flex;gap:var(--sp-3);align-items:flex-start;padding:var(--sp-4) var(--sp-6)}
 .band-success{background:var(--color-status-success-bg);color:var(--color-status-success)}
@@ -607,7 +611,7 @@ const itemBaseline = (it) => `
 /* condensed item row — refined variants */
 const itemRefined = (it, t, lg) => `
   <article class="item${lg ? ' item--lg' : ''}">
-    <div class="thumb" role="img" aria-label="${it.title}"></div>
+    <div class="thumb">${it.img ? `<img src="${it.img}" alt="${it.title}">` : ''}</div>
     <div class="item-meta">
       <p class="b">${it.title}</p>
       <p class="eyebrow t-ter">${it.artist}</p>

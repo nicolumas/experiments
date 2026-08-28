@@ -1,6 +1,7 @@
 <!doctype html>
 <!-- ═══ PROTO BOARD · VIEWPORTS ════════════════════════════════════════
-  Option 02 rendered at real phone viewports, DE and US side by side.
+  Option 01 (conservative refinement) rendered at real phone viewports,
+  DE and US side by side.
 
   Each frame is an iframe sized to the device's VISIBLE viewport (device
   CSS height minus browser chrome), running the prototype in "This device"
@@ -9,7 +10,7 @@
   these are 1:1 pixels.
 
   The line under each frame is measured live from inside it.
-  ?v=conservative switches the variant; ?m=de|us shows one market only.
+  ?v=recommended switches to option 02; ?m=de|us shows one market only.
 ═══════════════════════════════════════════════════════════════════════ -->
 <html lang="en">
 <head>
@@ -23,7 +24,7 @@
 <link href="../assets/lumas-fonts.css" rel="stylesheet">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cart overlay — real phone viewports</title>
+<title>Cart overlay — Option 01 across real phone viewports</title>
 <link rel="stylesheet" href="board.css">
 <style>
   .vp-wrap{max-width:1600px;margin:0 auto;padding:var(--sp-16) var(--sp-6) var(--sp-24)}
@@ -48,7 +49,7 @@
 <body>
 
 <header class="chrome">
-  <h1><span>PROTO-2026-014 · V2 conversion</span>Option 02 · real phone viewports</h1>
+  <h1><span>PROTO-2026-014 · V2 conversion</span>Option 01 · real phone viewports</h1>
 </header>
 
 <div class="vp-wrap">
@@ -74,8 +75,11 @@ const VIEWPORTS = [
 ];
 
 const q = new URLSearchParams(location.search);
-const variant = q.get('v') || 'recommended';
+const variant = q.get('v') || 'conservative';
 const markets = q.get('m') ? [q.get('m')] : ['de','us'];
+/* the prototype changes often — without this the browser serves a cached copy
+   and edits appear to do nothing */
+const BUST = Date.now().toString(36);
 
 document.getElementById('grid').innerHTML = VIEWPORTS.map(v => `
   <section class="vp">
@@ -88,7 +92,7 @@ document.getElementById('grid').innerHTML = VIEWPORTS.map(v => `
         <div class="vp-one">
           <span class="mkt">${m.toUpperCase()}</span>
           <div class="vp-screen" style="width:${v.w}px;height:${v.h}px">
-            <iframe src="variants.html?v=${variant}&m=${m}&dev=auto&chrome=0"
+            <iframe src="variants.html?v=${variant}&m=${m}&dev=auto&chrome=0&b=${BUST}"
               width="${v.w}" height="${v.h}" loading="lazy"
               title="${v.name} · ${m.toUpperCase()}"></iframe>
           </div>
