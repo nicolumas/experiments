@@ -763,7 +763,7 @@ function conservative(m, t) {
       ${trust(t)}
       ${totals(t.totalLabel, t.totalSubV1, t.total, null)}
       ${primaryCta(t.cta)}
-      ${expressRow(m, m === 'us' ? [applePay, shopPay, payPal] : [applePay, payPal])}
+      ${expressRow(m, [applePay, payPal])}
     </div>
   </div>`;
 }
@@ -792,7 +792,7 @@ function recommended(m, t, opts = {}) {
       ${totals(t.totalLabel, t.totalSubV2, t.total, null)}
       ${primaryCta(t.ctaV2)}
       ${orDivider(t)}
-      ${expressRow(m, m === 'us' ? [shopPay, applePay, payPal] : [applePay, payPal])}
+      ${expressRow(m, [applePay, payPal])}
     </div>
   </div>`;
 }
@@ -843,7 +843,7 @@ function aggressive(m, t, opts = {}) {
     <div class="ov-foot ov-foot--sunken">
       ${totals(t.totalLabel, t.totalSubV2, t.total, t.financing)}
       ${primaryCta(t.cta)}
-      ${expressRow(m, m === 'us' ? [shopPay, applePay, payPal] : [applePay, payPal])}
+      ${expressRow(m, [applePay, payPal])}
     </div>
   </div>`;
 }
