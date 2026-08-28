@@ -228,11 +228,42 @@ body{
   padding:var(--sp-3) var(--sp-6);border-bottom:1px solid var(--color-border-subtle);
 }
 .frame[data-tight] .exit-bar{padding:var(--sp-2) var(--sp-5)}
+.exit-bar--titled{gap:var(--sp-3)}
+.exit-bar--titled h2{flex:1;min-width:0}
+.exit-bar--titled .back{font-size:11px;letter-spacing:1px;white-space:nowrap}
+.frame[data-compact] .exit-bar--titled h2{font-size:22px}
+.frame[data-compact] .exit-bar--titled .back{font-size:10px;letter-spacing:.6px}
+.frame[data-tight] .item{padding:var(--sp-2) 0}
+.frame[data-tight] .ov-trust{padding:var(--sp-3) var(--sp-5)}
+.frame[data-tight] .totals{margin:var(--sp-2) 0}
+.frame[data-tight] .ov-foot{padding:var(--sp-3) var(--sp-5)}
 .ov-foot{padding:var(--sp-6);border-top:1px solid var(--color-border-subtle)}
 /* The page ground is ivory/300, so the money block goes WHITE — at the bottom
    edge of the frame an ivory footer dissolved straight into the page behind it.
    Separation is the 1px hairline; the card stays lighter than its ground. */
 .ov-foot--sunken{background:var(--color-surface-card)}
+/* the live cart's returns promise — green is a logged exception to
+   "status colour is functional only", kept as a conversion device */
+.reassure{display:flex;gap:var(--sp-3);align-items:center;padding:var(--sp-3) var(--sp-6);
+  background:var(--color-status-success-bg);color:var(--color-status-success);flex:none}
+.frame[data-tight] .reassure{padding:var(--sp-2) var(--sp-5)}
+
+/* full product row: every field the live cart shows */
+.spec{font-size:12px;line-height:1.45;margin-top:2px}
+.price-row{display:flex;align-items:baseline;gap:var(--sp-3);flex-wrap:wrap;margin-top:var(--sp-2)}
+.was{font-size:12px;line-height:1.4;color:var(--color-text-tertiary);text-decoration:line-through}
+
+/* two routes, not one stack */
+.or-div{display:flex;align-items:center;gap:var(--sp-3);margin:var(--sp-4) 0}
+.or-div::before,.or-div::after{content:"";height:1px;flex:1;background:var(--color-border-default)}
+.or-div span{font-weight:700;font-size:10px;line-height:1.5;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--color-text-tertiary)}
+.frame[data-tight] .or-div{margin:var(--sp-2) 0}
+.frame[data-compact] .spec{font-size:11px;line-height:1.4}
+.frame[data-compact] .was{font-size:11px}
+.frame[data-compact] .reassure{padding:var(--sp-2) var(--sp-4)}
+.frame[data-compact] .or-div{margin:var(--sp-2) 0}
+
 .ov-trust{
   flex:none;padding:var(--sp-4) var(--sp-6);background:var(--color-surface-card);
   border-top:1px solid var(--color-border-subtle);
@@ -266,8 +297,9 @@ body{
 .item:last-of-type{border-bottom:0}
 .thumb{
   aspect-ratio:1;background:var(--color-surface-page);
-  border:1px solid var(--color-border-subtle);
+  border:1px solid var(--color-border-subtle);overflow:hidden;
 }
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .item-meta{display:flex;flex-direction:column;gap:var(--sp-1);min-width:0}
 .item-row{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);margin-top:var(--sp-1)}
 .item-row .b-sm{font-size:12px}
@@ -365,6 +397,10 @@ body[data-pay="mono"] .pay:hover{filter:none;background:var(--color-surface-rais
 }
 .seg button[aria-pressed="true"]{background:var(--color-text-inverse);color:var(--color-surface-inverse)}
 .stage{padding:var(--sp-12) var(--sp-6) var(--sp-24);display:flex;justify-content:center}
+/* on a real phone the sheet IS the page: no stage padding, no card shadow */
+.frame[data-auto]{width:100%;max-width:100%;box-shadow:none}
+body:has(.frame[data-auto]) .stage{padding:0}
+body:has(.frame[data-auto]) .cmp{gap:0;width:100%}
 /* ?chrome=0 — embedded as a tile on the board page */
 body.bare{background:transparent}
 body.bare .chrome{display:none}
@@ -411,6 +447,11 @@ function track(eventName, params = {}) {
   console.log('[track]', eventName, params);
 }
 
+const ART = {
+  niki: 'art/niki-hare-what-could-possibly-go-wrong.png',
+  wave: 'art/puccinelli-intersection-44.png'
+};
+
 /* ── copy (carried 1:1 from the Figma frames; casing per V2 rules) ── */
 const T = {
   de: {
@@ -418,6 +459,8 @@ const T = {
     headBaseline:'Warenkorb', headV1:'Dein Warenkorb',
     continueShopping:'Weiter einkaufen', discoverMore:'Weitere Werke entdecken',
     addedPill:'Hinzugefügt',
+    reassureBold:'Liebe auf den ersten Blick', reassureRest:'oder 60 Tage Rückgaberecht.',
+    insteadOf:'Statt', or:'oder',
     successTitle:'Zu deinem Warenkorb hinzugefügt',
     successBody:'Deine Auswahl sieht großartig aus.',
     reserveTitle:'Edition wird für dich reserviert',
@@ -444,14 +487,14 @@ const T = {
     xsellHead:'Kuratiert passend zu deiner Auswahl',
     financing:null,
     items:[
-      { title:'What Could Possibly go Wrong', artist:'Niki Hare',
+      { title:'What Could Possibly go Wrong', artist:'Niki Hare', img:ART.niki,
         specSize:'Größe: 60 × 80 cm',
         specMount:'Kaschierung: Kaschierung unter Acrylglas, Stärke 2 mm glänzend',
-        specShort:'60 × 80 cm · Acrylglas 2 mm', price:'€ 899,00', last:true },
-      { title:'Intersections 44', artist:'Alessandro Puccinelli',
+        specShort:'60 × 80 cm · Acrylglas 2 mm', price:'€ 899,00', was:'€ 1.124,00', last:true },
+      { title:'Intersections 44', artist:'Alessandro Puccinelli', img:ART.wave,
         specSize:'Größe: 80 × 120 cm',
         specMount:'Kaschierung: Kaschierung unter Acrylglas, Stärke 2 mm matt',
-        specShort:'80 × 120 cm · Acrylglas matt', price:'€ 1.250,00', last:false }
+        specShort:'80 × 120 cm · Acrylglas matt', price:'€ 1.250,00', was:'€ 1.562,50', last:false }
     ],
     xsell:[
       { title:'Untitled (Blue)', artist:'M. Lange', price:'ab € 599' },
@@ -469,6 +512,8 @@ const T = {
     headBaseline:'Cart', headV1:'Your cart',
     continueShopping:'Continue shopping', discoverMore:'Discover more works',
     addedPill:'Added to cart',
+    reassureBold:'Love it', reassureRest:'or return it within 60 days.',
+    insteadOf:'Instead of', or:'or',
     successTitle:'Excellent choice',
     successBody:'Your edition is reserved for the next few minutes.',
     reserveTitle:'Your edition is being reserved',
@@ -495,14 +540,14 @@ const T = {
     xsellHead:'Pairs beautifully with',
     financing:{ mark:'Affirm', text:'From $215/mo' },
     items:[
-      { title:'What Could Possibly go Wrong', artist:'Niki Hare',
+      { title:'What Could Possibly go Wrong', artist:'Niki Hare', img:ART.niki,
         specSize:'Size: 24 × 32 in',
         specMount:'Mounting: Acrylic glass, 0.08" glossy',
-        specShort:'24 × 32 in · Acrylic glass', price:'$ 999.00', last:true },
-      { title:'Intersections 44', artist:'Alessandro Puccinelli',
+        specShort:'24 × 32 in · Acrylic glass', price:'$ 999.00', was:'$ 1,249.00', last:true },
+      { title:'Intersections 44', artist:'Alessandro Puccinelli', img:ART.wave,
         specSize:'Size: 32 × 48 in',
         specMount:'Mounting: Acrylic glass, 0.08" matte',
-        specShort:'32 × 48 in · Acrylic glass matte', price:'$ 1,390.00', last:false }
+        specShort:'32 × 48 in · Acrylic glass matte', price:'$ 1,390.00', was:'$ 1,737.50', last:false }
     ],
     xsell:[
       { title:'Untitled (Blue)', artist:'M. Lange', price:'from $720' },
@@ -572,6 +617,44 @@ const itemRefined = (it, t, lg) => `
       </div>
     </div>
   </article>`;
+
+/* The live cart's returns promise, kept verbatim: heart-60 mark, bold lead,
+   green status/success ground. */
+const HEART60 = `
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12.4 19.3s-6.2-3.8-6.2-8A3.5 3.5 0 0 1 12.4 9a3.5 3.5 0 0 1 6.2 2.3c0 4.2-6.2 8-6.2 8Z"/>
+    <path d="M5.6 7.3A7 7 0 0 1 18 4.9"/><path d="M18.1 2.2V5h-2.7"/>
+    <text x="12.4" y="15.6" font-size="6.2" text-anchor="middle" fill="currentColor"
+          stroke="none" font-weight="700">60</text>
+  </svg>`;
+
+const reassure = (t) => `
+  <div class="reassure">
+    <span style="flex:none">${HEART60}</span>
+    <p class="b-sm"><span style="font-weight:700">${t.reassureBold}</span> ${t.reassureRest}</p>
+  </div>`;
+
+/* Same fields the live cart shows for every edition: title, artist, the full
+   size + mounting line, the price and the crossed-out original. Only the
+   styling is V2 — sentence case, tighter rhythm, price pair on one line. */
+const itemFull = (it, t) => `
+  <article class="item item--lg">
+    <div class="thumb">${it.img ? `<img src="${it.img}" alt="${it.title}">` : ''}</div>
+    <div class="item-meta">
+      <p class="b">${it.title}</p>
+      <p class="eyebrow t-ter">${it.artist}</p>
+      <p class="spec t-sec">${it.specSize} · ${it.specMount}</p>
+      <p class="price-row">
+        <span class="price">${it.price}</span>
+        <span class="was">${t.insteadOf} ${it.was}</span>
+      </p>
+    </div>
+  </article>`;
+
+/* A quiet divider so the primary CTA and the express row read as two routes,
+   not one stack. */
+const orDivider = (t) => `<p class="or-div"><span>${t.or}</span></p>`;
 
 const trust = (t) => `
   <ul class="trust">
@@ -693,21 +776,22 @@ function conservative(m, t) {
 function recommended(m, t, opts = {}) {
   return `
   <div class="phone">
-    ${exitBar(t)}
-    <div class="band band-success">
-      <span aria-hidden="true">✓</span>
-      <div class="band-body">
-        <p class="b" style="font-weight:700;font-size:15px">${t.successTitle}</p>
-        <p class="b-sm band-sub">${t.successBody}</p>
-      </div>
+    <!-- title and both exits share one row, as the live cart does -->
+    <div class="exit-bar exit-bar--titled">
+      <h2 class="d-h3">${t.headBaseline}</h2>
+      <!-- ABLYFT-GOAL: Continue-shopping -->
+      <button class="btn btn-ghost back" onclick="track('cart_overlay_continue_shopping')">‹ ${t.continueShopping}</button>
+      ${close()}
     </div>
+    ${reassure(t)}
     <div class="ov-body" style="padding-top:0">
-      ${t.items.map(it => itemRefined(it, t, true)).join('')}
+      ${t.items.map(it => itemFull(it, t)).join('')}
     </div>
     <div class="ov-trust">${trust(t)}</div>
     <div class="ov-foot ov-foot--sunken">
       ${totals(t.totalLabel, t.totalSubV2, t.total, null)}
       ${primaryCta(t.ctaV2)}
+      ${orDivider(t)}
       ${expressRow(m, m === 'us' ? [shopPay, applePay, payPal] : [applePay, payPal])}
     </div>
   </div>`;
@@ -867,6 +951,10 @@ const PAYS    = [['brand','Brand pay'],['mono','Mono pay']];
    chrome (iOS Safari top + bottom bars, Chrome Android top bar).
    These are the heights the design actually has to live inside. */
 const DEVICES = [
+  /* 'auto' is the honest one: the sheet takes the actual visible viewport
+     (100dvh accounts for the browser bars as they show and hide), which is how
+     the real overlay behaves. It is the default on phone-sized screens. */
+  { id:'auto', label:'This device', w:0, h:0, vh:0, auto:true },
   { id:'se',  label:'iPhone SE',  w:375, h:667, vh:553, note:'Safari, bars shown' },
   { id:'i15', label:'iPhone 15',  w:390, h:844, vh:734, note:'Safari, bars shown' },
   { id:'px7', label:'Pixel 7',    w:412, h:915, vh:787, note:'Chrome Android' },
@@ -879,7 +967,8 @@ const state = {
   m: MARKETS.some(x => x[0] === params.get('m')) ? params.get('m') : 'de',
   v: VARIANTS.some(x => x[0] === params.get('v')) ? params.get('v') : 'recommended',
   s: STATES.some(x => x[0] === params.get('s')) ? params.get('s') : 'default',
-  dev: DEVICES.some(x => x.id === params.get('dev')) ? params.get('dev') : 'i15',
+  dev: DEVICES.some(x => x.id === params.get('dev')) ? params.get('dev')
+       : (window.innerWidth <= 480 ? 'auto' : 'i15'),
   pay: params.get('pay') === 'mono' ? 'mono' : 'brand',
   notes: params.get('notes') === '1'
 };
@@ -890,6 +979,11 @@ if (params.get('chrome') === '0') document.body.classList.add('bare');
 /* wrap an overlay in the current device viewport */
 function inFrame(html) {
   const d = device();
+  if (d.auto) {
+    const vh = window.innerHeight;   /* the tier still follows real height */
+    const tier = vh < 620 ? ' data-compact data-tight' : vh < 760 ? ' data-tight' : '';
+    return `<div class="frame" data-auto${tier} style="--vw:100%;--vh:100dvh">${html}</div>`;
+  }
   const h = d.vh ? `${d.vh}px` : 'auto';
   const tier = !d.vh ? '' : d.vh < 620 ? ' data-compact data-tight' : d.vh < 760 ? ' data-tight' : '';
   return `<div class="frame"${tier} style="--vw:${d.w}px;--vh:${h}">${html}</div>`;
