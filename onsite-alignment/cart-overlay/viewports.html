@@ -1,0 +1,126 @@
+<!doctype html>
+<!-- ═══ PROTO BOARD · VIEWPORTS ════════════════════════════════════════
+  Option 02 rendered at real phone viewports, DE and US side by side.
+
+  Each frame is an iframe sized to the device's VISIBLE viewport (device
+  CSS height minus browser chrome), running the prototype in "This device"
+  mode — so 100dvh resolves against that iframe and the sheet behaves
+  exactly as it will on the phone. Nothing here is scaled or simulated:
+  these are 1:1 pixels.
+
+  The line under each frame is measured live from inside it.
+  ?v=conservative switches the variant; ?m=de|us shows one market only.
+═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- shared fonts live one level up, under onsite-alignment/assets -->
+<link href="../assets/lumas-fonts.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart overlay — real phone viewports</title>
+<link rel="stylesheet" href="board.css">
+<style>
+  .vp-wrap{max-width:1600px;margin:0 auto;padding:var(--sp-16) var(--sp-6) var(--sp-24)}
+  .vp-intro{max-width:60ch;margin:0 auto var(--sp-16);text-align:center}
+  .vp-intro h1{font-family:var(--font-display);font-weight:400;font-size:34px;line-height:1.1}
+  .vp-intro p{margin-top:var(--sp-3);font-size:14px;line-height:1.65;color:var(--color-text-secondary)}
+  .vp-grid{display:flex;flex-wrap:wrap;gap:var(--sp-16) var(--sp-12);align-items:flex-start;justify-content:center}
+  .vp{display:flex;flex-direction:column;gap:var(--sp-3)}
+  .vp-head{display:flex;align-items:baseline;gap:var(--sp-3)}
+  .vp-head .name{font-weight:700;font-size:12px;letter-spacing:1.8px;text-transform:uppercase}
+  .vp-head .size{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums}
+  .vp-pair{display:flex;gap:var(--sp-6);align-items:flex-start}
+  .vp-one{display:flex;flex-direction:column;gap:var(--sp-2)}
+  .vp-one .mkt{font-weight:700;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--color-text-tertiary)}
+  .vp-screen{box-shadow:var(--shadow-md);background:var(--color-surface-card);overflow:hidden}
+  .vp-screen iframe{display:block;border:0}
+  .vp-fit{font-size:11px;line-height:1.5;color:var(--color-text-tertiary)}
+  .vp-fit .ok{color:var(--color-status-success);font-weight:700}
+  .vp-fit .warn{color:var(--color-status-warning);font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <h1><span>PROTO-2026-014 · V2 conversion</span>Option 02 · real phone viewports</h1>
+</header>
+
+<div class="vp-wrap">
+  <div class="vp-intro">
+    <h1>How it lands on a phone</h1>
+    <p>Every frame below is 1:1 — an actual viewport at that device's visible height,
+    with the sheet sized to it the way the production overlay will be. Nothing is scaled.
+    The line under each screen is measured inside it.</p>
+  </div>
+  <div class="vp-grid" id="grid"></div>
+</div>
+
+<script>
+/* Visible viewport = device CSS height minus browser chrome. */
+const VIEWPORTS = [
+  { name:'iPhone SE (1st gen)', w:320, h:460 },
+  { name:'Android · common',    w:360, h:640 },
+  { name:'iPhone SE 2/3',       w:375, h:553 },
+  { name:'iPhone 12/13',        w:390, h:664 },
+  { name:'iPhone 15',           w:390, h:734 },
+  { name:'Pixel 7',             w:412, h:787 },
+  { name:'iPhone 15 Pro Max',   w:430, h:844 }
+];
+
+const q = new URLSearchParams(location.search);
+const variant = q.get('v') || 'recommended';
+const markets = q.get('m') ? [q.get('m')] : ['de','us'];
+
+document.getElementById('grid').innerHTML = VIEWPORTS.map(v => `
+  <section class="vp">
+    <div class="vp-head">
+      <span class="name">${v.name}</span>
+      <span class="size">${v.w} × ${v.h}</span>
+    </div>
+    <div class="vp-pair">
+      ${markets.map(m => `
+        <div class="vp-one">
+          <span class="mkt">${m.toUpperCase()}</span>
+          <div class="vp-screen" style="width:${v.w}px;height:${v.h}px">
+            <iframe src="variants.html?v=${variant}&m=${m}&dev=auto&chrome=0"
+              width="${v.w}" height="${v.h}" loading="lazy"
+              title="${v.name} · ${m.toUpperCase()}"></iframe>
+          </div>
+          <p class="vp-fit" data-fit>measuring…</p>
+        </div>`).join('')}
+    </div>
+  </section>`).join('');
+
+/* Measure inside each frame once it has settled. */
+function measure() {
+  document.querySelectorAll('.vp-one').forEach(one => {
+    const f = one.querySelector('iframe'), out = one.querySelector('[data-fit]');
+    const d = f.contentDocument, w = f.contentWindow;
+    if (!d || !w || !d.querySelector('.ov-body')) return;
+    const body = d.querySelector('.ov-body');
+    const list = Math.max(0, body.scrollHeight - body.clientHeight);
+    const page = d.documentElement.scrollHeight > w.innerHeight + 1;
+    const cta  = d.querySelector('.btn-primary');
+    const exp  = d.querySelector('.express');
+    const ctaIn = cta && Math.round(cta.getBoundingClientRect().bottom) <= w.innerHeight;
+    const expIn = exp && Math.round(exp.getBoundingClientRect().bottom) <= w.innerHeight;
+    out.innerHTML = page
+      ? `<span class="warn">page scrolls</span> — the sheet is taller than the viewport`
+      : list === 0
+        ? `<span class="ok">fits</span> — nothing scrolls`
+        : `<span class="warn">${list}px</span> scrolls in the artwork list · `
+          + `total + CTA ${ctaIn ? 'in view' : 'OUT OF VIEW'}, express ${expIn ? 'in view' : 'OUT OF VIEW'}`;
+  });
+}
+addEventListener('load', () => setTimeout(measure, 600));
+setTimeout(measure, 1500);
+setTimeout(measure, 3000);
+</script>
+</body>
+</html>
