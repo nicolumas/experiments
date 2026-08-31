@@ -72,17 +72,22 @@ One interaction gets to a result: the availability row is a single link that res
 nearest holding gallery **and** opens the drawer showing it. No prior configuration step
 is required, and no second click is needed to see the answer.
 
-The row's action reads **Reserve in gallery** rather than "change" — the gallery is a way to
-buy, not a store picker. It **expands a reservation panel in place**, directly under the
-band and above the CTA, in the band's own warm tone so the two read as one block. The panel
-carries two lines only — what will be held, where, and how it is confirmed, then the address
-and hours — followed by Name / Email / Phone, the **Reserve this artwork** CTA and the consent
-line. Submitting swaps it for a "Reservation received" confirmation with a directions
-link. It animates open via `grid-template-rows: 0fr → 1fr`, owns a URL (`&reserve=1`) so it
-is linkable, works without JavaScript, and the row's arrow rotates to show the toggle state.
+Once a gallery is known the availability surface is a **gallery card**: name, the stock line
+for this configuration, opening state and distance, with a **Details & map** toggle that
+expands the address, the full opening hours, directions, a call link and a map. Beneath it
+sits the black **Reserve for gallery visit** CTA, a trust line (held 48h · no obligation to
+buy · consultant available) and **Buy online** as an outline button, so the online path stays
+one click.
 
-Collapsed is the default, so in the resting state nothing sits between availability and the
-primary CTA. The panel only comes between them once the shopper asks for it.
+Reserve opens a modal: eyebrow, the display headline, a line naming the artwork and size and
+the 48-hour hold at that gallery, then Full name / Phone / Email. The submit carries the
+computed deadline, **Reserve, held until Wed 2 Sept, 17:00**, and stays grey until the
+required fields hold something usable. Submitting swaps the card for a confirmation with
+directions. It owns a URL (`&reserve=1`), so it is linkable and survives a reload.
+
+When the selected gallery does not hold the configuration the card says so with a grey pin,
+the reserve CTA and trust line are absent, and **Buy online** returns to being the filled
+primary.
 
 The selected gallery is shown on a strip **directly above the image**, not in the navigation:
 

@@ -202,25 +202,51 @@ body[data-promo="0"] .promo{display:none}
 .price-sub{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
 
 /* availability, built on the live demand-indicator band */
-.avail{display:block;background:var(--band);border-radius:2px;margin-top:14px;
-  border:1px solid transparent;transition:border-color var(--t1) var(--ease)}
-.avail:hover{border-color:var(--ink)}
-.avail-in{display:flex;align-items:center;gap:11px;padding:12px 14px}
-.avail .pin{flex:none;display:grid;place-items:center;color:var(--ink)}
-.avail-txt{min-width:0;flex:1}
-.avail-main{font-size:15px;line-height:1.35}
-.avail-main b{font-weight:700}
-.avail-main .g-short{display:none}
-.avail-sub{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
-.avail-act{flex:none;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.4px;
-  text-transform:uppercase;color:var(--ink)}
-.avail[data-state="none"]{background:var(--page);border-color:var(--ink)}
-.avail[data-state="B"]{background:var(--band);box-shadow:inset 3px 0 0 var(--ink)}
-.avail[data-state="C"],.avail[data-state="D"]{background:var(--sunken)}
-.avail-updated{display:none;align-items:center;gap:7px;padding:0 14px 11px;font-size:11px;color:var(--ink-soft)}
-body[data-cfgchanged="1"] .avail-updated{display:flex}
+/* gallery card, the availability surface */
+.gcard-lite{margin-top:14px;border:1px solid var(--line-2);border-radius:2px;background:var(--page)}
+.gc-head{display:flex;align-items:flex-start;gap:10px;padding:13px 14px}
+.gc-head .pin{flex:none;display:grid;place-items:center;color:#2D6A31;padding-top:1px}
+.gcard-lite[data-in="0"] .gc-head .pin{color:var(--ink-soft)}
+.gc-txt{min-width:0;flex:1}
+.gc-name{font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;line-height:1.35}
+.gc-name .g-short{display:none}
+.gc-sub{margin-top:3px;font-size:13.5px;line-height:1.45;color:var(--ink-soft);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gc-stock{color:#8F2E22;font-weight:700}
+.gcard-lite[data-in="0"] .gc-stock{color:var(--ink-soft);font-weight:400}
+.gc-sub .open{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.gc-sub .odot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
+.gc-sub .odot[data-open="0"]{background:var(--line)}
+.gc-sub .sep{color:rgba(28,26,24,.32)}
+.gc-toggle{flex:none;display:flex;align-items:center;gap:8px;padding:4px 0 0;
+  font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);
+  transition:color var(--t1) var(--ease)}
+.gc-toggle:hover{color:var(--ink)}
+.gc-toggle svg{transition:transform var(--t2) var(--ease)}
+.gcard-lite[data-open="1"] .gc-toggle{color:var(--ink)}
+.gcard-lite[data-open="1"] .gc-toggle svg{transform:rotate(180deg)}
+.gc-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t2) var(--ease)}
+.gcard-lite[data-open="1"] .gc-wrap{grid-template-rows:1fr}
+.gc-body{overflow:hidden;min-height:0}
+.gc-body-in{border-top:1px solid var(--line-2);padding:16px 15px;display:grid;
+  grid-template-columns:minmax(0,1fr) 168px;gap:18px;align-items:start}
+.gc-body-in p{font-size:14px;line-height:1.55;color:var(--ink-soft);margin-bottom:13px}
+.gc-body-in p:last-of-type{margin-bottom:0}
+.gc-body-in a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.gc-map{aspect-ratio:1/1;background:var(--sunken);position:relative;
+  background-image:linear-gradient(rgba(28,26,24,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(28,26,24,.07) 1px,transparent 1px);background-size:28px 28px}
+.gc-map .mpin{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);color:#2D6A31}
+.gc-map .mpin svg{width:26px;height:26px;stroke-width:1.3}
+@media(max-width:560px){ .gc-body-in{grid-template-columns:1fr} .gc-map{max-width:180px} }
 
-.actions{margin-top:12px;display:grid;gap:10px}
+.actions{margin-top:10px;display:grid;gap:9px}
+.btn-reserve{height:54px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
+  justify-content:center;gap:12px;font-size:14px;letter-spacing:1.6px;text-transform:uppercase;
+  transition:background var(--t1) var(--ease)}
+.btn-reserve:hover{background:#000}
+.trust{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft)}
+.trust .sep{color:rgba(28,26,24,.3)}
 .btn-primary{height:50px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
   justify-content:center;font-size:16px;letter-spacing:1px;text-transform:uppercase;
   transition:background var(--t1) var(--ease)}
@@ -300,36 +326,48 @@ body.drawer-open .drawer{transform:none;visibility:visible}
 .gc-act a:hover{border-color:var(--ink)}
 .dr-foot{flex:none;padding:14px 20px;border-top:1px solid var(--line-2);font-size:11px;line-height:1.6;color:var(--ink-soft)}
 
-/* ── reserve panel, expands under the availability band ─ */
-.rwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t2) var(--ease)}
-body.reserve-open .rwrap{grid-template-rows:1fr}
-.rpanel{overflow:hidden;min-height:0}
-.rpanel-in{background:var(--band);border-top:1px solid rgba(28,26,24,.12);padding:18px}
-.rpanel .rlead{font-size:14px;line-height:1.55}
-.rpanel .rlead b{font-weight:700}
-.gaddr{margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
-.rform{margin-top:15px;display:grid;gap:8px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.rform input{width:100%;height:44px;padding:0 13px;border:1px solid #E0DDD8;border-radius:2px;background:var(--page);
-  font:inherit;font-size:14px;color:var(--ink);outline:0;transition:border-color var(--t1) var(--ease)}
-.rform input::placeholder{color:#8A8580}
-.rform input:focus{border-color:var(--ink)}
-.rform input:user-invalid{border-color:#C93028}
-.rform .btn-primary{margin-top:2px;height:48px;font-size:14px;letter-spacing:.4px;text-transform:none;font-weight:700}
-.rconsent{margin-top:12px;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
-.rconsent a{text-decoration:underline;text-underline-offset:2px}
-.rdone{display:none;text-align:center;padding:6px 0 2px}
-.rpanel-in[data-done="1"] .rbody{display:none}
-.rpanel-in[data-done="1"] .rdone{display:block}
-.rcheck{width:40px;height:40px;border-radius:50%;background:#2D6A31;color:#fff;display:grid;place-items:center;margin:0 auto 12px}
-.rdone h3{font-size:16px}
-.rdone p{margin-top:7px;font-size:14px;line-height:1.6;color:var(--ink-soft)}
-.rdone .ralt{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:11px;font-weight:700;
-  letter-spacing:1.4px;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:3px}
-.avail-act .chev{display:none}
-body.reserve-open #availRow .avail-act .arw{transform:rotate(90deg)}
-.avail-act .arw{transition:transform var(--t2) var(--ease)}
-@media(max-width:520px){ .frow{grid-template-columns:1fr} }
+/* ── reserve modal ───────────────────────────────────── */
+.rv{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+body.reserve-open .rv{display:flex}
+body.reserve-open{overflow:hidden}
+.rv-scrim{position:absolute;inset:0;background:rgba(28,26,24,.5)}
+.rv-card{position:relative;width:min(520px,100%);max-height:calc(100vh - 40px);overflow:auto;
+  background:var(--page);padding:30px 32px 32px;animation:rise 320ms var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rv-eyebrow{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink-soft)}
+.rv-x{position:absolute;top:24px;right:26px;width:30px;height:30px;display:grid;place-items:center;
+  color:var(--ink);transition:opacity var(--t1) var(--ease)}
+.rv-x:hover{opacity:.6}
+.rv-card h2{margin-top:14px;font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:30px;
+  line-height:1.14;letter-spacing:-.025em;padding-right:30px}
+.rv-lead{margin-top:14px;font-size:15px;line-height:1.6;color:var(--ink-soft)}
+.rv-lead i{font-style:italic;color:var(--ink)}
+.rv-form{margin-top:22px;display:grid;gap:10px}
+.rv-form input{width:100%;height:62px;padding:0 18px;border:0;border-radius:0;background:#EDEAE4;
+  font:inherit;font-size:16px;color:var(--ink);outline:0;transition:box-shadow var(--t1) var(--ease)}
+.rv-form input::placeholder{color:#8A8580}
+.rv-form input:focus{box-shadow:inset 0 0 0 1px var(--ink)}
+.rv-submit{height:62px;width:100%;background:#BDB8B0;color:#fff;font-size:14px;letter-spacing:1.6px;
+  text-transform:uppercase;transition:background var(--t1) var(--ease),color var(--t1) var(--ease)}
+.rv-form[data-valid="1"] .rv-submit{background:var(--ink);color:var(--cta-text);cursor:pointer}
+.rv-foot{margin-top:16px;font-size:13px;line-height:1.6;color:var(--ink-soft)}
+.rv-done{display:none;text-align:center;padding:8px 0 2px}
+.rv-card[data-done="1"] .rv-body{display:none}
+.rv-card[data-done="1"] .rv-done{display:block}
+.rv-check{width:46px;height:46px;border-radius:50%;background:#2D6A31;color:#fff;display:grid;
+  place-items:center;margin:0 auto 16px}
+.rv-done h3{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:26px;letter-spacing:-.02em}
+.rv-done p{margin-top:10px;font-size:15px;line-height:1.6;color:var(--ink-soft)}
+.rv-done a{display:inline-block;margin-top:16px;font-size:12px;font-weight:700;letter-spacing:1.6px;
+  text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:3px}
+@media(max-width:560px){
+  .rv{padding:0;align-items:flex-end}
+  .rv-card{width:100%;max-height:94vh;padding:24px 20px 26px}
+  .rv-card h2{font-size:25px}
+  .rv-x{top:19px;right:16px}
+  .rv-form input{height:56px}
+  .rv-submit{height:56px;font-size:11px;letter-spacing:.8px;padding:0 12px}
+}
 
 /* ── mobile ──────────────────────────────────────────── */
 .menu-btn{display:none}
@@ -363,16 +401,16 @@ body.reserve-open #availRow .avail-act .arw{transform:rotate(90deg)}
   .sizes{margin-top:7px}
   .price-container{margin-top:12px}
   .price{font-size:28px}
-  .avail{margin-top:12px}
-  .avail-in{padding:12px 14px;flex-wrap:wrap;gap:10px}
-  .avail-txt{flex:1 1 auto}
-  .avail-main{font-size:14.5px}
-  .avail-main .g-full{display:none}
-  .avail-main .g-short{display:inline}
-  .avail-sub{font-size:10px;letter-spacing:.5px}
-  .avail-act{flex:1 1 100%;justify-content:center;gap:9px;padding-top:11px;
-    border-top:1px solid rgba(28,26,24,.13);font-size:11px;letter-spacing:1.3px}
-  .avail-updated{padding:0 14px 10px;font-size:10.5px}
+  .gcard-lite{margin-top:12px}
+  .gc-head{padding:12px 13px;gap:10px}
+  .gc-name{font-size:12px;letter-spacing:1px}
+  .gc-name .g-full{display:none}
+  .gc-name .g-short{display:inline}
+  .gc-sub{font-size:13px;gap:6px}
+  .gc-toggle{font-size:10px;letter-spacing:1.2px;gap:7px}
+  .gc-body-in{padding:14px 13px;gap:14px}
+  .btn-reserve{height:52px;font-size:13px;letter-spacing:1.3px}
+  .trust{font-size:11px;gap:10px}
   .price-sub .ps-frame{display:none}
   .more-info{font-size:8.5px}
   .actions{margin-top:10px}
@@ -499,6 +537,17 @@ function availability(){
   return { code:'D', qty:0, gallery:GAL };
 }
 const AV = availability();
+const RESERVABLE = AV.code === 'A' || AV.code === 'B';
+
+/* the reservation is held for 48 hours from now */
+const HOLD_UNTIL = (() => {
+  const d = new Date(Date.now() + 48 * 3600 * 1000);
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const mons = ['Jan','Feb','March','April','May','June','July','Aug','Sept','Oct','Nov','Dec'];
+  const pad = n => String(n).padStart(2, '0');
+  return days[d.getDay()] + ' ' + d.getDate() + ' ' + mons[d.getMonth()]
+    + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+})();
 
 const money = n => '€ ' + n.toLocaleString('en-US');
 const esc   = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -545,6 +594,7 @@ const ICO = {
   expand:'<svg class="ico" viewBox="0 0 24 24"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>',
   room:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M3 20V8l9-4 9 4v12"/><path d="M8.5 20v-6h7v6"/></svg>',
   cube:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M12 3 4 7.2v9.6L12 21l8-4.2V7.2z"/><path d="M4 7.2 12 11.5l8-4.3M12 11.5V21"/></svg>',
+  cal:'<svg class="ico" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="1"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>',
   refresh:'<svg class="ico-s" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.4-5.5"/><path d="M19.8 4.6v4.2h-4.2"/></svg>'
 };
 
@@ -653,33 +703,38 @@ function renderFraming(){
 }
 
 function renderAvail(){
-  if (AV.code === 'none'){
-    return '<a class="avail" data-state="none" href="' + href({gallery:'auto', drawer:1}) + '" id="availRow">'
-      + '<div class="avail-in"><span class="pin">' + ICO.pin + '</span><div class="avail-txt">'
-        + '<div class="avail-main"><b>Check gallery availability</b></div>'
-        + '<div class="avail-sub">For this exact size and framing</div>'
-      + '</div><span class="avail-act">' + ICO.arrow + '</span></div></a>';
+  if (!GAL){
+    return '<div class="gcard-lite" data-in="0" id="availRow">'
+      + '<div class="gc-head"><span class="pin">' + ICO.pin + '</span><div class="gc-txt">'
+        + '<div class="gc-name">Find your gallery</div>'
+        + '<div class="gc-sub">See where this size and framing is hanging today</div>'
+      + '</div><a class="gc-toggle" href="' + href({gallery:'auto'}) + '">Check' + ICO.arrow + '</a></div></div>';
   }
-  let main, sub;
-  const gName = '<span class="g-full">' + esc(AV.gallery.name) + '</span>'
-    + '<span class="g-short">' + esc(short(AV.gallery)) + '</span>';
-  if (AV.code === 'A'){ main = '<b>In stock</b> · ' + gName; sub = 'Hanging today, ready to collect'; }
-  else if (AV.code === 'B'){ main = '<b>' + stockWord(AV.qty) + '</b> · ' + gName; sub = 'Held in this exact configuration'; }
-  else if (AV.code === 'C'){
-    main = '<b>Unavailable in ' + esc(AV.gallery.city) + '</b>';
-    sub = 'Available to buy online';
-  } else { main = '<b>Not currently in a gallery</b>'; sub = 'Made to order, delivered in 8 to 12 days'; }
-  const reservable = AV.code === 'A' || AV.code === 'B';
-  const inner = '<div class="avail-in"><span class="pin">' + ICO.pin + '</span><div class="avail-txt">'
-      + '<div class="avail-main">' + main + '</div><div class="avail-sub">' + sub + '</div></div>'
-      + (reservable ? '<span class="avail-act">Reserve in gallery<span class="arw">' + ICO.arrow + '</span></span>' : '') + '</div>'
-    + '<div class="avail-updated">' + ICO.refresh + '<span>Updated for ' + CFG.size.label
-      + ' cm · ' + esc(CFG.frame.name) + '</span></div>';
-  const isOpen = Q.get('reserve') === '1';
-  return reservable
-    ? '<a class="avail" data-reserve data-state="' + AV.code + '" href="'
-      + (isOpen ? href({}) : href({reserve:1})) + '" id="availRow">' + inner + '</a>'
-    : '<div class="avail" data-state="' + AV.code + '" id="availRow">' + inner + '</div>';
+  const g = GAL, q = CFG.stock[g.id] || 0, os = openState(g);
+  const km = g.km < 10 ? g.km.toFixed(1) : Math.round(g.km);
+  const stock = q > 0
+    ? (q === 1 ? 'Only 1 in ' + esc(g.city) : q === 2 ? 'Only 2 in ' + esc(g.city) : 'In stock in ' + esc(g.city))
+    : 'Not in this configuration';
+  return '<div class="gcard-lite" data-in="' + (q > 0 ? 1 : 0) + '" data-open="0" id="availRow">'
+    + '<div class="gc-head"><span class="pin">' + ICO.pin + '</span><div class="gc-txt">'
+      + '<div class="gc-name"><span class="g-full">LUMAS ' + esc(g.name) + '</span>'
+        + '<span class="g-short">LUMAS ' + esc(short(g)) + '</span></div>'
+      + '<div class="gc-sub"><span class="gc-stock">' + stock + '</span>'
+        + '<i class="sep">·</i><span class="open"><i class="odot" data-open="' + (os.open ? 1 : 0) + '"></i>'
+          + os.short + '</span>'
+        + '<i class="sep">·</i><span>~' + km + ' km</span></div>'
+    + '</div>'
+    + '<button class="gc-toggle" id="gcToggle" aria-expanded="false">'
+      + '<span class="t-show">Details &amp; map</span><span class="t-hide" hidden>Hide</span>' + ICO.chev + '</button></div>'
+    + '<div class="gc-wrap"><div class="gc-body"><div class="gc-body-in">'
+      + '<div>'
+        + '<p>' + esc(g.street) + ' · ' + esc(g.zip) + '</p>'
+        + '<p>' + g.hours.map(h => h[0] + ' ' + h[1] + '–' + h[2]).join('<br>') + '</p>'
+        + '<p>~' + km + ' km · <a href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Get directions</a></p>'
+        + '<p><a href="tel:' + g.phone.replace(/\s/g,'') + '">Call the gallery</a></p>'
+      + '</div>'
+      + '<div class="gc-map"><span class="mpin">' + ICO.pin + '</span></div>'
+    + '</div></div></div></div>';
 }
 
 function renderBuy(){
@@ -695,8 +750,15 @@ function renderBuy(){
     + '<div class="price-container"><div class="price">' + money(CFG.price) + '</div>'
       + '<div class="price-sub">incl. VAT<span class="ps-frame"> · ' + esc(CFG.frame.name) + '</span>'
       + (CFG.outerCm > CFG.size.cm ? ' · framed ' + CFG.outerCm + ' × ' + CFG.outerCm + ' cm' : '') + '</div></div>'
-    + renderAvail() + renderReserve()
-    + '<div class="actions"><a class="btn-primary" href="#" id="ctaBtn">Buy online</a></div>'
+    + renderAvail()
+    + '<div class="actions">'
+      + (RESERVABLE
+          ? '<button class="btn-reserve" data-reserve>' + ICO.cal + 'Reserve for gallery visit</button>'
+            + '<div class="trust"><span>Held 48h</span><i class="sep">·</i><span>No obligation to buy</span>'
+            + '<i class="sep">·</i><span>Consultant available</span></div>'
+            + '<a class="btn-outline" href="#" id="ctaBtn">Buy online</a>'
+          : '<a class="btn-primary" href="#" id="ctaBtn">Buy online</a>')
+    + '</div>'
     + '<div class="more-info">Ships in 5 days / incl. VAT / plus <a href="#">shipping</a> € 6,90'
       + '<br>' + ARTWORK.creationYear + ' / ' + ARTWORK.publicationYear + ' / ' + CFG.size.sku + '</div>'
   + '</div>';
@@ -760,30 +822,32 @@ function renderDrawer(){
 
 function renderReserve(){
   const g = GAL || CFG.holders[0] || GALLERIES[0];
-  const cfgLine = CFG.size.label + ' cm, ' + esc(CFG.frame.name);
-  return '<div class="rwrap"><div class="rpanel"><div class="rpanel-in" id="rCard">'
-    + '<div class="rbody">'
-      + '<p class="rlead">We will hold <b>' + esc(ARTWORK.title) + '</b>, ' + cfgLine
-        + ', at LUMAS ' + esc(g.name) + ' and confirm by email.</p>'
-      + '<p class="gaddr">' + esc(g.street) + ', ' + esc(g.zip) + ' · ' + hoursText(g) + '</p>'
-      + '<form class="rform" id="rForm" novalidate>'
-        + '<input name="name" type="text" placeholder="Name *" required autocomplete="name">'
-        + '<div class="frow">'
-          + '<input name="email" type="email" placeholder="Email address *" required autocomplete="email">'
-          + '<input name="phone" type="tel" placeholder="Phone number (optional)" autocomplete="tel">'
-        + '</div>'
-        + '<button class="btn-primary" type="submit">Reserve this artwork</button>'
-      + '</form>'
-      + '<p class="rconsent">By reserving, you agree to be contacted by LUMAS about this artwork. '
-        + 'See our <a href="#">Privacy Policy</a>.</p>'
-    + '</div>'
-    + '<div class="rdone">'
-      + '<span class="rcheck"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg></span>'
-      + '<h3>Reservation received</h3>'
-      + '<p>Held at LUMAS ' + esc(g.name) + '. We will confirm by email.</p>'
-      + '<a class="ralt" href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Get directions</a>'
-    + '</div>'
-  + '</div></div></div>';
+  return '<a class="rv-scrim" href="#" aria-label="Close"></a>'
+    + '<div class="rv-card" role="dialog" aria-modal="true" aria-labelledby="rvTitle" id="rvCard">'
+      + '<div class="rv-body">'
+        + '<span class="rv-eyebrow">Reserve for gallery visit</span>'
+        + '<button class="rv-x" aria-label="Close">' + ICO.close + '</button>'
+        + '<h2 id="rvTitle">See it in person, no strings attached.</h2>'
+        + '<p class="rv-lead">We hold <i>' + esc(ARTWORK.title) + '</i> (' + CFG.size.label
+          + ' cm) for 48 hours at LUMAS ' + esc(g.name) + '. No payment, no obligation, it simply '
+          + 'will not be sold before your visit.</p>'
+        + '<form class="rv-form" id="rvForm" data-valid="0" novalidate>'
+          + '<input name="name" type="text" placeholder="Full name" required autocomplete="name">'
+          + '<input name="phone" type="tel" placeholder="Phone" autocomplete="tel">'
+          + '<input name="email" type="email" placeholder="Email" required autocomplete="email">'
+          + '<button class="rv-submit" type="submit">Reserve, held until ' + HOLD_UNTIL + '</button>'
+        + '</form>'
+        + '<p class="rv-foot">A gallerist will confirm by phone or email. The reservation lapses '
+          + 'automatically after 48 hours.</p>'
+      + '</div>'
+      + '<div class="rv-done">'
+        + '<span class="rv-check"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg></span>'
+        + '<h3>Reserved until ' + HOLD_UNTIL + '</h3>'
+        + '<p>' + esc(ARTWORK.title) + ', ' + CFG.size.label + ' cm, ' + esc(CFG.frame.name)
+          + ', is held for you at LUMAS ' + esc(g.name) + '. A gallerist will confirm shortly.</p>'
+        + '<a href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Get directions</a>'
+      + '</div>'
+    + '</div>';
 }
 
 function renderStates(){
@@ -815,6 +879,8 @@ function renderStates(){
 <header class="hdr"><div class="hdr-in" id="hdrIn"></div><div class="hdr-rule"></div></header>
 <script>document.getElementById('hdrIn').innerHTML = renderHeader();</script>
 
+<div class="rv" id="rv"></div>
+
 <div class="shell">
   <main class="hero" id="hero"></main>
   <script>document.getElementById('hero').innerHTML = '<div class="stage-col">' + renderStage() + '</div>' + renderBuy();</script>
@@ -828,6 +894,7 @@ function renderStates(){
 <div class="sp" id="sp"></div>
 
 <script>
+document.getElementById('rv').innerHTML     = renderReserve();
 document.getElementById('drawer').innerHTML = renderDrawer();
 document.getElementById('sp').innerHTML     = renderStates();
 document.getElementById('scrim').setAttribute('href', href({}));
@@ -835,19 +902,11 @@ document.getElementById('scrim').setAttribute('href', href({}));
 if (Q.get('drawer') === '1') document.body.classList.add('drawer-open');
 if (Q.get('reserve') === '1') document.body.classList.add('reserve-open');
 
-/* the reserve panel expands in place but still owns a URL, so it is
-   linkable and works without JS */
+/* the reserve modal owns a URL, so it is linkable and survives a reload */
 function setReserve(open, push){
   document.body.classList.toggle('reserve-open', open);
   if (push) history.pushState({reserve:open?1:0}, '', open ? href({reserve:1}) : href({}));
-  const row = document.getElementById('availRow');
-  if (row) row.setAttribute('href', open ? href({}) : href({reserve:1}));
-  if (open){
-    const f = document.querySelector('#rForm input');
-    if (f) f.focus({preventScroll:true});
-    const panel = document.querySelector('.rpanel');
-    if (panel) setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'nearest'}), 340);
-  }
+  if (open){ const f = document.querySelector('#rvForm input'); if (f) f.focus({preventScroll:true}); }
 }
 function closeReserve(){
   if (!document.body.classList.contains('reserve-open')) return false;
@@ -855,17 +914,32 @@ function closeReserve(){
   return true;
 }
 document.addEventListener('click', e => {
-  if (!e.target.closest('[data-reserve]')) return;
-  e.preventDefault();
-  setReserve(!document.body.classList.contains('reserve-open'), true);
+  if (e.target.closest('[data-reserve]')){ e.preventDefault(); setReserve(true, true); return; }
+  if (e.target.closest('.rv-scrim, .rv-x')){ e.preventDefault(); closeReserve(); }
 });
-const rForm = document.getElementById('rForm');
-if (rForm) rForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const f = e.target;
-  if (!f.name.value.trim() || !/.+@.+\..+/.test(f.email.value)){ f.reportValidity(); return; }
-  document.getElementById('rCard').dataset.done = '1';
+
+/* details & map is view state, so it stays out of the URL */
+const gcToggle = document.getElementById('gcToggle');
+if (gcToggle) gcToggle.addEventListener('click', () => {
+  const card = document.getElementById('availRow');
+  const open = card.dataset.open !== '1';
+  card.dataset.open = open ? '1' : '0';
+  gcToggle.setAttribute('aria-expanded', open);
+  gcToggle.querySelector('.t-show').hidden = open;
+  gcToggle.querySelector('.t-hide').hidden = !open;
 });
+
+/* the submit only lights up once the required fields hold something usable */
+const rvForm = document.getElementById('rvForm');
+if (rvForm){
+  const valid = () => rvForm.name.value.trim().length > 1 && /.+@.+\..+/.test(rvForm.email.value);
+  rvForm.addEventListener('input', () => { rvForm.dataset.valid = valid() ? '1' : '0'; });
+  rvForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!valid()) return;
+    document.getElementById('rvCard').dataset.done = '1';
+  });
+}
 addEventListener('popstate', () => {
   setReserve(new URLSearchParams(location.search).get('reserve') === '1', false);
 });
