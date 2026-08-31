@@ -86,17 +86,18 @@ body[data-promo="0"] .promo{display:none}
 @media(max-width:1023px){ .hero{grid-template-columns:minmax(0,1fr);gap:0;padding:0 0 24px} }
 
 .stage-col{min-width:0}
-.stage-bar{display:flex;align-items:center;gap:12px;padding:13px 18px;margin-bottom:0;background:var(--band);
-  font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);flex-wrap:wrap;
-  box-shadow:inset 3px 0 0 var(--ink)}
-.stage-bar .pin{display:grid;place-items:center;flex:none}
-.stage-bar .lead{color:var(--ink-soft)}
-.stage-bar .who{font-size:13px;font-weight:700;letter-spacing:1.2px}
+.stage-bar{display:flex;align-items:center;gap:9px;padding:13px 18px;background:var(--band);
+  font-size:11px;letter-spacing:1px;color:var(--ink);box-shadow:inset 3px 0 0 var(--ink);min-width:0}
+.stage-bar .sdot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
+.stage-bar[data-in="0"] .sdot{background:var(--line)}
+.stage-bar .lbl{font-weight:700;text-transform:uppercase;white-space:nowrap}
+.stage-bar .meta{color:var(--ink-soft);text-transform:uppercase;white-space:nowrap;min-width:0;
+  overflow:hidden;text-overflow:ellipsis}
+.stage-bar .sep{font-style:normal;color:rgba(28,26,24,.32);flex:none}
 .stage-bar .g-short{display:none}
-.stage-bar .qty{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:1px;color:var(--ink)}
-.stage-bar .qty .sdot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
-.stage-bar[data-in="0"] .qty{color:var(--ink-soft)}
-.stage-bar[data-in="0"] .qty .sdot{background:var(--line)}
+.stage-bar .dir{margin-left:auto;flex:none;font-weight:700;text-transform:uppercase;
+  border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color var(--t1) var(--ease)}
+.stage-bar .dir:hover{border-color:var(--ink)}
 
 /* stage, mirrors .image-wrapper on the live PDP */
 .stage{position:relative;background:var(--stage) url('assets/pdp-background.jpg') center/cover;
@@ -339,12 +340,11 @@ body.reserve-open #availRow .avail-act .arw{transform:rotate(90deg)}
   .promo{font-size:11px;gap:12px;padding:0 40px 0 12px}
   .promo-cta{padding:6px 12px;font-size:10px;letter-spacing:1.2px}
   .hdr-r .ib[data-hide]{display:none}
-  .stage-bar{padding:10px var(--pad);font-size:10px;gap:8px;flex-wrap:nowrap;overflow:hidden}
-  .stage-bar .lead{display:none}
+  .stage-bar{padding:10px var(--pad);font-size:10.5px;gap:7px;overflow:hidden}
+  .stage-bar .d-only{display:none}
   .stage-bar .g-full{display:none}
   .stage-bar .g-short{display:inline}
-  .stage-bar .who{font-size:11.5px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .stage-bar .qty{margin-left:auto;font-size:9.5px;letter-spacing:.8px;white-space:nowrap;flex:none}
+  .stage-bar .meta{text-transform:none;letter-spacing:.2px;font-size:11.5px}
   .stage{--stage-pad:12px}
   .artwrap{width:min(calc(100% - 24px),31vh)}
   .stage-tools{top:8px;right:8px}
@@ -521,10 +521,10 @@ function openState(g){
   const d = new Date(), day = d.getDay(), mins = d.getHours()*60 + d.getMinutes();
   const to = t => (+t.slice(0,2))*60 + (+t.slice(3));
   const today = g.hours.find(h => { const r = DAYS[h[0]]; return r && day >= r[0] && day <= r[1]; });
-  if (!today) return { open:false, text:'Closed today' };
-  if (mins < to(today[1])) return { open:false, text:'Opens today at ' + today[1] };
-  if (mins < to(today[2])) return { open:true,  text:'Open now until ' + today[2] };
-  return { open:false, text:'Opens tomorrow at ' + g.hours[0][1] };
+  if (!today) return { open:false, text:'Closed today', short:'Closed today' };
+  if (mins < to(today[1])) return { open:false, text:'Opens today at ' + today[1], short:'Opens ' + today[1] };
+  if (mins < to(today[2])) return { open:true,  text:'Open now until ' + today[2], short:'Open until ' + today[2] };
+  return { open:false, text:'Opens tomorrow at ' + g.hours[0][1], short:'Opens tomorrow ' + g.hours[0][1] };
 }
 const mapsUrl = g => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('LUMAS ' + g.name + ', ' + g.street + ', ' + g.zip);
 </script>
@@ -572,15 +572,19 @@ function renderHeader(){
 /* ── stage ─────────────────────────────────────────────────────── */
 function renderStageBar(){
   if (!GAL) return '';
-  const q = CFG.stock[GAL.id] || 0;
+  const q = CFG.stock[GAL.id] || 0, os = openState(GAL);
+  const label = q > 0 ? stockWord(q) + ' in gallery' : 'Not in this configuration';
+  const km = GAL.km < 10 ? GAL.km.toFixed(1) : Math.round(GAL.km);
+  const dot = '<i class="sep">·</i>';
   return '<div class="stage-bar" data-in="' + (q > 0 ? 1 : 0) + '">'
-    + '<span class="pin">' + ICO.pin + '</span>'
-    + '<span class="lead">Your gallery</span>'
-    + '<span class="who"><span class="g-full">' + esc(GAL.name) + '</span>'
-      + '<span class="g-short">' + esc(short(GAL)) + '</span></span>'
-    + '<span class="qty"><i class="sdot"></i>'
-    + (q > 0 ? stockWord(q) + ' in this configuration' : 'Not in this configuration')
-    + '</span></div>';
+    + '<i class="sdot"></i>'
+    + '<span class="lbl">' + label + '</span>' + dot
+    + '<span class="meta"><span class="g-full">LUMAS ' + esc(GAL.name) + '</span>'
+      + '<span class="g-short">' + esc(short(GAL)) + '</span></span>' + dot
+    + '<span class="meta">' + km + ' km</span>'
+    + '<i class="sep d-only">·</i><span class="meta d-only">' + os.short + '</span>'
+    + '<a class="dir d-only" href="' + mapsUrl(GAL) + '" target="_blank" rel="noopener">Get directions</a>'
+  + '</div>';
 }
 
 function renderStage(){
