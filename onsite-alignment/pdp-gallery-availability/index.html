@@ -407,25 +407,6 @@ body.reserve-open{overflow:hidden}
   .actions{margin-top:10px}
 }
 
-/* ── prototype states panel ──────────────────────────── */
-.sp{position:fixed;left:14px;bottom:14px;z-index:90;font-size:12px}
-.sp-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--ink);color:var(--cta-text);
-  font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}
-.sp-btn svg{display:none}
-.sp-menu{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:auto;width:292px;background:var(--page);
-  border:1px solid var(--line);box-shadow:0 16px 50px -18px rgba(28,26,24,.4);padding:5px;max-height:64vh;overflow:auto}
-.sp[data-open="1"] .sp-menu{display:block}
-.sp-menu a{display:flex;gap:10px;padding:8px 10px;line-height:1.4;transition:background var(--t1) var(--ease)}
-.sp-menu a:hover{background:var(--sunken)}
-.sp-menu a i{font-style:normal;font-weight:700;color:var(--ink-soft);width:16px;flex:none;font-size:11px}
-.sp-menu hr{border:0;border-top:1px solid var(--line-2);margin:5px 0}
-@media(max-width:1023px){
-  .sp{left:auto;right:10px;bottom:14px}
-  .sp-btn{width:32px;height:32px;padding:0;justify-content:center;border-radius:50%;opacity:.85}
-  .sp-btn svg{display:block}.sp-btn span{display:none}
-  .sp-menu{width:min(292px,calc(100vw - 20px));left:auto;right:0}
-}
-@media print{ .sp{display:none!important} }
 </style>
 </head>
 <body>
@@ -823,28 +804,6 @@ function renderReserve(){
       + '</div>'
     + '</div>';
 }
-
-function renderStates(){
-  const S = [
-    ['1','Default, no gallery selected',       '?size=s80&frame=basel&gallery=none'],
-    ['2','Gallery selected, 3+ units',         '?size=s80&frame=basel&gallery=kudamm'],
-    ['3','Gallery selected, last one',         '?size=s80&frame=slim&gallery=kudamm'],
-    ['4','Sold out here, available elsewhere', '?size=s80&frame=artbox&gallery=kudamm'],
-    ['5','Not in any gallery',                 '?size=s80&frame=none&gallery=kudamm'],
-    ['6','Size switched, 80 to 120',           '?size=s120&frame=basel&gallery=kudamm'],
-    ['7','Framing switched, back in stock',    '?size=s40&frame=artbox&gallery=kudamm'],
-    ['8','Gallery drawer open',                '?size=s80&frame=basel&gallery=kudamm&drawer=1'],
-    ['9','Gallery switched in drawer',         '?size=s80&frame=basel&gallery=duesseldorf&drawer=1'],
-    ['R','Reserve pop-up',                     '?size=s80&frame=basel&gallery=kudamm&reserve=1'],
-    ['E','Remembered gallery, no parameter',   '?size=s80&frame=basel']
-  ];
-  return '<button class="sp-btn" id="spBtn" aria-label="Prototype states">'
-    + '<svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
-    + '<circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>'
-    + '<circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg><span>Prototype states</span></button>'
-    + '<div class="sp-menu">' + S.map(r => '<a href="' + r[2] + '"><i>' + r[0] + '</i><span>' + r[1] + '</span></a>').join('')
-    + '<hr><a href="mobile.html"><i>10</i><span>Mobile, 390 × 844</span></a></div>';
-}
 </script>
 
 <div class="promo" id="promo"></div>
@@ -863,12 +822,10 @@ function renderStates(){
 
 <a class="scrim" href="#" id="scrim" aria-label="Close availability panel"></a>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-label="Gallery availability"></aside>
-<div class="sp" id="sp"></div>
 
 <script>
 document.getElementById('rv').innerHTML     = renderReserve();
 document.getElementById('drawer').innerHTML = renderDrawer();
-document.getElementById('sp').innerHTML     = renderStates();
 document.getElementById('scrim').setAttribute('href', href({}));
 
 if (Q.get('drawer') === '1') document.body.classList.add('drawer-open');
@@ -950,13 +907,10 @@ document.getElementById('drawer').addEventListener('click', e => {
 
 document.getElementById('promoX').addEventListener('click', () => { document.body.dataset.promo = '0'; });
 
-const sp = document.getElementById('sp');
-sp.addEventListener('click', e => { if (e.target.closest('#spBtn')) sp.dataset.open = sp.dataset.open === '1' ? '0' : '1'; });
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (closeReserve()) return;
   if (document.body.classList.contains('drawer-open')) location.href = href({});
-  else sp.dataset.open = '0';
 });
 </script>
 </body>

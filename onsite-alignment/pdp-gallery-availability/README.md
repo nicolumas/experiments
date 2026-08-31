@@ -7,7 +7,6 @@ Reference page: <https://www.lumas.de/pictures/marta_contreras_simo/liu/>
 
 - `index.html` — the page. All states are real URLs.
 - `mobile.html` — four 390 × 844 frames side by side.
-- Prototype states are also reachable from the "Prototype states" button, bottom left.
 
 Serve `prototype/` and open `/pdp/`. Hotlinked artwork needs a network connection.
 
@@ -52,6 +51,21 @@ Every configuration is its own URL:
   paint. In production that same function is the server template. Nothing is rewritten
   client-side after load; JS only handles the drawer, the sticky mobile bar and the
   "configuration changed" note.
+
+## The states, as URLs
+
+The floating states panel is gone; every state is a link:
+
+| State | URL |
+|---|---|
+| In stock at your gallery | `?size=s80&frame=basel&gallery=kudamm` |
+| Last one | `?size=s80&frame=slim&gallery=kudamm` |
+| Unavailable in Berlin | `?size=s120&frame=basel&gallery=kudamm` |
+| Not in any gallery | `?size=s80&frame=none&gallery=kudamm` |
+| No gallery known | `?size=s80&frame=basel&gallery=none` |
+| Reserve modal | `?size=s80&frame=slim&gallery=kudamm&reserve=1` |
+| Gallery drawer | `?size=s80&frame=basel&gallery=kudamm&drawer=1` |
+| Remembered gallery | `?size=s80&frame=basel` |
 
 ## Availability states
 
@@ -114,8 +128,7 @@ Right-hand drawer, never a modal. On desktop (≥ 1180px) the page is **pushed**
 price, the availability row and the CTA stay fully visible while the drawer is open.
 Galleries holding the configuration offer **Reserve here**; the rest can still be set as
 your gallery. The drawer has no entry point in the UI: every affordance that opened it has
-since been removed by request, so it is reachable only by URL (`&drawer=1`) or the prototype
-states menu. On
+since been removed by request, so it is reachable only by URL (`&drawer=1`). On
 mobile the drawer carries the configuration and the price in its own header, so what you
 are buying is never in doubt. Dismiss with the X, the scrim, or Escape.
 
@@ -138,7 +151,7 @@ Real:
 Mock:
 
 - Per-configuration unit counts (`INVENTORY`), chosen so every availability state is
-  reachable from the states menu.
+  reachable from a URL.
 - Distances, which assume a visitor in Berlin.
 - The gallery photograph is a real LUMAS interior used generically; it is labelled
   "Inside a LUMAS gallery" rather than attributed to a specific room.
