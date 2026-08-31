@@ -237,11 +237,9 @@ body[data-promo="0"] .promo{display:none}
 .gcard-lite[data-open="1"] .gc-wrap{grid-template-rows:1fr}
 .gc-body{overflow:hidden;min-height:0}
 .gc-body-in{padding:24px 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,44%);
-  gap:22px;align-items:start;grid-template-areas:'info map' 'foot foot'}
+  gap:22px;align-items:start;grid-template-areas:'info map'}
 .gc-info{grid-area:info;min-width:0}
 .gc-map{grid-area:map}
-.gc-foot{grid-area:foot;font-size:13px;color:var(--ink-soft)}
-.gc-foot a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .gc-btns{display:none;gap:10px}
 .gc-btn{display:flex;align-items:center;justify-content:center;gap:9px;height:52px;flex:1;
   text-decoration:none;
@@ -250,7 +248,7 @@ body[data-promo="0"] .promo{display:none}
 .gc-btn:hover{border-color:var(--ink);background:#FAF7F3}
 .gc-body-in p{font-size:15px;line-height:1.5;color:var(--ink-soft);margin-bottom:26px}
 .gc-links p:last-child{margin-bottom:0}
-.gc-body-in p a,.gc-foot a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.gc-body-in p a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .gc-map{aspect-ratio:1/1.05;background:#EAE6DE;position:relative;
   background-image:linear-gradient(rgba(28,26,24,.07) 1px,transparent 1px),
     linear-gradient(90deg,rgba(28,26,24,.07) 1px,transparent 1px);background-size:20% 20%}
@@ -393,12 +391,11 @@ body.reserve-open{overflow:hidden}
   .gc-sub{font-size:13px;gap:6px}
   .gc-toggle .t-show,.gc-toggle .t-hide{display:none}
   .gc-body-in{padding:16px 14px 14px;gap:18px;grid-template-columns:1fr;
-    grid-template-areas:'map' 'info' 'foot'}
+    grid-template-areas:'map' 'info'}
   .gc-map{aspect-ratio:2.6/1;background-size:44px 44px}
   .gc-info p{margin-bottom:18px}
   .gc-links{display:none}
   .gc-btns{display:flex}
-  .gc-foot{font-size:12.5px}
   .gc-sub .s-full{display:none}
   .gc-sub .s-short{display:inline}
   .gc-sub{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -531,8 +528,6 @@ function availability(){
 const AV = availability();
 const RESERVABLE = AV.code === 'A' || AV.code === 'B';
 
-/* how long ago the gallery stock was last synced; a real feed timestamp in production */
-const STOCK_CHECKED_MIN = 12;
 
 /* the reservation is held for 48 hours from now */
 const HOLD_UNTIL = (() => {
@@ -741,8 +736,6 @@ function renderAvail(){
           + '<a class="gc-btn" href="tel:' + g.phone.replace(/\s/g,'') + '">' + ICO.phone + 'Call</a>'
         + '</div>'
       + '</div>'
-      + '<div class="gc-foot">Stock checked ' + STOCK_CHECKED_MIN + ' minutes ago · '
-        + '<a href="' + href({drawer:1}) + '">Choose another gallery</a></div>'
     + '</div></div></div></div>';
 }
 

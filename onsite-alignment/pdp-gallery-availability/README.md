@@ -113,9 +113,9 @@ frame requested, so the preview does not vary between the three framing options.
 Right-hand drawer, never a modal. On desktop (≥ 1180px) the page is **pushed**, so the
 price, the availability row and the CTA stay fully visible while the drawer is open.
 Galleries holding the configuration offer **Reserve here**; the rest can still be set as
-your gallery. Since "choose a different gallery" was removed from the reservation pop-up,
-the drawer currently has no entry point in the UI and is reachable only by URL
-(`&drawer=1`) or the prototype states menu. On
+your gallery. The drawer has no entry point in the UI: every affordance that opened it has
+since been removed by request, so it is reachable only by URL (`&drawer=1`) or the prototype
+states menu. On
 mobile the drawer carries the configuration and the price in its own header, so what you
 are buying is never in doubt. Dismiss with the X, the scrim, or Escape.
 
