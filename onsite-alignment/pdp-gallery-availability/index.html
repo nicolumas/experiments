@@ -203,23 +203,27 @@ body[data-promo="0"] .promo{display:none}
 
 /* availability, built on the live demand-indicator band */
 /* gallery card, the availability surface */
-.gcard-lite{margin-top:14px;border:1px solid var(--line-2);border-radius:2px;background:var(--page)}
-.gc-head{display:flex;align-items:flex-start;gap:10px;padding:13px 14px}
-.gc-head .pin{flex:none;display:grid;place-items:center;color:#2D6A31;padding-top:1px}
+.gcard-lite{margin-top:14px;border:1px solid var(--line-2);border-radius:2px;background:var(--page);
+  transition:background var(--t1) var(--ease),border-color var(--t1) var(--ease)}
+.gcard-lite:hover,.gcard-lite[data-open="1"]{background:var(--band);border-color:var(--line)}
+.gc-head{display:flex;align-items:center;gap:11px;padding:11px 14px;width:100%;text-align:left;cursor:pointer}
+.gc-head .pin{flex:none;display:grid;place-items:center;color:#2D6A31}
 .gcard-lite[data-in="0"] .gc-head .pin{color:var(--ink-soft)}
 .gc-txt{min-width:0;flex:1}
-.gc-name{font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;line-height:1.35}
+.gc-name{font-size:12.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gc-name .g-short{display:none}
-.gc-sub{margin-top:3px;font-size:13.5px;line-height:1.45;color:var(--ink-soft);
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gc-sub{margin-top:2px;font-size:13px;line-height:1.4;color:var(--ink-soft);
+  display:flex;align-items:center;gap:5px;flex-wrap:nowrap;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
 .gc-stock{color:#8F2E22;font-weight:700}
 .gcard-lite[data-in="0"] .gc-stock{color:var(--ink-soft);font-weight:400}
-.gc-sub .open{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.gc-sub .grp{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .gc-sub .odot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
 .gc-sub .odot[data-open="0"]{background:var(--line)}
 .gc-sub .sep{color:rgba(28,26,24,.32)}
-.gc-toggle{flex:none;display:flex;align-items:center;gap:8px;padding:4px 0 0;
-  font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);
+.gc-toggle{flex:none;display:flex;align-items:center;gap:8px;pointer-events:none;
+  font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink-soft);
   transition:color var(--t1) var(--ease)}
 .gc-toggle:hover{color:var(--ink)}
 .gc-toggle svg{transition:transform var(--t2) var(--ease)}
@@ -228,7 +232,7 @@ body[data-promo="0"] .promo{display:none}
 .gc-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t2) var(--ease)}
 .gcard-lite[data-open="1"] .gc-wrap{grid-template-rows:1fr}
 .gc-body{overflow:hidden;min-height:0}
-.gc-body-in{border-top:1px solid var(--line-2);padding:16px 15px;display:grid;
+.gc-body-in{border-top:1px solid var(--line-2);padding:15px 14px;display:grid;
   grid-template-columns:minmax(0,1fr) 168px;gap:18px;align-items:start}
 .gc-body-in p{font-size:14px;line-height:1.55;color:var(--ink-soft);margin-bottom:13px}
 .gc-body-in p:last-of-type{margin-bottom:0}
@@ -407,7 +411,10 @@ body.reserve-open{overflow:hidden}
   .gc-name .g-full{display:none}
   .gc-name .g-short{display:inline}
   .gc-sub{font-size:13px;gap:6px}
-  .gc-toggle{font-size:10px;letter-spacing:1.2px;gap:7px}
+  .gc-toggle{font-size:10px;letter-spacing:1px;gap:6px}
+  .gc-toggle .t-map{display:none}
+  .gc-sub{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gc-sub .grp:last-child{display:none}
   .gc-body-in{padding:14px 13px;gap:14px}
   .btn-reserve{height:52px;font-size:13px;letter-spacing:1.3px}
   .trust{font-size:11px;gap:10px}
@@ -716,16 +723,17 @@ function renderAvail(){
     ? (q === 1 ? 'Only 1 in ' + esc(g.city) : q === 2 ? 'Only 2 in ' + esc(g.city) : 'In stock in ' + esc(g.city))
     : 'Not in this configuration';
   return '<div class="gcard-lite" data-in="' + (q > 0 ? 1 : 0) + '" data-open="0" id="availRow">'
-    + '<div class="gc-head"><span class="pin">' + ICO.pin + '</span><div class="gc-txt">'
+    + '<button class="gc-head" id="gcToggle" aria-expanded="false"><span class="pin">' + ICO.pin + '</span><div class="gc-txt">'
       + '<div class="gc-name"><span class="g-full">LUMAS ' + esc(g.name) + '</span>'
         + '<span class="g-short">LUMAS ' + esc(short(g)) + '</span></div>'
       + '<div class="gc-sub"><span class="gc-stock">' + stock + '</span>'
-        + '<i class="sep">·</i><span class="open"><i class="odot" data-open="' + (os.open ? 1 : 0) + '"></i>'
+        + '<span class="grp"><i class="sep">·</i><i class="odot" data-open="' + (os.open ? 1 : 0) + '"></i>'
           + os.short + '</span>'
-        + '<i class="sep">·</i><span>~' + km + ' km</span></div>'
+        + '<span class="grp"><i class="sep">·</i>~' + km + ' km</span></div>'
     + '</div>'
-    + '<button class="gc-toggle" id="gcToggle" aria-expanded="false">'
-      + '<span class="t-show">Details &amp; map</span><span class="t-hide" hidden>Hide</span>' + ICO.chev + '</button></div>'
+    + '<span class="gc-toggle">'
+      + '<span class="t-show">Details<span class="t-map"> &amp; map</span></span>'
+        + '<span class="t-hide" hidden>Hide</span>' + ICO.chev + '</span></button>'
     + '<div class="gc-wrap"><div class="gc-body"><div class="gc-body-in">'
       + '<div>'
         + '<p>' + esc(g.street) + ' · ' + esc(g.zip) + '</p>'
