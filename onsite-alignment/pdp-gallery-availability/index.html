@@ -276,40 +276,6 @@ body[data-promo="0"] .promo{display:none}
 .more-info{margin-top:12px;font-size:9px;line-height:1.5;letter-spacing:.4px;text-transform:uppercase;color:var(--ink)}
 .more-info a{text-decoration:underline;text-underline-offset:2px}
 
-/* ── below the fold ──────────────────────────────────── */
-.section{padding:clamp(34px,3.6vw,58px) var(--pad);border-top:1px solid var(--line-2)}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
-.sec-head h2{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:clamp(22px,2vw,28px);line-height:1.15;letter-spacing:-.02em}
-.sec-head .tag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
-.visit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,52px);align-items:start}
-@media(max-width:860px){ .visit{grid-template-columns:1fr;gap:22px} }
-.visit-photo{margin:0;background:var(--sunken)}
-.visit-photo img{width:100%;aspect-ratio:16/10;object-fit:cover}
-.visit-photo figcaption{margin-top:8px;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft)}
-.visit h3{font-family:'utile-display',arial,sans-serif;font-weight:400;font-size:clamp(21px,1.9vw,26px);letter-spacing:-.02em}
-.visit p{margin-top:10px;max-width:46ch;font-size:15px}
-.deets{display:grid;gap:0;margin-top:18px}
-.deet{display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line-2);font-size:15px}
-.deet:last-child{border-bottom:0}
-.deet dt{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);padding-top:4px}
-.ghost{display:inline-flex;align-items:center;gap:9px;padding:4px 0 5px;border-bottom:1px solid var(--ink);
-  font-size:12px;font-weight:700;letter-spacing:1.68px;text-transform:uppercase;margin-top:18px}
-.others{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));border-top:1px solid var(--line-2);border-left:1px solid var(--line-2)}
-.oth{padding:18px 20px 17px;display:grid;gap:8px;align-content:start;border-right:1px solid var(--line-2);
-  border-bottom:1px solid var(--line-2);transition:background var(--t1) var(--ease)}
-.oth:hover{background:var(--sunken)}
-.oth .nm{font-size:15px;font-weight:700}
-.oth .st{display:flex;align-items:center;gap:8px;font-size:13px}
-.oth .ad{font-size:12px;line-height:1.55;color:var(--ink-soft)}
-.dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--ink)}
-.dot.hollow{background:none;box-shadow:inset 0 0 0 1px var(--line)}
-.empty-note{padding:6px 0 0;font-size:15px;max-width:60ch}
-.editionrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));border-top:1px solid var(--line-2)}
-.ed{padding:18px 22px 18px 0;border-bottom:1px solid var(--line-2)}
-.ed + .ed{padding-left:22px;border-left:1px solid var(--line-2)}
-@media(max-width:640px){ .ed + .ed{padding-left:0;border-left:0} .ed{padding-right:0} }
-.ed dt{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
-.ed dd{font-size:15px}
 .ftr{padding:30px var(--pad) 44px;border-top:1px solid var(--line-2);display:flex;gap:22px;flex-wrap:wrap;
   font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft)}
 
@@ -442,7 +408,6 @@ body.reserve-open{overflow:hidden}
   .trust{font-size:11px;gap:10px}
   .more-info{font-size:8.5px}
   .actions{margin-top:10px}
-  .section{padding:30px var(--pad)}
 }
 
 /* ── prototype states panel ──────────────────────────── */
@@ -524,7 +489,6 @@ const INVENTORY = {
   's120:none':{}, 's120:slim':{}, 's120:basel':{ hamburg:1, muenchen:1 }, 's120:artbox':{ kudamm:1 }
 };
 
-const GALLERY_PHOTO = '../galleries/assets/berlin-mitte/viewing-room.jpg';
 const byId = (arr,id,fb) => arr.find(x => x.id === id) || fb;
 
 function configure(sizeId, frameId){
@@ -810,33 +774,6 @@ function renderBuy(){
 </script>
 
 <script>
-/* ── below the fold ────────────────────────────────────────────── */
-function renderVisit(){
-  const g = GAL || CFG.holders[0];
-  if (!g) return '';
-  const q = CFG.stock[g.id] || 0, os = openState(g);
-  return '<section class="section"><div class="sec-head"><h2>See it in person</h2>'
-    + '<span class="tag">' + CFG.size.label + ' cm · ' + esc(CFG.frame.name) + '</span></div>'
-    + '<div class="visit">'
-      + '<figure class="visit-photo"><img src="' + GALLERY_PHOTO + '" alt="Inside a LUMAS gallery" loading="lazy">'
-        + '<figcaption>Inside a LUMAS gallery</figcaption></figure>'
-      + '<div><h3>' + esc(g.name) + '</h3>'
-        + '<p>' + (q > 0
-            ? 'This piece is hanging here now, framed exactly as configured. See the print, the paper and the frame at full scale before you decide.'
-            : 'This configuration is not on the wall here today. The team will bring out the edition, mock it up at your size and show you the framing samples in person.') + '</p>'
-        + '<dl class="deets">'
-          + '<div class="deet"><dt>Address</dt><dd>' + esc(g.street) + '<br>' + esc(g.zip) + '</dd></div>'
-          + '<div class="deet"><dt>Opening hours</dt><dd>' + hoursText(g)
-            + '<br><span style="color:' + (os.open ? 'var(--ink)' : 'var(--ink-soft)') + '">' + os.text + '</span></dd></div>'
-          + '<div class="deet"><dt>Phone</dt><dd><a href="tel:' + g.phone.replace(/\s/g,'') + '">' + esc(g.phone) + '</a></dd></div>'
-          + '<div class="deet"><dt>This piece</dt><dd>' + (q > 0
-              ? '<span class="b">' + q + ' available</span> in ' + CFG.size.label + ' cm, ' + esc(CFG.frame.name)
-              : 'Not in stock in this configuration') + '</dd></div>'
-        + '</dl>'
-        + '<a class="ghost" href="' + mapsUrl(g) + '" target="_blank" rel="noopener">Directions' + ICO.arrow + '</a>'
-      + '</div></div></section>';
-}
-
 /* ── drawer ────────────────────────────────────────────────────── */
 function renderDrawer(){
   const ordered = GALLERIES.slice().sort((a,b) =>
@@ -928,8 +865,6 @@ function renderStates(){
 <div class="shell">
   <main class="hero" id="hero"></main>
   <script>document.getElementById('hero').innerHTML = '<div class="stage-col">' + renderStage() + '</div>' + renderBuy();</script>
-  <div id="below"></div>
-  <script>document.getElementById('below').innerHTML = renderVisit();</script>
   <footer class="ftr"><span>LUMAS</span><a href="#">Galleries</a><a href="#">Delivery and returns</a><a href="#">Framing</a><a href="#">Contact</a></footer>
 </div>
 

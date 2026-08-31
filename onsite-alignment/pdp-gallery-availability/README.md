@@ -175,9 +175,10 @@ Fonts are the project's own `archivo.woff2` and `utile-display` files from
 
 What was intentionally dropped from the live page: the two `demand-indicator` urgency bands,
 "Preis vorschlagen", the follow-artist button, the Trustpilot block, the sticky back-to-top
-rail and the recommendation modules. Below the fold only "See it in person" remains; the
-"Other galleries" and "About this work" sections were removed. The promo bar is kept because
-it is part of the real chrome, and it is dismissible.
+rail and the recommendation modules. There is no below-the-fold content at all now, only the
+footer: the gallery card carries the address, hours, map and actions that "See it in person"
+used to hold. The promo bar is kept because it is part of the real chrome, and it is
+dismissible.
 
 The live page already has an "In Galerie ansehen" button that opens a centred `<dialog>`.
 That is what this prototype replaces: the availability row above the CTA, plus a side drawer.
