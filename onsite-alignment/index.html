@@ -149,7 +149,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0827", kicker: "Latest · today",        weekday: "Thursday",  date: "27 August", year: "2026", short: "27 Aug", upcoming: true },
+      { id: "s0831", kicker: "Latest · today",        weekday: "Monday",    date: "31 August", year: "2026", short: "31 Aug", upcoming: true },
+      { id: "s0827", kicker: "Previous",              weekday: "Thursday",  date: "27 August", year: "2026", short: "27 Aug" },
       { id: "s0826", kicker: "Previous",              weekday: "Wednesday", date: "26 August", year: "2026", short: "26 Aug" },
       { id: "s0825", kicker: "Previous",              weekday: "Tuesday",   date: "25 August", year: "2026", short: "25 Aug" },
       { id: "s0820", kicker: "Previous",              weekday: "Thursday",  date: "20 August", year: "2026", short: "20 Aug" },
@@ -166,6 +167,15 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Monday 31 August ───────────────────────────────────────
+      { s: "s0831", feature: true, title: "PDP — Gallery availability per configuration", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm", desc: "Local Inventory Ads, PDP." },
+      { s: "s0831", cluster: "Gallery availability", title: "In stock at your gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm" },
+      { s: "s0831", cluster: "Gallery availability", title: "Last one", href: "pdp-gallery-availability/index.html?size=s80&frame=slim&gallery=kudamm" },
+      { s: "s0831", cluster: "Gallery availability", title: "Unavailable in Berlin", href: "pdp-gallery-availability/index.html?size=s120&frame=basel&gallery=kudamm" },
+      { s: "s0831", cluster: "Gallery availability", title: "Not in any gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=none&gallery=kudamm" },
+      { s: "s0831", cluster: "Gallery availability", title: "Reserve for gallery visit", href: "pdp-gallery-availability/index.html?size=s80&frame=slim&gallery=kudamm&reserve=1" },
+      { s: "s0831", cluster: "Gallery availability", title: "Mobile, 390 \u00d7 844", href: "pdp-gallery-availability/mobile.html" },
+
       // ── Thursday 27 August ─────────────────────────────────────
       { s: "s0827", feature: true, title: "The moment art becomes yours",
         href: "meta-moment-router/",
@@ -209,13 +219,6 @@
       { s: "s0820", cluster: "Inspired No. 45", title: "The same issue as a room", href: "inspired-no-45/cloud.html" },
 
       // ── Wednesday 19 August ────────────────────────────────────
-      { s: "s0819", feature: true, title: "PDP — Gallery availability per configuration", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm", desc: "A simplified artwork PDP where gallery stock belongs to the configuration rather than to the artwork. A gallery holds one physical piece in one size and one framing, so the availability row can never describe anything other than the size and framing currently selected: change either and the price, the availability, the band above the image and the gallery list all move together. The whole page is one pure function of the URL plus a remembered-gallery cookie, run while the document parses, so price and availability are in the first paint and there is no \"checking availability\" step; choosing a size or a framing is a real navigation to a new URL, which is what a merchant feed needs. Availability sits directly above the primary CTA with equal weight, and its action is Reserve in gallery rather than a store picker: it expands a reservation form in place, carrying what will be held, where, and how it is confirmed. Five states are designed explicitly, including unavailable at your gallery and not in any gallery, both of which keep the online purchase intact. Built on the live PDP\u2019s own computed styles, with real sizes and prices from the DE feed, real framing prices from the PIM option set, real gallery addresses and hours, and the site\u2019s own framed render, stage texture and thumbnail rail. Only the per-configuration unit counts are mock, chosen so every state is reachable from the states menu." },
-      { s: "s0819", cluster: "Gallery availability", title: "In stock at your gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm" },
-      { s: "s0819", cluster: "Gallery availability", title: "Last one", href: "pdp-gallery-availability/index.html?size=s80&frame=slim&gallery=kudamm" },
-      { s: "s0819", cluster: "Gallery availability", title: "Unavailable in Berlin", href: "pdp-gallery-availability/index.html?size=s120&frame=basel&gallery=kudamm" },
-      { s: "s0819", cluster: "Gallery availability", title: "Not in any gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=none&gallery=kudamm" },
-      { s: "s0819", cluster: "Gallery availability", title: "Reserve in gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm&reserve=1" },
-      { s: "s0819", cluster: "Gallery availability", title: "Mobile, 390 \u00d7 844", href: "pdp-gallery-availability/mobile.html" },
       { s: "s0819", feature: true, title: "PDP Restructure — Minasena", href: "pdp-restructure/", desc: "The artwork PDP rebuilt to the restructure brief: decision above the fold, dropdown finishing with progressive frame colours, sticky add-to-cart, and one In-Größe-sehen entry for AR / 3D / zoom — real product, real prices, real imagery." },
       { s: "s0819", feature: true, title: "Events — the page and the system behind it", href: "galleries/events.html", desc: "The /events/ page, which is currently an empty state, and the content model it needs. Today's practice is one tile per gallery, so six events become twenty-nine tiles carrying the same description over and over and five different link labels for the same action; the control arm renders exactly that. Here a single Occurrence object joins an event to a gallery, and the action is simply the gallery name as a link. The layout that survived is a grid rather than full-width rows: a row can only carry so much content, so at 1920 a full-width row is structurally mostly empty. The largest event leads at full width with the photograph beside the copy, because eighteen locations need three real columns, and the five smaller events sit in a grid beneath it. One rule shapes the location list, and it is about the event rather than its size: same dates give one line of links, differing dates give one column per evening, so Golden Hour gets three columns because it runs on three evenings. Frankfurt Airport is excluded by a can-host flag, since it sits airside in the non-Schengen part of Terminal 3, which is why \"all galleries\" is never a literal string. Registration has no button; the phrase carries the link. Real LUMAS event photography, verified across eighteen widths from 360 to 2560, and one finding worth escalating: the V2 text/tertiary token measures 3.3:1 on white and cannot legally carry small copy." },
       { s: "s0819", cluster: "Events", title: "Events page", href: "galleries/events.html" },
