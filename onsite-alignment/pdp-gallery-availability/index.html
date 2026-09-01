@@ -595,7 +595,7 @@ function renderHeader(){
 function renderStageBar(){
   if (!GAL) return '';
   const q = CFG.stock[GAL.id] || 0, os = openState(GAL);
-  const label = q > 0 ? stockWord(q) + ' in gallery' : 'Not in this configuration';
+  const label = q > 0 ? 'Only ' + q + ' in gallery' : 'Not in this configuration';
   const km = GAL.km < 10 ? GAL.km.toFixed(1) : Math.round(GAL.km);
   const dot = '<i class="sep">·</i>';
   return '<div class="stage-bar" data-in="' + (q > 0 ? 1 : 0) + '">'
@@ -684,12 +684,8 @@ function renderAvail(){
   }
   const g = GAL, q = CFG.stock[g.id] || 0, os = openState(g);
   const km = g.km < 10 ? g.km.toFixed(1) : Math.round(g.km);
-  const stockFull = q > 0
-    ? (q === 1 ? 'Only 1 in ' + esc(g.city) : q === 2 ? 'Only 2 in ' + esc(g.city) : 'In stock in ' + esc(g.city))
-    : 'Not in this configuration';
-  const stockShort = q > 0
-    ? (q >= 3 ? 'In stock' : 'Only ' + q + ' on display')
-    : 'Not in this configuration';
+  const stockFull  = q > 0 ? 'Only ' + q + ' in ' + esc(g.city) : 'Not in this configuration';
+  const stockShort = q > 0 ? 'Only ' + q + ' on display'          : 'Not in this configuration';
   const stock = '<span class="s-full">' + stockFull + '</span><span class="s-short">' + stockShort + '</span>';
   return '<div class="gcard-lite" data-in="' + (q > 0 ? 1 : 0) + '" data-open="0" id="availRow">'
     + '<button class="gc-head" id="gcToggle" aria-expanded="false"><span class="pin">' + ICO.pin + '</span><div class="gc-txt">'
