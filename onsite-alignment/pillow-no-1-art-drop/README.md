@@ -222,7 +222,7 @@ Last run, German canonical, Chromium:
 
 | Check | Result |
 |---|---|
-| Images | 18/18 load, including every carousel slide. 0 placeholders. |
+| Images | 20/20 load, including every carousel slide. 0 placeholders. |
 | Horizontal overflow | 0px at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920 |
 | Hero lockup above the fold | 320×568, 390×844, 430×932, and the short desktop windows 768×700, 1024×700, 1440×800, 1920×900 — all clear |
 | AA contrast (page) | 4 phases × {390, 1440} = 8 combinations, **0 failures**, minimum **5.19:1**. Large text judged at 24px, or 18.66px at weight ≥700. The hero lockup is excluded here and measured properly below. |
@@ -230,7 +230,7 @@ Last run, German canonical, Chromium:
 | Scrim over the artwork | **0%** below 768px, **15–20%** above it (the masked edge only). 0% on both incidental framed pictures at every width. |
 | Type combinations | **10** at 390px, **12** at 1440px (target ≤12) |
 | Countdown numeral width | All 100 digit pairs render at 33.59px (390px) and 80.63px (1440px) — zero spread |
-| Carousel per view | rooms 1 everywhere (3 slides); works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
+| Carousel per view | rooms 1 everywhere (5 slides); works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
 | English build | `translate-en.py` exits 0 |
 | Fonts | `fontTools` name table on both shipped woff2 faces: no `Trial` string. Utile Display v1.302, TypeNetwork IDs 373473 / 373474. |
 | Hero crop | The work is fully in frame at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920, with 145px of air above it on phones and 20px at 1920. Asserted, not assumed. |
@@ -289,12 +289,16 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
   type (`Rafael Neff · 2026 · Nr. ___ / 999`) rather than showing one. A
   rendered signature would be a fabricated artefact. **Asset request: one macro
   of the signature and edition number on the smoked oak base.**
-- **The rooms slider is down to three slides.** Six renders were cut for
-  deformed geometry. Two more went for the base, which is smoked oak in the
-  studio reference at rgb(111, 86, 70): `RNE_img_03` renders it pale blond at
-  rgb(180, 156, 131), and `RNE_img_01` renders it two-tone with one near-white
-  face. The three that ship measure 88/73/63, 79/64/51 and 108/87/66. **Asset
-  request: more room renders with a correct smoked-oak base.**
+- **Two slides in the rooms slider need their base retouched.** Six of the
+  eleven renders were cut for deformed geometry. Two more have a wrong base and
+  are back in the deck at the client's request, to be edited: `RNE_img_03`
+  (slide 2) renders the smoked oak pale blond, and `RNE_img_01` (slide 5)
+  renders it two-tone with one near-white face. `prepare-assets.py` measures
+  every render's base against the studio reference on each run and prints the
+  delta, so re-running it after an edit is also the check. It judges colour
+  only: the sample boxes take in some of the surrounding table or floor, so the
+  light-to-dark spread it also prints is information rather than a verdict, and
+  a two-tone base still needs an eye.
 - **`detail-edition.jpg` is a screen grab.** The source file is
   `Screenshot 2026-08-26 at 10.04.40 1.jpg`, 2170×1198. It is the best evidence
   on the page for the Unikatsedition claim, so it is used — but confirm a proper

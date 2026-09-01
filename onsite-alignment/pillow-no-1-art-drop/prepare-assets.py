@@ -59,15 +59,35 @@ COPIES = [
     (DESIGN, 'RNE_Portrait_1.jpg', 'artist-portrait.jpg', 1600),
 
     # --- rooms, in carousel order -----------------------------------------
-    # Only three. Six renders were cut for deformed geometry, and two more for
-    # the base: RNE_img_03 renders it in pale blond oak (measured rgb 180,156,131
-    # against the real smoked oak at 111,86,70) and RNE_img_01 renders it
-    # two-tone with one near-white face. The three below all measure within
-    # range of the reference base.
+    # Six of the eleven renders were cut for deformed geometry. RNE_img_03 and
+    # RNE_img_01 are back at the client's request for retouching: their bases
+    # render pale blond and two-tone respectively, against the real smoked oak.
+    # check_bases() below measures every one of them against the studio
+    # reference after each run, so re-running this script is also the check.
     (DESIGN, 'room1 1.jpg',    'room-01-plinth.jpg',    1920),
-    (DESIGN, 'RNE_img_04.jpg', 'room-02-sideboard.jpg', 1920),
-    (DESIGN, 'RNE_img_10.jpg', 'room-03-garden.jpg',    1920),
+    (DESIGN, 'RNE_img_03.jpg', 'room-02-newyork.jpg',   1920),
+    (DESIGN, 'RNE_img_04.jpg', 'room-03-sideboard.jpg', 1920),
+    (DESIGN, 'RNE_img_10.jpg', 'room-04-garden.jpg',    1920),
+    (DESIGN, 'RNE_img_01.jpg', 'room-05-concrete.jpg',  1920),
 ]
+
+# Where the oak base sits in each render, as fractions of the frame. Eyeballed
+# once and only used for the colour report below, so a loose box is fine.
+BASE_PATCH = {
+    'room-01-plinth.jpg':    (.44, .70, .56, .78),
+    'room-02-newyork.jpg':   (.42, .72, .55, .80),
+    'room-03-sideboard.jpg': (.44, .78, .58, .87),
+    'room-04-garden.jpg':    (.44, .76, .57, .85),
+    'room-05-concrete.jpg':  (.42, .74, .56, .83),
+}
+# the studio shot of the real base is the reference every render is judged against
+BASE_REFERENCE = ('detail-base.jpg', (.30, .72, .62, .92))
+BASE_TOLERANCE = 30       # mean per-channel distance before it is called out
+# No spread threshold. A two-tone base was the other defect worth catching, but
+# these sample boxes are loose enough to include the table or floor around the
+# base, so the light-to-dark range says as much about the surroundings as about
+# the wood: the studio reference itself scores 142 against a white marble
+# surface. The number is printed for information and judged by eye.
 
 # The isolated studio shot, cropped to the object. The master is 3:2 with the
 # sculpture occupying only the middle 47% of the width, which left the work
@@ -84,9 +104,9 @@ PORTRAIT = (STUDIO, 'room2 (1).png', 'hero-room-portrait.jpg', 0.365, 1024, (1.2
 
 # Retired by later deliveries or by the decisions above, removed so publish.py
 # cannot ship an orphan.
-RETIRED = ['hero-room-plinth.jpg', 'hero-room-sideboard.jpg', 'room-living.jpg',
+RETIRED = ['room-02-sideboard.jpg', 'room-03-garden.jpg', 'room-10-concrete.jpg','hero-room-plinth.jpg', 'hero-room-sideboard.jpg', 'room-living.jpg',
            'room-villa.jpg', 'detail-seam.jpg',
-           'room-01-newyork.jpg', 'room-02-newyork.jpg', 'room-02-reflection.jpg',
+           'room-01-newyork.jpg', 'room-02-reflection.jpg',
            'room-03-reflection.jpg', 'room-03-salon.jpg', 'room-04-salon.jpg',
            'room-04-walnut.jpg', 'room-05-garden.jpg', 'room-05-sideboard.jpg',
            'room-05-walnut.jpg', 'room-06-garden.jpg', 'room-06-highrise.jpg',
@@ -145,6 +165,50 @@ def main():
         if p.exists():
             p.unlink()
             print(f'  removed retired {old}')
+
+    check_bases()
+
+
+def check_bases():
+    """Report each room render's base colour against the studio reference.
+
+    The sculpture sits on a smoked oak base. Several of the delivered renders
+    invent a different wood: one came out pale blond, another two-tone with a
+    near-white face. That is the kind of thing nobody notices until a collector
+    does, so it is measured rather than eyed. This reports, it does not fail:
+    the sample boxes are approximate and a render can be legitimately warmer or
+    cooler with the light in the room.
+    """
+    import numpy as np
+
+    def patch(path, box):
+        a = np.asarray(Image.open(path).convert('RGB')).astype(float)
+        h, w = a.shape[:2]
+        x0, y0, x1, y1 = box
+        return a[int(y0 * h):int(y1 * h), int(x0 * w):int(x1 * w)].reshape(-1, 3)
+
+    def spread(px):
+        """Light-to-dark range inside the patch, p90 minus p10."""
+        lum = px @ np.array([0.2126, 0.7152, 0.0722])
+        return float(np.percentile(lum, 90) - np.percentile(lum, 10))
+
+    ref_name, ref_box = BASE_REFERENCE
+    ref_px = patch(HERE / ref_name, ref_box)
+    ref, ref_spread = ref_px.mean(0), spread(ref_px)
+    print(f'\nbase colour vs {ref_name} — reference rgb'
+          f'({int(ref[0])}, {int(ref[1])}, {int(ref[2])}), spread {ref_spread:.0f}')
+    for name, box in BASE_PATCH.items():
+        if not (HERE / name).exists():
+            continue
+        px = patch(HERE / name, box)
+        got, spr = px.mean(0), spread(px)
+        dist = float(np.abs(got - ref).mean())
+        flag = 'ok' if dist <= BASE_TOLERANCE else 'OFF, wrong colour — retouch'
+        print(f'  {name:24} rgb({int(got[0]):3}, {int(got[1]):3}, {int(got[2]):3})'
+              f'   delta {dist:5.1f}   spread {spr:5.1f}   {flag}')
+    print('  delta is judged; spread is information only. A two-tone base still\n'
+          '  needs an eye: RNE_img_01 renders one face near-white and averages\n'
+          '  out to a plausible brown.')
 
 
 main()
