@@ -86,7 +86,7 @@ body[data-promo="0"] .promo{display:none}
 @media(max-width:1023px){ .hero{grid-template-columns:minmax(0,1fr);gap:0;padding:0 0 24px} }
 
 .stage-col{min-width:0}
-.stage-bar{display:flex;align-items:center;gap:9px;padding:13px 18px;background:var(--band);
+.stage-bar{display:none;align-items:center;gap:9px;padding:13px 18px;background:var(--band);
   font-size:11px;letter-spacing:1px;color:var(--ink);box-shadow:inset 3px 0 0 var(--ink);min-width:0}
 .stage-bar .sdot{width:8px;height:8px;border-radius:50%;background:#2D6A31;flex:none}
 .stage-bar[data-in="0"] .sdot{background:var(--line)}
@@ -216,6 +216,11 @@ body[data-promo="0"] .promo{display:none}
 .gc-name{font-size:14px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;line-height:1.3;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gc-name .g-short{display:none}
+@media(max-width:1500px){
+  .gc-name .g-full{display:none}
+  .gc-name .g-short{display:inline}
+  .gc-sub .grp:last-child{display:none}
+}
 .gc-sub{margin-top:3px;font-size:14px;line-height:1.45;color:var(--ink-soft);
   display:flex;align-items:center;gap:5px;flex-wrap:nowrap;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
@@ -257,20 +262,19 @@ body[data-promo="0"] .promo{display:none}
 
 
 .actions{margin-top:10px;display:grid;gap:9px}
-.btn-reserve{height:54px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
-  justify-content:center;gap:12px;font-size:14px;letter-spacing:1.6px;text-transform:uppercase;
-  transition:background var(--t1) var(--ease)}
-.btn-reserve:hover{background:#000}
 .trust{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft)}
 .trust .sep{color:rgba(28,26,24,.3)}
-.btn-primary{height:50px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
-  justify-content:center;font-size:16px;letter-spacing:1px;text-transform:uppercase;
+.btn-primary{height:54px;background:var(--ink);color:var(--cta-text);display:flex;align-items:center;
+  justify-content:center;gap:12px;font-size:14px;letter-spacing:1.6px;text-transform:uppercase;
   transition:background var(--t1) var(--ease)}
 .btn-primary:hover{background:#000}
-.btn-outline{height:52px;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:12px;font-weight:700;letter-spacing:1.68px;text-transform:uppercase;
-  transition:background var(--t1) var(--ease)}
-.btn-outline:hover{background:var(--sunken)}
+.btn-secondary{height:54px;background:var(--sunken);color:var(--ink);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;gap:12px;font-size:14px;letter-spacing:1.6px;
+  text-transform:uppercase;transition:background var(--t1) var(--ease),border-color var(--t1) var(--ease)}
+.btn-secondary:hover{background:#E9E2D7;border-color:var(--line-strong)}
+.or-sep{display:flex;align-items:center;gap:14px;margin:3px 0;font-size:11.5px;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--ink-soft)}
+.or-sep::before,.or-sep::after{content:'';flex:1;height:1px;background:var(--line-2)}
 .more-info{margin-top:12px;font-size:9px;line-height:1.5;letter-spacing:.4px;text-transform:uppercase;color:var(--ink)}
 .more-info a{text-decoration:underline;text-underline-offset:2px}
 
@@ -360,7 +364,7 @@ body.reserve-open{overflow:hidden}
   .promo{font-size:11px;gap:12px;padding:0 40px 0 12px}
   .promo-cta{padding:6px 12px;font-size:10px;letter-spacing:1.2px}
   .hdr-r .ib[data-hide]{display:none}
-  .stage-bar{padding:10px var(--pad);font-size:10.5px;gap:7px;overflow:hidden}
+  .stage-bar{display:flex;padding:10px var(--pad);font-size:10.5px;gap:7px;overflow:hidden}
   .stage-bar .d-only{display:none}
   .stage-bar .g-full{display:none}
   .stage-bar .g-short{display:inline}
@@ -401,7 +405,8 @@ body.reserve-open{overflow:hidden}
   .gc-sub{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .gc-sub .grp:last-child{display:none}
   .gc-body-in{padding:14px 13px;gap:14px}
-  .btn-reserve{height:52px;font-size:13px;letter-spacing:1.3px}
+  .btn-primary,.btn-secondary{height:52px;font-size:13px;letter-spacing:1.3px}
+  .or-sep{font-size:10.5px;letter-spacing:1.2px;gap:11px}
   .trust{font-size:11px;gap:10px}
   .more-info{font-size:8.5px}
   .actions{margin-top:10px}
@@ -731,11 +736,12 @@ function renderBuy(){
     + renderAvail()
     + '<div class="actions">'
       + (RESERVABLE
-          ? '<button class="btn-reserve" data-reserve>' + ICO.cal + 'Reserve for gallery visit</button>'
+          ? '<button class="btn-secondary" data-reserve>' + ICO.cal + 'Reserve for gallery visit</button>'
             + '<div class="trust"><span>Held 48h</span><i class="sep">·</i><span>No obligation to buy</span>'
             + '<i class="sep">·</i><span>Consultant available</span></div>'
-            + '<a class="btn-outline" href="#" id="ctaBtn">Buy online</a>'
-          : '<a class="btn-primary" href="#" id="ctaBtn">Buy online</a>')
+            + '<div class="or-sep">or buy online now</div>'
+          : '')
+      + '<a class="btn-primary" href="#" id="ctaBtn">Add to cart</a>'
     + '</div>'
     + '<div class="more-info">Ships in 5 days / incl. VAT / plus <a href="#">shipping</a> € 6,90'
       + '<br>' + ARTWORK.creationYear + ' / ' + ARTWORK.publicationYear + ' / ' + CFG.size.sku + '</div>'
