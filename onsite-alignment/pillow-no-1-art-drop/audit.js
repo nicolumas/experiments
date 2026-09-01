@@ -5,21 +5,24 @@
  *   node audit.js [http://localhost:8947/pillow-art-drop.html]
  *
  * Playwright comes from the repo's e2e workspace, so there is nothing to
- * install here. Writes audit-report.json beside this file; check-hero-plate.py
+ * install here. Writes audit-report.json beside this file; check-hero-scrim.py
  * consumes the hero geometry from it and does the pixel test on the photograph.
  *
  * What it checks, and why each one is here:
  *   1  every referenced image actually loads
  *   2  zero horizontal overflow at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920
- *   3  hero lockup above the fold at 320x568, 390x844, 430x932
- *   4  hero plate geometry mapped back into source-image pixels (for the
- *      pixel test: the plate must not cover the artwork)
+ *   3  hero lockup above the fold, phones and short desktop windows alike
+ *   4  hero geometry and per-line lockup rects, for check-hero-scrim.py
  *   5  AA contrast across 4 phases x {390, 1440} — reveal transitions are
  *      killed first, because a transition still in flight reports every
- *      element at exactly 1:1 and looks like a total failure
+ *      element at exactly 1:1 and looks like a total failure. The hero lockup
+ *      is excluded here and measured by check-hero-scrim.py instead, which
+ *      samples the photograph rather than compositing background colours.
  *   6  distinct type combinations (family/size/weight) at 390 and 1440
  *   7  countdown numeral width across all 100 digit pairs
  *   8  carousel slides-per-view measured from rendered widths
+ *   9  real line boxes: no line ends on a short function word, no paragraph
+ *      ends with a single word alone on the last line
  */
 const path = require('path');
 const fs = require('fs');
@@ -33,7 +36,10 @@ const { chromium } = require(E2E);
 const URL_BASE = process.argv[2] || 'http://localhost:8947/pillow-art-drop.html';
 const PHASES = ['REVEAL', 'EARLY_ACCESS', 'PUBLIC', 'ENDED'];
 const WIDTHS = [320, 390, 430, 768, 1024, 1440, 1920];
-const FOLD = [[320, 568], [390, 844], [430, 932]];
+// Short desktop windows matter too: at 92vh the hero bottom fell below the
+// fold and clipped the last lockup line on anything under ~1010px tall.
+const FOLD = [[320, 568], [390, 844], [430, 932],
+              [768, 700], [1024, 700], [1440, 800], [1920, 900]];
 
 /* ---------------------------------------------------------------- in-page ---
    Kept as strings so they run in the page, where the layout lives. */
@@ -94,7 +100,11 @@ const CONTRAST = `(() => {
     const el = n.parentElement;
     if (!el || seen.has(el)) continue;
     seen.add(el);
-    if (el.closest('.dev, .phase-switch, .sr-only, .skip-link')) continue;
+    // .proof__lockup is excluded on purpose: its background is a photograph
+    // plus a gradient scrim, which this walker cannot composite. Those four
+    // lines are measured against the real pixels by check-hero-scrim.py, which
+    // is stricter than this check, not laxer.
+    if (el.closest('.dev, .phase-switch, .sr-only, .skip-link, .proof__lockup')) continue;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
     const r = el.getBoundingClientRect();
@@ -140,6 +150,70 @@ const TYPECOMBOS = `(() => {
   return [...out.entries()].map(([k, v]) => ({ combo: k, examples: v }));
 })()`;
 
+/* Measures the REAL line boxes of every paragraph and heading, because the
+   binding in fix-typography.py is a prediction and this is the check.
+
+   Measured with Ranges over the existing text node, NOT by wrapping words in
+   spans: the first version did that and reported a widow the browser was not
+   actually rendering, because inserting inline elements changes how
+   `text-wrap: balance` distributes the lines. The DOM has to stay untouched.
+
+   Two offences are reported:
+     widow   a last line holding a single word
+     orphan  a line ending on a short function word
+   A non-breaking space is not a split point, so a bound pair can never be
+   counted as an offence. */
+const LINEBREAKS = `(() => {
+  const SHORT = new Set(('der die das den dem des ein eine einen einem einer und '
+    + 'oder mit von vom zum zur aus auf bei im am in an ist als wie nur bis für '
+    + 'ohne über unter vor nach seit sich wird sind the a an and or of to on at is '
+    + 'as for by with from no its it that only until after every each one two three so'
+    ).split(' '));
+  const out = [];
+  document.querySelectorAll('p, h1, h2, h3, h4, blockquote, dd, li').forEach(el => {
+    if (el.closest('.dev, .phase-switch, .sr-only, .skip-link')) return;
+    if (el.hidden || el.offsetParent === null) return;
+    if (el.childNodes.length !== 1 || el.firstChild.nodeType !== 3) return;
+    const node = el.firstChild;
+    const text = node.nodeValue;
+    if (!text || text.trim().split(/[ \u00a0]+/).length < 4) return;
+
+    // word spans by character offset; \u00a0 does NOT end a word
+    const words = [];
+    const re = /[^ ]+/g;
+    let m;
+    while ((m = re.exec(text)) !== null) words.push([m.index, m.index + m[0].length, m[0]]);
+    if (words.length < 4) return;
+
+    const range = document.createRange();
+    const lines = [];
+    let top = null;
+    for (const [a, b, w] of words) {
+      range.setStart(node, a); range.setEnd(node, b);
+      const t = Math.round(range.getBoundingClientRect().top);
+      if (top === null || Math.abs(t - top) > 3) { lines.push([]); top = t; }
+      lines[lines.length - 1].push(w);
+    }
+    range.detach && range.detach();
+    if (lines.length < 2) return;
+
+    const id = el.tagName.toLowerCase() + '.' +
+      (el.className || '').toString().split(' ').filter(Boolean)[0];
+    const last = lines[lines.length - 1];
+    if (last.length === 1 && !/\u00a0/.test(last[0])) {
+      out.push({ kind: 'widow', text: text.trim().slice(0, 46), word: last[0], sel: id });
+    }
+    for (let i = 0; i < lines.length - 1; i++) {
+      const tail = lines[i][lines[i].length - 1];
+      const clean = tail.replace(/[^\wÄÖÜäöüß]+$/, '').toLowerCase();
+      if (SHORT.has(clean)) {
+        out.push({ kind: 'orphan', text: text.trim().slice(0, 46), word: tail, sel: id });
+      }
+    }
+  });
+  return out;
+})()`;
+
 const OVERFLOW = `(() => {
   const d = document.documentElement;
   const off = [];
@@ -159,22 +233,36 @@ const OVERFLOW = `(() => {
 const HERO = `(() => {
   const proof = document.querySelector('.proof');
   const img = document.querySelector('.proof__img');
-  const plate = document.querySelector('.proof__plate');
-  const lines = [...plate.children].map(el => {
+  const lockup = document.querySelector('.proof__lockup');
+  const px = v => parseFloat(v) || 0;
+  // Every visible line, with its own box and type spec: the scrim ramp is a
+  // function of height, so a per-line rect is the only way to know the alpha
+  // that actually lands behind each one.
+  const lines = [...lockup.children].filter(el => !el.hidden && el.offsetParent !== null).map(el => {
     const r = el.getBoundingClientRect();
-    return { text: el.textContent.trim().slice(0, 24), bottom: Math.round(r.bottom), top: Math.round(r.top) };
+    const cs = getComputedStyle(el);
+    return {
+      text: el.textContent.trim().slice(0, 40),
+      x: r.left, y: r.top, w: r.width, h: r.height,
+      color: cs.color,
+      fontSize: px(cs.fontSize),
+      fontWeight: parseInt(cs.fontWeight, 10) || 400,
+    };
   });
-  const pr = proof.getBoundingClientRect(), plr = plate.getBoundingClientRect();
+  const scrimStyle = getComputedStyle(proof, '::after');
+  const pr = proof.getBoundingClientRect(), lr = lockup.getBoundingClientRect();
   return {
     src: (img.currentSrc || img.src).split('/').pop(),
     natural: [img.naturalWidth, img.naturalHeight],
     objectPosition: getComputedStyle(img).objectPosition,
     container: { x: pr.left, y: pr.top, w: pr.width, h: pr.height },
-    plate: { x: plr.left, y: plr.top, w: plr.width, h: plr.height },
+    plate: { x: lr.left, y: lr.top, w: lr.width, h: lr.height },
+    scrim: { height: scrimStyle.height, background: scrimStyle.backgroundImage,
+             mask: scrimStyle.maskImage || scrimStyle.webkitMaskImage || 'none' },
     lines,
     viewportH: innerHeight,
-    lockupBottom: Math.round(plr.bottom),
-    aboveFold: plr.bottom <= innerHeight + 0.5,
+    lockupBottom: Math.round(lr.bottom),
+    aboveFold: lr.bottom <= innerHeight + 0.5,
   };
 })()`;
 
@@ -220,11 +308,30 @@ async function main() {
   // --- 1. images ----------------------------------------------------------
   await page.goto(URL_BASE, { waitUntil: 'load' });
   await page.evaluate(async () => {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
     const h = document.documentElement.scrollHeight;
-    for (let y = 0; y < h; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 70)); }
+    for (let y = 0; y < h; y += 400) { window.scrollTo(0, y); await sleep(70); }
+    // Carousel slides are lazy and sit off-screen HORIZONTALLY, so scrolling the
+    // page alone never loads past the first few. Two traps here: the section has
+    // to be in view VERTICALLY as well (Chromium will not start a lazy load for
+    // a slide whose section is nowhere near the viewport), and the track has
+    // scroll-behavior:smooth, so assigning scrollLeft in a loop animates and
+    // never arrives — the far slides stayed unloaded until the behaviour was
+    // forced to auto and each slide was brought into view individually.
+    for (const t of document.querySelectorAll('.carousel__track')) {
+      const prev = t.style.scrollBehavior;
+      t.style.scrollBehavior = 'auto';
+      for (const slide of t.querySelectorAll('.carousel__slide')) {
+        slide.scrollIntoView({ block: 'center', inline: 'center' });
+        await sleep(110);
+      }
+      t.scrollLeft = 0;
+      t.style.scrollBehavior = prev;
+      await sleep(120);
+    }
     window.scrollTo(0, 0);
   });
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(3500);
   report.checks.images = await page.evaluate(`(() => {
     const all = [...document.images].map(i => ({ src: (i.currentSrc || i.src),
       ok: i.complete && i.naturalWidth > 0, nat: i.naturalWidth + 'x' + i.naturalHeight }));
@@ -250,7 +357,7 @@ async function main() {
     report.checks.heroFold[`${w}x${h}`] = await page.evaluate(HERO);
   }
   report.checks.heroGeometry = {};
-  for (const w of [390, 768, 1024, 1440, 1920]) {
+  for (const w of [320, 390, 430, 768, 1024, 1440, 1920]) {
     await page.setViewportSize({ width: w, height: w < 768 ? 844 : 900 });
     await page.waitForTimeout(320);
     report.checks.heroGeometry[w] = await page.evaluate(HERO);
@@ -272,6 +379,17 @@ async function main() {
         minRatio: min && min.ratio, minAt: min && `${min.sel} "${min.text}" ${min.size}px/${min.weight}`,
       };
     }
+  }
+
+  // --- 5b. line breaks: no orphans, no widows ----------------------------
+  report.checks.lineBreaks = {};
+  for (const w of [320, 390, 430, 768, 1024, 1440]) {
+    await page.setViewportSize({ width: w, height: w < 768 ? 844 : 900 });
+    await page.goto(`${URL_BASE}?phase=PUBLIC`, { waitUntil: 'load' });
+    await page.evaluate(FREEZE);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(600);
+    report.checks.lineBreaks[w] = await page.evaluate(LINEBREAKS);
   }
 
   // --- 6. type combinations ----------------------------------------------
@@ -332,6 +450,15 @@ async function main() {
     (cFail.length ? cFail.map(([k, v]) => `${k}: ${v.failures.length} fail (${v.failures.map(f => f.sel + ' ' + f.ratio).join('; ')})`).join(' | ')
                   : `all pass, minimum ${worst[1]}:1 at ${worst[0]} — ${worst[2]}`));
 
+  const lb = Object.entries(c.lineBreaks);
+  const lbBad = lb.filter(([, v]) => v.length);
+  line(lbBad.length === 0, 'line breaks, no orphans or widows at ' +
+    lb.map(([w]) => w).join(' / ') + ': ' +
+    (lbBad.length
+      ? lbBad.map(([w, v]) => `${w}px ${v.length} (` +
+          v.slice(0, 4).map(o => `${o.kind} "${o.word}" in ${o.sel}`).join('; ') + ')').join(' | ')
+      : 'clean'));
+
   Object.entries(c.typeCombos).forEach(([w, v]) =>
     line(v.count <= 12, `type combinations at ${w}px: ${v.count} (target <=12)`));
 
@@ -344,7 +471,7 @@ async function main() {
   Object.entries(c.carousels).forEach(([w, list]) =>
     console.log(`    ${String(w).padStart(4)}px  ` + list.map(l => `${l.name}=${l.perView} (slide ${l.slideWidth}px, gap ${l.gap}px)`).join('  ')));
 
-  console.log('\n  hero geometry written to audit-report.json — run check-hero-plate.py next\n');
+  console.log('\n  hero geometry written to audit-report.json — run check-hero-scrim.py next\n');
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

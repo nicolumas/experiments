@@ -14,18 +14,20 @@ It is a landing page that links to the PDP. It is not a PDP.
 | `pillow-art-drop.html` | **Canonical.** German. Edit this one. |
 | `pillow-art-drop-en.html` | Build artefact. English review copy. Do not hand-edit. |
 | `translate-en.py` | Regenerates the English file from the German. Exits non-zero if any German survives. |
-| `prepare-assets.py` | Derives the JPEG set (and the portrait hero crop) from the studio PNGs in `../`. |
+| `prepare-assets.py` | Derives the JPEG set from both asset deliveries. Names the sources and the crops. |
 | `audit.js` | The measured checks. `node audit.js [url]` → `audit-report.json`. |
 | `functional.js` | Interaction checks: carousels, newsletter, drawer, dev clock, ENDED routing. `node functional.js`. |
-| `check-hero-plate.py` | Proves the hero type plate never covers an artwork. Reads `audit-report.json`. |
+| `check-hero-scrim.py` | Proves the hero scrim and the hero crop against the real pixels. Reads `audit-report.json`. |
+| `fix-typography.py` | Binds line breaks so no line orphans a short word and no paragraph widows. Run after any copy edit. |
 | `publish.py` | Working copy → published copy: gate injection, metric stripping, photo re-encode. |
 | `lumas-fonts.css` + 4 `UtileDisplay-*` files | Licensed TypeNetwork faces (IDs 373473 / 373474). |
-| `*.jpg` | Room shots, the studio shot, three craft details. |
+| `*.jpg` | Hero (landscape + portrait crop), eleven room renders, the studio shot, three craft images, the artist portrait. |
 
-Regenerate English after any German change:
+Regenerate English after any German change (this also re-applies the line-break
+binding to both files):
 
 ```bash
-python3 translate-en.py
+python3 fix-typography.py pillow-art-drop.html && python3 translate-en.py
 ```
 
 Re-derive the images if the studio delivers new masters:
@@ -61,16 +63,63 @@ says CET; the ISO offsets in `SCHEDULE` are the real local ones.
 
 ## Deliberate departures from the template, and why
 
-**1. No hero scrim. The lockup sits on an opaque charcoal plate.**
+**1. The hero type sits on the photograph over a measured scrim.**
 The brand book (Performance Marketing → *Umgang mit Kunstwerken in visuellen
-Assets*) forbids darkening or lightening layers over an artwork, or over a room
-containing one, *even for text legibility*: „stattdessen Textposition ändern“.
-A bottom-up gradient over a room shot is exactly that layer. So the photograph
-ships untouched and the type sits on a solid `--surface-inverse` plate placed
-where the picture carries floor, wall and plinth. Two consequences: contrast is
-deterministic (`#F4EDE2` on `#1C1A18` = 13.98:1) instead of dependent on the
-pixels behind each line, and the plate position has to be proven rather than
-eyeballed — that is what `check-hero-plate.py` does.
+Assets*) asks for no darkening layer over an artwork or over a room containing
+one, *even for text legibility*: „stattdessen Textposition ändern“. This build
+first honoured that literally, with an opaque charcoal plate. That was overruled
+on review: type on the image, with a light darkening layer where legibility
+needs it. So the scrim is kept as small as it can be and still clear AA:
+
+* it is **solved numerically, not chosen**. `check-hero-scrim.py` parses the
+  gradient the browser actually paints, maps each lockup line back into source
+  pixels, walks the band row by row taking the 95th-percentile brightness, and
+  composites the alpha at that height. The published values are the
+  lightest-*looking* ramp (lowest peak alpha) that clears AA with 12% to spare.
+* above 1024px it is **masked horizontally** so it dies out before it reaches
+  the sculpture. Measured result: **0–15% darkening ever lands on a work**, and
+  0% on either framed picture at every width.
+* the offer line was split into two short lines because as one line it ran to
+  44.6% of the container at 1024px, past where the mask has to start fading —
+  the mask then cut the ramp behind the type to 43% and no ramp could clear.
+
+Two ramps, not one, because the portrait and landscape crops are different
+photographs of the same room: below 768px the ramp is 32% tall and unmasked but
+kept below the sculpture's base, and **0% darkening reaches the work**; from
+768px up it is 56% tall and masked, and 15–20% reaches the work at its edge.
+
+The portrait asset stops at 767px on purpose. In a 768×735 hero a 3:4 crop is
+cropped *vertically*, which pushes the work's base to 77% of the container, 3%
+above the type — measured, no ramp could then reach the type without washing
+the work. Tablets get the landscape asset and its mask instead.
+
+Re-run the script if the hero image is ever swapped: the numbers are tuned to
+these exact pixels.
+
+**9. The hero crop position is computed, not set.**
+`object-position` was briefly `50% 100%` to put the darkest floor behind the
+type, and it sliced the top off the sculpture on a wide, short window
+(2000×1080). A fixed percentage cannot be right at every viewport shape, so
+`setHeroCrop()` derives it from the work's own bounding box: the largest value
+that still keeps the box in frame, which is the most floor available without
+ever cropping the work. `check-hero-scrim.py` asserts the result, and reports the
+air above and below. The CSS fallback if JS never runs is 30%, which holds up to
+about 2560px wide.
+
+**10. The isolated studio shot is cropped to the object.**
+The master is 3:2 with the sculpture in the middle 47% of the width, which left
+the work looking small between two wide grey margins. Measured object box is
+x[366,1086] y[67,983] of 1536×1024; the crop is that plus 10% padding, and
+`.work-block__art` carries the matching `aspect-ratio: 864/1024`, so `contain`
+never letterboxes.
+
+**11. The works rail has no ground and every work is the same height.**
+Measured pixel ratios in the rail are 1.000, 1.264 and 1.441–1.445, so the box
+ratio is 1.445 — as wide as the widest work is at full height. Every artwork
+then fills the box height and only its width varies: same height, nothing
+cropped, nothing letterboxed, no colour behind the art. Silver Poplars (1.822)
+was swapped for Royal Opera House London (1.441) because it was the one work
+that could not share the common height.
 
 **2. „JETZT KAUFEN“ is gone. Every CTA reads „WERK SICHERN“.**
 The tonality chapter blacklists *Kaufen / Jetzt kaufen* and names
@@ -78,17 +127,22 @@ The tonality chapter blacklists *Kaufen / Jetzt kaufen* and names
 *„zufriedene Kunden“* became *„zufriedene Sammler:innen“*, and the price
 window is a *Vorzugspreis*, never a *Rabatt*.
 
-**3. `ENDED` does not mean sold out.**
+**3. `ENDED` does not mean sold out, and the mechanic is stated four times.**
 This drop is a price window, not a closing edition: after 14.09 the work stays
-on sale at a higher price (CF & AR, 13.08.26). So `ENDED` says
-„Der Vorzugspreis ist beendet“, keeps a live `ZUM WERK` CTA to the PDP, and
-never claims the edition has closed. The higher price is **not** stated on the
-page because no figure was supplied.
+on sale at a higher price (CF & AR, 13.08.26). The page therefore calls it an
+**Einführungspreis** (introductory price), not a Vorzugspreis, because the word
+itself implies the price rises. "Three days, then higher" appears in the banner,
+in the hero lockup, beside the price in the work panel, and in the closing
+block. `ENDED` says „Der Einführungspreis ist beendet“, keeps a live `ZUM WERK`
+CTA to the PDP, and never claims the edition has closed. The higher price is
+**not** stated because no figure was supplied.
 
 **4. The three „own it“ cards carry craft, not finishes.**
 A sculpture has no LUMASEC/Artbox choice and no framing, so the cards are
 surface / base / signature. Copy is the supplied product description verbatim
-in substance.
+in substance. The third card shows the studio shot of four Pillows side by side,
+which is the only image in the set that *evidences* the Unikatsedition claim
+rather than asserting it: four pieces, four different forms.
 
 **5. There is no certificate anywhere on the page.**
 The feed records this variant as `edition_signature = signatur_ohne_zertifikat`
@@ -107,12 +161,24 @@ None was supplied, and nothing may be put in Rafael Neff's mouth. The
 inspiration section carries the editorial idea in LUMAS's own voice instead,
 deliberately not marked up as a quotation.
 
+**8. The hero image is the 1535px salon, not one of the 2752px renders.**
+Chosen by geometry. The lockup sits lower-left and is ~365px wide at 1024, so it
+collides with any composition whose subject starts before ~40% of the frame
+width. Every render in the second delivery is 16:9 with the object at 31-37%,
+and at desktop widths the hero crops those horizontally, magnifying the object
+further into the corner: measured, the type landed on brass at rgb(240) and
+needed a ~50% wash over the sculpture to be legible. The 3:2 salon shot has the
+sculpture at 47.8% and clears at every width. Its cost is resolution, which is
+listed under Open below. A 2560px export of *that* room, or any render with the
+object right of centre, resolves it.
+
 ## Verified — measured numbers, not assurances
 
-Run all three; the first two in this order:
+Run all three; the first two in this order (`check-hero-scrim.py` reads the
+geometry `audit.js` writes):
 
 ```bash
-node audit.js && python3 check-hero-plate.py
+node audit.js && python3 check-hero-scrim.py
 node functional.js
 ```
 
@@ -120,18 +186,36 @@ Last run, German canonical, Chromium:
 
 | Check | Result |
 |---|---|
-| Images | 17/17 load. 1 deliberate placeholder (artist portrait). |
+| Images | 26/26 load, including all eleven carousel slides. 0 placeholders. |
 | Horizontal overflow | 0px at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920 |
-| Hero lockup above the fold | 320×568, 390×844, 430×932 — plate bottom lands exactly on the fold at all three |
-| AA contrast | 4 phases × {390, 1440} = 8 combinations, 63–82 text nodes each, **0 failures**, minimum **5.19:1** (`--text-tertiary` on charcoal). Large text judged at 24px, or 18.66px at weight ≥700. |
-| Hero plate vs artwork | 5 widths, minimum clearance **63 CSS px** (at 390px); 152–268px on desktop. Plate covers no work at any width. |
+| Hero lockup above the fold | 320×568, 390×844, 430×932, and the short desktop windows 768×700, 1024×700, 1440×800, 1920×900 — all clear |
+| AA contrast (page) | 4 phases × {390, 1440} = 8 combinations, **0 failures**, minimum **5.19:1**. Large text judged at 24px, or 18.66px at weight ≥700. The hero lockup is excluded here and measured properly below. |
+| AA contrast (hero, sampled pixels) | All four lockup lines at **7** widths clear, with the ramps solved to a 12% margin above AA. |
+| Scrim over the artwork | **0%** below 768px, **15–20%** above it (the masked edge only). 0% on both incidental framed pictures at every width. |
 | Type combinations | **10** at 390px, **12** at 1440px (target ≤12) |
 | Countdown numeral width | All 100 digit pairs render at 33.59px (390px) and 80.63px (1440px) — zero spread |
-| Carousel per view | rooms 1 everywhere; works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
-| English build | `translate-en.py` exits 0, and the English file passes the same audit with identical numbers |
+| Carousel per view | rooms 1 everywhere (11 slides); works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
+| English build | `translate-en.py` exits 0 |
 | Fonts | `fontTools` name table on both shipped woff2 faces: no `Trial` string. Utile Display v1.302, TypeNetwork IDs 373473 / 373474. |
-| Interaction (`functional.js`) | Both carousels scroll on click and on ArrowRight and re-enable the prev button; the newsletter rejects an empty field with `aria-invalid` and swaps in the confirmation on a valid one; the burger toggles the drawer and `aria-expanded`; the dev switcher time-travels (PUBLIC previews 12.09 12:00, countdown 02 TAGE 11 STD 59 MIN); exactly one `<h1>`; `ENDED` still routes both CTAs to the PDP. **16/16 pass.** |
-| Published copy | Every referenced asset returns 200 from `onsite-alignment/pillow-no-1-art-drop/`, the GA4 figure is stripped, gate and `noindex` are injected. Folder 1.4MB. |
+| Hero crop | The work is fully in frame at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920, with 145px of air above it on phones and 20px at 1920. Asserted, not assumed. |
+| Line breaks | No orphans and no widows at 320 / 390 / 430 / 768 / 1024 / 1440, measured from real line boxes with Ranges over the live text nodes. |
+| Interaction (`functional.js`) | **16/16 pass.** Both carousels scroll on click and on ArrowRight and re-enable the prev button; the newsletter rejects an empty field with `aria-invalid` and swaps in the confirmation on a valid one; the burger toggles the drawer and `aria-expanded`; the dev switcher time-travels into each phase; the readiness meter reports zero missing assets; exactly one `<h1>`; `ENDED` still routes both CTAs to the PDP. |
+| Published copy | Every referenced asset returns 200 from `onsite-alignment/pillow-no-1-art-drop/`, the GA4 figure is stripped, gate and `noindex` are injected. |
+
+Three audit-harness bugs were found and fixed along the way, all of which had
+been reporting green-looking nonsense:
+
+* lazy carousel images never loaded, because the track has
+  `scroll-behavior:smooth` (so assigning `scrollLeft` in a loop animates and
+  never arrives) and because Chromium will not start a lazy load for a slide
+  whose section is off-screen vertically;
+* the generic contrast walker was compositing the hero type against `.proof`'s
+  background *colour*, having no way to see the photograph — it now defers those
+  four lines to `check-hero-scrim.py`, which is stricter, not laxer;
+* the first line-break check wrapped every word in a span to measure it, which
+  changes how `text-wrap: balance` distributes lines and reported a widow the
+  browser was not rendering. It now measures with Ranges over the untouched
+  text node.
 
 Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
 366 units against `6` at 528, on a 1000-unit em. Widest raw pair is 6+6 at
@@ -149,17 +233,22 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
 
 ## Open before launch
 
-- **No artist portrait was supplied.** Section 4 renders a visible
-  `⚠︎ Platzhalter` block, 4:5. It must not ship as-is.
-- **No artist quote was supplied.** The section works without one, but a real
-  Neff quote would strengthen it.
+- **No artist quote was supplied.** The voice section works without one, but a
+  real Neff quote would strengthen it.
 - **No portrait room render was supplied.** `hero-room-portrait.jpg` is a 3:4
-  crop of the Paris landscape master, cut by `prepare-assets.py` at x=560.
-  It serves every viewport below 1024px. A real portrait render should replace
-  it — and if it does, re-run `node audit.js && python3 check-hero-plate.py`,
-  because the plate clearance is asset-specific.
-- **Hero resolution.** The studio masters are ~1535px wide. A full-bleed
-  desktop hero wants ~2880px for a 2× display. Ask for a larger master.
+  crop of the salon landscape master, cut by `prepare-assets.py` at 36.5% of the
+  width. It serves every viewport below 1024px. A real portrait render should
+  replace it — and if it does, re-run
+  `node audit.js && python3 check-hero-scrim.py`, because the scrim is tuned to
+  these exact pixels.
+- **Hero resolution: 1535px.** A full-bleed desktop hero wants ~2880px for a 2×
+  display. The second delivery has 2752px renders but none of them works
+  compositionally as a hero (see departure 8). Ask for a 2560px+ export of the
+  salon room, or a render with the object right of centre.
+- **`detail-edition.jpg` is a screen grab.** The source file is
+  `Screenshot 2026-08-26 at 10.04.40 1.jpg`, 2170×1198. It is the best evidence
+  on the page for the Unikatsedition claim, so it is used — but confirm a proper
+  master exists before launch.
 - **`SOLD_COUNT = null`.** The scarcity bar stays hidden until a real stock
   feed is wired in. It must never render an invented number.
 - **The post-drop price is unknown.** The page says the price rises without

@@ -11,8 +11,8 @@
 <script src="../assets/gate.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pillow No. 1 · Rafael Neff · LUMAS Art Drop</title>
-<meta name="description" content="Pillow No. 1 by Rafael Neff. Brass, mirror-polished, 44 × 44 cm, unique edition of 999 pieces. LUMAS Art Drop, 12 – 14 September 2026.">
+<title>Pillow No. 1 · Rafael Neff · LUMAS Art Drop</title>
+<meta name="description" content="Pillow No. 1 by Rafael Neff. Brass, mirror-polished, 44 × 44 cm, unique edition of 999 pieces. LUMAS Art Drop, 12 – 14 September 2026.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
@@ -162,11 +162,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   padding:16px;color:var(--text-secondary);
   font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
 }
-/* a placeholder that is deliberately in the page, not an error state */
-.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:24px;background:var(--surface-sunken);
-  border:1px solid var(--border-default);color:var(--text-secondary);
-  font-weight:500;font-size:11px;line-height:1.7;letter-spacing:.1em;text-transform:uppercase}
 .framed{box-shadow:var(--shadow-frame)}
 /* shadow/frame is charcoal at 28%: on an inverse surface it renders as nothing.
    A hairline gives the work a defined edge without shifting layout. */
@@ -181,8 +176,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 }
 .topbar__inner{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 .chip{
-  display:inline-block;border:1px solid #5A5752;border-radius:2px;padding:4px 8px;
-  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-block;border:1px solid #5A5752;border-radius:2px;padding:5px 9px;
+  font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;
   color:var(--text-inverse);
 }
 
@@ -314,6 +309,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .fade-out{opacity:0}
 .action__micro{color:var(--text-secondary)}
 .action__price{font-weight:400;font-size:20px;line-height:1.6;margin:0}
+/* the price carries a label, because "1.950 €" on its own does not say that
+   the number is temporary */
+.action__pricelabel{color:var(--text-tertiary);margin:0 0 -4px}
 
 /* One outlined block. The border lives on the wrapper, not the input, so the
    pair still reads as a single unit when the button has to wrap — which the
@@ -348,32 +346,58 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* ============================================================
    1 · PROOF — full-bleed room, the first screen is evidence
    ============================================================
-   No gradient scrim. The brand book (Performance Marketing) forbids darkening
-   or lightening layers over an artwork or over a room containing one, even for
-   text legibility: "stattdessen Textposition ändern". So the lockup sits on an
-   opaque charcoal plate placed in the lower left, where the photograph carries
-   floor and rug and no artwork — the sculpture, its base and the framed drawing
-   stay completely untouched. Contrast is then deterministic (#F4EDE2 on
-   #1C1A18 = 13.98:1) instead of dependent on the pixels behind each line, and
-   the overlap is checked by measurement at every breakpoint (see README).
+   The type sits directly on the photograph over a bottom-up scrim.
+   Tuned by measurement, not taste: check-hero-scrim.py samples the actual
+   image pixels behind each line, composites the scrim alpha at that height and
+   reports the resulting ratio, so these numbers are the LIGHTEST ramp that
+   still clears AA on this exact photograph. Re-run it if the hero is swapped.
+   The brand book (Performance Marketing) asks for no darkening layer over an
+   artwork, so above 1024px the ramp is masked to die out horizontally before
+   it reaches the sculpture: the work itself carries no scrim at all. Below
+   that the lockup runs full width and the mask cannot help; the measured alpha
+   that lands on the work is reported rather than hidden.
    ============================================================ */
 .proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
-.proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+/* The vertical placement of the cover crop is NOT a taste value: it is derived
+   from the sculpture's own bounding box by setHeroCrop() below, so the whole
+   work stays in frame at every viewport shape. A fixed percentage cannot do
+   this — 100% put the darkest floor behind the type but sliced the top off the
+   sculpture on a wide, short window. The 30% here is the static fallback if JS
+   never runs; it keeps the work in frame up to about 2560px wide. */
+.proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:50% var(--hero-pos-y, 30%)}
+/* Solved numerically, not chosen. Given the lockup geometry and the actual
+   pixels behind each line, this is the lightest-looking ramp (lowest peak
+   alpha) that clears AA with 12% to spare while keeping the darkening on any
+   artwork at or under 14%. A shorter, stronger ramp also clears but reads much
+   heavier. The portrait and landscape crops need different ramps because they
+   are different photographs of the same room. */
+.proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:36%;
+  background:linear-gradient(to top,rgba(20,19,17,.50) 0%,rgba(20,19,17,.44) 70%,rgba(20,19,17,0) 100%);
+  pointer-events:none;z-index:0}
 .proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
-.proof__plate{background:var(--surface-inverse);color:var(--text-inverse);
-  width:fit-content;max-width:min(100%,42ch);padding:28px 32px 30px}
-/* Three lines, one lockup: ART DROP / artist / dates. The label and the dates
-   are the campaign message, not caption furniture, so they run at full strength.
-   Matched size and tracking so they bracket the name as a pair. */
+.proof__lockup{color:var(--text-inverse);width:fit-content;max-width:min(100%,42ch)}
+/* Three lines, one lockup: ART DROP / artist / the offer. The label and the
+   third line are the campaign message, not caption furniture, so they run at
+   full strength. Matched size and tracking so they bracket the name as a pair.
+   A fourth line would push the ramp higher and was kept out deliberately: the
+   "price rises afterwards" half of the message lives in the banner above,
+   which is charcoal and needs no scrim at all. */
 .proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:400;
   font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
 /* Regular, not Light: at Light the name goes delicate against the photograph
    and the whole lockup reads as a whisper. */
 .proof__title{margin:0;font-weight:400;font-size:clamp(40px,5vw,72px);
   line-height:1.02;letter-spacing:-0.01em;text-wrap:balance}
+/* Two short lines rather than one long one. Not a style preference: as a single
+   line the offer ran to 44.6% of the container width at 1024px, which is past
+   where the scrim mask has to start fading to stay off the sculpture (it starts
+   at 47.4%). The mask then cut the ramp behind the type to 43% of its value and
+   no ramp could clear AA. Split, the widest line reaches ~34%. */
 .proof__dates{color:var(--text-inverse);margin:18px 0 0;
   font-family:var(--font-text);font-weight:400;
   font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+.proof__when{margin-top:4px;color:var(--text-inverse);opacity:.86}
 
 /* ============================================================
    2 · THE WORK — the sculpture isolated, every essential beside it
@@ -383,9 +407,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* grid items default to min-width:auto, so one nowrap button label was able to
    widen the whole track past the viewport and give the page a scrollbar */
 .work-block__grid > *{min-width:0}
-/* contain + transparent: the work is never cropped, and if a differently
-   proportioned asset is dropped in, the letterbox is charcoal not bone */
-.work-block__art{width:100%;max-width:640px;aspect-ratio:3/2;margin-inline:auto;background:transparent}
+/* The ratio matches CROP_WORK in prepare-assets.py exactly, so contain never
+   letterboxes: the asset IS this shape. Transparent so that if a differently
+   proportioned asset is dropped in, the letterbox is charcoal, not bone. */
+.work-block__art{width:100%;max-width:560px;aspect-ratio:864/1024;margin-inline:auto;background:transparent}
 .work-block__panel{display:flex;flex-direction:column;gap:24px;max-width:560px}
 
 /* countdown is the loudest thing in the panel after the work itself */
@@ -422,7 +447,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    4 · VOICE — artist, on bone
    ============================================================ */
 .voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
-.voice__portrait{aspect-ratio:4/5}
+/* the delivered portrait is a 1.4:1 landscape crop, so the box stays
+   landscape: a 4:5 frame would cut into the head */
+.voice__portrait{aspect-ratio:4/3}
 .voice__text{display:flex;flex-direction:column;gap:24px}
 .voice__eyebrow{margin:0}
 .voice__lead{max-width:56ch;font-size:20px;line-height:1.6}
@@ -503,9 +530,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .carousel--works .work{text-align:left;align-items:stretch}
 .work{display:flex;flex-direction:column;text-decoration:none;color:var(--text-primary)}
 .work__imglink{display:block}
-/* 4:3 with object-fit:contain — Neff's works run from 1:1 to 1.9:1 and every
-   one has to show whole. A cover crop would slice the widest ones. */
-.work__media{aspect-ratio:4/3;margin-bottom:8px}
+/* No ground behind the art, and every work the same height.
+   The box is as wide as the WIDEST work in the rail is at full height, so the
+   artwork fills the box height and only its width varies: measured pixel ratios
+   are 1.000 (the two objects), 1.264 (Ocean) and 1.441-1.445 (the interiors),
+   so 1.445 is the box ratio and nothing is ever cropped or letterboxed.
+   Adding a work wider than 1.445 would break the equal heights — max-width
+   caps it and its height would come out short. Silver Poplars (1.822) was
+   swapped out of the rail for exactly that reason. */
+.work__media{aspect-ratio:1.445;margin-bottom:8px;background:transparent}
+.work__media img{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  height:100%;width:auto;max-width:100%;object-fit:contain}
 .work__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
 .work__title{color:var(--text-primary);text-decoration:none}
 .work__fav{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
@@ -605,7 +640,22 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
   .work-block__art{margin-inline:0;max-width:none}
   .work-block__panel{max-width:none}
+  /* 92vh puts the hero bottom BELOW the fold, and with a 64px inset the last
+     lockup line then clips on any window shorter than ~1010px. Take the space
+     the header leaves, minus a 40px sliver so the next section still peeks and
+     the page reads as scrollable. Same argument as the phone rule, same
+     measured source (--above-proof), just a different reason to care. */
+  .proof{height:calc(100vh - var(--above-proof, 0px) - 40px);
+         height:calc(100svh - var(--above-proof, 0px) - 40px);
+         min-height:440px}
   .proof__wrap{padding-bottom:64px}
+  /* the ramp fades out horizontally before the sculpture, so the work carries
+     no darkening layer. Without mask support the fallback is the plain
+     full-width ramp above, which is still legible. */
+  .proof::after{height:52%;
+                background:linear-gradient(to top,rgba(20,19,17,.62) 0%,rgba(20,19,17,.48) 70%,rgba(20,19,17,0) 100%);
+                -webkit-mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%);
+                mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%)}
   .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
 }
 
@@ -651,9 +701,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .proof{height:calc(100vh - var(--above-proof, 0px));
          height:calc(100svh - var(--above-proof, 0px));
          min-height:320px}
-  .proof__img{object-position:50% 100%}
-  .proof__wrap{padding-bottom:0;align-items:flex-end}
-  .proof__plate{max-width:none;width:100%;padding:24px var(--gutter) 26px}
+  .proof__wrap{padding-bottom:36px;align-items:flex-end}
+  .proof__lockup{max-width:none;width:100%}
 }
 
 /* ============================================================
@@ -700,9 +749,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      the vh line is the fallback. The min-height must stay BELOW that calc on
      the shortest portrait phone (568 - 181 = 387px): 320px does, 440px did
      not. Only the lockup's internal rhythm tightens at this width. */
-  .proof__plate{padding:20px var(--gutter) 22px}
+  .proof__wrap{padding-bottom:28px}
   .proof__eyebrow{margin-bottom:12px}
   .proof__dates{margin-top:12px}
+  .proof__when{margin-top:2px}
 
   /* --- countdown: four segments will not fit a phone at desktop sizes ----
      40px numerals + 24px gaps needed 451px of a 390px screen. Sized to fit
@@ -750,14 +800,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 </head>
 <body>
 
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ============================ TOPBAR ============================ -->
 <div class="topbar">
   <div class="topbar__inner">
-    <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
-    <span class="t-ui" id="topbar-label">EARLY ACCESS ON 11 SEPTEMBER, 09:00</span>
-    <span class="sr-only">Price advantage until 14 September 2026, 23:59</span>
+    <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
+    <span class="t-ui" id="topbar-label">EARLY ACCESS ON 11 SEPTEMBER · INTRODUCTORY PRICE 12–14 SEPTEMBER</span>
+    <span class="sr-only">Introductory price until 14 September 2026, 23:59</span>
   </div>
 </div>
 
@@ -825,14 +875,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <source media="(max-width:1023px)" srcset="hero-room-portrait.jpg" width="768" height="1024">
     <img class="proof__img" src="hero-room-paris.jpg" width="1535" height="1024"
          fetchpriority="high" decoding="async"
-         alt="Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light."
+         alt="Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light."
          data-fallback="ROOM SHOT · PARIS SALON · 3:2">
   </picture>
   <div class="wrap proof__wrap">
-    <div class="proof__plate">
+    <div class="proof__lockup">
       <p class="t-eyebrow proof__eyebrow">ART DROP</p>
       <h1 class="t-display-xl proof__title">Rafael Neff</h1>
-      <p class="proof__dates">12–14 SEPTEMBER</p>
+      <p class="proof__dates" data-phases="REVEAL EARLY_ACCESS PUBLIC">INTRODUCTORY PRICE</p>
+      <p class="proof__dates proof__when" data-phases="REVEAL EARLY_ACCESS PUBLIC">12–14 SEPTEMBER</p>
+      <p class="proof__dates" data-phases="ENDED">INTRODUCTORY PRICE ENDED</p>
+      <p class="proof__dates proof__when" data-phases="ENDED">STILL AVAILABLE</p>
     </div>
   </div>
 </section>
@@ -844,68 +897,71 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   <div class="wrap work-block__grid">
 
     <div class="work-block__art media media--contain framed">
-      <img src="work-studio.jpg" width="1440" height="960" decoding="async"
-           alt="Pillow No. 1 by Rafael Neff: an inflated, mirror-polished brass form standing on one point, on a base of smoked oak."
-           data-fallback="SCULPTURE · PILLOW NO. 1 · 3:2">
+      <img src="work-studio.jpg" width="864" height="1024" decoding="async"
+           alt="Pillow No. 1 by Rafael Neff: an inflated, mirror-polished brass form standing on one point, on a base of smoked oak."
+           data-fallback="SCULPTURE · PILLOW NO. 1">
     </div>
 
     <div class="work-block__panel" data-reveal-group>
 
+      <p><span class="chip">Handcrafted, one of a kind</span></p>
+
       <div class="work-block__urgency">
-        <p class="t-ui work-block__cdlabel" id="work-cd-label">EARLY ACCESS IN</p>
+        <p class="t-ui work-block__cdlabel" id="work-cd-label">EARLY ACCESS IN</p>
         <span class="cd" id="cd-work" aria-live="off"></span>
       </div>
 
-      <p class="t-body work-block__intro">Pillow No. 1: a pillow, stopped at the moment of inflation. What ought to feel soft is mirror-polished brass, giving back the room around it.</p>
+      <p class="t-body work-block__intro">Pillow No. 1: a pillow, stopped at the moment of inflation. What ought to feel soft is mirror-polished brass. Every piece is welded and inflated by hand, and no two are alike.</p>
 
       <dl class="specs">
-        <div class="specs__row"><dt class="t-ui">WORK</dt><dd class="t-body-s">Pillow No. 1, 2026</dd></div>
-        <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Unique edition, limited to 999 pieces</dd></div>
+        <div class="specs__row"><dt class="t-ui">WORK</dt><dd class="t-body-s">Pillow No. 1, 2026</dd></div>
+        <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Unique edition, 999 handcrafted pieces</dd></div>
         <div class="specs__row"><dt class="t-ui">DIMENSIONS</dt><dd class="t-body-s">Sculpture 44 × 44 × 15 cm, base 15.5 × 15.5 × 4 cm</dd></div>
-        <div class="specs__row"><dt class="t-ui">MATERIAL</dt><dd class="t-body-s">Brass, mirror-polished, with a base of smoked oak</dd></div>
-        <div class="specs__row"><dt class="t-ui">SIGNATURE</dt><dd class="t-body-s">Signed by the artist with date and edition number</dd></div>
-        <div class="specs__row"><dt class="t-ui">PRICE ADVANTAGE</dt><dd class="t-body-s">12 – 14 September 2026</dd></div>
+        <div class="specs__row"><dt class="t-ui">MATERIAL</dt><dd class="t-body-s">Brass, mirror-polished, with a base of smoked oak</dd></div>
+        <div class="specs__row"><dt class="t-ui">SIGNATURE</dt><dd class="t-body-s">Signed by the artist with date and edition number</dd></div>
+        <div class="specs__row"><dt class="t-ui">INTRODUCTORY PRICE</dt><dd class="t-body-s">12 – 14 September 2026, higher after that</dd></div>
       </dl>
 
       <!-- buy (EARLY_ACCESS / PUBLIC) -->
       <div class="action" data-phases="EARLY_ACCESS PUBLIC">
+        <p class="t-ui action__pricelabel">Introductory price</p>
         <p class="action__price">€1,950</p>
         <a class="btn btn--primary btn--full" href="#" target="_self"
-           data-buy="work" data-ablyft-goal="drop_click_buy">SECURE THE WORK</a>
-        <p class="t-caption action__micro">The price advantage runs until 14 September, 23:59. After that Pillow No. 1 stays available, at a higher price.</p>
+           data-buy="work" data-ablyft-goal="drop_click_buy">SECURE THE WORK</a>
+        <p class="t-body-s action__micro">Only until 14 September, 23:59. After that Pillow No. 1 stays available and the price rises.</p>
       </div>
 
       <!-- ENDED — the work stays available, only the price advantage ends -->
       <div class="action" data-phases="ENDED">
-        <p class="t-h4">The price advantage has ended</p>
-        <p class="t-body work-block__intro">Pillow No. 1 stays available. The current price is on the product page.</p>
+        <p class="t-h4">The introductory price has ended</p>
+        <p class="t-body work-block__intro">Pillow No. 1 stays available. The current price is on the product page.</p>
         <a class="btn btn--primary btn--full" href="#" target="_self"
-           data-buy="work-ended" data-ablyft-goal="drop_click_buy">GO TO THE WORK</a>
+           data-buy="work-ended" data-ablyft-goal="drop_click_buy">GO TO THE WORK</a>
       </div>
 
       <!-- newsletter (REVEAL / ENDED) -->
       <div class="action" data-phases="REVEAL ENDED" id="hero-nl">
         <form class="action" novalidate data-nl="hero">
-          <label class="nl__label sr-only" for="email-hero">Email address</label>
+          <label class="nl__label sr-only" for="email-hero">Email address</label>
           <div class="nl__row">
             <div class="nl__field">
               <input class="input" type="email" id="email-hero" name="email"
                      autocomplete="email" placeholder="Email address" aria-describedby="err-hero">
             </div>
             <button class="btn btn--primary btn--full" type="submit" data-phases="REVEAL"
-                    data-ablyft-goal="drop_submit_newsletter">SIGN UP FOR EARLY ACCESS</button>
+                    data-ablyft-goal="drop_submit_newsletter">SIGN UP FOR EARLY ACCESS</button>
             <button class="btn btn--primary btn--full" type="submit" data-phases="ENDED"
-                    data-ablyft-goal="drop_submit_newsletter">SIGN UP FOR THE NEWSLETTER</button>
+                    data-ablyft-goal="drop_submit_newsletter">SIGN UP FOR THE NEWSLETTER</button>
           </div>
-          <p class="t-body-s nl__error" id="err-hero" hidden>Please enter a valid email address.</p>
-          <p class="t-caption nl__consent" data-phases="REVEAL">We will contact you once, on 11 September at 09:00, before the edition opens to the public. LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
-          <p class="t-caption nl__consent" data-phases="ENDED">LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
+          <p class="t-body-s nl__error" id="err-hero" hidden>Please enter a valid email address.</p>
+          <p class="t-caption nl__consent" data-phases="REVEAL">We will contact you once, on 11 September at 09:00, before the edition opens to the public. LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
+          <p class="t-caption nl__consent" data-phases="ENDED">LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
         </form>
         <div class="nl__success" data-nl-success hidden>
           <p class="t-h4">You are in.</p>
-          <p class="t-body work-block__intro" data-phases="REVEAL">Your Early Access invitation reaches you on 11 September at 09:00.</p>
-          <p class="t-body work-block__intro" data-phases="ENDED">We will be in touch as soon as the next Art Drop begins.</p>
-          <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/" target="_self">Add work to wishlist →</a></p>
+          <p class="t-body work-block__intro" data-phases="REVEAL">Your Early Access invitation reaches you on 11 September at 09:00.</p>
+          <p class="t-body work-block__intro" data-phases="ENDED">We will be in touch as soon as the next Art Drop begins.</p>
+          <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/" target="_self">Add work to wishlist →</a></p>
         </div>
       </div>
 
@@ -922,19 +978,20 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 <section class="section" data-sec="own">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2 class="t-h2">Handcrafted down to the finest detail.</h2>
+      <h2 class="t-h2">Handcrafted down to the finest detail.</h2>
+      <p class="t-body-l sec-head__stand">Every Pillow is welded and inflated one at a time. The form comes out differently each time, which is why every piece is one of a kind.</p>
     </div>
 
     <div class="fcards" data-reveal-group>
       <article class="fcard">
         <div class="fcard__media media">
           <img src="detail-surface.jpg" width="1200" height="801" loading="lazy" decoding="async"
-               alt="Close-up of the mirror-polished brass edge of Pillow No. 1 with the weld seam visible."
+               alt="Close-up of the mirror-polished brass edge of Pillow No. 1 with the weld seam visible."
                data-fallback="DETAIL · SURFACE · 3:2">
         </div>
         <div class="fcard__body">
           <h3 class="t-h4">Brass, mirror-polished</h3>
-          <p class="t-body-s fcard__desc">Welded, inflated and mirror-polished. Lacquered in six layers with instrument lacquer and kiln-fired at 185 °C: a flawless, deeply reflective surface that mirrors and reimagines the room and the viewer.</p>
+          <p class="t-body-s fcard__desc">Welded, inflated and mirror-polished. Lacquered in six layers with instrument lacquer and kiln-fired at 185 °C: a flawless, deeply reflective surface that mirrors and reimagines the room and the viewer.</p>
         </div>
       </article>
 
@@ -945,23 +1002,23 @@ a:focus-visible,button:focus-visible,input:focus-visible{
                data-fallback="DETAIL · BASE · 3:2">
         </div>
         <div class="fcard__body">
-          <h3 class="t-h4">A base of smoked oak</h3>
-          <p class="t-body-s fcard__desc">The base sets a warm contrast to the cool metal surface and grounds the sculpture with natural presence. 15.5 × 15.5 × 4 cm.</p>
+          <h3 class="t-h4">A base of smoked oak</h3>
+          <p class="t-body-s fcard__desc">The base sets a warm contrast to the cool metal surface and grounds the sculpture with natural presence. 15.5 × 15.5 × 4 cm.</p>
         </div>
       </article>
 
       <article class="fcard">
         <div class="fcard__media media">
-          <img src="detail-seam.jpg" width="1200" height="801" loading="lazy" decoding="async"
-               alt="Macro detail of the drawn-in centre of Pillow No. 1, where four surfaces meet at one point."
-               data-fallback="DETAIL · SEAM · 3:2">
+          <img src="detail-edition.jpg" width="1600" height="883" loading="lazy" decoding="async"
+               alt="Four pieces of Pillow No. 1 side by side in the studio: every brass form is inflated differently, so every one is unique."
+               data-fallback="STUDIO · FOUR PIECES · 16:9">
         </div>
         <div class="fcard__body">
-          <h3 class="t-h4">Signed, dated, numbered</h3>
-          <p class="t-body-s fcard__desc">As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist with date and edition number.</p>
+          <h3 class="t-h4">Signed, dated, numbered</h3>
+          <p class="t-body-s fcard__desc">As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist with date and edition number.</p>
           <div class="fcard__foot">
             <a class="btn btn--secondary btn--full" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/"
-               target="_self" data-ablyft-goal="drop_click_details">MORE DETAILS</a>
+               target="_self" data-ablyft-goal="drop_click_details">MORE DETAILS</a>
           </div>
         </div>
       </article>
@@ -977,13 +1034,15 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 <section class="section on-bone" data-sec="voice">
   <div class="wrap voice__grid">
     <div class="voice__portrait media">
-      <div class="placeholder">⚠︎ Placeholder<br>Artist portrait Rafael Neff<br>4:5 · asset missing</div>
+      <img src="artist-portrait.jpg" width="1600" height="1140" loading="lazy" decoding="async"
+           alt="Rafael Neff in a black-and-white portrait, round glasses and a black shirt, looking upward."
+           data-fallback="ARTIST PORTRAIT · RAFAEL NEFF · 4:3">
     </div>
 
     <div class="voice__text reveal">
       <p class="t-eyebrow voice__eyebrow">The artist</p>
-      <h2 class="t-h2">In his work the surface is not a carrier for an image, it is an element that shapes the room.</h2>
-      <p class="t-body voice__lead">Rafael Neff, born in Freienseen in 1969, studied photography in Mainz, Prague and New York and was a master student of Kevin Clarke. He became known for interiors without people, where beach chairs turn into sculptures and libraries into cathedrals. For many years he has also worked in brass and copper: high-gloss polished surfaces that write reflection, depth and presence into the work.</p>
+      <h2 class="t-h2">His surfaces do not just carry an image, they shape the room.</h2>
+      <p class="t-body voice__lead">Rafael Neff, born in Freienseen in 1969, studied photography in Mainz, Prague and New York and was a master student of Kevin Clarke. He became known for interiors without people, where beach chairs turn into sculptures and libraries into cathedrals. For many years he has also worked in brass and copper: high-gloss polished surfaces that write reflection, depth and presence into the work.</p>
     </div>
   </div>
 </section>
@@ -992,10 +1051,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 <section class="section" data-sec="rooms">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2 class="t-h2">It needs no wall. Only a surface and light.</h2>
-      <p class="t-body-l sec-head__stand">44 × 44 cm on a 15.5 cm base: the sculpture takes little space and still changes how a room feels.</p>
+      <h2 class="t-h2">It needs no wall. Only a surface and light.</h2>
+      <p class="t-body-l sec-head__stand">44 × 44 cm on a 15.5 cm base: the sculpture takes little space and still changes how a room feels.</p>
       <a class="btn btn--primary rooms__cta" href="#" target="_self"
-         data-phases="EARLY_ACCESS PUBLIC" data-buy="rooms" data-ablyft-goal="drop_click_buy">SECURE THE WORK</a>
+         data-phases="EARLY_ACCESS PUBLIC" data-buy="rooms" data-ablyft-goal="drop_click_buy">SECURE THE WORK</a>
     </div>
 
     <!-- ROOMS CAROUSEL
@@ -1003,28 +1062,92 @@ a:focus-visible,button:focus-visible,input:focus-visible{
          drop the new file into this folder. Nothing else needs changing — the
          controls, counter and keyboard handling read the slide count at runtime. -->
     <div class="carousel carousel--rooms" data-carousel="rooms">
-      <div class="carousel__track" tabindex="0" role="group" aria-label="Pillow No. 1 in the room, image gallery">
+      <div class="carousel__track" tabindex="0" role="group" aria-label="Pillow No. 1 in the room, image gallery">
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-living.jpg" width="1440" height="960" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a white plinth in a living room with a fireplace, bouclé sofa and sisal rug."
-                 data-fallback="ROOM SHOT · LIVING ROOM · 3:2">
+            <img src="room-01-plinth.jpg" width="1920" height="1280" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a white plinth in a living room with a fireplace, bouclé sofa and sisal rug."
+                 data-fallback="ROOM SHOT · PLINTH · 3:2">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="hero-room-paris.jpg" width="1535" height="1024" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 in a Parisian period salon against a pale wall, beside a tall window."
-                 data-fallback="ROOM SHOT · PARIS SALON · 3:2">
+            <img src="room-02-newyork.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a black marble plinth in a New York apartment, a window wall looking onto a park."
+                 data-fallback="ROOM SHOT · NEW YORK · 16:9">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-villa.jpg" width="1440" height="1080" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a plinth in a Mediterranean living room with an olive tree, timber beams and a view into the garden."
+            <img src="room-03-reflection.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="A viewer sits beside Pillow No. 1; the polished brass surface reflects him and the room with its blue velvet sofas."
+                 data-fallback="ROOM SHOT · REFLECTION · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-04-salon.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a dark console in a salon with a stucco ceiling, marble fireplace and a view over the city at dusk."
+                 data-fallback="ROOM SHOT · SALON · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-05-sideboard.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a dark sideboard in front of a grey sofa, with a large black-and-white work to the left."
+                 data-fallback="ROOM SHOT · SIDEBOARD · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-06-walnut.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a walnut table in a pale living room with bouclé armchairs, pampas grass and an open fireplace."
+                 data-fallback="ROOM SHOT · WALNUT · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-07-garden.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a marble table in a living room with a green sofa, a skylight and a view into the garden."
+                 data-fallback="ROOM SHOT · GARDEN ROOM · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-08-highrise.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a dark coffee table in a high-rise apartment with a brown velvet sofa and a view over the rooftops."
+                 data-fallback="ROOM SHOT · HIGH RISE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-09-loft.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a round black table in a loft with exposed concrete, leather armchairs and a drawing on the wall."
+                 data-fallback="ROOM SHOT · LOFT · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-10-concrete.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a metal table in front of a window wall, with a marble fireplace and a leather armchair behind."
+                 data-fallback="ROOM SHOT · CONCRETE · 16:9">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-11-mediterran.jpg" width="1440" height="1080" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a plinth in a Mediterranean living room with an olive tree, timber beams and a view into the garden."
                  data-fallback="ROOM SHOT · MEDITERRANEAN · 4:3">
           </div>
         </figure>
@@ -1052,11 +1175,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      Neff's mouth. Every material fact comes from the product description. -->
 <section class="section on-bone inspiration" data-sec="inspiration">
   <div class="wrap inspiration__inner">
-    <h2 class="t-eyebrow inspiration__eyebrow">About the work</h2>
+    <h2 class="t-eyebrow inspiration__eyebrow">About the work</h2>
 
-    <p class="t-h3 inspiration__quote">A pillow carries the trace of the evening before. Here that trace is welded into brass, and stays.</p>
+    <p class="t-h3 inspiration__quote">A pillow carries the trace of the evening before. Here that trace is welded into brass, and stays.</p>
 
-    <p class="t-body-l inspiration__body">Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185 °C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.</p>
+    <p class="t-body-l inspiration__body">Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185 °C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.</p>
   </div>
 </section>
 
@@ -1075,11 +1198,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{
           <a class="trust__link" href="https://www.lumas.de/galerien/" target="_self"
              data-ablyft-goal="drop_click_galleries">19 galleries worldwide</a>
         </p>
-        <p class="t-body-s trust__note">See works in person</p>
+        <p class="t-body-s trust__note">See works in person</p>
       </div>
       <div>
-        <p class="t-h4 trust__head">60-day right of return</p>
-        <p class="t-body-s trust__note">no reason required</p>
+        <p class="t-h4 trust__head">60-day right of return</p>
+        <p class="t-body-s trust__note">no reason required</p>
       </div>
     </div>
   </div>
@@ -1091,13 +1214,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
     <!-- REVEAL -->
     <div class="close__inner" data-phases="REVEAL" style="padding:0">
-      <h2 class="t-h2">Three days. 999 one-of-a-kind pieces.</h2>
-      <p class="t-body close__body">Sign up and get access on 11 September at 09:00,<br>before the edition opens to the public.</p>
+      <h2 class="t-h2">Three days at the introductory price. 999 one-of-a-kind pieces.</h2>
+      <p class="t-body close__body">Sign up and get access on 11 September at 09:00,<br>before the edition opens to the public.</p>
     </div>
 
     <!-- EARLY_ACCESS / PUBLIC -->
     <div class="close__inner" data-phases="EARLY_ACCESS PUBLIC" style="padding:0">
-      <h2 class="t-h3 close__head">Three days. 999 one-of-a-kind pieces.</h2>
+      <h2 class="t-h3 close__head">Three days at the introductory price. 999 one-of-a-kind pieces.</h2>
 
       <!-- SCARCITY — driven by SOLD_COUNT. The whole block stays hidden until a
            real stock figure is wired in; it must never show an invented number. -->
@@ -1107,23 +1230,23 @@ a:focus-visible,button:focus-visible,input:focus-visible{
       </div>
 
       <span class="cd close__cd" id="cd-close" aria-live="off"></span>
-      <p class="t-body close__body">The price advantage of €1,950 runs until 14 September, 23:59.</p>
+      <p class="t-body close__body">The introductory price of €1,950 runs only until 14 September, 23:59. After that Pillow No. 1 stays available and the price rises.</p>
       <a class="btn btn--primary" href="#" target="_self" data-buy="close"
-         data-ablyft-goal="drop_click_buy" style="min-width:280px">SECURE THE WORK</a>
+         data-ablyft-goal="drop_click_buy" style="min-width:280px">SECURE THE WORK</a>
     </div>
 
     <!-- ENDED -->
     <div class="close__inner" data-phases="ENDED" style="padding:0">
-      <h2 class="t-h2">The price advantage has ended.</h2>
-      <p class="t-body close__body">Pillow No. 1 stays available, at a higher price. Sign up so you do not miss the next Art Drop.</p>
+      <h2 class="t-h2">The introductory price has ended.</h2>
+      <p class="t-body close__body">Pillow No. 1 stays available, at a higher price. Sign up so you do not miss the next Art Drop.</p>
       <a class="btn btn--secondary" href="#" target="_self" data-buy="close-ended"
-         data-ablyft-goal="drop_click_buy" style="min-width:280px">GO TO THE WORK</a>
+         data-ablyft-goal="drop_click_buy" style="min-width:280px">GO TO THE WORK</a>
     </div>
 
     <!-- newsletter (REVEAL / ENDED) -->
     <div class="action" data-phases="REVEAL ENDED" style="width:100%">
       <form class="action" novalidate data-nl="close">
-        <label class="nl__label sr-only" for="email-close">Email address</label>
+        <label class="nl__label sr-only" for="email-close">Email address</label>
         <div class="nl__row">
           <div class="nl__field">
             <input class="input" type="email" id="email-close" name="email"
@@ -1132,14 +1255,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
           <button class="btn btn--primary btn--full" type="submit"
                   data-ablyft-goal="drop_submit_newsletter" data-close-cta>SIGN UP NOW</button>
         </div>
-        <p class="t-body-s nl__error" id="err-close" hidden>Please enter a valid email address.</p>
-        <p class="t-caption nl__consent">LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
+        <p class="t-body-s nl__error" id="err-close" hidden>Please enter a valid email address.</p>
+        <p class="t-caption nl__consent">LUMAS protects your data (<a href="https://www.lumas.de/datenschutz/" target="_self">Privacy policy</a>).</p>
       </form>
 
       <div class="nl__success" data-nl-success hidden>
         <p class="t-h4">You are in.</p>
-        <p class="t-body close__body">We will be in touch as soon as it starts.</p>
-        <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/" target="_self">Add work to wishlist →</a></p>
+        <p class="t-body close__body">We will be in touch as soon as it starts.</p>
+        <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/" target="_self">Add work to wishlist →</a></p>
       </div>
     </div>
 
@@ -1156,7 +1279,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 <section class="section" id="more-works" data-sec="continue">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2 class="t-h2">More works by Rafael Neff</h2>
+      <h2 class="t-h2">More works by Rafael Neff</h2>
     </div>
   </div>
 
@@ -1188,23 +1311,23 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         </a>
         <div class="work__row">
           <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/astrolabium_galileo_galilei_ulysse_nardin/" target="_self"
-             data-work="RNE121" data-ablyft-goal="drop_click_work">Astrolabium Galileo Galilei</a>
+             data-work="RNE121" data-ablyft-goal="drop_click_work">Astrolabium Galileo Galilei</a>
           <button class="work__fav" type="button" aria-label="Astrolabium Galileo Galilei add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
       </article>
 
       <article class="carousel__slide work">
-        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/silver_poplars/" target="_self" tabindex="-1" aria-hidden="true"
-           data-work="RNE312" data-ablyft-goal="drop_click_work">
-          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne312_full.jpg"
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/royal_opera_house_london/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE245" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne245_full.jpg"
                loading="lazy" decoding="async"
-               alt="Silver Poplars by Rafael Neff."
-               data-fallback="WORK · SILVER POPLARS"></div>
+               alt="Royal Opera House London by Rafael Neff."
+               data-fallback="WORK · ROYAL OPERA HOUSE"></div>
         </a>
         <div class="work__row">
-          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/silver_poplars/" target="_self"
-             data-work="RNE312" data-ablyft-goal="drop_click_work">Silver Poplars</a>
-          <button class="work__fav" type="button" aria-label="Silver Poplars add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/royal_opera_house_london/" target="_self"
+             data-work="RNE245" data-ablyft-goal="drop_click_work">Royal Opera House London</a>
+          <button class="work__fav" type="button" aria-label="Royal Opera House London add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
       </article>
 
@@ -1248,7 +1371,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         </a>
         <div class="work__row">
           <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/stiftsbibliothek_st_gallen/" target="_self"
-             data-work="RNE295" data-ablyft-goal="drop_click_work">Stiftsbibliothek St. Gallen</a>
+             data-work="RNE295" data-ablyft-goal="drop_click_work">Stiftsbibliothek St. Gallen</a>
           <button class="work__fav" type="button" aria-label="Stiftsbibliothek St. Gallen add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
       </article>
@@ -1263,7 +1386,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         </a>
         <div class="work__row">
           <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/new_york_public_library-2/" target="_self"
-             data-work="RNE292" data-ablyft-goal="drop_click_work">New York Public Library</a>
+             data-work="RNE292" data-ablyft-goal="drop_click_work">New York Public Library</a>
           <button class="work__fav" type="button" aria-label="New York Public Library add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
       </article>
@@ -1293,7 +1416,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         </a>
         <div class="work__row">
           <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/chateau_margaux_bordeaux_france/" target="_self"
-             data-work="RNE223" data-ablyft-goal="drop_click_work">Chateau Margaux</a>
+             data-work="RNE223" data-ablyft-goal="drop_click_work">Chateau Margaux</a>
           <button class="work__fav" type="button" aria-label="Chateau Margaux add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
       </article>
@@ -1383,18 +1506,21 @@ const pad = n => String(n).padStart(2, '0');
 /* Countdown label in the work block. */
 const CD_LABEL = {
   REVEAL:       'EARLY ACCESS IN',
-  EARLY_ACCESS: 'PRICE ADVANTAGE ENDS IN',
-  PUBLIC:       'PRICE ADVANTAGE ENDS IN',
-  ENDED:        'PRICE ADVANTAGE ENDED'
+  EARLY_ACCESS: 'INTRODUCTORY PRICE ENDS IN',
+  PUBLIC:       'INTRODUCTORY PRICE ENDS IN',
+  ENDED:        'INTRODUCTORY PRICE ENDED'
 };
 
 /* Banner label. There is no countdown in the banner, so these stand alone
    rather than trailing off into a number. */
+/* The banner is the loudest slot on the page and it is charcoal, so it needs no
+   scrim and can carry the whole mechanic: three days at the introductory price,
+   higher afterwards. */
 const BANNER_LABEL = {
-  REVEAL:       'EARLY ACCESS ON 11 SEPTEMBER, 09:00',
-  EARLY_ACCESS: 'EARLY ACCESS · PRICE ADVANTAGE UNTIL 14 SEPTEMBER',
-  PUBLIC:       'PRICE ADVANTAGE UNTIL 14 SEPTEMBER, 23:59',
-  ENDED:        'PRICE ADVANTAGE ENDED'
+  REVEAL:       'EARLY ACCESS ON 11 SEPTEMBER · INTRODUCTORY PRICE 12–14 SEPTEMBER',
+  EARLY_ACCESS: 'EARLY ACCESS · INTRODUCTORY PRICE UNTIL 14 SEPTEMBER, THEN THE PRICE RISES',
+  PUBLIC:       'INTRODUCTORY PRICE ONLY UNTIL 14 SEPTEMBER, 23:59 · THEN THE PRICE RISES',
+  ENDED:        'INTRODUCTORY PRICE ENDED · PILLOW NO. 1 STILL AVAILABLE'
 };
 
 const COUNTDOWN_TARGET = {
@@ -1674,6 +1800,55 @@ $$('[data-carousel]').forEach(root => {
 });
 
 /* ============================================================
+   HERO CROP — the whole sculpture must stay in frame
+   ============================================================
+   The hero is a full-bleed object-fit:cover crop, so on a wide, short window it
+   discards a large slice of the image vertically. Which slice is a real
+   decision: anchoring to the bottom (100%) put the darkest floor behind the
+   type and cut the top off the sculpture. So the position is computed from the
+   work's bounding box instead — the largest value that still keeps the box
+   inside the visible band, which is the most floor available without ever
+   cropping the work. Both hero crops share these fractions because the portrait
+   asset is a horizontal crop of the same master.
+   ============================================================ */
+const HERO_ART = { top: 0.142, bottom: 0.674 };  // fractions of the hero image
+const HERO_INSET = 0.02;                          // a sliver of air kept around it
+
+(() => {
+  const proof = document.querySelector('.proof');
+  const img = document.querySelector('.proof__img');
+  if (!proof || !img) return;
+
+  const setHeroCrop = () => {
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    const cw = proof.clientWidth, ch = proof.clientHeight;
+    const scale = Math.max(cw / nw, ch / nh);
+    const visible = Math.min(nh, ch / scale);   // source pixels visible vertically
+    const cropped = nh - visible;               // source pixels discarded
+    let py = 1;
+    if (cropped > 0.5) {
+      const top = (HERO_ART.top - HERO_INSET) * nh;
+      const bottom = (HERO_ART.bottom + HERO_INSET) * nh;
+      const upper = Math.min(1, Math.max(0, top / cropped));
+      const lower = Math.min(1, Math.max(0, (bottom - visible) / cropped));
+      // upper is the most floor we can show without clipping the work's top
+      py = upper >= lower ? upper
+        // too wide and short for the work to fit at all: centre it, which at
+        // least crops top and bottom equally instead of beheading it
+        : Math.min(1, Math.max(0, ((top + bottom) / 2 - visible / 2) / cropped));
+    }
+    document.documentElement.style.setProperty('--hero-pos-y', (py * 100).toFixed(2) + '%');
+  };
+
+  setHeroCrop();
+  img.addEventListener('load', setHeroCrop);   // the <picture> source swap
+  window.addEventListener('resize', setHeroCrop);
+  window.addEventListener('orientationchange', setHeroCrop);
+  if (window.ResizeObserver) new ResizeObserver(setHeroCrop).observe(proof);
+})();
+
+/* ============================================================
    HERO FIT — the lockup must be above the fold on landing
    ============================================================
    The header stack (banner + nav row + search row) is ~181px on a phone, and a
@@ -1724,7 +1899,7 @@ if (new URLSearchParams(location.search).has('dev')) {
     const d = new Date(now());
     const stamp = SIMULATED_NOW === null ? 'real time' :
       d.toLocaleString('en-GB', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
-    const open = document.querySelectorAll('.fallback, .placeholder').length;
+    const open = document.querySelectorAll('.fallback').length;
     const notes = (document.body.innerText.match(/⚠︎/g) || []).length;
     const stock = Number.isInteger(SOLD_COUNT) ? 'stock ok' : 'no stock feed';
     meta.textContent = 'now: ' + stamp + ' · ' + open + ' image placeholders · ' + notes + ' open copy items · ' + stock;

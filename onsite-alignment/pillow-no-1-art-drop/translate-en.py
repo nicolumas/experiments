@@ -16,16 +16,32 @@ Two rules learned the expensive way on the previous build:
     AUSFÜHRUNGEN into EXECUTIONEN and produced "CERTIFICATE · CERTIFICATE".
 
 NB = U+00A0. The German source uses real non-breaking spaces (not &nbsp;) in
-units, dimensions and prices, so the keys below have to carry them too.
+units, dimensions and prices, so the keys below have to carry them too. Watch
+for this when copying a key by hand: a plain space silently fails to match, and
+the only symptom is an untranslated string in the report.
 """
 import pathlib
 import re
+import subprocess
 import sys
 
 SRC = pathlib.Path(__file__).with_name('pillow-art-drop.html')
 OUT = pathlib.Path(__file__).with_name('pillow-art-drop-en.html')
 
 NB = ' '
+
+
+def _flex(key):
+    """Match a key whether its spaces are plain or non-breaking.
+
+    fix-typography.py rewrites the source with real U+00A0 between bound words,
+    which used to make every long key in T miss silently. Rather than keeping two
+    copies of every sentence, the key is compiled into a pattern where each
+    space matches either kind.
+    """
+    return re.compile(''.join(
+        '[ \u00a0]' if ch in ' \u00a0' else re.escape(ch) for ch in key))
+
 
 T = {
     '<html lang="de">': '<html lang="en">',
@@ -52,39 +68,49 @@ T = {
     'aria-label="Sprache: Deutsch"': 'aria-label="Language: English"',
     '>DE<': '>EN<',
 
-    # --- phase banners and countdown labels (script side too) ------------
-    'EARLY ACCESS AM 11. SEPTEMBER, 09:00 UHR': 'EARLY ACCESS ON 11 SEPTEMBER, 09:00',
-    'EARLY ACCESS · VORZUGSPREIS BIS 14. SEPTEMBER': 'EARLY ACCESS · PRICE ADVANTAGE UNTIL 14 SEPTEMBER',
-    'VORZUGSPREIS BIS 14. SEPTEMBER, 23:59 UHR': 'PRICE ADVANTAGE UNTIL 14 SEPTEMBER, 23:59',
-    'VORZUGSPREIS ENDET IN': 'PRICE ADVANTAGE ENDS IN',
-    'VORZUGSPREIS BEENDET': 'PRICE ADVANTAGE ENDED',
-    'Vorzugspreis bis 14. September 2026, 23:59 Uhr': 'Price advantage until 14 September 2026, 23:59',
-
-    # --- proof -----------------------------------------------------------
+    # --- the offer, in every slot it appears -----------------------------
+    'EARLY ACCESS AM 11. SEPTEMBER · EINFÜHRUNGSPREIS 12.–14. SEPTEMBER':
+        'EARLY ACCESS ON 11 SEPTEMBER · INTRODUCTORY PRICE 12–14 SEPTEMBER',
+    'EARLY ACCESS · EINFÜHRUNGSPREIS BIS 14. SEPTEMBER, DANACH STEIGT DER PREIS':
+        'EARLY ACCESS · INTRODUCTORY PRICE UNTIL 14 SEPTEMBER, THEN THE PRICE RISES',
+    'EINFÜHRUNGSPREIS NUR BIS 14. SEPTEMBER, 23:59 UHR · DANACH STEIGT DER PREIS':
+        'INTRODUCTORY PRICE ONLY UNTIL 14 SEPTEMBER, 23:59 · THEN THE PRICE RISES',
+    'EINFÜHRUNGSPREIS BEENDET · PILLOW NO. 1 WEITERHIN ERHÄLTLICH':
+        'INTRODUCTORY PRICE ENDED · PILLOW NO. 1 STILL AVAILABLE',
+    'EINFÜHRUNGSPREIS ENDET IN': 'INTRODUCTORY PRICE ENDS IN',
+    'EINFÜHRUNGSPREIS BEENDET': 'INTRODUCTORY PRICE ENDED',
+    'Einführungspreis bis 14. September 2026, 23:59 Uhr':
+        'Introductory price until 14 September 2026, 23:59',
+    '>EINFÜHRUNGSPREIS<': '>INTRODUCTORY PRICE<',
+    '>WEITERHIN ERHÄLTLICH<': '>STILL AVAILABLE<',
+    '>Einführungspreis<': '>Introductory price<',
     '>12.–14. SEPTEMBER<': '>12–14 SEPTEMBER<',
+    '12. – 14. September 2026, danach höher': '12 – 14 September 2026, higher after that',
+    'Nur bis 14. September, 23:59 Uhr. Danach bleibt Pillow No. 1 erhältlich, der Preis steigt.':
+        'Only until 14 September, 23:59. After that Pillow No. 1 stays available and the price rises.',
+    'Der Einführungspreis ist beendet.': 'The introductory price has ended.',
+    'Der Einführungspreis ist beendet': 'The introductory price has ended',
+    'Der Einführungspreis von 1.950' + NB + '€ gilt nur bis zum 14. September, 23:59 Uhr. Danach bleibt Pillow No. 1 erhältlich, der Preis steigt.':
+        'The introductory price of €1,950 runs only until 14 September, 23:59. After that Pillow No. 1 stays available and the price rises.',
+    'Drei Tage Einführungspreis. 999 Unikate.':
+        'Three days at the introductory price. 999 one-of-a-kind pieces.',
+    '>1.950' + NB + '€<': '>€1,950<',
 
     # --- the work --------------------------------------------------------
-    'Pillow No. 1: ein Kissen, im Moment des Aufblasens angehalten. Was sich weich anfühlen müsste, ist spiegelpoliertes Messing, das den Raum um sich herum zurückgibt.':
-        'Pillow No. 1: a pillow, stopped at the moment of inflation. What ought to feel soft is mirror-polished brass, giving back the room around it.',
+    'Handgefertigtes Unikat': 'Handcrafted, one of a kind',
+    'Pillow No. 1: ein Kissen, im Moment des Aufblasens angehalten. Was sich weich anfühlen müsste, ist spiegelpoliertes Messing. Jedes Exemplar wird von Hand verschweißt und aufgeblasen, keine zwei sind gleich.':
+        'Pillow No. 1: a pillow, stopped at the moment of inflation. What ought to feel soft is mirror-polished brass. Every piece is welded and inflated by hand, and no two are alike.',
     '>WERK<': '>WORK<',
-    '>EDITION<': '>EDITION<',
     '>MASSE<': '>DIMENSIONS<',
-    '>MATERIAL<': '>MATERIAL<',
     '>SIGNATUR<': '>SIGNATURE<',
-    '>VORZUGSPREIS<': '>PRICE ADVANTAGE<',
-    'Unikatsedition, limitiert auf 999 Exemplare': 'Unique edition, limited to 999 pieces',
-    f'Skulptur 44{NB}×{NB}44{NB}×{NB}15{NB}cm, Sockel 15,5{NB}×{NB}15,5{NB}×{NB}4{NB}cm':
-        f'Sculpture 44{NB}×{NB}44{NB}×{NB}15{NB}cm, base 15.5{NB}×{NB}15.5{NB}×{NB}4{NB}cm',
+    'Unikatsedition, 999 handgefertigte Exemplare': 'Unique edition, 999 handcrafted pieces',
+    'Skulptur 44' + NB + '×' + NB + '44' + NB + '×' + NB + '15' + NB + 'cm, Sockel 15,5' + NB + '×' + NB + '15,5' + NB + '×' + NB + '4' + NB + 'cm':
+        'Sculpture 44' + NB + '×' + NB + '44' + NB + '×' + NB + '15' + NB + 'cm, base 15.5' + NB + '×' + NB + '15.5' + NB + '×' + NB + '4' + NB + 'cm',
     'Messing, spiegelpoliert, mit Sockel aus geräucherter Eiche':
         'Brass, mirror-polished, with a base of smoked oak',
     'Vom Künstler signiert, mit Datum und Editionsnummer':
         'Signed by the artist with date and edition number',
-    '12. – 14. September 2026': '12 – 14 September 2026',
     'WERK SICHERN': 'SECURE THE WORK',
-    'Der Vorzugspreis gilt bis 14. September, 23:59 Uhr. Danach bleibt Pillow No. 1 erhältlich, zu einem höheren Preis.':
-        'The price advantage runs until 14 September, 23:59. After that Pillow No. 1 stays available, at a higher price.',
-    'Der Vorzugspreis ist beendet.': 'The price advantage has ended.',
-    'Der Vorzugspreis ist beendet': 'The price advantage has ended',
     'Pillow No. 1 bleibt erhältlich. Den aktuellen Preis findest du auf der Werkseite.':
         'Pillow No. 1 stays available. The current price is on the product page.',
     'ZUM WERK': 'GO TO THE WORK',
@@ -106,42 +132,49 @@ T = {
         'We will be in touch as soon as the next Art Drop begins.',
     'Wir melden uns, sobald es losgeht.': 'We will be in touch as soon as it starts.',
     'Werk zur Wunschliste hinzufügen →': 'Add work to wishlist →',
+    'Melde dich an und erhalte am 11. September um 09:00 Uhr Zugang,':
+        'Sign up and get access on 11 September at 09:00,',
+    'bevor die Edition öffentlich verfügbar ist.': 'before the edition opens to the public.',
+    'Pillow No. 1 bleibt erhältlich, zu einem höheren Preis. Melde dich an, um den nächsten Art Drop nicht zu verpassen.':
+        'Pillow No. 1 stays available, at a higher price. Sign up so you do not miss the next Art Drop.',
 
-    # --- own it ----------------------------------------------------------
+    # --- craft -----------------------------------------------------------
     'Handgefertigt bis ins letzte Detail.': 'Handcrafted down to the finest detail.',
+    'Jedes Pillow wird einzeln verschweißt und aufgeblasen. Die Form entsteht dabei jedes Mal neu, deshalb ist jedes Exemplar ein Unikat.':
+        'Every Pillow is welded and inflated one at a time. The form comes out differently each time, which is why every piece is one of a kind.',
     'Messing, spiegelpoliert': 'Brass, mirror-polished',
-    f'Verschweißt, aufgeblasen und spiegelpoliert. Sechsfach mit Instrumentenlack lackiert und bei 185{NB}°C eingebrannt: eine makellose, tief spiegelnde Oberfläche, die Raum und Betrachter neu inszeniert.':
-        f'Welded, inflated and mirror-polished. Lacquered in six layers with instrument lacquer and kiln-fired at 185{NB}°C: a flawless, deeply reflective surface that mirrors and reimagines the room and the viewer.',
+    'Verschweißt, aufgeblasen und spiegelpoliert. Sechsfach mit Instrumentenlack lackiert und bei 185' + NB + '°C eingebrannt: eine makellose, tief spiegelnde Oberfläche, die Raum und Betrachter neu inszeniert.':
+        'Welded, inflated and mirror-polished. Lacquered in six layers with instrument lacquer and kiln-fired at 185' + NB + '°C: a flawless, deeply reflective surface that mirrors and reimagines the room and the viewer.',
     'Sockel aus geräucherter Eiche': 'A base of smoked oak',
-    f'Der Sockel setzt einen warmen Kontrast zur kühlen Metalloberfläche und verleiht der Skulptur natürliche Erdung. 15,5{NB}×{NB}15,5{NB}×{NB}4{NB}cm.':
-        f'The base sets a warm contrast to the cool metal surface and grounds the sculpture with natural presence. 15.5{NB}×{NB}15.5{NB}×{NB}4{NB}cm.',
+    'Der Sockel setzt einen warmen Kontrast zur kühlen Metalloberfläche und verleiht der Skulptur natürliche Erdung. 15,5' + NB + '×' + NB + '15,5' + NB + '×' + NB + '4' + NB + 'cm.':
+        'The base sets a warm contrast to the cool metal surface and grounds the sculpture with natural presence. 15.5' + NB + '×' + NB + '15.5' + NB + '×' + NB + '4' + NB + 'cm.',
     'Signiert, datiert, nummeriert': 'Signed, dated, numbered',
     'Als Unikatsedition ist jedes Pillow ein einzigartiges Werk, vom Künstler mit Datum und Editionsnummer signiert.':
         'As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist with date and edition number.',
     'MEHR DETAILS': 'MORE DETAILS',
 
     # --- voice -----------------------------------------------------------
-    '⚠︎ Platzhalter': '⚠︎ Placeholder',
-    'Künstlerporträt Rafael Neff': 'Artist portrait Rafael Neff',
-    '4:5 · Asset fehlt': '4:5 · asset missing',
     'Der Künstler': 'The artist',
-    'Bei ihm ist die Oberfläche kein Bildträger, sondern ein raumbildendes Element.':
-        'In his work the surface is not a carrier for an image, it is an element that shapes the room.',
+    # Reworded because the old headline widowed "Element." at 320 and 390px and
+    # the bound pair would have been 22 characters at 34px, wider than the
+    # column. Same claim, from the same approved artist copy.
+    'Seine Oberflächen tragen nicht nur ein Bild, sie formen den Raum.':
+        'His surfaces do not just carry an image, they shape the room.',
     'Rafael Neff, 1969 in Freienseen geboren, studierte Fotografie in Mainz, Prag und New York und war Meisterschüler von Kevin Clarke. Bekannt wurde er für menschenleere Innenräume, in denen Strandkörbe zu Skulpturen und Bibliotheken zu Kathedralen werden. Seit vielen Jahren arbeitet er zusätzlich mit Messing und Kupfer: hochglanzpolierte Oberflächen, die Reflexion, Tiefe und Präsenz in die Arbeit einschreiben.':
         'Rafael Neff, born in Freienseen in 1969, studied photography in Mainz, Prague and New York and was a master student of Kevin Clarke. He became known for interiors without people, where beach chairs turn into sculptures and libraries into cathedrals. For many years he has also worked in brass and copper: high-gloss polished surfaces that write reflection, depth and presence into the work.',
 
     # --- rooms -----------------------------------------------------------
     'Sie braucht keine Wand. Nur eine Fläche und Licht.':
         'It needs no wall. Only a surface and light.',
-    f'44{NB}×{NB}44{NB}cm auf einem Sockel von 15,5{NB}cm: die Skulptur nimmt wenig Platz und verändert doch, wie ein Raum sich anfühlt.':
-        f'44{NB}×{NB}44{NB}cm on a 15.5{NB}cm base: the sculpture takes little space and still changes how a room feels.',
+    '44' + NB + '×' + NB + '44' + NB + 'cm auf einem Sockel von 15,5' + NB + 'cm: die Skulptur nimmt wenig Platz und verändert doch, wie ein Raum sich anfühlt.':
+        '44' + NB + '×' + NB + '44' + NB + 'cm on a 15.5' + NB + 'cm base: the sculpture takes little space and still changes how a room feels.',
 
     # --- inspiration -----------------------------------------------------
     'Über das Werk': 'About the work',
     'Ein Kissen trägt die Spur des Abends zuvor. Hier ist diese Spur in Messing verschweißt und bleibt.':
         'A pillow carries the trace of the evening before. Here that trace is welded into brass, and stays.',
-    f'Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185{NB}°C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.':
-        f'Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185{NB}°C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.',
+    'Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185' + NB + '°C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.':
+        'Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185' + NB + '°C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.',
 
     # --- trust -----------------------------------------------------------
     '330.000 zufriedene Sammler:innen': '330,000 satisfied collectors',
@@ -150,19 +183,8 @@ T = {
     'Werke vor Ort ansehen': 'See works in person',
     '60 Tage Rückgaberecht': '60-day right of return',
     'ohne Angabe von Gründen': 'no reason required',
-
-    # --- close -----------------------------------------------------------
-    'Drei Tage. 999 Unikate.': 'Three days. 999 one-of-a-kind pieces.',
-    'Melde dich an und erhalte am 11. September um 09:00 Uhr Zugang,':
-        'Sign up and get access on 11 September at 09:00,',
-    'bevor die Edition öffentlich verfügbar ist.': 'before the edition opens to the public.',
     '</span> von <span': '</span> of <span',
     '>verkauft<': '>sold<',
-    f'Der Vorzugspreis von 1.950{NB}€ gilt bis zum 14. September, 23:59 Uhr.':
-        f'The price advantage of €1,950 runs until 14 September, 23:59.',
-    'Pillow No. 1 bleibt erhältlich, zu einem höheren Preis. Melde dich an, um den nächsten Art Drop nicht zu verpassen.':
-        'Pillow No. 1 stays available, at a higher price. Sign up so you do not miss the next Art Drop.',
-    f'>1.950{NB}€<': '>€1,950<',
 
     # --- continue --------------------------------------------------------
     'Weitere Werke von Rafael Neff': 'More works by Rafael Neff',
@@ -172,9 +194,10 @@ T = {
     'aria-label="Nächstes Bild"': 'aria-label="Next image"',
     'aria-label="Vorherige Werke"': 'aria-label="Previous works"',
     'aria-label="Weitere Werke"': 'aria-label="More works"',
-    'aria-label="Pillow No. 1 im Raum, Bildergalerie"': 'aria-label="Pillow No. 1 in the room, image gallery"',
+    'aria-label="Pillow No. 1 im Raum, Bildergalerie"':
+        'aria-label="Pillow No. 1 in the room, image gallery"',
 
-    # --- alt text --------------------------------------------------------
+    # --- alt text: the work, the details, the artist ----------------------
     'Pillow No. 1 auf einem Sockel und einer weißen Stele in einem Pariser Altbau-Salon, Fischgrätparkett und Nachmittagslicht.':
         'Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light.',
     'Pillow No. 1 von Rafael Neff: eine aufgeblasene, spiegelpolierte Messingform auf der Spitze stehend, auf einem Sockel aus geräucherter Eiche.':
@@ -183,22 +206,48 @@ T = {
         'Close-up of the mirror-polished brass edge of Pillow No. 1 with the weld seam visible.',
     'Der Sockel aus geräucherter Eiche, auf dem die Messingform mit einer einzigen Spitze aufsetzt.':
         'The smoked oak base, where the brass form meets it on a single point.',
-    'Makro-Detail der eingezogenen Mitte von Pillow No. 1, wo vier Flächen in einem Punkt zusammenlaufen.':
-        'Macro detail of the drawn-in centre of Pillow No. 1, where four surfaces meet at one point.',
+    'Vier Exemplare von Pillow No. 1 nebeneinander im Atelier: jede Messingform ist anders aufgeblasen und damit ein Unikat.':
+        'Four pieces of Pillow No. 1 side by side in the studio: every brass form is inflated differently, so every one is unique.',
+    'Rafael Neff im Schwarz-Weiß-Porträt, mit runder Brille und schwarzem Shirt, den Blick nach oben gerichtet.':
+        'Rafael Neff in a black-and-white portrait, round glasses and a black shirt, looking upward.',
+
+    # --- alt text: the eleven rooms --------------------------------------
     'Pillow No. 1 auf einer weißen Stele in einem Wohnraum mit Kamin, Bouclé-Sofa und Sisalteppich.':
         'Pillow No. 1 on a white plinth in a living room with a fireplace, bouclé sofa and sisal rug.',
-    'Pillow No. 1 in einem Pariser Altbau-Salon vor einer hellen Wand, daneben ein hohes Fenster.':
-        'Pillow No. 1 in a Parisian period salon against a pale wall, beside a tall window.',
+    'Pillow No. 1 auf einem Sockel aus schwarzem Marmor in einem New Yorker Apartment, Fensterfront mit Blick auf einen Park.':
+        'Pillow No. 1 on a black marble plinth in a New York apartment, a window wall looking onto a park.',
+    'Ein Betrachter sitzt neben Pillow No. 1, die polierte Messingfläche spiegelt ihn und den Raum mit den blauen Samtsofas.':
+        'A viewer sits beside Pillow No. 1; the polished brass surface reflects him and the room with its blue velvet sofas.',
+    'Pillow No. 1 auf einer dunklen Konsole in einem Salon mit Stuckdecke, Marmorkamin und Blick über die Stadt im Abendlicht.':
+        'Pillow No. 1 on a dark console in a salon with a stucco ceiling, marble fireplace and a view over the city at dusk.',
+    'Pillow No. 1 auf einem dunklen Sideboard vor einem grauen Sofa, links eine großformatige Schwarz-Weiß-Arbeit.':
+        'Pillow No. 1 on a dark sideboard in front of a grey sofa, with a large black-and-white work to the left.',
+    'Pillow No. 1 auf einem Nussbaumtisch in einem hellen Wohnraum mit Bouclé-Sesseln, Pampasgras und offenem Kamin.':
+        'Pillow No. 1 on a walnut table in a pale living room with bouclé armchairs, pampas grass and an open fireplace.',
+    'Pillow No. 1 auf einem Marmortisch in einem Wohnraum mit grünem Sofa, Dachfenster und Blick in den Garten.':
+        'Pillow No. 1 on a marble table in a living room with a green sofa, a skylight and a view into the garden.',
+    'Pillow No. 1 auf einem dunklen Couchtisch in einem Hochhaus-Apartment mit braunem Samtsofa und Blick über die Dächer.':
+        'Pillow No. 1 on a dark coffee table in a high-rise apartment with a brown velvet sofa and a view over the rooftops.',
+    'Pillow No. 1 auf einem runden schwarzen Tisch in einem Loft mit Sichtbeton, Ledersesseln und einer Zeichnung an der Wand.':
+        'Pillow No. 1 on a round black table in a loft with exposed concrete, leather armchairs and a drawing on the wall.',
+    'Pillow No. 1 auf einem Metalltisch vor einer Fensterfront, dahinter ein Marmorkamin und ein Ledersessel.':
+        'Pillow No. 1 on a metal table in front of a window wall, with a marble fireplace and a leather armchair behind.',
     'Pillow No. 1 auf einer Stele in einem mediterranen Wohnraum mit Olivenbaum, Holzbalken und Blick in den Garten.':
         'Pillow No. 1 on a plinth in a Mediterranean living room with an olive tree, timber beams and a view into the garden.',
 
     # --- fallback labels -------------------------------------------------
     'ROOM SHOT · SALON PARIS · 3:2': 'ROOM SHOT · PARIS SALON · 3:2',
-    'SKULPTUR · PILLOW NO. 1 · 3:2': 'SCULPTURE · PILLOW NO. 1 · 3:2',
+    'SKULPTUR · PILLOW NO. 1': 'SCULPTURE · PILLOW NO. 1',
+    'ROOM SHOT · STELE · 3:2': 'ROOM SHOT · PLINTH · 3:2',
     'DETAIL · OBERFLÄCHE · 3:2': 'DETAIL · SURFACE · 3:2',
     'DETAIL · SOCKEL · 3:2': 'DETAIL · BASE · 3:2',
-    'DETAIL · NAHT · 3:2': 'DETAIL · SEAM · 3:2',
-    'ROOM SHOT · WOHNRAUM · 3:2': 'ROOM SHOT · LIVING ROOM · 3:2',
+    'ATELIER · VIER EXEMPLARE · 16:9': 'STUDIO · FOUR PIECES · 16:9',
+    'KÜNSTLERPORTRÄT · RAFAEL NEFF · 4:3': 'ARTIST PORTRAIT · RAFAEL NEFF · 4:3',
+    'ROOM SHOT · SPIEGELUNG · 16:9': 'ROOM SHOT · REFLECTION · 16:9',
+    'ROOM SHOT · NUSSBAUM · 16:9': 'ROOM SHOT · WALNUT · 16:9',
+    'ROOM SHOT · GARTENZIMMER · 16:9': 'ROOM SHOT · GARDEN ROOM · 16:9',
+    'ROOM SHOT · HOCHHAUS · 16:9': 'ROOM SHOT · HIGH RISE · 16:9',
+    'ROOM SHOT · BETON · 16:9': 'ROOM SHOT · CONCRETE · 16:9',
     'ROOM SHOT · MEDITERRAN · 4:3': 'ROOM SHOT · MEDITERRANEAN · 4:3',
     'WERK · ': 'WORK · ',
 
@@ -217,7 +266,6 @@ T = {
     "'Stock ok'": "'stock ok'",
     "'Kaufphase ansehen'": "'View buy phase'",
     "'Reveal ansehen'": "'View reveal'",
-    'aria-label="Phase (dev)"': 'aria-label="Phase (dev)"',
 }
 
 BANNER = """<!DOCTYPE html>
@@ -229,22 +277,22 @@ BANNER = """<!DOCTYPE html>
 
 # Words that mean the pass missed something. Kept narrow on purpose: a broad
 # rule fires on brand and place names (Rafael Neff, Freienseen, Mainz).
+# "Edition" is deliberately absent: it is the same word in both languages, and
+# listing it made the validator fail on correct English.
 GERMAN = re.compile(
     r'[äöüßÄÖÜ]'
     r'|^(?:der|die|das|den|dem|des|und|oder|mit|von|vom|zum|zur|auf|aus|bei'
     r'|nicht|wird|werden|sind|eine|einen|einem|einer|dich|deine|Uhr|Werk|Werke'
-    r'|Exemplare|Skulptur|Sockel|Signatur|Masse|Vorzugspreis|Platzhalter'
-    r'|Kissen|Messing|Unikate|Galerien|Kunstwerke|Suche|Sammler)$'
+    r'|Exemplare|Skulptur|Sockel|Signatur|Masse|Vorzugspreis|Kissen|Messing'
+    r'|Unikat|Unikate|Galerien|Kunstwerke|Suche|Sammler|hoeher)$'
     r'|EN$(?<=ONEN)', re.I)
-# "Edition" is deliberately absent above: it is the same word in both
-# languages, and listing it made the validator fail on correct English.
 
 # Legitimately German in an English page: proper nouns and place names.
 ALLOW = {'neff', 'rafael', 'freienseen', 'mainz', 'lumas', 'pillow', 'clarke',
          'kevin', 'gallen', 'stiftsbibliothek', 'nationalbibliothek', 'wien',
          'margaux', 'chateau', 'bordeaux', 'audemars', 'piguet', 'ulysse',
          'nardin', 'squelette', 'astrolabium', 'galilei', 'galileo', 'poplars',
-         'silver', 'ocean', 'complication', 'grande', 'york', 'public',
+         'silver', 'ocean', 'royal', 'opera', 'house', 'london', 'complication', 'grande', 'york', 'public',
          'library', 'new', 'september', 'art', 'drop'}
 
 
@@ -253,7 +301,7 @@ def main():
     # longest key first, so a long sentence is replaced before a short substring
     # of it can chop the sentence into a half-translated hybrid
     for de, en in sorted(T.items(), key=lambda kv: -len(kv[0])):
-        s = s.replace(de, en)
+        s = _flex(de).sub(lambda _m, e=en: e, s)
     s = s.replace('<!DOCTYPE html>', BANNER, 1)
     OUT.write_text(s, encoding='utf-8')
 
@@ -266,6 +314,10 @@ def main():
                         if GERMAN.search(w) and w.lower() not in ALLOW})
 
     print('wrote', OUT.name, len(s), 'chars')
+    # the English copy needs the same line-break binding as the German
+    subprocess.run([sys.executable,
+                    str(pathlib.Path(__file__).with_name('fix-typography.py')),
+                    str(OUT)], check=True)
     if leftovers:
         print('UNTRANSLATED GERMAN:', leftovers, file=sys.stderr)
         sys.exit(1)

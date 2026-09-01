@@ -65,7 +65,10 @@ const ok=(c,m)=>console.log((c?'  PASS  ':'  FAIL  ')+m);
  const cd=await m.$eval('#cd-close',e=>e.textContent.replace(/\s+/g,' ').trim());
  ok(/now: 12\.09/.test(meta),'dev clock time-travels into PUBLIC ('+meta.split(' · ')[0]+')');
  ok(/^02TAGE|^\d\dTAGE/.test(cd.replace(/ /g,'')),'countdown is plausible inside the phase: '+cd);
- ok(/1 Bild-Platzhalter/.test(meta),'readiness meter counts the portrait placeholder');
+ // Every asset is delivered now, so the readiness meter must report a clean
+ // sheet. It counted 1 while the artist portrait was still a placeholder block;
+ // asserting 0 is what keeps a future missing asset from shipping quietly.
+ ok(/0 Bild-Platzhalter/.test(meta),'readiness meter reports no image placeholders: '+meta);
 
  // --- one h1, source order = tab order --------------------------------
  const h1s=await p.$$eval('h1',e=>e.length);
