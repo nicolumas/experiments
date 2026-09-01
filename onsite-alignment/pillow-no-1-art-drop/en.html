@@ -640,22 +640,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
   .work-block__art{margin-inline:0;max-width:none}
   .work-block__panel{max-width:none}
-  /* 92vh puts the hero bottom BELOW the fold, and with a 64px inset the last
-     lockup line then clips on any window shorter than ~1010px. Take the space
-     the header leaves, minus a 40px sliver so the next section still peeks and
-     the page reads as scrollable. Same argument as the phone rule, same
-     measured source (--above-proof), just a different reason to care. */
-  .proof{height:calc(100vh - var(--above-proof, 0px) - 40px);
-         height:calc(100svh - var(--above-proof, 0px) - 40px);
-         min-height:440px}
   .proof__wrap{padding-bottom:64px}
-  /* the ramp fades out horizontally before the sculpture, so the work carries
-     no darkening layer. Without mask support the fallback is the plain
-     full-width ramp above, which is still legible. */
-  .proof::after{height:52%;
-                background:linear-gradient(to top,rgba(20,19,17,.62) 0%,rgba(20,19,17,.48) 70%,rgba(20,19,17,0) 100%);
-                -webkit-mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%);
-                mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%)}
   .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
 }
 
@@ -689,20 +674,40 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .js .reveal.is-in{opacity:1;transform:none}
 
 /* ============================================================
-   TABLET + PHONE HERO
+   PHONE HERO
    ============================================================
-   The portrait framing is used below 1024px, and both the fold argument and the
-   plate clearance apply on a tablet exactly as they do on a phone: take only
-   the height the header leaves, run the plate full width at the bottom, and
-   anchor the cover crop to the bottom of the image so what sits above the plate
-   is plinth and floor rather than the sculpture. Measured clearance per width
-   is in the check-hero-plate.py report. */
-@media (max-width:1023px){
+   Portrait asset, full-width lockup, hero takes only the height the header
+   leaves. The scrim here is shorter and unmasked: a full-width lockup leaves no
+   room for a horizontal fade, so the ramp is kept below the sculpture's base
+   instead. The portrait asset is used ONLY below 768px — in a 768x735 hero a
+   3:4 crop is cropped vertically, which pushes the work's base to 77% of the
+   container, 3% above the type, and then no ramp can reach the type without
+   darkening the work. Above 767 the landscape asset and its mask do the job. */
+@media (max-width:767px){
   .proof{height:calc(100vh - var(--above-proof, 0px));
          height:calc(100svh - var(--above-proof, 0px));
          min-height:320px}
   .proof__wrap{padding-bottom:36px;align-items:flex-end}
   .proof__lockup{max-width:none;width:100%}
+  .proof::after{height:32%;
+    background:linear-gradient(to top,rgba(20,19,17,.56) 0%,rgba(20,19,17,.52) 70%,rgba(20,19,17,0) 100%)}
+}
+
+/* From 768 up the hero is the landscape asset, so the scrim can fade out
+   horizontally before the sculpture and the work carries almost no darkening.
+   The hero height comes from here too: 92vh put the hero bottom below the fold
+   and clipped the last lockup line on any window shorter than ~1010px, so it
+   takes the space the header leaves minus a 40px sliver, which also lets the
+   next section peek and read as scrollable. */
+@media (min-width:768px){
+  .proof{height:calc(100vh - var(--above-proof, 0px) - 40px);
+         height:calc(100svh - var(--above-proof, 0px) - 40px);
+         min-height:440px}
+  .proof__wrap{padding-bottom:56px}
+  .proof::after{height:56%;
+                background:linear-gradient(to top,rgba(20,19,17,.58) 0%,rgba(20,19,17,.52) 70%,rgba(20,19,17,0) 100%);
+                -webkit-mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%);
+                mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%)}
 }
 
 /* ============================================================
@@ -872,7 +877,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
        was supplied; hero-room-portrait.jpg is derived from the landscape master
        by prepare-assets.py and should be replaced by a real one. -->
   <picture>
-    <source media="(max-width:1023px)" srcset="hero-room-portrait.jpg" width="768" height="1024">
+    <source media="(max-width:767px)" srcset="hero-room-portrait.jpg" width="768" height="1024">
     <img class="proof__img" src="hero-room-paris.jpg" width="1535" height="1024"
          fetchpriority="high" decoding="async"
          alt="Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light."
@@ -918,7 +923,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Unique edition, 999 handcrafted pieces</dd></div>
         <div class="specs__row"><dt class="t-ui">DIMENSIONS</dt><dd class="t-body-s">Sculpture 44 × 44 × 15 cm, base 15.5 × 15.5 × 4 cm</dd></div>
         <div class="specs__row"><dt class="t-ui">MATERIAL</dt><dd class="t-body-s">Brass, mirror-polished, with a base of smoked oak</dd></div>
-        <div class="specs__row"><dt class="t-ui">SIGNATURE</dt><dd class="t-body-s">Signed by the artist with date and edition number</dd></div>
+        <div class="specs__row"><dt class="t-ui">SIGNATURE</dt><dd class="t-body-s">Signed on the base, with edition number and date</dd></div>
         <div class="specs__row"><dt class="t-ui">INTRODUCTORY PRICE</dt><dd class="t-body-s">12 – 14 September 2026, higher after that</dd></div>
       </dl>
 
@@ -1015,10 +1020,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         </div>
         <div class="fcard__body">
           <h3 class="t-h4">Signed, dated, numbered</h3>
-          <p class="t-body-s fcard__desc">As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist with date and edition number.</p>
+          <p class="t-body-s fcard__desc">As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist on the base, with edition number and date.</p>
           <div class="fcard__foot">
+            <!-- not in REVEAL: the article only goes live on the 10th, so
+                 before then this would link to a page with nothing on it -->
             <a class="btn btn--secondary btn--full" href="https://www.lumas.de/pictures/rafael_neff/pillow_no_1/"
-               target="_self" data-ablyft-goal="drop_click_details">MORE DETAILS</a>
+               target="_self" data-phases="EARLY_ACCESS PUBLIC ENDED"
+               data-ablyft-goal="drop_click_details">MORE DETAILS</a>
           </div>
         </div>
       </article>

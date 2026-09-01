@@ -101,15 +101,17 @@ T = {
     'Pillow No. 1: ein Kissen, im Moment des Aufblasens angehalten. Was sich weich anfühlen müsste, ist spiegelpoliertes Messing. Jedes Exemplar wird von Hand verschweißt und aufgeblasen, keine zwei sind gleich.':
         'Pillow No. 1: a pillow, stopped at the moment of inflation. What ought to feel soft is mirror-polished brass. Every piece is welded and inflated by hand, and no two are alike.',
     '>WERK<': '>WORK<',
-    '>MASSE<': '>DIMENSIONS<',
+    # written GRÖSSE rather than relying on text-transform to case the ß:
+    # the label is authored uppercase like every other spec label
+    '>GRÖSSE<': '>DIMENSIONS<',
     '>SIGNATUR<': '>SIGNATURE<',
     'Unikatsedition, 999 handgefertigte Exemplare': 'Unique edition, 999 handcrafted pieces',
     'Skulptur 44' + NB + '×' + NB + '44' + NB + '×' + NB + '15' + NB + 'cm, Sockel 15,5' + NB + '×' + NB + '15,5' + NB + '×' + NB + '4' + NB + 'cm':
         'Sculpture 44' + NB + '×' + NB + '44' + NB + '×' + NB + '15' + NB + 'cm, base 15.5' + NB + '×' + NB + '15.5' + NB + '×' + NB + '4' + NB + 'cm',
     'Messing, spiegelpoliert, mit Sockel aus geräucherter Eiche':
         'Brass, mirror-polished, with a base of smoked oak',
-    'Vom Künstler signiert, mit Datum und Editionsnummer':
-        'Signed by the artist with date and edition number',
+    'Auf dem Sockel signiert, mit Editionsnummer und Datum':
+        'Signed on the base, with edition number and date',
     'WERK SICHERN': 'SECURE THE WORK',
     'Pillow No. 1 bleibt erhältlich. Den aktuellen Preis findest du auf der Werkseite.':
         'Pillow No. 1 stays available. The current price is on the product page.',
@@ -149,8 +151,8 @@ T = {
     'Der Sockel setzt einen warmen Kontrast zur kühlen Metalloberfläche und verleiht der Skulptur natürliche Erdung. 15,5' + NB + '×' + NB + '15,5' + NB + '×' + NB + '4' + NB + 'cm.':
         'The base sets a warm contrast to the cool metal surface and grounds the sculpture with natural presence. 15.5' + NB + '×' + NB + '15.5' + NB + '×' + NB + '4' + NB + 'cm.',
     'Signiert, datiert, nummeriert': 'Signed, dated, numbered',
-    'Als Unikatsedition ist jedes Pillow ein einzigartiges Werk, vom Künstler mit Datum und Editionsnummer signiert.':
-        'As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist with date and edition number.',
+    'Als Unikatsedition ist jedes Pillow ein einzigartiges Werk, vom Künstler auf dem Sockel signiert, mit Editionsnummer und Datum.':
+        'As part of a unique edition, each Pillow is a one-of-a-kind piece, signed by the artist on the base, with edition number and date.',
     'MEHR DETAILS': 'MORE DETAILS',
 
     # --- voice -----------------------------------------------------------
