@@ -439,13 +439,40 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .fcard__foot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:16px}
 
 /* ============================================================
-   4 · VOICE — artist, on bone
+   6 · VOICE — artist, on bone
    ============================================================ */
-.voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+.voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
+.voice__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.voice__quote{margin:0;text-wrap:balance}
+.voice__by{color:var(--text-secondary);margin:0}
+
+/* Awards and exhibitions, two columns. A dl per column so the year stays tied
+   to its entry for a screen reader; the year column is fixed so the two lists
+   align to the same rhythm. */
+.cv{display:grid;grid-template-columns:1fr;gap:32px;margin-top:8px}
+.cv__head{color:var(--text-secondary);margin:0 0 12px}
+.cv__list{margin:0}
+.cv__row{display:flex;gap:16px;padding-block:7px;font-size:13px;line-height:1.65}
+.cv__row + .cv__row{border-top:1px solid var(--border-default)}
+.cv__row dt{flex:0 0 3.6em;color:var(--text-secondary)}
+.cv__row dd{margin:0;color:var(--text-primary)}
+
+/* the edition mark on the third craft card: type, not a photographed artefact */
+.editionmark{margin:4px 0 0;font-size:13px;line-height:1.5;letter-spacing:.06em;
+  color:var(--text-secondary)}
+.editionmark__slot{letter-spacing:.02em}
+
+/* ============================================================
+   8 · GALLERY — additive, never a substitute for the purchase
+   ============================================================ */
+.gallery__inner{max-width:760px;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.gallery__eyebrow{color:var(--text-secondary);margin:0}
+.gallery__body{color:var(--text-secondary);max-width:60ch}
+.gallery__cta{margin-top:16px;min-width:280px}
 /* the delivered portrait is a 1.4:1 landscape crop, so the box stays
    landscape: a 4:5 frame would cut into the head */
 .voice__portrait{aspect-ratio:4/3}
-.voice__text{display:flex;flex-direction:column;gap:24px}
+.voice__text{display:flex;flex-direction:column;gap:28px}
 .voice__eyebrow{margin:0}
 .voice__lead{max-width:56ch;font-size:20px;line-height:1.6}
 
@@ -631,6 +658,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .sec-head{margin-bottom:56px}
   .fcards{grid-template-columns:repeat(3,1fr)}
   .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
+  .cv{grid-template-columns:1fr 1fr;gap:48px}
   .work-block{padding-block:120px}
   .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
   .work-block__art{margin-inline:0;max-width:none}
@@ -969,7 +997,43 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   </div>
 </section>
 
-<!-- ============================ 3 · OWN IT ============================
+<!-- ============================ 3 · ASSURE ============================
+     Straight after the buy box, not in the footer: the three things a
+     collector wants settled before a four-figure decision. -->
+<section class="section section--white" data-sec="assure" style="padding-block:72px">
+  <div class="wrap">
+    <div class="trust" data-reveal-group>
+      <div>
+        <p class="t-h4 trust__head">Streng limitiert</p>
+        <p class="t-body-s trust__note">999 Exemplare, jedes ein Unikat</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">Versichert versandt</p>
+        <p class="t-body-s trust__note">sicher verpackt für den Transport</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">60 Tage Rückgaberecht</p>
+        <p class="t-body-s trust__note">ohne Angabe von Gründen</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4 · INSPIRATION ============================
+     The editorial idea, in LUMAS's own voice. Deliberately NOT set as a quote:
+     no artist statement was supplied and nothing here may be put in Rafael
+     Neff's mouth. Every material fact comes from the product description. -->
+<section class="section on-bone inspiration" data-sec="inspiration">
+  <div class="wrap inspiration__inner">
+    <h2 class="t-eyebrow inspiration__eyebrow">Über das Werk</h2>
+
+    <p class="t-h3 inspiration__quote">Ein Kissen trägt die Spur des Abends zuvor. Hier ist diese Spur in Messing verschweißt und bleibt.</p>
+
+    <p class="t-body-l inspiration__body">Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185 °C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.</p>
+  </div>
+</section>
+
+<!-- ============================ 5 · OWN IT ============================
      A sculpture has no finishes and no framing, so the three cards carry the
      craft instead: the surface, the base, the signature. Every claim here is
      the supplied product description, not new copy. There is no certificate:
@@ -1016,6 +1080,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{
         <div class="fcard__body">
           <h3 class="t-h4">Signiert, datiert, nummeriert</h3>
           <p class="t-body-s fcard__desc">Als Unikatsedition ist jedes Pillow ein einzigartiges Werk, vom Künstler auf dem Sockel signiert, mit Editionsnummer und Datum.</p>
+          <!-- The mark is set in type, not shown as a photograph: no close-up
+               of a signed base was delivered, and a rendered signature would be
+               a fabricated artefact. Asset request is in the README. -->
+          <p class="editionmark">Rafael Neff · 2026 · Nr. <span class="editionmark__slot">___</span> / 999</p>
           <div class="fcard__foot">
             <!-- not in REVEAL: the article only goes live on the 10th, so
                  before then this would link to a page with nothing on it -->
@@ -1029,7 +1097,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   </div>
 </section>
 
-<!-- ============================ 4 · VOICE ============================
+<!-- ============================ 6 · VOICE ============================
      Condensed from the approved artist copy on lumas.de/artist/rafael_neff/,
      not newly written. No artist portrait and no artist quote were supplied for
      this drop — the portrait block is a visible placeholder rather than a
@@ -1045,12 +1113,40 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <div class="voice__text reveal">
       <p class="t-eyebrow voice__eyebrow">Der Künstler</p>
       <h2 class="t-h2">Seine Oberflächen tragen nicht nur ein Bild, sie formen den Raum.</h2>
+      <figure class="voice__fig">
+        <blockquote class="t-h3 voice__quote">Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.</blockquote>
+        <figcaption class="t-eyebrow voice__by">Rafael Neff</figcaption>
+      </figure>
+
       <p class="t-body voice__lead">Rafael Neff, 1969 in Freienseen geboren, studierte Fotografie in Mainz, Prag und New York und war Meisterschüler von Kevin Clarke. Bekannt wurde er für menschenleere Innenräume, in denen Strandkörbe zu Skulpturen und Bibliotheken zu Kathedralen werden. Seit vielen Jahren arbeitet er zusätzlich mit Messing und Kupfer: hochglanzpolierte Oberflächen, die Reflexion, Tiefe und Präsenz in die Arbeit einschreiben.</p>
+
+      <div class="cv">
+        <div class="cv__col">
+          <h3 class="t-eyebrow cv__head">Auszeichnungen</h3>
+          <dl class="cv__list">
+            <div class="cv__row"><dt>2019</dt><dd>Gregor Kalender Award</dd></div>
+            <div class="cv__row"><dt>2013</dt><dd>DesignPlus Preis</dd></div>
+            <div class="cv__row"><dt>2010</dt><dd>Gold, Internationaler Kalenderpreis</dd></div>
+            <div class="cv__row"><dt>2008</dt><dd>Red Dot Design Award, Kodak Photo Award</dd></div>
+            <div class="cv__row"><dt>2005</dt><dd>Designpreis des Landes Rheinland-Pfalz</dd></div>
+          </dl>
+        </div>
+        <div class="cv__col">
+          <h3 class="t-eyebrow cv__head">Ausstellungen, eine Auswahl</h3>
+          <dl class="cv__list">
+            <div class="cv__row"><dt>2013</dt><dd>Villa Merton, Frankfurt</dd></div>
+            <div class="cv__row"><dt>2012</dt><dd>LUMAS Düsseldorf, Hamburg, Berlin</dd></div>
+            <div class="cv__row"><dt>2011</dt><dd>LUMAS Wien</dd></div>
+            <div class="cv__row"><dt>2008</dt><dd>Paris Photo, Paris</dd></div>
+            <div class="cv__row"><dt>2007</dt><dd>Art Cologne, Köln</dd></div>
+          </dl>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============================ 5 · ROOMS ============================ -->
+<!-- ============================ 7 · ROOMS ============================ -->
 <section class="section" data-sec="rooms">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -1077,31 +1173,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-02-newyork.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einem Sockel aus schwarzem Marmor in einem New Yorker Apartment, Fensterfront mit Blick auf einen Park."
-                 data-fallback="ROOM SHOT · NEW YORK · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-03-reflection.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Ein Betrachter sitzt neben Pillow No. 1, die polierte Messingfläche spiegelt ihn und den Raum mit den blauen Samtsofas."
-                 data-fallback="ROOM SHOT · SPIEGELUNG · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-04-salon.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einer dunklen Konsole in einem Salon mit Stuckdecke, Marmorkamin und Blick über die Stadt im Abendlicht."
-                 data-fallback="ROOM SHOT · SALON · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-05-sideboard.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+            <img src="room-02-sideboard.jpg" width="1920" height="1072" loading="lazy" decoding="async"
                  alt="Pillow No. 1 auf einem dunklen Sideboard vor einem grauen Sofa, links eine großformatige Schwarz-Weiß-Arbeit."
                  data-fallback="ROOM SHOT · SIDEBOARD · 16:9">
           </div>
@@ -1109,49 +1181,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-06-walnut.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einem Nussbaumtisch in einem hellen Wohnraum mit Bouclé-Sesseln, Pampasgras und offenem Kamin."
-                 data-fallback="ROOM SHOT · NUSSBAUM · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-07-garden.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+            <img src="room-03-garden.jpg" width="1920" height="1072" loading="lazy" decoding="async"
                  alt="Pillow No. 1 auf einem Marmortisch in einem Wohnraum mit grünem Sofa, Dachfenster und Blick in den Garten."
                  data-fallback="ROOM SHOT · GARTENZIMMER · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-08-highrise.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einem dunklen Couchtisch in einem Hochhaus-Apartment mit braunem Samtsofa und Blick über die Dächer."
-                 data-fallback="ROOM SHOT · HOCHHAUS · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-09-loft.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einem runden schwarzen Tisch in einem Loft mit Sichtbeton, Ledersesseln und einer Zeichnung an der Wand."
-                 data-fallback="ROOM SHOT · LOFT · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-10-concrete.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einem Metalltisch vor einer Fensterfront, dahinter ein Marmorkamin und ein Ledersessel."
-                 data-fallback="ROOM SHOT · BETON · 16:9">
-          </div>
-        </figure>
-
-        <figure class="carousel__slide">
-          <div class="room__media media framed">
-            <img src="room-11-mediterran.jpg" width="1440" height="1080" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 auf einer Stele in einem mediterranen Wohnraum mit Olivenbaum, Holzbalken und Blick in den Garten."
-                 data-fallback="ROOM SHOT · MEDITERRAN · 4:3">
           </div>
         </figure>
 
@@ -1172,46 +1204,24 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   </div>
 </section>
 
-<!-- ============================ 6 · INSPIRATION ============================
-     The editorial idea, in LUMAS's own voice. Deliberately NOT set as a quote:
-     no artist statement was supplied and nothing here may be put in Rafael
-     Neff's mouth. Every material fact comes from the product description. -->
-<section class="section on-bone inspiration" data-sec="inspiration">
-  <div class="wrap inspiration__inner">
-    <h2 class="t-eyebrow inspiration__eyebrow">Über das Werk</h2>
-
-    <p class="t-h3 inspiration__quote">Ein Kissen trägt die Spur des Abends zuvor. Hier ist diese Spur in Messing verschweißt und bleibt.</p>
-
-    <p class="t-body-l inspiration__body">Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185 °C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.</p>
+<!-- ============================ 8 · IN PERSON ============================
+     Additive, never a substitute for the purchase: the CTA here is secondary
+     and the closing block that follows carries the primary one. The claim is
+     supported by the feed - RNE319 carries the Gallery and Franchise Gallery
+     sales channels and is_pos = true - but which galleries physically stock it
+     is not known, so the copy invites an enquiry rather than promising a
+     display. -->
+<section class="section on-bone" data-sec="gallery">
+  <div class="wrap gallery__inner">
+    <p class="t-eyebrow gallery__eyebrow">In echt sehen</p>
+    <h2 class="t-h2">Pillow No. 1 gibt es auch in unseren Galerien.</h2>
+    <p class="t-body-l gallery__body">Eine spiegelpolierte Oberfläche lässt sich schwer fotografieren, sie verändert sich mit jedem Schritt. LUMAS ist in 19 Galerien weltweit vertreten. Frag dort nach Pillow No. 1, wenn du das Werk vor dem Kauf einmal selbst sehen möchtest.</p>
+    <a class="btn btn--secondary gallery__cta" href="https://www.lumas.de/galerien/" target="_self"
+       data-ablyft-goal="drop_click_galleries">Galerien ansehen</a>
   </div>
 </section>
 
-<!-- ============================ 7 · REASSURE ============================
-     Risk-reducers sit directly above the closing CTA, not in the footer:
-     risk-reducers sit directly above the closing CTA rather than in the footer. -->
-<section class="section section--white" data-sec="trust" style="padding-block:88px">
-  <div class="wrap">
-    <div class="trust" data-reveal-group>
-      <div>
-        <p class="t-h4 trust__head">330.000 zufriedene Sammler:innen</p>
-        <p class="t-body-s trust__note">seit 2004</p>
-      </div>
-      <div>
-        <p class="t-h4 trust__head">
-          <a class="trust__link" href="https://www.lumas.de/galerien/" target="_self"
-             data-ablyft-goal="drop_click_galleries">19 Galerien weltweit</a>
-        </p>
-        <p class="t-body-s trust__note">Werke vor Ort ansehen</p>
-      </div>
-      <div>
-        <p class="t-h4 trust__head">60 Tage Rückgaberecht</p>
-        <p class="t-body-s trust__note">ohne Angabe von Gründen</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ 8 · ACT ============================ -->
+<!-- ============================ 9 · ACT ============================ -->
 <section class="on-inverse close" id="close" data-sec="close">
   <div class="wrap close__inner">
 

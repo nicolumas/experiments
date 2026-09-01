@@ -61,6 +61,26 @@ plausible moment inside it rather than counting down from today.
 All times Europe/Berlin, which is **CEST (+02:00)** on these dates. The brief
 says CET; the ISO offsets in `SCHEDULE` are the real local ones.
 
+## Section order
+
+1. Hero
+2. Buy box
+3. Trust: strictly limited · shipped insured · 60-day return
+4. About the work
+5. Handcrafted down to the finest detail
+6. The artist
+7. Rooms
+8. In the galleries
+9. Urgency: countdown and closing CTA
+10. More works by the artist
+
+The old trust row (330,000 collectors · 19 galleries · 60-day returns) was
+replaced by the new section at position 3. Its galleries claim moved into the
+gallery section at 8, so nothing is said twice. The gallery section is
+deliberately additive and carries a *secondary* CTA: the closing block right
+after it holds the primary one, so the page never resolves a purchase intent
+with "go to a gallery instead".
+
 ## Deliberate departures from the template, and why
 
 **1. The hero type sits on the photograph over a measured scrim.**
@@ -113,7 +133,23 @@ x[366,1086] y[67,983] of 1536×1024; the crop is that plus 10% padding, and
 `.work-block__art` carries the matching `aspect-ratio: 864/1024`, so `contain`
 never letterboxes.
 
-**11. The works rail has no ground and every work is the same height.**
+**11. The artist quote is real, and it is not about this work.**
+No statement about Pillow No. 1 was supplied. There *is* a published first-person
+quote in the LUMAS artist interview, about his working method rather than this
+sculpture: „Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis
+sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst."
+It is used verbatim apart from one dash normalised to a colon, per the no-dash
+rule. Source: lumas.de/artist/rafael_neff/, Interview tab. A quote about *this*
+work would be better and is still worth asking the artist for.
+
+**12. Awards and exhibitions are lifted from the artist page, not written.**
+Both columns come from the Vita on lumas.de/artist/rafael_neff/. The awards list
+is complete to 2005; the exhibitions column is explicitly labelled a selection,
+because the full list runs to about thirty entries. Collections (DZ Bank,
+Deutsche Bank, Berenberg, LBBW, Sparkassenverband Rheinland-Pfalz) are on the
+artist page too and are available if a third column is ever wanted.
+
+**13. The works rail has no ground and every work is the same height.**
 Measured pixel ratios in the rail are 1.000, 1.264 and 1.441–1.445, so the box
 ratio is 1.445 — as wide as the widest work is at full height. Every artwork
 then fills the box height and only its width varies: same height, nothing
@@ -186,7 +222,7 @@ Last run, German canonical, Chromium:
 
 | Check | Result |
 |---|---|
-| Images | 26/26 load, including all eleven carousel slides. 0 placeholders. |
+| Images | 18/18 load, including every carousel slide. 0 placeholders. |
 | Horizontal overflow | 0px at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920 |
 | Hero lockup above the fold | 320×568, 390×844, 430×932, and the short desktop windows 768×700, 1024×700, 1440×800, 1920×900 — all clear |
 | AA contrast (page) | 4 phases × {390, 1440} = 8 combinations, **0 failures**, minimum **5.19:1**. Large text judged at 24px, or 18.66px at weight ≥700. The hero lockup is excluded here and measured properly below. |
@@ -194,7 +230,7 @@ Last run, German canonical, Chromium:
 | Scrim over the artwork | **0%** below 768px, **15–20%** above it (the masked edge only). 0% on both incidental framed pictures at every width. |
 | Type combinations | **10** at 390px, **12** at 1440px (target ≤12) |
 | Countdown numeral width | All 100 digit pairs render at 33.59px (390px) and 80.63px (1440px) — zero spread |
-| Carousel per view | rooms 1 everywhere (11 slides); works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
+| Carousel per view | rooms 1 everywhere (3 slides); works 1 / 1 / 1 / 3 / 4 / 5 / 5 at the seven widths, measured from rendered slide widths |
 | English build | `translate-en.py` exits 0 |
 | Fonts | `fontTools` name table on both shipped woff2 faces: no `Trial` string. Utile Display v1.302, TypeNetwork IDs 373473 / 373474. |
 | Hero crop | The work is fully in frame at 320 / 390 / 430 / 768 / 1024 / 1440 / 1920, with 145px of air above it on phones and 20px at 1920. Asserted, not assumed. |
@@ -243,8 +279,22 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
   these exact pixels.
 - **Hero resolution: 1535px.** A full-bleed desktop hero wants ~2880px for a 2×
   display. The second delivery has 2752px renders but none of them works
-  compositionally as a hero (see departure 8). Ask for a 2560px+ export of the
-  salon room, or a render with the object right of centre.
+  compositionally as a hero (see departure 8). An unsharp mask (r 1.2 / 115% /
+  t 3) is applied on the way out, which helps the resampled edges read cleaner
+  but cannot add detail. Ask for a 2560px+ export of the salon room, or a render
+  with the object right of centre. The buy-box shot gets a lighter pass
+  (r 1.0 / 95% / t 3) for the same reason: 864px native in a ~700px column.
+- **No photograph of the signature exists.** Neither delivery includes a
+  close-up of a signed base, so the third craft card sets the edition mark in
+  type (`Rafael Neff · 2026 · Nr. ___ / 999`) rather than showing one. A
+  rendered signature would be a fabricated artefact. **Asset request: one macro
+  of the signature and edition number on the smoked oak base.**
+- **The rooms slider is down to three slides.** Six renders were cut for
+  deformed geometry. Two more went for the base, which is smoked oak in the
+  studio reference at rgb(111, 86, 70): `RNE_img_03` renders it pale blond at
+  rgb(180, 156, 131), and `RNE_img_01` renders it two-tone with one near-white
+  face. The three that ship measure 88/73/63, 79/64/51 and 108/87/66. **Asset
+  request: more room renders with a correct smoked-oak base.**
 - **`detail-edition.jpg` is a screen grab.** The source file is
   `Screenshot 2026-08-26 at 10.04.40 1.jpg`, 2170×1198. It is the best evidence
   on the page for the Unikatsedition claim, so it is used — but confirm a proper

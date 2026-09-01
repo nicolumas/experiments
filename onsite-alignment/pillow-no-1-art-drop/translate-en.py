@@ -178,6 +178,34 @@ T = {
     'Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185' + NB + '°C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.':
         'Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185' + NB + '°C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.',
 
+    # --- assure (the trust row under the buy box) -------------------------
+    'Streng limitiert': 'Strictly limited',
+    '999 Exemplare, jedes ein Unikat': '999 pieces, every one unique',
+    'Versichert versandt': 'Shipped insured',
+    'sicher verpackt für den Transport': 'securely packed for transport',
+
+    # --- the artist quote and the CV columns -----------------------------
+    'Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.':
+        'Once I have found something, I work on it until it is perfect: the one right form of expression. Only then is it art.',
+    'Auszeichnungen': 'Awards',
+    'Ausstellungen, eine Auswahl': 'Exhibitions, a selection',
+    'Gold, Internationaler Kalenderpreis': 'Gold, International Calendar Award',
+    'Designpreis des Landes Rheinland-Pfalz': 'Rhineland-Palatinate State Design Award',
+    'Villa Merton, Frankfurt': 'Villa Merton, Frankfurt',
+    'LUMAS Düsseldorf, Hamburg, Berlin': 'LUMAS Düsseldorf, Hamburg, Berlin',
+    'LUMAS Wien': 'LUMAS Vienna',
+    'Art Cologne, Köln': 'Art Cologne, Cologne',
+    'Nr. <span class="editionmark__slot">___</span> / 999':
+        'No. <span class="editionmark__slot">___</span> / 999',
+
+    # --- gallery ----------------------------------------------------------
+    'In echt sehen': 'See it in person',
+    'Pillow No. 1 gibt es auch in unseren Galerien.':
+        'Pillow No. 1 is in our galleries too.',
+    'Eine spiegelpolierte Oberfläche lässt sich schwer fotografieren, sie verändert sich mit jedem Schritt. LUMAS ist in 19 Galerien weltweit vertreten. Frag dort nach Pillow No. 1, wenn du das Werk vor dem Kauf einmal selbst sehen möchtest.':
+        'A mirror-polished surface is hard to photograph: it changes with every step you take. LUMAS is present in 19 galleries worldwide. Ask for Pillow No. 1 there if you would like to see the work yourself before buying.',
+    'Galerien ansehen': 'See the galleries',
+
     # --- trust -----------------------------------------------------------
     '330.000 zufriedene Sammler:innen': '330,000 satisfied collectors',
     'seit 2004': 'since 2004',
@@ -295,7 +323,9 @@ ALLOW = {'neff', 'rafael', 'freienseen', 'mainz', 'lumas', 'pillow', 'clarke',
          'margaux', 'chateau', 'bordeaux', 'audemars', 'piguet', 'ulysse',
          'nardin', 'squelette', 'astrolabium', 'galilei', 'galileo', 'poplars',
          'silver', 'ocean', 'royal', 'opera', 'house', 'london', 'complication', 'grande', 'york', 'public',
-         'library', 'new', 'september', 'art', 'drop'}
+         'library', 'new', 'september', 'art', 'drop',
+         # place names that stay German in English copy
+         'düsseldorf', 'köln', 'frankfurt', 'merton', 'gregor', 'kalender'}
 
 
 def main():
