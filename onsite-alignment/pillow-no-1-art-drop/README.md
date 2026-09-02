@@ -320,10 +320,12 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
   with the object right of centre. The buy-box shot gets a lighter pass
   (r 1.0 / 95% / t 3) for the same reason: 864px native in a ~700px column.
 - **No photograph of the signature exists.** Neither delivery includes a
-  close-up of a signed base, so the third craft card sets the edition mark in
-  type (`Rafael Neff · 2026 · Nr. ___ / 999`) rather than showing one. A
-  rendered signature would be a fabricated artefact. **Asset request: one macro
-  of the signature and edition number on the smoked oak base.**
+  close-up of a signed base. The third craft card carried a type-set stand-in
+  for the mark (`Rafael Neff · 2026 · Nr. ___ / 999`) until 02.09.2026, when it
+  was removed: a blank-slot placeholder reads as unfinished, and a rendered
+  signature would be a fabricated artefact. The card now makes the claim in
+  prose only. **Asset request: one macro of the signature and edition number on
+  the smoked oak base.**
 - **Two slides in the rooms slider need their base retouched.** Six of the
   eleven renders were cut for deformed geometry. Two more have a wrong base and
   are back in the deck at the client's request, to be edited: `RNE_img_03`

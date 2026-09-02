@@ -198,8 +198,6 @@ T = {
     'LUMAS Düsseldorf, Hamburg, Berlin': 'LUMAS Düsseldorf, Hamburg, Berlin',
     'LUMAS Wien': 'LUMAS Vienna',
     'Art Cologne, Köln': 'Art Cologne, Cologne',
-    'Nr. <span class="editionmark__slot">___</span> / 999':
-        'No. <span class="editionmark__slot">___</span> / 999',
 
     # --- gallery ----------------------------------------------------------
     'In echt sehen': 'See it in person',
