@@ -295,6 +295,15 @@ a { color: inherit; }
 .ed-line2{ font-size: 13.5px; color: var(--color-charcoal-700, #5A5752); line-height: 1.4; }
 .edition-chip .n-left{ font-size: 12.5px; font-weight: 600; color: var(--color-status-warning, #9B6D1E); margin-top: 2px; }
 .edition-chip .ed-info{ width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: 0 0 auto; color: var(--color-charcoal-700, #5A5752); }
+.demand-row{
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+  font-size: 12px; line-height: 1.5; color: var(--color-charcoal-700, #5A5752);
+}
+.demand-row strong{ font-weight: 600; color: var(--color-charcoal-800, #3A3835); }
+.d-bars{ display: flex; gap: 3px; flex: 0 0 auto; }
+.d-bars i{ width: 14px; height: 2px; background: var(--color-bone-100, #E2D8CC); }
+.d-bars i.hot{ background: var(--color-charcoal-900, #1C1A18); }
+@media (max-width: 1023px){ .demand-row{ justify-content: center; } }
 @media (max-width: 1023px){
   .edition-chip{ gap: 12px; padding: 10px 14px; }
   .ed-num{ font-size: 32px; }
@@ -562,12 +571,6 @@ a { color: inherit; }
 .sheet .x{ width: 44px; height: 44px; display: grid; place-items: center; margin-right: -10px; }
 
 /* provenance sheet specifics */
-.prov-scale{ display: flex; gap: 4px; margin: 26px 0 10px; }
-.prov-scale i{ flex: 1; height: 2px; background: var(--color-bone-100, #E2D8CC); }
-.prov-scale i.hot{ background: var(--color-charcoal-900, #1C1A18); }
-.prov-scale-labels{ display: flex; justify-content: space-between; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary, #908C87); }
-.prov-scale-labels span{ white-space: nowrap; }
-@media (max-width: 1023px){ .prov-scale-labels{ display: none; } .prov-scale{ margin-bottom: 2px; } }
 
 /* scale viewer */
 .viewer{
@@ -796,6 +799,10 @@ a { color: inherit; }
         </span>
         <svg class="ed-info" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
       </button>
+      <p class="demand-row" aria-label="Nachfragestatus: beliebt">
+        <span class="d-bars" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></span>
+        <span><strong>Nachfrage: beliebt</strong> · Preis kann mit der Auflage steigen</span>
+      </p>
     </section>
 
     <section class="config" aria-label="Konfiguration">
@@ -924,9 +931,6 @@ a { color: inherit; }
       <dt style="color:var(--color-charcoal-700, #5A5752)">Werknummer</dt><dd>MCS36</dd>
       <dt style="color:var(--color-charcoal-700, #5A5752)">Zertifikat</dt><dd>Echtheitszertifikat inklusive</dd>
     </dl>
-    <div class="prov-scale" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></div>
-    <div class="prov-scale-labels" aria-hidden="true"><span>Geheimtipp</span><span>Beliebt</span><span>Stark nachgefragt</span><span>Letzte Exemplare</span></div>
-    <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--color-text-secondary)"><strong>Nachfragestatus: beliebt.</strong> Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
   </div>
 </aside>
 
