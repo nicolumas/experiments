@@ -18,7 +18,7 @@ const ok=(c,m)=>console.log((c?'  PASS  ':'  FAIL  ')+m);
  // --- carousels scroll (the grid-vs-flex trap) -------------------------
  let p=await b.newPage({viewport:{width:1440,height:900}});
  await p.goto(U+'?phase=PUBLIC'); await p.waitForTimeout(900);
- for (const name of ['rooms','works']) {
+ for (const name of ['rooms']) {
    const sel=`[data-carousel="${name}"]`;
    const before=await p.$eval(sel+' .carousel__track',t=>t.scrollLeft);
    await p.click(sel+' .carousel__btn[data-dir="1"]');

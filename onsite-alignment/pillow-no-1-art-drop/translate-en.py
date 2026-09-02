@@ -219,14 +219,10 @@ T = {
     '</span> von <span': '</span> of <span',
     '>verkauft<': '>sold<',
 
-    # --- continue --------------------------------------------------------
-    'Weitere Werke von Rafael Neff': 'More works by Rafael Neff',
+    # --- rooms carousel ---------------------------------------------------
     'von Rafael Neff.': 'by Rafael Neff.',
-    'zur Wunschliste hinzufügen': 'add to wishlist',
     'aria-label="Vorheriges Bild"': 'aria-label="Previous image"',
     'aria-label="Nächstes Bild"': 'aria-label="Next image"',
-    'aria-label="Vorherige Werke"': 'aria-label="Previous works"',
-    'aria-label="Weitere Werke"': 'aria-label="More works"',
     'aria-label="Pillow No. 1 im Raum, Bildergalerie"':
         'aria-label="Pillow No. 1 in the room, image gallery"',
 
@@ -283,7 +279,6 @@ T = {
     'ROOM SHOT · HOCHHAUS · 16:9': 'ROOM SHOT · HIGH RISE · 16:9',
     'ROOM SHOT · BETON · 16:9': 'ROOM SHOT · CONCRETE · 16:9',
     'ROOM SHOT · MEDITERRAN · 4:3': 'ROOM SHOT · MEDITERRANEAN · 4:3',
-    'WERK · ': 'WORK · ',
 
     # --- script strings --------------------------------------------------
     "const PRICE = '1.950 €';": "const PRICE = '€1,950';",
