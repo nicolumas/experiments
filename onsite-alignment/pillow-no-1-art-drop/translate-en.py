@@ -173,6 +173,9 @@ T = {
 
     # --- inspiration -----------------------------------------------------
     'Über das Werk': 'About the work',
+    'Wir Künstler sind Suchende.': 'We artists are seekers.',
+    'Das Suchen steckt im Verfahren. Neff probiert aus, wird zurückgeworfen, ändert den Ansatz und macht weiter, bis eine Form ihre eigene Eigenständigkeit hat. Bei Pillow No. 1 lässt sich das Ergebnis nicht wiederholen: jedes Exemplar wird einzeln aufgeblasen, und die Form entscheidet sich im Moment des Verschweißens.':
+        'The searching is in the method. Neff experiments, is thrown back, changes the approach and carries on until a form has an identity of its own. With Pillow No. 1 the result cannot be repeated: every piece is inflated individually, and the form is decided in the moment of welding.',
     'Ein Kissen trägt die Spur des Abends zuvor. Hier ist diese Spur in Messing verschweißt und bleibt.':
         'A pillow carries the trace of the evening before. Here that trace is welded into brass, and stays.',
     'Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185' + NB + '°C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.':

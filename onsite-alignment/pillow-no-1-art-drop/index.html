@@ -263,6 +263,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .on-bone .voice__lead,
 .on-bone .voice__eyebrow,
 .on-bone .inspiration__eyebrow,
+.on-bone .inspiration__citeby,
 .on-bone .inspiration__body{color:var(--text-secondary)}
 .on-bone .inspiration__quote{color:var(--text-primary)}
 
@@ -580,6 +581,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .inspiration__eyebrow{margin:0}
 .inspiration__quote{margin:0;text-wrap:balance;max-width:none}
 .inspiration__body{max-width:70ch}
+/* The pivot quote sits between the two body paragraphs rather than beside the
+   display line: two display sizes stacked competed with each other. t-h4, so it
+   adds no new size to the type audit. */
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:12px;padding-block:8px}
+.inspiration__cite{margin:0;text-wrap:balance}
+.inspiration__citeby{margin:0}
 
 /* ============================================================
    7 · TRUST
@@ -1020,9 +1027,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 </section>
 
 <!-- ============================ 4 · INSPIRATION ============================
-     The editorial idea, in LUMAS's own voice. Deliberately NOT set as a quote:
-     no artist statement was supplied and nothing here may be put in Rafael
-     Neff's mouth. Every material fact comes from the product description. -->
+     The editorial idea in LUMAS's own voice, pivoting on one real quote.
+     "Wir Kuenstler sind Suchende" is verbatim from the interview on
+     lumas.de/artist/rafael_neff/, as is "wir probieren aus, wir werden
+     zurueckgeworfen". What is NOT here is the origin-in-leftover-material
+     story: that belongs to Gold Leaves ("entstanden aus den Resten vergoldeter
+     Portraitplatten"), not to Pillow No. 1, so it is not claimed about this
+     work. Everything else is the product description. -->
 <section class="section on-bone inspiration" data-sec="inspiration">
   <div class="wrap inspiration__inner">
     <h2 class="t-eyebrow inspiration__eyebrow">Über das Werk</h2>
@@ -1030,6 +1041,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <p class="t-h3 inspiration__quote">Ein Kissen trägt die Spur des Abends zuvor. Hier ist diese Spur in Messing verschweißt und bleibt.</p>
 
     <p class="t-body-l inspiration__body">Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185 °C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.</p>
+
+    <figure class="inspiration__fig">
+      <blockquote class="t-h4 inspiration__cite">Wir Künstler sind Suchende.</blockquote>
+      <figcaption class="t-eyebrow inspiration__citeby">Rafael Neff</figcaption>
+    </figure>
+
+    <p class="t-body-l inspiration__body">Das Suchen steckt im Verfahren. Neff probiert aus, wird zurückgeworfen, ändert den Ansatz und macht weiter, bis eine Form ihre eigene Eigenständigkeit hat. Bei Pillow No. 1 lässt sich das Ergebnis nicht wiederholen: jedes Exemplar wird einzeln aufgeblasen, und die Form entscheidet sich im Moment des Verschweißens.</p>
   </div>
 </section>
 

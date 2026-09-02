@@ -268,6 +268,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .on-bone .voice__lead,
 .on-bone .voice__eyebrow,
 .on-bone .inspiration__eyebrow,
+.on-bone .inspiration__citeby,
 .on-bone .inspiration__body{color:var(--text-secondary)}
 .on-bone .inspiration__quote{color:var(--text-primary)}
 
@@ -585,6 +586,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .inspiration__eyebrow{margin:0}
 .inspiration__quote{margin:0;text-wrap:balance;max-width:none}
 .inspiration__body{max-width:70ch}
+/* The pivot quote sits between the two body paragraphs rather than beside the
+   display line: two display sizes stacked competed with each other. t-h4, so it
+   adds no new size to the type audit. */
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:12px;padding-block:8px}
+.inspiration__cite{margin:0;text-wrap:balance}
+.inspiration__citeby{margin:0}
 
 /* ============================================================
    7 · TRUST
@@ -1025,9 +1032,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 </section>
 
 <!-- ============================ 4 · INSPIRATION ============================
-     The editorial idea, in LUMAS's own voice. Deliberately NOT set as a quote:
-     no artist statement was supplied and nothing here may be put in Rafael
-     Neff's mouth. Every material fact comes from the product description. -->
+     The editorial idea in LUMAS's own voice, pivoting on one real quote.
+     "Wir Kuenstler sind Suchende" is verbatim from the interview on
+     lumas.de/artist/rafael_neff/, as is "wir probieren aus, wir werden
+     zurueckgeworfen". What is NOT here is the origin-in-leftover-material
+     story: that belongs to Gold Leaves ("entstanden aus den Resten vergoldeter
+     Portraitplatten"), not to Pillow No. 1, so it is not claimed about this
+     work. Everything else is the product description. -->
 <section class="section on-bone inspiration" data-sec="inspiration">
   <div class="wrap inspiration__inner">
     <h2 class="t-eyebrow inspiration__eyebrow">About the work</h2>
@@ -1035,6 +1046,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <p class="t-h3 inspiration__quote">A pillow carries the trace of the evening before. Here that trace is welded into brass, and stays.</p>
 
     <p class="t-body-l inspiration__body">Soft things are taken to be fleeting. They give way, they lose their shape, in the morning they are smoothed out again. Rafael Neff stops the moment before: welded, inflated, mirror-polished, lacquered in six layers with instrument lacquer and kiln-fired at 185 °C. The soft gesture becomes a hard, deeply reflective surface in which the room and the viewer appear. What remains is the memory of a touch, in a material that outlasts it.</p>
+
+    <figure class="inspiration__fig">
+      <blockquote class="t-h4 inspiration__cite">We artists are seekers.</blockquote>
+      <figcaption class="t-eyebrow inspiration__citeby">Rafael Neff</figcaption>
+    </figure>
+
+    <p class="t-body-l inspiration__body">The searching is in the method. Neff experiments, is thrown back, changes the approach and carries on until a form has an identity of its own. With Pillow No. 1 the result cannot be repeated: every piece is inflated individually, and the form is decided in the moment of welding.</p>
   </div>
 </section>
 

@@ -133,7 +133,16 @@ x[366,1086] y[67,983] of 1536×1024; the crop is that plus 10% padding, and
 `.work-block__art` carries the matching `aspect-ratio: 864/1024`, so `contain`
 never letterboxes.
 
-**11. The artist quote is real, and it is not about this work.**
+**11. Two real quotes, and one claim deliberately left out.**
+The about-the-work section pivots on „Wir Künstler sind Suchende", verbatim
+from the interview on lumas.de/artist/rafael_neff/, and the paragraph after it
+uses his own „wir probieren aus, wir werden zurückgeworfen". What is *not* there
+is the origin-in-leftover-material story: „entstanden aus den Resten vergoldeter
+Portraitplatten" is the Gold Leaves series on the same page, not Pillow No. 1,
+so it is not claimed about this work. If the artist confirms a comparable origin
+for the Pillows, it is a strong line and worth adding.
+
+**12. The artist-section quote is also real, and also not about this work.**
 No statement about Pillow No. 1 was supplied. There *is* a published first-person
 quote in the LUMAS artist interview, about his working method rather than this
 sculpture: „Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis
@@ -142,14 +151,14 @@ It is used verbatim apart from one dash normalised to a colon, per the no-dash
 rule. Source: lumas.de/artist/rafael_neff/, Interview tab. A quote about *this*
 work would be better and is still worth asking the artist for.
 
-**12. Awards and exhibitions are lifted from the artist page, not written.**
+**13. Awards and exhibitions are lifted from the artist page, not written.**
 Both columns come from the Vita on lumas.de/artist/rafael_neff/. The awards list
 is complete to 2005; the exhibitions column is explicitly labelled a selection,
 because the full list runs to about thirty entries. Collections (DZ Bank,
 Deutsche Bank, Berenberg, LBBW, Sparkassenverband Rheinland-Pfalz) are on the
 artist page too and are available if a third column is ever wanted.
 
-**13. The works rail has no ground and every work is the same height.**
+**14. The works rail has no ground and every work is the same height.**
 Measured pixel ratios in the rail are 1.000, 1.264 and 1.441–1.445, so the box
 ratio is 1.445 — as wide as the widest work is at full height. Every artwork
 then fills the box height and only its width varies: same height, nothing
