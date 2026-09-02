@@ -228,8 +228,24 @@ T = {
         'aria-label="Pillow No. 1 in the room, image gallery"',
 
     # --- alt text: the work, the details, the artist ----------------------
-    'Pillow No. 1 auf einem Sockel und einer weißen Stele in einem Pariser Altbau-Salon, Fischgrätparkett und Nachmittagslicht.':
-        'Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light.',
+    'Pillow No. 1 auf einem Sockel aus Marmor in einem hellen Altbau-Wohnraum, Fischgrätparkett, Bücherwand und Balkontüren.':
+        'Pillow No. 1 on a marble plinth in a bright period living room, herringbone parquet, a wall of books and balcony doors.',
+    'ROOM SHOT · ALTBAU · 16:9': 'ROOM SHOT · PERIOD ROOM · 16:9',
+    'Pillow No. 1 auf einer weißen Stele in einem warmen Wohnraum, links ein Bouclé-Sofa, rechts eine Kaminnische und eine großformatige Arbeit in Beige.':
+        'Pillow No. 1 on a white plinth in a warm living room, a bouclé sofa to the left, a fireplace niche and a large-format work in beige to the right.',
+    'ROOM SHOT · STELE · 16:9': 'ROOM SHOT · PLINTH · 16:9',
+    'Pillow No. 1 auf einem Sockel aus schwarzem Marmor in einem Apartment mit Fensterfront, dahinter ein Park und die Silhouette der Stadt.':
+        'Pillow No. 1 on a black marble plinth in an apartment with a window wall, a park and the city skyline behind it.',
+    'ROOM SHOT · APARTMENT · 16:9': 'ROOM SHOT · APARTMENT · 16:9',
+    'Pillow No. 1 auf einem dunklen Metalltisch in einem Loft, dahinter ein Marmorkamin mit gestapeltem Holz und ein Lounge-Sessel aus Nussbaum.':
+        'Pillow No. 1 on a dark metal table in a loft, a marble fireplace stacked with firewood and a walnut lounge chair behind it.',
+    'ROOM SHOT · LOFT · 16:9': 'ROOM SHOT · LOFT · 16:9',
+    'Pillow No. 1 auf einem Beistelltisch in einem hellen Wohnraum mit olivgrünem Sofa, Dachfenster und Blick durch die Stahltür in den Garten.':
+        'Pillow No. 1 on a side table in a bright living room with an olive-green sofa, a skylight and a view through the steel doors into the garden.',
+    'ROOM SHOT · GARTENZIMMER · 16:9': 'ROOM SHOT · GARDEN ROOM · 16:9',
+    'Pillow No. 1 auf einem Sideboard aus Nussbaum, dahinter ein graues Bouclé-Sofa, eine Bogenlampe und ein Kamin aus Travertin.':
+        'Pillow No. 1 on a walnut sideboard, a grey bouclé sofa, an arc lamp and a travertine fireplace behind it.',
+    'ROOM SHOT · SIDEBOARD · 16:9': 'ROOM SHOT · SIDEBOARD · 16:9',
     'Pillow No. 1 von Rafael Neff: eine aufgeblasene, spiegelpolierte Messingform auf der Spitze stehend, auf einem Sockel aus geräucherter Eiche.':
         'Pillow No. 1 by Rafael Neff: an inflated, mirror-polished brass form standing on one point, on a base of smoked oak.',
     'Nahaufnahme der spiegelpolierten Messingkante von Pillow No. 1 mit sichtbarer Schweißnaht.':
@@ -242,44 +258,13 @@ T = {
         'Rafael Neff in a black-and-white portrait, round glasses and a black shirt, looking upward.',
 
     # --- alt text: the eleven rooms --------------------------------------
-    'Pillow No. 1 auf einer weißen Stele in einem Wohnraum mit Kamin, Bouclé-Sofa und Sisalteppich.':
-        'Pillow No. 1 on a white plinth in a living room with a fireplace, bouclé sofa and sisal rug.',
-    'Pillow No. 1 auf einem Sockel aus schwarzem Marmor in einem New Yorker Apartment, Fensterfront mit Blick auf einen Park.':
-        'Pillow No. 1 on a black marble plinth in a New York apartment, a window wall looking onto a park.',
-    'Ein Betrachter sitzt neben Pillow No. 1, die polierte Messingfläche spiegelt ihn und den Raum mit den blauen Samtsofas.':
-        'A viewer sits beside Pillow No. 1; the polished brass surface reflects him and the room with its blue velvet sofas.',
-    'Pillow No. 1 auf einer dunklen Konsole in einem Salon mit Stuckdecke, Marmorkamin und Blick über die Stadt im Abendlicht.':
-        'Pillow No. 1 on a dark console in a salon with a stucco ceiling, marble fireplace and a view over the city at dusk.',
-    'Pillow No. 1 auf einem dunklen Sideboard vor einem grauen Sofa, links eine großformatige Schwarz-Weiß-Arbeit.':
-        'Pillow No. 1 on a dark sideboard in front of a grey sofa, with a large black-and-white work to the left.',
-    'Pillow No. 1 auf einem Nussbaumtisch in einem hellen Wohnraum mit Bouclé-Sesseln, Pampasgras und offenem Kamin.':
-        'Pillow No. 1 on a walnut table in a pale living room with bouclé armchairs, pampas grass and an open fireplace.',
-    'Pillow No. 1 auf einem Marmortisch in einem Wohnraum mit grünem Sofa, Dachfenster und Blick in den Garten.':
-        'Pillow No. 1 on a marble table in a living room with a green sofa, a skylight and a view into the garden.',
-    'Pillow No. 1 auf einem dunklen Couchtisch in einem Hochhaus-Apartment mit braunem Samtsofa und Blick über die Dächer.':
-        'Pillow No. 1 on a dark coffee table in a high-rise apartment with a brown velvet sofa and a view over the rooftops.',
-    'Pillow No. 1 auf einem runden schwarzen Tisch in einem Loft mit Sichtbeton, Ledersesseln und einer Zeichnung an der Wand.':
-        'Pillow No. 1 on a round black table in a loft with exposed concrete, leather armchairs and a drawing on the wall.',
-    'Pillow No. 1 auf einem Metalltisch vor einer Fensterfront, dahinter ein Marmorkamin und ein Ledersessel.':
-        'Pillow No. 1 on a metal table in front of a window wall, with a marble fireplace and a leather armchair behind.',
-    'Pillow No. 1 auf einer Stele in einem mediterranen Wohnraum mit Olivenbaum, Holzbalken und Blick in den Garten.':
-        'Pillow No. 1 on a plinth in a Mediterranean living room with an olive tree, timber beams and a view into the garden.',
 
     # --- fallback labels -------------------------------------------------
-    'ROOM SHOT · SALON PARIS · 3:2': 'ROOM SHOT · PARIS SALON · 3:2',
     'SKULPTUR · PILLOW NO. 1': 'SCULPTURE · PILLOW NO. 1',
-    'ROOM SHOT · STELE · 3:2': 'ROOM SHOT · PLINTH · 3:2',
     'DETAIL · OBERFLÄCHE · 3:2': 'DETAIL · SURFACE · 3:2',
     'DETAIL · SOCKEL · 3:2': 'DETAIL · BASE · 3:2',
     'ATELIER · VIER EXEMPLARE · 16:9': 'STUDIO · FOUR PIECES · 16:9',
     'KÜNSTLERPORTRÄT · RAFAEL NEFF': 'ARTIST PORTRAIT · RAFAEL NEFF',
-    'ROOM SHOT · SPIEGELUNG · 16:9': 'ROOM SHOT · REFLECTION · 16:9',
-    'ROOM SHOT · NUSSBAUM · 16:9': 'ROOM SHOT · WALNUT · 16:9',
-    'ROOM SHOT · GARTENZIMMER · 16:9': 'ROOM SHOT · GARDEN ROOM · 16:9',
-    'ROOM SHOT · NEW YORK · 16:9': 'ROOM SHOT · NEW YORK · 16:9',
-    'ROOM SHOT · HOCHHAUS · 16:9': 'ROOM SHOT · HIGH RISE · 16:9',
-    'ROOM SHOT · BETON · 16:9': 'ROOM SHOT · CONCRETE · 16:9',
-    'ROOM SHOT · MEDITERRAN · 4:3': 'ROOM SHOT · MEDITERRANEAN · 4:3',
 
     # --- script strings --------------------------------------------------
     "const PRICE = '1.950 €';": "const PRICE = '€1,950';",

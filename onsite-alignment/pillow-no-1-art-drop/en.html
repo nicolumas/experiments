@@ -384,8 +384,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    A fourth line would push the ramp higher and was kept out deliberately: the
    "price rises afterwards" half of the message lives in the banner above,
    which is charcoal and needs no scrim at all. */
-.proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:400;
-  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+/* 700 at >=19px, and that is legibility rather than style: WCAG counts
+   18.66px at weight 700 as large text, so these lines are held to 3:1 instead
+   of 4.5:1. At the old 16px/400 they needed 4.5:1, and the second delivery's
+   hero puts a sunlit window exactly behind them — clearing 4.5:1 there
+   measures at ~80% scrim, which is the opaque plate this design deliberately
+   does not use. Same reason .proof__dates is 700. */
+.proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:700;
+  font-size:clamp(19px,1.9vw,24px);letter-spacing:.14em}
 /* Regular, not Light: at Light the name goes delicate against the photograph
    and the whole lockup reads as a whisper. */
 .proof__title{margin:0;font-weight:400;font-size:clamp(40px,5vw,72px);
@@ -396,8 +402,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    at 47.4%). The mask then cut the ramp behind the type to 43% of its value and
    no ramp could clear AA. Split, the widest line reaches ~34%. */
 .proof__dates{color:var(--text-inverse);margin:18px 0 0;
-  font-family:var(--font-text);font-weight:400;
-  font-size:clamp(16px,1.9vw,24px);letter-spacing:.14em}
+  font-family:var(--font-text);font-weight:700;
+  font-size:clamp(19px,1.9vw,24px);letter-spacing:.14em}
 .proof__when{margin-top:4px;color:var(--text-inverse);opacity:.86}
 
 /* ============================================================
@@ -411,7 +417,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* The ratio matches CROP_WORK in prepare-assets.py exactly, so contain never
    letterboxes: the asset IS this shape. Transparent so that if a differently
    proportioned asset is dropped in, the letterbox is charcoal, not bone. */
-.work-block__art{width:100%;max-width:560px;aspect-ratio:864/1024;margin-inline:auto;background:transparent}
+.work-block__art{width:100%;max-width:560px;aspect-ratio:1296/1536;margin-inline:auto;background:transparent}
 .work-block__panel{display:flex;flex-direction:column;gap:24px;max-width:560px}
 
 /* countdown is the loudest thing in the panel after the work itself */
@@ -690,10 +696,19 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .proof{height:calc(100vh - var(--above-proof, 0px));
          height:calc(100svh - var(--above-proof, 0px));
          min-height:320px}
-  .proof__wrap{padding-bottom:36px;align-items:flex-end}
+  /* 40px, not 24px: the review page's fixed phase-switch sits bottom-right and
+     was overlapping the last lockup line on a phone. The lockup cannot simply
+     move up — the eyebrow's contrast is the binding constraint — so the ramp
+     holds to 90% of the band to pay for the extra clearance. */
+  .proof__wrap{padding-bottom:40px;align-items:flex-end}
   .proof__lockup{max-width:none;width:100%}
-  .proof::after{height:32%;
-    background:linear-gradient(to top,rgba(20,19,17,.56) 0%,rgba(20,19,17,.52) 70%,rgba(20,19,17,0) 100%)}
+  /* 31% is the measured ceiling on a phone: past it the band starts darkening
+     the sculpture's base, and 44% put 49% of scrim across the work. So the
+     band cannot grow — instead the ramp holds its strength to 84% of the band
+     rather than 70%, because the eyebrow sits near the top of it and was
+     taking only 38% of the ramp. check-hero-scrim.py prints the ceiling. */
+  .proof::after{height:31%;
+    background:linear-gradient(to top,rgba(20,19,17,.64) 0%,rgba(20,19,17,.60) 90%,rgba(20,19,17,0) 100%)}
 }
 
 /* From 768 up the hero is the landscape asset, so the scrim can fade out
@@ -871,16 +886,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      specs: the first screen is evidence. The photograph itself is untouched —
      see the .proof comment in the stylesheet for why there is no scrim. -->
 <section class="proof" data-sec="proof">
-  <!-- A 3:2 room shot in a portrait viewport crops to a slice of wall, so the
-       phone and tablet get a 3:4 framing of the same room. No portrait render
-       was supplied; hero-room-portrait.jpg is derived from the landscape master
-       by prepare-assets.py and should be replaced by a real one. -->
+  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall, so the
+       phone gets a 3:4 framing of the same room. No portrait render was
+       supplied; hero-room-portrait.jpg is derived from the landscape master by
+       prepare-assets.py and should be replaced by a real one. -->
   <picture>
-    <source media="(max-width:767px)" srcset="hero-room-portrait.jpg" width="768" height="1024">
-    <img class="proof__img" src="hero-room-paris.jpg" width="1535" height="1024"
+    <source media="(max-width:767px)" srcset="hero-room-portrait.jpg" width="1152" height="1536">
+    <img class="proof__img" src="hero-room-paris.jpg" width="1920" height="1072"
          fetchpriority="high" decoding="async"
-         alt="Pillow No. 1 on its base and a white plinth in a Parisian period salon, herringbone parquet and afternoon light."
-         data-fallback="ROOM SHOT · PARIS SALON · 3:2">
+         alt="Pillow No. 1 on a marble plinth in a bright period living room, herringbone parquet, a wall of books and balcony doors."
+         data-fallback="ROOM SHOT · PERIOD ROOM · 16:9">
   </picture>
   <div class="wrap proof__wrap">
     <div class="proof__lockup">
@@ -901,7 +916,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   <div class="wrap work-block__grid">
 
     <div class="work-block__art media media--contain framed">
-      <img src="work-studio.jpg" width="864" height="1024" decoding="async"
+      <img src="work-studio.jpg" width="1296" height="1536" decoding="async"
            alt="Pillow No. 1 by Rafael Neff: an inflated, mirror-polished brass form standing on one point, on a base of smoked oak."
            data-fallback="SCULPTURE · PILLOW NO. 1">
     </div>
@@ -1156,41 +1171,41 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-01-plinth.jpg" width="1920" height="1280" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a white plinth in a living room with a fireplace, bouclé sofa and sisal rug."
-                 data-fallback="ROOM SHOT · PLINTH · 3:2">
+            <img src="room-01-plinth.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a white plinth in a warm living room, a bouclé sofa to the left, a fireplace niche and a large-format work in beige to the right."
+                 data-fallback="ROOM SHOT · PLINTH · 16:9">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-02-newyork.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a black marble plinth in a New York apartment, a window wall looking onto a park."
-                 data-fallback="ROOM SHOT · NEW YORK · 16:9">
+            <img src="room-02-highrise.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a black marble plinth in an apartment with a window wall, a park and the city skyline behind it."
+                 data-fallback="ROOM SHOT · APARTMENT · 16:9">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-03-sideboard.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a dark sideboard in front of a grey sofa, with a large black-and-white work to the left."
-                 data-fallback="ROOM SHOT · SIDEBOARD · 16:9">
+            <img src="room-03-loft.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a dark metal table in a loft, a marble fireplace stacked with firewood and a walnut lounge chair behind it."
+                 data-fallback="ROOM SHOT · LOFT · 16:9">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
             <img src="room-04-garden.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a marble table in a living room with a green sofa, a skylight and a view into the garden."
+                 alt="Pillow No. 1 on a side table in a bright living room with an olive-green sofa, a skylight and a view through the steel doors into the garden."
                  data-fallback="ROOM SHOT · GARDEN ROOM · 16:9">
           </div>
         </figure>
 
         <figure class="carousel__slide">
           <div class="room__media media framed">
-            <img src="room-05-concrete.jpg" width="1920" height="1072" loading="lazy" decoding="async"
-                 alt="Pillow No. 1 on a metal table in front of a window wall, with a marble fireplace and a leather armchair behind."
-                 data-fallback="ROOM SHOT · CONCRETE · 16:9">
+            <img src="room-05-sideboard.jpg" width="1920" height="1072" loading="lazy" decoding="async"
+                 alt="Pillow No. 1 on a walnut sideboard, a grey bouclé sofa, an arc lamp and a travertine fireplace behind it."
+                 data-fallback="ROOM SHOT · SIDEBOARD · 16:9">
           </div>
         </figure>
 
@@ -1659,7 +1674,7 @@ $$('[data-carousel]').forEach(root => {
    cropping the work. Both hero crops share these fractions because the portrait
    asset is a horizontal crop of the same master.
    ============================================================ */
-const HERO_ART = { top: 0.142, bottom: 0.674 };  // fractions of the hero image
+const HERO_ART = { top: 0.050, bottom: 0.685 };  // fractions of the hero image
 const HERO_INSET = 0.02;                          // a sliver of air kept around it
 
 (() => {

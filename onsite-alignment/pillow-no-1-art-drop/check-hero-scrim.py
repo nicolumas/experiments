@@ -60,15 +60,18 @@ PORTRAIT = 'hero-room-portrait.jpg'
 # two are pictures hanging in the photographed room. They still must not be
 # washed by the scrim, but a full-bleed hero will always clip incidental wall
 # art at the frame edge, so their framing is reported, not enforced.
+# Read off a 5%-grid overlay of the master and confirmed by drawing them back
+# on the image. Automatic detection does not work here: a gold/saturation mask
+# cannot tell brass from parquet, walnut or a sisal rug.
 MASTER_ARTWORKS = {
-    'Pillow No. 1, sculpture and base': (0.472, 0.142, 0.782, 0.674),
-    'framed drawing, right wall':       (0.772, 0.000, 1.000, 0.562),
-    'framed picture, background left':  (0.401, 0.117, 0.596, 0.386),
+    'Pillow No. 1, sculpture and base': (0.555, 0.050, 0.795, 0.685),
+    'framed work, right wall':          (0.895, 0.015, 1.000, 0.420),
+    'framed work, over the desk':       (0.455, 0.125, 0.575, 0.355),
 }
 PRIMARY = 'Pillow No. 1, sculpture and base'
-# must match PORTRAIT in prepare-assets.py
-CROP_LEFT_FRAC = 0.365
-MASTER_W, MASTER_H = 1535, 1024
+# must match the hero entry in TALL_CROPS in prepare-assets.py
+CROP_LEFT_FRAC = 0.466
+MASTER_W, MASTER_H = 2752, 1536
 CROP_W_FRAC = (MASTER_H * 3 / 4) / MASTER_W
 
 BRIGHT_PERCENTILE = 95
@@ -229,6 +232,19 @@ def main():
             else:
                 print(f'         "{name}" fully in frame '
                       f'({-cut_top:.0f}px air above, {-cut_bottom:.0f}px below)')
+            # How tall the scrim band may be before it starts darkening the work.
+            # Only meaningful without a horizontal mask: with one the band is
+            # kept off the work sideways instead, so this bound does not apply.
+            # Printed because the band height is the number that trades off
+            # against the lockup's contrast, and guessing it from the image
+            # fractions is exactly how the phone band ended up 49% over the
+            # sculpture.
+            if name == PRIMARY and not mask_stops:
+                headroom = ((visible_bottom - min(bottom, visible_bottom))
+                            * (cont['h'] / (visible_bottom - visible_top)))
+                print(f'         unmasked band may reach {headroom:.0f}px '
+                      f'({headroom / cont["h"] * 100:.0f}% of the hero) '
+                      f'before it touches the work')
 
         for line in g['lines']:
             fg = luminance(parse_rgb(line['color'])[:3])

@@ -242,16 +242,26 @@ None was supplied, and nothing may be put in Rafael Neff's mouth. The
 inspiration section carries the editorial idea in LUMAS's own voice instead,
 deliberately not marked up as a quotation.
 
-**8. The hero image is the 1535px salon, not one of the 2752px renders.**
-Chosen by geometry. The lockup sits lower-left and is ~365px wide at 1024, so it
-collides with any composition whose subject starts before ~40% of the frame
-width. Every render in the second delivery is 16:9 with the object at 31-37%,
-and at desktop widths the hero crops those horizontally, magnifying the object
-further into the corner: measured, the type landed on brass at rgb(240) and
-needed a ~50% wash over the sculpture to be legible. The 3:2 salon shot has the
-sculpture at 47.8% and clears at every width. Its cost is resolution, which is
-listed under Open below. A 2560px export of *that* room, or any render with the
-object right of centre, resolves it.
+**8. The hero image is chosen by geometry, and the third delivery finally has one.**
+The lockup sits lower-left and is ~365px wide at 1024, so it collides with any
+composition whose subject starts before ~40% of the frame width. The first
+delivery's renders put the object at 31-37%, and at desktop widths the hero
+crops those horizontally, magnifying it further into the corner: measured, the
+type landed on brass at rgb(240) and needed a ~50% wash over the sculpture to
+be legible. The 1535px salon was used instead, at 47.8%, and its cost was
+resolution. `Header2.jpg` from the replacement delivery of 02.09.2026 puts the
+sculpture at **56%** at 2752px, which is both the clearest margin and the
+sharpest master so far.
+
+It brought its own problem, and the fix is in the type rather than the scrim:
+the new room is a sunlit apartment whose brightest area, the window and pale
+curtain, sits exactly behind the lockup. At the old 16px/400 the small lines
+needed 4.5:1 there, which measures at a ~80% scrim — the opaque plate this
+design deliberately does not use. They are now 19px/700, which WCAG counts as
+large text at 3:1, and the phone ramp holds its strength to 90% of a band that
+is capped at 31% of the hero because that is where the sculpture's base begins.
+Result: every line clears at all seven widths with 4.6-5.1:1, and the scrim
+lands **0%** on the work at every width, down from 20% on the old hero.
 
 ## Verified — measured numbers, not assurances
 
@@ -317,18 +327,17 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
 - **No artist quote was supplied.** The voice section works without one, but a
   real Neff quote would strengthen it.
 - **No portrait room render was supplied.** `hero-room-portrait.jpg` is a 3:4
-  crop of the salon landscape master, cut by `prepare-assets.py` at 36.5% of the
-  width. It serves every viewport below 1024px. A real portrait render should
+  crop of the landscape master, cut by `prepare-assets.py` at 46.6% of the
+  width, where the sculpture and base sit centred with an even 9.4% either
+  side. It serves every viewport below 768px. A real portrait render should
   replace it — and if it does, re-run
   `node audit.js && python3 check-hero-scrim.py`, because the scrim is tuned to
   these exact pixels.
-- **Hero resolution: 1535px.** A full-bleed desktop hero wants ~2880px for a 2×
-  display. The second delivery has 2752px renders but none of them works
-  compositionally as a hero (see departure 8). An unsharp mask (r 1.2 / 115% /
-  t 3) is applied on the way out, which helps the resampled edges read cleaner
-  but cannot add detail. Ask for a 2560px+ export of the salon room, or a render
-  with the object right of centre. The buy-box shot gets a lighter pass
-  (r 1.0 / 95% / t 3) for the same reason: 864px native in a ~700px column.
+- ~~**Hero resolution: 1535px.**~~ **Resolved 02.09.2026.** The replacement
+  delivery is 2752x1536, so the hero publishes at 1920px and the buy-box shot
+  at 1296px, both downscaled from the master rather than resampled up. Every
+  unsharp mask has been removed: nothing on the page is now shown above its
+  native size.
 - **No photograph of the signature exists.** Neither delivery includes a
   close-up of a signed base. The third craft card carried a type-set stand-in
   for the mark (`Rafael Neff · 2026 · Nr. ___ / 999`) until 02.09.2026, when it
@@ -336,16 +345,23 @@ Digit advances measured from the shipped `UtileDisplay-Regular.woff2`: `1` is
   signature would be a fabricated artefact. The card now makes the claim in
   prose only. **Asset request: one macro of the signature and edition number on
   the smoked oak base.**
-- **Two slides in the rooms slider need their base retouched.** Six of the
-  eleven renders were cut for deformed geometry. Two more have a wrong base and
-  are back in the deck at the client's request, to be edited: `RNE_img_03`
-  (slide 2) renders the smoked oak pale blond, and `RNE_img_01` (slide 5)
-  renders it two-tone with one near-white face. `prepare-assets.py` measures
-  every render's base against the studio reference on each run and prints the
-  delta, so re-running it after an edit is also the check. It judges colour
-  only: the sample boxes take in some of the surrounding table or floor, so the
-  light-to-dark spread it also prints is information rather than a verdict, and
-  a two-tone base still needs an eye.
+- **One slide in the rooms slider still needs its base retouched.** The
+  replacement delivery re-renders all five and fixes the pale-blond base, but
+  `carousel_3` (slide 3, `room-03-loft.jpg`) still renders the walnut two-tone,
+  with the left face near-white. It posts both the worst colour delta of the
+  five, 42.9 against a tolerance of 30, and the widest light-to-dark spread,
+  201.6, so this time the measurement catches it rather than an eye.
+  `prepare-assets.py` prints the table on every run. Slides 2 and 5 read cool
+  and grey next to the studio reference, at deltas of 31.2 and 28.9, which is
+  worth a look but is mostly the daylight in those two scenes.
+
+  The sample boxes had to be re-read for the new renders: the old ones were
+  measured on the first delivery's compositions and were landing on the plinth,
+  which reported a good base as wrong. They are read off a 1%-grid zoom of each
+  master. Automatic detection was tried twice and abandoned both times — a
+  gold/saturation mask cannot separate brass from parquet or walnut, and keying
+  off the sculpture's lowest gold pixel lands above the base and, in
+  `carousel_5`, latches onto the brass table frame instead.
 - **`detail-edition.jpg` is a screen grab.** The source file is
   `Screenshot 2026-08-26 at 10.04.40 1.jpg`, 2170×1198. It is the best evidence
   on the page for the Unikatsedition claim, so it is used — but confirm a proper
