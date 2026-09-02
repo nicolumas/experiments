@@ -188,8 +188,8 @@ T = {
     'sicher verpackt für den Transport': 'securely packed for transport',
 
     # --- the artist quote and the CV columns -----------------------------
-    'Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.':
-        'Once I have found something, I work on it until it is perfect: the one right form of expression. Only then is it art.',
+    '„Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.“':
+        '“Once I have found something, I work on it until it is perfect: the one right form of expression. Only then is it art.”',
     'Auszeichnungen': 'Awards',
     'Ausstellungen, eine Auswahl': 'Exhibitions, a selection',
     'Gold, Internationaler Kalenderpreis': 'Gold, International Calendar Award',
@@ -271,7 +271,7 @@ T = {
     'DETAIL · OBERFLÄCHE · 3:2': 'DETAIL · SURFACE · 3:2',
     'DETAIL · SOCKEL · 3:2': 'DETAIL · BASE · 3:2',
     'ATELIER · VIER EXEMPLARE · 16:9': 'STUDIO · FOUR PIECES · 16:9',
-    'KÜNSTLERPORTRÄT · RAFAEL NEFF · 4:3': 'ARTIST PORTRAIT · RAFAEL NEFF · 4:3',
+    'KÜNSTLERPORTRÄT · RAFAEL NEFF': 'ARTIST PORTRAIT · RAFAEL NEFF',
     'ROOM SHOT · SPIEGELUNG · 16:9': 'ROOM SHOT · REFLECTION · 16:9',
     'ROOM SHOT · NUSSBAUM · 16:9': 'ROOM SHOT · WALNUT · 16:9',
     'ROOM SHOT · GARTENZIMMER · 16:9': 'ROOM SHOT · GARDEN ROOM · 16:9',

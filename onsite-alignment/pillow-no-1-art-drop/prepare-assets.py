@@ -97,10 +97,25 @@ BASE_TOLERANCE = 30       # mean per-channel distance before it is called out
 CROP_WORK = (STUDIO, 'DSC_4411-reflections.png', 'work-studio.jpg',
              294, 0, 1158, 1024, (1.0, 95, 3))
 
-# 3:4 crop of the hero master. Left edge as a FRACTION of the source width, so
-# it survives the master being re-exported at a different size. 0.365 keeps the
-# sculpture, its plinth and the framed background picture in frame.
-PORTRAIT = (STUDIO, 'room2 (1).png', 'hero-room-portrait.jpg', 0.365, 1024, (1.2, 115, 3))
+# Tall crops taken from a landscape master. The left edge is a FRACTION of the
+# source width, so each one survives its master being re-exported at a
+# different size, and the crop uses the master's full height.
+# (folder, source, output, ratio w/h, left fraction, output height[, sharpen])
+TALL_CROPS = [
+    # Hero, <=767px only. 0.365 keeps the sculpture, its plinth and the framed
+    # background picture in frame.
+    (STUDIO, 'room2 (1).png', 'hero-room-portrait.jpg', 3 / 4, 0.365, 1024,
+     (1.2, 115, 3)),
+
+    # Artist portrait for the two-column layout (>=1024px), where a 4:3 crop
+    # left ~380px of empty bone under it against the text column. 2:3 makes the
+    # portrait as tall as that column at 1440 and 1920. Measured on the master:
+    # his head spans x 0.15-0.52, so an 0.11 left edge keeps 4% air beside it
+    # and puts the larger margin, 6.5%, on the side he is looking towards.
+    # 1100px wide is a true 2x for the 533px column, so it is downscaled from
+    # the 1500px window and needs no sharpening.
+    (DESIGN, 'RNE_Portrait_1.jpg', 'artist-portrait-tall.jpg', 2 / 3, 0.11, 1650),
+]
 
 # Retired by later deliveries or by the decisions above, removed so publish.py
 # cannot ship an orphan.
@@ -118,6 +133,19 @@ RETIRED = ['room-02-sideboard.jpg', 'room-03-garden.jpg', 'room-10-concrete.jpg'
 
 QUALITY = 88   # working copy stays generous; publish.py caps and re-encodes
 
+# The design folder gets reorganised between deliveries — on 02.09.2026 four of
+# the room masters moved into an `artdrop` subfolder — so a master is looked up
+# by name in the folder itself and then one level down in the known subfolders,
+# rather than being pinned to a path that a tidy-up breaks.
+SUBFOLDERS = ['artdrop']
+
+
+def master(folder, name):
+    for candidate in [folder / name] + [folder / sub / name for sub in SUBFOLDERS]:
+        if candidate.exists():
+            return candidate
+    return None
+
 
 def save(im, out, cap, sharpen=None):
     if im.width > cap:
@@ -132,7 +160,8 @@ def save(im, out, cap, sharpen=None):
 
 
 def main():
-    missing = [f'{e[0].name}/{e[1]}' for e in COPIES if not (e[0] / e[1]).exists()]
+    missing = [f'{e[0].name}/{e[1]}' for e in COPIES + TALL_CROPS
+               if master(e[0], e[1]) is None]
     if missing:
         sys.exit(f'masters not found: {missing}')
 
@@ -141,24 +170,27 @@ def main():
     for entry in COPIES:
         folder, name, out, cap = entry[:4]
         sharpen = entry[4] if len(entry) > 4 else None
-        save(Image.open(folder / name).convert('RGB'), out, cap, sharpen)
+        save(Image.open(master(folder, name)).convert('RGB'), out, cap, sharpen)
 
     folder, name, out, x0, y0, x1, y1, sharpen = CROP_WORK
-    im = Image.open(folder / name).convert('RGB')
+    im = Image.open(master(folder, name)).convert('RGB')
     save(im.crop((x0, y0, x1, y1)), out, x1 - x0, sharpen)
     print(f'  {"":26} -> .work-block__art aspect-ratio:{x1 - x0}/{y1 - y0}')
 
-    folder, name, out, left_frac, height, sharpen = PORTRAIT
-    im = Image.open(folder / name).convert('RGB')
-    crop_h = min(height, im.height)
-    crop_w = round(crop_h * 3 / 4)
-    left = round(im.width * left_frac)
-    if left + crop_w > im.width:
-        sys.exit(f'{name}: 3:4 crop at x={left} does not fit {im.size}')
-    # take the crop at full master resolution, then scale to `height`
-    scale = im.height / crop_h
-    box = (left, 0, left + round(crop_w * scale), im.height)
-    save(im.crop(box).resize((crop_w, crop_h), Image.LANCZOS), out, crop_w, sharpen)
+    for entry in TALL_CROPS:
+        folder, name, out, ratio, left_frac, height = entry[:6]
+        sharpen = entry[6] if len(entry) > 6 else None
+        im = Image.open(master(folder, name)).convert('RGB')
+        crop_h = min(height, im.height)
+        crop_w = round(crop_h * ratio)
+        left = round(im.width * left_frac)
+        # take the crop at full master resolution, then scale to `height`
+        scale = im.height / crop_h
+        box_w = round(crop_w * scale)
+        if left + box_w > im.width:
+            sys.exit(f'{name}: {ratio:.3f} crop at x={left} does not fit {im.size}')
+        box = (left, 0, left + box_w, im.height)
+        save(im.crop(box).resize((crop_w, crop_h), Image.LANCZOS), out, crop_w, sharpen)
 
     for old in RETIRED:
         p = HERE / old

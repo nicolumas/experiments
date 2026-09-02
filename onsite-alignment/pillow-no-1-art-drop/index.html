@@ -473,6 +473,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* the delivered portrait is a 1.4:1 landscape crop, so the box stays
    landscape: a 4:5 frame would cut into the head */
 .voice__portrait{aspect-ratio:4/3}
+/* two columns from 1024: the portrait matches the text column instead of
+   stopping a third of the way down it — see the <picture> in the markup */
 .voice__text{display:flex;flex-direction:column;gap:28px}
 .voice__eyebrow{margin:0}
 .voice__lead{max-width:56ch;font-size:20px;line-height:1.6}
@@ -637,6 +639,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .sec-head{margin-bottom:56px}
   .fcards{grid-template-columns:repeat(3,1fr)}
   .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
+  .voice__portrait{aspect-ratio:2/3}
   .cv{grid-template-columns:1fr 1fr;gap:48px}
   .work-block{padding-block:120px}
   .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
@@ -1084,16 +1087,23 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 <section class="section on-bone" data-sec="voice">
   <div class="wrap voice__grid">
     <div class="voice__portrait media">
-      <img src="artist-portrait.jpg" width="1600" height="1140" loading="lazy" decoding="async"
-           alt="Rafael Neff im Schwarz-Weiß-Porträt, mit runder Brille und schwarzem Shirt, den Blick nach oben gerichtet."
-           data-fallback="KÜNSTLERPORTRÄT · RAFAEL NEFF · 4:3">
+      <!-- Two crops of one master. Stacked, the 4:3 landscape reads better and
+           keeps the page short; from 1024 the layout is two columns and a 4:3
+           portrait left ~380px of empty bone beside the text, so the 2:3 crop
+           runs the full height of that column. -->
+      <picture>
+        <source media="(min-width:1024px)" srcset="artist-portrait-tall.jpg" width="1100" height="1650">
+        <img src="artist-portrait.jpg" width="1600" height="1140" loading="lazy" decoding="async"
+             alt="Rafael Neff im Schwarz-Weiß-Porträt, mit runder Brille und schwarzem Shirt, den Blick nach oben gerichtet."
+             data-fallback="KÜNSTLERPORTRÄT · RAFAEL NEFF">
+      </picture>
     </div>
 
     <div class="voice__text reveal">
       <p class="t-eyebrow voice__eyebrow">Der Künstler</p>
       <h2 class="t-h2">Seine Oberflächen tragen nicht nur ein Bild, sie formen den Raum.</h2>
       <figure class="voice__fig">
-        <blockquote class="t-h3 voice__quote">Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.</blockquote>
+        <blockquote class="t-h3 voice__quote">„Wenn ich eine Sache gefunden habe, arbeite ich so lange daran, bis sie perfekt ist: die eine, richtige Ausdrucksform. Erst dann ist es Kunst.“</blockquote>
         <figcaption class="t-eyebrow voice__by">Rafael Neff</figcaption>
       </figure>
 

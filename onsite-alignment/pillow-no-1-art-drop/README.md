@@ -115,6 +115,23 @@ the work. Tablets get the landscape asset and its mask instead.
 Re-run the script if the hero image is ever swapped: the numbers are tuned to
 these exact pixels.
 
+**8b. The artist portrait ships as two crops of one master.**
+Stacked, the 4:3 landscape reads better and keeps the page short. From 1024 the
+section is two columns, and there a 4:3 portrait ended a third of the way down
+the text column, leaving ~380px of empty bone beside it. A `<source
+media="(min-width:1024px)">` swaps in a 2:3 crop that runs the column's full
+height: 533x800 against a 778px text column at 1440, 785px at 1920, so the two
+columns finish together. The crop is measured, not eyeballed — his head spans
+x 0.15–0.52 of the master, so an 0.11 left edge keeps 4% air beside it and puts
+the larger margin, 6.5%, on the side he is looking towards. 1100px wide is a
+true 2x for the 533px column and is downscaled from the 1500px window, so it
+needs no sharpening.
+
+At 1024–1279 the text column is narrow enough to run long whatever the crop
+does: the residual gap there is 319px at 1024 (was 589px) and 82px at 1280. The
+only way to close 1024 completely is a layout change, either the section
+staying stacked until 1280 or the CV moving under both columns.
+
 **9. The hero crop position is computed, not set.**
 `object-position` was briefly `50% 100%` to put the darkest floor behind the
 type, and it sliced the top off the sculpture on a wide, short window
@@ -141,9 +158,9 @@ Portraitplatten" is the Gold Leaves series on the same page, not Pillow No. 1,
 so it is not claimed about this work. If the artist confirms a comparable origin
 for the Pillows, it is a strong line and worth adding.
 
-The pull quote carries German „…" marks (English „…" becomes “…”) rather than
-relying on size alone, because at t-h4 on a centred axis it otherwise read as a
-second headline. There is no hanging indent: measured in Utile Display at 26px
+Both quotes carry German „…" marks (English „…" becomes “…”) rather than
+relying on size alone, because at display sizes they otherwise read as another
+headline. There is no hanging indent: measured in Utile Display at 26px
 the German marks advance 0.405em and 0.391em, so the sentence sits 0.85px off
 the centre axis in German and 0.34px in English, and hanging the opening mark
 would have pushed it a visible 10px off the axis the display line sits on.

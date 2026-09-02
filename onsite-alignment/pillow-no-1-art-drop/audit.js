@@ -341,6 +341,34 @@ async function main() {
              loaded: all.filter(a => a.ok).map(a => a.src.split('/').pop() + ' ' + a.nat) };
   })()`);
 
+  // --- 1b. every local asset, including the ones only a breakpoint reaches ---
+  // document.images only sees currentSrc, so an asset behind <source media>
+  // (the <=767 hero portrait, the >=1024 artist portrait) is never requested at
+  // the audit viewport and a 404 on it would pass silently. Load each candidate
+  // directly instead.
+  report.checks.assets = await page.evaluate(`(async () => {
+    const names = new Set();
+    for (const el of document.querySelectorAll('img[src], img[srcset], source[srcset]')) {
+      for (const attr of [el.getAttribute('src'), el.getAttribute('srcset')]) {
+        if (!attr) continue;
+        for (const part of attr.split(',')) {
+          const u = part.trim().split(/\\s+/)[0];
+          if (u && !/^(https?:)?\\/\\//.test(u) && !u.startsWith('data:')) names.add(u);
+        }
+      }
+    }
+    const results = [];
+    for (const n of names) {
+      try {
+        const im = new Image();
+        im.src = n;
+        await im.decode();
+        results.push({ n, ok: im.naturalWidth > 0, nat: im.naturalWidth + 'x' + im.naturalHeight });
+      } catch (e) { results.push({ n, ok: false, nat: 'no decode' }); }
+    }
+    return results;
+  })()`);
+
   // --- 2. overflow -------------------------------------------------------
   report.checks.overflow = {};
   for (const w of WIDTHS) {
@@ -433,6 +461,12 @@ async function main() {
     `images: ${c.images.total - c.images.failed.length}/${c.images.total} loaded` +
     (c.images.failed.length ? ' — failed: ' + c.images.failed.join(', ') : '') +
     ` · ${c.images.placeholderBlocks} deliberate placeholder(s)`);
+
+  const badAssets = c.assets.filter(a => !a.ok);
+  line(badAssets.length === 0,
+    `local assets decode, breakpoint-only ones included: ${c.assets.length - badAssets.length}/${c.assets.length}` +
+    (badAssets.length ? ' — ' + badAssets.map(a => a.n + ' (' + a.nat + ')').join(', ')
+                      : ' · ' + c.assets.map(a => a.n.replace('.jpg', '') + ' ' + a.nat).join(' · ')));
 
   const ovf = Object.entries(c.overflow).filter(([, v]) => v.overflow > 0);
   line(ovf.length === 0, 'horizontal overflow: ' +
