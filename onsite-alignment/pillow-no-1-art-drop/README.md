@@ -72,6 +72,7 @@ says CET; the ISO offsets in `SCHEDULE` are the real local ones.
 7. Rooms
 8. In the galleries
 9. Urgency: countdown and closing CTA
+10. More works by the artist
 
 The old trust row (330,000 collectors · 19 galleries · 60-day returns) was
 replaced by the new section at position 3. Its galleries claim moved into the
@@ -194,13 +195,19 @@ because the full list runs to about thirty entries. Collections (DZ Bank,
 Deutsche Bank, Berenberg, LBBW, Sparkassenverband Rheinland-Pfalz) are on the
 artist page too and are available if a third column is ever wanted.
 
-**14. The page ends on the CTA. There is no rail of other works.**
-A nine-work Rafael Neff carousel used to close the page. It was removed: a drop
-page has one job, and the last thing on the page should be the way to act on
-it, not nine alternatives to it. The related-works job belongs to the PDP the
-CTA points at. Its markup, CSS, tracking and translations were all taken out
-rather than hidden, so nothing dead is left behind — see the section-order list
-above for what the page is now.
+**14. The works rail has no ground and every work is the same height.**
+Measured pixel ratios in the rail are 1.000, 1.264 and 1.441-1.445, so the box
+ratio is 1.445 — as wide as the widest work is at full height. Every artwork
+then fills the box height and only its width varies: same height, nothing
+cropped, nothing letterboxed, no colour behind the art. Silver Poplars (1.822)
+was swapped for Royal Opera House London (1.441) because it was the one work
+that could not share the common height.
+
+It was removed on 02.09.2026 and restored on the same day at the client's
+request. It sits last, after the closing CTA: the page's job is to convert, so
+the way to act comes before the nine alternatives to acting, and the rail reads
+as a footer for people who are not buying today rather than as an exit ramp
+placed in front of the button.
 
 **2. „JETZT KAUFEN“ is gone. Every CTA reads „WERK SICHERN“.**
 The tonality chapter blacklists *Kaufen / Jetzt kaufen* and names

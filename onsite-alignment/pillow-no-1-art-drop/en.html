@@ -528,26 +528,62 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* one room at a time, full width, circular controls on the image */
 .carousel--rooms .carousel__slide{flex-basis:100%}
 .carousel--rooms .room__media{aspect-ratio:3/2}
-.carousel--rooms .carousel__nav{
+.carousel--works .carousel__track{padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+.carousel--rooms .carousel__nav,
+.carousel--works .carousel__nav{
   position:absolute;top:0;left:0;right:0;height:var(--nav-h,0);gap:0;
   display:flex;align-items:center;justify-content:space-between;
   pointer-events:none;z-index:2;
 }
 .carousel--rooms .carousel__nav{padding-inline:20px}
-.carousel--rooms .carousel__btn{
+.carousel--works .carousel__nav{padding-inline:16px}
+.carousel--rooms .carousel__btn,
+.carousel--works .carousel__btn{
   pointer-events:auto;width:52px;height:52px;border-radius:50%;border:0;
   background:rgba(255,255,255,.94);color:var(--text-primary);
 }
-.carousel--rooms .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
-.carousel--rooms .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
+.carousel--rooms .carousel__btn:disabled,
+.carousel--works .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
+.carousel--rooms .carousel__btn:disabled .carousel__arrow,
+.carousel--works .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
 @media (hover:hover) and (pointer:fine){
-  .carousel--rooms .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
-  .carousel--rooms .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
+  .carousel--rooms .carousel__btn:hover:not(:disabled),
+  .carousel--works .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
+  .carousel--rooms .carousel__btn:hover:not(:disabled) .carousel__arrow,
+  .carousel--works .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
 }
-.carousel--rooms .carousel__count{display:none}
-.carousel--rooms .carousel__bar{margin-top:0}
+.carousel--rooms .carousel__count,
+.carousel--works .carousel__count{display:none}
+.carousel--rooms .carousel__bar,
+.carousel--works .carousel__bar{margin-top:0}
 .rooms__cta{align-self:flex-start;margin-top:32px;min-width:280px}
 .room__media{aspect-ratio:3/2}
+
+/* CONTINUE — centred header, controls on the images */
+[data-sec="continue"] .sec-head{max-width:760px;margin-inline:auto;text-align:center;align-items:center}
+[data-sec="continue"] .sec-head__stand{max-width:680px;margin-inline:auto}
+.carousel--works .work{text-align:left;align-items:stretch}
+.work{display:flex;flex-direction:column;text-decoration:none;color:var(--text-primary)}
+.work__imglink{display:block}
+/* No ground behind the art, and every work the same height.
+   The box is as wide as the WIDEST work in the rail is at full height, so the
+   artwork fills the box height and only its width varies: measured pixel ratios
+   are 1.000 (the two objects), 1.264 (Ocean) and 1.441-1.445 (the interiors),
+   so 1.445 is the box ratio and nothing is ever cropped or letterboxed.
+   Adding a work wider than 1.445 would break the equal heights — max-width
+   caps it and its height would come out short. Silver Poplars (1.822) was
+   swapped out of the rail for exactly that reason. */
+.work__media{aspect-ratio:1.445;margin-bottom:8px;background:transparent}
+.work__media img{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  height:100%;width:auto;max-width:100%;object-fit:contain}
+.work__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.work__title{color:var(--text-primary);text-decoration:none}
+.work__fav{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto;
+  transition:transform 160ms var(--ease-out)}
+.work__fav svg{width:22px;height:22px;display:block}
+.work__fav:active{transform:scale(.9)}
+@media (hover:hover) and (pointer:fine){.work__title:hover{text-decoration:underline;text-underline-offset:3px}}
 
 /* ============================================================
    6 · INSPIRATION — the editorial idea, on bone
@@ -639,6 +675,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
    ============================================================ */
 @media (min-width:768px){
   :root{--gutter:40px}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
   .trust{grid-template-columns:repeat(3,1fr)}
 }
 
@@ -658,6 +695,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .work-block__art{margin-inline:0;max-width:none}
   .work-block__panel{max-width:none}
   .proof__wrap{padding-bottom:64px}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
+}
+
+/* Works carousel widens with the viewport: 3 across on tablet, 4 on laptop,
+   5 on wide desktop. This block MUST stay below @media(min-width:1024px) —
+   equal specificity, so above 1440 whichever comes last in the file wins. */
+@media (min-width:1440px){
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 128px) / 5)}
 }
 
 /* ============================================================
@@ -745,6 +790,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .nav__searchinput{height:48px}
   .nav__searchbtn{width:44px;height:44px;right:0;top:2px}
   .nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) - 6px)}
+  .work__fav{width:44px;height:44px;margin-right:-11px}
+  .work__row{min-height:44px}
+  .work__title{padding-block:9px}
   .carousel__btn{width:44px;height:44px}
   .textlink{display:inline-block;padding-block:6px}
 
@@ -754,6 +802,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .carousel--rooms .room__media{aspect-ratio:4/3}
   .carousel--rooms .carousel__nav{padding-inline:12px}
   .carousel--rooms .carousel__btn{width:44px;height:44px}
+  .carousel--works .carousel__nav{padding-inline:10px}
 
   /* --- long display strings need to come down at this width -------------- */
   .inspiration__quote{font-size:26px;line-height:1.2}
@@ -1314,6 +1363,174 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   </div>
 </section>
 
+<!-- ============================ 10 · CONTINUE ============================
+     Live from the lumas.de catalogue feed: nine works by Rafael Neff, all of
+     them is_online = true and status normal on 2026-08-26. Image codes are the
+     feed's image_filename, which is NOT the article SKU. Prices are omitted on
+     purpose: the feed price is per variant and would need confirming.
+     Pillow No. 2 (RNE320) and Blow up (RNE317) are deliberately absent — both
+     are coming_soon / please_call and not orderable online. -->
+<section class="section" id="more-works" data-sec="continue">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">More works by Rafael Neff</h2>
+    </div>
+  </div>
+
+  <div class="carousel carousel--works" data-carousel="works">
+    <div class="carousel__track" tabindex="0" role="group" aria-label="More works by Rafael Neff">
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/grande_complication_squelette_audemars_piguet/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE299" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne299_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Grande Complication Squelette (Audemars Piguet) by Rafael Neff."
+               data-fallback="WORK · GRANDE COMPLICATION"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/grande_complication_squelette_audemars_piguet/" target="_self"
+             data-work="RNE299" data-ablyft-goal="drop_click_work">Grande Complication Squelette</a>
+          <button class="work__fav" type="button" aria-label="Grande Complication Squelette add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/astrolabium_galileo_galilei_ulysse_nardin/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE121" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne121_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Astrolabium Galileo Galilei (Ulysse Nardin) by Rafael Neff."
+               data-fallback="WORK · ASTROLABIUM"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/astrolabium_galileo_galilei_ulysse_nardin/" target="_self"
+             data-work="RNE121" data-ablyft-goal="drop_click_work">Astrolabium Galileo Galilei</a>
+          <button class="work__fav" type="button" aria-label="Astrolabium Galileo Galilei add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/royal_opera_house_london/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE245" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne245_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Royal Opera House London by Rafael Neff."
+               data-fallback="WORK · ROYAL OPERA HOUSE"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/royal_opera_house_london/" target="_self"
+             data-work="RNE245" data-ablyft-goal="drop_click_work">Royal Opera House London</a>
+          <button class="work__fav" type="button" aria-label="Royal Opera House London add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/ocean_l-1/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE303" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne303_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Ocean l by Rafael Neff."
+               data-fallback="WORK · OCEAN I"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/ocean_l-1/" target="_self"
+             data-work="RNE303" data-ablyft-goal="drop_click_work">Ocean l</a>
+          <button class="work__fav" type="button" aria-label="Ocean l add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/ocean_lll/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE309" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne309_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Ocean lll by Rafael Neff."
+               data-fallback="WORK · OCEAN III"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/ocean_lll/" target="_self"
+             data-work="RNE309" data-ablyft-goal="drop_click_work">Ocean lll</a>
+          <button class="work__fav" type="button" aria-label="Ocean lll add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/stiftsbibliothek_st_gallen/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE295" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne295_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Stiftsbibliothek St. Gallen by Rafael Neff."
+               data-fallback="WORK · ST. GALLEN"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/stiftsbibliothek_st_gallen/" target="_self"
+             data-work="RNE295" data-ablyft-goal="drop_click_work">Stiftsbibliothek St. Gallen</a>
+          <button class="work__fav" type="button" aria-label="Stiftsbibliothek St. Gallen add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/new_york_public_library-2/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE292" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne292_full.jpg"
+               loading="lazy" decoding="async"
+               alt="New York Public Library by Rafael Neff."
+               data-fallback="WORK · NEW YORK PUBLIC LIBRARY"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/new_york_public_library-2/" target="_self"
+             data-work="RNE292" data-ablyft-goal="drop_click_work">New York Public Library</a>
+          <button class="work__fav" type="button" aria-label="New York Public Library add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/nationalbibliothek_wien/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE151" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne151_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Nationalbibliothek Wien by Rafael Neff."
+               data-fallback="WORK · NATIONALBIBLIOTHEK WIEN"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/nationalbibliothek_wien/" target="_self"
+             data-work="RNE151" data-ablyft-goal="drop_click_work">Nationalbibliothek Wien</a>
+          <button class="work__fav" type="button" aria-label="Nationalbibliothek Wien add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/rafael_neff/chateau_margaux_bordeaux_france/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RNE223" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rne223_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Chateau Margaux, Bordeaux, France by Rafael Neff."
+               data-fallback="WORK · CHATEAU MARGAUX"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/rafael_neff/chateau_margaux_bordeaux_france/" target="_self"
+             data-work="RNE223" data-ablyft-goal="drop_click_work">Chateau Margaux</a>
+          <button class="work__fav" type="button" aria-label="Chateau Margaux add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="carousel__bar">
+      <p class="t-caption carousel__count" aria-hidden="true"></p>
+      <div class="carousel__nav">
+        <button class="carousel__btn" type="button" data-dir="-1" aria-label="Previous works">
+          <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+        </button>
+        <button class="carousel__btn" type="button" data-dir="1" aria-label="More works">
+          <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <!-- ============================ DEV SWITCHER ============================ -->
@@ -1514,6 +1731,10 @@ $$('a[data-buy]').forEach(a => {
   });
 });
 
+$$('a[data-work]').forEach(a => {
+  a.addEventListener('click', () => track('drop_click_work', { sku: a.dataset.work }));
+});
+
 /* ============================================================
    NEWSLETTER
    ============================================================ */
@@ -1601,6 +1822,16 @@ $$('form[data-nl]').forEach(form => {
 })();
 
 /* ============================================================
+   MORE-WORKS VIEW EVENT
+   ============================================================ */
+let worksFired = false;
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !worksFired) { worksFired = true; track('drop_view_works', {}); }
+  });
+}, { threshold: 0.5 }).observe($('#more-works'));
+
+/* ============================================================
    CAROUSELS
    ============================================================ */
 $$('[data-carousel]').forEach(root => {
@@ -1625,7 +1856,7 @@ $$('[data-carousel]').forEach(root => {
 
   function sync() {
     // publish the media height so the overlay controls can centre on the image
-    const firstMedia = slides[0] && slides[0].querySelector('.room__media');
+    const firstMedia = slides[0] && slides[0].querySelector('.room__media, .work__media');
     if (firstMedia) root.style.setProperty('--nav-h', firstMedia.getBoundingClientRect().height + 'px');
 
     const n = slides.length, pv = perView(), i = index();

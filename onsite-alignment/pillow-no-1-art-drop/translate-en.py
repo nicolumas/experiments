@@ -220,6 +220,13 @@ T = {
     '</span> von <span': '</span> of <span',
     '>verkauft<': '>sold<',
 
+    # --- continue: more works by the artist --------------------------------
+    'Weitere Werke von Rafael Neff': 'More works by Rafael Neff',
+    'aria-label="Vorherige Werke"': 'aria-label="Previous works"',
+    'aria-label="Weitere Werke"': 'aria-label="More works"',
+    'zur Wunschliste hinzufügen': 'add to wishlist',
+    'WERK · ': 'WORK · ',
+
     # --- rooms carousel ---------------------------------------------------
     'von Rafael Neff.': 'by Rafael Neff.',
     'aria-label="Vorheriges Bild"': 'aria-label="Previous image"',
