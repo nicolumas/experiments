@@ -23,17 +23,17 @@ Removed:
 
 Added:
 
-- A **compact green pill at the top of the buy box**, above the artist name: "Available in BERLIN KURFÜRSTENDAMM" with an
-  info icon. It only appears when the selected gallery actually holds the current size and
+- A **compact green availability tag at the top of the buy box**, above the artist name: "Available in BERLIN KURFÜRSTENDAMM" with an
+  info icon. Square-cornered at the 2px chip radius, not a rounded pill. It only appears when the selected gallery actually holds the current size and
   framing, so it is a positive signal only, never a negative one.
-- A **pop-up behind the pill** carrying the gallery name, address, opening hours and a
+- A **pop-up behind the tag** carrying the gallery name, address, opening hours and a
   directions link, then "Get in touch, our art consultants would be happy to help you."
   and three CTAs: **Email**, **WhatsApp**, **Call**. Email pre-fills a subject with the
   artwork and size; WhatsApp and Call use the gallery's own number. The pop-up owns a URL
   (`&info=1`), so it is linkable and survives a reload.
 
-The buy box is now: availability pill, artist, title, edition, size, framing, price, one
-black **Add to cart**, fine print. On mobile the pill is centred with the title block.
+The buy box is now: availability tag, artist, title, edition, size, framing, price, one
+black **Add to cart**, fine print. On mobile the tag is centred with the title block.
 
 ## The architectural rule
 
@@ -81,22 +81,32 @@ Every state is a link:
 
 | State | URL |
 |---|---|
-| Pill shown | `?size=s80&frame=basel&gallery=kudamm` |
+| Tag shown | `?size=s80&frame=basel&gallery=kudamm` |
 
-| No pill, not in this gallery | `?size=s120&frame=basel&gallery=kudamm` |
-| No pill, not in any gallery | `?size=s80&frame=none&gallery=kudamm` |
+| No tag, not in this gallery | `?size=s120&frame=basel&gallery=kudamm` |
+| No tag, not in any gallery | `?size=s80&frame=none&gallery=kudamm` |
 | No gallery known | `?size=s80&frame=basel&gallery=none` |
 | Consultant pop-up | `?size=s80&frame=slim&gallery=kudamm&info=1` |
 | Remembered gallery | `?size=s80&frame=basel` |
+
+## Radii
+
+Everything on the page is square or near-square, per the brand's low-radius rule: the
+availability tag and the pop-up badge sit at the 2px chip radius, buttons and the pop-up
+card are sharp, the size selector keeps the live PDP's 4px and the framing control its 3px.
+The header search field keeps its 20px because that is what production ships.
+
+Note the V2 foundations do carve out an exception, reserving the fully-rounded pill for
+availability and status chips. This prototype does not use it, by request.
 
 ## Availability states
 
 | Condition | Result |
 |---|---|
-| Selected gallery holds this size and framing | green pill, "Available in <gallery>" |
-| It does not, or no gallery is known | no pill; Add to cart is the whole story |
+| Selected gallery holds this size and framing | green tag, "Available in <gallery>" |
+| It does not, or no gallery is known | no tag; Add to cart is the whole story |
 
-The pill is deliberately one-directional: it never says a work is unavailable, it just goes
+The tag is deliberately one-directional: it never says a work is unavailable, it just goes
 quiet. That is a change from the first iteration, which designed an explicit state for
 "unavailable in Berlin" and for "not in any gallery".
 
