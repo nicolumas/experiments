@@ -181,7 +181,7 @@ body[data-promo="0"] .promo{display:none}
 
 /* availability, built on the live demand-indicator band */
 /* availability pill under the price */
-.avpill{display:inline-flex;align-items:center;gap:9px;margin-top:13px;height:34px;padding:0 15px;
+.avpill{display:inline-flex;align-items:center;gap:9px;margin:0 0 16px;height:34px;padding:0 15px;
   border-radius:999px;background:#E7F1EA;color:#26603A;font-size:12.5px;line-height:1;
   transition:background var(--t1) var(--ease)}
 .avpill:hover{background:#DBEAE1}
@@ -252,6 +252,7 @@ body.info-open{overflow:hidden}
   .stage-actions{right:8px;bottom:8px}
   .stage-act{padding:7px 9px;font-size:9px}
   .buy{padding:14px var(--pad) 0}
+  .avpill{margin:0 auto 14px;align-self:center}
   .artist-holder{font-size:27px;text-align:center}
   .artwork-title{text-align:center}
   .edition{justify-content:center}
@@ -533,6 +534,7 @@ function renderPill(){
 
 function renderBuy(){
   return '<div class="buy">'
+    + renderPill()
     + '<h1 class="artist-holder">' + esc(ARTWORK.artist) + '</h1>'
     + '<div class="artwork-title">' + esc(ARTWORK.title) + '</div>'
     + '<div class="edition"><span>Limited Edition ' + ARTWORK.editionSize + '</span>'
@@ -543,7 +545,6 @@ function renderBuy(){
     + '<div class="framing"><div class="sec-label">Choose framing</div>' + renderFraming() + '</div>'
     + '<div class="price-container"><div class="price">' + money(CFG.price) + '</div>'
       + '</div>'
-    + renderPill()
     + '<div class="actions"><a class="btn-primary" href="#" id="ctaBtn">Add to cart</a></div>'
     + '<div class="more-info">Ships in 5 days / incl. VAT / plus <a href="#">shipping</a> € 6,90'
       + '<br>' + ARTWORK.creationYear + ' / ' + ARTWORK.publicationYear + ' / ' + CFG.size.sku + '</div>'

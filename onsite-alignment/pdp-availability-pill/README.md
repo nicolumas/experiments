@@ -23,7 +23,7 @@ Removed:
 
 Added:
 
-- A **compact green pill under the price**: "Available in BERLIN KURFÜRSTENDAMM" with an
+- A **compact green pill at the top of the buy box**, above the artist name: "Available in BERLIN KURFÜRSTENDAMM" with an
   info icon. It only appears when the selected gallery actually holds the current size and
   framing, so it is a positive signal only, never a negative one.
 - A **pop-up behind the pill** carrying the gallery name, address, opening hours and a
@@ -32,8 +32,8 @@ Added:
   artwork and size; WhatsApp and Call use the gallery's own number. The pop-up owns a URL
   (`&info=1`), so it is linkable and survives a reload.
 
-The buy box is now: artist, title, edition, size, framing, price, availability pill, one
-black **Add to cart**, fine print.
+The buy box is now: availability pill, artist, title, edition, size, framing, price, one
+black **Add to cart**, fine print. On mobile the pill is centred with the title block.
 
 ## The architectural rule
 
