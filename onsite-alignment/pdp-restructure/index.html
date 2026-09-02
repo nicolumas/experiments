@@ -367,6 +367,31 @@ a { color: inherit; }
 .options-ghost{ margin-top: 12px; color: var(--color-text-primary, #1C1A18); }
 
 /* ATC + reassurance */
+.avail-pill{
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 12px var(--gutter) 0; padding: 8px 14px; border-radius: 999px;
+  background: var(--color-status-success-bg, #E8F2EB); color: var(--color-status-success, #3A6B4A);
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; min-height: 34px;
+  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+@media (min-width: 1024px){ .avail-pill{ margin: 12px 0 0; } }
+.avail-pill:hover{ filter: brightness(0.96); }
+.avail-pill:active{ transform: scale(0.97); }
+.avail-pill .dot{ width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.avail-pill svg{ width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.gal-kv{ display: grid; grid-template-columns: max-content 1fr; gap: 10px 28px; margin: 18px 0; font-size: 15px; }
+.gal-kv dt{ color: var(--color-charcoal-700, #5A5752); }
+.gal-route{ display: inline-block; margin-top: 4px; font-size: 14px; text-underline-offset: 3px; }
+.gal-ctas{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+.gal-cta{
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  min-height: 64px; border: 1px solid var(--color-charcoal-900, #1C1A18); border-radius: 4px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; text-decoration: none;
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.gal-cta:hover{ background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); }
+.gal-cta:active{ transform: scale(0.97); }
+.gal-cta svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 .atc-wrap{ padding: 22px var(--gutter) 0; }
 @media (min-width: 1024px){ .atc-wrap{ padding: 22px 0 0; } }
 .atc-error{
@@ -383,9 +408,6 @@ a { color: inherit; }
 @media (min-width: 1024px){ .reassure{ padding: 14px 0 0; justify-content: flex-start; text-align: left; } }
 .reassure .dot-sep{ color: var(--color-charcoal-300, #C7C3BE); }
 @media (max-width: 1023px){ .desktop-only-inline{ display: none; } .reassure{ font-size: 10px; letter-spacing: 0.05em; flex-wrap: nowrap; white-space: nowrap; } }
-.gallery-link{ margin-top: 20px; text-align: center; }
-@media (min-width: 1024px){ .gallery-link{ text-align: left; } }
-.gallery-link a{ font-size: 12px; letter-spacing: 1.68px; text-transform: uppercase; color: var(--color-text-secondary, #5A5752); text-decoration: none; border-bottom: 1px solid var(--color-border-strong, #C7C3BE); padding-bottom: 2px; }
 
 /* ══ zone 3 — depth ═══════════════════════════════════════════════════ */
 .zone3{ padding: 28px var(--gutter) 0; }
@@ -804,6 +826,13 @@ a { color: inherit; }
         <span class="price-note">inkl. MwSt.</span>
       </div>
       <span class="price-flag caption" id="priceFlag">* Platzhalterpreis, final aus PIM</span>
+      <div>
+        <button class="avail-pill" id="availPill" aria-haspopup="dialog">
+          <span class="dot" aria-hidden="true"></span>
+          Verfügbar in Berlin Mitte
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
+        </button>
+      </div>
       <div class="atc-wrap">
         <!-- ABLYFT-GOAL: ATC (primary goal) -->
         <button class="btn btn-primary" id="atc"><span id="atcLabel">In den Warenkorb</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg></button>
@@ -818,7 +847,6 @@ a { color: inherit; }
         <span class="dot-sep desktop-only-inline">·</span>
         <span class="desktop-only-inline">Zertifikat inklusive</span>
       </p>
-      <p class="gallery-link"><a href="https://www.lumas.de/galerien/" id="galleryLink">In einer Galerie ansehen</a></p>
     </section>
 
     <!-- ══ Zone 3: depth, opt-in ══ -->
@@ -898,6 +926,44 @@ a { color: inherit; }
     <div class="prov-scale" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></div>
     <div class="prov-scale-labels" aria-hidden="true"><span>Geheimtipp</span><span>Beliebt</span><span>Stark nachgefragt</span><span>Letzte Exemplare</span></div>
     <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--color-text-secondary)"><strong>Nachfragestatus: beliebt.</strong> Bei limitierten Editionen kann der Preis mit fortschreitendem Verkauf der Auflage steigen.</p>
+  </div>
+</aside>
+
+<!-- gallery availability sheet -->
+<aside class="sheet" id="gallerySheet" role="dialog" aria-modal="true" aria-labelledby="galTitle">
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="galTitle">Galerie Berlin Mitte</h2>
+    <button class="x" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="sheet-body">
+    <p><strong>Dieses Werk ist aktuell in der Galerie zu sehen.</strong></p>
+    <dl class="gal-kv">
+      <dt>Adresse</dt>
+      <dd>
+        LUMAS Galerie Berlin Mitte<br>
+        Rosenthaler Straße 40/41<br>
+        10178 Berlin<br>
+        <a class="gal-route" href="https://maps.google.com/?q=LUMAS+Galerie,+Rosenthaler+Stra%C3%9Fe+40/41,+10178+Berlin" target="_blank" rel="noopener" id="galRoute">Route planen →</a>
+      </dd>
+      <dt>Öffnungszeiten</dt>
+      <dd>Mo–Sa 11–19 Uhr<br>So 13–18 Uhr</dd>
+    </dl>
+    <p style="margin-top:22px">Nimm Kontakt auf, unsere Art Consultants helfen dir gerne weiter.</p>
+    <div class="gal-ctas">
+      <a class="gal-cta" href="mailto:berlin.mitte@lumas.de" data-channel="email">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg>
+        E-Mail
+      </a>
+      <a class="gal-cta" href="https://wa.me/493028040373" target="_blank" rel="noopener" data-channel="whatsapp">
+        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><path d="M8.8 9.2c.3 2.6 3.4 5.5 6 6l1.4-1.4-2-1.3-1 .7c-.8-.4-1.9-1.5-2.3-2.3l.7-1-1.3-2-1.5 1.3z"/></svg>
+        WhatsApp
+      </a>
+      <a class="gal-cta" href="tel:+493028040373" data-channel="call">
+        <svg viewBox="0 0 24 24"><path d="M5 4h4l1.5 4.5-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2L20 15v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+        Anrufen
+      </a>
+    </div>
   </div>
 </aside>
 
@@ -1275,6 +1341,12 @@ document.querySelectorAll('.sheet').forEach(sheet => {
 });
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeAllSheets));
 
+document.getElementById('availPill').addEventListener('click', () => {
+  track('gallery_availability_open', { gallery: 'berlin-mitte' });
+  showSheet('gallerySheet');
+});
+document.querySelectorAll('.gal-cta').forEach(a => a.addEventListener('click', () =>
+  track('gallery_contact_click', { channel: a.dataset.channel, gallery: 'berlin-mitte' })));
 document.getElementById('editionChip').addEventListener('click', () => {
   track('edition_info_open', { edition_type: 'limited_signed', edition_size: 150 });
   showSheet('provSheet');
@@ -1433,9 +1505,6 @@ document.getElementById('discoverBtn').addEventListener('click', () => {
   document.getElementById('tabSimilar').click();
   document.querySelector('.zone4').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-
-/* gallery CTA — demoted, still measured */
-document.getElementById('galleryLink').addEventListener('click', () => track('gallery_visit_click', {}));
 
 /* init */
 update();
