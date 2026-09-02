@@ -29,9 +29,9 @@
                (Außenmaß 44,4 cm, Profil 15 mm, Kanadischer Ahorn braun);
                Basel colour renders erlebraun/schwarz/nussbaum; Versand 5
                Tage, € 6,90/12,90/14,90; 60 Tage Rückgabe; Zertifikat;
-               Trustpilot 4,7/5 (6 k). PLACEHOLDERS (PIM unreachable through
-               broken configurator, flagged with * in UI): Abzug + Basel
-               prices at 80/120.
+               Trustpilot 4,7/5 (6 k). Full price matrix incl. framed/print
+               at all sizes + Basel Plus (120 only) verified live 20 Aug 2026
+               with Art Week promo pairs; no placeholders remain.
   Status:      exploration → ready for red-team
 ═══════════════════════════════════════════════════════════════════════════ -->
 <html lang="de">
@@ -319,8 +319,8 @@ a { color: inherit; }
 }
 .price.updating{ filter: blur(2px); opacity: 0.55; }
 .price-note{ font-size: 12px; color: var(--color-text-tertiary, #908C87); }
-.price-flag{ font-size: 11px; color: var(--color-status-warning, #9B6D1E); display: none; }
-.price-flag.on{ display: inline; }
+.price-was{ font-size: 15px; color: var(--color-text-tertiary, #908C87); }
+.price-save{ font-size: 12px; color: var(--color-charcoal-700, #5A5752); margin-top: 2px; }
 
 /* ══ zone 2 — configurator ════════════════════════════════════════════ */
 .config{ padding: 20px var(--gutter) 0; }
@@ -659,8 +659,8 @@ a { color: inherit; }
 
 <!-- promo bar: kept, single line, no viewport theft. V2 voice: no "!" -->
 <div class="promo" id="promo">
-  <b>10 % auf dein erstes Kunstwerk</b>
-  <a class="promo-cta" href="#" onclick="return false">Bis 16.08. sichern</a>
+  <b>Art Week · 20 % auf alle Editionen</b>
+  <a class="promo-cta" href="#" onclick="return false">Vorteil automatisch im Warenkorb</a>
   <button class="promo-x" aria-label="Hinweis schließen" onclick="this.parentElement.remove()">
     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
@@ -830,10 +830,11 @@ a { color: inherit; }
       </div>
 
       <div class="price-row">
-        <span class="price" id="price" aria-live="polite">€ 449</span>
+        <span class="price" id="price" aria-live="polite">€ 359</span>
+        <s class="price-was" id="priceWas" hidden></s>
         <span class="price-note">inkl. MwSt.</span>
       </div>
-      <span class="price-flag caption" id="priceFlag">* Platzhalterpreis, final aus PIM</span>
+      <p class="price-save" id="priceSave" hidden></p>
       <div>
         <button class="avail-pill" id="availPill" aria-haspopup="dialog">
           <span class="dot" aria-hidden="true"></span>
@@ -1034,13 +1035,14 @@ const PRODUCT = {
   artist: 'Marta Contreras Simó',
   title: 'Mina&Sena',
   abstractId: 6437864,
+  /* prices verified live 20 Aug 2026 (Art Week −20 % / regular) */
   sizes: [
     { key: '40',  dim: '40 × 40',  sku: 'MCS36', ship: '6,90',  outerBasel: '44,4 × 44,4 cm',
-      prices: { print: 240, acryl: 449, basel: 599 }, verified: { print: true, acryl: true, basel: true } },
+      prices: { print: [192, 240], acryl: [359, 449], basel: [479, 599] } },
     { key: '80',  dim: '80 × 80',  sku: 'MCS35', ship: '12,90', outerBasel: '84,4 × 84,4 cm',
-      prices: { print: 530, acryl: 990, basel: 1190 }, verified: { print: false, acryl: true, basel: false } },
+      prices: { print: [424, 530], acryl: [792, 990], basel: [959, 1199] } },
     { key: '120', dim: '120 × 120', sku: 'MCS34', ship: '14,90', outerBasel: '124,4 × 124,4 cm',
-      prices: { print: 900, acryl: 1690, basel: 1990 }, verified: { print: false, acryl: true, basel: false } },
+      prices: { print: [680, 850], acryl: [1352, 1690], basel: [1599, 1999], baselplus: [2072, 2590] } },
   ],
   finishes: [
     { key: 'acryl', name: 'Kaschierung unter Acrylglas', spec: 'Acrylglas 2 mm matt, fertig zum Aufhängen',
@@ -1052,6 +1054,9 @@ const PRODUCT = {
     { key: 'print', name: 'Fotografie-Abzug', spec: 'Premium-Papier matt, ungerahmt, gerollt versendet',
       rec: '', framed: false, curated: true,
       thumb: IMG_BARE },
+    { key: 'baselplus', name: 'Rahmen Basel mit Schattenfuge Plus', spec: 'Breiteres Profil, Acrylglas matt, fertig zum Aufhängen',
+      rec: '', framed: true, curated: false,
+      thumb: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg' },
   ],
   colours: [ /* verified corner renders on img.lumas.com */
     { key: 'ahorn',    name: 'Kanad. Ahorn braun', img: 'https://img.lumas.com/fileadmin/lumas_rahmen/corner/basel/schattenfugen-erlebraun.jpg' },
@@ -1100,6 +1105,9 @@ const state = {
   atcError: qs.get('state') === 'atc-error',
 };
 const fmt = n => '€ ' + n.toLocaleString('de-DE');
+const PROMO = qs.get('promo') !== 'off'; // Art Week live on lumas.de, verified 20 Aug 2026
+const priceNow = (size, key) => { const p = size.prices[key]; return p ? (PROMO ? p[0] : p[1]) : null; };
+const priceWas = (size, key) => { const p = size.prices[key]; return (p && PROMO) ? p[1] : null; };
 
 /* ═══ variant switch (proto-kit) ═══ */
 function applyVariant(){
@@ -1178,21 +1186,24 @@ function renderColours(){
 
 /* ═══ price + sticky + delivery ═══ */
 const priceEl = document.getElementById('price');
-const priceFlag = document.getElementById('priceFlag');
 let deliverySeen = false;
 function update(trigger){
+  if (!state.size.prices[state.finish.key]) state.finish = PRODUCT.finishes[0]; // option not offered at this size
   renderSizes(); renderFinishes(); renderColours();
-  const p = state.size.prices[state.finish.key];
-  const verified = state.size.verified[state.finish.key];
+  const p = priceNow(state.size, state.finish.key);
+  const was = priceWas(state.size, state.finish.key);
   priceEl.classList.add('updating');
   setTimeout(() => {
-    priceEl.textContent = fmt(p) + (verified ? '' : '*');
+    priceEl.textContent = fmt(p);
     priceEl.classList.remove('updating');
   }, 180);
-  priceFlag.classList.toggle('on', !verified);
-  document.getElementById('stickyPrice').textContent = fmt(p) + (verified ? '' : '*');
+  const wasEl = document.getElementById('priceWas');
+  wasEl.hidden = !was; if (was) wasEl.textContent = 'statt ' + fmt(was);
+  const saveEl = document.getElementById('priceSave');
+  saveEl.hidden = !was; if (was) saveEl.textContent = 'Heute ' + fmt(was - p) + ' sparen';
+  document.getElementById('stickyPrice').textContent = fmt(p);
   document.getElementById('stickyMeta').textContent =
-    `${state.size.dim} · ${state.finish.key === 'acryl' ? 'Acrylglas' : state.finish.key === 'basel' ? 'Rahmen Basel' : 'Abzug'}`;
+    `${state.size.dim} · ${({acryl: 'Acrylglas', basel: 'Rahmen Basel', baselplus: 'Rahmen Basel Plus', print: 'Abzug'})[state.finish.key]}`;
   document.getElementById('deliveryLine').textContent = `Versand in 5 Tagen (zzgl. € ${state.size.ship})`;
   document.getElementById('sizeHint').textContent =
     state.finish.key === 'basel' ? `Außenmaß gerahmt: ${state.size.outerBasel}` : 'Bildmaß in cm';
@@ -1203,7 +1214,7 @@ function update(trigger){
 /* ═══ ATC ═══ */
 function addToCart(position){
   track('add_to_cart', {
-    cta_position: position, value: state.size.prices[state.finish.key],
+    cta_position: position, value: priceNow(state.size, state.finish.key),
     size: state.size.dim, finish: state.finish.key,
     frame_color: state.finish.framed ? state.colour.key : null, sku: state.size.sku,
   });
@@ -1358,25 +1369,27 @@ document.getElementById('editionChip').addEventListener('click', () => {
 });
 function renderOptionsSheet(){
   const el = document.getElementById('optionsBody');
-  el.innerHTML = PRODUCT.finishes.map(f => {
-    const p = state.size.prices[f.key];
-    const star = state.size.verified[f.key] ? '' : '*';
+  const avail = PRODUCT.finishes.filter(f => state.size.prices[f.key]);
+  el.innerHTML = avail.map(f => {
+    const p = priceNow(state.size, f.key);
+    const was = priceWas(state.size, f.key);
     return `
-    <div data-active="${f === state.finish}" style="display:grid;grid-template-columns:96px 1fr;gap:16px;padding:14px;margin:0 -14px;border-bottom:1px solid var(--color-border-subtle);${f === state.finish ? 'outline:2px solid var(--color-border-focus);outline-offset:-2px;' : ''}">
+    <div data-key="${f.key}" style="display:grid;grid-template-columns:96px 1fr;gap:16px;padding:14px;margin:0 -14px;border-bottom:1px solid var(--color-border-subtle);${f === state.finish ? 'outline:2px solid var(--color-border-focus);outline-offset:-2px;' : ''}">
       <img src="${f.thumb}" alt="" style="width:96px;height:96px;object-fit:cover;background:var(--stage)">
       <div>
         ${f.rec ? `<span class="rec" style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-tertiary);display:block;margin-bottom:3px">${f.rec}</span>` : ''}
         <strong style="font-size:14px">${f.name}</strong>
-        <p class="body-small" style="color:var(--color-text-secondary);margin:3px 0 6px">${f.spec}${f.key === 'basel' ? ' · Rahmenfarben: Kanad. Ahorn braun, Schwarz, Nussbaum' : ''}</p>
-        <span style="font-weight:600;font-size:14px">${fmt(p)}${star}</span>
+        <p class="body-small" style="color:var(--color-text-secondary);margin:3px 0 6px">${f.spec}${f.framed ? ' · Rahmenfarben: Kanad. Ahorn braun, Schwarz, Nussbaum' : ''}</p>
+        <span style="font-weight:600;font-size:14px">${fmt(p)}</span>
+        ${was ? `<s style="font-size:12.5px;color:var(--color-text-tertiary);margin-left:8px">${fmt(was)}</s>` : ''}
       </div>
     </div>`;
   }).join('') + `<p class="caption" style="margin-top:12px;color:var(--color-text-tertiary)">Bei Werken mit größerem Rahmenkatalog erscheint hier die vollständige Liste aller Ausführungen, gruppiert nach Rahmenfamilie.${' '}Auswahl gilt sofort, ein zusätzlicher Bestätigen-Schritt entfällt.</p>`;
-  el.querySelectorAll('div[style*="grid"]').forEach((row, i) => {
+  el.querySelectorAll('div[data-key]').forEach(row => {
     row.style.cursor = 'pointer';
     row.addEventListener('click', () => {
-      state.finish = PRODUCT.finishes[i];
-      track('artwork_finish_select', { finish_name: state.finish.key, is_curated: true, price_delta: 0, source: 'options_sheet' });
+      state.finish = PRODUCT.finishes.find(f => f.key === row.dataset.key);
+      track('artwork_finish_select', { finish_name: state.finish.key, is_curated: state.finish.curated, price_delta: 0, source: 'options_sheet' });
       update('finish'); closeAllSheets();
     });
   });
