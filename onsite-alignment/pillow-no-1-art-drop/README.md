@@ -132,7 +132,7 @@ x[366,1086] y[67,983] of 1536×1024; the crop is that plus 10% padding, and
 `.work-block__art` carries the matching `aspect-ratio: 864/1024`, so `contain`
 never letterboxes.
 
-**11. Two real quotes, and one claim deliberately left out.**
+**11. Two real quotes, marked as quotes, and one claim left out.**
 The about-the-work section pivots on „Wir Künstler sind Suchende", verbatim
 from the interview on lumas.de/artist/rafael_neff/, and the paragraph after it
 uses his own „wir probieren aus, wir werden zurückgeworfen". What is *not* there
@@ -140,6 +140,16 @@ is the origin-in-leftover-material story: „entstanden aus den Resten vergoldet
 Portraitplatten" is the Gold Leaves series on the same page, not Pillow No. 1,
 so it is not claimed about this work. If the artist confirms a comparable origin
 for the Pillows, it is a strong line and worth adding.
+
+The pull quote carries German „…" marks (English „…" becomes “…”) rather than
+relying on size alone, because at t-h4 on a centred axis it otherwise read as a
+second headline. There is no hanging indent: measured in Utile Display at 26px
+the German marks advance 0.405em and 0.391em, so the sentence sits 0.85px off
+the centre axis in German and 0.34px in English, and hanging the opening mark
+would have pushed it a visible 10px off the axis the display line sits on.
+The quote, its attribution and the paragraph that unpacks it are one flex unit
+with a 20px internal rhythm against the block's 32px, so it reads as the opening
+of that thought instead of a floating third block.
 
 **12. The artist-section quote is also real, and also not about this work.**
 No statement about Pillow No. 1 was supplied. There *is* a published first-person

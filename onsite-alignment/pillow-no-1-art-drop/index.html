@@ -547,8 +547,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .inspiration__body{max-width:70ch}
 /* The pivot quote sits between the two body paragraphs rather than beside the
    display line: two display sizes stacked competed with each other. t-h4, so it
-   adds no new size to the type audit. */
-.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:12px;padding-block:8px}
+   adds no new size to the type audit.
+   The quote and the paragraph that unpacks it are ONE unit: the parent's 32px
+   gap separates that unit from the material paragraph above, and inside it the
+   rhythm is tighter, so the quote reads as the opening of this thought rather
+   than as a third unrelated block.
+   No hanging indent for the „ mark. Measured in Utile Display at this size the
+   German marks advance 0.405em and 0.391em, so a centred line is already
+   balanced to within 0.2px; hanging the opening mark would push the sentence
+   visibly off the centre axis the display line above sits on. */
+.inspiration__voice{display:flex;flex-direction:column;align-items:center;gap:20px}
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:8px}
 .inspiration__cite{margin:0;text-wrap:balance}
 .inspiration__citeby{margin:0}
 
@@ -993,12 +1002,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
     <p class="t-body-l inspiration__body">Weiches gilt als flüchtig. Es gibt nach, es verliert die Form, am Morgen wird es wieder glattgezogen. Rafael Neff hält den Moment davor an: verschweißt, aufgeblasen, spiegelpoliert, sechsfach mit Instrumentenlack lackiert und bei 185 °C eingebrannt. Aus der weichen Geste wird eine harte, tief reflektierende Oberfläche, in der Raum und Betrachter erscheinen. Was bleibt, ist die Erinnerung an eine Berührung, in einem Material, das sie überdauert.</p>
 
-    <figure class="inspiration__fig">
-      <blockquote class="t-h4 inspiration__cite">Wir Künstler sind Suchende.</blockquote>
-      <figcaption class="t-eyebrow inspiration__citeby">Rafael Neff</figcaption>
-    </figure>
-
-    <p class="t-body-l inspiration__body">Das Suchen steckt im Verfahren. Neff probiert aus, wird zurückgeworfen, ändert den Ansatz und macht weiter, bis eine Form ihre eigene Eigenständigkeit hat. Bei Pillow No. 1 lässt sich das Ergebnis nicht wiederholen: jedes Exemplar wird einzeln aufgeblasen, und die Form entscheidet sich im Moment des Verschweißens.</p>
+    <div class="inspiration__voice">
+      <figure class="inspiration__fig">
+        <blockquote class="t-h4 inspiration__cite">„Wir Künstler sind Suchende.“</blockquote>
+        <figcaption class="t-eyebrow inspiration__citeby">Rafael Neff</figcaption>
+      </figure>
+      <p class="t-body-l inspiration__body">Das Suchen steckt im Verfahren. Neff probiert aus, wird zurückgeworfen, ändert den Ansatz und macht weiter, bis eine Form ihre eigene Eigenständigkeit hat. Bei Pillow No. 1 lässt sich das Ergebnis nicht wiederholen: jedes Exemplar wird einzeln aufgeblasen, und die Form entscheidet sich im Moment des Verschweißens.</p>
+    </div>
   </div>
 </section>
 
