@@ -132,6 +132,16 @@ does: the residual gap there is 319px at 1024 (was 589px) and 82px at 1280. The
 only way to close 1024 completely is a layout change, either the section
 staying stacked until 1280 or the CV moving under both columns.
 
+**8c. The gallery section is text-left, photograph-right.**
+It was text-only, so on desktop the right half of the band was empty bone. It
+now carries `DSC06390` from the LUMAS opening shoot the galleries prototype
+uses, uncropped: the master is 7011x4674 at 1.501, so the 3:2 frame takes it as
+shot and 1280px is a true 2x for the ~640px column. The picture sits on the
+right, the opposite way round to the artist section above it, so two picture
+columns never stack on the same side. The photograph shows identifiable
+guests — fine for a gated preview, worth confirming the release before this
+copy goes public.
+
 **9. The hero crop position is computed, not set.**
 `object-position` was briefly `50% 100%` to put the darkest floor behind the
 type, and it sliced the top off the sculpture on a wide, short window

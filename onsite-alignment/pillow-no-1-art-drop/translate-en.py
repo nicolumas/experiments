@@ -206,6 +206,9 @@ T = {
     'Eine spiegelpolierte Oberfläche lässt sich schwer fotografieren, sie verändert sich mit jedem Schritt. LUMAS ist in 19 Galerien weltweit vertreten. Frag dort nach Pillow No. 1, wenn du das Werk vor dem Kauf einmal selbst sehen möchtest.':
         'A mirror-polished surface is hard to photograph: it changes with every step you take. LUMAS is present in 19 galleries worldwide. Ask for Pillow No. 1 there if you would like to see the work yourself before buying.',
     'Galerien ansehen': 'See the galleries',
+    'Gäste einer LUMAS Galerieeröffnung im Gespräch, hinter ihnen eine großformatige Aufnahme eines Opernhauses.':
+        'Guests in conversation at a LUMAS gallery opening, a large-format photograph of an opera house behind them.',
+    'GALERIEERÖFFNUNG · GÄSTE · 3:2': 'GALLERY OPENING · GUESTS · 3:2',
 
     # --- trust -----------------------------------------------------------
     '330.000 zufriedene Sammler:innen': '330,000 satisfied collectors',

@@ -58,6 +58,12 @@ COPIES = [
     # --- the artist --------------------------------------------------------
     (DESIGN, 'RNE_Portrait_1.jpg', 'artist-portrait.jpg', 1600),
 
+    # --- the galleries -----------------------------------------------------
+    # A LUMAS opening, from the shoot the galleries prototype uses. The master
+    # is 7011x4674, so 1280 is a true 2x for the ~640px column and the crop is
+    # already 1.501, near enough 3:2 that the frame takes it uncropped.
+    (STUDIO, 'DSC06390.jpg', 'gallery-event.jpg', 1280),
+
     # --- rooms, in carousel order -----------------------------------------
     # Six of the eleven renders were cut for deformed geometry. RNE_img_03 and
     # RNE_img_01 are back at the client's request for retouching: their bases

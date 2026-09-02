@@ -461,12 +461,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 /* ============================================================
    8 · GALLERY — additive, never a substitute for the purchase
    ============================================================ */
+.gallery__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
 .gallery__inner{max-width:760px;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+/* Uncropped at 3:2, which is what the master already is. The section reads
+   text-left / photograph-right, the opposite way round to the artist section
+   above it, so two picture columns never stack on the same side. */
+.gallery__figure{margin:0;aspect-ratio:3/2}
 .gallery__eyebrow{color:var(--text-secondary);margin:0}
 .gallery__body{color:var(--text-secondary);max-width:60ch}
 .gallery__cta{margin-top:16px;min-width:280px}
-/* the delivered portrait is a 1.4:1 landscape crop, so the box stays
-   landscape: a 4:5 frame would cut into the head */
+/* stacked, the 4:3 crop of the master reads better and keeps the page short */
 .voice__portrait{aspect-ratio:4/3}
 /* two columns from 1024: the portrait matches the text column instead of
    stopping a third of the way down it — see the <picture> in the markup */
@@ -475,7 +479,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 .voice__lead{max-width:56ch;font-size:20px;line-height:1.6}
 
 /* ============================================================
-   5 · ROOMS + 9 · CONTINUE — carousels
+   7 · ROOMS — carousel
    ============================================================ */
 .carousel{position:relative}
 .carousel__track{
@@ -635,6 +639,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   .fcards{grid-template-columns:repeat(3,1fr)}
   .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
   .voice__portrait{aspect-ratio:2/3}
+  .gallery__grid{grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .gallery__grid .gallery__inner{max-width:none}
   .cv{grid-template-columns:1fr 1fr;gap:48px}
   .work-block{padding-block:120px}
   .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
@@ -1208,12 +1214,22 @@ a:focus-visible,button:focus-visible,input:focus-visible{
      is not known, so the copy invites an enquiry rather than promising a
      display. -->
 <section class="section on-bone" data-sec="gallery">
-  <div class="wrap gallery__inner">
-    <p class="t-eyebrow gallery__eyebrow">In echt sehen</p>
-    <h2 class="t-h2">Pillow No. 1 gibt es auch in unseren Galerien.</h2>
-    <p class="t-body-l gallery__body">Eine spiegelpolierte Oberfläche lässt sich schwer fotografieren, sie verändert sich mit jedem Schritt. LUMAS ist in 19 Galerien weltweit vertreten. Frag dort nach Pillow No. 1, wenn du das Werk vor dem Kauf einmal selbst sehen möchtest.</p>
-    <a class="btn btn--secondary gallery__cta" href="https://www.lumas.de/galerien/" target="_self"
-       data-ablyft-goal="drop_click_galleries">Galerien ansehen</a>
+  <div class="wrap gallery__grid">
+    <div class="gallery__inner">
+      <p class="t-eyebrow gallery__eyebrow">In echt sehen</p>
+      <h2 class="t-h2">Pillow No. 1 gibt es auch in unseren Galerien.</h2>
+      <p class="t-body-l gallery__body">Eine spiegelpolierte Oberfläche lässt sich schwer fotografieren, sie verändert sich mit jedem Schritt. LUMAS ist in 19 Galerien weltweit vertreten. Frag dort nach Pillow No. 1, wenn du das Werk vor dem Kauf einmal selbst sehen möchtest.</p>
+      <a class="btn btn--secondary gallery__cta" href="https://www.lumas.de/galerien/" target="_self"
+         data-ablyft-goal="drop_click_galleries">Galerien ansehen</a>
+    </div>
+
+    <!-- A LUMAS opening, from the same shoot the galleries prototype uses.
+         Uncropped: the master is 1.501, so the 3:2 frame takes it as shot. -->
+    <figure class="gallery__figure media">
+      <img src="gallery-event.jpg" width="1280" height="853" loading="lazy" decoding="async"
+           alt="Gäste einer LUMAS Galerieeröffnung im Gespräch, hinter ihnen eine großformatige Aufnahme eines Opernhauses."
+           data-fallback="GALERIEERÖFFNUNG · GÄSTE · 3:2">
+    </figure>
   </div>
 </section>
 
