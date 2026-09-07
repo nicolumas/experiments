@@ -226,6 +226,13 @@
   .toggleRow.on .track{background:var(--charcoal);}
   .toggleRow.on .track::before{background:#fff;transform:translateX(17px);}
   .toggleRow .lbl{font-size:14px;color:var(--charcoal);}
+  .dateTrigger{position:relative;}
+  .dateTrigger .fic{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-tertiary);pointer-events:none;}
+  .dateTrigger input[type=date]{padding-left:40px;color:transparent;}
+  .dateTrigger input[type=date].has-value{color:var(--charcoal);}
+  .dateTrigger input[type=date]::-webkit-calendar-picker-indicator{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;}
+  .dateTrigger .placeholderTxt{position:absolute;left:40px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);font-size:14px;pointer-events:none;}
+  .dateTrigger input[type=date].has-value ~ .placeholderTxt{display:none;}
 
   /* ---------- Order summary (right col / mobile expanded) ---------- */
   .prod{display:flex;gap:16px;align-items:flex-start;max-width:400px;}
@@ -386,6 +393,7 @@ const I = {
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>',
   trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
   bReturn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8a8 8 0 1 1-1.5 6"/><path d="M3 4v4h4"/></svg>',
   bInstall:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>',
   bPeople:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 6.5a3 3 0 0 1 0 5.8"/><path d="M17 19a5 5 0 0 0-2.5-4"/></svg>',
@@ -413,6 +421,7 @@ const initialState = {
   shippingMethod:'standard',
   vatId:'',
   preferredDate:'',
+  shipASAP:true,
 };
 let state = JSON.parse(JSON.stringify(initialState));
 let currentView = 'dv1';
@@ -491,6 +500,7 @@ function onVatIdInput(el){
 }
 function onPreferredDateInput(el){
   state.preferredDate = el.value;
+  el.classList.toggle('has-value', !!el.value);
 }
 
 /* ---------------- Reusable fragments ---------------- */
@@ -619,11 +629,21 @@ function shipping(){
       <div class="infoBox">Dein Warenkorb ist leer.</div>
     </div>`;
   }
+  const dateBlock = !state.shipASAP ? `
+    <div style="margin-top:16px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:4px">Bevorzugtes Lieferdatum</div>
+      <div class="subtle" style="margin-bottom:8px">Wähle den frühesten Tag, an dem deine Bestellung versendet werden soll.</div>
+      <div class="field dateTrigger">
+        <span class="fic">${I.calendar}</span>
+        <input type="date" id="preferredDateInput" value="${state.preferredDate}" oninput="onPreferredDateInput(this)" class="${state.preferredDate?'has-value':''}">
+        <span class="placeholderTxt">Datum auswählen</span>
+      </div>
+    </div>` : '';
   const dateField = `
-    <div class="field floating" style="margin-top:4px">
-      <span class="floatLbl">Bevorzugtes Lieferdatum (optional)</span>
-      <input type="date" id="preferredDateInput" value="${state.preferredDate}" oninput="onPreferredDateInput(this)" style="padding-top:16px">
-    </div>`;
+    <button type="button" class="toggleRow${state.shipASAP?' on':''}" data-act="toggleShipASAP" style="margin-top:16px">
+      <span class="track"></span><span class="lbl">So schnell wie möglich versenden</span>
+    </button>
+    ${dateBlock}`;
   return `<div class="section">
     <div class="secHead"><h2>Versand</h2></div>
     <div class="payList">
@@ -967,6 +987,10 @@ document.addEventListener('click', (e)=>{
       break;
     case 'setShipping':
       state.shippingMethod = t.dataset.method;
+      rerender();
+      break;
+    case 'toggleShipASAP':
+      state.shipASAP = !state.shipASAP;
       rerender();
       break;
     case 'qtyInc':
