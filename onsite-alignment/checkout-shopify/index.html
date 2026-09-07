@@ -107,22 +107,6 @@
   .tpWord .pin{width:16px;height:16px;background:var(--tpGreen);border-radius:2px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
   .tpWord .pin svg{width:12px;height:12px;fill:#fff;}
 
-  /* ---------- Review-quote card (desktop v1) ---------- */
-  .tpReviewWrap{display:flex;flex-direction:column;align-items:center;gap:24px;width:100%;}
-  .tpLogoBig{height:31px;display:flex;align-items:center;gap:6px;font-weight:800;font-size:26px;letter-spacing:-.02em;color:#000;}
-  .tpLogoBig .pin{width:28px;height:28px;background:var(--tpGreen);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
-  .tpLogoBig .pin svg{width:20px;height:20px;fill:#fff;}
-  .reviewCard{background:var(--ivory-200);border-radius:0;padding:16px;display:flex;flex-direction:column;gap:10px;width:100%;}
-  .reviewCard .top{display:flex;align-items:center;justify-content:space-between;}
-  .reviewCard .stars{display:flex;gap:2px;}
-  .reviewCard .stars .sq{width:17px;height:17px;background:var(--tpGreen);border-radius:1px;display:flex;align-items:center;justify-content:center;}
-  .reviewCard .stars .sq svg{width:13px;height:13px;fill:#fff;}
-  .reviewCard .tpFoot{display:flex;align-items:center;gap:6px;padding-top:2px;}
-  .reviewCard .date{font-size:14px;color:var(--text-tertiary);letter-spacing:-.14px;}
-  .reviewCard .quote{font-size:14px;color:var(--text-secondary);letter-spacing:-.14px;line-height:1.35;}
-  .reviewCard .author{display:flex;align-items:center;gap:4px;font-size:14px;color:var(--text-tertiary);letter-spacing:-.14px;}
-  .reviewCard .author svg{width:12px;height:12px;}
-
   /* ---------- Express checkout ---------- */
   .expressLabel{text-align:center;font-size:13px;color:var(--text-tertiary);}
   .expressBtns{display:flex;gap:12px;justify-content:center;}
@@ -426,6 +410,9 @@ const initialState = {
   saleDemo:false,
   mobileOrderOpen:false,
   promoVisible:true,
+  shippingMethod:'standard',
+  vatId:'',
+  preferredDate:'',
 };
 let state = JSON.parse(JSON.stringify(initialState));
 let currentView = 'dv1';
@@ -439,11 +426,13 @@ const savedAddresses = [
 const UNIT_PRICE = 1990.00;
 const SALE_PRICE = 1592.00;
 const SHIPPING_FEE = 29;
+const PREMIUM_SHIPPING_FEE = 79;
 
 function fmt(n){ return '€ '+n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function isValidVatId(v){ return /^[A-Za-z]{2}[A-Za-z0-9]{6,12}$/.test((v||'').trim()); }
 
 function calc(){
-  if(state.itemRemoved) return {lineSubtotal:0, regularSubtotal:0, discountAmt:0, shipping:0, total:0, tax:0};
+  if(state.itemRemoved) return {lineSubtotal:0, regularSubtotal:0, discountAmt:0, shipping:0, total:0, tax:0, vatValid:false};
   const unit = state.saleDemo ? SALE_PRICE : UNIT_PRICE;
   const regularUnit = UNIT_PRICE;
   const lineSubtotal = unit*state.qty;
@@ -451,10 +440,12 @@ function calc(){
   let discountAmt = 0;
   if(state.discountApplied) discountAmt = Math.round(lineSubtotal*(state.discountApplied.pct/100)*100)/100;
   const afterDiscount = lineSubtotal-discountAmt;
-  const shipping = SHIPPING_FEE;
-  const total = afterDiscount+shipping;
-  const tax = Math.round(total/1.19*0.19*100)/100;
-  return {lineSubtotal, regularSubtotal, discountAmt, shipping, total, tax, unit};
+  const shipping = state.shippingMethod==='premium' ? PREMIUM_SHIPPING_FEE : SHIPPING_FEE;
+  const grossTotal = afterDiscount+shipping;
+  const vatValid = isValidVatId(state.vatId);
+  const total = vatValid ? Math.round(grossTotal/1.19*100)/100 : grossTotal;
+  const tax = vatValid ? 0 : Math.round(total/1.19*0.19*100)/100;
+  return {lineSubtotal, regularSubtotal, discountAmt, shipping, total, tax, unit, vatValid};
 }
 
 function toast(msg){
@@ -481,6 +472,27 @@ function onContactEmailInput(el){
   }
 }
 
+function patchTotals(){
+  const c = calc();
+  document.querySelectorAll('.grand .amt').forEach(el=>{ el.textContent = fmt(c.total); });
+  document.querySelectorAll('.grandTaxNote').forEach(el=>{
+    el.textContent = c.vatValid ? 'zzgl. 0% USt · Reverse-Charge-Verfahren' : `inkl. MwSt ${fmt(c.tax)}`;
+  });
+}
+function onVatIdInput(el){
+  state.vatId = el.value;
+  const valid = isValidVatId(state.vatId);
+  const note = document.getElementById('vatNote');
+  if(note){
+    note.textContent = state.vatId.trim() ? (valid ? 'Gültiges Format erkannt · Reverse-Charge-Verfahren wird angewendet (§13b UStG)' : 'Bitte Format prüfen, z. B. DE123456789') : '';
+    note.style.color = valid ? 'var(--success)' : 'var(--text-tertiary)';
+  }
+  patchTotals();
+}
+function onPreferredDateInput(el){
+  state.preferredDate = el.value;
+}
+
 /* ---------------- Reusable fragments ---------------- */
 function promoBar(){
   if(!state.promoVisible) return '';
@@ -502,17 +514,6 @@ function ratingCompact(){
     <div class="tpRow tpRow2">
       <span class="txt">Basierend auf zahlreichen Bewertungen</span>
       <span class="tpWord"><span class="pin">${I.star}</span>Trustpilot</span>
-    </div>
-  </div>`;
-}
-function ratingReview(){
-  return `<div class="tpReviewWrap">
-    <div class="tpLogoBig"><span class="pin">${I.star}</span>Trustpilot</div>
-    <div class="reviewCard">
-      <div class="top"><div class="stars">${('<span class="sq">'+I.star+'</span>').repeat(5)}</div><span class="date">24/02/2026</span></div>
-      <div class="quote">„Das Kunstwerk kam perfekt verpackt an, der Rahmen ist erstklassig verarbeitet – genau wie auf dem Foto erwartet.”</div>
-      <div class="author">– M. R., verifizierte Käuferin ${I.verified}</div>
-      <div class="tpFoot"><div class="stars">${('<span class="sq">'+I.star+'</span>').repeat(5)}</div></div>
     </div>
   </div>`;
 }
@@ -612,18 +613,32 @@ function delivery(){
   return `<div class="section">${deliveryFormFields()}</div>`;
 }
 function shipping(){
-  const c = calc();
   if(state.itemRemoved){
     return `<div class="section">
       <div class="secHead"><h2>Versand</h2></div>
       <div class="infoBox">Dein Warenkorb ist leer.</div>
     </div>`;
   }
+  const dateField = `
+    <div class="field floating" style="margin-top:4px">
+      <span class="floatLbl">Bevorzugtes Lieferdatum (optional)</span>
+      <input type="date" id="preferredDateInput" value="${state.preferredDate}" oninput="onPreferredDateInput(this)" style="padding-top:16px">
+    </div>`;
   return `<div class="section">
     <div class="secHead"><h2>Versand</h2></div>
-    <div class="infoBox" style="background:var(--ivory-200);color:var(--charcoal);display:flex;justify-content:space-between;align-items:center">
-      <span>Standardversand</span><span style="font-weight:600">${fmt(SHIPPING_FEE)}</span>
+    <div class="payList">
+      <button type="button" class="payRow${state.shippingMethod==='standard'?' on selectedGroup':''}" data-act="setShipping" data-method="standard">
+        <span class="radio"></span>
+        <span class="name">Standardversand<br><span class="subtle" style="font-weight:400">5–7 Werktage</span></span>
+        <span class="payChips" style="font-weight:600;color:var(--charcoal)">${fmt(SHIPPING_FEE)}</span>
+      </button>
+      <button type="button" class="payRow${state.shippingMethod==='premium'?' on selectedGroup':''}" data-act="setShipping" data-method="premium">
+        <span class="radio"></span>
+        <span class="name">Premiumversand<br><span class="subtle" style="font-weight:400">1–2 Werktage · mit Terminvereinbarung</span></span>
+        <span class="payChips" style="font-weight:600;color:var(--charcoal)">${fmt(PREMIUM_SHIPPING_FEE)}</span>
+      </button>
     </div>
+    ${dateField}
   </div>`;
 }
 function payRow(name, method, chipsHtml){
@@ -669,12 +684,18 @@ function payment(){
 }
 function billing(){
   const extra = !state.billingSame ? `<div style="margin-top:4px">${deliveryFormFields()}</div>` : '';
+  const vatValid = isValidVatId(state.vatId);
+  const vatNoteText = state.vatId.trim() ? (vatValid ? 'Gültiges Format erkannt · Reverse-Charge-Verfahren wird angewendet (§13b UStG)' : 'Bitte Format prüfen, z. B. DE123456789') : '';
   return `<div class="section">
     <div class="secHead"><h2>Rechnungsadresse</h2></div>
     <button type="button" class="toggleRow${state.billingSame?' on':''}" data-act="toggleBilling">
       <span class="track"></span><span class="lbl">Rechnungsadresse entspricht der Lieferadresse</span>
     </button>
     ${extra}
+    <div class="field" style="margin-top:4px">
+      <input id="vatIdInput" placeholder="USt-IdNr. (optional, für Firmenkunden)" value="${state.vatId}" oninput="onVatIdInput(this)">
+    </div>
+    <div id="vatNote" class="subtle" style="color:${vatValid?'var(--success)':'var(--text-tertiary)'}">${vatNoteText}</div>
   </div>`;
 }
 function phoneSave(){
@@ -760,12 +781,13 @@ function totals(){
   if(state.discountApplied){
     rows += `<div class="totRow save"><span>Preisvorteil (${state.discountApplied.code})</span><span>− ${fmt(c.discountAmt)}</span></div>`;
   }
-  rows += `<div class="totRow"><span class="lft">Versand <span class="tooltipWrap"><button type="button" class="infoBtn" data-act="shippingInfo">${I.info}</button><span class="tooltipBubble">Versicherter Standardversand · Lieferzeit 5–7 Werktage</span></span></span><span>${fmt(SHIPPING_FEE)}</span></div>`;
+  rows += `<div class="totRow"><span class="lft">Versand <span class="tooltipWrap"><button type="button" class="infoBtn" data-act="shippingInfo">${I.info}</button><span class="tooltipBubble">Versicherter Versand · sichere Verpackung durch unsere Kunstspedition</span></span></span><span>${fmt(c.shipping)}</span></div>`;
+  const taxNote = c.vatValid ? 'zzgl. 0% USt · Reverse-Charge-Verfahren' : `inkl. MwSt ${fmt(c.tax)}`;
   return `<div class="totals">
     ${rows}
     <div class="grand">
       <span class="gl">Gesamt</span>
-      <span class="gr"><div><span class="amt">${fmt(c.total)}</span></div><div class="tax">inkl. MwSt ${fmt(c.tax)}</div></span>
+      <span class="gr"><div><span class="amt">${fmt(c.total)}</span></div><div class="tax grandTaxNote">${taxNote}</div></span>
     </div>
   </div>`;
 }
@@ -796,6 +818,9 @@ function fragen(){
     </div>
   </div>`;
 }
+function termsNote(){
+  return `<div class="legal">Mit Klick auf „Werk sichern“ akzeptierst du unsere <button data-act="legalNote">AGB</button> und bestätigst, unsere <button data-act="legalNote">Widerrufsbelehrung</button> zur Kenntnis genommen zu haben. Bei individuell in Auftrag gegebenen Anfertigungen erlischt das Widerrufsrecht mit Beginn der Bearbeitung.</div>`;
+}
 function buy(){
   const disabled = state.itemRemoved ? 'disabled' : '';
   return `<button class="buyBtn" data-act="buyNow" ${disabled}>Werk sichern</button>`;
@@ -822,10 +847,10 @@ function renderDesktopV1(){
   <div class="checkout">
     <div class="col-left">
       ${ratingCompact()}
-      ${ratingReview()}
       ${express()}
       ${oder()}
       ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${termsNote()}
       ${buy()}
       ${footer()}
     </div>
@@ -844,6 +869,7 @@ function renderMobileV1(){
       ${express()}
       ${oder()}
       ${contact()}${delivery()}${shipping()}${payment()}${billing()}${phoneSave()}
+      ${termsNote()}
       ${buy()}
       ${badges()}
       ${fragen()}
@@ -937,6 +963,10 @@ document.addEventListener('click', (e)=>{
       break;
     case 'toggleBilling':
       state.billingSame = !state.billingSame;
+      rerender();
+      break;
+    case 'setShipping':
+      state.shippingMethod = t.dataset.method;
       rerender();
       break;
     case 'qtyInc':
