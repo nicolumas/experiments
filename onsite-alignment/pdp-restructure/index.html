@@ -295,15 +295,27 @@ a { color: inherit; }
 .ed-line2{ font-size: 13.5px; color: var(--color-charcoal-700, #5A5752); line-height: 1.4; }
 .edition-chip .n-left{ font-size: 12.5px; font-weight: 600; color: var(--color-status-warning, #9B6D1E); margin-top: 2px; }
 .edition-chip .ed-info{ width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: 0 0 auto; color: var(--color-charcoal-700, #5A5752); }
+.price-steps{ margin: 14px 0 0; max-width: 320px; }
+.ps-track{ position: relative; height: 9px; }
+.ps-track::before{
+  content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--color-charcoal-900, #1C1A18) 0 62.5%, var(--color-bone-100, #E2D8CC) 62.5% 100%);
+}
+.ps-track i{
+  position: absolute; left: 62.5%; top: 50%; width: 8px; height: 8px;
+  background: var(--color-charcoal-900, #1C1A18); transform: translate(-50%, -50%) rotate(45deg);
+}
+.ps-labels{ display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 4px; }
+.ps-labels span, .ps-labels strong{ font-size: 10.5px; text-align: center; white-space: nowrap; }
+.ps-labels span{ color: var(--color-text-tertiary, #908C87); }
+.ps-labels strong{ font-weight: 700; color: var(--color-charcoal-900, #1C1A18); font-size: 11px; }
+.ps-labels .next{ color: var(--color-charcoal-700, #5A5752); }
 .demand-row{
-  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+  margin-top: 6px;
   font-size: 12px; line-height: 1.5; color: var(--color-charcoal-700, #5A5752);
 }
 .demand-row strong{ font-weight: 600; color: var(--color-charcoal-800, #3A3835); }
-.d-bars{ display: flex; gap: 3px; flex: 0 0 auto; }
-.d-bars i{ width: 14px; height: 2px; background: var(--color-bone-100, #E2D8CC); }
-.d-bars i.hot{ background: var(--color-charcoal-900, #1C1A18); }
-@media (max-width: 1023px){ .demand-row{ justify-content: center; } }
+@media (max-width: 1023px){ .price-steps{ margin-left: auto; margin-right: auto; } }
 @media (max-width: 1023px){
   .edition-chip{ gap: 12px; padding: 10px 14px; }
   .ed-num{ font-size: 32px; }
@@ -808,10 +820,11 @@ a { color: inherit; }
         </span>
         <svg class="ed-info" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
       </button>
-      <p class="demand-row" aria-label="Nachfragestatus: beliebt">
-        <span class="d-bars" aria-hidden="true"><i class="hot"></i><i class="hot"></i><i></i><i></i></span>
-        <span><strong>Nachfrage: beliebt</strong> · Preis kann mit der Auflage steigen</span>
-      </p>
+      <div class="price-steps" id="priceSteps">
+        <div class="ps-track" aria-hidden="true"><i></i></div>
+        <div class="ps-labels" id="psLabels" aria-hidden="true"></div>
+      </div>
+      <p class="demand-row"><strong>Nachfrage: beliebt</strong> · jeder Verkauf führt zur nächsten Preisstufe</p>
     </section>
 
     <section class="config" aria-label="Konfiguration">
@@ -1189,6 +1202,7 @@ function update(trigger){
   const saveEl = document.getElementById('priceSave');
   saveEl.hidden = !was; if (was) saveEl.textContent = 'Heute ' + fmt(was - p) + ' sparen';
   document.getElementById('stickyPrice').textContent = fmt(p);
+  renderPriceSteps();
   document.getElementById('stickyMeta').textContent =
     `${state.size.dim} · ${({acryl: 'Acrylglas', basel: 'Rahmen Basel', baselplus: 'Rahmen Basel Plus', print: 'Abzug'})[state.finish.key]}`;
   document.getElementById('deliveryLine').textContent = `Versand in 5 Tagen (zzgl. € ${state.size.ship})`;
@@ -1196,6 +1210,17 @@ function update(trigger){
     state.finish.key === 'basel' ? `Außenmaß gerahmt: ${state.size.outerBasel}` : 'Bildmaß in cm';
   if (trigger) track('price_updated', { new_price: p, trigger });
   if (!deliverySeen){ deliverySeen = true; track('delivery_estimate_view', { estimate_days: 5 }); }
+}
+
+/* price-step ladder — DEMO steps (no price-stage feed exists); marker fixed at stage 3 of 4 */
+function renderPriceSteps(){
+  const base = state.size.prices[state.finish.key][1]; // regular stage price, promo-independent
+  const d = { '40': 50, '80': 100, '120': 150 }[state.size.key];
+  const steps = [base - 2 * d, base - d, base, base + d];
+  document.getElementById('psLabels').innerHTML =
+    `<span>${fmt(steps[0])}</span><span>${fmt(steps[1])}</span><strong>${fmt(steps[2])}</strong><span class="next">${fmt(steps[3])}</span>`;
+  document.getElementById('priceSteps').setAttribute('aria-label',
+    `Preisstufen der Edition: aktuell ${fmt(steps[2])}, nächste Stufe ${fmt(steps[3])}`);
 }
 
 /* ═══ ATC ═══ */
