@@ -295,7 +295,7 @@ a { color: inherit; }
 .ed-line2{ font-size: 13.5px; color: var(--color-charcoal-700, #5A5752); line-height: 1.4; }
 .edition-chip .n-left{ font-size: 12.5px; font-weight: 600; color: var(--color-status-warning, #9B6D1E); margin-top: 2px; }
 .edition-chip .ed-info{ width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: 0 0 auto; color: var(--color-charcoal-700, #5A5752); }
-.price-steps{ margin: 14px 0 0; max-width: 320px; }
+.price-steps{ margin: 16px 0 0; }
 .ps-track{ position: relative; height: 9px; }
 .ps-track::before{
   content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-50%);
@@ -305,8 +305,10 @@ a { color: inherit; }
   position: absolute; left: 62.5%; top: 50%; width: 8px; height: 8px;
   background: var(--color-charcoal-900, #1C1A18); transform: translate(-50%, -50%) rotate(45deg);
 }
-.ps-labels{ display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 4px; }
+.ps-labels{ display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 5px; }
 .ps-labels span, .ps-labels strong{ font-size: 10.5px; text-align: center; white-space: nowrap; }
+.ps-labels :first-child{ text-align: left; }
+.ps-labels :last-child{ text-align: right; }
 .ps-labels span{ color: var(--color-text-tertiary, #908C87); }
 .ps-labels strong{ font-weight: 700; color: var(--color-charcoal-900, #1C1A18); font-size: 11px; }
 .ps-labels .next{ color: var(--color-charcoal-700, #5A5752); }
@@ -315,7 +317,7 @@ a { color: inherit; }
   font-size: 12px; line-height: 1.5; color: var(--color-charcoal-700, #5A5752);
 }
 .demand-row strong{ font-weight: 600; color: var(--color-charcoal-800, #3A3835); }
-@media (max-width: 1023px){ .price-steps{ margin-left: auto; margin-right: auto; } }
+
 @media (max-width: 1023px){
   .edition-chip{ gap: 12px; padding: 10px 14px; }
   .ed-num{ font-size: 32px; }
@@ -327,9 +329,7 @@ a { color: inherit; }
 .price{
   font-family: 'Archivo', sans-serif; font-weight: 400;
   font-size: clamp(28px, 5vw, 32px); line-height: 1.25;
-  transition: filter var(--dur-2) ease, opacity var(--dur-2) ease;
 }
-.price.updating{ filter: blur(2px); opacity: 0.55; }
 .price-note{ font-size: 12px; color: var(--color-text-tertiary, #908C87); }
 .price-was{ font-size: 15px; color: var(--color-text-tertiary, #908C87); }
 .price-save{ font-size: 12px; color: var(--color-charcoal-700, #5A5752); margin-top: 2px; }
@@ -386,32 +386,6 @@ a { color: inherit; }
 .options-ghost{ margin-top: 12px; color: var(--color-text-primary, #1C1A18); }
 
 /* ATC + reassurance */
-.avail-pill{
-  display: inline-flex; align-items: center; gap: 8px;
-  margin: 12px var(--gutter) 0; padding: 8px 14px; border-radius: 999px;
-  background: var(--color-status-success-bg, #E8F2EB); color: var(--color-status-success, #3A6B4A);
-  font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; min-height: 34px;
-  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
-}
-@media (min-width: 1024px){ .avail-pill{ margin: 12px 0 0; } }
-.avail-pill:hover{ filter: brightness(0.96); }
-.avail-pill:active{ transform: scale(0.97); }
-.avail-pill .dot{ width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-.avail-pill svg{ width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
-.gal-kv{ display: grid; grid-template-columns: max-content 1fr; gap: 10px 28px; margin: 18px 0; font-size: 15px; }
-.gal-kv dt{ color: var(--color-charcoal-700, #5A5752); }
-.gal-route{ display: inline-block; margin-top: 4px; font-size: 14px; text-underline-offset: 3px; }
-.gal-ctas{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
-.gal-cta{
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-  min-height: 68px; padding: 12px 8px; border: 1px solid var(--color-charcoal-900, #1C1A18); border-radius: 0;
-  font-size: 12px; font-weight: 700; letter-spacing: 1.68px; text-transform: uppercase; text-decoration: none;
-  color: var(--color-charcoal-900, #1C1A18);
-  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
-}
-.gal-cta:hover{ background: var(--color-surface-inverse, #1C1A18); color: var(--color-text-inverse, #F4EDE2); }
-.gal-cta:active{ transform: scale(0.97); }
-.gal-cta svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 .atc-wrap{ padding: 22px var(--gutter) 0; }
 @media (min-width: 1024px){ .atc-wrap{ padding: 22px 0 0; } }
 .atc-error{
@@ -680,8 +654,8 @@ a { color: inherit; }
 
 <!-- promo bar: kept, single line, no viewport theft. V2 voice: no "!" -->
 <div class="promo" id="promo">
-  <b>Art Week · 20 % auf alle Editionen</b>
-  <a class="promo-cta" href="#" onclick="return false">Vorteil automatisch im Warenkorb</a>
+  <b>10 % auf dein erstes Kunstwerk</b>
+  <a class="promo-cta" href="#" onclick="return false">Jetzt sichern</a>
   <button class="promo-x" aria-label="Hinweis schließen" onclick="this.parentElement.remove()">
     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
@@ -847,18 +821,11 @@ a { color: inherit; }
       </div>
 
       <div class="price-row">
-        <span class="price" id="price" aria-live="polite">€ 359</span>
+        <span class="price" id="price" aria-live="polite">€ 449</span>
         <s class="price-was" id="priceWas" hidden></s>
         <span class="price-note">inkl. MwSt.</span>
       </div>
       <p class="price-save" id="priceSave" hidden></p>
-      <div>
-        <button class="avail-pill" id="availPill" aria-haspopup="dialog">
-          <span class="dot" aria-hidden="true"></span>
-          Verfügbar in Berlin Mitte
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>
-        </button>
-      </div>
       <div class="atc-wrap">
         <!-- ABLYFT-GOAL: ATC (primary goal) -->
         <button class="btn btn-primary" id="atc"><span id="atcLabel">In den Warenkorb</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg></button>
@@ -949,44 +916,6 @@ a { color: inherit; }
       <dt style="color:var(--color-charcoal-700, #5A5752)">Werknummer</dt><dd>MCS36</dd>
       <dt style="color:var(--color-charcoal-700, #5A5752)">Zertifikat</dt><dd>Echtheitszertifikat inklusive</dd>
     </dl>
-  </div>
-</aside>
-
-<!-- gallery availability sheet -->
-<aside class="sheet" id="gallerySheet" role="dialog" aria-modal="true" aria-labelledby="galTitle">
-  <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head">
-    <h2 id="galTitle">Galerie Berlin Mitte</h2>
-    <button class="x" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-  <div class="sheet-body">
-    <p><strong>Dieses Werk ist aktuell in der Galerie zu sehen.</strong></p>
-    <dl class="gal-kv">
-      <dt>Adresse</dt>
-      <dd>
-        LUMAS Galerie Berlin Mitte<br>
-        Rosenthaler Straße 40/41<br>
-        10178 Berlin<br>
-        <a class="gal-route" href="https://maps.google.com/?q=LUMAS+Galerie,+Rosenthaler+Stra%C3%9Fe+40/41,+10178+Berlin" target="_blank" rel="noopener" id="galRoute">Route planen →</a>
-      </dd>
-      <dt>Öffnungszeiten</dt>
-      <dd>Mo–Sa 11–19 Uhr<br>So 13–18 Uhr</dd>
-    </dl>
-    <p style="margin-top:22px">Nimm Kontakt auf, unsere Art Consultants helfen dir gerne weiter.</p>
-    <div class="gal-ctas">
-      <a class="gal-cta" href="mailto:berlin.mitte@lumas.de" data-channel="email">
-        <svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg>
-        E-Mail
-      </a>
-      <a class="gal-cta" href="https://wa.me/493028040373" target="_blank" rel="noopener" data-channel="whatsapp">
-        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><path d="M8.8 9.2c.3 2.6 3.4 5.5 6 6l1.4-1.4-2-1.3-1 .7c-.8-.4-1.9-1.5-2.3-2.3l.7-1-1.3-2-1.5 1.3z"/></svg>
-        WhatsApp
-      </a>
-      <a class="gal-cta" href="tel:+493028040373" data-channel="call">
-        <svg viewBox="0 0 24 24"><path d="M5 4h4l1.5 4.5-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2L20 15v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
-        Anrufen
-      </a>
-    </div>
   </div>
 </aside>
 
@@ -1129,7 +1058,7 @@ const state = {
   atcError: qs.get('state') === 'atc-error',
 };
 const fmt = n => '€ ' + n.toLocaleString('de-DE');
-const PROMO = qs.get('promo') !== 'off'; // Art Week live on lumas.de, verified 20 Aug 2026
+const PROMO = qs.get('promo') === 'artweek'; // strike prices off for now; ?promo=artweek re-enables the verified pairs
 const priceNow = (size, key) => { const p = size.prices[key]; return p ? (PROMO ? p[0] : p[1]) : null; };
 const priceWas = (size, key) => { const p = size.prices[key]; return (p && PROMO) ? p[1] : null; };
 
@@ -1192,11 +1121,7 @@ function update(trigger){
   renderSizes(); renderFinishes();
   const p = priceNow(state.size, state.finish.key);
   const was = priceWas(state.size, state.finish.key);
-  priceEl.classList.add('updating');
-  setTimeout(() => {
-    priceEl.textContent = fmt(p);
-    priceEl.classList.remove('updating');
-  }, 180);
+  priceEl.textContent = fmt(p);
   const wasEl = document.getElementById('priceWas');
   wasEl.hidden = !was; if (was) wasEl.textContent = 'statt ' + fmt(was);
   const saveEl = document.getElementById('priceSave');
@@ -1369,12 +1294,6 @@ document.querySelectorAll('.sheet').forEach(sheet => {
 });
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeAllSheets));
 
-document.getElementById('availPill').addEventListener('click', () => {
-  track('gallery_availability_open', { gallery: 'berlin-mitte' });
-  showSheet('gallerySheet');
-});
-document.querySelectorAll('.gal-cta').forEach(a => a.addEventListener('click', () =>
-  track('gallery_contact_click', { channel: a.dataset.channel, gallery: 'berlin-mitte' })));
 document.getElementById('editionChip').addEventListener('click', () => {
   track('edition_info_open', { edition_type: 'limited_signed', edition_size: 150 });
   showSheet('provSheet');
