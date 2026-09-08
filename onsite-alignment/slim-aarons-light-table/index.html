@@ -1352,11 +1352,11 @@ img{display:block;max-width:100%;height:auto}
       <div class="lt-sec-head">
         <p class="t-eyebrow">On the wall</p>
         <h2 class="t-h2">How your edit&nbsp;hangs</h2>
-        <p class="t-small">Every slide is cut to the same square, so whatever you choose lands on one grid. Three in a run above a console, six in a block, or the whole box as a nine.</p>
+        <p class="t-small">Every slide is cut to the same square, so whatever you choose lands on one grid. One above a console, three in a run, six in a block, or the whole box as a&nbsp;nine.</p>
       </div>
       <div class="lt-wall">
         <div class="lt-wall__inner">
-          <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966">
+          <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966" loading="lazy">
           <div class="lt-hang" id="hang"></div>
         </div>
       </div>
@@ -1720,11 +1720,10 @@ img{display:block;max-width:100%;height:auto}
     $("nextLine").textContent = line;
     $("barNext").textContent = line;
 
-    /* primary + alternate action. At eight, completing is both cheaper and
-       more complete, so it takes the primary slot and securing eight drops
-       to the ghost action. */
+    /* Primary action plus, from six on, a ghost that names what finishing the
+       box actually costs. */
     var cta = $("cta"), alt2 = $("altCta"), barCta = $("barCta");
-    cta.disabled = barCta.disabled = (n === 0);
+    cta.disabled = barCta.disabled = $("clearBtn").disabled = (n === 0);
     cta.textContent = barCta.textContent = ctaLabel(n);
     cta.dataset.action = barCta.dataset.action = "cart";
     if (ruleOn && n >= 6 && n <= 8){
@@ -1768,8 +1767,13 @@ img{display:block;max-width:100%;height:auto}
   var PCT_PER_CM = 0.002808;
   function renderWall(n){
     var sec = $("wallSec");
-    sec.hidden = (n < 3 || variant === "control");
+    sec.hidden = (variant === "control");
     if (sec.hidden){ hang.innerHTML = ""; $("wallDims").innerHTML = "&nbsp;"; return; }
+    if (n === 0){
+      hang.innerHTML = "";
+      $("wallDims").textContent = "Choose a slide to hang it here.";
+      return;
+    }
 
     var cols = n <= 2 ? n : 3;
     var rows = Math.ceil(n / cols);
@@ -1788,7 +1792,7 @@ img{display:block;max-width:100%;height:auto}
     hang.innerHTML = "";
     hang.appendChild(wrapEl);
     sizeWall();
-    $("wallDims").textContent = n + " slides, " + blockW + " × " + blockH + " cm overall";
+    $("wallDims").textContent = n + (n === 1 ? " slide, " : " slides, ") + blockW + " × " + blockH + " cm overall";
   }
 
   function sizeWall(){
