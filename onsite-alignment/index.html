@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0901", kicker: "Latest · today",        weekday: "Tuesday",   date: "1 September", year: "2026", short: "1 Sep", upcoming: true },
+      { id: "s0908", kicker: "Latest · today",        weekday: "Tuesday",   date: "8 September", year: "2026", short: "8 Sep", upcoming: true },
+      { id: "s0901", kicker: "Previous",              weekday: "Tuesday",   date: "1 September", year: "2026", short: "1 Sep" },
       { id: "s0831", kicker: "Previous",              weekday: "Monday",    date: "31 August", year: "2026", short: "31 Aug" },
       { id: "s0827", kicker: "Previous",              weekday: "Thursday",  date: "27 August", year: "2026", short: "27 Aug" },
       { id: "s0826", kicker: "Previous",              weekday: "Wednesday", date: "26 August", year: "2026", short: "26 Aug" },
@@ -167,6 +168,9 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Tuesday 8 September ─────────────────────────────
+      { s: "s0908", feature: true, title: "Slim Aarons — The light table", href: "slim-aarons-light-table/", desc: "A curation page for the nine 34 × 34 cm Slim Aarons archive slides (SAA114 to SAA122), adapting the Petites & Darlings Wall Curator to a four-rung price ladder. The works are not photographs but Slim’s original 35 mm slides, mounts and handwriting intact, so the surface is the light table a picture editor edited a take on: click a slide to keep it, and one large price-per-slide figure answers at 3, 6 and 9. Working the tiers through every quantity found two dead rungs — seven slides cost €1,393 and eight cost €1,592 against €1,341 for all nine — so at eight the primary action becomes ‘Add the ninth and pay €251 less’. Carries a control arm (press V) and a rule-off state, real product data (Lambda colour photograph, estate stamp, acrylic glass mount), a quick view that transcribes each mount, and a hang preview above a real credenza." },
+
       // ── Tuesday 1 September ────────────────────────────────────
       { s: "s0901", feature: true, title: "Book a consultation", href: "book-a-consultation/", desc: "A rebrand of a Figma Make prototype into LUMAS V2 — the gallery-consultation contact card, restyled in Charcoal/Ivory/Bone with the real booking-modal mechanic (postcode to nearest of the nineteen galleries)." },
       { s: "s0901", feature: true, title: "Checkout — Shopify Style", href: "checkout-shopify/", desc: "A Figma reference of a Shopify-style single-page checkout, rebuilt in LUMAS V2 — Charcoal/Ivory/Bone, Utile Display headings, and the interactions the reference only screenshotted: a working quantity stepper, discount codes, a saved-address picker, a real billing-address toggle, and email-recognition login in place of a tab strip." },
