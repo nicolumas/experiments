@@ -59,7 +59,10 @@
   --lt-ground:#FFFFFF;
   --lt-lift:0 1.8rem 6rem -1.6rem rgba(28,26,24,.30);
   --lt-lift-sm:0 .2rem .8rem rgba(28,26,24,.07);
-  --lt-wall-shadow:0 1.2rem 2.4rem -1rem rgba(28,26,24,.38);
+  --lt-wall-shadow:
+    0 1px 1px rgba(28,26,24,.34),
+    0 3px 4px -1px rgba(28,26,24,.26),
+    0 8px 10px -6px rgba(28,26,24,.20);
   --lt-ease:cubic-bezier(.2,.8,.2,1);
   --lt-t-fast:.22s;
   --lt-t:.32s;
@@ -193,7 +196,6 @@ img{display:block;max-width:100%;height:auto}
 .lt-slide__tick .lt-ic{stroke-width:2.5}
 .lt-slide.is-kept .lt-slide__tick{border-color:var(--color-ivory-100);background:var(--color-ivory-100);color:var(--color-charcoal-900)}
 /* the two states where completing costs less than not completing */
-.lt-table.is-dominated .lt-slide:not(.is-kept){border-color:var(--color-charcoal-900)}
 
 .lt-slide__info{
   position:absolute;right:1.1rem;bottom:auto;top:calc(100% - var(--cap-h,5.2rem) / 2);transform:translateY(-50%);width:2.8rem;height:2.8rem;border-radius:50%;
@@ -232,11 +234,11 @@ img{display:block;max-width:100%;height:auto}
 @keyframes lt-rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
 .lt-ladder{display:flex;align-items:flex-end;gap:.5rem;height:5.2rem;margin:2.2rem 0 .6rem;padding-bottom:2rem;position:relative}
-.lt-notch{flex:1;background:var(--color-border-default);height:1.1rem;position:relative;transition:background var(--lt-t-fast) var(--lt-ease)}
-.lt-notch--tier{height:2.6rem}
+.lt-notch{flex:1;background:var(--color-border-default);position:relative;transition:background var(--lt-t-fast) var(--lt-ease)}
 .lt-notch.is-on{background:var(--color-charcoal-900)}
-.lt-notch--tier b{position:absolute;top:calc(100% + .6rem);left:50%;transform:translateX(-50%);font-size:1.0rem;font-weight:400;letter-spacing:.04em;color:var(--color-text-secondary);white-space:nowrap;font-variant-numeric:tabular-nums}
-.lt-notch--tier.is-on b{color:var(--color-text-primary);font-weight:600}
+.lt-notch b{position:absolute;top:calc(100% + .6rem);left:50%;transform:translateX(-50%);font-size:1.0rem;font-weight:400;letter-spacing:.04em;color:var(--color-text-secondary);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lt-notch:last-child b{left:auto;right:0;transform:none}
+.lt-notch:first-child b{left:0;transform:none}
 
 .lt-next{font-size:1.3rem;line-height:1.5;color:var(--color-text-secondary);min-height:4rem;border-top:1px solid var(--color-border-subtle);padding-top:1.4rem;margin:1.2rem 0 0}
 .lt-lines{margin:.6rem 0 0;border-top:1px solid var(--color-border-subtle);padding-top:1.4rem;display:flex;flex-direction:column;gap:.9rem}
@@ -259,8 +261,7 @@ img{display:block;max-width:100%;height:auto}
 .lt-bar.is-tier{background:var(--color-charcoal-900);border-top-color:var(--color-charcoal-900);color:var(--color-ivory-100)}
 .lt-bar__sum{display:flex;align-items:center;gap:1.4rem;width:100%;background:none;border:0;padding:1.2rem 0 1rem;font:inherit;color:inherit;cursor:pointer;text-align:left}
 .lt-bar__ladder{display:flex;align-items:flex-end;gap:.3rem;height:1.4rem;flex:1;min-width:0}
-.lt-bar__ladder i{flex:1;height:.6rem;background:var(--color-border-default);transition:background var(--lt-t-fast) var(--lt-ease)}
-.lt-bar__ladder i.tier{height:1.2rem}
+.lt-bar__ladder i{flex:1;background:var(--color-border-default);transition:background var(--lt-t-fast) var(--lt-ease)}
 .lt-bar__ladder i.on{background:var(--color-charcoal-900)}
 .lt-bar.is-tier .lt-bar__ladder i{background:rgba(244,237,226,.28)}
 .lt-bar.is-tier .lt-bar__ladder i.on{background:var(--color-ivory-100)}
@@ -291,7 +292,14 @@ img{display:block;max-width:100%;height:auto}
 .lt-wall-sec{background:var(--color-surface-page);border-top:1px solid var(--color-border-subtle);border-bottom:1px solid var(--color-border-subtle)}
 .lt-wall-sec[hidden]{display:none}
 .lt-wall{position:relative;overflow:hidden;background:var(--color-surface-muted)}
-.lt-wall>img{width:100%;height:auto}
+.lt-wall__inner{position:relative;transform-origin:52% 56%}
+.lt-wall img{width:100%;height:auto}
+/* On a phone the full 1.66:1 room reduces the art to a detail, so the whole
+   composition is scaled about its focal point. The hung art lives inside the
+   same layer, so it stays locked to the wall through the crop. */
+@media(max-width:700px){
+  .lt-wall__inner{transform:scale(1.85)}
+}
 .lt-hang{position:absolute;inset:0;pointer-events:none}
 /* the block hangs from a fixed baseline 28 cm above the credenza, and grows
    upward as rows are added, which is how art is actually hung over furniture */
@@ -1347,8 +1355,10 @@ img{display:block;max-width:100%;height:auto}
         <p class="t-small">Every slide is cut to the same square, so whatever you choose lands on one grid. Three in a run above a console, six in a block, or the whole box as a nine.</p>
       </div>
       <div class="lt-wall">
-        <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966">
-        <div class="lt-hang" id="hang"></div>
+        <div class="lt-wall__inner">
+          <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966">
+          <div class="lt-hang" id="hang"></div>
+        </div>
       </div>
       <div class="lt-wall__cap">
         <p class="lt-note" id="wallDims">&nbsp;</p>
@@ -1504,7 +1514,10 @@ img{display:block;max-width:100%;height:auto}
   ];
 
   var SINGLE = 249;
-  var TIERS = [{at:9,price:149},{at:6,price:199},{at:3,price:229}];
+  /* One step per slide. Every added slide reprices the whole selection, and
+     the marginal cost falls the whole way: 249, 229, 209, 189, 169, 149, 80,
+     54, 13. No quantity is dominated by a larger one. */
+  var PRICE = [SINGLE, 249, 239, 229, 219, 209, 199, 182, 166, 149];
   var WORD = ["","one","two","three","four","five","six","seven","eight","nine"];
 
   /* ── url params ──────────────────────────────────────────────────── */
@@ -1525,36 +1538,22 @@ img{display:block;max-width:100%;height:auto}
   }
 
   /* ── pricing ─────────────────────────────────────────────────────── */
-  function tier(n){
-    if (!ruleOn) return SINGLE;
-    for (var i=0;i<TIERS.length;i++) if (n >= TIERS[i].at) return TIERS[i].price;
-    return SINGLE;
-  }
+  function tier(n){ return ruleOn ? PRICE[Math.max(0, Math.min(9, n))] : SINGLE; }
   function totalFor(n){ return n * tier(n); }
   function euro(v){ return "€" + v.toLocaleString("en-GB"); }
 
-  /* Nine costs less than seven or eight. Return the saving from completing,
-     or 0 when completing is not cheaper. */
-  function completionSaving(n){
-    if (!ruleOn || n < 1 || n > 8) return 0;
-    var diff = totalFor(n) - totalFor(9);
-    return diff > 0 ? diff : 0;
-  }
+  /* What the next slide costs, and what the rest of the box costs. */
+  function costOfNext(n){ return ruleOn && n < 9 ? totalFor(n+1) - totalFor(n) : 0; }
+  function costToComplete(n){ return ruleOn && n < 9 ? totalFor(9) - totalFor(n) : 0; }
 
   function nextLine(n){
     if (!ruleOn) return "Nine archive slides, €249 each.";
-    switch(n){
-      case 0: return "Nine slides. Choose the ones you want.";
-      case 1: return "One slide, €249. Three brings every slide to €229.";
-      case 2: return "One more slide brings all three to €229 each.";
-      case 3: return "€229 each. Three more and every slide is €199.";
-      case 4: return "Two more and every slide is €199.";
-      case 5: return "One more. The sixth slide costs €49.";
-      case 6: return "€199 each. The full nine is €149 a slide.";
-      case 7: return "Nine slides cost " + euro(totalFor(9)) + ". Seven cost " + euro(totalFor(7)) + ".";
-      case 8: return "Adding the ninth takes " + euro(completionSaving(8)) + " off your total.";
-      default: return "The complete box. €149 a slide.";
-    }
+    if (n === 0) return "Nine slides. Choose the ones you want.";
+    if (n === 9) return "The complete box. €149 a slide, " + euro(9 * SINGLE - totalFor(9)) + " less than nine bought singly.";
+    if (n === 1) return "One slide, €249. A second brings both to €239.";
+    if (n <= 5) return euro(tier(n)) + " each. The next slide costs " + euro(costOfNext(n)) + " and lowers every slide to " + euro(tier(n+1)) + ".";
+    /* from six on, the drop steepens and the marginal cost is the story */
+    return euro(tier(n)) + " each. The next slide costs " + euro(costOfNext(n)) + ".";
   }
 
   function ctaLabel(n){
@@ -1638,20 +1637,21 @@ img{display:block;max-width:100%;height:auto}
   });
 
   /* the nine-notch index ---------------------------------------------- */
+  /* The step heights are the price ladder itself: tallest at 249, shortest at
+     149, so the descent is visible before a single slide is chosen. */
+  function stepHeight(i, min, max){
+    return min + (PRICE[i] - PRICE[9]) / (PRICE[1] - PRICE[9]) * (max - min);
+  }
   for (var i = 1; i <= 9; i++){
-    var isTier = (i === 3 || i === 6 || i === 9);
     var n = document.createElement("span");
-    n.className = "lt-notch" + (isTier ? " lt-notch--tier" : "");
-    if (isTier) n.innerHTML = "<b>" + tierPriceAt(i) + "</b>";
+    n.className = "lt-notch";
+    n.style.height = stepHeight(i, 0.8, 2.8).toFixed(2) + "rem";
+    if (i === 1 || i === 9) n.innerHTML = "<b>" + PRICE[i] + "</b>";
     ladder.appendChild(n);
 
     var m = document.createElement("i");
-    m.className = isTier ? "tier" : "";
+    m.style.height = stepHeight(i, 0.5, 1.4).toFixed(2) + "rem";
     barLadder.appendChild(m);
-  }
-  function tierPriceAt(at){
-    for (var i=0;i<TIERS.length;i++) if (TIERS[i].at === at) return TIERS[i].price;
-    return SINGLE;
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -1681,7 +1681,6 @@ img{display:block;max-width:100%;height:auto}
 
   function render(){
     var n = kept.length, per = tier(n), total = totalFor(n), save = n * SINGLE - total;
-    var dominated = completionSaving(n) > 0;
 
     /* tiles */
     Array.prototype.forEach.call(table.children, function(b){
@@ -1689,7 +1688,6 @@ img{display:block;max-width:100%;height:auto}
       b.classList.toggle("is-kept", on);
       b.querySelector(".lt-slide__select").setAttribute("aria-pressed", on ? "true" : "false");
     });
-    table.classList.toggle("is-dominated", dominated);
 
     /* ladder */
     Array.prototype.forEach.call(ladder.children, function(el, i){ el.classList.toggle("is-on", i < n); });
@@ -1727,28 +1725,21 @@ img{display:block;max-width:100%;height:auto}
        to the ghost action. */
     var cta = $("cta"), alt2 = $("altCta"), barCta = $("barCta");
     cta.disabled = barCta.disabled = (n === 0);
-    if (n === 8 && ruleOn){
-      cta.textContent = barCta.textContent = "Add the ninth and pay " + euro(completionSaving(8)) + " less";
-      cta.dataset.action = barCta.dataset.action = "complete";
+    cta.textContent = barCta.textContent = ctaLabel(n);
+    cta.dataset.action = barCta.dataset.action = "cart";
+    if (ruleOn && n >= 6 && n <= 8){
+      var left = 9 - n;
       alt2.hidden = false;
-      alt2.textContent = "Secure these eight slides";
-      alt2.dataset.action = "cart";
+      alt2.textContent = (left === 1 ? "Add the ninth for " : "Add the last " + WORD[left] + " for ") + euro(costToComplete(n));
+      alt2.dataset.action = "complete";
     } else {
-      cta.textContent = barCta.textContent = ctaLabel(n);
-      cta.dataset.action = barCta.dataset.action = "cart";
-      if (n === 7 && ruleOn){
-        alt2.hidden = false;
-        alt2.textContent = "Take all nine instead, " + euro(totalFor(9));
-        alt2.dataset.action = "complete";
-      } else {
-        alt2.hidden = true;
-      }
+      alt2.hidden = true;
     }
 
     /* mobile bar */
     var bar = $("bar");
     bar.hidden = (variant === "control");
-    bar.classList.toggle("is-tier", ruleOn && (n === 3 || n === 6 || n === 9));
+    bar.classList.toggle("is-tier", ruleOn && n === 9);
     barLadder.hidden = !ruleOn;
 
     /* thumbnails in the expanded sheet */
@@ -1771,10 +1762,10 @@ img{display:block;max-width:100%;height:auto}
   /* Scale of the hung block. Measuring the credenza off the source file gave
      0.156% of image width per cm, but the lens exaggerates the foreground and
      that reads far too small against this wall, so the render is tuned by eye
-     at twice that. The cm readout under the photograph is the honest figure.
+     a little under twice that. The cm readout under the photograph is the honest figure.
      Sizes are computed in px from the rendered width so no percentage
      resolution surprises apply. */
-  var PCT_PER_CM = 0.00312;
+  var PCT_PER_CM = 0.002808;
   function renderWall(n){
     var sec = $("wallSec");
     sec.hidden = (n < 3 || variant === "control");
@@ -1803,7 +1794,9 @@ img{display:block;max-width:100%;height:auto}
   function sizeWall(){
     var grid = hang.querySelector(".lt-hang__grid");
     if (!grid) return;
-    var w = hang.getBoundingClientRect().width;
+    /* offsetWidth, not getBoundingClientRect: the mobile crop scales this
+       layer, and a measured rect would fold that scale in a second time. */
+    var w = hang.offsetWidth;
     if (!w) return;
     var pxPerCm = w * PCT_PER_CM;
     grid.style.setProperty("--tile", (34 * pxPerCm).toFixed(2) + "px");
