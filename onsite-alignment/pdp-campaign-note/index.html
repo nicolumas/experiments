@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>PDP campaign note · LUMAS onsite alignment</title>
+<script src="../assets/gate.js"></script>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap">
+<style>
+/* ---------------------------------------------------------------
+   Tokens copied verbatim from de.prelive.kunsteditionen.com/brandshowcase/
+   Deliberately NOT ../assets/v2-tokens.css: that file still carries the
+   old --color-surface-page: #FAF6F1. The brandshowcase and the shop's own
+   config/_tokens.scss both say #fff, and the white confirmation panel
+   below depends on it.
+--------------------------------------------------------------- */
+:root{
+  --color-surface-page:#fff; --color-surface-card:#fff;
+  --color-surface-raised:#f7f1e9; --color-surface-sunken:#f4ede2;
+  --color-surface-muted:#f0ebe3; --color-surface-subtle:#eae2d8;
+  --color-surface-inverse:#1c1a18;
+  --color-text-primary:#1c1a18; --color-text-secondary:#5a5752;
+  --color-text-tertiary:#908c87; --color-text-inverse:#f4ede2;
+  --color-border-default:#e2d8cc; --color-border-subtle:#eae2d8;
+  --color-border-strong:#c7c3be; --color-border-focus:#1c1a18;
+  --color-campaign:#c44d4a; --color-discount:#9b6d1e;
+  --sp-1:.4rem; --sp-2:.8rem; --sp-3:1.2rem; --sp-4:1.6rem; --sp-5:2rem;
+  --radius-none:0; --radius-xs:.2rem; --white:#fff;
+  --font-display:'UtileDisplay',Georgia,serif;
+  --font-body:'Archivo',system-ui,Arial,sans-serif;
+  --font-body-bold:'Archivo',system-ui,Arial,sans-serif;
+  --motion-fast:220ms; --motion-easing:cubic-bezier(0.2,0.8,0.2,1);
+}
+html{font-size:62.5%}
+body{margin:0;background:var(--white);font-family:var(--font-body);font-size:1.5rem;line-height:1.5;color:var(--color-text-primary);-webkit-font-smoothing:antialiased}
+p{margin:0 0 1rem;font-size:1.5rem;line-height:1.5}
+
+/* ---- production classes, values from inline.css / main.css ---- */
+.headline-block{font-family:var(--font-body-bold);font-weight:700;font-size:1.1rem;letter-spacing:.18em;line-height:1.5;text-transform:uppercase}
+.like-h4{font-family:var(--font-display);font-size:2.2rem;font-weight:400;letter-spacing:0;line-height:1.25}
+@media(min-width:1260px){.like-h4{font-size:2.6rem}}
+.color-secondary{color:var(--color-text-secondary)}
+.btn{background-color:var(--color-surface-inverse);border:0;border-radius:var(--radius-none);color:var(--color-text-inverse);cursor:pointer;display:inline-block;font-family:var(--font-body-bold);font-weight:700;font-size:1.2rem;letter-spacing:.14em;line-height:1.5;padding:var(--sp-4) 2.8rem;text-align:center;text-transform:uppercase;transition:background-color var(--motion-fast) var(--motion-easing)}
+
+/* ---------------------------------------------------------------
+   The component — compiled from
+   frontend/themes/white/assets/sass/pdp/online/components/_campaign-note.scss
+--------------------------------------------------------------- */
+.pdp-campaign-note{
+  background-color:var(--color-surface-raised);
+  border-radius:var(--radius-xs);
+  color:var(--color-text-primary);
+  padding:var(--sp-4);
+  margin-block:var(--sp-4);
+}
+.pdp-campaign-note p{margin:0}
+.pdp-campaign-note p + p{margin-top:var(--sp-1)}
+.pdp-campaign-note p + p:last-child{margin-top:var(--sp-3)}
+.pdp-campaign-note .confirmation{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp-3);
+  background-color:var(--color-surface-page);
+  border-radius:var(--radius-xs);
+  color:var(--color-text-secondary);
+  padding:var(--sp-3) var(--sp-4);
+}
+.pdp-campaign-note .confirmation::after{
+  content:"";display:inline-block;width:1em;height:1em;
+  vertical-align:middle;background-color:currentcolor;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http:%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 1024 1024'%3E%3Cpath transform='translate(0 960) scale(1 -1)' fill='%23000' d='M897.161 825.276l-499.166-502.477-271.019 270.95-126.976-126.669 397.414-396.356 626.586 627.849z'%2F%3E%3C%2Fsvg%3E") no-repeat center/contain content-box;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http:%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 1024 1024'%3E%3Cpath transform='translate(0 960) scale(1 -1)' fill='%23000' d='M897.161 825.276l-499.166-502.477-271.019 270.95-126.976-126.669 397.414-396.356 626.586 627.849z'%2F%3E%3C%2Fsvg%3E") no-repeat center/contain content-box;
+  color:var(--color-text-primary);font-size:1.6rem;flex:none;
+}
+
+/* ---- today's block, recreated for comparison ---- */
+.legacy{background-color:#e3e0db;border-radius:.8rem;padding:2rem;margin-block:1.6rem}
+.legacy-head{display:flex;align-items:center;gap:1rem;font-weight:700;font-size:2.6rem;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+.legacy-head svg{width:3.2rem;height:3.2rem;flex:none}
+.legacy-sub{font-size:1.9rem;margin:1rem 0 0;line-height:1.35}
+.legacy-sub b{font-weight:700}
+.legacy-pill{display:flex;align-items:center;justify-content:space-between;gap:1rem;background-color:#fff;border-radius:.8rem;padding:1.2rem 1.6rem;margin-top:1.6rem;color:#5a5752;font-size:1.6rem}
+.legacy-pill svg{width:2.2rem;height:2.2rem;flex:none;color:#1c1a18}
+
+/* ---- page chrome ---- */
+.wrap{max-width:140rem;margin:0 auto;padding:4rem 3rem 10rem}
+.eyebrow{font-weight:700;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 1.2rem}
+h1{font-family:var(--font-display);font-weight:400;font-size:3.4rem;line-height:1.12;margin:0 0 .8rem}
+@media(min-width:1260px){h1{font-size:4.6rem}}
+.lede{font-weight:300;font-size:1.8rem;line-height:1.6;color:var(--color-text-secondary);max-width:74rem;margin:0 0 4rem}
+.grid{display:grid;gap:4rem;grid-template-columns:repeat(auto-fit,minmax(34rem,1fr));align-items:start}
+.col > h2{font-weight:700;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 .6rem}
+.col > .note{font-size:1.3rem;color:var(--color-text-secondary);margin:0 0 2rem}
+.buybox{border:.1rem dashed var(--color-border-strong);padding:2.4rem;background-color:var(--white)}
+.buybox .price{font-weight:700;font-size:2.6rem;letter-spacing:-.04em;line-height:1;display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.buybox .price s{font-weight:400;font-size:1.7rem;color:var(--color-text-secondary)}
+.badge{display:inline-block;font-size:1rem;line-height:2.1rem;padding:0 .5rem;background-color:var(--color-discount);color:var(--white);text-transform:uppercase;letter-spacing:.1rem;margin-top:.8rem}
+.buybox .btn{width:100%;margin-top:2rem;box-sizing:border-box}
+hr.sep{border:0;border-top:.1rem solid var(--color-border-subtle);margin:6rem 0 3rem}
+h2.sect{font-family:var(--font-display);font-weight:400;font-size:2.6rem;letter-spacing:0;margin:0 0 1rem}
+.sect-note{font-size:1.4rem;color:var(--color-text-secondary);max-width:74rem;margin:0 0 3rem}
+.phones{display:grid;gap:4rem;grid-template-columns:repeat(auto-fit,minmax(34rem,1fr));align-items:start}
+.phone{width:39rem;max-width:100%;border:.1rem solid var(--color-border-default);padding:1.6rem;box-sizing:border-box;background-color:var(--white)}
+.phone .price{font-weight:700;font-size:2.2rem;letter-spacing:-.04em;display:flex;gap:.8rem;align-items:baseline}
+.phone .price s{font-weight:400;font-size:1.7rem;color:var(--color-text-secondary)}
+.phone .btn{width:100%;margin-top:2rem;box-sizing:border-box}
+.phone > h3{font-weight:700;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 1.6rem}
+.spec{border-collapse:collapse;width:100%;max-width:74rem;font-size:1.4rem;margin-top:1rem}
+.spec th,.spec td{text-align:left;padding:.9rem 1.6rem .9rem 0;border-bottom:.1rem solid var(--color-border-subtle);vertical-align:top}
+.spec th{font-weight:700;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.spec code{font-size:1.3rem;background-color:var(--color-surface-muted);padding:.1rem .5rem;border-radius:var(--radius-xs)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="eyebrow">PDP · sale block</p>
+<h1>The campaign note under Add to cart</h1>
+<p class="lede">The block that appears beneath the add-to-cart button while a sale is running, made
+lighter. Every class and token value used here exists on the brandshowcase, so nothing new enters
+the design system.</p>
+
+<div class="grid">
+
+  <div class="col">
+    <h2>Today</h2>
+    <p class="note">A charcoal-100 card at 8px radius, a nested white pill, and two icons that are not
+    in the shop sprite. Three stacked surfaces for one sentence, and the offer stated twice on the
+    same page.</p>
+    <div class="buybox">
+      <div class="price">€549 <s>€687</s></div>
+      <div class="badge">15% off</div>
+      <button class="btn" type="button">Add to bag</button>
+      <div class="legacy">
+        <div class="legacy-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 9V6a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v3a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5Z"/><path d="M9 9.5 15 15"/><circle cx="9.5" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="14.5" cy="14.5" r=".9" fill="currentColor" stroke="none"/></svg>
+          <span>Art&nbsp;week</span>
+        </div>
+        <p class="legacy-sub"><b>15% OFF</b> all LUMAS Editions &mdash; Last Chance Today!</p>
+        <div class="legacy-pill">
+          <span>Your discount has been automatically applied in the cart</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-4.9"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>New <span style="color:var(--color-campaign)">&middot; in the theme</span></h2>
+    <p class="note">An ivory note on <code>surface/raised</code>, the campaign name as an eyebrow, the
+    offer line in Utile Display, and the confirmation on a white inset panel carrying the shop's own
+    check glyph. No bold anywhere: size and tone do the work.</p>
+    <div class="buybox">
+      <div class="price">€549 <s>€687</s></div>
+      <div class="badge">15% off</div>
+      <button class="btn" type="button">Add to bag</button>
+      <div class="pdp-campaign-note">
+        <p class="headline-block">Art week</p>
+        <p class="like-h4">15% off all LUMAS Editions</p>
+        <p class="confirmation">Your price advantage is already applied</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr class="sep">
+<h2 class="sect">At 390px</h2>
+<p class="sect-note">The note keeps its three tiers on a phone. Today's block needs four lines and two
+icons to say the same thing.</p>
+<div class="phones">
+  <div class="phone">
+    <h3>Today</h3>
+    <div class="price">€549 <s>€687</s></div>
+    <div class="badge">15% off</div>
+    <button class="btn" type="button">Add to bag</button>
+    <div class="legacy">
+      <div class="legacy-head" style="font-size:2.2rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 9V6a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v3a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5Z"/><path d="M9 9.5 15 15"/></svg>
+        <span>Art&nbsp;week</span>
+      </div>
+      <p class="legacy-sub" style="font-size:1.7rem"><b>15% OFF</b> all LUMAS Editions &mdash; Last Chance Today!</p>
+      <div class="legacy-pill" style="font-size:1.4rem">
+        <span>Your discount has been automatically applied in the cart</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-4.9"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="phone">
+    <h3>New</h3>
+    <div class="price">€549 <s>€687</s></div>
+    <div class="badge">15% off</div>
+    <button class="btn" type="button">Add to bag</button>
+    <div class="pdp-campaign-note">
+      <p class="headline-block">Art week</p>
+      <p class="like-h4">15% off all LUMAS Editions</p>
+      <p class="confirmation">Your price advantage is already applied</p>
+    </div>
+  </div>
+</div>
+
+<hr class="sep">
+<h2 class="sect">Other campaign shapes the block has to survive</h2>
+<p class="sect-note">The content is CMS-authored, so the spacing rules are written to hold whether a
+campaign carries three lines, two, or one.</p>
+<div class="phones">
+  <div class="phone">
+    <h3>Two lines, no offer line</h3>
+    <div class="pdp-campaign-note">
+      <p class="headline-block">Collector's week</p>
+      <p class="confirmation">Your price advantage is already applied</p>
+    </div>
+  </div>
+  <div class="phone">
+    <h3>Offer line alone</h3>
+    <div class="pdp-campaign-note">
+      <p class="like-h4">15% off all LUMAS Editions</p>
+    </div>
+  </div>
+  <div class="phone">
+    <h3>Long copy, wrapping</h3>
+    <div class="pdp-campaign-note">
+      <p class="headline-block">Art week</p>
+      <p class="like-h4">15% off all LUMAS Editions</p>
+      <p class="confirmation">Dein Preisvorteil wird im Warenkorb automatisch berücksichtigt</p>
+    </div>
+  </div>
+</div>
+
+<hr class="sep">
+<h2 class="sect">What it is made of</h2>
+<p class="sect-note">Nothing here is new. The check mark is the glyph the shop's own success flash
+already uses, rendered as a CSS mask in <code>currentColor</code>, so no icon package and no sprite
+change was needed.</p>
+<table class="spec">
+  <tr><th>Line</th><th>Class</th><th>Renders as</th></tr>
+  <tr><td>Campaign name</td><td><code>.headline-block</code></td><td>Archivo Bold 1.1rem, 0.18em tracking, uppercase</td></tr>
+  <tr><td>Offer</td><td><code>.like-h4</code></td><td>Utile Display 2.2rem, 2.6rem at desktop</td></tr>
+  <tr><td>Confirmation</td><td><code>.confirmation</code></td><td>Archivo 1.5rem on <code>surface/page</code>, <code>radius-xs</code>, check via <code>icon(check)</code></td></tr>
+  <tr><td>Note</td><td><code>.pdp-campaign-note</code></td><td><code>surface/raised</code>, <code>radius-xs</code>, <code>sp/4</code> padding</td></tr>
+</table>
+
+<hr class="sep">
+<h2 class="sect">Three things the copy had to fix</h2>
+<p class="sect-note">
+  The brandbook blacklists <b>discount</b> as a lead message and asks for <b>price advantage</b> or a
+  named promotional window, which is why the confirmation line is worded the way it is. It also rules
+  out exclamation marks, so <i>Last Chance Today!</i> could not stay. The third is structural: the
+  price badge directly above the button already states the percentage, and the no-redundancy rule
+  allows it only once per asset. The offer line here repeats it by decision, not by oversight.
+</p>
+
+</div>
+</body>
+</html>
