@@ -33,48 +33,74 @@ Distance is Haversine against the gallery's real coordinates. When there is no f
 back to the base's own hardcoded per-gallery `km` values, which is what the base was already
 using as its implicit notion of "near".
 
+## German, du form
+
+The page runs the **real LUMAS navigation** (`prototype/_nav/`, DE market), injected with
+`python3 prototype/_nav/inline.py DE --into`. That nav is German and addresses the visitor as
+**du**, so the whole page follows it: `du`, `dein`, `deiner`, never `Sie`. The brandbook's
+du/Sie firewall says the two are never mixed in one asset.
+
+Prices render through `toLocaleString('de-DE')`, so it is `€ 1.129`, not `€ 1,129`.
+
+Nothing in the page defines its own header any more. The prototype's promo bar, header markup
+and their CSS were removed rather than left dead; `--nav-h` is measured from `<site-header>` at
+runtime and drives the body offset, the sticky buy column and the slide-in.
+
+## Where the location lives
+
+Two surfaces, and they do different jobs.
+
+**The PDP carries the availability tag and nothing else.** When a gallery near the visitor
+holds this exact size and framing, the buy box shows one green tag:
+
+> Verfügbar in **BERLIN KURFÜRSTENDAMM**
+
+No location line, no chip, no explanation. Where we think the visitor is does not belong on the
+product.
+
+**The navigation carries the location.** A pin sits beside the account icon, with a small green
+dot once a location is known. Hover on a pointer, tap on a touch screen, and it opens: a panel
+hanging under the icon on desktop, a full-width drawer under the nav on a phone. Because it
+lives in the nav it persists across the session instead of being restated on every page.
+
+| State | Panel |
+|---|---|
+| Located by device | In der Nähe von Essen · Auf Basis deines Geräts · **Ändern** · **Standort nicht mehr verwenden** |
+| Located by region | In der Nähe von Hamburg · Auf Basis deiner Region · **Ändern** |
+| Gallery chosen by hand | Berlin, Kurfürstendamm · Von dir gewählt · **Ändern** · **Standort zurücksetzen** |
+| Refused | Kein Standort · "Wir verwenden deinen Standort nicht." · **Galerie wählen** |
+| Nothing known | Galerie in deiner Nähe · the disclosure · **Standort verwenden** · **Galerie wählen** |
+
+The control is injected at runtime, in front of `site-header .auth-link`, rather than into the
+nav kit's fenced markup, so re-running `inline.py` to refresh the nav cannot wipe it. It retries
+for four seconds while `nav.js` upgrades the custom element, then gives up quietly.
+
 ## Consent
 
 The page asks for nothing on arrival. `getCurrentPosition` is not called until the visitor
 presses a button, verified at every state below.
 
-**The first ask is a compact slide-in.** On a first visit, when we have no idea where they are
-and they have not already named a gallery, a 328px panel slides up from the bottom-left after
-900ms, sized 328 x 169. On a phone it becomes a bottom sheet with 10px gutters. It carries a
-headline, one sentence, a filled **Use my location** and a **Not now** link, plus a close
-control.
+**The first ask is a compact slide-in, top right.** On a first visit, when we have no idea where
+the visitor is and they have not already named a gallery, a 328px panel slides in from the right
+under the nav after 900ms, landing directly beneath the location pin it will hand over to. On a
+phone it is full width with 10px gutters. It carries a headline, one sentence, a filled
+**Standort verwenden** and a **Jetzt nicht** link, plus a close control.
 
-It is shown **once**. Whatever the visitor does with it, `lumas_loc_ask_v1` records that the
-ask has happened and it never appears again.
+It is shown **once**. Whatever the visitor does with it, `lumas_loc_ask_v1` records that the ask
+has happened and it never appears again. After that the nav pin is the only way in, which is the
+point: one control, one place, all session.
 
-**Dismissing is "not now", not "no".** Closing the panel writes only the ask flag, never a
+**Dismissing is "jetzt nicht", not "nein".** Closing the panel writes only the ask flag, never a
 refusal, so nothing about the visitor's location preference is inferred from a dismissal. Only
 an actual `PERMISSION_DENIED` from the browser writes `refused`.
 
-**The offer is never lost.** The 34px chip is painted underneath the slide-in before it
-appears, so the panel is a prompt over a standing affordance rather than the only route in.
-Dismiss the panel and the chip is still there:
-
-> ⌖ See it in a gallery near you
-
-Pressing the chip opens a 300px popover holding the same sentence and the same two actions.
-On desktop that popover is absolutely positioned, so opening it shifts nothing. Below 560px it
-drops into the flow under the chip.
-
-| | closed | open |
-|---|---|---|
-| Slide-in | not shown after the first ask | 328 x 169 fixed, 370 x 169 on a phone |
-| Chip, desktop | 34px | 34px + floating popover |
-| Chip, mobile | 34px | 176px |
-
 **Refusing means refusing.** `PERMISSION_DENIED` (error code 1) does not fall back to IP: the
-chip changes to "Choose a gallery" and no location is used at all. The brief asked for an IP
-fallback on denial; that is narrowed deliberately. Codes 2 and 3 are technical failures rather
-than an answer, so a coarse regional guess is still fair there.
+nav panel reads "Kein Standort" and offers the gallery chooser instead. The brief asked for an
+IP fallback on denial; that is narrowed deliberately. Codes 2 and 3 are technical failures
+rather than an answer, so a coarse regional guess is still fair there.
 
 The outcome is remembered in `localStorage` under `lumas_loc_v1` (`device`, `refused`, or
-`manual:<id>`). Once located, the line under the pill carries **Change** and
-**Stop using my location**, so the state is visible and reversible on the page itself.
+`manual:<id>`), and is reversible from the nav panel at any time.
 
 Under `prefers-reduced-motion: reduce` the panel fades in place instead of sliding.
 
@@ -84,11 +110,11 @@ A fix is only trusted if it can distinguish one German city from another.
 
 | Precision | Trusted | Shown as |
 |---|---|---|
-| `device` | yes | "Near Essen", distances to one decimal under 10km |
-| `city` (IP) | yes | "Near Hamburg, based on your region", "approx. 4 km" |
-| `country` (IP) | no | no gallery named; the invitation is offered instead |
+| `device` | yes | "In der Nähe von Essen", distances to one decimal under 10km |
+| `city` (IP) | yes | "In der Nähe von Hamburg", "Auf Basis deiner Region", "ca. 4 km" |
+| `country` (IP) | no | no gallery named; the nav panel offers the invitation instead |
 
-The `kmText(v, precise)` helper exists so a city-level fix can never print "0.8 km" and imply
+The `kmText(v, precise)` helper exists so a city-level fix can never print "0,8 km" and imply
 a precision it does not have.
 
 ## The states, as URLs
@@ -96,7 +122,7 @@ a precision it does not have.
 | State | URL |
 |---|---|
 | The first ask, slide-in | `?size=s80&frame=basel&ask=1` |
-| Dismissed, the chip remains | `?size=s80&frame=basel&ask=0` |
+| Dismissed, nav pin only | `?size=s80&frame=basel&ask=0` |
 | Located by region, nearest gallery | `?size=s80&frame=basel&loc=ip&ipcity=Hamburg` |
 | Located by device | `?size=s80&frame=basel&loc=device` |
 | Location refused | `?size=s80&frame=basel&loc=denied` |
@@ -113,20 +139,24 @@ without clearing browser storage.
 The slide-in is skipped entirely when a `?loc=` switch is forced, when a gallery is already
 chosen by URL or cookie, or when the ask flag is set.
 
-When the visitor is located and **no** gallery holds the configuration, the module says
-nothing at all rather than announcing their city for no reason: no pill, no location line.
+When the visitor is located and **no** gallery holds the configuration, the PDP says nothing:
+no tag. The nav panel still reports where we think they are, because that is a session fact
+rather than a claim about this product.
 
-## What was changed in the base
+## How far this has moved from the base
 
-Eleven lines, listed so the copy stays auditable:
+`prototype/pdp-pill/` is still the base and is still English, with its own hand-built header.
+This copy has since diverged on four axes, none of which were folded back:
 
-- Six `GALLERIES` rows gained `lat` / `lon`.
-- Four lines in `renderPill()` and one in `renderGalleryInfo()` read `ACTIVE_GAL` instead of
-  the URL-only `GAL`.
+1. The real DE navigation replaces the hand-built header and promo bar.
+2. All copy is German in the du form.
+3. The location layer, which the base does not have at all.
+4. The location control lives in the nav rather than on the product.
 
-`ACTIVE_GAL` and `MANUAL` are declared next to `const GAL`, before the base's first
-synchronous render, so the base still paints price and availability in the first paint with
-no client-side rewrite. The location layer only ever repaints on top of that.
+The one rule carried over untouched is the base's rendering contract: `ACTIVE_GAL` and `MANUAL`
+are declared next to `const GAL`, before the first synchronous render, so price and availability
+are still in the first paint with no client-side rewrite. The location layer only repaints on
+top of that.
 
 ## Brand tokens
 
