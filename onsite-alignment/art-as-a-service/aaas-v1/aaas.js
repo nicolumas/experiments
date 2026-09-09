@@ -38,7 +38,16 @@
     },
     B: {
       id: 'B', label: 'Checkliste 21.08.', rate: 0.0375, base: 'netto',
-      months: 12, termChoices: [3, 6, 12], credit: 0.80, withdrawalDays: 14,
+      months: 12, termChoices: [3, 6, 12],
+      // The checklist asks for the 3 / 6 / 12 dropdown and puts "monatliche
+      // Rate %" in the PIM, but never states a rate PER term. Only the
+      // 12-month figure below is the checklist's own 3,75 %; the two shorter
+      // rates are ASSUMED so the dropdown means something. Shape follows
+      // Grover, which the epic names as the contract template: halve the term
+      // and the monthly rises by roughly 1,4x, so the longer commitment is the
+      // cheaper month. Replace with real PIM values before this is quoted.
+      rates: { 3: 0.0750, 6: 0.0550, 12: 0.0375 },
+      credit: 0.80, withdrawalDays: 14,
       consent: 'tickbox', monthlyShipping: true, pdpToggle: true
     }
   };
@@ -57,11 +66,17 @@
   // TERMS stays a plain object so every existing TERMS.months reference keeps
   // working; the chosen term is folded in here rather than at each call site.
   var TERMS;
+
+  function rateFor(months) {
+    var s = SPECS[spec()];
+    return (s.rates && s.rates[months]) || s.rate;
+  }
+
   function applySpec() {
     var s = SPECS[spec()];
     var chosen = s.termChoices && s.termChoices.indexOf(storedTerm()) > -1 ? storedTerm() : s.months;
     TERMS = {
-      id: s.id, label: s.label, rate: s.rate, base: s.base, credit: s.credit,
+      id: s.id, label: s.label, rate: rateFor(chosen), base: s.base, credit: s.credit,
       withdrawalDays: s.withdrawalDays, consent: s.consent,
       monthlyShipping: s.monthlyShipping, termChoices: s.termChoices,
       pdpToggle: s.pdpToggle, months: chosen
@@ -86,6 +101,13 @@
   }
 
   function round2(n) { return Math.round(n * 100) / 100; }
+
+  function monthlyFor(base, months) { return round2(base * rateFor(months)); }
+
+  function rateLabel() {
+    return (TERMS.rate * 100).toString().replace('.', ',') + ' % vom ' +
+      (TERMS.base === 'netto' ? 'Netto-Verkaufspreis' : 'Kaufpreis');
+  }
 
   /* ---------- the model ---------- */
 
@@ -476,6 +498,13 @@
   }
   function setVariant(v) { try { sessionStorage.setItem(VARIANT_KEY, v); } catch (e) {} }
 
+  // The term belongs in the control only when there is no term dropdown under
+  // it. With the dropdown present the trigger already names it, and repeating it
+  // wrapped the switch label onto a second line at 390px.
+  function termSuffix() {
+    return TERMS.termChoices ? '' : ', ' + TERMS.months + ' Monate';
+  }
+
   function modeChooser(q, renting) {
     var v = variant();
 
@@ -491,7 +520,7 @@
         '<span class="aaas-ms-text">Mieten statt kaufen' +
           '<span class="aaas-ms-sep" aria-hidden="true"> · </span>' +
           '<b>' + money(q.monthly) + '</b> im Monat' +
-          (renting ? ', ' + TERMS.months + ' Monate' : '') +
+          (renting ? termSuffix() : '') +
         '</span></button>';
     }
 
@@ -517,7 +546,7 @@
         renting + '">Mieten</button>' +
     '</div>' +
     '<div class="aaas-seg-price">' + (renting
-      ? '<b>' + money(q.monthly) + '</b> im Monat, ' + TERMS.months + ' Monate'
+      ? '<b>' + money(q.monthly) + '</b> im Monat' + termSuffix()
       : '<b>' + money(q.gross) + '</b> einmalig') + '</div>';
   }
 
@@ -537,7 +566,8 @@
       '<ul class="aaas-select-list" role="listbox" aria-labelledby="' + id + '-trigger" hidden>' +
         options.map(function (o) {
           return '<li role="option" data-val="' + o.value + '" tabindex="-1" aria-selected="' +
-            (o.value === value ? 'true' : 'false') + '">' + o.label + '</li>';
+            (o.value === value ? 'true' : 'false') + '">' + o.label +
+            (o.note ? '<span class="aaas-opt-note">' + o.note + '</span>' : '') + '</li>';
         }).join('') +
       '</ul></div>';
   }
@@ -677,13 +707,15 @@
   // spec B only: term choice, the net basis, shipping note, damage tooltip and the
   // rent-to-own share, all of which the 21 Aug checklist asks for on the PDP
   function pdpRentDetail(q) {
+    // Each option carries its own monthly, so the three terms can be compared
+    // in the list rather than one at a time. The trigger stays the bare term:
+    // the switch line above it already states the price you would pay.
     return selectMarkup('aaas-term', 'Wähle die Laufzeit:',
       TERMS.termChoices.map(function (n) {
-        return { value: String(n), label: n + ' Monate' };
+        return { value: String(n), label: n + ' Monate',
+                 note: money(monthlyFor(q.base, n)) + ' im Monat' };
       }), String(TERMS.months)) +
-      '<p class="aaas-note"><b>' + money(q.monthly) + '</b> im Monat, ' +
-        (TERMS.rate * 100).toString().replace('.', ',') + ' % vom Netto-Verkaufspreis (' +
-        money(q.base) + ').</p>' +
+      '<p class="aaas-note">' + rateLabel() + ' (' + money(q.base) + ').</p>' +
       '<p class="aaas-note">Versand ' + money(q.shipping) + ' einmalig, danach fällt nur ' +
         'die Monatsmiete an.</p>' +
       '<p class="aaas-note">' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete ' +
@@ -734,6 +766,7 @@
     if (!gross) return;
     var q = quote(gross, FALLBACK_SHIPPING);
 
+    fillShopExpress();
     if (!priceEl.dataset.aaasBuy) priceEl.dataset.aaasBuy = priceEl.textContent.trim();
     var host = aside.querySelector('.cart-items-container') || aside;
 
@@ -796,7 +829,8 @@
       summary.hidden = !renting;
       summary.innerHTML = renting
         ? '<table class="aaas-breakdown"><tbody>' +
-            '<tr><th scope="row">Monatsmiete<span class="aaas-sub">3,75 % vom Kaufpreis</span></th><td>' + money(q.monthly) + '</td></tr>' +
+            '<tr><th scope="row">Monatsmiete<span class="aaas-sub">' + rateLabel() +
+              '</span></th><td>' + money(q.monthly) + '</td></tr>' +
             '<tr><th scope="row">Bereitstellungsentgelt<span class="aaas-sub">einmalig, entspricht einer Monatsmiete</span></th><td>' + money(q.provisioning) + '</td></tr>' +
             '<tr><th scope="row">Versand<span class="aaas-sub">einmalig</span></th><td>' + money(q.shipping) + '</td></tr>' +
             '<tr class="aaas-row-major"><th scope="row">Heute fällig</th><td>' + money(q.dueToday) + '</td></tr>' +
@@ -990,15 +1024,23 @@
       '" aria-hidden="true"><use href="#payment-icon-' + id + '"></use></svg></button>';
   }
 
-  function expressBlock(renting) {
-    if (renting) return '';
-    return '<div class="aaas-express">' +
-      '<p>Du kannst stattdessen weiterhin den Express-Checkout verwenden.</p>' +
-      '<div class="aaas-express-row">' +
-        expressBtn('paypal', 'PayPal') +
-        expressBtn('amazon-pay', 'Amazon Pay') +
-        expressBtn('apple-pay', 'Apple Pay') +
-      '</div></div>';
+  /* The shop ships its own express block at the top of the checkout, and all
+   * three routes in it are provider custom elements drawn by that provider's
+   * SDK against a live merchant session: <paypal-express-checkout-button>,
+   * <amazon-checkout-button>, <apple-pay-checkout-button>. None of those SDKs
+   * can run in a static clone, so the section renders empty apart from Amazon's
+   * grey placeholder image. These stand-ins take their place so the buy flow
+   * shows what the live checkout shows. They are presentation only: no express
+   * route is wired, which is also why rent mode hides the block outright. */
+  function fillShopExpress() {
+    var box = document.querySelector('section.spc-express .buttons-container');
+    if (!box || box.dataset.aaasFilled) return;
+    box.dataset.aaasFilled = '1';
+    box.innerHTML = '<div class="aaas-express-row">' +
+      expressBtn('paypal', 'PayPal') +
+      expressBtn('amazon-pay', 'Amazon Pay') +
+      expressBtn('apple-pay', 'Apple Pay') +
+    '</div>';
   }
 
   function toggleRow(label, on) {
@@ -1011,9 +1053,18 @@
   function ensureHost(main) {
     var host = document.getElementById('aaas-step-host');
     if (!host) {
-      var h1 = main.querySelector('h1.main-title') || main.firstElementChild;
+      // The host goes BELOW the express block and its "oder" divider, not
+      // straight under the H1: express stays on screen through the flow, and
+      // anchoring above it would push it under the step content from step 2 on.
+      var anchor = main.querySelector('h1.main-title') || main.firstElementChild;
+      var ex = main.querySelector('section.spc-express');
+      if (ex) {
+        anchor = ex;
+        var sep = ex.nextElementSibling;
+        if (sep && sep.classList.contains('separator')) anchor = sep;
+      }
       host = el('div'); host.id = 'aaas-step-host';
-      h1.insertAdjacentElement('afterend', host);
+      anchor.insertAdjacentElement('afterend', host);
     }
     return { host: host };
   }
@@ -1027,9 +1078,15 @@
 
     var host = ensureHost(main).host;
 
-    // step 1 keeps the real captured markup; later steps replace the column
+    // step 1 keeps the real captured markup; later steps replace the column.
+    // The express block and its "oder" divider are exempt: on the live checkout
+    // they sit above the flow the whole way, not only on the first step.
     [].forEach.call(main.children, function (c) {
       if (c === host || c.tagName === 'H1') return;
+      var prev = c.previousElementSibling;
+      if (c.classList.contains('spc-express') ||
+          (c.classList.contains('separator') && prev &&
+           prev.classList.contains('spc-express'))) return;
       c.classList.toggle('aaas-hidden-by-step', s > 1);
     });
 
@@ -1042,7 +1099,6 @@
 
     if (s === 2) {
       host.innerHTML =
-        expressBlock(renting) +
         contact +
         '<h2 class="aaas-step-title">Rechnungsadresse</h2>' +
         '<div class="aaas-titlerow"><div class="aaas-stat-label">Anrede</div>' +
@@ -1092,7 +1148,6 @@
         payRow('sepa', 'SEPA-Lastschrift');
 
     host.innerHTML =
-      expressBlock(renting) +
       contact +
       summaryRow('Lieferung an', addr + '<br>' + street + '<br>' + town + '<br>Österreich',
         'Die Rechnungsadresse entspricht der Lieferadresse', 2) +

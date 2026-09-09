@@ -414,6 +414,10 @@
 }
 
 .aaas-select-list [role="option"] {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
   padding: var(--sp-3) 2rem;
   font-family: var(--font-body);
   font-size: 1.3rem;
@@ -422,6 +426,14 @@
 }
 
 .aaas-select-list [role="option"] + [role="option"] { border-top: 1px solid var(--color-border-default); }
+
+/* the price stays regular weight even on the selected row, so the term reads as
+   the label and the amount as the consequence */
+.aaas-opt-note {
+  flex: none;
+  font-family: var(--font-body);
+  color: var(--color-text-secondary);
+}
 .aaas-select-list [role="option"][aria-selected="true"] { font-family: var(--font-body-bold); }
 .aaas-select-list [role="option"]:focus-visible,
 .aaas-select-list [role="option"]:focus { outline: 0; background: var(--color-surface-muted); }
@@ -922,6 +934,11 @@
 /* Express checkout, buy mode only. The button grounds are the payment providers'
    own required colours, so they are literal values by necessity rather than
    LUMAS tokens; likewise the small radius, which follows their button specs. */
+/* The stand-ins sit in the shop's own .buttons-container, which is a flex row
+   sized for the providers' SDK iframes, so the row has to claim the width back. */
+.spc-express .buttons-container { display: block; width: 100%; }
+.spc-express .aaas-express-row { margin: 0; }
+
 .aaas-express { margin: 0 0 var(--sp-5); }
 .aaas-express p { font-size: 1.5rem; line-height: 1.5; margin: 0 0 var(--sp-3); }
 
