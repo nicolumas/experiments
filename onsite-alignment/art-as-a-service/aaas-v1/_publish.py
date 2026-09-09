@@ -71,11 +71,14 @@ def gate(path):
 
 
 # The clone captures the live shop's inline config verbatim, which includes the
-# storefront's Google Places browser key. That key is public by design (every
-# at.lumas.com page serves it) and is HTTP-referrer restricted, so it is useless
-# from anywhere else - but committing it to a public repo trips GitHub secret
-# scanning and invites quota-burning attempts against the referrer allowlist.
-# Redact it on publish rather than in the clone, so the baseline stays pristine.
+# storefront's Google Places browser key. That key is public by design - every
+# at.lumas.com page serves it to every visitor - so redacting it here removes an
+# exposure, not a secret. It still has to go: the key's HTTP-referrer allowlist
+# rejects a wrong referrer but cannot reject a request that sends no Referer
+# header at all, so a key harvested out of a public repo bills Maps Platform
+# usage to LUMAS. Restricting which APIs the key may call and capping its quota
+# is the real fix; this only stops the repo from advertising it.
+# Redact on publish rather than in the clone, so the baseline stays pristine.
 SECRET_PATTERNS = (
     (re.compile(r"AIzaSy[0-9A-Za-z_-]{33}"), "REDACTED"),
 )
