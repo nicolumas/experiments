@@ -291,25 +291,34 @@ img{display:block;max-width:100%;height:auto}
 /* ══ WALL PREVIEW ═════════════════════════════════════════════════════════ */
 .lt-wall-sec{background:var(--color-surface-page);border-top:1px solid var(--color-border-subtle);border-bottom:1px solid var(--color-border-subtle)}
 .lt-wall-sec[hidden]{display:none}
-.lt-wall{position:relative;overflow:hidden;background:var(--color-surface-muted)}
-.lt-wall__inner{position:relative;transform-origin:52% 56%}
+/* The room is a pointer-and-space feature: the arrangement tool needs a mouse
+   and a wall big enough to compose on, so the whole section is desktop only. */
+@media(max-width:1079px){ .lt-wall-sec{display:none} }
+.lt-wall{position:relative;overflow:hidden;background:var(--color-surface-muted);touch-action:none}
+.lt-wall__inner{position:relative}
 .lt-wall img{width:100%;height:auto}
-/* On a phone the full 1.66:1 room reduces the art to a detail, so the whole
-   composition is scaled about its focal point. The hung art lives inside the
-   same layer, so it stays locked to the wall through the crop. */
-@media(max-width:700px){
-  .lt-wall__inner{transform:scale(1.85)}
+.lt-hang{position:absolute;inset:0}
+
+/* one hung work */
+.lt-hang__art{
+  position:absolute;padding:0;border:0;background:none;cursor:grab;
+  width:var(--tile,70px);height:var(--tile,70px);
+  transition:box-shadow var(--lt-t-fast) var(--lt-ease);
 }
-.lt-hang{position:absolute;inset:0;pointer-events:none}
-/* the block hangs from a fixed baseline 28 cm above the credenza, and grows
-   upward as rows are added, which is how art is actually hung over furniture */
-.lt-hang__grid{
-  position:absolute;left:52%;bottom:37%;transform:translateX(-50%);
-  display:grid;grid-template-columns:repeat(var(--cols,3),var(--tile,70px));
-  gap:var(--gap,8px);justify-content:center;
-}
-.lt-hang__grid img{width:var(--tile,70px);height:var(--tile,70px);object-fit:contain;background:#fff;box-shadow:var(--lt-wall-shadow)}
-.lt-wall__cap{display:flex;justify-content:space-between;gap:1.6rem;flex-wrap:wrap;margin-top:1.4rem}
+.lt-hang__art img{width:100%;height:100%;object-fit:contain;background:#fff;box-shadow:var(--lt-wall-shadow);pointer-events:none}
+.lt-hang__art:focus-visible{outline:2px solid var(--color-charcoal-900);outline-offset:3px}
+@media(hover:hover){ .lt-hang__art:hover img{box-shadow:var(--lt-wall-shadow),0 0 0 1px rgba(28,26,24,.28)} }
+.lt-hang__art.is-dragging{cursor:grabbing;z-index:5}
+.lt-hang__art.is-dragging img{box-shadow:0 2px 3px rgba(28,26,24,.34),0 14px 22px -8px rgba(28,26,24,.34)}
+
+/* alignment guides, drawn only while dragging */
+.lt-guide{position:absolute;background:var(--color-charcoal-900);opacity:.55;pointer-events:none;z-index:4}
+.lt-guide--v{width:1px;top:0;bottom:0}
+.lt-guide--h{height:1px;left:0;right:0}
+.lt-guide[hidden]{display:none !important}
+
+.lt-wall__cap{display:flex;justify-content:space-between;align-items:baseline;gap:1.6rem;flex-wrap:wrap;margin-top:1.4rem}
+.lt-wall__hint{display:flex;align-items:center;gap:1.6rem}
 
 /* ══ EDITORIAL STRIP ══════════════════════════════════════════════════════ */
 .lt-strip{background:var(--color-surface-inverse);color:var(--color-text-inverse);padding:12rem 0}
@@ -1352,17 +1361,23 @@ img{display:block;max-width:100%;height:auto}
       <div class="lt-sec-head">
         <p class="t-eyebrow">On the wall</p>
         <h2 class="t-h2">How your edit&nbsp;hangs</h2>
-        <p class="t-small">Every slide is cut to the same square, so whatever you choose lands on one grid. Three in a run above a console, six in a block, or the whole box as a&nbsp;nine.</p>
+        <p class="t-small">Every slide is cut to the same square, so any of them will hang together. Drag them into the arrangement you want, and the measurements below follow what you&nbsp;make.</p>
       </div>
       <div class="lt-wall">
         <div class="lt-wall__inner">
           <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966" loading="lazy">
-          <div class="lt-hang" id="hang"></div>
+          <div class="lt-hang" id="hang">
+            <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
+            <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
+          </div>
         </div>
       </div>
       <div class="lt-wall__cap">
         <p class="lt-note" id="wallDims">&nbsp;</p>
-        <p class="lt-note">Hung 4 cm apart.</p>
+        <div class="lt-wall__hint">
+          <p class="lt-note">Drag a slide to arrange the wall. Arrow keys nudge.</p>
+          <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1765,42 +1780,206 @@ img{display:block;max-width:100%;height:auto}
      Sizes are computed in px from the rendered width so no percentage
      resolution surprises apply. */
   var PCT_PER_CM = 0.002808;
+  /* Positions are held as percentages of the wall, per slide, so an arrangement
+     survives adding and removing works and any resize of the photograph. */
+  var pos = {};
+
+  /* the hangable plane: clear of the ceiling line and above the credenza */
+  var PLANE = { top: 10, bottom: 66, left: 5, right: 95 };
+  var SNAP = 0.6;            /* percent of wall width */
+
+  function tileSize(){
+    var w = hang.offsetWidth, h = hang.offsetHeight;
+    if (!w || !h) return null;
+    var pxPerCm = w * PCT_PER_CM;
+    var px = 34 * pxPerCm;
+    return { px: px, pxPerCm: pxPerCm, wPct: px / w * 100, hPct: px / h * 100, w: w, h: h };
+  }
+
+  /* the tidy arrangement: up to three across, hanging from a fixed baseline */
+  function defaultSlots(count){
+    var t = tileSize(); if (!t) return [];
+    var gapH = 4 * t.pxPerCm / t.w * 100;
+    var gapV = 4 * t.pxPerCm / t.h * 100;
+    var cols = count <= 2 ? Math.max(count, 1) : 3;
+    var rows = Math.ceil(count / cols);
+    var blockW = cols * t.wPct + (cols - 1) * gapH;
+    var blockH = rows * t.hPct + (rows - 1) * gapV;
+    var x0 = 52 - blockW / 2, y0 = 63 - blockH, out = [];
+    for (var i = 0; i < count; i++){
+      out.push({ x: x0 + (i % cols) * (t.wPct + gapH),
+                 y: y0 + Math.floor(i / cols) * (t.hPct + gapV) });
+    }
+    return out;
+  }
+
+  function clampPos(p, t){
+    return {
+      x: Math.min(Math.max(p.x, PLANE.left), PLANE.right - t.wPct),
+      y: Math.min(Math.max(p.y, PLANE.top), PLANE.bottom - t.hPct)
+    };
+  }
+
   function renderWall(n){
     var sec = $("wallSec");
     sec.hidden = (n < 3 || variant === "control");
-    if (sec.hidden){ hang.innerHTML = ""; $("wallDims").innerHTML = "&nbsp;"; return; }
+    if (sec.hidden){
+      hang.querySelectorAll(".lt-hang__art").forEach(function(el){ el.remove(); });
+      $("wallDims").innerHTML = "&nbsp;";
+      return;
+    }
+    syncWall();
+  }
 
-    var cols = n <= 2 ? n : 3;
-    var rows = Math.ceil(n / cols);
-    var blockW = cols * 34 + (cols - 1) * 4;
-    var blockH = rows * 34 + (rows - 1) * 4;
+  /* Diff rather than rebuild: re-creating the nodes on every selection change
+     would throw away whatever arrangement the visitor has made. */
+  function syncWall(){
+    var slots = defaultSlots(kept.length);
+    var t = tileSize();
 
-    var wrapEl = document.createElement("div");
-    wrapEl.className = "lt-hang__grid";
-    wrapEl.style.setProperty("--cols", cols);
-    kept.forEach(function(code){
+    kept.forEach(function(code, i){
+      if (!pos[code] && slots[i]) pos[code] = slots[i];
+      if (hang.querySelector('[data-code="' + code + '"]')) return;
       var s = SLIDES.find(function(x){ return x.code === code; });
-      var im = document.createElement("img");
-      im.src = src(code, 640); im.alt = s.title; im.loading = "lazy";
-      wrapEl.appendChild(im);
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "lt-hang__art";
+      b.dataset.code = code;
+      b.setAttribute("aria-label", "Move " + s.title + " on the wall. Arrow keys nudge.");
+      b.innerHTML = '<img src="' + src(code, 640) + '" alt="" loading="lazy">';
+      b.addEventListener("pointerdown", startDrag);
+      b.addEventListener("keydown", nudge);
+      hang.appendChild(b);
     });
-    hang.innerHTML = "";
-    hang.appendChild(wrapEl);
-    sizeWall();
-    $("wallDims").textContent = n + (n === 1 ? " slide, " : " slides, ") + blockW + " × " + blockH + " cm overall";
+
+    hang.querySelectorAll(".lt-hang__art").forEach(function(el){
+      if (kept.indexOf(el.dataset.code) < 0) el.remove();
+    });
+
+    if (t) hang.querySelectorAll(".lt-hang__art").forEach(function(el){
+      var p = clampPos(pos[el.dataset.code], t);
+      pos[el.dataset.code] = p;
+      el.style.width = el.style.height = t.px.toFixed(2) + "px";
+      el.style.left = p.x + "%";
+      el.style.top = p.y + "%";
+    });
+
+    measureWall();
   }
 
-  function sizeWall(){
-    var grid = hang.querySelector(".lt-hang__grid");
-    if (!grid) return;
-    /* offsetWidth, not getBoundingClientRect: the mobile crop scales this
-       layer, and a measured rect would fold that scale in a second time. */
-    var w = hang.offsetWidth;
-    if (!w) return;
-    var pxPerCm = w * PCT_PER_CM;
-    grid.style.setProperty("--tile", (34 * pxPerCm).toFixed(2) + "px");
-    grid.style.setProperty("--gap",  (4  * pxPerCm).toFixed(2) + "px");
+  /* the readout follows the arrangement, not the tidy grid */
+  function measureWall(){
+    var t = tileSize(), n = kept.length;
+    if (!t || !n){ $("wallDims").innerHTML = "&nbsp;"; return; }
+    var xs = [], ys = [];
+    kept.forEach(function(code){
+      var p = pos[code]; if (!p) return;
+      xs.push(p.x, p.x + t.wPct);
+      ys.push(p.y, p.y + t.hPct);
+    });
+    if (!xs.length){ $("wallDims").innerHTML = "&nbsp;"; return; }
+    var wCm = Math.round((Math.max.apply(null, xs) - Math.min.apply(null, xs)) / 100 * t.w / t.pxPerCm);
+    var hCm = Math.round((Math.max.apply(null, ys) - Math.min.apply(null, ys)) / 100 * t.h / t.pxPerCm);
+    $("wallDims").textContent = n + (n === 1 ? " slide, " : " slides, ") + wCm + " \u00d7 " + hCm + " cm overall";
   }
+
+  /* ── dragging ─────────────────────────────────────────────────────── */
+  var drag = null;
+
+  function startDrag(e){
+    if (e.button !== undefined && e.button !== 0) return;
+    var el = e.currentTarget, t = tileSize();
+    if (!t) return;
+    var wall = hang.getBoundingClientRect();
+    var p = pos[el.dataset.code];
+    drag = { el: el, code: el.dataset.code, t: t, wall: wall, moved: false,
+             dx: e.clientX - (wall.left + p.x / 100 * wall.width),
+             dy: e.clientY - (wall.top + p.y / 100 * wall.height) };
+    el.setPointerCapture(e.pointerId);
+    el.classList.add("is-dragging");
+    e.preventDefault();
+  }
+
+  function onDragMove(e){
+    if (!drag) return;
+    var w = drag.wall, t = drag.t;
+    var p = clampPos({ x: (e.clientX - drag.dx - w.left) / w.width * 100,
+                       y: (e.clientY - drag.dy - w.top) / w.height * 100 }, t);
+    p = snap(p, t);
+    drag.moved = true;
+    pos[drag.code] = p;
+    drag.el.style.left = p.x + "%";
+    drag.el.style.top = p.y + "%";
+    measureWall();
+  }
+
+  function endDrag(){
+    if (!drag) return;
+    drag.el.classList.remove("is-dragging");
+    hideGuides();
+    if (drag.moved) track("wall_arrange", { item_id: drag.code, selected: kept.length });
+    drag = null;
+  }
+
+  /* Snap to the edges and centre lines of the other works, which is what makes
+     a hand-made arrangement read as deliberate rather than approximate. */
+  function snap(p, t){
+    var vT = [], hT = [];
+    kept.forEach(function(code){
+      if (code === drag.code) return;
+      var o = pos[code]; if (!o) return;
+      vT.push(o.x, o.x + t.wPct / 2, o.x + t.wPct);
+      hT.push(o.y, o.y + t.hPct / 2, o.y + t.hPct);
+    });
+    var v = nearest([p.x, p.x + t.wPct / 2, p.x + t.wPct], vT, SNAP);
+    var h = nearest([p.y, p.y + t.hPct / 2, p.y + t.hPct], hT, SNAP * (t.hPct / t.wPct));
+    if (v){ p.x += v.delta; showGuide("guideV", "left", v.at); } else hideGuide("guideV");
+    if (h){ p.y += h.delta; showGuide("guideH", "top", h.at); } else hideGuide("guideH");
+    return p;
+  }
+
+  function nearest(edges, targets, tol){
+    var found = null;
+    edges.forEach(function(edge){
+      targets.forEach(function(target){
+        var d = target - edge;
+        if (Math.abs(d) <= tol && (!found || Math.abs(d) < Math.abs(found.delta))) found = { delta: d, at: target };
+      });
+    });
+    return found;
+  }
+
+  function showGuide(id, prop, atPct){ var g = $(id); g.hidden = false; g.style[prop] = atPct + "%"; }
+  function hideGuide(id){ $(id).hidden = true; }
+  function hideGuides(){ hideGuide("guideV"); hideGuide("guideH"); }
+
+  function nudge(e){
+    var map = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    var d = map[e.key]; if (!d) return;
+    var t = tileSize(); if (!t) return;
+    e.preventDefault();
+    var code = e.currentTarget.dataset.code;
+    var step = e.shiftKey ? 3 : 0.6;
+    var p = clampPos({ x: pos[code].x + d[0] * step,
+                       y: pos[code].y + d[1] * step * (t.wPct / t.hPct) }, t);
+    pos[code] = p;
+    e.currentTarget.style.left = p.x + "%";
+    e.currentTarget.style.top = p.y + "%";
+    measureWall();
+  }
+
+  document.addEventListener("pointermove", onDragMove);
+  document.addEventListener("pointerup", endDrag);
+  document.addEventListener("pointercancel", endDrag);
+
+  $("tidyBtn").addEventListener("click", function(){
+    var slots = defaultSlots(kept.length);
+    kept.forEach(function(code, i){ if (slots[i]) pos[code] = slots[i]; });
+    syncWall();
+    track("wall_tidy", { selected: kept.length });
+  });
+
+  function sizeWall(){ if (!$("wallSec").hidden) syncWall(); }
 
   /* ════════════════════════════════════════════════════════════════════
      QUICK VIEW
