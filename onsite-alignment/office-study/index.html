@@ -226,6 +226,11 @@ a{color:inherit}
 /* ── M5 typologies ───────────────────────────────────────────────────────── */
 .typo-row{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gutter);align-items:center;margin-bottom:96px}
 .typo-row:last-child{margin-bottom:0}
+/* Both cells are pinned to row 1. Without it, the reversed rows break: .fig is
+   auto-placed into columns 6-12 first, and grid's sparse algorithm never moves the
+   cursor backwards, so .txt (columns 1-4) is pushed onto a second row and the text
+   lands underneath the photograph instead of beside it. */
+.typo-row .fig,.typo-row .txt{grid-row:1}
 .typo-row .fig{grid-column:1 / span 7}
 .typo-row .txt{grid-column:9 / span 4}
 .typo-row.rev .fig{grid-column:6 / span 7}
@@ -386,6 +391,7 @@ body[data-v="v2"] #m8{display:none}
     margin-inline:-20px;padding:0 20px 8px;scroll-padding-left:20px}
   .state-card{flex:0 0 78%;scroll-snap-align:start}
   .typo-row{display:block;margin-bottom:56px}
+  .typo-row .fig,.typo-row .txt{grid-row:auto}
   .typo-row .txt{margin-top:24px}
   .tod,.macros,.linkblock,.edit-head{grid-template-columns:1fr;gap:24px}
   .grid12{grid-template-columns:1fr;gap:24px}
