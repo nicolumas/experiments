@@ -3,8 +3,9 @@
 Third iteration. This is a **copy of `prototype/pdp-pill/`** with one layer added on top: the
 page can now work out *which* gallery to talk about, instead of waiting to be told.
 
-`prototype/pdp-pill/` is the base and is untouched. The diff is 11 changed lines and roughly
-280 added ones; nothing was removed.
+The functional diff against the base is 11 changed lines and roughly 280 added ones; nothing
+was removed. The brand-token corrections below were applied to both folders in the same pass,
+so those lines are identical in each.
 
 Reference page: <https://www.lumas.de/pictures/marta_contreras_simo/liu/>
 
@@ -102,6 +103,34 @@ Eleven lines, listed so the copy stays auditable:
 `ACTIVE_GAL` and `MANUAL` are declared next to `const GAL`, before the base's first
 synchronous render, so the base still paints price and availability in the first paint with
 no client-side rewrite. The location layer only ever repaints on top of that.
+
+## Brand tokens
+
+Every colour on the page is a real V2 token. The values below were hand-mixed in an earlier
+pass and have since been corrected to the Figma foundations:
+
+| Was | Now | Token |
+|---|---|---|
+| `#26603A` | `#3A6B4A` | `status/success` |
+| `#E7F1EA` | `#E8F2EB` | `status/success-bg` |
+| `#DBEAE1` | `#DCEBE2` | success-bg hover, re-derived |
+| `#5C5C5C` | `#5A5752` | `text/secondary`, charcoal/700 |
+| `#6E6A65` | `#908C87` | `text/tertiary`, charcoal/500 (search placeholder only) |
+| `#FAF7F3` | `#FAF6F1` | `surface/page`, ivory/300 |
+| `#E9E2D7` | `#EAE2D8` | `border/subtle`, bone/200 |
+| `#000` | `#3A3835` | charcoal/800, primary CTA hover |
+
+The availability tag now reads 5.42:1 on its own background, so it still clears AA.
+
+Two deliberate exceptions remain:
+
+- The **frame swatches** (`#24211D`, `#141210`, `#7A5B3F`) depict physical frame finishes.
+  They are product imagery, not brand colour, so they stay as they are.
+- The **header search field** keeps its 20px radius because that is what production ships,
+  even though V2 puts inputs at 4px. The chrome mirrors the live page on purpose.
+
+Em-dashes are gone from the page title and the mobile board, per the V2 voice rule. The
+en-dashes inside opening-hours ranges stay: those are numeric ranges, not punctuation.
 
 ## Everything else
 
