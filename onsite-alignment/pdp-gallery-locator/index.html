@@ -311,6 +311,39 @@ body.info-open{overflow:hidden}
   .locline{ justify-content:center }
 }
 
+/* ── the first ask: a compact panel that slides in once, then never again ──
+   It offers the choice; it does not take it. getCurrentPosition still only
+   runs when the visitor presses the button inside it. */
+.locslide{ position:fixed; z-index:90; left:24px; bottom:24px; width:328px;
+  background:var(--page); border:1px solid var(--line); border-radius:2px; padding:16px 18px 17px;
+  box-shadow:0 16px 44px -18px rgba(28,26,24,.32);
+  transform:translateY(calc(100% + 32px)); opacity:0; visibility:hidden;
+  transition:transform 320ms var(--ease), opacity 220ms var(--ease), visibility 0s linear 320ms }
+.locslide[data-in="1"]{ transform:none; opacity:1; visibility:visible; transition-delay:0s }
+.locslide h4{ margin:0 0 6px; font-family:'utile-display',georgia,serif; font-weight:400;
+  font-size:17px; line-height:1.25; letter-spacing:-.2px; color:var(--ink) }
+.locslide p{ margin:0; font-size:12.5px; line-height:1.55; color:var(--ink-soft) }
+.locslide .ls-a{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:13px }
+.locslide .ls-yes{ font:inherit; font-size:11px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+  height:36px; padding:0 15px; background:var(--ink); color:var(--cta-text); border:1px solid var(--ink);
+  cursor:pointer; transition:background var(--t1) var(--ease), color var(--t1) var(--ease) }
+.locslide .ls-yes:hover{ background:var(--page); color:var(--ink) }
+.locslide .ls-no{ font:inherit; font-size:12.5px; background:none; border:0; padding:0; cursor:pointer;
+  color:var(--ink); text-decoration:underline; text-underline-offset:3px }
+.locslide .ls-x{ position:absolute; top:9px; right:9px; width:26px; height:26px; display:grid; place-items:center;
+  background:none; border:0; padding:0; cursor:pointer; color:var(--ink-soft);
+  transition:color var(--t1) var(--ease) }
+.locslide .ls-x:hover{ color:var(--ink) }
+.locslide .ls-x svg{ width:13px; height:13px }
+@media(max-width:560px){
+  /* a bottom sheet on a phone, which is where a slide-in belongs */
+  .locslide{ left:10px; right:10px; bottom:10px; width:auto; padding:16px 16px 17px }
+}
+@media(prefers-reduced-motion:reduce){
+  .locslide{ transition:opacity 160ms linear, visibility 0s linear 160ms; transform:none }
+  .locslide[data-in="1"]{ transition-delay:0s }
+}
+
 /* gallery chooser, shown inside the existing pop-up */
 .gpick{ display:grid }
 .gpick-row{ display:flex; align-items:flex-start; gap:11px; width:100%; text-align:left; font:inherit;
@@ -947,6 +980,54 @@ document.addEventListener('keydown', function(e){
   if (w){ w.dataset.open = '0'; const c = w.querySelector('.locchip'); if (c){ c.setAttribute('aria-expanded','false'); c.focus(); } }
 });
 
+/* ── the first ask ──────────────────────────────────────────────────────
+   Shown once, and only once, when we have no idea where the visitor is and
+   they have not already told us. It is a disclosure, not a request: the
+   permission prompt still waits for the button inside it.
+
+   Dismissing it is "not now", not "no". Only an actual PERMISSION_DENIED
+   writes 'refused'; a dismissal just records that we have asked, and the
+   inline chip stays behind it so the offer is never lost.
+   ─────────────────────────────────────────────────────────────────────── */
+const ASK_KEY = 'lumas_loc_ask_v1';
+const askGet = () => { try { return localStorage.getItem(ASK_KEY); } catch(e){ return null; } };
+const askSet = () => { try { localStorage.setItem(ASK_KEY, 'done'); } catch(e){} };
+
+function closeSlide(){
+  const el = document.getElementById('locSlide');
+  if (!el) return;
+  el.dataset.in = '0';
+  askSet();
+  el.addEventListener('transitionend', () => el.remove(), { once:true });
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 600);
+}
+function openSlide(){
+  if (document.getElementById('locSlide')) return;
+  const el = document.createElement('aside');
+  el.className = 'locslide'; el.id = 'locSlide';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-labelledby', 'locSlideH');
+  el.dataset.in = '0';
+  el.innerHTML =
+      '<button class="ls-x" id="locSlideX" aria-label="Close">' + ICO.close + '</button>'
+    + '<h4 id="locSlideH">See it in a gallery near you</h4>'
+    + '<p>We check your location once to find the nearest gallery holding this size and '
+    + 'framing. It is not stored, and you can switch it off at any time.</p>'
+    + '<div class="ls-a">'
+      + '<button class="ls-yes" id="locSlideYes">Use my location</button>'
+      + '<button class="ls-no" id="locSlideNo">Not now</button>'
+    + '</div>';
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { el.dataset.in = '1'; });
+
+  document.getElementById('locSlideYes').addEventListener('click', () => { closeSlide(); useDevice(); });
+  document.getElementById('locSlideNo').addEventListener('click', closeSlide);
+  document.getElementById('locSlideX').addEventListener('click', closeSlide);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('locSlide')) closeSlide();
+});
+
 /* ── boot ── */
 (function initLocation(){
   const forced = Q.get('loc');
@@ -960,7 +1041,15 @@ document.addEventListener('keydown', function(e){
   if (pref === 'refused'){ if (!MANUAL) LOC.status = 'refused'; paintLocation(); return; }
   if (pref && pref.indexOf('manual:') === 0){ paintLocation(); return; }
 
-  paintLocation();   // the invitation is offered inline; nothing is requested on arrival
+  paintLocation();   // the inline chip is drawn first, so the offer survives any dismissal
+
+  /* ?ask=1 replays the first ask, ?ask=0 suppresses it, so both are linkable */
+  const ask = Q.get('ask');
+  if (ask === '0') return;
+  if (ask === '1'){ setTimeout(openSlide, 900); return; }
+  if (MANUAL) return;   // they have already named a gallery; there is nothing to ask
+  if (askGet()) return;
+  setTimeout(openSlide, 900);
 })();
 </script>
 </body>

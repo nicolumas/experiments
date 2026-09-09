@@ -10,7 +10,7 @@ so those lines are identical in each.
 Reference page: <https://www.lumas.de/pictures/marta_contreras_simo/liu/>
 
 - `index.html` — the page. Every state is a real URL.
-- `mobile.html` — six 390 x 844 frames.
+- `mobile.html` — seven 390 x 844 frames.
 
 Serve `prototype/` and open `/pdp-pill-locator/`.
 
@@ -38,27 +38,45 @@ using as its implicit notion of "near".
 The page asks for nothing on arrival. `getCurrentPosition` is not called until the visitor
 presses a button, verified at every state below.
 
-What they see instead is a 34px chip in the slot the pill will later occupy:
+**The first ask is a compact slide-in.** On a first visit, when we have no idea where they are
+and they have not already named a gallery, a 328px panel slides up from the bottom-left after
+900ms, sized 328 x 169. On a phone it becomes a bottom sheet with 10px gutters. It carries a
+headline, one sentence, a filled **Use my location** and a **Not now** link, plus a close
+control.
+
+It is shown **once**. Whatever the visitor does with it, `lumas_loc_ask_v1` records that the
+ask has happened and it never appears again.
+
+**Dismissing is "not now", not "no".** Closing the panel writes only the ask flag, never a
+refusal, so nothing about the visitor's location preference is inferred from a dismissal. Only
+an actual `PERMISSION_DENIED` from the browser writes `refused`.
+
+**The offer is never lost.** The 34px chip is painted underneath the slide-in before it
+appears, so the panel is a prompt over a standing affordance rather than the only route in.
+Dismiss the panel and the chip is still there:
 
 > ⌖ See it in a gallery near you
 
-Pressing it opens a 300px popover holding one sentence, an outlined **Use my location** and a
-**Choose a gallery** link. On desktop the popover is absolutely positioned, so opening it
-shifts nothing. Below 560px it drops into the flow under the chip.
+Pressing the chip opens a 300px popover holding the same sentence and the same two actions.
+On desktop that popover is absolutely positioned, so opening it shifts nothing. Below 560px it
+drops into the flow under the chip.
 
 | | closed | open |
 |---|---|---|
-| Desktop | 34px | 34px + floating popover |
-| Mobile | 34px | 176px |
+| Slide-in | not shown after the first ask | 328 x 169 fixed, 370 x 169 on a phone |
+| Chip, desktop | 34px | 34px + floating popover |
+| Chip, mobile | 34px | 176px |
 
 **Refusing means refusing.** `PERMISSION_DENIED` (error code 1) does not fall back to IP: the
 chip changes to "Choose a gallery" and no location is used at all. The brief asked for an IP
 fallback on denial; that is narrowed deliberately. Codes 2 and 3 are technical failures rather
 than an answer, so a coarse regional guess is still fair there.
 
-The choice is remembered in `localStorage` under `lumas_loc_v1` (`device`, `refused`, or
+The outcome is remembered in `localStorage` under `lumas_loc_v1` (`device`, `refused`, or
 `manual:<id>`). Once located, the line under the pill carries **Change** and
 **Stop using my location**, so the state is visible and reversible on the page itself.
+
+Under `prefers-reduced-motion: reduce` the panel fades in place instead of sliding.
 
 ## Precision gating
 
@@ -77,7 +95,8 @@ a precision it does not have.
 
 | State | URL |
 |---|---|
-| Invitation, nothing asked yet | `?size=s80&frame=basel` |
+| The first ask, slide-in | `?size=s80&frame=basel&ask=1` |
+| Dismissed, the chip remains | `?size=s80&frame=basel&ask=0` |
 | Located by region, nearest gallery | `?size=s80&frame=basel&loc=ip&ipcity=Hamburg` |
 | Located by device | `?size=s80&frame=basel&loc=device` |
 | Location refused | `?size=s80&frame=basel&loc=denied` |
@@ -88,6 +107,11 @@ a precision it does not have.
 
 `?loc=` and `?ipcity=` are demo switches standing in for a server-side GeoIP lookup. In
 production the coarse fix arrives with the document and only the device fix is asynchronous.
+`?ask=1` replays the first ask and `?ask=0` suppresses it, so both sides of it are linkable
+without clearing browser storage.
+
+The slide-in is skipped entirely when a `?loc=` switch is forced, when a gallery is already
+chosen by URL or cookie, or when the ask flag is set.
 
 When the visitor is located and **no** gallery holds the configuration, the module says
 nothing at all rather than announcing their city for no reason: no pill, no location line.
