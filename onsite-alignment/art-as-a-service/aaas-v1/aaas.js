@@ -177,6 +177,24 @@
       '</div>';
   }
 
+  /* The PDP's switch, extracted so every surface that carries the buy-or-rent
+   * decision in spec B uses the same control rather than a second dialect of
+   * it. `attrs` is how a caller hangs its own hook on it (the PDP listens for
+   * data-pdptoggle, the cart and checkout for data-mode) without copying the
+   * markup. A button with role="switch" rather than a label wrapping a
+   * checkbox: that construction rendered a square knob, and the knob is a real
+   * element so nothing in the shop's stylesheet can reach it. */
+  function switchControl(q, renting, attrs) {
+    return '<button type="button" class="aaas-ms" role="switch" ' + (attrs || '') +
+      ' aria-checked="' + renting + '">' +
+      '<span class="aaas-ms-track"><span class="aaas-ms-knob"></span></span>' +
+      '<span class="aaas-ms-text">Mieten statt kaufen' +
+        '<span class="aaas-ms-sep" aria-hidden="true"> · </span>' +
+        '<b>' + money(q.monthly) + '</b> im Monat' +
+        (renting ? termSuffix() : '') +
+      '</span></button>';
+  }
+
   function syncSwitches(renting, root) {
     (root || document).querySelectorAll('.aaas-mode-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === (renting ? 'rent' : 'buy')));
@@ -338,7 +356,11 @@
         '<div class="cart-overlay-bottom">' +
           '<div class="aaas-cart-mode">' +
             '<div class="aaas-label">Kaufen oder mieten</div>' +
-            modeSwitch(q) +
+            // spec B decides on the PDP with a switch, so the cart repeats that
+            // control rather than offering the same choice in another shape
+            (TERMS.pdpToggle
+              ? switchControl(q, renting, 'data-mode="' + (renting ? 'buy' : 'rent') + '"')
+              : modeSwitch(q)) +
           '</div>' +
           // express checkout is left out of the drawer entirely for now. It also
           // cannot carry a recurring SEPA mandate, so it never applied to renting.
@@ -359,7 +381,7 @@
     shell.querySelector('.icon-close').addEventListener('click', closeCart);
     shell.querySelector('.backdrop').addEventListener('click', closeCart);
     shell.addEventListener('click', function (e) {
-      var b = e.target.closest && e.target.closest('.aaas-mode-btn');
+      var b = e.target.closest && e.target.closest('[data-mode]');
       if (!b) return;
       var m = b.getAttribute('data-mode');
       setMode(m);
@@ -509,19 +531,7 @@
     var v = variant();
 
     if (v === 'switch') {
-      /* A button with role="switch" rather than a label wrapping a checkbox: the
-       * checkbox construction rendered a square knob here, and the knob is a real
-       * element instead of a pseudo-element so nothing in the shop's stylesheet
-       * can interfere with it. Everything sits on one line, and the price is not
-       * repeated as a second block. */
-      return '<button type="button" class="aaas-ms" role="switch" data-pdptoggle ' +
-        'aria-checked="' + renting + '">' +
-        '<span class="aaas-ms-track"><span class="aaas-ms-knob"></span></span>' +
-        '<span class="aaas-ms-text">Mieten statt kaufen' +
-          '<span class="aaas-ms-sep" aria-hidden="true"> · </span>' +
-          '<b>' + money(q.monthly) + '</b> im Monat' +
-          (renting ? termSuffix() : '') +
-        '</span></button>';
+      return switchControl(q, renting, 'data-pdptoggle');
     }
 
     if (v === 'rows') {
