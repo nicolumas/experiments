@@ -70,6 +70,35 @@ def gate(path):
     return True
 
 
+# The clone captures the live shop's inline config verbatim, which includes the
+# storefront's Google Places browser key. That key is public by design (every
+# at.lumas.com page serves it) and is HTTP-referrer restricted, so it is useless
+# from anywhere else - but committing it to a public repo trips GitHub secret
+# scanning and invites quota-burning attempts against the referrer allowlist.
+# Redact it on publish rather than in the clone, so the baseline stays pristine.
+SECRET_PATTERNS = (
+    (re.compile(r"AIzaSy[0-9A-Za-z_-]{33}"), "REDACTED"),
+)
+
+# With the key gone the Places call can only fail; the allowlist would reject
+# github.io anyway, so autocomplete was already dead in the published copy.
+PLACES_FLAG = (re.compile(r"(isGooglePlacesActive\s*:\s*)true"), r"\1false")
+
+
+def scrub(path):
+    """Strip captured credentials from a published page."""
+    raw = open(path, encoding="utf-8", errors="surrogateescape").read()
+    html = raw
+    for pattern, repl in SECRET_PATTERNS:
+        html = pattern.sub(repl, html)
+    if html == raw:
+        return False
+    html = PLACES_FLAG[0].sub(PLACES_FLAG[1], html)
+    if not DRY:
+        open(path, "w", encoding="utf-8", errors="surrogateescape").write(html)
+    return True
+
+
 def top_index():
     """The section hub links '<slug>/index.html', so the prototype's own index
     moves up a level and its links gain the aaas-v1/ prefix."""
@@ -90,9 +119,13 @@ rsync(SRC_V1, os.path.join(DEST, "aaas-v1"))
 print("staged both trees")
 print("top index: %d links rewritten" % top_index())
 
-gated = 0
+gated = scrubbed = 0
 for root, _dirs, files in os.walk(DEST):
     for f in files:
-        if f.endswith(".html") and gate(os.path.join(root, f)):
+        path = os.path.join(root, f)
+        if f.endswith((".html", ".js", ".json")) and scrub(path):
+            scrubbed += 1
+        if f.endswith(".html") and gate(path):
             gated += 1
+print("scrubbed %d files" % scrubbed)
 print("gated %d pages%s" % (gated, " (dry run)" if DRY else ""))
