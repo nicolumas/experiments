@@ -196,8 +196,15 @@
   }
 
   function syncSwitches(renting, root) {
-    (root || document).querySelectorAll('.aaas-mode-btn').forEach(function (b) {
+    var scope = root || document;
+    scope.querySelectorAll('.aaas-mode-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === (renting ? 'rent' : 'buy')));
+    });
+    // the switch states the mode it is in and carries the one it would move to,
+    // so both attributes have to turn over together
+    scope.querySelectorAll('.aaas-ms[data-mode]').forEach(function (sw) {
+      sw.setAttribute('aria-checked', String(renting));
+      sw.setAttribute('data-mode', renting ? 'buy' : 'rent');
     });
   }
 
@@ -783,8 +790,16 @@
     if (!document.getElementById('aaas-mode')) {
       var panel = el('div', 'aaas-mode');
       panel.id = 'aaas-mode';
-      panel.innerHTML = '<div class="aaas-label">Kaufen oder mieten</div>' + modeSwitch(q) +
-                        '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
+      // spec B decides with a switch on the PDP and in the cart, so the last
+      // surface carrying the decision uses it too rather than reverting to the
+      // button pair. syncSwitches keeps it in step: unlike the cart, this panel
+      // is built once and never re-rendered.
+      panel.innerHTML = '<div class="aaas-label">Kaufen oder mieten</div>' +
+        (TERMS.pdpToggle
+          ? switchControl(q, mode() === 'rent',
+              'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"')
+          : modeSwitch(q)) +
+        '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
       host.insertAdjacentElement('beforebegin', panel);
       panel.addEventListener('click', function (e) {
         var b = e.target.closest('[data-mode]');

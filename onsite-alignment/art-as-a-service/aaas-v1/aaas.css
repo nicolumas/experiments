@@ -101,8 +101,15 @@
   cursor: pointer;
 }
 
+/* Two boxes per row: the native checkbox plus a second one the theme paints as
+   span::before (content " ", 15x15, white, 1px charcoal). That pseudo-box is
+   inert here, it never picks up :checked because the shop's rule expects its own
+   markup, so it was decoration that could not show state. The label's own
+   pseudo-elements go the same way. */
 .aaas-consent label.aaas-check::before,
-.aaas-consent label.aaas-check::after { content: none !important; display: none !important; }
+.aaas-consent label.aaas-check::after,
+.aaas-consent label.aaas-check span::before,
+.aaas-consent label.aaas-check span::after { content: none !important; display: none !important; }
 
 .aaas-consent label.aaas-check input[type="checkbox"] {
   position: static;
