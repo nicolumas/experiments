@@ -1,0 +1,77 @@
+{
+ "klaviyoData": {
+  "$value": 2431,
+  "AddedItemProductName": "Alika&Siara",
+  "AddedItemProductID": "AT-MCS45",
+  "AddedItemSKU": "MCS45",
+  "AddedItemSapSKU": "1300-000009-MCS45",
+  "AddedItemImageURL": "https://img.lumas.com/showimg_mcs01_desktop.jpg",
+  "AddedItemURL": "at.lumas.com/pictures/marta_contreras_simo/alikasiara/",
+  "AddedItemPrice": 2990,
+  "AddedItemQuantity": 1,
+  "CheckoutURL": "at.lumas.com/checkout/single-page/",
+  "AddedItemStockLeft": 43,
+  "AddedItemNumberOfEdition": 100,
+  "AddedItemPriceIncrease": true,
+  "ItemNames": [
+   "Alika&Siara"
+  ],
+  "AddedItemCategories": [
+   "Marta Contreras Simó",
+   "AFRICA",
+   "discountable",
+   "Limited Edition",
+   "Wall Picture",
+   "Neu",
+   "w-1500",
+   "h-1500",
+   "orange",
+   "Fashion",
+   "Portrait",
+   "Digitale Kunst"
+  ],
+  "Items": [
+   {
+    "ProductID": "AT-MCS45",
+    "SKU": "MCS45",
+    "ProductName": "Alika&Siara",
+    "Quantity": 1,
+    "ItemPrice": 2990,
+    "RowTotal": 2990,
+    "ProductURL": "at.lumas.com/pictures/marta_contreras_simo/alikasiara/",
+    "ImageURL": "https://img.lumas.com/showimg_mcs01_desktop.jpg",
+    "ProductCategories": [
+     "Marta Contreras Simó",
+     "AFRICA",
+     "discountable",
+     "Limited Edition",
+     "Wall Picture",
+     "Neu",
+     "w-1500",
+     "h-1500",
+     "orange",
+     "Fashion",
+     "Portrait",
+     "Digitale Kunst"
+    ],
+    "StockLeft": 43,
+    "NumberOfEdition": 100,
+    "PriceIncrease": true
+   }
+  ]
+ },
+ "html": "<div class=\"backdrop\"></div>\n<div class=\"arrow-up\"></div>\n<div class=\"cart-overlay-container has-payment-options\">\n <button class=\"icon-close\"></button>\n <div class=\"continue-shopping\"><span>WEITER EINKAUFEN</span></div>\n <div class=\"title\">Warenkorb</div>\n  <div class=\"items\">\n  <div class=\"item\"\n data-sku=\"MCS45\"\n data-sap-sku=\"1300-000009-MCS45\"\n data-price=\"299000\"\n data-quantity=\"1\"\n data-is-discountable=\"1\"\n >\n <a href=\"/pictures/marta_contreras_simo/alikasiara/\"> <picture class=\"product-image\">\n  <source srcset=\"https://img.lumas.com/showimg_mcs01_mobile.webp\" media=\"all\" type=\"image/webp\">\n <source srcset=\"https://img.lumas.com/showimg_mcs01_mobile.jpg\" media=\"all\" type=\"image/jpg\">\n <img src=\"https://img.lumas.com/showimg_mcs01_mobile.jpg\" alt=\"Alika&amp;Siara - MCS45\">\n  </picture>\n </a> <div class=\"item-meta\">\n <div class=\"name\">Alika&amp;Siara</div>\n <div class=\"artist-name\">Marta Contreras Simó</div>\n <div class=\"finishing\">GRÖSSE:150 x 150 cm&nbsp;|&nbsp;KASCHIERUNG:&nbsp;Kaschierung unter Acrylglas, Stärke 2 mm matt</div>\n  <div class=\"price\">\n <div class=\"campaign-new-price\">€ 2.392,00</div>\n <div class=\"campaign-old-price-container\">statt\n <span class=\"campaign-old-price\">€ 2.990,00</span>\n </div>\n </div>\n </div>\n </div>\n  </div>\n  <div class=\"cart-overlay-bottom\">\n <div class=\"payment-buttons\">\n  <header>Express checkout</header>\n <p>100% sicher. Sofortige Reservierung.</p>\n <div class=\"express-payment\">\n  <div class=\"apple-pay-placeholder\"\n data-env='live'\n data-currency='EUR'\n data-country-code='AT'\n data-client-key='live_4L6QS75QFBF2ZAXLKDZNK52SPQHVXIOP'\n data-amount='243100'\n data-locale='de_DE'>\n </div>\n   <div class=\"paypal-express-placeholder\"\n data-env='live'\n data-country-code='AT'\n data-client-key='live_4L6QS75QFBF2ZAXLKDZNK52SPQHVXIOP'\n data-locale='de_DE'\n data-valid-countries='[\"AT\"]'>\n </div>\n  </div>\n  </div>\n <div class=\"cart-totals\">\n <div class=\"price-to-pay\">\n <div>Gesamtpreis inkl. MwSt.</div>\n <div>€ 2.431,00</div>\n </div>\n <div class=\"shipping-added\">\n Der Betrag beinhaltet lokale Versandkosten.\n </div>\n <div class=\"button\"><a href=\"/cart/\" class=\"btn\">Zum Warenkorb</a></div>\n </div>\n </div>\n</div>\n",
+ "totals": {
+  "subtotal": "€ 2.990,00",
+  "subtotalValue": 2990,
+  "grandTotal": "€ 2.431,00",
+  "grandTotalValue": 2431,
+  "netTotal": "€ 2.025,83",
+  "netTotalValue": 2025.83,
+  "taxTotalAmount": "€ 405,17",
+  "taxTotalAmountValue": 405.17,
+  "discountTotal": 59800,
+  "priceToPay": "€ 2.431,00",
+  "priceToPayValue": 2431
+ }
+}

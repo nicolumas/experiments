@@ -1,0 +1,1 @@
+.loader-wrapper{position:relative}.loader-wrapper .loading{bottom:0;display:flex;left:0;position:absolute;right:0;top:0}.loader-wrapper .loading.overlay{background-color:rgba(0,0,0,.5);z-index:999}.loader-wrapper .loading svg{height:5rem;margin:auto;width:5rem}

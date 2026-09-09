@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="de"><meta name="robots" content="noindex, nofollow"><script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art as a Service - Prototyp</title>
+<style>
+ /* colours are set explicitly: without a background this page renders
+    dark-on-dark for anyone whose browser is in dark mode */
+ :root{color-scheme:light}
+ html,body{background:#fff;color:#1c1a18}
+ body{font:16px/1.6 system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+      max-width:760px;margin:0 auto;padding:56px 24px}
+ h1{font-weight:400;font-size:30px;margin:0 0 6px}
+ p.sub{color:#5a5752;margin:0 0 36px}
+ a.card{display:block;border:1px solid rgba(0,0,0,.16);padding:20px 22px;margin-bottom:12px;
+        text-decoration:none;color:#1c1a18;background:#fff}
+ a.card:hover{border-color:#1c1a18}
+ a.card b{display:block;font-weight:600;margin-bottom:3px}
+ a.card span{color:#5a5752;font-size:14px}
+ .note{margin-top:32px;font-size:13.5px;color:#5a5752;
+       border-top:1px solid rgba(0,0,0,.16);padding-top:18px}
+ ol{color:#5a5752;font-size:14px;padding-left:20px}
+ ol b{color:#1c1a18}
+</style>
+<h1>Art as a Service</h1>
+<p class="sub">Mietstrecke, aufgesetzt auf den unveränderten Klon von at.lumas.com.</p>
+<a class="card" href="aaas-v1/pdp.html"><b>Produktseite</b><span>Einstieg "Oder mieten ab ..." und die Konditionen im Drawer</span></a>
+<a class="card" href="aaas-v1/checkout.html"><b>Checkout</b><span>Kontakt, Adresse und Zahlung, wie im Live-Checkout</span></a>
+<a class="card" href="aaas-v1/success.html"><b>Bestellbestätigung</b><span>Beträge, Termine und der Weg ins Konto. Zeigt Miete oder Kauf, je nach zuletzt gewähltem Modus</span></a>
+<a class="card" href="aaas-v1/account-rental.html"><b>Kundenkonto: Deine Miete</b><span>Laufzeit, Abbuchungen, Übernahmepreis</span></a>
+<p class="note">Am besten der Reihe nach durchklicken:</p>
+<ol>
+ <li>Auf der Produktseite <b>In den Warenkorb</b>, dann im Warenkorb auf <b>Mieten</b> umschalten.</li>
+ <li>Über <b>Zur Kasse</b> in den Checkout, dort die vier Schritte durchgehen.</li>
+ <li>Nach der Bestätigung führt der Weg ins Kundenkonto.</li>
+</ol>
+<p class="note">Alle Beträge sind aus den verbindlichen Konditionen in GLOB-2053 gerechnet:
+3,75 % Monatsmiete, Bereitstellungsentgelt in Höhe einer Monatsmiete, 36 Monate Mindestlaufzeit,
+80 % Anrechnung bei Übernahme.</p>

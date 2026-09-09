@@ -1,0 +1,98 @@
+"""Stage the AaaS prototype into the GitHub Pages share repo.
+
+    python3 _publish.py            # copy + gate, leaves the commit to you
+    python3 _publish.py --dry-run
+
+Published at https://nicolumas.github.io/experiments/onsite-alignment/art-as-a-service/
+
+The layer pages reference the baseline through '../aaas-baseline/', so both trees
+have to sit side by side under one folder:
+
+    onsite-alignment/art-as-a-service/
+      index.html          generated from aaas-v1/index.html, hrefs prefixed
+      aaas-v1/            the layer
+      aaas-baseline/      the untouched clone plus its mirrored assets
+
+Every page then gets the section's noindex meta and gate.js, at the depth its own
+URL needs. That injection is what makes the published baseline copy differ from
+the source clone by more than the two AaaS tags; the source stays pristine.
+"""
+import os, re, subprocess, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SRC_V1 = HERE
+SRC_BASE = os.path.abspath(os.path.join(HERE, "..", "aaas-baseline"))
+SHARE = os.path.expanduser("~/lumas-prototypes-share/onsite-alignment")
+DEST = os.path.join(SHARE, "art-as-a-service")
+DRY = "--dry-run" in sys.argv
+
+ROBOTS = '<meta name="robots" content="noindex, nofollow">'
+
+
+def rsync(src, dst):
+    cmd = ["rsync", "-a", "--delete", "--exclude", ".DS_Store",
+           src.rstrip("/") + "/", dst.rstrip("/") + "/"]
+    if DRY:
+        cmd.insert(1, "-n")
+    subprocess.run(cmd, check=True)
+
+
+ROBOTS_TAG = re.compile(r"<meta[^>]*name=[\"']robots[\"'][^>]*>", re.I)
+
+
+def gate(path):
+    """Add gate.js and force the page to noindex, resolving '../assets' from here.
+
+    The cloned shop pages already carry the live site's own
+    <meta content="index,follow" name="robots">, so an existing tag has to be
+    replaced rather than treated as satisfied: skipping it published the clone
+    as indexable, which is exactly what this section must not be."""
+    html = open(path, encoding="utf-8").read()
+    depth = os.path.relpath(path, DEST).count(os.sep) + 1
+    tag = '<script src="%sassets/gate.js"></script>' % ("../" * depth)
+    changed = False
+    if ROBOTS_TAG.search(html):
+        html, n = ROBOTS_TAG.subn(ROBOTS, html)
+        changed = n > 0
+    add = "" if ROBOTS_TAG.search(html) else ROBOTS
+    if "assets/gate.js" not in html:
+        add += tag
+    if not add:
+        if changed and not DRY:
+            open(path, "w", encoding="utf-8").write(html)
+        return changed
+    m = re.search(r"<head[^>]*>", html, re.I) or re.search(r"<html[^>]*>", html, re.I)
+    if not m:
+        return False
+    html = html[:m.end()] + add + html[m.end():]
+    if not DRY:
+        open(path, "w", encoding="utf-8").write(html)
+    return True
+
+
+def top_index():
+    """The section hub links '<slug>/index.html', so the prototype's own index
+    moves up a level and its links gain the aaas-v1/ prefix."""
+    src = open(os.path.join(SRC_V1, "index.html"), encoding="utf-8").read()
+    out = re.sub(r'href="(?!https?:|aaas-v1/)([^"]+\.html)"', r'href="aaas-v1/\1"', src)
+    if not DRY:
+        open(os.path.join(DEST, "index.html"), "w", encoding="utf-8").write(out)
+    return out.count('href="aaas-v1/')
+
+
+if not os.path.isdir(SHARE):
+    sys.exit("share repo not found: " + SHARE)
+
+if not DRY:
+    os.makedirs(DEST, exist_ok=True)
+rsync(SRC_BASE, os.path.join(DEST, "aaas-baseline"))
+rsync(SRC_V1, os.path.join(DEST, "aaas-v1"))
+print("staged both trees")
+print("top index: %d links rewritten" % top_index())
+
+gated = 0
+for root, _dirs, files in os.walk(DEST):
+    for f in files:
+        if f.endswith(".html") and gate(os.path.join(root, f)):
+            gated += 1
+print("gated %d pages%s" % (gated, " (dry run)" if DRY else ""))

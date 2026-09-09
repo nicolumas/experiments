@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkyves_zed=self.webpackChunkyves_zed||[]).push([[9668],{79668:function(e,n,r){r.r(n),r.d(n,{getLocalePrefix:function(){return t}});var t=()=>{var e=new URL(window.location).pathname;return e.match(/^\/(en|fr)\//)?e.substring(0,3):""}}}]);

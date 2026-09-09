@@ -1,0 +1,1375 @@
+/* Art as a Service - additive layer over the at.lumas.com baseline.
+ *
+ * BRANDING: this file defines no tokens of its own. The shop already ships the full
+ * V2 system as custom properties (--primitive-charcoal/ivory/bone ramps, semantic
+ * --color-* aliases, --font-body / --font-body-bold / --font-display, --sp-* spacing,
+ * --motion-*). Everything below inherits those, so the layer tracks the brand
+ * automatically instead of drifting from it.
+ *
+ * One deliberate deviation: small informational copy uses --color-text-secondary
+ * (charcoal-700 #5a5752) rather than --color-text-tertiary (charcoal-500 #908c87),
+ * which is only ~3.3:1 on white and fails WCAG AA. Tertiary is kept for decorative
+ * micro-labels that sit beside the shop's own.
+ *
+ * Root font-size is 10px, so 1rem = 10px - the same scale the theme uses.
+ */
+
+/* ---------- shared primitives ---------- */
+
+/* --color-text-tertiary (#908c87) is only 3.34:1 on white, which fails AA at these
+   sizes, so informational labels use --color-text-secondary (#5a5752, 7.19:1) */
+.aaas-label {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--sp-2);
+}
+
+.aaas-note {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: var(--sp-3) 0 0;
+}
+
+.aaas-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-text-link);
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  cursor: pointer;
+}
+
+/* hover gated so touch devices don't latch a sticky hover state on tap */
+@media (hover: hover) and (pointer: fine) {
+  .aaas-link:hover { opacity: .6; }
+}
+
+.aaas-link:focus-visible,
+.aaas-btn:focus-visible,
+.aaas-mode-btn:focus-visible,
+.aaas-close:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.aaas-btn {
+  display: block;
+  width: 100%;
+  padding: 1.6rem 2rem;
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  border: 0;
+  font-family: var(--font-body-bold);
+  font-size: 1.4rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  /* the shop already ships a proper ease-out curve and duration scale; use them */
+  transition: opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+              transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-btn:hover { opacity: .85; }
+}
+
+/* a pressable element should acknowledge the press */
+.aaas-btn:active { transform: scale(.98); }
+
+.aaas-hidden-by-rent { display: none !important; }
+
+/* spec B consent tickboxes: the checkout hides native inputs and pins label
+   height, so both need undoing here */
+.aaas-consent label.aaas-check {
+  position: static;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  height: auto;
+  min-height: 0;
+  margin: 0 0 var(--sp-3);
+  padding: 0;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.aaas-consent label.aaas-check::before,
+.aaas-consent label.aaas-check::after { content: none !important; display: none !important; }
+
+.aaas-consent label.aaas-check input[type="checkbox"] {
+  position: static;
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  width: 1.6rem;
+  height: 1.6rem;
+  min-height: 0;
+  margin: .2rem 0 0;
+  opacity: 1;
+  accent-color: var(--color-text-primary);
+}
+
+.aaas-consent label.aaas-check span {
+  flex: 1;
+  background: none !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+}
+
+/* The shop centres headings, which my panels inherit: the artwork title sat
+   centred above left-aligned meta. Left-align every heading the layer owns. */
+.aaas-card-title,
+.aaas-step-title,
+.aaas-consent h3,
+.aaas-option h4,
+.aaas-sx-panel h2 { text-align: left; }
+
+/* ---------- Trustpilot fallback layout ----------
+ * The real widget renders through Trustpilot's own script, which cannot load in a
+ * static clone, so the page falls back to this markup. As shipped the three parts
+ * sit on three different baselines across 72px, with the review count stacked
+ * above the star bar. Prototype-only tidy-up: a two-line grid inside the 409px
+ * column, stars and score on the first line, the count and the Trustpilot
+ * wordmark on the second with the mark held at the right edge. `display: contents`
+ * dissolves the summary wrapper so its stars and count can be placed directly. */
+
+.trustpilot-rating {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: var(--sp-3);
+  row-gap: 0.2rem;
+}
+
+.trustpilot-rating-summary { display: contents; }
+
+.trustpilot-rating-stars {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.trustpilot-rating-score {
+  grid-area: 1 / 2 / 2 / 4;
+  white-space: nowrap;
+}
+
+.trustpilot-rating-count {
+  grid-area: 2 / 1 / 3 / 3;
+  white-space: nowrap;
+}
+
+.trustpilot-rating-logo {
+  grid-area: 2 / 3 / 3 / 4;
+  justify-self: end;
+}
+
+/* ---------- PDP buy-box rhythm ----------
+ * Not AaaS-specific, but it lives here so the baseline clone stays untouched.
+ * As shipped: an empty <dimension-preview> adds a 20px margin between the size
+ * selector and the mounting dropdown, while the price sits flush against the
+ * dropdown with no gap at all. So the two controls read as unrelated and the
+ * price reads as attached to the dropdown. Group the controls, separate the price. */
+
+.pdp-products .sizes { padding-bottom: .2rem; }       /* was 20px */
+.pdp-products dimension-preview { margin-bottom: 0; } /* was 20px; renders empty here */
+.pdp-price-container { margin-top: 1.6rem; }          /* was flush against the dropdown */
+
+/* ---------- PDP entry point ---------- */
+
+.aaas-rent-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  /* .5rem here, not --sp-2: the price carries its own 5px bottom margin, so this
+     lands the price-to-hairline gap on 10px */
+  margin: .5rem 0 var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border-default);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+
+.aaas-rent-line b { font-family: var(--font-body-bold); font-weight: 400; }
+
+/* secondary, not tertiary: tertiary is 3.34:1 and fails AA even on a separator */
+.aaas-rent-line .aaas-sep { color: var(--color-text-secondary); }
+
+/* ---------- PDP, spec B ----------
+ * The 21 Aug checklist puts the buy/rent decision on the product page, with a
+ * term choice, the net basis, a shipping note and a damage tooltip. */
+
+.aaas-pdp-b {
+  margin: var(--sp-4) 0 var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border-default);
+  font-family: var(--font-body);
+}
+
+.aaas-pdp-b .aaas-note { margin: var(--sp-3) 0 0; }
+.aaas-pdp-b .aaas-note b { font-family: var(--font-body-bold); font-weight: 400; }
+.aaas-pdp-b > .aaas-link { margin-top: var(--sp-4); }
+
+/* ---------- buy/rent presentation variants (spec B) ----------
+ * All three keep the price out of the control itself, since the buy box already
+ * shows one. Charcoal/ivory for the active state, sharp edges throughout. */
+
+/* seg: one track, shared hairline, active half filled */
+.aaas-seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--color-text-primary);
+}
+
+.aaas-seg-btn {
+  padding: .9rem var(--sp-3);
+  border: 0;
+  background: var(--color-surface-page);
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+              color var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-seg-btn + .aaas-seg-btn { border-left: 1px solid var(--color-text-primary); }
+
+.aaas-seg-btn[aria-pressed="true"] {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body-bold);
+}
+
+.aaas-seg-btn:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: -3px; }
+
+.aaas-seg-price {
+  margin-top: var(--sp-3);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  color: var(--color-text-secondary);
+}
+
+.aaas-seg-price b {
+  font-family: var(--font-body-bold);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--color-text-primary);
+}
+
+/* switch: everything on one line. The knob is a real element rather than a
+   pseudo-element, and the control is a button with role="switch" rather than a
+   label wrapping a checkbox, which rendered a square knob here. */
+.aaas-ms {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: .6rem 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aaas-ms-track {
+  flex: none;
+  position: relative;
+  display: block;
+  width: 3.6rem;
+  height: 2rem;
+  border-radius: 1rem;
+  background: var(--color-border-strong);
+  transition: background var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-ms-knob {
+  position: absolute;
+  top: .2rem;
+  left: .2rem;
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-ms[aria-checked="true"] .aaas-ms-track { background: var(--color-surface-inverse); }
+.aaas-ms[aria-checked="true"] .aaas-ms-knob { transform: translateX(1.6rem); }
+
+.aaas-ms-text { flex: 1; background: none !important; border-radius: 0 !important; }
+.aaas-ms-text b { font-family: var(--font-body-bold); font-weight: 400; }
+.aaas-ms-sep { color: var(--color-text-secondary); }
+.aaas-ms:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aaas-ms-track, .aaas-ms-knob { transition: none; }
+}
+
+/* rows: full-width, label left and price right, the most room to breathe */
+.aaas-moderows { border-top: 1px solid var(--color-border-default); }
+
+.aaas-moderows label.aaas-moderow {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: auto;
+  min-height: 4.4rem;
+  margin: 0;
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.aaas-moderows label.aaas-moderow::before,
+.aaas-moderows label.aaas-moderow::after { content: none !important; display: none !important; }
+
+.aaas-moderows label.aaas-moderow input[type="radio"] {
+  position: static;
+  appearance: auto;
+  -webkit-appearance: radio;
+  width: 1.6rem;
+  height: 1.6rem;
+  min-height: 0;
+  margin: 0;
+  opacity: 1;
+  accent-color: var(--color-text-primary);
+}
+
+.aaas-moderows .aaas-moderow-name {
+  flex: 1;
+  background: none !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+}
+
+.aaas-moderows label.aaas-moderow[data-on] .aaas-moderow-name { font-family: var(--font-body-bold); }
+.aaas-moderows .aaas-moderow-price { font-family: var(--font-body-bold); font-weight: 400; white-space: nowrap; }
+
+.aaas-flag-variant button { text-transform: none; letter-spacing: 0; }
+
+/* ---------- branded listbox ----------
+ * Measured off the PDP's own Kaschierung control: 1px solid black, 3px radius,
+ * white ground, archivo 13px left-aligned, 36px tall. The chevron is the shop's
+ * own inline SVG, matching its <select> background-image. */
+
+.aaas-select { position: relative; margin: var(--sp-4) 0 0; }
+.aaas-select .pdp-product-section-header { margin-bottom: var(--sp-2); }
+
+.aaas-select-trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 3.6rem;
+  padding: 0 3.6rem 0 2rem;
+  border: 1px solid #000;
+  border-radius: .3rem;
+  background: var(--color-surface-page)
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.5L6 6.5L11 1.5' stroke='%231C1A18' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>")
+    no-repeat right 1.6rem center / 1.2rem;
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aaas-select-trigger:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+.aaas-select-trigger[aria-expanded="true"] { border-radius: .3rem .3rem 0 0; }
+
+.aaas-select-list {
+  position: absolute;
+  z-index: 60;                      /* above the buy box, below the cart overlay (160) */
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-surface-page);
+  border: 1px solid #000;
+  border-top: 0;
+  border-radius: 0 0 .3rem .3rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.aaas-select-list [role="option"] {
+  padding: var(--sp-3) 2rem;
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.aaas-select-list [role="option"] + [role="option"] { border-top: 1px solid var(--color-border-default); }
+.aaas-select-list [role="option"][aria-selected="true"] { font-family: var(--font-body-bold); }
+.aaas-select-list [role="option"]:focus-visible,
+.aaas-select-list [role="option"]:focus { outline: 0; background: var(--color-surface-muted); }
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-select-list [role="option"]:hover { background: var(--color-surface-muted); }
+}
+
+.aaas-tip {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface-muted);
+  font-size: 1.3rem;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+}
+
+.aaas-drawer-foot .aaas-btn + .aaas-btn { margin-top: var(--sp-2); }
+
+/* ---------- conditions drawer ---------- */
+
+.aaas-drawer {
+  border: 0;
+  padding: 0;
+  margin: 0 0 0 auto;
+  height: 100%;
+  max-height: 100%;
+  width: min(44rem, 100vw);
+  max-width: 100vw;
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+
+  /* enters from the edge it is anchored to, so the motion explains the geometry.
+     exit is faster than enter: the user has already decided. */
+  translate: 100% 0;
+  opacity: 0;
+  transition:
+    translate var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    overlay var(--motion-fast, 220ms) allow-discrete,
+    display var(--motion-fast, 220ms) allow-discrete;
+}
+
+.aaas-drawer[open] {
+  translate: 0 0;
+  opacity: 1;
+  transition-duration: var(--motion-default, 320ms);
+}
+
+@starting-style {
+  .aaas-drawer[open] { translate: 100% 0; opacity: 0; }
+}
+
+.aaas-drawer::backdrop {
+  background: rgba(0, 0, 0, 0);
+  transition:
+    background var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    overlay var(--motion-fast, 220ms) allow-discrete,
+    display var(--motion-fast, 220ms) allow-discrete;
+}
+
+.aaas-drawer[open]::backdrop { background: rgba(0, 0, 0, .3); }
+
+@starting-style {
+  .aaas-drawer[open]::backdrop { background: rgba(0, 0, 0, 0); }
+}
+
+.aaas-drawer-inner { display: flex; flex-direction: column; height: 100%; }
+
+.aaas-drawer-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-6) var(--sp-6) var(--sp-4);
+}
+
+.aaas-drawer-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.aaas-close {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 2.2rem;
+  line-height: 1;
+  padding: 0 0 0 var(--sp-3);
+  color: var(--color-text-primary);
+}
+
+.aaas-drawer-body { flex: 1; overflow-y: auto; padding: 0 var(--sp-6) var(--sp-6); }
+
+.aaas-drawer-foot {
+  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.aaas-lede {
+  margin: 0 0 var(--sp-5);
+  font-size: 1.5rem;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+}
+
+/* compact key figures - the drawer stays scannable, not a contract */
+.aaas-figures { border-top: 1px solid var(--color-border-default); margin: 0 0 var(--sp-4); }
+
+.aaas-figures div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.4rem;
+}
+
+.aaas-figures dt, .aaas-figures span:first-child { color: var(--color-text-primary); }
+.aaas-figures b { font-family: var(--font-body-bold); font-weight: 400; white-space: nowrap; }
+.aaas-figures small { display: block; font-size: 1.2rem; color: var(--color-text-secondary); margin-top: .2rem; }
+
+.aaas-points { margin: 0; padding: 0; list-style: none; }
+
+.aaas-points li {
+  position: relative;
+  padding-left: var(--sp-4);
+  margin-bottom: var(--sp-2);
+  font-size: 1.4rem;
+  line-height: 1.55;
+}
+
+.aaas-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .85em;
+  width: .5rem;
+  height: 1px;
+  background: var(--color-text-primary);
+}
+
+/* ---------- cart drawer: rent additions ---------- */
+
+/* The reassurance strip the shop injects renders untinted here with its icon
+   stacked above the text. Restore it to the band it is on the live drawer:
+   one row, icon beside the copy, on the success wash. */
+.cart-overlay .lu-0003-container {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  margin: 0 0 var(--sp-5);
+  background: var(--color-status-success-bg, var(--color-surface-muted));
+}
+
+.cart-overlay .lu-0003-container .lu-0003-icon { flex: none; width: 2.4rem; height: 2.4rem; }
+.cart-overlay .lu-0003-container .lu-0003-text { margin: 0; font-size: 1.3rem; line-height: 1.45; }
+
+.aaas-cart-mode { margin: 0 0 var(--sp-4); }
+
+.aaas-cart-mode .aaas-mode-switch { margin-bottom: 0; }
+
+.aaas-cart-figures { border-top: 1px solid var(--color-border-default); margin-bottom: var(--sp-3); }
+
+.aaas-cart-figures div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.3rem;
+}
+
+.aaas-cart-figures b { font-family: var(--font-body-bold); font-weight: 400; white-space: nowrap; }
+
+.aaas-cart-figures small {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-top: .2rem;
+}
+
+/* ---------- mixed-cart conflict ---------- */
+
+.aaas-cf { padding: var(--sp-4) 0 var(--sp-2); }
+.aaas-cf-lede { font-size: 1.4rem; line-height: 1.55; margin: 0 0 var(--sp-5); color: var(--color-text-primary); }
+
+.aaas-cf-work {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.aaas-cf-work:last-of-type { border-bottom: 1px solid var(--color-border-default); }
+.aaas-cf-work img { width: 5.6rem; height: auto; flex: none; }
+.aaas-cf-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
+.aaas-cf-meta b { font-family: var(--font-body-bold); font-weight: 400; font-size: 1.4rem; }
+.aaas-cf-meta span { font-size: 1.2rem; line-height: 1.35; color: var(--color-text-secondary); }
+
+.aaas-cf-tag {
+  flex: none;
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  text-align: right;
+  max-width: 9rem;
+  line-height: 1.35;
+}
+
+.aaas-cf-actions { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+/* ---------- mode switch (cart + checkout) ---------- */
+
+.aaas-mode { margin: 0 0 var(--sp-5); }
+
+.aaas-mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+
+/* Matches the PDP size-selector language: single hairline, no nested outline.
+   Scoped through .aaas-mode-switch so it outranks the checkout's own
+   `.spc-container aside button` reset, which would otherwise strip the border. */
+/* Proportioned off the shop's own size selector, which fits two lines into 40px
+   with 7px of padding. The previous 12px padding plus loose leading made these
+   59px, half again as tall as the control they sit beside. */
+.aaas-mode-switch .aaas-mode-btn {
+  padding: .6rem var(--sp-2);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-default);
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.1;
+  transition:
+    border-color var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-mode-switch .aaas-mode-btn:active { transform: scale(.98); }
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-mode-switch .aaas-mode-btn:hover { border-color: var(--color-border-strong); }
+}
+
+.aaas-mode-switch .aaas-mode-btn small {
+  display: block;
+  font-size: 1.2rem;
+  line-height: 1.15;
+  color: var(--color-text-secondary);
+  margin-top: .1rem;
+}
+
+.aaas-mode-switch .aaas-mode-btn[aria-pressed="true"] { border-color: var(--color-text-primary); }
+
+/* ---------- checkout ---------- */
+
+.aaas-rent-summary { margin-top: var(--sp-4); }
+
+.aaas-breakdown { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 1.4rem; }
+
+/* the cells inherit a 2.0 line-height from the checkout, which made every row
+   with a sub-label 79px tall; tightening the leading does more than the padding */
+.aaas-breakdown th,
+.aaas-breakdown td {
+  padding: var(--sp-2) 0;
+  line-height: 1.35;
+  text-align: left;
+  font-weight: 400;
+  border-bottom: 1px solid var(--color-border-default);
+  vertical-align: baseline;
+}
+
+.aaas-breakdown td { text-align: right; white-space: nowrap; }
+.aaas-breakdown .aaas-row-major th { font-family: var(--font-body-bold); }
+.aaas-breakdown .aaas-row-major td { font-family: var(--font-body-bold); }
+.aaas-breakdown .aaas-sub { display: block; font-size: 1.2rem; color: var(--color-text-secondary); margin-top: .2rem; }
+
+/* the commitment reads as prose, not as a checkbox in the fine print */
+.aaas-consent {
+  background: var(--color-surface-muted);
+  padding: var(--sp-5);
+  margin: var(--sp-5) 0;
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.aaas-consent h3 {
+  margin: 0 0 var(--sp-2);
+  font-family: var(--font-body-bold);
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.aaas-consent p { margin: 0 0 var(--sp-2); }
+.aaas-consent p:last-child { margin-bottom: 0; }
+.aaas-consent b { font-family: var(--font-body-bold); font-weight: 400; }
+
+/* ---------- checkout summary panel fixes ----------
+ * The checkout resets padding on elements inside the summary panel, which
+ * flattened the consent block to zero on all four sides and left the item
+ * flush against the totals above it. Both need to out-specify that reset. */
+
+#aaas-consent.aaas-consent { padding: var(--sp-5); }
+
+.spc-container aside .cart-items-container { padding-top: var(--sp-6); }
+
+/* .aaas-sub was only ever given display:block inside .aaas-breakdown, so the
+   monthly qualifier ran straight into the price as "€ 112,13im Monat" */
+.aaas-sub {
+  display: block;
+  font-size: 1.2rem;
+  line-height: 1.35;
+  color: var(--color-text-secondary);
+  margin-top: .3rem;
+}
+
+/* ---------- order success ---------- */
+
+.aaas-sx { max-width: 118rem; margin: 0 auto; padding: var(--sp-8) var(--sp-5) var(--sp-20); font-family: var(--font-body); }
+
+.aaas-sx-head { text-align: center; margin-bottom: var(--sp-8); }
+/* sentence case in the display face, per the V2 rule against all-caps headlines.
+   Tracking can go negative again now the letters are not capitals. */
+.aaas-sx-head h1 {
+  font-family: var(--font-display);
+  font-size: 3.6rem;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+  margin: 0 0 var(--sp-3);
+}
+.aaas-sx-head p { font-size: 1.5rem; line-height: 1.6; margin: 0; }
+
+.aaas-sx-panel { border: 1px solid var(--color-border-default); padding: var(--sp-6); margin-bottom: var(--sp-5); }
+.aaas-sx-panel h2 { font-family: var(--font-body-bold); font-size: 1.8rem; font-weight: 400; margin: 0 0 var(--sp-3); }
+.aaas-sx-panel p { font-size: 1.4rem; line-height: 1.6; margin: 0 0 var(--sp-3); }
+.aaas-sx-panel p:last-child { margin-bottom: 0; }
+.aaas-sx-panel a { color: var(--color-text-link); text-decoration: underline; text-underline-offset: .3rem; }
+
+.aaas-sx-row { display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-5); align-items: start; }
+.aaas-sx-survey { min-height: 24rem; }
+.aaas-sx-stack { display: flex; flex-direction: column; }
+
+.aaas-sx-figures .aaas-grid { margin-top: 0; }
+
+.aaas-sx-work-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.3rem;
+  color: var(--color-text-secondary);
+}
+.aaas-sx-work-head .aaas-label { margin: 0; }
+
+.aaas-sx-work-row { display: flex; align-items: center; gap: var(--sp-5); padding-top: var(--sp-4); }
+.aaas-sx-work-row img { width: 8rem; height: auto; flex: none; }
+.aaas-sx-work-row > div { flex: 1; }
+.aaas-sx-work-row b { font-family: var(--font-body-bold); font-weight: 400; font-size: 1.6rem; }
+
+/* The live page renders this as a rounded pill, but V2 reserves full rounding for
+   availability/status pills and keeps buttons sharp. Brand rule wins, as with the
+   all-caps headline: an outline secondary button at radius 0. */
+.aaas-pill {
+  display: inline-block;
+  border: 1px solid var(--color-text-primary);
+  background: var(--color-surface-page);
+  border-radius: 0;
+  padding: 1.4rem 2.4rem;
+  font-family: var(--font-body-bold);
+  font-size: 1.3rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+              transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-pill:active { transform: scale(.98); }
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-pill:hover { opacity: .7; }
+}
+
+@media (max-width: 860px) {
+  .aaas-sx-row { grid-template-columns: 1fr; }
+  .aaas-sx-head h1 { font-size: 2.2rem; }
+}
+
+/* ---------- account: rental overview ---------- */
+
+/* Rebuilt to match the real logged-in account: centred welcome, left sidebar,
+   bordered table and bordered info cards. */
+
+.aaas-acct { font-family: var(--font-body); color: var(--color-text-primary); }
+
+.aaas-acct-head { text-align: center; padding: var(--sp-8) var(--sp-5) var(--sp-6); }
+.aaas-acct-head h1 { font-family: var(--font-body); font-size: 3.2rem; font-weight: 400; margin: 0 0 var(--sp-2); }
+.aaas-acct-head p { font-size: 2.2rem; margin: 0; line-height: 1.35; }
+
+.aaas-acct-body {
+  max-width: 128rem;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-20);
+  border-top: 1px solid var(--color-border-default);
+  display: grid;
+  grid-template-columns: 24rem 1fr;
+  gap: var(--sp-8);
+}
+
+.aaas-acct-nav { display: flex; flex-direction: column; gap: var(--sp-1); }
+
+.aaas-acct-nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  font-size: 1.3rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.aaas-acct-nav a svg { width: 1.8rem; height: 1.8rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; }
+@media (hover: hover) and (pointer: fine) {
+  .aaas-acct-nav a:hover { opacity: .6; }
+}
+.aaas-acct-nav a[aria-current] { font-family: var(--font-body-bold); }
+
+.aaas-acct-main { min-width: 0; }
+
+.aaas-panel { border: 1px solid var(--color-border-default); margin-bottom: var(--sp-6); }
+.aaas-panel-inner { padding: var(--sp-5); }
+
+.aaas-card-head { display: flex; gap: var(--sp-5); align-items: flex-start; flex-wrap: wrap; }
+.aaas-card-head img { width: 9.2rem; height: auto; flex: none; }
+.aaas-card-title { font-family: var(--font-body-bold); font-size: 1.6rem; font-weight: 400; letter-spacing: .06em; margin: 0 0 var(--sp-1); }
+.aaas-meta { font-size: 1.3rem; color: var(--color-text-secondary); line-height: 1.7; }
+
+.aaas-progress { margin: var(--sp-6) 0 var(--sp-2); height: 2px; background: var(--color-border-default); position: relative; }
+.aaas-progress span { position: absolute; inset: 0 auto 0 0; background: var(--color-text-primary); }
+.aaas-progress-legend { display: flex; justify-content: space-between; font-size: 1.2rem; color: var(--color-text-secondary); }
+
+.aaas-grid { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin-top: var(--sp-6); }
+.aaas-stat-label { font-size: 1.1rem; letter-spacing: .1em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: .5rem; }
+.aaas-orders tbody tr { transition: background var(--motion-fast, 220ms) var(--motion-easing, ease-out); }
+.aaas-stat-value { font-family: var(--font-body-bold); font-size: 1.9rem; }
+
+/* mirrors the account's own orders table */
+.aaas-orders { width: 100%; border-collapse: collapse; border: 1px solid var(--color-border-default); font-size: 1.4rem; }
+.aaas-orders th, .aaas-orders td { text-align: left; padding: var(--sp-3) var(--sp-4); font-weight: 400; }
+.aaas-orders thead th {
+  font-size: 1.1rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border-default);
+}
+.aaas-orders tbody td { border-bottom: 1px solid var(--color-border-default); }
+.aaas-orders tbody tr:last-child td { border-bottom: 0; }
+.aaas-orders td:last-child, .aaas-orders th:last-child { text-align: right; }
+
+.aaas-options { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); }
+.aaas-option { border: 1px solid var(--color-border-default); padding: var(--sp-4); font-size: 1.35rem; line-height: 1.55; }
+.aaas-option h4 { margin: 0 0 var(--sp-1); font-family: var(--font-body-bold); font-weight: 400; font-size: 1.4rem; letter-spacing: .06em; }
+.aaas-option[data-locked] { color: var(--color-text-secondary); }
+
+@media (max-width: 860px) {
+  .aaas-acct-body { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .aaas-acct-head p { font-size: 1.8rem; }
+}
+
+/* ---------- checkout steps ---------- */
+
+.aaas-hidden-by-step { display: none !important; }
+
+/* ---------- live checkout structure ----------
+ * The live checkout collapses finished sections into labelled rows with an edit
+ * link, and lists payment methods as bordered rows carrying brand marks. */
+
+/* Express checkout, buy mode only. The button grounds are the payment providers'
+   own required colours, so they are literal values by necessity rather than
+   LUMAS tokens; likewise the small radius, which follows their button specs. */
+.aaas-express { margin: 0 0 var(--sp-5); }
+.aaas-express p { font-size: 1.5rem; line-height: 1.5; margin: 0 0 var(--sp-3); }
+
+.aaas-express-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
+
+.aaas-express-btn {
+  display: grid;
+  place-items: center;
+  height: 4.8rem;
+  padding: 0 var(--sp-3);
+  border: 0;
+  /* sharp, per the V2 button rule. The providers' own buttons are rounded, but
+     these are not the SDK buttons, so LUMAS consistency wins here. */
+  border-radius: 0;
+  cursor: pointer;
+  transition: opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+              transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+/* the sprite symbols are 60x40 badges, so hold that ratio rather than stretching
+   the box and leaving the mark stranded small in the middle */
+.aaas-express-btn svg { height: 2.4rem; width: auto; max-width: 100%; }
+.aaas-express-word {
+  font-family: var(--font-body-bold);
+  font-size: 1.7rem;
+  line-height: 2.4rem;
+  letter-spacing: 0;
+  color: #111;
+}
+.aaas-express-btn:active { transform: scale(.98); }
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-express-btn:hover { opacity: .88; }
+}
+
+.aaas-express-btn[data-brand="paypal"] { background: #ffc439; }
+.aaas-express-btn[data-brand="amazon-pay"] { background: #ffd814; }
+.aaas-express-btn[data-brand="apple-pay"] { background: #000; }
+/* the sprite marks are dark, so the one on a black ground needs inverting */
+.aaas-express-btn[data-brand="apple-pay"] svg { filter: invert(1); }
+
+@media (max-width: 760px) {
+  .aaas-express-row { grid-template-columns: 1fr; }
+}
+
+.aaas-corow {
+  display: grid;
+  grid-template-columns: 12rem 1fr auto;
+  gap: var(--sp-4);
+  align-items: start;
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+.aaas-corow-label { color: var(--color-text-secondary); }
+.aaas-corow-body em {
+  display: block;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  font-size: 1.35rem;
+  margin-top: .3rem;
+}
+
+.aaas-titlerow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); margin: var(--sp-5) 0 var(--sp-4); }
+.aaas-titlerow .aaas-stat-label { margin: 0; }
+.aaas-titlerow label { display: inline-flex; align-items: center; gap: .6rem; font-size: 1.5rem; }
+
+.aaas-payrows { border: 1px solid var(--color-border-default); margin: var(--sp-4) 0; }
+
+/* same override set the payment list needs: the checkout pins label height,
+   hides native radios, and paints label > span as its custom radio dot */
+.aaas-payrows label.aaas-payrow {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.aaas-payrows label.aaas-payrow:last-child { border-bottom: 0; }
+.aaas-payrows label.aaas-payrow::before,
+.aaas-payrows label.aaas-payrow::after { content: none !important; display: none !important; }
+
+.aaas-payrows label.aaas-payrow input[type="radio"] {
+  position: static;
+  appearance: auto;
+  -webkit-appearance: radio;
+  width: 1.6rem;
+  height: 1.6rem;
+  min-height: 0;
+  margin: 0;
+  opacity: 1;
+  accent-color: var(--color-text-primary);
+}
+
+.aaas-payrows .aaas-payrow-name {
+  flex: 1;
+  background: none !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+}
+
+/* the mark is an <svg> referencing the shop's sprite, sized to the row */
+.aaas-payrows svg.aaas-payrow-mark {
+  flex: none;
+  width: auto;
+  height: 2.6rem;
+  max-width: 7rem;
+  background: none !important;
+  border-radius: 0 !important;
+}
+
+.aaas-toggle {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: auto;
+  min-height: 0;
+  margin: var(--sp-3) 0;
+  padding: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.aaas-toggle::before, .aaas-toggle::after { content: none !important; display: none !important; }
+.aaas-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+
+.aaas-toggle-track {
+  flex: none;
+  width: 3.6rem;
+  height: 2rem;
+  border-radius: 1rem;
+  background: var(--color-border-strong);
+  position: relative;
+  transition: background var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-toggle-track::after {
+  content: "";
+  position: absolute;
+  top: .2rem;
+  left: .2rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-toggle input:checked + .aaas-toggle-track { background: var(--color-surface-inverse); }
+.aaas-toggle input:checked + .aaas-toggle-track::after { transform: translateX(1.6rem); }
+.aaas-toggle input:focus-visible + .aaas-toggle-track {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.aaas-legal { font-size: 1.3rem; line-height: 1.6; color: var(--color-text-secondary); margin: var(--sp-5) 0 0; }
+.aaas-legal a { color: var(--color-text-link); text-decoration: underline; text-underline-offset: .3rem; }
+
+.aaas-step-title {
+  font-family: var(--font-body);
+  font-size: 2.2rem;
+  font-weight: 400;
+  text-align: left;
+  margin: 0 0 var(--sp-4);
+}
+
+.aaas-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-4); }
+.aaas-form > .aaas-field:nth-child(3) { grid-column: 1 / -1; }
+
+/* label follows the input in the DOM (the checkout's own pattern), so flip it up */
+.aaas-field { display: flex; flex-direction: column-reverse; gap: .5rem; margin-bottom: var(--sp-4); }
+.aaas-field label {
+  font-size: 1.1rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.aaas-field input,
+.aaas-field select {
+  width: 100%;
+  padding: 1.4rem;
+  border: 1px solid var(--color-border-default);
+  background: var(--color-surface-page);
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+}
+.aaas-field input:focus-visible,
+.aaas-field select:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
+
+.aaas-pay-list { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-4) 0; }
+
+/* The checkout styles <label> as a fixed-height floating label and hides native
+   radios, which would squash these rows and overlap them. Scoped overrides undo
+   that for the payment list only. */
+.aaas-pay-list label.aaas-pay {
+  position: static;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--color-border-default);
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1.45;
+  color: var(--color-text-primary);
+  transition:
+    border-color var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    transform var(--motion-fast, 220ms) var(--motion-easing, ease-out);
+}
+
+.aaas-pay-list label.aaas-pay:active { transform: scale(.995); }
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-pay-list label.aaas-pay:hover { border-color: var(--color-border-strong); }
+}
+
+/* the checkout draws its own radio via label pseudo-elements; on a full-width
+   flex row those stretch into dark bars across the text, so switch them off */
+.aaas-pay-list label.aaas-pay::before,
+.aaas-pay-list label.aaas-pay::after { content: none !important; display: none !important; }
+
+.aaas-pay-list label.aaas-pay:has(input:checked) { border-color: var(--color-text-primary); }
+
+.aaas-pay-list label.aaas-pay input[type="radio"] {
+  position: static;
+  appearance: auto;
+  -webkit-appearance: radio;
+  width: 1.6rem;
+  height: 1.6rem;
+  min-height: 0;
+  margin: .2rem 0 0;
+  opacity: 1;
+  accent-color: var(--color-text-primary);
+}
+
+/* the checkout paints label > span as its custom radio dot (radial-gradient +
+   50% radius), which stretches into a bar on a full-width row; reset it here */
+.aaas-pay-list label.aaas-pay .aaas-pay-text {
+  display: block;
+  flex: 1;
+  width: auto;
+  height: auto;
+  background: none !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.aaas-pay-list label.aaas-pay b { font-family: var(--font-body-bold); font-weight: 400; }
+.aaas-pay-list label.aaas-pay small {
+  display: block;
+  font-size: 1.3rem;
+  color: var(--color-text-secondary);
+  margin-top: .3rem;
+}
+
+.aaas-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.aaas-actions .btn { margin-left: auto; }
+
+/* the shop's .btn paints the charcoal ground but leaves the label charcoal too
+   in this page's context, so the text has to be set to ivory explicitly */
+.aaas-actions a.btn,
+.aaas-actions button.btn { color: var(--color-text-inverse); }
+.aaas-actions a.btn { text-decoration: none; display: inline-block; }
+
+/* the success panel's CTA reads as part of the panel, not flushed to its edge */
+.aaas-sx-figures .aaas-actions { justify-content: flex-start; }
+.aaas-sx-figures .aaas-actions .btn { margin-left: 0; }
+
+.aaas-review {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+  border: 1px solid var(--color-border-default);
+  font-size: 1.45rem;
+  line-height: 1.6;
+}
+
+.aaas-confirm { max-width: 62rem; padding: var(--sp-6) 0 var(--sp-16); }
+.aaas-confirm h2 { font-family: var(--font-display); font-size: 3rem; font-weight: 400; margin: 0 0 var(--sp-3); }
+
+@media (max-width: 760px) {
+  .aaas-form { grid-template-columns: 1fr; }
+}
+
+/* ---------- prototype marker ---------- */
+
+/* the shop's own stack tops out around 161 (cart overlay), so 300 sits above it
+   without resorting to an arbitrary maximum */
+.aaas-flag-spec { display: inline-flex; gap: .4rem; margin-left: .8rem; }
+
+.aaas-flag-spec button {
+  font: inherit;
+  padding: .3rem .7rem;
+  border: 1px solid rgba(255, 255, 255, .35);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  letter-spacing: inherit;
+}
+
+.aaas-flag-spec button[aria-pressed="true"] {
+  background: var(--color-text-inverse);
+  color: var(--color-surface-inverse);
+  border-color: var(--color-text-inverse);
+}
+
+.aaas-flag-note { margin-left: .8rem; opacity: .7; text-transform: none; letter-spacing: 0; }
+
+.aaas-flag {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 300;
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body-bold);
+  font-size: 1.1rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: .9rem 1.2rem;
+}
+
+/* reduced motion keeps the fades that aid comprehension and drops the movement */
+@media (prefers-reduced-motion: reduce) {
+  .aaas-btn,
+  .aaas-mode-switch .aaas-mode-btn,
+  .aaas-pay-list label.aaas-pay,
+  .aaas-orders tbody tr { transition: none; }
+
+  .aaas-btn:active,
+  .aaas-mode-switch .aaas-mode-btn:active,
+  .aaas-pay-list label.aaas-pay:active { transform: none; }
+
+  .aaas-drawer,
+  .aaas-drawer[open] {
+    translate: 0 0;
+    transition:
+      opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+      overlay var(--motion-fast, 220ms) allow-discrete,
+      display var(--motion-fast, 220ms) allow-discrete;
+  }
+
+  @starting-style {
+    .aaas-drawer[open] { translate: 0 0; opacity: 0; }
+  }
+}
+
+/* On mobile the conditions panel is a bottom sheet, not a side sheet: it enters
+   from the edge it is anchored to, and sizes to its content instead of standing
+   full height with dead space under the copy. */
+@media (max-width: 760px) {
+  .aaas-drawer {
+    width: 100vw;
+    max-width: 100vw;
+    height: auto;
+    max-height: 88vh;
+    margin: auto 0 0;
+    translate: 0 100%;
+  }
+
+  .aaas-drawer[open] { translate: 0 0; }
+
+  @starting-style {
+    .aaas-drawer[open] { translate: 0 100%; }
+  }
+
+  .aaas-drawer-inner { height: auto; max-height: 88vh; }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+  .aaas-drawer,
+  .aaas-drawer[open] { translate: 0 0; }
+
+  @starting-style {
+    .aaas-drawer[open] { translate: 0 0; }
+  }
+}
+
+/* ---------- mobile refinements ----------
+ * Measured at 390px: no surface overflows, but the checkout's summary rows were
+ * squeezing the address into ~127px of a 120/127/49 three-column split, and two
+ * controls sat below a comfortable touch size. */
+@media (max-width: 760px) {
+
+  /* label above, value and edit side by side, so the address gets full width */
+  .aaas-corow {
+    grid-template-columns: 1fr auto;
+    gap: var(--sp-1) var(--sp-3);
+    padding: var(--sp-5) 0;
+  }
+
+  .aaas-corow-label {
+    grid-column: 1 / -1;
+    font-size: 1.2rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* 44px minimum touch targets */
+  .aaas-close {
+    display: grid;
+    place-items: center;
+    min-width: 4.4rem;
+    min-height: 4.4rem;
+    padding: 0;
+    margin-right: calc(var(--sp-3) * -1);
+  }
+
+  .aaas-corow .aaas-link,
+  .aaas-actions .aaas-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 4.4rem;
+  }
+
+  /* the compact desktop height sits just under a comfortable touch target */
+  .aaas-mode-switch .aaas-mode-btn { min-height: 4.4rem; }
+
+  /* the display headline was left at the size the all-caps version needed */
+  .aaas-sx-head h1 { font-size: 2.8rem; }
+
+  /* keep the prototype marker clear of the primary action */
+  .aaas-flag { font-size: 1rem; padding: .6rem .9rem; }
+}

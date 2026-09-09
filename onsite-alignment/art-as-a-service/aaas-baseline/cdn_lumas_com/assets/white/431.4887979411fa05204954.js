@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkyves_zed=self.webpackChunkyves_zed||[]).push([[431],{70431:function(e,n,t){t.r(n);var a=t(74692);n.default={init(){a(".btn.save-cart").on("click",function(){var e=a(this).data("link"),n=prompt(a(this).data("prompt"),"");n.length>0&&(window.location.href=e+"?name="+encodeURIComponent(n))})}}}}]);
