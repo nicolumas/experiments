@@ -169,27 +169,27 @@
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
       // ── Tuesday 8 September ─────────────────────────────
-      { s: "s0908", feature: true, title: "Slim Aarons — The light table", href: "slim-aarons-light-table/", desc: "A curation page for the nine 34 × 34 cm Slim Aarons archive slides (SAA114 to SAA122), adapting the Petites & Darlings Wall Curator to a four-rung price ladder. The works are not photographs but Slim’s original 35 mm slides, mounts and handwriting intact, so the surface is the light table a picture editor edited a take on: click a slide to keep it, and one large price-per-slide figure answers at 3, 6 and 9. Working the tiers through every quantity found two dead rungs — seven slides cost €1,393 and eight cost €1,592 against €1,341 for all nine — so at eight the primary action becomes ‘Add the ninth and pay €251 less’. Carries a control arm (press V) and a rule-off state, real product data (Lambda colour photograph, estate stamp, acrylic glass mount), a quick view that transcribes each mount, and a hang preview above a real credenza." },
+      { s: "s0908", feature: true, title: "Slim Aarons — The light table", href: "slim-aarons-light-table/", desc: "Curate the nine Slim Aarons archive slides on a light table, priced on a four-rung ladder." },
 
-      { s: "s0908", feature: true, title: "The campaign note under Add to cart", href: "pdp-campaign-note/", desc: "The block that appears beneath the add-to-cart button while a sale is running, made lighter. Gone are the charcoal-100 card, the 8px radius, the nested white pill and the two icons that are not in the shop sprite. What remains is an ivory note on surface/raised carrying the campaign name as an eyebrow, the offer line in Utile Display, and the confirmation on a white inset panel, with no bold anywhere: size and tone do the work instead. Every class and token value comes from the brandshowcase, so nothing new enters the design system: .headline-block, .like-h4, radius-xs, the sp ladder, and the icon(check) CSS mask that .flashes .success already uses, which meant no icon package and no sprite change. Building it turned up two copy problems in the live block, an exclamation mark and the blacklisted word \u201cdiscount\u201d, and one structural one: the price badge directly above the button already states the percentage, which the brandbook allows only once per asset. Shown against today\u2019s block at desktop and 390px, alongside the two-line, single-line and wrapping shapes the CMS can produce." },
+      { s: "s0908", feature: true, title: "The campaign note under Add to cart", href: "pdp-campaign-note/", desc: "The sale block beneath add-to-cart, rebuilt lighter from brandshowcase tokens only." },
 
       // ── Tuesday 1 September ────────────────────────────────────
-      { s: "s0901", feature: true, title: "Book a consultation", href: "book-a-consultation/", desc: "A rebrand of a Figma Make prototype into LUMAS V2 — the gallery-consultation contact card, restyled in Charcoal/Ivory/Bone with the real booking-modal mechanic (postcode to nearest of the nineteen galleries)." },
-      { s: "s0901", feature: true, title: "Checkout — Shopify Style", href: "checkout-shopify/", desc: "A Figma reference of a Shopify-style single-page checkout, rebuilt in LUMAS V2 — Charcoal/Ivory/Bone, Utile Display headings, and the interactions the reference only screenshotted: a working quantity stepper, discount codes, a saved-address picker, a real billing-address toggle, and email-recognition login in place of a tab strip." },
+      { s: "s0901", feature: true, title: "Book a consultation", href: "book-a-consultation/", desc: "The gallery-consultation card rebranded to V2, with postcode routing to the nearest gallery." },
+      { s: "s0901", feature: true, title: "Checkout — Shopify Style", href: "checkout-shopify/", desc: "A Shopify-style single-page checkout rebuilt in V2, fully clickable." },
 
       // ── Monday 31 August ───────────────────────────────────────
-      { s: "s0831", feature: true, title: "PDP — Availability pill and consultant contact", href: "pdp-availability-pill/index.html?size=s80&frame=slim&gallery=kudamm", desc: "Second PDP iteration: the local-inventory module, the reserve button and the mobile banner are gone, replaced by one compact green availability pill under the price whose pop-up carries the gallery address, hours, directions and a route to an art consultant by email, WhatsApp or phone." },
+      { s: "s0831", feature: true, title: "PDP — Availability pill and consultant contact", href: "pdp-availability-pill/index.html?size=s80&frame=slim&gallery=kudamm", desc: "One green availability pill under the price, carrying gallery details and consultant contact." },
       { s: "s0831", cluster: "Availability pill", title: "Pill shown", href: "pdp-availability-pill/index.html?size=s80&frame=slim&gallery=kudamm" },
       { s: "s0831", cluster: "Availability pill", title: "Consultant pop-up", href: "pdp-availability-pill/index.html?size=s80&frame=slim&gallery=kudamm&info=1" },
       { s: "s0831", cluster: "Availability pill", title: "No pill, not in this gallery", href: "pdp-availability-pill/index.html?size=s120&frame=basel&gallery=kudamm" },
       { s: "s0831", cluster: "Availability pill", title: "Mobile, 390 \u00d7 844", href: "pdp-availability-pill/mobile.html" },
-      { s: "s0831", feature: true, title: "Pillow No. 1 — Art Drop", href: "pillow-no-1-art-drop/", desc: "The three-day introductory-price drop for Rafael Neff’s brass sculpture “Pillow No. 1”, a unique edition of 999, driven end to end by one PHASE constant." },
+      { s: "s0831", feature: true, title: "Pillow No. 1 — Art Drop", href: "pillow-no-1-art-drop/", desc: "The three-day introductory-price drop for Rafael Neff’s brass sculpture Pillow No. 1." },
       { s: "s0831", cluster: "Pillow No. 1 — Art Drop", title: "Reveal", href: "pillow-no-1-art-drop/?phase=REVEAL" },
       { s: "s0831", cluster: "Pillow No. 1 — Art Drop", title: "Early Access", href: "pillow-no-1-art-drop/?phase=EARLY_ACCESS" },
       { s: "s0831", cluster: "Pillow No. 1 — Art Drop", title: "Public sale", href: "pillow-no-1-art-drop/?phase=PUBLIC" },
       { s: "s0831", cluster: "Pillow No. 1 — Art Drop", title: "After the introductory price", href: "pillow-no-1-art-drop/?phase=ENDED" },
       { s: "s0831", cluster: "Pillow No. 1 — Art Drop", title: "English review copy", href: "pillow-no-1-art-drop/en.html?phase=PUBLIC" },
-      { s: "s0831", feature: true, title: "PDP — Gallery availability per configuration", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm", desc: "Local Inventory Ads, PDP." },
+      { s: "s0831", feature: true, title: "PDP — Gallery availability per configuration", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm", desc: "Gallery availability shown per configuration on the PDP." },
       { s: "s0831", cluster: "Gallery availability", title: "In stock at your gallery", href: "pdp-gallery-availability/index.html?size=s80&frame=basel&gallery=kudamm" },
       { s: "s0831", cluster: "Gallery availability", title: "Last one", href: "pdp-gallery-availability/index.html?size=s80&frame=slim&gallery=kudamm" },
       { s: "s0831", cluster: "Gallery availability", title: "Unavailable in Berlin", href: "pdp-gallery-availability/index.html?size=s120&frame=basel&gallery=kudamm" },
@@ -200,11 +200,11 @@
       // ── Thursday 27 August ─────────────────────────────────────
       { s: "s0827", feature: true, title: "The moment art becomes yours",
         href: "meta-moment-router/",
-        desc: "A META decision router built on the ad's own film, sending the arrival to one of three doors: see it on your wall, book a gallery consultation, or start with the bestsellers." },
-      { s: "s0827", feature: true, title: "Find Art Your Way", href: "find-art-your-way/", desc: "The six discovery tools (Art Finder, Art Liker, room upload, similarity search, Art Cloud, art consultation) given a page of their own, each one shown working on real catalogue data rather than described in five words."},
+        desc: "A META decision router sending the arrival to a wall preview, a consultation, or the bestsellers." },
+      { s: "s0827", feature: true, title: "Find Art Your Way", href: "find-art-your-way/", desc: "The six discovery tools given a page of their own, each working on real catalogue data."},
       { s: "s0827", feature: true, title: "Buy art online with confidence",
         href: "buy-art-online/",
-        desc: "A reassurance-led SEO landing page for “buy art online” intent, routing search arrivals to the limited-edition collection instead of hard-selling. It answers a first-time online buyer’s hesitations in order: see it in a gallery, talk to a consultant, gallery-standard framing by hand, 30-day returns, then hands them to the works our curators are showing now. Real LUMAS editions shown bare at true ratio (no mat, no crop), a guided room-and-feeling chip module, and reserved room-view slots through the page for in-situ renders to follow. Responsive at 375 and 1280." },
+        desc: "A reassurance-led SEO landing page for “buy art online” intent, routing arrivals to the limited editions." },
 
       // ── Wednesday 26 August ────────────────────────────────────
       { s: "s0826", feature: true, title: "Homepage, six new sections",
@@ -225,7 +225,7 @@
       // ── Tuesday 25 August ──────────────────────────────────────
       { s: "s0825", feature: true, title: "Meta ads → landing pages: call and answer",
         href: "meta-landing-pages/",
-        desc: "Five destinations for the Meta ads that were sending their best traffic to a homepage, each one continuing the film rather than restating it. Twelve named interiors carry the proof: a Kyoto sukiya house, a Haussmann apartment in Paris, Cape Town De Waterkant, a converted Berlin works, each with a real edition at a real size and the reason it hangs there. Museum format climbs from sixty centimetres to two hundred and sixty, growing on screen as you read. Every page ends where the objection actually is: an Art Consultant, free and without obligation, replying within two working days, with the fifteen real faces behind it. Real works, real prices, live links, and the shop's own navigation throughout." },
+        desc: "Five destinations for the Meta ads, each continuing the film rather than restating it." },
       { s: "s0825", cluster: "Meta ads → landing pages", title: "Art in the room", href: "meta-landing-pages/art-in-the-room.html" },
       { s: "s0825", cluster: "Meta ads → landing pages", title: "The gallery, always open", href: "meta-landing-pages/gallery.html" },
       { s: "s0825", cluster: "Meta ads → landing pages", title: "Museum format", href: "meta-landing-pages/museum-format.html" },
@@ -235,29 +235,29 @@
       // ── Thursday 20 August ─────────────────────────────────────
       { s: "s0820", feature: true, title: "Inspired No. 45 — the magazine as a story",
         href: "inspired-no-45/",
-        desc: "The autumn magalog rebuilt as one scroll: the cover pulls back from a detail to the whole work, a studio turns into the edition made in it, two hundred years of photography flood the frame technique by technique, and a lenticular edition turns as you pass it. Black, ivory and bone alternate to carry the rhythm." },
+        desc: "The autumn magalog rebuilt as one continuous scroll." },
       { s: "s0820", cluster: "Inspired No. 45", title: "The story", href: "inspired-no-45/" },
       { s: "s0820", cluster: "Inspired No. 45", title: "The same issue as a room", href: "inspired-no-45/cloud.html" },
 
       // ── Wednesday 19 August ────────────────────────────────────
-      { s: "s0819", feature: true, title: "PDP Restructure — Minasena", href: "pdp-restructure/", desc: "The artwork PDP rebuilt to the restructure brief: decision above the fold, dropdown finishing with progressive frame colours, sticky add-to-cart, and one In-Größe-sehen entry for AR / 3D / zoom — real product, real prices, real imagery." },
-      { s: "s0819", feature: true, title: "Events — the page and the system behind it", href: "galleries/events.html", desc: "The /events/ page, which is currently an empty state, and the content model it needs. Today's practice is one tile per gallery, so six events become twenty-nine tiles carrying the same description over and over and five different link labels for the same action; the control arm renders exactly that. Here a single Occurrence object joins an event to a gallery, and the action is simply the gallery name as a link. The layout that survived is a grid rather than full-width rows: a row can only carry so much content, so at 1920 a full-width row is structurally mostly empty. The largest event leads at full width with the photograph beside the copy, because eighteen locations need three real columns, and the five smaller events sit in a grid beneath it. One rule shapes the location list, and it is about the event rather than its size: same dates give one line of links, differing dates give one column per evening, so Golden Hour gets three columns because it runs on three evenings. Frankfurt Airport is excluded by a can-host flag, since it sits airside in the non-Schengen part of Terminal 3, which is why \"all galleries\" is never a literal string. Registration has no button; the phrase carries the link. Real LUMAS event photography, verified across eighteen widths from 360 to 2560, and one finding worth escalating: the V2 text/tertiary token measures 3.3:1 on white and cannot legally carry small copy." },
+      { s: "s0819", feature: true, title: "PDP Restructure — Minasena", href: "pdp-restructure/", desc: "The artwork PDP rebuilt to the restructure brief, with the decision above the fold." },
+      { s: "s0819", feature: true, title: "Events — the page and the system behind it", href: "galleries/events.html", desc: "The empty /events/ page rebuilt on one occurrence model: one card, three states." },
       { s: "s0819", cluster: "Events", title: "Events page", href: "galleries/events.html" },
       { s: "s0819", cluster: "Events", title: "Control — one tile per gallery", href: "galleries/events.html?v=control" },
       { s: "s0819", cluster: "Events", title: "Gallery page with the events strip", href: "galleries/events.html#/gallery/hamburg" },
-      { s: "s0819", title: "Two Hundred Years of Light", href: "two-hundred-years-of-light/", desc: "2,184 in-stock photographs hang suspended in a dark room at the depth of the year they were made, and you drift forward through them from 1918 to today." },
-      { s: "s0819", feature: true, title: "Our Editions — Overview", href: "our-editions/", desc: "The /unsere-editionen/ overview regrouped by ordering axis, so each group answers the question people arrive with instead of describing mood."},
-      { s: "s0819", feature: true, title: "Art Advisory & Trade", href: "art-advisory/", desc: "Two pages that make LUMAS’s human services discoverable: personal art advisory led by named consultants, and a B2B trade hub routing to four sector pages." },
+      { s: "s0819", title: "Two Hundred Years of Light", href: "two-hundred-years-of-light/", desc: "Drift through 2,184 in-stock photographs, each suspended at the depth of its year." },
+      { s: "s0819", feature: true, title: "Our Editions — Overview", href: "our-editions/", desc: "The editions overview regrouped by ordering axis instead of mood."},
+      { s: "s0819", feature: true, title: "Art Advisory & Trade", href: "art-advisory/", desc: "Two pages making the personal advisory and B2B trade services discoverable." },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Personal art advisory", href: "art-advisory/advisory.html" },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Trade & business — hub", href: "art-advisory/trade.html" },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Hotels & hospitality", href: "art-advisory/trade-hotels.html" },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Restaurants & bars", href: "art-advisory/trade-restaurants.html" },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Interior designers & architects", href: "art-advisory/trade-interior.html" },
       { s: "s0819", cluster: "Art Advisory & Trade", title: "Offices & workplace", href: "art-advisory/trade-offices.html" },
-      { s: "s0819", feature: true, title: "Local Inventory Ads — What we need to build", href: "local-inventory-ads/what-we-need-to-build.html", desc: "Google’s local inventory ad requirements turned into a build brief, with the decisions already taken, rebuilt from the deck on the V2 system." },
+      { s: "s0819", feature: true, title: "Local Inventory Ads — What we need to build", href: "local-inventory-ads/what-we-need-to-build.html", desc: "Google’s local inventory ad requirements turned into a build brief." },
 
       // ── Saturday 15 August ─────────────────────────────────────
-      { s: "s0815", feature: true, title: "Galleries — Overview & 19 detail pages", href: "galleries/", desc: "The full LUMAS gallery network rebuilt from scratch: an overview carousel plus nineteen detail pages on real per-gallery data." },
+      { s: "s0815", feature: true, title: "Galleries — Overview & 19 detail pages", href: "galleries/", desc: "An overview carousel plus nineteen detail pages on real per-gallery data." },
       { s: "s0815", cluster: "Gallery pages", title: "Galleries — Overview",         href: "galleries/index.html" },
       { s: "s0815", cluster: "Gallery pages", title: "Berlin Mitte",                  href: "galleries/berlin-mitte.html" },
       { s: "s0815", cluster: "Gallery pages", title: "Berlin Kurfürstendamm",         href: "galleries/berlin-kudamm.html" },
@@ -280,24 +280,24 @@
       { s: "s0815", cluster: "Gallery pages", title: "Miami Beach",                   href: "galleries/miami.html" },
 
       // ── Wednesday 5 August ─────────────────────────────────────
-      { s: "s0803", feature: true, title: "Baroque Pools II — Art Drop", href: "baroque-pools-ii-art-drop/", desc: "The three-day drop for Tomislav Marcijuš’s “Baroque Pools II”, limited to 100 and driven end to end by one PHASE constant." },
-      { s: "s0803", feature: true, title: "The Commission", href: "the-commission/", desc: "Sell walls, not pictures: the customer gives one wall, and a named consultant returns a priced arrangement as a single commission." },
-      { s: "s0803", feature: true, title: "Cart Overlay — V2", href: "cart-overlay/", desc: "The cart overlay converted to the V2 brand system, three questions with two options each, every frame live at a real device viewport." },
-      { s: "s0803", feature: true, title: "Art Cloud · Desktop", href: "art-cloud-desktop/", desc: "The Art Cloud adapted for desktop, with a live switcher of mouse-movement styles to test with stakeholders." },
-      { s: "s0803", feature: true, title: "Local Inventory Ads — Alternative PDP", href: "local-inventory-ads/", desc: "The Variant B PDP for the local inventory ads test, with a local-availability group above a single reserve CTA, the gallery lead form, and a copyable A/B spec." },
-      { s: "s0803", feature: true, title: "Contact", href: "contact/", desc: "The contact page reworked contact-first, leading with WhatsApp, phone, live chat and email." },
-      { s: "s0803", feature: true, title: "PDP · Edition USP & Demand Signal", href: "pdp-edition-urgency/", desc: "The Garden of Life buy box with four treatments for the hand-signed edition line and four quieter demand signals." },
+      { s: "s0803", feature: true, title: "Baroque Pools II — Art Drop", href: "baroque-pools-ii-art-drop/", desc: "The three-day drop for Tomislav Marcijuš’s Baroque Pools II, limited to 100." },
+      { s: "s0803", feature: true, title: "The Commission", href: "the-commission/", desc: "One wall in, a priced arrangement back from a named consultant." },
+      { s: "s0803", feature: true, title: "Cart Overlay — V2", href: "cart-overlay/", desc: "The cart overlay converted to the V2 brand system." },
+      { s: "s0803", feature: true, title: "Art Cloud · Desktop", href: "art-cloud-desktop/", desc: "The Art Cloud adapted for desktop, with a live switcher of mouse-movement styles." },
+      { s: "s0803", feature: true, title: "Local Inventory Ads — Alternative PDP", href: "local-inventory-ads/", desc: "The Variant B PDP for the local inventory ads test, with a single reserve CTA." },
+      { s: "s0803", feature: true, title: "Contact", href: "contact/", desc: "The contact page reworked contact-first." },
+      { s: "s0803", feature: true, title: "PDP · Edition USP & Demand Signal", href: "pdp-edition-urgency/", desc: "The Garden of Life buy box with four hand-signed treatments and four demand signals." },
 
       // ── Tuesday 28 July — next session ─────────────────────────
-      { s: "s0728", feature: true, title: "Alice — Art Drop", href: "alice-art-drop/", desc: "The 72-hour drop for Carol Muthiga-Oyekunle’s “Alice”, limited to 300 and driven by one PHASE constant." },
+      { s: "s0728", feature: true, title: "Alice — Art Drop", href: "alice-art-drop/", desc: "The 72-hour drop for Carol Muthiga-Oyekunle’s Alice, limited to 300." },
 
       // ── Friday 24 July ─────────────────────────────────────────
-      { s: "s0724", feature: true, title: "Announcement Banners", href: "announcement-banners/", desc: "Four rotating announcement-bar treatments across two promos, each shown as a full-width desktop bar and inside a phone frame." },
+      { s: "s0724", feature: true, title: "Announcement Banners", href: "announcement-banners/", desc: "Four rotating announcement-bar treatments across two promos." },
 
       // ── Thursday 23 July ───────────────────────────────────────
-      { s: "s0723", feature: true, title: "Size Guide", href: "size-guide/", desc: "Room-by-room hanging guidance with to-scale line diagrams, interleaved with bestseller carousels ranked by what sells in Germany." },
-      { s: "s0723", feature: true, title: "Art Cloud · Mobile", href: "art-cloud/", desc: "The desktop-only Art Cloud reimagined for touch, re-clustering the whole cloud around any work you tap." },
-      { s: "s0723", feature: true, title: "Colour Guide", href: "color-guide/", desc: "An editorial choose-art-by-colour landing page with seven carousels drawn from live bestseller data." },
+      { s: "s0723", feature: true, title: "Size Guide", href: "size-guide/", desc: "Room-by-room hanging guidance with to-scale diagrams and bestseller carousels." },
+      { s: "s0723", feature: true, title: "Art Cloud · Mobile", href: "art-cloud/", desc: "The desktop-only Art Cloud reimagined for touch." },
+      { s: "s0723", feature: true, title: "Colour Guide", href: "color-guide/", desc: "An editorial choose-art-by-colour page built on live bestseller data." },
       { s: "s0803", cluster: "Cart Overlay — V2", title: "Recommended · DE + US", href: "cart-overlay/recommended.html" },
       { s: "s0803", cluster: "Cart Overlay — V2", title: "Total disclosure · A + B", href: "cart-overlay/total-disclosure.html" },
       { s: "s0803", cluster: "Cart Overlay — V2", title: "Option 02 across real phone viewports", href: "cart-overlay/viewports.html" },
@@ -309,21 +309,21 @@
       { s: "s0723", cluster: "Figma files", title: "PDP · Share option", href: "https://www.figma.com/design/Uefupx4GD78AliUOUyJxKP/Share-Button?node-id=0-1" },
 
       // ── Monday 13 July (9 July merged in) ──────────────────────
-      { s: "s0713", title: "This Day on Earth", href: "this-day-on-earth/", desc: "Drift through 170 years of photography, suspended in the dark, with 2,443 in-stock works placed at the year they were made." },
-      { s: "s0713", title: "The Unwrapping", href: "the-unwrapping/", desc: "The moment art becomes yours — unbox the Winter Edition drop, unlock a gift card, or compose a piece for someone." },
-      { s: "s0713", title: "Yours to Choose", href: "yours-to-choose/", desc: "Give art without guessing their taste — describe someone you love, a private collection is composed, and they choose the one that becomes theirs." },
-      { s: "s0713", title: "A Gift for You", href: "gift-recipient/", desc: "The recipient’s side of an art gift — a notification email opens into a dark, snow-lit reveal, where they choose works fully covered by a gift whose value is never shown." },
-      { s: "s0713", title: "Two Yeses", href: "two-yeses/lumas-two-yeses-flow.html", desc: "Deciding on art together: seal three works, hand the phone over, and both commit blind." },
+      { s: "s0713", title: "This Day on Earth", href: "this-day-on-earth/", desc: "2,443 in-stock works suspended in the dark at the year they were made." },
+      { s: "s0713", title: "The Unwrapping", href: "the-unwrapping/", desc: "The moment art becomes yours, across three Christmas thresholds." },
+      { s: "s0713", title: "Yours to Choose", href: "yours-to-choose/", desc: "Describe someone you love, and they choose the work that becomes theirs." },
+      { s: "s0713", title: "A Gift for You", href: "gift-recipient/", desc: "The recipient’s side of an art gift, where the value is never shown." },
+      { s: "s0713", title: "Two Yeses", href: "two-yeses/lumas-two-yeses-flow.html", desc: "Seal three works, hand the phone over, and both commit blind." },
       { s: "s0713", title: "Two Yeses · flow overview", href: "two-yeses/lumas-two-yeses-overview.html", desc: "Every screen of the Two Yeses flow, laid out and annotated." },
-      { s: "s0713", title: "PDP Controls", href: "pdp-controls/", desc: "UX audit of the artwork PDP’s image controls — three live concepts (minimal, unified, premium), desktop + mobile, with an annotated interactive comparison." },
-      { s: "s0713", title: "Pop-Ups (V2)", href: "pop-ups/", desc: "Seven storefront pop-ups rebuilt in the V2 brand system, desktop dialogs and mobile bottom sheets." },
-      { s: "s0713", title: "Homepage A/B Pre-Screen", href: "homepage-ab-prescreen/", desc: "Simulated persona-panel pre-screen of four mobile homepage variants (DE), a prediction to prioritise real tests rather than proof of uplift." },
+      { s: "s0713", title: "PDP Controls", href: "pdp-controls/", desc: "UX audit of the PDP image controls, with three live concepts compared." },
+      { s: "s0713", title: "Pop-Ups (V2)", href: "pop-ups/", desc: "Seven storefront pop-ups rebuilt in the V2 brand system." },
+      { s: "s0713", title: "Homepage A/B Pre-Screen", href: "homepage-ab-prescreen/", desc: "A simulated persona-panel pre-screen of four mobile homepage variants, a prediction rather than proof." },
 
       // ── Thursday 25 June ───────────────────────────────────────
       { s: "s0625", title: "The Collector Relationship", href: "collector-relationship/prototype/deck.html", desc: "Recurring collector revenue from the customers we already have." },
-      { s: "s0625", title: "How do you want to feel?", href: "feel/", desc: "Choose how you want to feel; walk a mood, and the works you love gather into your wall." },
-      { s: "s0625", title: "Lass uns spielen", href: "hang-or-pass/", desc: "Swipe-to-discover art game — real feed-driven recommendations, save to your wishlist." },
-      { s: "s0625", title: "The Exhibition", href: "exhibition/", desc: "A curated show, walked wall by wall — with voice-over, and a single move to secure the whole exhibition." },
+      { s: "s0625", title: "How do you want to feel?", href: "feel/", desc: "Walk a mood, and the works you love gather into your wall." },
+      { s: "s0625", title: "Lass uns spielen", href: "hang-or-pass/", desc: "A swipe-to-discover art game on real feed data." },
+      { s: "s0625", title: "The Exhibition", href: "exhibition/", desc: "A curated show walked wall by wall, with one move to secure it whole." },
       { s: "s0625", cluster: "PDP artist variations", title: "Serene Garden", href: "private-view/serene-garden.html" },
       { s: "s0625", cluster: "PDP artist variations", title: "Long Shadow",   href: "private-view/long-shadow.html" },
       { s: "s0625", cluster: "PDP artist variations", title: "Aset Journey",  href: "private-view/aset-journey-concise.html" },
