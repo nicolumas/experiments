@@ -16,6 +16,11 @@
   var PASS = 'lumas2026';
   var KEY  = 'oa-unlocked';
 
+  // Temporary open-access window (10 minutes, set 2026-09-09 10:05 CEST).
+  // While Date.now() < BYPASS_UNTIL the gate is skipped for everyone.
+  var BYPASS_UNTIL = 1788941708204;
+  if (Date.now() < BYPASS_UNTIL) return;
+
   try { if (sessionStorage.getItem(KEY) === '1') return; } catch (e) { return; }
 
   var hide = document.createElement('style');
