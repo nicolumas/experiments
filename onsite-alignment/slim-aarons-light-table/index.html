@@ -1366,7 +1366,7 @@ img{display:block;max-width:100%;height:auto}
             </div>
             <div class="lt-wall__cap">
               <p class="lt-note" id="wallDims">&nbsp;</p>
-              <div class="lt-wall__hint">
+              <div class="lt-wall__hint" id="wallHint">
                 <p class="lt-note">Drag to arrange. Arrow keys nudge.</p>
                 <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
               </div>
@@ -1874,6 +1874,11 @@ img{display:block;max-width:100%;height:auto}
   /* Positions are held as percentages of the wall, per slide, so an arrangement
      survives adding and removing works and any resize of the photograph. */
   var pos = {};
+  /* Until the visitor moves something, the wall re-flows to the tidy grid on
+     every change. Keeping stale positions while later slides take slots from a
+     new grid was leaving works on top of each other. Once they arrange it
+     themselves, their layout is preserved and only new slides get a slot. */
+  var arranged = false;
 
   /* the hangable plane: clear of the ceiling line and above the credenza */
   var PLANE = { top: 10, bottom: 66, left: 5, right: 95 };
@@ -1913,12 +1918,21 @@ img{display:block;max-width:100%;height:auto}
 
   function renderWall(n){
     var sec = $("wallSec");
-    sec.hidden = (n < 3 || variant === "control");
+    sec.hidden = (variant === "control");
     if (sec.hidden){
       hang.querySelectorAll(".lt-hang__art").forEach(function(el){ el.remove(); });
       $("wallDims").innerHTML = "&nbsp;";
       return;
     }
+    /* An empty wall is the invitation. Nothing to drag yet, so the arranging
+       controls stand down rather than offering an action that does nothing. */
+    if (n === 0){
+      hang.querySelectorAll(".lt-hang__art").forEach(function(el){ el.remove(); });
+      $("wallDims").textContent = "Choose a slide to hang it here.";
+      $("wallHint").hidden = true;
+      return;
+    }
+    $("wallHint").hidden = false;
     syncWall();
   }
 
@@ -1929,7 +1943,7 @@ img{display:block;max-width:100%;height:auto}
     var t = tileSize();
 
     kept.forEach(function(code, i){
-      if (!pos[code] && slots[i]) pos[code] = slots[i];
+      if ((!arranged || !pos[code]) && slots[i]) pos[code] = slots[i];
       if (hang.querySelector('[data-code="' + code + '"]')) return;
       var s = SLIDES.find(function(x){ return x.code === code; });
       var b = document.createElement("button");
@@ -2008,7 +2022,7 @@ img{display:block;max-width:100%;height:auto}
     if (!drag) return;
     drag.el.classList.remove("is-dragging");
     hideGuides();
-    if (drag.moved) track("wall_arrange", { item_id: drag.code, selected: kept.length });
+    if (drag.moved){ arranged = true; track("wall_arrange", { item_id: drag.code, selected: kept.length }); }
     drag = null;
   }
 
@@ -2050,6 +2064,7 @@ img{display:block;max-width:100%;height:auto}
     var t = tileSize(); if (!t) return;
     e.preventDefault();
     var code = e.currentTarget.dataset.code;
+    arranged = true;
     var step = e.shiftKey ? 3 : 0.6;
     var p = clampPos({ x: pos[code].x + d[0] * step,
                        y: pos[code].y + d[1] * step * (t.wPct / t.hPct) }, t);
@@ -2064,6 +2079,7 @@ img{display:block;max-width:100%;height:auto}
   document.addEventListener("pointercancel", endDrag);
 
   $("tidyBtn").addEventListener("click", function(){
+    arranged = false;
     var slots = defaultSlots(kept.length);
     kept.forEach(function(code, i){ if (slots[i]) pos[code] = slots[i]; });
     syncWall();
