@@ -43,9 +43,13 @@
 
   PLACEMENT NOTE (honest limitation): this PDP is deliberately compressed and
   has no editorial zone, so "move the module up" can only mean "into the buy
-  column". A sits directly under the add-to-cart, B after the reassurance
-  block. The real contrast being tested is buy column vs page bottom, which is
-  a cleaner question than high vs mid anyway.
+  column". Every in-page variant renders in one slot below the trust row: the
+  trust row supports the purchase and is not pushed beneath a module offering
+  an alternative to it. Position is therefore held constant, so A against B
+  isolates SHAPE (one edition versus two lanes) and the contrast against the
+  control is buy column versus page bottom. High-versus-mid is not testable on
+  a page this short, and pretending otherwise would have been two slots one
+  section apart.
 
   VARIANTS:    ?reco=control|a|b|c|d  (press "r" to cycle; the base's own
                ?v=control|v1 and "v" key still work, unchanged)
@@ -541,8 +545,8 @@ a { color: inherit; }
 /* the slots are siblings of .config inside .col-buy, so they carry the same
    gutter as the buy column: without it the module ran flush to the viewport
    edges while every other element was inset. */
-#recoSlotA, #recoSlotB{ padding-inline: var(--gutter); }
-@media (min-width: 1024px){ #recoSlotA, #recoSlotB{ padding-inline: 0; } }
+#recoSlot{ padding-inline: var(--gutter); }
+@media (min-width: 1024px){ #recoSlot{ padding-inline: 0; } }
 
 .reco{
   border: 1px solid var(--color-border-default, #E2D8CC);
@@ -1238,10 +1242,6 @@ body{ padding-top: var(--rtb-h, 0px); }
       </p>
     </section>
 
-    <!-- ══ SLOT A ══ variant A lands here: directly after price + finish + ATC.
-         On desktop this is inside the sticky buy rail. ══ -->
-    <div id="recoSlotA"></div>
-
     <!-- ══ Zone 3: depth, opt-in ══ -->
     <section class="zone3">
       <!-- Trustpilot summary — verified live 12 Aug 2026: 4,7/5 aus 6 k Bewertungen -->
@@ -1264,10 +1264,12 @@ body{ padding-top: var(--rtb-h, 0px); }
       </div>
     </section>
 
-    <!-- ══ SLOT B ══ variant B lands here: after the reassurance block, above
-         the fold-bottom. This PDP has no editorial zone, so "moved up" can
-         only mean "into the buy column". Stated in the proto header. ══ -->
-    <div id="recoSlotB"></div>
+    <!-- ══ RECOMMENDATION SLOT ══ every in-page variant renders here, below
+         the trust row. The trust row supports the purchase, so it is not
+         pushed under a module that offers an alternative to it; and with the
+         position now held constant, A and B differ only in shape (one
+         edition against two lanes) rather than in placement. ══ -->
+    <div id="recoSlot"></div>
   </div>
 </main>
 
@@ -2385,7 +2387,7 @@ function recoCloseSheet(how){
   track('reco_dismiss', { reco_slot: 'end_sheet', dismiss_method: how });
   /* dismissal downgrades to a quiet strip. It never interrupts twice. */
   RECO.cDismissed = true;
-  const host = document.getElementById('recoSlotB');
+  const host = document.getElementById('recoSlot');
   if (host && !host.querySelector('.reco-strip')){
     host.innerHTML = `<div class="reco-strip">
       <p>${rt('strip.text')}</p>
@@ -2400,9 +2402,14 @@ document.getElementById('recoSheetX').addEventListener('click', () => recoCloseS
 document.getElementById('scrim').addEventListener('click', () => {
   if (recoSheet.classList.contains('on')) recoCloseSheet('backdrop');
 });
+/* Capture phase, deliberately: this file's own Escape handler is registered
+   earlier and calls closeAllSheets(), which strips .on from every sheet. In
+   the bubble phase this handler would then find the class already gone, so
+   Escape closed the sheet without tracking the dismissal or leaving the
+   downgrade strip behind. Capture runs it first. */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && recoSheet.classList.contains('on')) recoCloseSheet('escape');
-});
+}, { capture: true });
 
 /* triggers. Mobile has no exit intent, so: scroll-bottom, back-intent and
    the post-add-to-cart moment, which is an end of engagement with THIS
@@ -2422,8 +2429,7 @@ addEventListener('popstate', () => {
 });
 
 /* ── impression + click ─────────────────────────────────────────────── */
-const recoSlotOf = el => el.closest('#recoSlotA') ? 'buy_column_after_atc'
-  : el.closest('#recoSlotB') ? 'buy_column_after_trust'
+const recoSlotOf = el => el.closest('#recoSlot') ? 'buy_column_after_trust'
   : el.closest('#zone4') ? 'page_bottom'
   : el.closest('#recoSheet') ? 'end_sheet' : 'unknown';
 
@@ -2485,9 +2491,9 @@ function recoWireRails(scope){
 }
 
 /* ── placement switch ───────────────────────────────────────────────── */
-const recoSlots = { a: document.getElementById('recoSlotA'), b: document.getElementById('recoSlotB') };
+const recoSlot = document.getElementById('recoSlot');
 function renderReco(){
-  Object.values(recoSlots).forEach(el => { if (el) el.innerHTML = ''; });
+  recoSlot.innerHTML = '';
   recoSheet.classList.remove('on');
   if (!document.querySelector('.sheet.on')) document.getElementById('scrim').classList.remove('on');
   RECO.cDismissed = false; RECO.cFired = false; RECO.seen.clear();
@@ -2498,9 +2504,9 @@ function renderReco(){
   document.getElementById('zone4').hidden = (p === 'a' || p === 'b' ||
     (p === 'd' && ['paid_social', 'feed'].includes(RECO.entry)));
 
-  if (p === 'a') renderRecoA(recoSlots.a);
-  if (p === 'b') renderRecoB(recoSlots.b);
-  if (p === 'd' && ['paid_social', 'feed'].includes(RECO.entry)) renderRecoB(recoSlots.b);
+  if (p === 'a') renderRecoA(recoSlot);
+  if (p === 'b') renderRecoB(recoSlot);
+  if (p === 'd' && ['paid_social', 'feed'].includes(RECO.entry)) renderRecoB(recoSlot);
   if (recoIsC()){ recoScrollArmed = true; history.pushState({ pdp: true }, ''); }
 
   recoNote();
@@ -2525,8 +2531,8 @@ function recoNote(){
   const eff = routed ? routed.toLowerCase() : RECO.placement;
   const copy = {
     control: ['Zone 4 at the page bottom, exactly as it is today', 'scroll to the bottom of the page'],
-    a: ['One edition in a compact box, directly under the add to cart. Zone 4 removed', 'in the buy column, under the CTA'],
-    b: ['Two separated lanes in the buy column, after the reassurance line. Zone 4 removed', 'in the buy column, below the Trustpilot row'],
+    a: ['One edition in a compact box, below the trust row. Zone 4 removed', 'in the buy column, under the Trustpilot row'],
+    b: ['Two separated lanes in the same slot, below the trust row. Zone 4 removed', 'in the buy column, under the Trustpilot row'],
     c: ['Nothing new on the page. Fires at end of engagement only', 'scroll to the bottom, press back, or add to cart. Or press "fire C"'],
   }[eff] || ['', ''];
   const res = resolveReco(RECO.tier);
@@ -2547,8 +2553,8 @@ update = function(trigger){
   recoBaseUpdate(trigger);
   if (!trigger) return;                      // first paint is handled by renderReco()
   const p = RECO.placement;
-  if (p === 'a') renderRecoA(recoSlots.a);
-  else if (p === 'b' || (p === 'd' && ['paid_social', 'feed'].includes(RECO.entry))) renderRecoB(recoSlots.b);
+  if (p === 'a') renderRecoA(recoSlot);
+  else if (p === 'b' || (p === 'd' && ['paid_social', 'feed'].includes(RECO.entry))) renderRecoB(recoSlot);
   recoNote();
 };
 
@@ -2657,7 +2663,7 @@ function recoAudit(){
   const priceNode = document.getElementById('price');
   const atcBtn = document.getElementById('atc');
   const focal = document.getElementById('heroImg');
-  const mod = document.querySelector('#recoSlotA .reco, #recoSlotB .reco, #recoSheet.on .reco-rail');
+  const mod = document.querySelector('#recoSlot .reco, #recoSheet.on .reco-rail');
 
   out.push(`reco=${RECO.placement}  entry=${RECO.entry}  tier=${RECO.tier}  state=${RECO.render}  lang=${RECO.lang}`);
   out.push(`config: ${state.size.dim} · ${state.finish.key} · ${fmt(recoFocalPrice())}`);
@@ -2738,7 +2744,7 @@ function recoAudit(){
 
   out.push('');
   out.push('// type scale (the module holds four sizes, no near-duplicates)');
-  const modScope = document.querySelector('#recoSlotA .reco, #recoSlotB .reco, #recoSheet .sheet-body');
+  const modScope = document.querySelector('#recoSlot .reco, #recoSheet .sheet-body');
   if (modScope){
     const sizes = new Map();
     modScope.querySelectorAll('*').forEach(el => {
@@ -2781,7 +2787,7 @@ function recoAudit(){
     return false;
   };
   const wide = [];
-  document.querySelectorAll('.reco *, #recoSlotA *, #recoSlotB *').forEach(el => {
+  document.querySelectorAll('.reco *, #recoSlot *').forEach(el => {
     const r = el.getBoundingClientRect();
     if (r.width < 1) return;
     if (r.right > de.clientWidth + 1 && getComputedStyle(el).position !== 'fixed' && !inScroller(el))
