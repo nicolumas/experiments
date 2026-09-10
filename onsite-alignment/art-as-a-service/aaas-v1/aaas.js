@@ -801,12 +801,17 @@
     document.addEventListener('click', function (e) {
       if (!e.target.closest) return;
       if (e.target.closest('button.size')) { setTimeout(renderPdpLine, 120); return; }
-      // the real add-to-cart posts to the live shop; in the clone it opens the drawer
+      // The real add-to-cart posts to the live shop; in the clone it opens the
+      // drawer. Matched on the marker first, not only on the label: the inline
+      // presentation relabels this button to "Mieten für X" in rent mode, and
+      // matching on its text alone meant the click stopped being caught there
+      // and the drawer never opened.
       var atc = e.target.closest('button, a');
-      if (atc && /in den warenkorb/i.test(atc.textContent || '') && !atc.closest('.aaas-drawer')) {
+      if (!atc || atc.closest('.aaas-drawer')) return;
+      if (atc.hasAttribute('data-aaas-cta') || /in den warenkorb/i.test(atc.textContent || '')) {
         e.preventDefault();
         e.stopPropagation();
-        // spec B decides buy vs rent on the PDP, so the add follows that choice
+        // the PDP decides buy vs rent, so the add follows that choice
         attemptAdd(mode() === 'rent');
       }
     }, true);
