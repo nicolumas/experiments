@@ -226,25 +226,48 @@ img{display:block;max-width:100%;height:auto}
 @media(max-width:1079px){.lt-ledger{display:none}}
 
 .lt-ledger__top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--color-border-default);padding-bottom:1.4rem}
-.lt-ledger__count{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.9rem;font-variant-numeric:tabular-nums}
-.lt-figure{padding:2.6rem 0 .4rem}
-.lt-figure__num{font-family:UtileDisplayLumas,Georgia,serif;font-weight:300;font-size:7.6rem;line-height:.92;letter-spacing:-.01em;font-variant-numeric:tabular-nums;display:block}
-.lt-figure__unit{font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin-top:1.2rem;display:block}
+.lt-ledger__count{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.9rem;font-variant-numeric:tabular-nums;font-weight:400}
+.lt-ledger__count i{font-style:normal;color:var(--color-text-secondary)}
+
+/* the mechanic, said once, in the display face */
+.lt-rule{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.85rem;line-height:1.4;margin:2rem 0 2.4rem}
+.lt-rule em{font-style:italic}
 .lt-rise{animation:lt-rise var(--lt-t) var(--lt-ease)}
 @keyframes lt-rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-.lt-ladder{display:flex;align-items:flex-end;gap:.5rem;height:5.2rem;margin:2.2rem 0 .6rem;padding-bottom:2rem;position:relative}
-.lt-notch{flex:1;background:var(--color-border-default);position:relative;transition:background var(--lt-t-fast) var(--lt-ease)}
+/* nine steps you can walk. Height carries the descent, the fill carries where
+   you are, and each one is a real button that sets the count. */
+.lt-ladder__label{margin-bottom:1.2rem}
+.lt-ladder{display:flex;align-items:flex-end;gap:.5rem;height:3.4rem}
+.lt-notch{
+  flex:1;background:var(--color-bone-100);border:0;padding:0;cursor:pointer;
+  transition:background var(--lt-t-fast) var(--lt-ease),transform var(--lt-t-fast) var(--lt-ease);
+}
+@media(hover:hover){.lt-notch:hover{transform:translateY(-3px)}}
 .lt-notch.is-on{background:var(--color-charcoal-900)}
-.lt-notch b{position:absolute;top:calc(100% + .6rem);left:50%;transform:translateX(-50%);font-size:1.0rem;font-weight:400;letter-spacing:.04em;color:var(--color-text-secondary);white-space:nowrap;font-variant-numeric:tabular-nums}
-.lt-notch:last-child b{left:auto;right:0;transform:none}
-.lt-notch:first-child b{left:0;transform:none}
+.lt-notch.is-current{box-shadow:0 0 0 2px var(--lt-ground),0 0 0 3px var(--color-charcoal-900)}
+.lt-notch:focus-visible{outline:2px solid var(--color-charcoal-900);outline-offset:3px}
+.lt-ladder__ends{display:flex;justify-content:space-between;font-size:1.1rem;color:var(--color-text-secondary);margin:1rem 0 2.4rem;font-variant-numeric:tabular-nums}
+.lt-ladder__ends b{color:var(--color-text-primary);font-weight:600}
 
-.lt-next{font-size:1.3rem;line-height:1.5;color:var(--color-text-secondary);min-height:4rem;border-top:1px solid var(--color-border-subtle);padding-top:1.4rem;margin:1.2rem 0 0}
-.lt-lines{margin:.6rem 0 0;border-top:1px solid var(--color-border-subtle);padding-top:1.4rem;display:flex;flex-direction:column;gap:.9rem}
+/* the decision, laid out as the options from here */
+.lt-options{border-top:1px solid var(--color-border-default)}
+.lt-opt{display:flex;justify-content:space-between;align-items:baseline;gap:1.6rem;padding:1.3rem 0;border-bottom:1px solid var(--color-border-default)}
+.lt-opt__l{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.lt-opt__q{font-size:1.35rem;color:var(--color-text-primary)}
+.lt-opt__q b{font-weight:600}
+.lt-opt__sub{font-size:1.15rem;color:var(--color-text-secondary);font-variant-numeric:tabular-nums}
+.lt-opt__p{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.6rem;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lt-opt.is-here{background:var(--color-surface-sunken);margin:0 -2.4rem;padding-left:2.4rem;padding-right:2.4rem}
+.lt-opt__tag{display:inline-block;font-size:.95rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-left:.8rem;color:var(--color-text-primary);vertical-align:middle}
+.lt-empty{font-size:1.3rem;line-height:1.5;color:var(--color-text-secondary);padding:1.6rem 0 .4rem;margin:0}
+
+.lt-lines{margin:2.2rem 0 0;display:flex;flex-direction:column;gap:.9rem}
+.lt-strike{text-decoration:line-through;color:var(--color-text-secondary);font-weight:400}
 .lt-line{display:flex;justify-content:space-between;gap:1.2rem;font-size:1.3rem;color:var(--color-text-secondary);font-variant-numeric:tabular-nums}
-.lt-line--total{font-size:1.6rem;color:var(--color-text-primary);border-top:1px solid var(--color-border-subtle);padding-top:1.1rem;margin-top:.3rem}
-.lt-line--total b{font-family:UtileDisplayLumas,Georgia,serif;font-weight:400;font-size:2.2rem}
+.lt-line--total{font-size:1.6rem;color:var(--color-text-primary);border-top:1px solid var(--color-charcoal-900);padding-top:1.3rem;margin-top:.5rem;align-items:baseline}
+.lt-line--total span{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.5rem}
+.lt-line--total b{font-family:UtileDisplayLumas,Georgia,serif;font-weight:400;font-size:2.6rem}
 .lt-line--save b{color:var(--color-text-primary);font-weight:400}
 .lt-ledger .lt-btn{margin-top:2rem}
 .lt-alt{margin-top:1.2rem;text-align:center}
@@ -1321,18 +1344,23 @@ img{display:block;max-width:100%;height:auto}
         <aside class="lt-ledger" id="ledger" aria-label="Your edit">
           <div class="lt-ledger__top">
             <span class="t-eyebrow">Your edit</span>
-            <b class="lt-ledger__count" id="count">0 / 9</b>
+            <b class="lt-ledger__count"><span id="count">0</span> <i>/ 9 slides</i></b>
           </div>
-          <div class="lt-figure">
-            <span class="lt-figure__num" id="perPiece">249</span>
-            <span class="lt-figure__unit" id="perUnit">&euro; per slide</span>
+          <p class="lt-rule">Every slide you add lowers the price of <em>all</em> of&nbsp;them.</p>
+
+          <p class="t-eyebrow lt-ladder__label" id="perUnit">Price per slide</p>
+          <div class="lt-ladder" id="ladder" role="group" aria-label="Choose how many slides"></div>
+          <div class="lt-ladder__ends">
+            <span>1 slide &middot; <b>&euro;249</b></span>
+            <span>All nine &middot; <b>&euro;149</b></span>
           </div>
-          <div class="lt-ladder" id="ladder" aria-hidden="true"></div>
-          <p class="lt-next" id="nextLine">Nine slides. Choose the ones you want.</p>
-          <div class="lt-lines">
-            <div class="lt-line"><span>Slides</span><b id="valSub">&ndash;</b></div>
+
+          <div class="lt-options" id="options"></div>
+
+          <div class="lt-lines" id="totals">
+            <div class="lt-line"><span id="baseLabel">&nbsp;</span><b class="lt-strike" id="baseTotal">&ndash;</b></div>
             <div class="lt-line lt-line--save"><span>You save</span><b id="valSave">&ndash;</b></div>
-            <div class="lt-line lt-line--total"><span>Total</span><b id="valTotal">&euro;0</b></div>
+            <div class="lt-line lt-line--total"><span>You pay</span><b id="valTotal">&euro;0</b></div>
           </div>
           <!-- ABLYFT-GOAL: ATC (primary) -->
           <button type="button" class="lt-btn lt-btn--block" id="cta" disabled>Choose a slide</button>
@@ -1658,15 +1686,34 @@ img{display:block;max-width:100%;height:auto}
     return min + (PRICE[i] - PRICE[9]) / (PRICE[1] - PRICE[9]) * (max - min);
   }
   for (var i = 1; i <= 9; i++){
-    var n = document.createElement("span");
-    n.className = "lt-notch";
-    n.style.height = stepHeight(i, 0.8, 2.8).toFixed(2) + "rem";
-    if (i === 1 || i === 9) n.innerHTML = "<b>" + PRICE[i] + "</b>";
-    ladder.appendChild(n);
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "lt-notch";
+    b.dataset.n = i;
+    b.style.height = stepHeight(i, 1.0, 3.4).toFixed(2) + "rem";
+    b.setAttribute("aria-label", i + (i === 1 ? " slide, " : " slides, ") + "\u20ac" + PRICE[i] + " each");
+    b.addEventListener("click", function(){ setCount(+this.dataset.n); });
+    ladder.appendChild(b);
 
     var m = document.createElement("i");
     m.style.height = stepHeight(i, 0.5, 1.4).toFixed(2) + "rem";
     barLadder.appendChild(m);
+  }
+
+  /* Walking the ladder has to choose actual works, not just a number: it fills
+     from the ones not yet kept, in catalogue order, and trims the most recently
+     added first so a considered selection is the last thing to go. */
+  function setCount(target){
+    if (target === kept.length) return;
+    if (target > kept.length){
+      SLIDES.forEach(function(sl){
+        if (kept.length < target && kept.indexOf(sl.code) < 0) kept.push(sl.code);
+      });
+    } else {
+      kept = kept.slice(0, target);
+    }
+    track("ladder_set", { to: target });
+    render();
   }
 
   /* ════════════════════════════════════════════════════════════════════
@@ -1705,35 +1752,41 @@ img{display:block;max-width:100%;height:auto}
     });
 
     /* ladder */
-    Array.prototype.forEach.call(ladder.children, function(el, i){ el.classList.toggle("is-on", i < n); });
+    Array.prototype.forEach.call(ladder.children, function(el, i){
+      el.classList.toggle("is-on", i < n);
+      el.classList.toggle("is-current", i + 1 === n);
+    });
     Array.prototype.forEach.call(barLadder.children, function(el, i){ el.classList.toggle("on", i < n); });
 
     /* figure */
     if (per !== lastTier){
-      [$("perPiece"), $("barFig")].forEach(function(el){
-        el.classList.remove("lt-rise"); void el.offsetWidth; el.classList.add("lt-rise");
-      });
+      $("barFig").classList.remove("lt-rise"); void $("barFig").offsetWidth; $("barFig").classList.add("lt-rise");
       track("tier_cross", {from:lastTier, to:per, direction: per < lastTier ? "up" : "down", selected:n});
       lastTier = per;
     }
-    $("perPiece").textContent = per;
     $("barFig").textContent = euro(per);
-    $("count").textContent = n + " / 9";
+    $("count").textContent = n;
     $("barCnt").textContent = n + " / 9";
     $("tableCount").textContent = n === 0 ? "Nothing chosen yet"
       : n + (n === 1 ? " slide chosen, " : " slides chosen, ") + euro(per) + " each";
 
     /* lines */
-    var subTxt = n ? n + " × " + euro(per) : "–";
     var saveTxt = save > 0 ? euro(save) : "–";
-    $("valSub").textContent = subTxt;  $("barSub").textContent = subTxt;
+    $("baseLabel").textContent = n ? n + (n === 1 ? " slide" : " slides") + " at the single-slide price" : "\u00a0";
+    $("baseTotal").textContent = n ? euro(n * SINGLE) : "–";
+    $("barSub").textContent = n ? n + " × " + euro(per) : "–";
     $("valSave").textContent = saveTxt; $("barSave").textContent = saveTxt;
     $("valTotal").textContent = euro(total); $("barTotal").textContent = euro(total);
+    $("totals").hidden = (n === 0);
+    /* with no ladder there is nothing to compare against, so the struck base
+       and the saving row would just restate what you pay */
+    var comparable = ruleOn && save > 0;
+    $("baseLabel").parentNode.hidden = !comparable;
+    document.querySelector("#ledger .lt-line--save").hidden = !comparable;
+    renderOptions(n, per, total);
 
     /* next step */
-    var line = nextLine(n);
-    $("nextLine").textContent = line;
-    $("barNext").textContent = line;
+    $("barNext").textContent = nextLine(n);
 
     /* Primary action plus, from six on, a ghost that names what finishing the
        box actually costs. */
@@ -1770,6 +1823,44 @@ img{display:block;max-width:100%;height:auto}
 
     renderWall(n);
     syncUrl();
+  }
+
+  /* The options from here: where the visitor stands, one more, and the whole
+     box. Naming the marginal cost is what makes the ladder legible. */
+  function renderOptions(n, per, total){
+    var box = $("options");
+    if (n === 0){
+      box.innerHTML = '<p class="lt-empty">Choose a slide on the table, or pick a number on the ladder above.</p>';
+      return;
+    }
+    var rows = [{
+      q: "Your edit \u00b7 " + n + (n === 1 ? " slide" : " slides"),
+      sub: euro(per) + " each" + (ruleOn && total < n * SINGLE ? " \u00b7 you save " + euro(n * SINGLE - total) : ""),
+      p: euro(total), here: true
+    }];
+    if (ruleOn && n < 9){
+      rows.push({
+        q: "Add one more \u00b7 " + (n + 1) + " slides",
+        sub: euro(tier(n + 1)) + " each \u00b7 plus " + euro(costOfNext(n)),
+        p: euro(totalFor(n + 1))
+      });
+    }
+    if (ruleOn && n < 8){
+      rows.push({
+        q: "The full set \u00b7 nine slides",
+        sub: "\u20ac149 each \u00b7 plus " + euro(costToComplete(n)),
+        p: euro(totalFor(9)), best: true
+      });
+    }
+    box.innerHTML = rows.map(function(r){
+      return '<div class="lt-opt' + (r.here ? " is-here" : "") + '">' +
+        '<span class="lt-opt__l">' +
+          '<span class="lt-opt__q"><b>' + r.q + '</b>' + (r.best ? '<span class="lt-opt__tag">Best price</span>' : '') + '</span>' +
+          '<span class="lt-opt__sub">' + r.sub + '</span>' +
+        '</span>' +
+        '<span class="lt-opt__p">' + r.p + '</span>' +
+      '</div>';
+    }).join("");
   }
 
   /* ── the wall, at true scale ─────────────────────────────────────── */
@@ -2105,9 +2196,12 @@ img{display:block;max-width:100%;height:auto}
     $("offerBar").hidden = !isControl || !ruleOn;
     $("tableTitle").textContent = ruleOn ? "Nine slides. Choose your edit." : "Nine slides";
     $("ledger").style.display = "";
-    /* with the rule suspended there is no ladder and no per-slide figure to move */
+    /* with the rule suspended there is no ladder to walk and no rule to state */
     $("ladder").hidden = !ruleOn;
-    $("perUnit").textContent = ruleOn ? "€ per slide" : "€ each";
+    document.querySelector(".lt-ladder__ends").hidden = !ruleOn;
+    document.querySelector(".lt-rule").hidden = !ruleOn;
+    $("perUnit").textContent = ruleOn ? "Price per slide" : "Price";
+    $("perUnit").hidden = !ruleOn;
     $("applied").textContent = ruleOn ? "Applied in the cart" : "Price per slide";
     $("factNine").innerHTML = ruleOn ? "&euro;149 each" : "&euro;249 each";
 
