@@ -238,9 +238,9 @@ img{display:block;max-width:100%;height:auto}
 /* nine steps you can walk. The fill carries where you are, the labels beneath
    carry the descent, and each step is a real button that sets the count. */
 .lt-ladder__label{margin-bottom:1.2rem}
-.lt-ladder{display:flex;align-items:stretch;gap:.5rem;height:3.4rem}
+.lt-ladder{display:flex;align-items:flex-start;gap:.5rem}
 .lt-notch{
-  flex:1;background:var(--color-bone-100);border:0;padding:0;cursor:pointer;
+  flex:1;aspect-ratio:1;background:var(--color-bone-100);border:0;padding:0;cursor:pointer;
   transition:background var(--lt-t-fast) var(--lt-ease),transform var(--lt-t-fast) var(--lt-ease);
 }
 @media(hover:hover){.lt-notch:hover{transform:translateY(-3px)}}
