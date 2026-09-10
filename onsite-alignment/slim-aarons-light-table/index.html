@@ -314,9 +314,10 @@ img{display:block;max-width:100%;height:auto}
 /* ══ WALL PREVIEW ═════════════════════════════════════════════════════════ */
 .lt-wall-sec{background:var(--color-surface-page);border-top:1px solid var(--color-border-subtle);border-bottom:1px solid var(--color-border-subtle)}
 .lt-wall-sec[hidden]{display:none}
-/* The room is a pointer-and-space feature: the arrangement tool needs a mouse
-   and a wall big enough to compose on, so the whole section is desktop only. */
-@media(max-width:1079px){ .lt-wall-sec{display:none} }
+/* The room is off on phones. The boundary is the page's own table breakpoint,
+   the width at which the light table goes three across, rather than the
+   ledger's, which was hiding the room on small laptops too. */
+@media(max-width:759px){ .lt-wall-sec{display:none} }
 .lt-wall{position:relative;overflow:hidden;background:var(--color-surface-muted);touch-action:none}
 .lt-wall__inner{position:relative}
 .lt-wall img{width:100%;height:auto}
