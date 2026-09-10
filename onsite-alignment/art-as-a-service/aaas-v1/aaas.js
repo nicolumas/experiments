@@ -519,10 +519,10 @@
    *   rows    full-width radio rows, label left and price right, room to breathe.
    */
   var VARIANT_KEY = 'aaas-variant';
-  var VARIANTS = { seg: 'Segmented', 'switch': 'Switch', rows: 'Zeilen' };
+  var VARIANTS = { inline: 'Inline', seg: 'Segmented', 'switch': 'Switch', rows: 'Zeilen' };
 
   function variant() {
-    try { return VARIANTS[sessionStorage.getItem(VARIANT_KEY)] ? sessionStorage.getItem(VARIANT_KEY) : 'seg'; }
+    try { return VARIANTS[sessionStorage.getItem(VARIANT_KEY)] ? sessionStorage.getItem(VARIANT_KEY) : 'inline'; }
     catch (e) { return 'seg'; }
   }
   function setVariant(v) { try { sessionStorage.setItem(VARIANT_KEY, v); } catch (e) {} }
@@ -663,6 +663,7 @@
     }
     if (!TERMS.pdpToggle) {
       // spec A: buying stays primary, renting enters as a line and a link
+      transformBuyBox(q, false);
       line.className = 'aaas-rent-line';
       line.innerHTML =
         '<span>Oder mieten ab <b>' + money(q.monthly) + '</b> im Monat</span>' +
@@ -674,12 +675,24 @@
 
     // spec B: the buy/rent decision sits on the PDP, with a term choice
     var renting = mode() === 'rent';
-    line.className = 'aaas-pdp-b';
-    line.innerHTML =
-      // the shop's own section-header class, so the label matches "wähle Größe…"
-      '<div class="pdp-product-section-header">Kaufen oder mieten:</div>' +
-      modeChooser(q, renting) +
-      (renting ? pdpRentDetail(q) : '');
+    var inline = variant() === 'inline';
+
+    // only the inline presentation rewrites the price and the CTA; calling it
+    // with false on every other path is what restores them when the variant or
+    // the mode changes back
+    transformBuyBox(q, inline && renting);
+
+    if (inline) {
+      line.className = 'aaas-inline';
+      line.innerHTML = inlineControl(q, renting) + (renting ? inlineDetail(q) : '');
+    } else {
+      line.className = 'aaas-pdp-b';
+      line.innerHTML =
+        // the shop's own section-header class, so the label matches "wähle Größe…"
+        '<div class="pdp-product-section-header">Kaufen oder mieten:</div>' +
+        modeChooser(q, renting) +
+        (renting ? pdpRentDetail(q) : '');
+    }
 
     if (!line.dataset.wired) {
       line.dataset.wired = '1';
@@ -721,17 +734,113 @@
     });
   }
 
-  // spec B only: term choice, the net basis, shipping note, damage tooltip and the
-  // rent-to-own share, all of which the 21 Aug checklist asks for on the PDP
-  function pdpRentDetail(q) {
-    // Each option carries its own monthly, so the three terms can be compared
-    // in the list rather than one at a time. The trigger stays the bare term:
-    // the switch line above it already states the price you would pay.
+  // Each option carries its own monthly, so the three terms can be compared in
+  // the list rather than one at a time. The trigger stays the bare term: the
+  // control above it already states the price you would pay.
+  function termSelect(q) {
     return selectMarkup('aaas-term', 'Wähle die Laufzeit:',
       TERMS.termChoices.map(function (n) {
         return { value: String(n), label: n + ' Monate',
                  note: money(monthlyFor(q.base, n)) + ' im Monat' };
-      }), String(TERMS.months)) +
+      }), String(TERMS.months));
+  }
+
+  /* ---------- PDP: the inline presentation ----------
+   * Spec A's quiet entry line carrying spec B's switch, and flipping it turns
+   * the whole buy box over rather than adding a panel beside it: the price
+   * becomes a monthly, the CTA becomes "Mieten für X", and the terms open in
+   * place. A slide-in was tried first and reads as a detour, so this variant
+   * never opens one. No section label and no rule above it either, so in buy
+   * mode nothing is added to the page but one line of text. */
+
+  function pdpPriceText() {
+    var p = document.querySelector('.pdp-price-container pdp-price');
+    return p ? p.textContent.trim() : '';
+  }
+
+  function inlineControl(q, renting) {
+    return '<button type="button" class="aaas-ms aaas-ms-quiet" role="switch" ' +
+      'data-pdptoggle aria-checked="' + renting + '">' +
+      '<span class="aaas-ms-track"><span class="aaas-ms-knob"></span></span>' +
+      '<span class="aaas-ms-text">' + (renting
+        ? 'oder für <b>' + pdpPriceText() + '</b> kaufen'
+        : 'oder ab <b>' + money(q.monthly) + '</b>/Monat mieten') +
+      '</span></button>';
+  }
+
+  function fact(label, value, sub, major) {
+    return '<div' + (major ? ' class="aaas-fact-major"' : '') + '><dt>' + label +
+      (sub ? '<small>' + sub + '</small>' : '') + '</dt><dd>' + value + '</dd></div>';
+  }
+
+  // everything the 21 Aug checklist asks for on the PDP, in place of the panel
+  function inlineDetail(q) {
+    return '<div class="aaas-inline-detail">' +
+      (TERMS.termChoices ? termSelect(q) : '') +
+      '<dl class="aaas-facts">' +
+        fact('Monatsmiete', money(q.monthly), rateLabel()) +
+        fact('Bereitstellungsentgelt', money(q.provisioning),
+             'einmalig, entspricht einer Monatsmiete') +
+        fact('Versand', money(q.shipping), 'einmalig') +
+        fact('Heute fällig', money(q.dueToday), null, true) +
+        fact('Ab Monat 2 monatlich', money(q.monthly)) +
+        fact('Gesamt über ' + TERMS.months + ' Monate', money(q.totalCost),
+             'inklusive Bereitstellung und Versand') +
+      '</dl>' +
+      '<p class="aaas-note">' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten ' +
+        'Miete werden angerechnet, wenn du das Werk übernimmst. Widerruf ' +
+        TERMS.withdrawalDays + ' Tage ab Lieferung.</p>' +
+      '<p class="aaas-note"><button type="button" class="aaas-link" data-tip="damage">' +
+        'Was passiert bei Beschädigung?</button></p>' +
+      // deliberately makes no insurance promise: that decision is still open
+      '<div class="aaas-tip" hidden>Normale Gebrauchsspuren sind kein Problem. Bei einem ' +
+        'Schaden melde dich bei uns, wir klären Reparatur und Kosten gemeinsam.</div>' +
+    '</div>';
+  }
+
+  /* The buy box itself turns over: the shop's price element is swapped for the
+   * monthly and the add-to-cart label becomes the rent one. Both are restored
+   * from what was captured, never rebuilt, so buy mode is byte-identical to the
+   * page as shipped. The shop's <pdp-price> is hidden rather than rewritten,
+   * which also keeps pdpGross() reading the real price underneath. */
+  function transformBuyBox(q, renting) {
+    var box = document.querySelector('.pdp-price-container');
+    if (box) {
+      var shopPrice = box.querySelector('pdp-price');
+      var rent = box.querySelector('.aaas-price-rent');
+      if (renting) {
+        if (!rent) { rent = el('div', 'aaas-price-rent'); box.appendChild(rent); }
+        rent.innerHTML = '<b>' + money(q.monthly) + '</b><span>/Monat</span>';
+      }
+      if (rent) rent.hidden = !renting;
+      if (shopPrice) shopPrice.classList.toggle('aaas-hidden-by-rent', renting);
+    }
+
+    var cta = document.querySelector('[data-aaas-cta]');
+    if (!cta) {
+      var all = document.querySelectorAll('.pdp-actions button, .pdp-actions a');
+      for (var i = 0; i < all.length && !cta; i++) {
+        if (/in den warenkorb/i.test(all[i].textContent || '')) cta = all[i];
+      }
+      if (cta) cta.dataset.aaasCta = '1';
+    }
+    if (!cta) return;
+    // the label is a bare text node next to the bag icon, so the node is edited
+    // in place and the icon left alone
+    for (var n = cta.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType !== 3 || !n.nodeValue.trim()) continue;
+      if (!cta.dataset.aaasLabel) cta.dataset.aaasLabel = n.nodeValue;
+      n.nodeValue = renting
+        ? 'Mieten für ' + money(q.monthly) + '/Monat'
+        : cta.dataset.aaasLabel;
+      return;
+    }
+  }
+
+  // spec B only: term choice, the net basis, shipping note, damage tooltip and the
+  // rent-to-own share, all of which the 21 Aug checklist asks for on the PDP
+  function pdpRentDetail(q) {
+    return termSelect(q) +
       '<p class="aaas-note">' + rateLabel() + ' (' + money(q.base) + ').</p>' +
       '<p class="aaas-note">Versand ' + money(q.shipping) + ' einmalig, danach fällt nur ' +
         'die Monatsmiete an.</p>' +

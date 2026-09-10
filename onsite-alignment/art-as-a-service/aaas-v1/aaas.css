@@ -228,6 +228,62 @@
 .aaas-pdp-b .aaas-note b { font-family: var(--font-body-bold); font-weight: 400; }
 .aaas-pdp-b > .aaas-link { margin-top: var(--sp-4); }
 
+/* ---------- PDP, inline presentation ----------
+ * The quiet line from spec A carrying spec B's switch. No rule above it and no
+ * section label: in buy mode the page gains one line of text and nothing else,
+ * which is the whole point of the variant. */
+
+.aaas-inline { margin: .5rem 0 var(--sp-5); font-family: var(--font-body); }
+
+/* quiet: the label is secondary prose, not a heading, and the amounts inside it
+   carry the emphasis instead */
+.aaas-ms-quiet { padding: 0; font-size: 1.4rem; color: var(--color-text-secondary); }
+.aaas-ms-quiet .aaas-ms-text b { color: var(--color-text-primary); }
+
+/* the monthly takes the place of the shop's own price, at its weight */
+.aaas-price-rent {
+  display: flex;
+  align-items: baseline;
+  /* no gap: the slash binds the unit to the figure, and 4px of air read as a
+     stray character next to a 30px number */
+  gap: 0;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.aaas-price-rent b { font-weight: 400; }
+
+.aaas-price-rent span {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: var(--color-text-secondary);
+}
+
+.aaas-inline-detail { margin-top: var(--sp-4); }
+
+.aaas-facts { margin: var(--sp-4) 0 0; padding: 0; }
+
+.aaas-facts > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-top: 1px solid var(--color-border-default);
+  font-size: 1.3rem;
+}
+
+.aaas-facts dt { margin: 0; color: var(--color-text-primary); }
+.aaas-facts dt small { display: block; color: var(--color-text-secondary); font-size: 1.1rem; }
+.aaas-facts dd { margin: 0; flex: none; font-variant-numeric: tabular-nums; }
+
+.aaas-fact-major dt,
+.aaas-fact-major dd { font-family: var(--font-body-bold); }
+
+.aaas-inline-detail .aaas-note { margin: var(--sp-3) 0 0; font-size: 1.3rem; }
+
 /* ---------- buy/rent presentation variants (spec B) ----------
  * All three keep the price out of the control itself, since the buy box already
  * shows one. Charcoal/ivory for the active state, sharp edges throughout. */
