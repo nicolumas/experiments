@@ -16,73 +16,27 @@
 (function () {
   'use strict';
 
-  /* Two specs run side by side, because GLOB-2053 contains both and they conflict.
-   *   A  the binding "Verbindliche Konditionen" in the ticket description:
-   *      3.75 % of the GROSS price, fixed 36 months, 60-day withdrawal, consent as
-   *      prose (which LUMAS-16152 also asks for).
-   *   B  the earlier checklist in the 21 Aug comment: rent as a share of the NET
-   *      price, a 3/6/12 term choice, 14-day withdrawal, consent via tickboxes.
-   * A is the default. The toggle exists so both can be shown, not to imply either
-   * has been decided. */
-  var SPEC_KEY = 'aaas-spec';
+  /* One model, and it is the "Verbindliche Konditionen" in the GLOB-2053
+   * description. An earlier 21 Aug checklist in the comments proposed a net
+   * basis, a 3/6/12 term choice, 14-day withdrawal and tickbox consent; the
+   * comments are not the spec, and every one of those contradicts the
+   * description, so none of them survive here. The term is fixed at 36 months
+   * and there is no term selector, which both tickets state outright. */
   var MODE_KEY = 'aaas-mode';
-  var TERM_KEY = 'aaas-term';
+  var STEP_KEY = 'aaas-step';
+  var DATA_KEY = 'aaas-order';
   var FALLBACK_SHIPPING = 39; // AT. The epic's worked example uses the DE figure of 29.
-  var VAT_AT = 0.20;
 
-  var SPECS = {
-    A: {
-      id: 'A', label: 'Verbindliche Konditionen', rate: 0.0375, base: 'brutto',
-      months: 36, termChoices: null, credit: 0.80, withdrawalDays: 60,
-      consent: 'prose', monthlyShipping: false, pdpToggle: false
-    },
-    B: {
-      id: 'B', label: 'Checkliste 21.08.', rate: 0.0375, base: 'netto',
-      months: 12, termChoices: [3, 6, 12],
-      // The checklist asks for the 3 / 6 / 12 dropdown and puts "monatliche
-      // Rate %" in the PIM, but never states a rate PER term. Only the
-      // 12-month figure below is the checklist's own 3,75 %; the two shorter
-      // rates are ASSUMED so the dropdown means something. Shape follows
-      // Grover, which the epic names as the contract template: halve the term
-      // and the monthly rises by roughly 1,4x, so the longer commitment is the
-      // cheaper month. Replace with real PIM values before this is quoted.
-      rates: { 3: 0.0750, 6: 0.0550, 12: 0.0375 },
-      credit: 0.80, withdrawalDays: 14,
-      consent: 'tickbox', monthlyShipping: true, pdpToggle: true
-    }
+  var TERMS = {
+    rate: 0.0375,          // of the GROSS price
+    months: 36,            // fixed, no selector
+    credit: 0.80,          // of rent paid, against a buyout
+    withdrawalDays: 60,    // from delivery
+    noticeDays: 30,        // to the end of the month
+    exchangeEarlyShare: 0.30  // of the higher of the old or new work's price
   };
 
-  function spec() {
-    try { return sessionStorage.getItem(SPEC_KEY) === 'B' ? 'B' : 'A'; } catch (e) { return 'A'; }
-  }
-  function setSpec(v) { try { sessionStorage.setItem(SPEC_KEY, v); } catch (e) {} }
 
-  function storedTerm() {
-    var v; try { v = parseInt(sessionStorage.getItem(TERM_KEY), 10); } catch (e) {}
-    return v;
-  }
-  function setStoredTerm(n) { try { sessionStorage.setItem(TERM_KEY, String(n)); } catch (e) {} }
-
-  // TERMS stays a plain object so every existing TERMS.months reference keeps
-  // working; the chosen term is folded in here rather than at each call site.
-  var TERMS;
-
-  function rateFor(months) {
-    var s = SPECS[spec()];
-    return (s.rates && s.rates[months]) || s.rate;
-  }
-
-  function applySpec() {
-    var s = SPECS[spec()];
-    var chosen = s.termChoices && s.termChoices.indexOf(storedTerm()) > -1 ? storedTerm() : s.months;
-    TERMS = {
-      id: s.id, label: s.label, rate: rateFor(chosen), base: s.base, credit: s.credit,
-      withdrawalDays: s.withdrawalDays, consent: s.consent,
-      monthlyShipping: s.monthlyShipping, termChoices: s.termChoices,
-      pdpToggle: s.pdpToggle, months: chosen
-    };
-  }
-  applySpec();
 
   /* ---------- money ---------- */
 
@@ -102,18 +56,14 @@
 
   function round2(n) { return Math.round(n * 100) / 100; }
 
-  function monthlyFor(base, months) { return round2(base * rateFor(months)); }
-
   function rateLabel() {
-    return (TERMS.rate * 100).toString().replace('.', ',') + ' % vom ' +
-      (TERMS.base === 'netto' ? 'Netto-Verkaufspreis' : 'Kaufpreis');
+    return (TERMS.rate * 100).toString().replace('.', ',') + ' % vom Brutto-Verkaufspreis';
   }
 
   /* ---------- the model ---------- */
 
   function quote(gross, shipping) {
-    // spec B bases the rent on the NET price, so the same artwork rents cheaper
-    var base = TERMS.base === 'netto' ? round2(gross / (1 + VAT_AT)) : gross;
+    var base = gross;                            // the rate is on the gross price
     var monthly = round2(base * TERMS.rate);
     return {
       base: base,
@@ -271,22 +221,22 @@
             figure('Gesamt über ' + TERMS.months + ' Monate', '<b>' + money(q.totalCost) + '</b>') +
           '</div>' +
           '<ul class="aaas-points">' +
-            '<li>80 % deiner gezahlten Miete werden angerechnet, wenn du das Werk übernimmst.</li>' +
+            '<li>' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden ' +
+              'angerechnet, wenn du das Werk übernimmst. Das Bereitstellungsentgelt nicht.</li>' +
             '<li>Übernehmen kannst du jederzeit. Ab dem ' + q.ownedFromMonth + '. Monat liegt der ' +
               'Übernahmepreis bei ' + money(0) + '.</li>' +
-            '<li>Tauschen oder zurückgeben kannst du ab Monat ' + TERMS.months + '.</li>' +
+            '<li>Tauschen und zurückgeben kannst du ab Monat ' + TERMS.months + '. Ein früherer ' +
+              'Tausch kostet ' + Math.round(TERMS.exchangeEarlyShare * 100) + ' % des ' +
+              'Kaufpreises und ein neues Bereitstellungsentgelt.</li>' +
+            '<li>Kündigungsfrist ' + TERMS.noticeDays + ' Tage zum Monatsende.</li>' +
           '</ul>' +
-          '<p class="aaas-note">' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung. ' +
-            'Zahlung per SEPA-Lastschrift oder Kreditkarte. Das Werk bleibt bis zur Übernahme ' +
-            'Eigentum von LUMAS.</p>' +
+          '<p class="aaas-note">' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung, ' +
+            'dabei trägst du den Rückversand und die Miete für die Nutzungsdauer. Zahlung per ' +
+            'SEPA-Lastschrift oder Kreditkarte. Das Werk bleibt bis zur Übernahme Eigentum ' +
+            'von LUMAS.</p>' +
         '</div>' +
         '<div class="aaas-drawer-foot">' +
           '<button type="button" class="aaas-btn" data-aaas-rent>In den Warenkorb, zur Miete</button>' +
-          // spec B's checklist asks for a "später kaufen" option alongside the terms
-          (TERMS.pdpToggle
-            ? '<button type="button" class="aaas-btn aaas-btn-secondary" data-aaas-buy>' +
-              'Stattdessen jetzt kaufen</button>'
-            : '') +
         '</div>' +
       '</div>';
 
@@ -323,11 +273,9 @@
            '<div class="price-to-pay"><div>Heute fällig</div><div>' + money(q.dueToday) + '</div></div>' +
            '<div class="shipping-added">Danach ' + money(q.monthly) + ' im Monat, ' +
              TERMS.months + ' Monate.</div>' +
-           // spec B's checklist asks for a cross-border hint in the cart
-           (TERMS.pdpToggle
-             ? '<p class="aaas-note aaas-xborder">Mieten ist nicht in allen Lieferländern ' +
-               'verfügbar. Im Pilotbetrieb: Österreich, Schweiz und international.</p>'
-             : '');
+           '<p class="aaas-note aaas-xborder">Mieten ist nicht in allen Lieferländern ' +
+             'verfügbar. Im Pilotbetrieb: Österreich, die Schweiz und der internationale ' +
+             'Shop.</p>';
   }
 
   function renderCart(q, p) {
@@ -363,11 +311,9 @@
         '<div class="cart-overlay-bottom">' +
           '<div class="aaas-cart-mode">' +
             '<div class="aaas-label">Kaufen oder mieten</div>' +
-            // spec B decides on the PDP with a switch, so the cart repeats that
-            // control rather than offering the same choice in another shape
-            (TERMS.pdpToggle
-              ? switchControl(q, renting, 'data-mode="' + (renting ? 'buy' : 'rent') + '"')
-              : modeSwitch(q)) +
+            // the PDP decides with a switch, so the cart repeats that control
+            // rather than offering the same choice in another shape
+            switchControl(q, renting, 'data-mode="' + (renting ? 'buy' : 'rent') + '"') +
           '</div>' +
           // express checkout is left out of the drawer entirely for now. It also
           // cannot carry a recurring SEPA mandate, so it never applied to renting.
@@ -519,7 +465,8 @@
    *   rows    full-width radio rows, label left and price right, room to breathe.
    */
   var VARIANT_KEY = 'aaas-variant';
-  var VARIANTS = { inline: 'Inline', seg: 'Segmented', 'switch': 'Switch', rows: 'Zeilen' };
+  var VARIANTS = { inline: 'Inline', line: 'Linie', seg: 'Segmented',
+                   'switch': 'Switch', rows: 'Zeilen' };
 
   function variant() {
     try { return VARIANTS[sessionStorage.getItem(VARIANT_KEY)] ? sessionStorage.getItem(VARIANT_KEY) : 'inline'; }
@@ -531,7 +478,7 @@
   // it. With the dropdown present the trigger already names it, and repeating it
   // wrapped the switch label onto a second line at 390px.
   function termSuffix() {
-    return TERMS.termChoices ? '' : ', ' + TERMS.months + ' Monate';
+    return ', ' + TERMS.months + ' Monate';
   }
 
   function modeChooser(q, renting) {
@@ -661,8 +608,9 @@
       // buying stays primary: renting enters as a line, never a second button
       container.insertAdjacentElement('afterend', line);
     }
-    if (!TERMS.pdpToggle) {
-      // spec A: buying stays primary, renting enters as a line and a link
+    // "Linie": no control at all on the page, renting enters as a sentence and
+    // a link, and the terms open in the drawer. The quietest of the five.
+    if (variant() === 'line') {
       transformBuyBox(q, false);
       line.className = 'aaas-rent-line';
       line.innerHTML =
@@ -725,29 +673,11 @@
       });
     }
 
-    // the block is re-rendered on every change, so the listbox is wired each time
-    var sel = line.querySelector('.aaas-select');
-    if (sel) wireSelect(sel, function (val) {
-      setStoredTerm(parseInt(val, 10));
-      applySpec();
-      renderPdpLine();
-    });
-  }
-
-  // Each option carries its own monthly, so the three terms can be compared in
-  // the list rather than one at a time. The trigger stays the bare term: the
-  // control above it already states the price you would pay.
-  function termSelect(q) {
-    return selectMarkup('aaas-term', 'Wähle die Laufzeit:',
-      TERMS.termChoices.map(function (n) {
-        return { value: String(n), label: n + ' Monate',
-                 note: money(monthlyFor(q.base, n)) + ' im Monat' };
-      }), String(TERMS.months));
   }
 
   /* ---------- PDP: the inline presentation ----------
-   * Spec A's quiet entry line carrying spec B's switch, and flipping it turns
-   * the whole buy box over rather than adding a panel beside it: the price
+   * A quiet entry line carrying a switch, and flipping it turns the whole
+   * buy box over rather than adding a panel beside it: the price
    * becomes a monthly, the CTA becomes "Mieten für X", and the terms open in
    * place. A slide-in was tried first and reads as a detour, so this variant
    * never opens one. No section label and no rule above it either, so in buy
@@ -776,7 +706,6 @@
   // everything the 21 Aug checklist asks for on the PDP, in place of the panel
   function inlineDetail(q) {
     return '<div class="aaas-inline-detail">' +
-      (TERMS.termChoices ? termSelect(q) : '') +
       '<dl class="aaas-facts">' +
         fact('Monatsmiete', money(q.monthly), rateLabel()) +
         fact('Bereitstellungsentgelt', money(q.provisioning),
@@ -787,9 +716,16 @@
         fact('Gesamt über ' + TERMS.months + ' Monate', money(q.totalCost),
              'inklusive Bereitstellung und Versand') +
       '</dl>' +
-      '<p class="aaas-note">' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten ' +
-        'Miete werden angerechnet, wenn du das Werk übernimmst. Widerruf ' +
-        TERMS.withdrawalDays + ' Tage ab Lieferung.</p>' +
+      '<p class="aaas-note">Übernehmen kannst du jederzeit. ' +
+        Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden angerechnet, ' +
+        'das Bereitstellungsentgelt nicht. Ab dem ' + q.ownedFromMonth + '. Monat liegt der ' +
+        'Übernahmepreis bei ' + money(0) + '.</p>' +
+      '<p class="aaas-note">Tauschen und zurückgeben kannst du ab Monat ' + TERMS.months +
+        ', ein früherer Tausch kostet ' + Math.round(TERMS.exchangeEarlyShare * 100) +
+        ' % des Kaufpreises. Kündigungsfrist ' + TERMS.noticeDays + ' Tage zum Monatsende.</p>' +
+      '<p class="aaas-note">Widerruf ' + TERMS.withdrawalDays + ' Tage ab Lieferung, dabei ' +
+        'trägst du den Rückversand und die Miete für die Nutzungsdauer. Das Werk bleibt bis ' +
+        'zur Übernahme Eigentum von LUMAS.</p>' +
       '<p class="aaas-note"><button type="button" class="aaas-link" data-tip="damage">' +
         'Was passiert bei Beschädigung?</button></p>' +
       // deliberately makes no insurance promise: that decision is still open
@@ -845,8 +781,7 @@
   // spec B only: term choice, the net basis, shipping note, damage tooltip and the
   // rent-to-own share, all of which the 21 Aug checklist asks for on the PDP
   function pdpRentDetail(q) {
-    return termSelect(q) +
-      '<p class="aaas-note">' + rateLabel() + ' (' + money(q.base) + ').</p>' +
+    return       '<p class="aaas-note">' + rateLabel() + ' (' + money(q.base) + ').</p>' +
       '<p class="aaas-note">Versand ' + money(q.shipping) + ' einmalig, danach fällt nur ' +
         'die Monatsmiete an.</p>' +
       '<p class="aaas-note">' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete ' +
@@ -872,7 +807,7 @@
         e.preventDefault();
         e.stopPropagation();
         // spec B decides buy vs rent on the PDP, so the add follows that choice
-        attemptAdd(TERMS.pdpToggle && mode() === 'rent');
+        attemptAdd(mode() === 'rent');
       }
     }, true);
   }
@@ -904,15 +839,11 @@
     if (!document.getElementById('aaas-mode')) {
       var panel = el('div', 'aaas-mode');
       panel.id = 'aaas-mode';
-      // spec B decides with a switch on the PDP and in the cart, so the last
-      // surface carrying the decision uses it too rather than reverting to the
-      // button pair. syncSwitches keeps it in step: unlike the cart, this panel
-      // is built once and never re-rendered.
+      // the same switch as the PDP and the cart. syncSwitches keeps it in step:
+      // unlike the cart, this panel is built once and never re-rendered.
       panel.innerHTML = '<div class="aaas-label">Kaufen oder mieten</div>' +
-        (TERMS.pdpToggle
-          ? switchControl(q, mode() === 'rent',
-              'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"')
-          : modeSwitch(q)) +
+        switchControl(q, mode() === 'rent',
+          'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"') +
         '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
       host.insertAdjacentElement('beforebegin', panel);
       panel.addEventListener('click', function (e) {
@@ -1007,102 +938,6 @@
     renderSteps(q);
   }
 
-  function checkRow(id, label) {
-    return '<label class="aaas-check"><input type="checkbox" id="' + id + '">' +
-      '<span>' + label + '</span></label>';
-  }
-
-  /* Spec A states the mandate as prose, which is what LUMAS-16152 asks for
-   * ("not a checkbox in the fine print"). Spec B's checklist asks for explicit
-   * tickboxes plus an opt-out of the withdrawal period for an immediate start. */
-  function rentConsent(q) {
-    if (TERMS.consent !== 'tickbox') {
-      return '<div class="aaas-consent"><h3>SEPA-Lastschriftmandat</h3>' +
-        '<p>Du ermächtigst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von deinem Konto ' +
-        'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Das Mandat gilt für ' +
-        'die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.</p>' +
-        '<p>Du kannst die Zahlungsart jederzeit in deinem Konto ändern.</p></div>';
-    }
-    return '<div class="aaas-consent"><h3>Zustimmungen</h3>' +
-      checkRow('aaas_c_contract',
-        'Ich habe den <a href="#">Mietvertrag</a> gelesen und bestätige ihn.') +
-      checkRow('aaas_c_debit',
-        'Ich stimme der wiederkehrenden Abbuchung von <b>' + money(q.monthly) +
-        '</b> im Monat per SEPA-Lastschrift oder Kreditkarte zu.') +
-      checkRow('aaas_c_start',
-        'Ich möchte sofort starten und verzichte auf mein ' + TERMS.withdrawalDays +
-        '-tägiges Widerrufsrecht.') +
-      '<p class="aaas-note">Ohne diesen Verzicht beginnt die Miete nach Ablauf der ' +
-        TERMS.withdrawalDays + ' Tage.</p>' +
-      '<p class="aaas-note">Den Mietvertrag findest du nach der Bestellung in deinem ' +
-        'Kundenkonto.</p></div>';
-  }
-
-  function renderConsent(q, renting) {
-    var node = document.getElementById('aaas-consent');
-    if (!renting) { if (node) node.remove(); return; }
-    if (!node) {
-      var anchor = document.querySelector('aside .cart-items-container') || document.querySelector('aside');
-      if (!anchor) return;
-      node = el('div', 'aaas-consent');
-      node.id = 'aaas-consent';
-      anchor.insertAdjacentElement('afterend', node);
-    }
-    node.innerHTML =
-      '<h3>Das buchst du</h3>' +
-      '<p>Du schließt einen Mietvertrag über <b>' + TERMS.months + ' Monate</b> ab. Heute werden ' +
-        '<b>' + money(q.dueToday) + '</b> abgebucht, danach monatlich <b>' + money(q.monthly) +
-        '</b> per SEPA-Lastschrift oder Kreditkarte.</p>' +
-      '<p>Übernehmen kannst du jederzeit. 80 % deiner gezahlten Miete werden angerechnet, ab dem ' +
-        q.ownedFromMonth + '. Monat liegt der Übernahmepreis bei ' + money(0) + '. Tausch und ' +
-        'Rückgabe sind ab Monat ' + TERMS.months + ' möglich.</p>' +
-      '<p>' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung. Es gelten die ' +
-        'Mietbedingungen und die Widerrufsbelehrung.</p>';
-  }
-
-  /* ---------- checkout steps ----------
-   * The captured page only contains the guest/customer step: address, payment and
-   * summary are server-rendered after an email is submitted, so they are not in the
-   * clone. They are built here using the checkout's own markup patterns
-   * (.col-xs-12 wrappers with a floating <label>, button.btn, h1.main-title) so they
-   * inherit the shop's styling rather than a look invented for the prototype. */
-
-  // Stages mirror the live checkout: 1 = the real captured email step,
-  // 2 = billing address, 3 = payment (which carries the paid action, there is no
-  // separate summary step), 4 = confirmation.
-  var STEP_KEY = 'aaas-step';
-  var DATA_KEY = 'aaas-order';
-
-  function step() {
-    try { return parseInt(sessionStorage.getItem(STEP_KEY), 10) || 1; } catch (e) { return 1; }
-  }
-  function setStep(n) { try { sessionStorage.setItem(STEP_KEY, String(n)); } catch (e) {} }
-  function orderData() {
-    try { return JSON.parse(sessionStorage.getItem(DATA_KEY) || '{}'); } catch (e) { return {}; }
-  }
-  function saveOrder(patch) {
-    var d = orderData();
-    Object.keys(patch).forEach(function (k) { d[k] = patch[k]; });
-    try { sessionStorage.setItem(DATA_KEY, JSON.stringify(d)); } catch (e) {}
-  }
-
-  function field(id, label, type, value) {
-    return '<div class="col-xs-12 aaas-field">' +
-      '<input id="' + id + '" name="' + id + '" type="' + (type || 'text') +
-        '" placeholder="' + label + '*" value="' + (value || '') + '" required>' +
-      '<label class="required" for="' + id + '">' + label + '</label></div>';
-  }
-
-  function payOption(id, name, note, checked) {
-    return '<label class="aaas-pay' + (checked ? ' is-on' : '') + '">' +
-      '<input type="radio" name="aaas-payment" value="' + id + '"' + (checked ? ' checked' : '') + '>' +
-      // NOT a bare <span>: the checkout styles label > span as its custom radio dot
-      '<span class="aaas-pay-text"><b>' + name + '</b>' +
-      (note ? '<small>' + note + '</small>' : '') + '</span></label>';
-  }
-
-  // the live checkout collapses a completed section into a labelled row with an
-  // edit link, instead of showing a numbered progress bar
   function summaryRow(label, body, note, toStep) {
     return '<div class="aaas-corow">' +
       '<div class="aaas-corow-label">' + label + '</div>' +
@@ -1180,6 +1015,63 @@
       expressBtn('amazon-pay', 'Amazon Pay') +
       expressBtn('apple-pay', 'Apple Pay') +
     '</div>';
+  }
+
+  function step() {
+    try { return parseInt(sessionStorage.getItem(STEP_KEY), 10) || 1; } catch (e) { return 1; }
+  }
+
+  function setStep(n) { try { sessionStorage.setItem(STEP_KEY, String(n)); } catch (e) {} }
+
+  function orderData() {
+    try { return JSON.parse(sessionStorage.getItem(DATA_KEY) || '{}'); } catch (e) { return {}; }
+  }
+
+  function saveOrder(patch) {
+    var d = orderData();
+    Object.keys(patch).forEach(function (k) { d[k] = patch[k]; });
+    try { sessionStorage.setItem(DATA_KEY, JSON.stringify(d)); } catch (e) {}
+  }
+
+  function field(id, label, type, value) {
+    return '<div class="col-xs-12 aaas-field">' +
+      '<input id="' + id + '" name="' + id + '" type="' + (type || 'text') +
+        '" placeholder="' + label + '*" value="' + (value || '') + '" required>' +
+      '<label class="required" for="' + id + '">' + label + '</label></div>';
+  }
+
+  /* Prose, not a tickbox. LUMAS-16152 asks that the contract conclusion
+   * "appear trustworthy and understandable, without coming across as merely a
+   * formality involving a checkbox in the fine print". The tickbox version came
+   * from the 21 Aug comment and is gone with the rest of it. */
+  function rentConsent(q) {
+    return '<div class="aaas-consent"><h3>SEPA-Lastschriftmandat</h3>' +
+      '<p>Du ermächtigst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von deinem Konto ' +
+      'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Das Mandat gilt für ' +
+      'die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.</p>' +
+      '<p>Du kannst die Zahlungsart jederzeit in deinem Konto ändern.</p></div>';
+  }
+
+  function renderConsent(q, renting) {
+    var node = document.getElementById('aaas-consent');
+    if (!renting) { if (node) node.remove(); return; }
+    if (!node) {
+      var anchor = document.querySelector('aside .cart-items-container') || document.querySelector('aside');
+      if (!anchor) return;
+      node = el('div', 'aaas-consent');
+      node.id = 'aaas-consent';
+      anchor.insertAdjacentElement('afterend', node);
+    }
+    node.innerHTML =
+      '<h3>Das buchst du</h3>' +
+      '<p>Du schließt einen Mietvertrag über <b>' + TERMS.months + ' Monate</b> ab. Heute werden ' +
+        '<b>' + money(q.dueToday) + '</b> abgebucht, danach monatlich <b>' + money(q.monthly) +
+        '</b> per SEPA-Lastschrift oder Kreditkarte.</p>' +
+      '<p>Übernehmen kannst du jederzeit. 80 % deiner gezahlten Miete werden angerechnet, ab dem ' +
+        q.ownedFromMonth + '. Monat liegt der Übernahmepreis bei ' + money(0) + '. Tausch und ' +
+        'Rückgabe sind ab Monat ' + TERMS.months + ' möglich.</p>' +
+      '<p>' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung. Es gelten die ' +
+        'Mietbedingungen und die Widerrufsbelehrung.</p>';
   }
 
   function toggleRow(label, on) {
@@ -1459,7 +1351,6 @@
     // term, so clamp it and derive the end date from the term rather than a fixture
     var paid = Math.min(parseInt(host.getAttribute('data-months-paid'), 10) || 0, TERMS.months);
     var pct = Math.min(100, Math.round(paid / TERMS.months * 100));
-    var specB = TERMS.pdpToggle;   // the 21 Aug checklist adds several account items
 
     var forward = function (s, n) {
       var p = String(s).split('.').map(Number);
@@ -1485,10 +1376,7 @@
     for (var i = 0; i < 4 && paid - i > 0; i++) {
       rows += '<tr><td>Rate ' + (paid - i) + ' von ' + TERMS.months + '</td>' +
               '<td>' + shift(host.getAttribute('data-next'), i + 1) + '</td>' +
-              '<td>Bezahlt</td><td>' + money(q.monthly) + '</td>' +
-              // spec B's checklist asks for invoices alongside the debit history
-              (TERMS.pdpToggle ? '<td><a class="aaas-link" href="#">Rechnung</a></td>' : '') +
-              '</tr>';
+              '<td>Bezahlt</td><td>' + money(q.monthly) + '</td></tr>';
     }
 
     // the real account sidebar, with Mieten added. In the live shop this is one
@@ -1537,90 +1425,56 @@
               '<div class="aaas-progress"><span style="width:' + pct + '%"></span></div>' +
               '<div class="aaas-progress-legend"><span>Monat ' + paid + ' von ' + TERMS.months + '</span>' +
                 '<span>Mindestlaufzeit endet ' + endDate + '</span></div>' +
-              (specB
-                ? '<p class="aaas-note">Nach der Mindestlaufzeit verlängert sich die Miete ' +
-                  'monatlich, bis du übernimmst, tauschst oder zurückgibst.</p>'
-                : '') +
+              '<p class="aaas-note">Kündigungsfrist ' + TERMS.noticeDays +
+                ' Tage zum Monatsende.</p>' +
               '<div class="aaas-grid">' +
                 stat('Monatsmiete', money(q.monthly)) +
                 stat('Nächste Abbuchung', host.getAttribute('data-next')) +
                 stat('Übernahmepreis heute', money(buyoutAt(q, paid))) +
-                (specB
-                  ? stat('Erstes Replacement', endDate)
-                  : stat('Bereits gezahlt', money(round2(q.monthly * paid)))) +
+                stat('Bereits gezahlt', money(round2(q.monthly * paid))) +
               '</div>' +
             '</div></div>' +
 
-            // spec B: payment method is self-service, with a CS route for an expired card
-            (specB
-              ? '<div class="aaas-label">Zahlungsart</div>' +
-                '<div class="aaas-panel"><div class="aaas-panel-inner">' +
-                  '<div class="aaas-payline"><span>SEPA-Lastschrift, IBAN endet auf 4021</span>' +
-                    '<button type="button" class="aaas-link">Ändern</button></div>' +
-                  '<p class="aaas-note">Karte abgelaufen oder Bank gewechselt? ' +
-                    '<a href="#">Zahlungsart über unser Team aktualisieren</a>.</p>' +
-                '</div></div>'
-              : '') +
+            // LUMAS-16152 asks the account to carry the recurring payment method
+            '<div class="aaas-label">Zahlungsart</div>' +
+            '<div class="aaas-panel"><div class="aaas-panel-inner">' +
+              '<div class="aaas-payline"><span>SEPA-Lastschrift, IBAN endet auf 4021</span>' +
+                '<button type="button" class="aaas-link">Ändern</button></div>' +
+              '<p class="aaas-note">Karte abgelaufen oder Bank gewechselt? ' +
+                '<a href="#">Zahlungsart über unser Team aktualisieren</a>.</p>' +
+            '</div></div>' +
 
             '<div class="aaas-label">Abbuchungen</div>' +
             '<table class="aaas-orders"><thead><tr><th>Rate</th><th>Datum</th>' +
-              '<th>Status</th><th>Betrag</th>' + (specB ? '<th>Rechnung</th>' : '') +
-              '</tr></thead><tbody>' + rows + '</tbody></table>' +
+              '<th>Status</th><th>Betrag</th></tr></thead><tbody>' + rows + '</tbody></table>' +
 
             '<div class="aaas-label" style="margin-top:var(--sp-6)">Zum Laufzeitende</div>' +
             '<div class="aaas-options">' +
               '<div class="aaas-option"><h4>Übernehmen</h4>Jederzeit möglich. ' +
-                Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden angerechnet. ' +
-                'Aktuell ' + money(buyoutAt(q, paid)) + '.' +
-                (specB ? '<button type="button" class="aaas-link" data-eot="buy">' +
-                  'Ankauf starten</button>' : '') + '</div>' +
+                Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden angerechnet, ' +
+                'das Bereitstellungsentgelt nicht. Aktuell ' + money(buyoutAt(q, paid)) +
+                '.</div>' +
               '<div class="aaas-option" data-locked><h4>Tauschen</h4>Ab Monat ' + TERMS.months +
-                '. Gegen ein neues Bereitstellungsentgelt.' +
-                // the checklist leaves this one open: account flow or CS only
-                (specB ? '<span class="aaas-open">Offen: Anfrage im Konto oder nur über ' +
-                  'unser Team</span>' : '') + '</div>' +
+                ' kostenlos, es fallen eine neue Monatsmiete und ein neues ' +
+                'Bereitstellungsentgelt an. Vorher jederzeit gegen ' +
+                Math.round(TERMS.exchangeEarlyShare * 100) + ' % des Kaufpreises.</div>' +
               '<div class="aaas-option" data-locked><h4>Zurückgeben</h4>Ab Monat ' + TERMS.months +
-                '. Das Werk muss in verkaufsfähigem Zustand sein, der Echtheitsnachweis muss beiliegen.' +
-                (specB ? '<button type="button" class="aaas-link" data-eot="return">' +
-                  'Rückgabe anfragen</button>' : '') + '</div>' +
+                '. Das Werk muss in verkaufsfähigem Zustand sein, der Echtheitsnachweis muss ' +
+                'beiliegen. Den Rückversand übernehmen wir.</div>' +
             '</div>' +
             '<div id="aaas-eot"></div>' +
 
-            (specB
-              ? '<div class="aaas-panel aaas-cs"><div class="aaas-panel-inner">' +
-                  '<h2 class="aaas-card-title">Kündigung oder Ankauf besprechen</h2>' +
-                  '<p class="aaas-note">Ruf uns an unter 030 30 30 69 69 oder schreib uns über ' +
-                    'das <a href="#">Kontaktformular</a>. Wir wickeln Übernahme, Tausch und ' +
-                    'Rückgabe persönlich mit dir ab.</p>' +
-                '</div></div>'
-              : '<p class="aaas-note">Für Übernahme, Tausch und Rückgabe melde dich bei unserem Team.</p>') +
+            // GLOB-2053: CS and Finance handle end-of-term manually in the pilot
+            '<div class="aaas-panel aaas-cs"><div class="aaas-panel-inner">' +
+              '<h2 class="aaas-card-title">Kündigung oder Ankauf besprechen</h2>' +
+              '<p class="aaas-note">Ruf uns an unter 030 30 30 69 69 oder schreib uns über ' +
+                'das <a href="#">Kontaktformular</a>. Wir wickeln Übernahme, Tausch und ' +
+                'Rückgabe persönlich mit dir ab.</p>' +
+            '</div></div>' +
           '</div>' +
         '</div>' +
       '</div>';
 
-    // spec B: the buyout and return requests resolve inline rather than dead-ending
-    var eot = document.getElementById('aaas-eot');
-    if (eot) host.addEventListener('click', function (e) {
-      var b = e.target.closest && e.target.closest('[data-eot]');
-      if (!b) return;
-      if (b.getAttribute('data-eot') === 'buy') {
-        eot.innerHTML = '<div class="aaas-consent"><h3>Ankauf bestätigen</h3>' +
-          '<p>Du übernimmst <b>' + host.getAttribute('data-title') + '</b> zum aktuellen ' +
-          'Übernahmepreis von <b>' + money(buyoutAt(q, paid)) + '</b>. Die monatliche ' +
-          'Abbuchung endet danach.</p>' +
-          '<button type="button" class="aaas-btn" data-eot="buy-confirm">Ankauf zahlungspflichtig bestätigen</button></div>';
-      } else if (b.getAttribute('data-eot') === 'buy-confirm') {
-        eot.innerHTML = '<div class="aaas-consent"><h3>Ankauf angefragt</h3>' +
-          '<p>Wir haben deine Anfrage erhalten und melden uns mit der Abschlussrechnung. ' +
-          'Die monatliche Abbuchung stoppen wir mit dem Abschluss.</p></div>';
-      } else if (b.getAttribute('data-eot') === 'return') {
-        eot.innerHTML = '<div class="aaas-consent"><h3>Rückgabe anfragen</h3>' +
-          '<p>Wir schicken dir Verpackung und Rücksendeetikett. Bitte lege den ' +
-          'Echtheitsnachweis bei und gib das Werk in verkaufsfähigem Zustand zurück.</p>' +
-          '<p>Nach Eingang prüfen wir den Zustand und beenden den Mietvertrag.</p></div>';
-      }
-      eot.scrollIntoView({ block: 'nearest' });
-    });
   }
 
   /* ---------- boot ---------- */
@@ -1644,29 +1498,16 @@
       var flag = el('div', 'aaas-flag');
       flag.innerHTML =
         '<span class="aaas-flag-title">Prototyp · Art as a Service</span>' +
-        '<span class="aaas-flag-spec">' +
-          '<button type="button" data-spec="A"' +
-            (spec() === 'A' ? ' aria-pressed="true"' : '') + '>Spec A</button>' +
-          '<button type="button" data-spec="B"' +
-            (spec() === 'B' ? ' aria-pressed="true"' : '') + '>Spec B</button>' +
-        '</span>' +
-        '<span class="aaas-flag-note">' + TERMS.label + '</span>' +
-        // the buy/rent presentation only exists in spec B, so only offer it there
-        (TERMS.pdpToggle
-          ? '<span class="aaas-flag-spec aaas-flag-variant">' +
-            Object.keys(VARIANTS).map(function (k) {
-              return '<button type="button" data-aaas-variant="' + k + '"' +
-                (variant() === k ? ' aria-pressed="true"' : '') + '>' + VARIANTS[k] + '</button>';
-            }).join('') + '</span>'
-          : '');
-      // switching spec changes the pricing basis, so the page is re-rendered whole
+        '<span class="aaas-flag-note">GLOB-2053, verbindliche Konditionen</span>' +
+        '<span class="aaas-flag-spec aaas-flag-variant">' +
+          Object.keys(VARIANTS).map(function (k) {
+            return '<button type="button" data-aaas-variant="' + k + '"' +
+              (variant() === k ? ' aria-pressed="true"' : '') + '>' + VARIANTS[k] + '</button>';
+          }).join('') + '</span>';
       flag.addEventListener('click', function (e) {
         var v = e.target.closest('[data-aaas-variant]');
-        if (v) { setVariant(v.getAttribute('data-aaas-variant')); location.reload(); return; }
-        var b = e.target.closest('[data-spec]');
-        if (!b) return;
-        setSpec(b.getAttribute('data-spec'));
-        try { sessionStorage.removeItem(TERM_KEY); } catch (err) {}
+        if (!v) return;
+        setVariant(v.getAttribute('data-aaas-variant'));
         location.reload();
       });
       document.body.appendChild(flag);

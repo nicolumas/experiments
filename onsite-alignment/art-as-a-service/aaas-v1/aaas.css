@@ -85,51 +85,6 @@
 
 .aaas-hidden-by-rent { display: none !important; }
 
-/* spec B consent tickboxes: the checkout hides native inputs and pins label
-   height, so both need undoing here */
-.aaas-consent label.aaas-check {
-  position: static;
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-3);
-  height: auto;
-  min-height: 0;
-  margin: 0 0 var(--sp-3);
-  padding: 0;
-  font-size: 1.35rem;
-  line-height: 1.5;
-  cursor: pointer;
-}
-
-/* Two boxes per row: the native checkbox plus a second one the theme paints as
-   span::before (content " ", 15x15, white, 1px charcoal). That pseudo-box is
-   inert here, it never picks up :checked because the shop's rule expects its own
-   markup, so it was decoration that could not show state. The label's own
-   pseudo-elements go the same way. */
-.aaas-consent label.aaas-check::before,
-.aaas-consent label.aaas-check::after,
-.aaas-consent label.aaas-check span::before,
-.aaas-consent label.aaas-check span::after { content: none !important; display: none !important; }
-
-.aaas-consent label.aaas-check input[type="checkbox"] {
-  position: static;
-  appearance: auto;
-  -webkit-appearance: checkbox;
-  width: 1.6rem;
-  height: 1.6rem;
-  min-height: 0;
-  margin: .2rem 0 0;
-  opacity: 1;
-  accent-color: var(--color-text-primary);
-}
-
-.aaas-consent label.aaas-check span {
-  flex: 1;
-  background: none !important;
-  background-image: none !important;
-  border-radius: 0 !important;
-}
-
 /* The shop centres headings, which my panels inherit: the artwork title sat
    centred above left-aligned meta. Left-align every heading the layer owns. */
 .aaas-card-title,

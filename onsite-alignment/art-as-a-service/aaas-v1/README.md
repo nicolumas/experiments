@@ -39,15 +39,23 @@ rewriting every `at.lumas.com` URL would turn the page's navigation into local f
 
 Every figure is computed from the binding conditions, never hardcoded:
 
+Everything comes from the **ticket descriptions**. An earlier checklist in the GLOB-2053
+comments proposed a net basis, a 3 / 6 / 12 term choice, 14-day withdrawal and tickbox consent;
+the comments are not the spec and every one of those contradicts the description, so none of
+them are here.
+
 | Term | Value |
 |---|---|
 | Monthly rent | 3,75 % of the **gross** price |
 | Provisioning fee | one month's rent, once, **never** credited against a buyout |
-| Minimum term | 36 months, fixed (deliberately no term selector) |
+| Minimum term | 36 months, fixed (there is no term selector) |
+| Notice | 30 days to the end of the month |
 | Buyout | any time; 80 % of rent paid so far is credited |
-| Return / exchange | only from month 36 |
-| Withdrawal | 60 days from delivery |
+| Exchange | free from month 36 (new rent + new provisioning fee); earlier against 30 % of the price |
+| Return | from month 36; saleable condition, certificate of authenticity included |
+| Withdrawal | 60 days from delivery; the customer bears return shipping and pro-rata rent |
 | Payment | SEPA or card, recurring via Adyen |
+| Pilot markets | AT, CH, COM |
 
 Verified against the epic's own worked example (MCS45, gross €2.990):
 
@@ -57,6 +65,9 @@ Verified against the epic's own worked example (MCS45, gross €2.990):
 | Bereitstellungsentgelt | € 112,13 | € 112,13 |
 | Heute fällig | € 263,26 | € 253,26 (uses DE shipping €29; AT is €39) |
 | Gesamt 36 Monate | € 4.187,81 | € 4.177,81 (same €29/€39 difference) |
+
+Rerun that check against the epic's own table any time the model is touched: with the DE
+shipping figure of €29 all five lines match to the cent.
 
 Shipping is read per variant from the buy box, so the €549 40×40 correctly uses €9,90, not €39.
 
@@ -103,12 +114,11 @@ both the contract and the FAQ.
 
 ## Not built yet
 
-- **Cart drawer in rent mode.** The drawer is client-rendered by the live shop and cannot be triggered
-  in a static clone, so the mode switch lives in the checkout's cart summary instead.
 - The **transactional mails** (text-only per the design brief, so no design needed).
-- **Exchange / return request flows.** LUMAS-16152 explicitly defers these; the account page shows them
-  as states, not flows.
-- **Mixed-cart conflict state.** Stated in the drawer copy, not yet demonstrated as a UI.
+- **Exchange / return request flows.** GLOB-2053 says CS and Finance handle all three end-of-term
+  paths manually in the pilot, so the account page shows them as states, not as self-service flows.
+- The **rental conditions page** ("Mietbedingungen") the checkout links to. GLOB-2053 puts the
+  legal pages outside this ticket.
 
 ## Open questions that materially affect this prototype
 
