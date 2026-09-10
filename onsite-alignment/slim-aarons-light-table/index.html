@@ -216,6 +216,18 @@ img{display:block;max-width:100%;height:auto}
   .lt-slide__info .lt-ic{width:1.3rem;height:1.3rem}
   .lt-slide__n{min-width:1.4rem}
 }
+/* Where the ledger sits alongside, the nine read as two lines rather than a
+   3 x 3: five across, then four. The tile lands near 180px, so the caption
+   takes the same compact treatment as the narrow one. */
+@media(min-width:1080px){
+  .lt-table{grid-template-columns:repeat(5,1fr);gap:1.6rem}
+  .lt-slide{--cap-h:6.2rem}
+  .lt-slide__cap{padding:.9rem 3.4rem 1rem .9rem;gap:.6rem;align-items:center}
+  .lt-slide__t{font-size:1.1rem;line-height:1.25;-webkit-line-clamp:3}
+  .lt-slide__info{width:2.4rem;height:2.4rem;right:.8rem}
+  .lt-slide__info .lt-ic{width:1.3rem;height:1.3rem}
+  .lt-slide__n{min-width:1.4rem}
+}
 
 .lt-table-foot{display:flex;justify-content:space-between;align-items:center;gap:1.6rem;flex-wrap:wrap;margin-top:1.6rem}
 .lt-note{font-size:1.1rem;letter-spacing:.02em;color:var(--color-text-secondary);margin:0}
@@ -312,12 +324,12 @@ img{display:block;max-width:100%;height:auto}
 .lt-bar.is-tier .lt-bar__thumbs .lt-rm{background:var(--color-ivory-100);color:var(--color-charcoal-900)}
 
 /* ══ WALL PREVIEW ═════════════════════════════════════════════════════════ */
-.lt-wall-sec{background:var(--color-surface-page);border-top:1px solid var(--color-border-subtle);border-bottom:1px solid var(--color-border-subtle)}
-.lt-wall-sec[hidden]{display:none}
-/* The room is off on phones. The boundary is the page's own table breakpoint,
-   the width at which the light table goes three across, rather than the
-   ledger's, which was hiding the room on small laptops too. */
-@media(max-width:759px){ .lt-wall-sec{display:none} }
+/* The room sits in the same column as the nine, immediately beneath them, so
+   choosing a slide and seeing it hang are one movement of the eye. Off on
+   phones: the boundary is the page's own table breakpoint. */
+.lt-wall-block{margin-top:4rem}
+.lt-wall-block__label{margin-bottom:1.2rem}
+@media(max-width:759px){ .lt-wall-block{display:none} }
 .lt-wall{position:relative;overflow:hidden;background:var(--color-surface-muted);touch-action:none}
 .lt-wall__inner{position:relative}
 .lt-wall img{width:100%;height:auto}
@@ -1339,6 +1351,27 @@ img{display:block;max-width:100%;height:auto}
             <p class="lt-note">Each slide is its own work. Nothing is bundled.</p>
             <p class="lt-note" id="tableCount" aria-live="polite">Nothing chosen yet</p>
           </div>
+
+          <!-- ══ THE ROOM, directly under the nine ═══════════════════════ -->
+          <div class="lt-wall-block" id="wallSec" hidden>
+            <p class="t-eyebrow lt-wall-block__label">On the wall</p>
+            <div class="lt-wall">
+              <div class="lt-wall__inner">
+                <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966" loading="lazy">
+                <div class="lt-hang" id="hang">
+                  <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
+                  <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
+                </div>
+              </div>
+            </div>
+            <div class="lt-wall__cap">
+              <p class="lt-note" id="wallDims">&nbsp;</p>
+              <div class="lt-wall__hint">
+                <p class="lt-note">Drag to arrange. Arrow keys nudge.</p>
+                <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ledger (desktop) -->
@@ -1381,33 +1414,6 @@ img{display:block;max-width:100%;height:auto}
         <h2 class="t-h2">Nine archive slides</h2>
       </div>
       <div class="lt-cgrid" id="cgrid"></div>
-    </div>
-  </section>
-
-  <!-- ══ WALL PREVIEW ══════════════════════════════════════════════════ -->
-  <section class="lt-sec lt-wall-sec" id="wallSec" hidden>
-    <div class="lt-wrap">
-      <div class="lt-sec-head">
-        <p class="t-eyebrow">On the wall</p>
-        <h2 class="t-h2">How your edit&nbsp;hangs</h2>
-        <p class="t-small">Every slide is cut to the same square, so any of them will hang together. Drag them into the arrangement you want, and the measurements below follow what you&nbsp;make.</p>
-      </div>
-      <div class="lt-wall">
-        <div class="lt-wall__inner">
-          <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966" loading="lazy">
-          <div class="lt-hang" id="hang">
-            <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
-            <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
-          </div>
-        </div>
-      </div>
-      <div class="lt-wall__cap">
-        <p class="lt-note" id="wallDims">&nbsp;</p>
-        <div class="lt-wall__hint">
-          <p class="lt-note">Drag a slide to arrange the wall. Arrow keys nudge.</p>
-          <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
-        </div>
-      </div>
     </div>
   </section>
 
