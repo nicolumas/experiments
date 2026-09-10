@@ -235,10 +235,10 @@ img{display:block;max-width:100%;height:auto}
 .lt-rise{animation:lt-rise var(--lt-t) var(--lt-ease)}
 @keyframes lt-rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-/* nine steps you can walk. Height carries the descent, the fill carries where
-   you are, and each one is a real button that sets the count. */
+/* nine steps you can walk. The fill carries where you are, the labels beneath
+   carry the descent, and each step is a real button that sets the count. */
 .lt-ladder__label{margin-bottom:1.2rem}
-.lt-ladder{display:flex;align-items:flex-end;gap:.5rem;height:3.4rem}
+.lt-ladder{display:flex;align-items:stretch;gap:.5rem;height:3.4rem}
 .lt-notch{
   flex:1;background:var(--color-bone-100);border:0;padding:0;cursor:pointer;
   transition:background var(--lt-t-fast) var(--lt-ease),transform var(--lt-t-fast) var(--lt-ease);
@@ -283,7 +283,7 @@ img{display:block;max-width:100%;height:auto}
 @media(min-width:1080px){.lt-bar{display:none}}
 .lt-bar.is-tier{background:var(--color-charcoal-900);border-top-color:var(--color-charcoal-900);color:var(--color-ivory-100)}
 .lt-bar__sum{display:flex;align-items:center;gap:1.4rem;width:100%;background:none;border:0;padding:1.2rem 0 1rem;font:inherit;color:inherit;cursor:pointer;text-align:left}
-.lt-bar__ladder{display:flex;align-items:flex-end;gap:.3rem;height:1.4rem;flex:1;min-width:0}
+.lt-bar__ladder{display:flex;align-items:stretch;gap:.3rem;height:1.4rem;flex:1;min-width:0}
 .lt-bar__ladder i{flex:1;background:var(--color-border-default);transition:background var(--lt-t-fast) var(--lt-ease)}
 .lt-bar__ladder i.on{background:var(--color-charcoal-900)}
 .lt-bar.is-tier .lt-bar__ladder i{background:rgba(244,237,226,.28)}
@@ -1680,23 +1680,16 @@ img{display:block;max-width:100%;height:auto}
   });
 
   /* the nine-notch index ---------------------------------------------- */
-  /* The step heights are the price ladder itself: tallest at 249, shortest at
-     149, so the descent is visible before a single slide is chosen. */
-  function stepHeight(i, min, max){
-    return min + (PRICE[i] - PRICE[9]) / (PRICE[1] - PRICE[9]) * (max - min);
-  }
   for (var i = 1; i <= 9; i++){
     var b = document.createElement("button");
     b.type = "button";
     b.className = "lt-notch";
     b.dataset.n = i;
-    b.style.height = stepHeight(i, 1.0, 3.4).toFixed(2) + "rem";
     b.setAttribute("aria-label", i + (i === 1 ? " slide, " : " slides, ") + "\u20ac" + PRICE[i] + " each");
     b.addEventListener("click", function(){ setCount(+this.dataset.n); });
     ladder.appendChild(b);
 
     var m = document.createElement("i");
-    m.style.height = stepHeight(i, 0.5, 1.4).toFixed(2) + "rem";
     barLadder.appendChild(m);
   }
 
