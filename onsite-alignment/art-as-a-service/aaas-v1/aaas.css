@@ -240,24 +240,25 @@
 .aaas-ms-quiet { padding: 0; font-size: 1.4rem; color: var(--color-text-secondary); }
 .aaas-ms-quiet .aaas-ms-text b { color: var(--color-text-primary); }
 
-/* the monthly takes the place of the shop's own price, at its weight */
+/* The monthly takes the place of the shop's own price and must be typeset
+   identically, so the element wears the shop's .price class and this rule
+   declares no type of its own: only the layout, and the unit that follows. */
 .aaas-price-rent {
   display: flex;
   align-items: baseline;
   /* no gap: the slash binds the unit to the figure, and 4px of air read as a
-     stray character next to a 30px number */
+     stray character next to a 32px number */
   gap: 0;
-  font-family: var(--font-display);
-  font-size: 3rem;
-  line-height: 1.1;
-  color: var(--color-text-primary);
 }
 
-.aaas-price-rent b { font-weight: 400; }
+/* The element is toggled with the hidden attribute, and an author `display`
+   rule beats the UA sheet's [hidden] { display: none }: without this the
+   monthly stayed on screen next to the shop's price in buy mode. */
+.aaas-price-rent[hidden] { display: none !important; }
 
-.aaas-price-rent span {
-  font-family: var(--font-body);
+.aaas-price-rent-unit {
   font-size: 1.5rem;
+  line-height: 1.2;
   color: var(--color-text-secondary);
 }
 

@@ -809,8 +809,13 @@
       var shopPrice = box.querySelector('pdp-price');
       var rent = box.querySelector('.aaas-price-rent');
       if (renting) {
-        if (!rent) { rent = el('div', 'aaas-price-rent'); box.appendChild(rent); }
-        rent.innerHTML = '<b>' + money(q.monthly) + '</b><span>/Monat</span>';
+        // the shop's own .price class carries the buy price's type, so wearing it
+        // makes the monthly render in exactly the same face, size and colour,
+        // and keeps tracking it across breakpoints. No <b>: the global b rule
+        // swaps in archivo-bold, and the shop's price is archivo at 400.
+        if (!rent) { rent = el('div', 'price aaas-price-rent'); box.appendChild(rent); }
+        rent.innerHTML = money(q.monthly) +
+          '<span class="aaas-price-rent-unit">/Monat</span>';
       }
       if (rent) rent.hidden = !renting;
       if (shopPrice) shopPrice.classList.toggle('aaas-hidden-by-rent', renting);
