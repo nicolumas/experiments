@@ -600,6 +600,8 @@
     }
   }
 
+  var pdpSettled = false;
+
   function renderPdpLine() {
     var container = document.querySelector('.pdp-price-container');
     if (!container || !pdpGross()) return;
@@ -612,6 +614,24 @@
       // buying stays primary: renting enters as a line, never a second button
       container.insertAdjacentElement('afterend', line);
     }
+
+    /* The buy box is built by Vue after the page parses, and the size selector
+     * lands ABOVE the price container that is already in the static markup. Run
+     * before that and the line is correctly anchored to the price but sits high
+     * on the page under the edition line, with the price not yet drawn, which
+     * is what it looked like when opening the PDP from the index. So: re-anchor
+     * in case the buy box was rebuilt, and stay hidden until the price element
+     * has an actual box. */
+    if (line.previousElementSibling !== container) {
+      container.insertAdjacentElement('afterend', line);
+    }
+    var shopPrice = container.querySelector('pdp-price');
+    var priceDrawn = !!shopPrice && shopPrice.getBoundingClientRect().height > 0;
+    var rentPriceShown = !!document.querySelector('.aaas-price-rent:not([hidden])');
+    var sizesDrawn = !!document.querySelector('button.size');
+    // pdpSettled is the escape hatch: if the buy box never finishes for any
+    // reason, show the line anyway rather than hiding it for good
+    line.hidden = !pdpSettled && !((priceDrawn || rentPriceShown) && sizesDrawn);
     // "Linie": no control at all on the page, renting enters as a sentence and
     // a link, and the terms open in the drawer. The quietest of the five.
     if (variant() === 'line') {
@@ -801,6 +821,11 @@
   function initPdp() {
     if (!document.querySelector('.pdp-price-container')) return;
     renderPdpLine();
+
+    // the buy box finishes rendering well after this runs, so re-render a few
+    // times to re-anchor the line and reveal it once the price is on screen
+    [150, 400, 900, 1800, 3200].forEach(function (ms) { setTimeout(renderPdpLine, ms); });
+    setTimeout(function () { pdpSettled = true; renderPdpLine(); }, 3600);
 
     document.addEventListener('click', function (e) {
       if (!e.target.closest) return;
