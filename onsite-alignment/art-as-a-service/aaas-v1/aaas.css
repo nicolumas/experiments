@@ -1135,29 +1135,28 @@
   margin: 0 0 var(--sp-4);
 }
 
-.aaas-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-4); }
-.aaas-form > .aaas-field:nth-child(3) { grid-column: 1 / -1; }
+/* one field per row, which is how the live checkout stacks them; only an
+   explicit .aaas-pair puts two side by side */
+.aaas-form { display: block; }
 
-/* label follows the input in the DOM (the checkout's own pattern), so flip it up */
-.aaas-field { display: flex; flex-direction: column-reverse; gap: .5rem; margin-bottom: var(--sp-4); }
-.aaas-field label {
-  font-size: 1.1rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
+/* .form-group__full is a Bootstrap-style column: float:left, width:100% and a
+   1rem inline padding. Inside the shop's own grid that is fine; here it made
+   the paired fields collapse to slivers and the toggles wrap around the float.
+   The float and the column widths go, the position:relative that carries the
+   floating label stays. */
+.aaas-form .form-group__full {
+  float: none;
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
 }
-.aaas-field input,
-.aaas-field select {
-  width: 100%;
-  padding: 1.4rem;
-  border: 1px solid var(--color-border-default);
-  background: var(--color-surface-page);
-  font-family: var(--font-body);
-  font-size: 1.5rem;
-  color: var(--color-text-primary);
+
+.aaas-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-4); }
+.aaas-pair > .form-group { min-width: 0; }
+
+@media (max-width: 760px) {
+  .aaas-pair { grid-template-columns: 1fr; }
 }
-.aaas-field input:focus-visible,
-.aaas-field select:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
 
 .aaas-pay-list { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-4) 0; }
 
@@ -1261,10 +1260,6 @@
 
 .aaas-confirm { max-width: 62rem; padding: var(--sp-6) 0 var(--sp-16); }
 .aaas-confirm h2 { font-family: var(--font-display); font-size: 3rem; font-weight: 400; margin: 0 0 var(--sp-3); }
-
-@media (max-width: 760px) {
-  .aaas-form { grid-template-columns: 1fr; }
-}
 
 /* ---------- prototype marker ---------- */
 

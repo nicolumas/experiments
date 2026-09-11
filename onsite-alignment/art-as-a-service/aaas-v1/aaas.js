@@ -954,7 +954,7 @@
       '<div class="aaas-corow-label">' + label + '</div>' +
       '<div class="aaas-corow-body">' + body +
         (note ? '<em>' + note + '</em>' : '') + '</div>' +
-      '<button type="button" class="aaas-link aaas-back" data-step="' + toStep + '">Ändern</button>' +
+      '<button type="button" class="aaas-link aaas-back" data-step="' + toStep + '">Bearbeiten</button>' +
     '</div>';
   }
 
@@ -1044,11 +1044,36 @@
     try { sessionStorage.setItem(DATA_KEY, JSON.stringify(d)); } catch (e) {}
   }
 
-  function field(id, label, type, value) {
-    return '<div class="col-xs-12 aaas-field">' +
+  /* The checkout's own field component, copied from its captured email field:
+   * .form-group.form-group__full > .col-xs-12 > input + label, which is what
+   * makes the shop position the label absolutely and float it into the box.
+   * Two earlier attempts got this wrong in opposite directions. A hand-rolled
+   * wrapper missed those rules and printed an uppercase caption above every
+   * field; .form-row, borrowed from the register form, is styled by the account
+   * page's bundle, which the checkout never loads, so the fields came out
+   * unstyled with the label beside them. */
+  function field(id, label, type, value, optional) {
+    return '<div class="form-group form-group__full"><div class="col-xs-12">' +
       '<input id="' + id + '" name="' + id + '" type="' + (type || 'text') +
-        '" placeholder="' + label + '*" value="' + (value || '') + '" required>' +
-      '<label class="required" for="' + id + '">' + label + '</label></div>';
+        '" placeholder="' + label + (optional ? '' : '*') + '" value="' + (value || '') + '"' +
+        (optional ? '' : ' required="required"') + '>' +
+      '<label' + (optional ? '' : ' class="required"') + ' for="' + id + '">' + label +
+      '</label></div></div>';
+  }
+
+  // the live checkout pairs first/last name and postcode/city; the field itself
+  // stays the shop's, only the two-up placement is ours
+  function fieldPair(a, b) { return '<div class="aaas-pair">' + a + b + '</div>'; }
+
+  function salutation() {
+    var opt = function (id, label, checked) {
+      return '<label class="radio-button"><input id="' + id + '" name="aaas_salutation" ' +
+        'type="radio" value="' + id + '"' + (checked ? ' checked=""' : '') + '><span></span> ' +
+        label + '</label>';
+    };
+    return '<div class="form-group__full type-radio salutation"><label>Anrede</label>' +
+      '<div class="options">' + opt('aaasMr', 'Herr', true) + opt('aaasMrs', 'Frau') +
+      opt('aaasMx', 'Divers') + '</div></div>';
   }
 
   /* Prose, not a tickbox. LUMAS-16152 asks that the contract conclusion
@@ -1142,32 +1167,35 @@
     if (s === 2) {
       host.innerHTML =
         contact +
-        '<h2 class="aaas-step-title">Rechnungsadresse</h2>' +
-        '<div class="aaas-titlerow"><div class="aaas-stat-label">Anrede</div>' +
-          '<label><input type="radio" name="aaas-title" checked> Herr</label>' +
-          '<label><input type="radio" name="aaas-title"> Frau</label>' +
-          '<label><input type="radio" name="aaas-title"> Divers</label></div>' +
-        '<div class="aaas-form">' +
-          field('aaas_first', 'Vorname', 'text', d.first) +
-          field('aaas_last', 'Nachname', 'text', d.last) +
-          field('aaas_company', 'Firma', 'text', d.company) +
-          field('aaas_street', 'Straße und Hausnummer', 'text', d.street) +
-          field('aaas_extra', 'Adresszusatz', 'text', d.extra) +
-          field('aaas_zip', 'PLZ', 'text', d.zip) +
-          field('aaas_city', 'Ort', 'text', d.city) +
-          '<div class="col-xs-12 aaas-field"><select id="aaas_country" name="aaas_country">' +
-            '<option>Österreich</option><option>Schweiz</option><option>Deutschland</option>' +
-          '</select><label for="aaas_country">Land</label></div>' +
-          field('aaas_phone', 'Telefonnummer für Rückfragen zur Lieferung', 'tel', d.phone) +
-        '</div>' +
-        toggleRow('Die Rechnungsadresse entspricht der Lieferadresse', true) +
-        toggleRow('Schnellstmöglich versenden', true) +
+        // the live checkout labels this as body copy, not as a heading
+        '<p class="message aaas-form-title">Rechnungsadresse</p>' +
+        // A real <form> element, because the shop's field styling is scoped to
+        // "main form .form-group__full > div input + label". Outside a form the
+        // same markup gets none of it: the label stays in flow beside a 21px
+        // unstyled input, which is what the two earlier attempts produced.
+        '<form class="aaas-form" novalidate>' +
+          salutation() +
+          fieldPair(field('aaas_first', 'Vorname', 'text', d.first),
+                    field('aaas_last', 'Nachname', 'text', d.last)) +
+          field('aaas_company', 'Firma', 'text', d.company, true) +
+          field('aaas_street', 'Strasse, Hausnummer', 'text', d.street) +
+          field('aaas_extra', 'Adresszusatz', 'text', d.extra, true) +
+          fieldPair(field('aaas_zip', 'Postleitzahl', 'text', d.zip),
+                    field('aaas_city', 'Stadt', 'text', d.city)) +
+          '<div class="form-group form-group__full"><div class="col-xs-12">' +
+            '<select id="aaas_country" name="aaas_country">' +
+              '<option>Österreich</option><option>Schweiz</option><option>Deutschland</option>' +
+            '</select><label class="required" for="aaas_country">Land</label></div></div>' +
+          field('aaas_phone', 'Telefon für Rückfragen zur Lieferung', 'tel', d.phone) +
+        '</form>' +
+        toggleRow('Lieferadresse entspricht Rechnungsadresse', true) +
+        toggleRow('So schnell wie möglich versenden', true) +
         (renting
           ? '<p class="aaas-note">Das Werk bleibt während der Mietzeit Eigentum von LUMAS und wird an ' +
             'dieser Adresse genutzt. Wenn du umziehst, sag uns bitte Bescheid.</p>'
           : '') +
-        '<div class="aaas-actions">' +
-          '<button type="button" class="btn aaas-next" data-step="3">Weiter zu den Zahlungsoptionen</button>' +
+        '<div class="aaas-actions aaas-actions-wide">' +
+          '<button type="button" class="btn aaas-next" data-step="3">Weiter zu Zahlungsmöglichkeiten</button>' +
         '</div>';
       return;
     }
