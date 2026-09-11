@@ -1386,7 +1386,7 @@ img{display:block;max-width:100%;height:auto}
             <p class="t-eyebrow lt-wall-block__label">On the wall</p>
             <div class="lt-wall">
               <div class="lt-wall__inner">
-                <img src="assets/slim-aarons-slides/wall-hallway.webp" alt="A hallway with a long teak credenza against a pale wall." width="1600" height="966" loading="lazy">
+                <img src="assets/slim-aarons-slides/wall-dining.webp" alt="A quiet dining room with an oak sideboard below a bare plaster wall." width="1330" height="920" loading="lazy">
                 <div class="lt-hang" id="hang">
                   <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
                   <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
@@ -1924,13 +1924,16 @@ img{display:block;max-width:100%;height:auto}
   }
 
   /* ── the wall, at true scale ─────────────────────────────────────── */
-  /* Scale of the hung block. Measuring the credenza off the source file gave
-     0.156% of image width per cm, but the lens exaggerates the foreground and
-     that reads far too small against this wall, so the render is tuned by eye
-     a little under twice that. The cm readout under the photograph is the honest figure.
+  /* Scale of the hung block, measured off the room plate rather than tuned by
+     eye. Three anchors on the wall plane agree: the plate's own door-height
+     reading (0.3636 cm/px), its skirting reading (0.3561), and the cornice to
+     floor run of 850 px across a 3.1 m storey (0.365). At 0.365 cm/px that is
+     2.740 px per cm on the 1920 px source, and 0.206% of the width of the crop
+     the page ships. So a 34 cm slide is 94 px of the source, and the nine hang
+     110 cm across, which is what the caption underneath reports.
      Sizes are computed in px from the rendered width so no percentage
      resolution surprises apply. */
-  var PCT_PER_CM = 0.002808;
+  var PCT_PER_CM = 0.002060;
   /* Positions are held as percentages of the wall, per slide, so an arrangement
      survives adding and removing works and any resize of the photograph. */
   var pos = {};
@@ -1940,8 +1943,9 @@ img{display:block;max-width:100%;height:auto}
      themselves, their layout is preserved and only new slides get a slot. */
   var arranged = false;
 
-  /* the hangable plane: clear of the ceiling line and above the credenza */
-  var PLANE = { top: 10, bottom: 66, left: 5, right: 95 };
+  /* the hangable plane: below the pendant, above the sideboard, and between
+     the door architrave and the screen */
+  var PLANE = { top: 25, bottom: 73, left: 7, right: 88 };
   var SNAP = 0.6;            /* percent of wall width */
 
   function tileSize(){
@@ -1961,7 +1965,7 @@ img{display:block;max-width:100%;height:auto}
     var rows = Math.ceil(count / cols);
     var blockW = cols * t.wPct + (cols - 1) * gapH;
     var blockH = rows * t.hPct + (rows - 1) * gapV;
-    var x0 = 52 - blockW / 2, y0 = 63 - blockH, out = [];
+    var x0 = 44 - blockW / 2, y0 = 70 - blockH, out = [];
     for (var i = 0; i < count; i++){
       out.push({ x: x0 + (i % cols) * (t.wPct + gapH),
                  y: y0 + Math.floor(i / cols) * (t.hPct + gapV) });
