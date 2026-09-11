@@ -65,6 +65,32 @@ def _ver(name):
     return int(os.path.getmtime(p)) if os.path.exists(p) else 0
 
 
+def preload_artwork(soup):
+    """Start the main artwork downloading in the head.
+
+    The clone pulls the shop's whole CSS/JS payload before the preview renders,
+    so on a cold visit the wall texture paints first and the artwork slot sits
+    empty for a beat. A preload puts the image in flight with the stylesheets
+    instead of after them. It is the same file the page already requests, so
+    nothing extra is fetched.
+    """
+    if not soup.head:
+        return
+    # The artwork is not an <img> in the HTML at all: it arrives as a path inside
+    # the preview's JSON config, so the browser cannot even start fetching it
+    # until the shop's whole JS bundle has parsed and built the element. That is
+    # why the slot sits empty on a cold visit. Pull the "full" path out of the
+    # config and preload it.
+    m = re.search(r'"full":"([^"]*showimg_[^"]*_full\.jpg)"', str(soup))
+    if not m:
+        return
+    src = m.group(1).replace("\\/", "/")
+    link = soup.new_tag("link", rel="preload", href=src)
+    link.attrs["as"] = "image"
+    link.attrs["fetchpriority"] = "high"
+    soup.head.insert(0, link)
+
+
 def inject_layer(soup):
     for old in soup.select('link[href^="aaas.css"], script[src^="aaas.js"]'):
         old.decompose()
@@ -85,6 +111,7 @@ def build(src_name, out_name, transform=None):
     soup = BeautifulSoup(open(src, encoding="utf-8").read(), "html.parser")
     if transform:
         transform(soup)
+    preload_artwork(soup)
     inject_layer(soup)
     html = repoint_assets(str(soup))
     out = os.path.join(HERE, out_name)

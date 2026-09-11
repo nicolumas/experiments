@@ -24,6 +24,7 @@
    * and there is no term selector, which both tickets state outright. */
   var MODE_KEY = 'aaas-mode';
   var STEP_KEY = 'aaas-step';
+  var PAY_KEY = 'aaas-pay';
   var DATA_KEY = 'aaas-order';
   var FALLBACK_SHIPPING = 39; // AT. The epic's worked example uses the DE figure of 29.
 
@@ -868,6 +869,14 @@
 
     if (!document.body.dataset.aaasSteps) {
       document.body.dataset.aaasSteps = '1';
+
+      // picking a payment method swaps the card fields and the mandate copy
+      document.addEventListener('change', function (e) {
+        if (!e.target.matches || !e.target.matches('input[name="aaas-payment"]')) return;
+        setPayMethod(e.target.value);
+        renderPayChoice(q);
+      });
+
       document.addEventListener('click', function (e) {
         if (!e.target.closest) return;
 
@@ -962,6 +971,28 @@
   // render at 0x0 unless referenced. Point at them with <use> rather than cloning
   // the symbol (that produced duplicate ids and nothing visible), and keep the
   // wrapper an <svg>: a <span> child of the label inherits the custom radio dot.
+  var CARD = 'adyen-credit-card-cse';
+
+  function payMethod(renting) {
+    var v; try { v = sessionStorage.getItem(PAY_KEY); } catch (e) {}
+    var allowed = renting ? [ 'sepa', CARD ]
+                          : [ 'adyen-paypal', CARD, 'invoice', 'klarna', 'paybybank', 'sepa' ];
+    return allowed.indexOf(v) > -1 ? v : allowed[0];
+  }
+  function setPayMethod(v) { try { sessionStorage.setItem(PAY_KEY, v); } catch (e) {} }
+
+  /* Card details in the clone are plain fields. On the live checkout they are
+   * Adyen's hosted inputs, which cannot run here, but the step has to show that
+   * a card is entered rather than jumping straight to the mandate. */
+  function cardFields() {
+    return '<form class="aaas-form aaas-cardform" novalidate>' +
+      field('aaas_card_number', 'Kartennummer', 'text', '') +
+      fieldPair(field('aaas_card_exp', 'Gültig bis (MM/JJ)', 'text', ''),
+                field('aaas_card_cvc', 'Sicherheitscode', 'text', '')) +
+      field('aaas_card_name', 'Name auf der Karte', 'text', '') +
+    '</form>';
+  }
+
   function payMark(id) {
     var sym = document.getElementById('payment-icon-' + id);
     if (!sym) return '';
@@ -1080,12 +1111,29 @@
    * "appear trustworthy and understandable, without coming across as merely a
    * formality involving a checkbox in the fine print". The tickbox version came
    * from the 21 Aug comment and is gone with the rest of it. */
-  function rentConsent(q) {
-    return '<div class="aaas-consent"><h3>SEPA-Lastschriftmandat</h3>' +
-      '<p>Du ermächtigst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von deinem Konto ' +
-      'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Das Mandat gilt für ' +
-      'die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.</p>' +
+  function rentConsent(q, method) {
+    var card = method === CARD;
+    return '<div class="aaas-consent">' +
+      '<h3>' + (card ? 'Wiederkehrende Kartenzahlung' : 'SEPA-Lastschriftmandat') + '</h3>' +
+      '<p>' + (card
+        ? 'Du autorisierst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von dieser Karte ' +
+          'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Die Autorisierung ' +
+          'gilt für die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.'
+        : 'Du ermächtigst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von deinem Konto ' +
+          'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Das Mandat gilt ' +
+          'für die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.') + '</p>' +
       '<p>Du kannst die Zahlungsart jederzeit in deinem Konto ändern.</p></div>';
+  }
+
+  // only the two blocks that depend on the choice are redrawn, so the rest of
+  // the step and the customer's focus survive picking a different method
+  function renderPayChoice(q) {
+    var renting = mode() === 'rent';
+    var chosen = payMethod(renting);
+    var detail = document.getElementById('aaas-paydetail');
+    if (detail) detail.innerHTML = chosen === CARD ? cardFields() : '';
+    var consent = document.getElementById('aaas-rentconsent');
+    if (consent) consent.innerHTML = renting ? rentConsent(q, chosen) : '';
   }
 
   function renderConsent(q, renting) {
@@ -1194,7 +1242,7 @@
           ? '<p class="aaas-note">Das Werk bleibt während der Mietzeit Eigentum von LUMAS und wird an ' +
             'dieser Adresse genutzt. Wenn du umziehst, sag uns bitte Bescheid.</p>'
           : '') +
-        '<div class="aaas-actions aaas-actions-wide">' +
+        '<div class="aaas-actions">' +
           '<button type="button" class="btn aaas-next" data-step="3">Weiter zu Zahlungsmöglichkeiten</button>' +
         '</div>';
       return;
@@ -1207,15 +1255,17 @@
     var town = [d.zip || '1010', d.city || 'Wien'].join(' ');
 
     // only SEPA and card can carry a recurring Adyen mandate
+    var chosen = payMethod(renting);
+    var row = function (id, name) { return payRow(id, name, id === chosen); };
     var methods = renting
-      ? payRow('sepa', 'SEPA-Lastschrift', true) +
-        payRow('adyen-credit-card-cse', 'Kreditkarte')
-      : payRow('adyen-paypal', 'PayPal', true) +
-        payRow('adyen-credit-card-cse', 'Kreditkarte') +
-        payRow('invoice', 'Rechnung, zahle nach Erhalt deiner Bestellung') +
-        payRow('klarna', 'Klarna, später zahlen') +
-        payRow('paybybank', 'Pay by Bank') +
-        payRow('sepa', 'SEPA-Lastschrift');
+      ? row('sepa', 'SEPA-Lastschrift') +
+        row(CARD, 'Kreditkarte')
+      : row('adyen-paypal', 'PayPal') +
+        row(CARD, 'Kreditkarte') +
+        row('invoice', 'Rechnung, zahle nach Erhalt deiner Bestellung') +
+        row('klarna', 'Klarna, später zahlen') +
+        row('paybybank', 'Pay by Bank') +
+        row('sepa', 'SEPA-Lastschrift');
 
     host.innerHTML =
       contact +
@@ -1229,7 +1279,8 @@
           : 'Bitte wähle eine der verfügbaren Zahlungsarten.') +
       '</p>' +
       '<div class="aaas-payrows">' + methods + '</div>' +
-      (renting ? rentConsent(q) : '') +
+      '<div id="aaas-paydetail">' + (chosen === CARD ? cardFields() : '') + '</div>' +
+      '<div id="aaas-rentconsent">' + (renting ? rentConsent(q, chosen) : '') + '</div>' +
       '<p class="aaas-legal">' +
         (renting
           ? 'Mit dem Abschluss schließt du einen Mietvertrag über ' + TERMS.months +

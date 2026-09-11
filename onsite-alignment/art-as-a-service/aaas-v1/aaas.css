@@ -1128,6 +1128,12 @@
   transition: background var(--motion-fast, 220ms) var(--motion-easing, ease-out);
 }
 
+/* The theme paints its own checkbox onto this span as ::before, a 15x15 square
+   with a 1px border and a charcoal fill. Sitting inside a 36x20 pill it squared
+   off the left end and pushed the knob past the right, which is what made the
+   control look misshapen. Only ::after, the knob, belongs here. */
+.aaas-toggle-track::before { content: none !important; display: none !important; }
+
 .aaas-toggle-track::after {
   content: "";
   position: absolute;
@@ -1266,6 +1272,15 @@
 .aaas-actions a.btn,
 .aaas-actions button.btn { color: var(--color-text-inverse); }
 .aaas-actions a.btn { text-decoration: none; display: inline-block; }
+
+/* every step's continue button runs the full column, as on the live checkout,
+   rather than sitting right-aligned at its own width */
+#aaas-step-host .aaas-actions .btn { width: 100%; margin-left: 0; }
+
+/* the form title is body copy on the live checkout, not a heading */
+.aaas-form-title { margin: var(--sp-5) 0 var(--sp-3); }
+
+.aaas-cardform { margin: var(--sp-4) 0 0; }
 
 /* the success panel's CTA reads as part of the panel, not flushed to its edge */
 .aaas-sx-figures .aaas-actions { justify-content: flex-start; }
