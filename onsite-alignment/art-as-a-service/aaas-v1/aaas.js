@@ -1047,9 +1047,10 @@
       '<use href="#payment-icon-' + id + '"></use></svg>';
   }
 
-  function payRow(id, name, checked) {
+  function payRow(id, name, checked, group) {
     return '<label class="aaas-payrow">' +
-      '<input type="radio" name="aaas-payment" value="' + id + '"' + (checked ? ' checked' : '') + '>' +
+      '<input type="radio" name="' + (group || 'aaas-payment') + '" value="' + id + '"' +
+        (checked ? ' checked' : '') + '>' +
       '<span class="aaas-payrow-name">' + name + '</span>' + payMark(id) + '</label>';
   }
 
@@ -1476,9 +1477,68 @@
 
   /* ---------- account ---------- */
 
+  /* The recurring instrument can be changed from the account. Both tickets are
+   * quiet on how: LUMAS-16152 asks only that the account carry the payment
+   * method, and GLOB-2053 hands CS the contract-end processes, not this one. So
+   * the change is offered in place, limited to the two instruments the model
+   * allows, with the team route still beneath it for an expired card. Assumed,
+   * not specified. */
+  var ACCT_PAY_KEY = 'aaas-acctpay';
+
+  function acctPay() {
+    var v; try { v = sessionStorage.getItem(ACCT_PAY_KEY); } catch (e) {}
+    return v === CARD ? CARD : 'sepa';
+  }
+
+  function payLineText() {
+    return acctPay() === CARD
+      ? 'Kreditkarte, endet auf 4242'
+      : 'SEPA-Lastschrift, IBAN endet auf 4021';
+  }
+
+  function renderPayChange(open) {
+    var box = document.getElementById('aaas-paychange');
+    if (!box) return;
+    box.hidden = !open;
+    if (!open) { box.innerHTML = ''; return; }
+    var cur = acctPay();
+    box.innerHTML =
+      '<div class="aaas-payrows">' +
+        payRow('sepa', 'SEPA-Lastschrift', cur === 'sepa', 'aaas-acctpay') +
+        payRow(CARD, 'Kreditkarte', cur === CARD, 'aaas-acctpay') +
+      '</div>' +
+      '<div id="aaas-acct-detail">' + (cur === CARD ? cardFields() : '') + '</div>' +
+      '<div class="aaas-actions"><button type="button" class="btn" data-paysave>' +
+        'Zahlungsart speichern</button></div>';
+  }
+
+  function wirePayChange() {
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest) return;
+      if (e.target.closest('[data-paychange]')) {
+        var box = document.getElementById('aaas-paychange');
+        renderPayChange(!!(box && box.hidden));
+        return;
+      }
+      if (e.target.closest('[data-paysave]')) {
+        var picked = document.querySelector('input[name="aaas-acctpay"]:checked');
+        if (picked) { try { sessionStorage.setItem(ACCT_PAY_KEY, picked.value); } catch (err) {} }
+        var line = document.getElementById('aaas-payline-text');
+        if (line) line.textContent = payLineText();
+        renderPayChange(false);
+      }
+    });
+    document.addEventListener('change', function (e) {
+      if (!e.target.matches || !e.target.matches('input[name="aaas-acctpay"]')) return;
+      var d = document.getElementById('aaas-acct-detail');
+      if (d) d.innerHTML = e.target.value === CARD ? cardFields() : '';
+    });
+  }
+
   function initAccount() {
     var host = document.querySelector('[data-aaas-account]');
     if (!host) return;
+    wirePayChange();
     var acctItem = cartItem();
     var q = quote((acctItem && acctItem.gross) || parseFloat(host.getAttribute('data-gross')),
                   (acctItem && acctItem.shipping) || FALLBACK_SHIPPING);
@@ -1573,8 +1633,9 @@
             // LUMAS-16152 asks the account to carry the recurring payment method
             '<div class="aaas-label">Zahlungsart</div>' +
             '<div class="aaas-panel"><div class="aaas-panel-inner">' +
-              '<div class="aaas-payline"><span>SEPA-Lastschrift, IBAN endet auf 4021</span>' +
-                '<button type="button" class="aaas-link">Ändern</button></div>' +
+              '<div class="aaas-payline"><span id="aaas-payline-text">' + payLineText() + '</span>' +
+                '<button type="button" class="aaas-link" data-paychange>Ändern</button></div>' +
+              '<div id="aaas-paychange" hidden></div>' +
               '<p class="aaas-note">Karte abgelaufen oder Bank gewechselt? ' +
                 '<a href="#">Zahlungsart über unser Team aktualisieren</a>.</p>' +
             '</div></div>' +
