@@ -390,30 +390,23 @@ img{display:block;max-width:100%;height:auto}
 }
 @media(hover:hover){.lt-round:hover:not([disabled]){background:var(--color-charcoal-900);border-color:var(--color-charcoal-900);color:var(--color-text-inverse)}}
 .lt-round[disabled]{opacity:.3;cursor:default}
-.lt-rail{display:flex;gap:2.4rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:.4rem}
+.lt-rail{display:flex;gap:2.4rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none}
 .lt-rail::-webkit-scrollbar{display:none}
 .lt-pcard{
-  flex:0 0 32rem;min-width:0;scroll-snap-align:start;display:flex;flex-direction:column;gap:1.2rem;
-  background:var(--lt-ground);border:1px solid var(--color-border-default);padding:2rem;
+  flex:0 0 32rem;min-width:0;scroll-snap-align:start;display:flex;flex-direction:column;gap:1rem;
   color:var(--color-text-primary);text-decoration:none;
-  transition:border-color var(--lt-t-fast) var(--lt-ease),box-shadow var(--lt-t-fast) var(--lt-ease);
 }
-@media(hover:hover){.lt-pcard:hover{border-color:var(--color-charcoal-900);box-shadow:var(--lt-lift-sm)}}
 .lt-pcard__fig{display:block;background:#fff;border:1px solid var(--color-border-subtle);overflow:hidden}
 .lt-pcard img{width:100%;aspect-ratio:1/1;object-fit:contain;transition:transform var(--lt-t-slow) var(--lt-ease)}
 @media(hover:hover){.lt-pcard:hover img{transform:scale(1.02)}}
-.lt-pcard__n{font-size:1.1rem;font-weight:700;letter-spacing:.14em;color:var(--color-text-secondary)}
-.lt-pcard__t{font-family:UtileDisplayLumas,Georgia,serif;font-weight:400;font-size:2rem;line-height:1.2}
-.lt-pcard__q{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.4rem;line-height:1.4;border-left:2px solid var(--color-charcoal-900);padding-left:1.2rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.lt-pcard__row{margin-top:auto;padding-top:1.4rem;border-top:1px solid var(--color-border-subtle);display:flex;align-items:center;justify-content:space-between;gap:1.6rem}
-.lt-pcard__p{font-size:1.5rem;font-weight:700}
-.lt-pcard__cta{font-size:1.1rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.7rem}
-.lt-pcard__cta .lt-ic{width:1.4rem;height:1.4rem;transition:transform var(--lt-t-fast) var(--lt-ease)}
-@media(hover:hover){.lt-pcard:hover .lt-pcard__cta .lt-ic{transform:translateX(3px)}}
+.lt-pcard__a{font-size:1.2rem;color:var(--color-text-secondary);margin-top:.4rem}
+.lt-pcard__t{font-family:UtileDisplayLumas,Georgia,serif;font-weight:400;font-size:1.8rem;line-height:1.25}
+@media(hover:hover){.lt-pcard:hover .lt-pcard__t{text-decoration:underline;text-underline-offset:.4rem}}
+.lt-pcard__p{font-size:1.4rem;margin-top:auto}
 @media(max-width:759px){
   .lt-sec-head--rail{flex-direction:column;align-items:flex-start}
   .lt-rail{gap:1.6rem;margin-inline:-2rem;padding-inline:2rem;scroll-padding-inline:2rem}
-  .lt-pcard{flex:0 0 26rem;padding:1.6rem}
+  .lt-pcard{flex:0 0 24rem}
 }
 
 /* ══ QUICK VIEW ═══════════════════════════════════════════════════════════ */
@@ -1487,7 +1480,7 @@ img{display:block;max-width:100%;height:auto}
       <div class="lt-sec-head lt-sec-head--rail">
         <div class="lt-sec-head__t">
           <p class="t-eyebrow">The nine</p>
-          <h2 class="t-h2">Every slide, and what Slim wrote on&nbsp;it</h2>
+          <h2 class="t-h2">All nine slides in the&nbsp;series</h2>
         </div>
         <div class="lt-rail-nav">
           <button type="button" class="lt-round" id="railPrev" aria-label="Show the previous slides" aria-controls="rail"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg></button>
@@ -1701,13 +1694,9 @@ img{display:block;max-width:100%;height:auto}
     e.href = s.url; e.target = "_blank"; e.rel = "noopener";
     e.innerHTML =
       '<span class="lt-pcard__fig"><img src="' + src(s.code,640) + '" alt="' + alt(s,i) + '" width="640" height="640" loading="lazy"></span>' +
-      '<span class="lt-pcard__n">' + num(i) + ' &middot; ' + s.code.toUpperCase() + '</span>' +
+      '<span class="lt-pcard__a">Slim Aarons</span>' +
       '<span class="lt-pcard__t">' + s.title + '</span>' +
-      '<span class="lt-pcard__q">' + s.hand + '</span>' +
-      '<span class="lt-pcard__row">' +
-        '<span class="lt-pcard__p tnum">' + euro(SINGLE) + '</span>' +
-        '<span class="lt-pcard__cta">Open the full page<svg class="lt-ic"><use href="#lc-arrow-right"/></svg></span>' +
-      '</span>';
+      '<span class="lt-pcard__p tnum">' + euro(SINGLE) + '</span>';
     e.addEventListener("click", function(){
       track("view_item", {item_id:s.code, item_name:s.title, source:"carousel"});
     });
