@@ -90,6 +90,18 @@ def preload_artwork(soup):
     link.attrs["fetchpriority"] = "high"
     soup.head.insert(0, link)
 
+    # The preload only wins the download; the artwork still cannot appear until
+    # the Vue preview mounts, which is a second or two into a cold visit. So the
+    # same file is also seeded straight into the empty preview container, where
+    # it paints as soon as it arrives and Vue overwrites it on mount.
+    holder = soup.select_one("div.pdp-preview-desktop")
+    if holder is not None and not holder.contents:
+        seed = soup.new_tag("img", src=src)
+        seed.attrs["class"] = "aaas-seed"
+        seed.attrs["alt"] = ""
+        seed.attrs["aria-hidden"] = "true"
+        holder.append(seed)
+
 
 def inject_layer(soup):
     for old in soup.select('link[href^="aaas.css"], script[src^="aaas.js"]'):

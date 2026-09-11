@@ -183,6 +183,39 @@
 .aaas-pdp-b .aaas-note b { font-family: var(--font-body-bold); font-weight: 400; }
 .aaas-pdp-b > .aaas-link { margin-top: var(--sp-4); }
 
+/* ---------- cart drawer: reachable on a phone ----------
+ * .cart-overlay-container is fixed with overflow visible, so once the rent
+ * breakdown makes the drawer taller than the viewport the checkout button sits
+ * below the fold with nothing to scroll. dvh rather than vh because the phone
+ * browser's own toolbar is part of what is eating the space. */
+
+@media (max-width: 760px) {
+  .cart-overlay-container {
+    max-height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ---------- PDP: first paint of the artwork ----------
+ * div.pdp-preview-desktop ships empty and Vue fills it, so nothing is on screen
+ * where the artwork goes until the bundle mounts. The seed image sits in that
+ * container and is discarded the moment Vue renders over it. Sized to the box
+ * the real one ends up in, so the swap is not a jump, and contain keeps the
+ * work's true ratio for any format. */
+
+.pdp-preview-desktop:has(> .aaas-seed) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aaas-seed {
+  max-width: 58.4%;
+  max-height: 84%;
+  object-fit: contain;
+}
+
 /* ---------- PDP: the artwork follows the buy box ----------
  * section.pdp-preview is a two-column grid, 815px of artwork beside a 429px
  * buy box. The artwork column is a fixed 567px, and the inline rent detail adds
