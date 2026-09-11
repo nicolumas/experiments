@@ -183,6 +183,29 @@
 .aaas-pdp-b .aaas-note b { font-family: var(--font-body-bold); font-weight: 400; }
 .aaas-pdp-b > .aaas-link { margin-top: var(--sp-4); }
 
+/* ---------- PDP: the artwork follows the buy box ----------
+ * section.pdp-preview is a two-column grid, 815px of artwork beside a 429px
+ * buy box. The artwork column is a fixed 567px, and the inline rent detail adds
+ * 538px to the other one, so switching to rent took the empty space under the
+ * artwork from 104px to 642px. Nothing fills that column, so instead the
+ * artwork sticks and stays beside the conditions while they are read.
+ * align-self:start is required: a grid item stretches to the row by default,
+ * and a stretched item cannot stick. */
+
+@media (min-width: 1000px) {
+  /* The shop sets body { overflow: hidden auto }, and overflow-x: hidden makes
+     the body a scroll container, so a sticky descendant sticks to the body box
+     rather than to the viewport and never engages. overflow-x: clip suppresses
+     the same horizontal overflow without creating that container. */
+  body.lumas-theme { overflow-x: clip; overflow-y: visible; }
+
+  .pdp-preview .pdp-desktop-preview-container {
+    position: sticky;
+    top: 9rem;
+    align-self: start;
+  }
+}
+
 /* ---------- PDP, inline presentation ----------
  * The quiet line from spec A carrying spec B's switch. No rule above it and no
  * section label: in buy mode the page gains one line of text and nothing else,
