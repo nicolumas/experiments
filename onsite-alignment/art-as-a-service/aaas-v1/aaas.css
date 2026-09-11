@@ -1268,26 +1268,6 @@
 
 /* ---------- prototype marker ---------- */
 
-/* the shop's own stack tops out around 161 (cart overlay), so 300 sits above it
-   without resorting to an arbitrary maximum */
-.aaas-flag-note { margin-left: .8rem; opacity: .7; text-transform: none; letter-spacing: 0; }
-
-.aaas-flag {
-  display: flex;
-  align-items: center;
-  position: fixed;
-  left: 1.2rem;
-  bottom: 1.2rem;
-  z-index: 300;
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
-  font-family: var(--font-body-bold);
-  font-size: 1.1rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  padding: .9rem 1.2rem;
-}
-
 /* reduced motion keeps the fades that aid comprehension and drops the movement */
 @media (prefers-reduced-motion: reduce) {
   .aaas-btn,
@@ -1388,5 +1368,4 @@
   .aaas-sx-head h1 { font-size: 2.8rem; }
 
   /* keep the prototype marker clear of the primary action */
-  .aaas-flag { font-size: 1rem; padding: .6rem .9rem; }
 }

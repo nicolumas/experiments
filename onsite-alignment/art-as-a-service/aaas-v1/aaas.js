@@ -1505,13 +1505,6 @@
       })();
     }
 
-    if (!document.querySelector('.aaas-flag')) {
-      var flag = el('div', 'aaas-flag');
-      flag.innerHTML =
-        '<span class="aaas-flag-title">Prototyp · Art as a Service</span>' +
-        '<span class="aaas-flag-note">GLOB-2053, verbindliche Konditionen</span>';
-      document.body.appendChild(flag);
-    }
   }
 
   if (document.readyState === 'loading') {
