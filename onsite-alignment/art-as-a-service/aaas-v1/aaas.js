@@ -879,9 +879,27 @@
       // unlike the cart, this panel is built once and never re-rendered.
       panel.innerHTML = '<div class="aaas-label">Kaufen oder mieten</div>' +
         switchControl(q, mode() === 'rent',
-          'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"') +
-        '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
+          'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"');
       host.insertAdjacentElement('beforebegin', panel);
+
+      // the breakdown is its own element so the switch can be lifted out of the
+      // collapsed summary on a phone without taking six rows of figures with it
+      var breakdown = el('div', 'aaas-rent-summary');
+      breakdown.id = 'aaas-rent-summary';
+      breakdown.hidden = true;
+      panel.insertAdjacentElement('afterend', breakdown);
+
+      /* The shop's own <details class="is-sticky"> wraps the whole summary and
+       * its <summary> already reads "Bestellübersicht anzeigen"; the capture
+       * just has it open. Closed on a phone it takes the summary from 1323px to
+       * its 62px bar, which is what stopped the customer scrolling past
+       * everything they had already done to reach the step they are on. The
+       * buy-or-rent decision is lifted above it so it stays visible either way. */
+      var details = aside.querySelector('details');
+      if (details && window.matchMedia('(max-width: 760px)').matches) {
+        details.open = false;
+        aside.insertBefore(panel, details);
+      }
       panel.addEventListener('click', function (e) {
         var b = e.target.closest('[data-mode]');
         if (!b) return;
@@ -918,9 +936,10 @@
         });
         saveOrder(keep);
 
-        setStep(real ? 2 : parseInt(nav.getAttribute('data-step'), 10));
+        var to = real ? 2 : parseInt(nav.getAttribute('data-step'), 10);
+        setStep(to);
         applyCheckoutMode(q);
-        window.scrollTo(0, 0);
+        scrollToStep(to);
       }, true);
     }
 
@@ -980,6 +999,22 @@
     // the live flow leaves the checkout for a real success page
     if (step() >= 4) { window.location.href = 'success.html'; return; }
     renderSteps(q);
+  }
+
+  /* Land on the part of the step that was just unlocked rather than at the top
+   * of the page. On a phone the summary above it is long enough that scrolling
+   * to 0 left the customer looking at what they had already done. The sticky
+   * header would cover the heading, so its height comes off the target. */
+  function scrollToStep(s) {
+    var target = s === 2 ? document.querySelector('.aaas-form-title')
+               : s === 3 ? document.querySelector('.aaas-step-title')
+               : null;
+    if (!target) { window.scrollTo(0, 0); return; }
+    var header = document.querySelector('site-header, .site-header, header');
+    var offset = (header ? header.getBoundingClientRect().height : 0) + 16;
+    var y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: Math.max(0, y), behavior: still ? 'auto' : 'smooth' });
   }
 
   function summaryRow(label, body, note, toStep) {
