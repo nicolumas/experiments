@@ -66,6 +66,7 @@
   --lt-ease:cubic-bezier(.2,.8,.2,1);
   --lt-t-fast:.22s;
   --lt-t:.32s;
+  --lt-t-slow:.52s;
   --lt-rail:34rem;
   --lt-bar-h:0rem;
 }
@@ -375,20 +376,45 @@ img{display:block;max-width:100%;height:auto}
 .lt-fact dt{font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin:0}
 .lt-fact dd{margin:0;font-size:1.4rem;line-height:1.55;color:var(--color-text-primary)}
 
-/* ══ INDEX ════════════════════════════════════════════════════════════════ */
-.lt-index{display:grid;grid-template-columns:1fr;gap:1px;background:var(--color-border-default);border:1px solid var(--color-border-default)}
-@media(min-width:760px){.lt-index{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1200px){.lt-index{grid-template-columns:repeat(3,1fr)}}
-.lt-entry{background:var(--lt-ground);padding:2rem;display:flex;gap:1.6rem;align-items:flex-start}
-.lt-entry img{width:8rem;flex:0 0 8rem;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--color-border-subtle)}
-.lt-entry__b{flex:1;min-width:0;display:flex;flex-direction:column;gap:.5rem}
-.lt-entry__n{font-size:1.1rem;font-weight:700;letter-spacing:.14em;color:var(--color-text-secondary)}
-.lt-entry h3{font-size:1.6rem;line-height:1.25;margin:0;font-family:UtileDisplayLumas,Georgia,serif;font-weight:400}
-.lt-entry p{font-size:1.2rem;line-height:1.5;color:var(--color-text-secondary);margin:0}
-.lt-entry a{font-size:1.1rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--color-text-primary);text-decoration:none;border-bottom:1px solid var(--color-border-default);padding-bottom:.4rem;align-self:flex-start;margin-top:.3rem;display:inline-flex;align-items:center;gap:.7rem}
-.lt-entry a .lt-ic{width:1.4rem;height:1.4rem;transition:transform var(--lt-t-fast) var(--lt-ease)}
-.lt-entry a:hover .lt-ic{transform:translateX(3px)}
-.lt-entry a:hover{border-bottom-color:var(--color-charcoal-900)}
+/* ══ PRODUCT CAROUSEL ═════════════════════════════════════════════════════ */
+.lt-sec-head--rail{max-width:none;flex-direction:row;align-items:flex-end;justify-content:space-between;gap:3.2rem}
+.lt-sec-head--rail .lt-sec-head__t{display:flex;flex-direction:column;gap:1.4rem;max-width:70ch;min-width:0}
+.lt-rail-nav{display:none;gap:1rem;flex:0 0 auto}
+@media(min-width:760px){.lt-rail-nav{display:flex}}
+.lt-round{
+  appearance:none;width:4.8rem;height:4.8rem;border-radius:50%;padding:0;cursor:pointer;
+  border:1px solid var(--color-border-default);background:none;color:var(--color-text-primary);
+  display:grid;place-items:center;
+  transition:background-color var(--lt-t-fast) var(--lt-ease),color var(--lt-t-fast) var(--lt-ease),
+             border-color var(--lt-t-fast) var(--lt-ease),opacity var(--lt-t-fast) var(--lt-ease);
+}
+@media(hover:hover){.lt-round:hover:not([disabled]){background:var(--color-charcoal-900);border-color:var(--color-charcoal-900);color:var(--color-text-inverse)}}
+.lt-round[disabled]{opacity:.3;cursor:default}
+.lt-rail{display:flex;gap:2.4rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:.4rem}
+.lt-rail::-webkit-scrollbar{display:none}
+.lt-pcard{
+  flex:0 0 32rem;min-width:0;scroll-snap-align:start;display:flex;flex-direction:column;gap:1.2rem;
+  background:var(--lt-ground);border:1px solid var(--color-border-default);padding:2rem;
+  color:var(--color-text-primary);text-decoration:none;
+  transition:border-color var(--lt-t-fast) var(--lt-ease),box-shadow var(--lt-t-fast) var(--lt-ease);
+}
+@media(hover:hover){.lt-pcard:hover{border-color:var(--color-charcoal-900);box-shadow:var(--lt-lift-sm)}}
+.lt-pcard__fig{display:block;background:#fff;border:1px solid var(--color-border-subtle);overflow:hidden}
+.lt-pcard img{width:100%;aspect-ratio:1/1;object-fit:contain;transition:transform var(--lt-t-slow) var(--lt-ease)}
+@media(hover:hover){.lt-pcard:hover img{transform:scale(1.02)}}
+.lt-pcard__n{font-size:1.1rem;font-weight:700;letter-spacing:.14em;color:var(--color-text-secondary)}
+.lt-pcard__t{font-family:UtileDisplayLumas,Georgia,serif;font-weight:400;font-size:2rem;line-height:1.2}
+.lt-pcard__q{font-family:UtileDisplayLumas,Georgia,serif;font-size:1.4rem;line-height:1.4;border-left:2px solid var(--color-charcoal-900);padding-left:1.2rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.lt-pcard__row{margin-top:auto;padding-top:1.4rem;border-top:1px solid var(--color-border-subtle);display:flex;align-items:center;justify-content:space-between;gap:1.6rem}
+.lt-pcard__p{font-size:1.5rem;font-weight:700}
+.lt-pcard__cta{font-size:1.1rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.7rem}
+.lt-pcard__cta .lt-ic{width:1.4rem;height:1.4rem;transition:transform var(--lt-t-fast) var(--lt-ease)}
+@media(hover:hover){.lt-pcard:hover .lt-pcard__cta .lt-ic{transform:translateX(3px)}}
+@media(max-width:759px){
+  .lt-sec-head--rail{flex-direction:column;align-items:flex-start}
+  .lt-rail{gap:1.6rem;margin-inline:-2rem;padding-inline:2rem;scroll-padding-inline:2rem}
+  .lt-pcard{flex:0 0 26rem;padding:1.6rem}
+}
 
 /* ══ QUICK VIEW ═══════════════════════════════════════════════════════════ */
 .lt-qv{position:fixed;inset:0;z-index:80;display:none}
@@ -1305,6 +1331,7 @@ img{display:block;max-width:100%;height:auto}
   <symbol id="lc-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
   <symbol id="lc-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="lc-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="lc-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
   <symbol id="lc-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
   <symbol id="lc-image-off" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"/><line x1="13.5" x2="6" y1="13.5" y2="21"/><line x1="18" x2="21" y1="12" y2="15"/><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59"/><path d="M21 15V5a2 2 0 0 0-2-2H9"/></symbol>
   </defs></svg>
@@ -1454,14 +1481,20 @@ img{display:block;max-width:100%;height:auto}
     </div>
   </section>
 
-  <!-- ══ THE NINE, LISTED ══════════════════════════════════════════════ -->
+  <!-- ══ THE NINE, AS A CAROUSEL ═══════════════════════════════════════ -->
   <section class="lt-sec" style="background:var(--color-surface-page)">
     <div class="lt-wrap">
-      <div class="lt-sec-head">
-        <p class="t-eyebrow">The nine</p>
-        <h2 class="t-h2">Every slide, and what Slim wrote on&nbsp;it</h2>
+      <div class="lt-sec-head lt-sec-head--rail">
+        <div class="lt-sec-head__t">
+          <p class="t-eyebrow">The nine</p>
+          <h2 class="t-h2">Every slide, and what Slim wrote on&nbsp;it</h2>
+        </div>
+        <div class="lt-rail-nav">
+          <button type="button" class="lt-round" id="railPrev" aria-label="Show the previous slides" aria-controls="rail"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg></button>
+          <button type="button" class="lt-round" id="railNext" aria-label="Show the next slides" aria-controls="rail"><svg class="lt-ic"><use href="#lc-arrow-right"/></svg></button>
+        </div>
       </div>
-      <div class="lt-index" id="index"></div>
+      <div class="lt-rail" id="rail" tabindex="0" role="group" aria-label="The nine slides, one card each"></div>
     </div>
   </section>
 
@@ -1625,7 +1658,7 @@ img{display:block;max-width:100%;height:auto}
      BUILD
      ════════════════════════════════════════════════════════════════════ */
   var $ = function(id){ return document.getElementById(id); };
-  var table = $("table"), index = $("index"), cgrid = $("cgrid"),
+  var table = $("table"), rail = $("rail"), cgrid = $("cgrid"),
       ladder = $("ladder"), barLadder = $("barLadder"), hang = $("hang");
 
   function src(code, w){ return IMG + code + "-" + w + ".webp"; }
@@ -1662,21 +1695,23 @@ img{display:block;max-width:100%;height:auto}
     b.querySelector(".lt-slide__select").addEventListener("click", function(){ toggle(s.code); });
     table.appendChild(b);
 
-    /* the index ------------------------------------------------------ */
-    var e = document.createElement("article");
-    e.className = "lt-entry";
+    /* the product carousel -------------------------------------------- */
+    var e = document.createElement("a");
+    e.className = "lt-pcard";
+    e.href = s.url; e.target = "_blank"; e.rel = "noopener";
     e.innerHTML =
-      '<img src="' + src(s.code,640) + '" alt="" width="640" height="640" loading="lazy">' +
-      '<div class="lt-entry__b">' +
-        '<span class="lt-entry__n">' + num(i) + ' &middot; ' + s.code.toUpperCase() + '</span>' +
-        '<h3>' + s.title + '</h3>' +
-        '<p>' + s.story + '</p>' +
-        '<a href="' + s.url + '" target="_blank" rel="noopener">Open the full page<svg class="lt-ic"><use href="#lc-arrow-right"/></svg></a>' +
-      '</div>';
-    e.querySelector("a").addEventListener("click", function(){
-      track("view_item", {item_id:s.code, item_name:s.title, source:"index"});
+      '<span class="lt-pcard__fig"><img src="' + src(s.code,640) + '" alt="' + alt(s,i) + '" width="640" height="640" loading="lazy"></span>' +
+      '<span class="lt-pcard__n">' + num(i) + ' &middot; ' + s.code.toUpperCase() + '</span>' +
+      '<span class="lt-pcard__t">' + s.title + '</span>' +
+      '<span class="lt-pcard__q">' + s.hand + '</span>' +
+      '<span class="lt-pcard__row">' +
+        '<span class="lt-pcard__p tnum">' + euro(SINGLE) + '</span>' +
+        '<span class="lt-pcard__cta">Open the full page<svg class="lt-ic"><use href="#lc-arrow-right"/></svg></span>' +
+      '</span>';
+    e.addEventListener("click", function(){
+      track("view_item", {item_id:s.code, item_name:s.title, source:"carousel"});
     });
-    index.appendChild(e);
+    rail.appendChild(e);
 
     /* the control grid ----------------------------------------------- */
     var c = document.createElement("article");
@@ -1693,6 +1728,34 @@ img{display:block;max-width:100%;height:auto}
     });
     cgrid.appendChild(c);
   });
+
+  /* the carousel controls ---------------------------------------------- */
+  (function(){
+    var prev = $("railPrev"), next = $("railNext");
+    var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    /* one card plus one gap, measured rather than assumed, so the step
+       stays right when the card width changes at a breakpoint. */
+    function step(){
+      var card = rail.firstElementChild;
+      if (!card) return rail.clientWidth;
+      return card.getBoundingClientRect().width +
+             (parseFloat(getComputedStyle(rail).columnGap) || 0);
+    }
+    function go(dir){
+      rail.scrollBy({left:dir * step(), behavior:still.matches ? "auto" : "smooth"});
+    }
+    function sync(){
+      var end = rail.scrollWidth - rail.clientWidth - 1;
+      prev.disabled = rail.scrollLeft <= 0;
+      next.disabled = rail.scrollLeft >= end;
+    }
+    prev.addEventListener("click", function(){ go(-1); track("carousel_nav", {direction:"prev"}); });
+    next.addEventListener("click", function(){ go(1);  track("carousel_nav", {direction:"next"}); });
+    rail.addEventListener("scroll", sync, {passive:true});
+    window.addEventListener("resize", sync);
+    sync();
+  })();
 
   /* the nine-notch index ---------------------------------------------- */
   for (var i = 1; i <= 9; i++){
