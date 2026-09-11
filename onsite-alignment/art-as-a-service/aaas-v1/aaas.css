@@ -385,7 +385,6 @@
 .aaas-moderows label.aaas-moderow[data-on] .aaas-moderow-name { font-family: var(--font-body-bold); }
 .aaas-moderows .aaas-moderow-price { font-family: var(--font-body-bold); font-weight: 400; white-space: nowrap; }
 
-.aaas-flag-variant button { text-transform: none; letter-spacing: 0; }
 
 /* ---------- branded listbox ----------
  * Measured off the PDP's own Kaschierung control: 1px solid black, 3px radius,
@@ -1271,24 +1270,6 @@
 
 /* the shop's own stack tops out around 161 (cart overlay), so 300 sits above it
    without resorting to an arbitrary maximum */
-.aaas-flag-spec { display: inline-flex; gap: .4rem; margin-left: .8rem; }
-
-.aaas-flag-spec button {
-  font: inherit;
-  padding: .3rem .7rem;
-  border: 1px solid rgba(255, 255, 255, .35);
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  letter-spacing: inherit;
-}
-
-.aaas-flag-spec button[aria-pressed="true"] {
-  background: var(--color-text-inverse);
-  color: var(--color-surface-inverse);
-  border-color: var(--color-text-inverse);
-}
-
 .aaas-flag-note { margin-left: .8rem; opacity: .7; text-transform: none; letter-spacing: 0; }
 
 .aaas-flag {

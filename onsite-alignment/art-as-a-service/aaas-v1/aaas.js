@@ -464,15 +464,21 @@
    *   switch  a labelled switch under the price, price line follows the state.
    *   rows    full-width radio rows, label left and price right, room to breathe.
    */
-  var VARIANT_KEY = 'aaas-variant';
+  /* The page shows one presentation, "inline". The four others are kept because
+   * each was built and reviewed, but they are off the page: reachable only by
+   * asking for one in the URL, ?variant=line|seg|switch|rows. Reading it from
+   * the URL rather than sessionStorage is deliberate, since a stored value from
+   * an earlier session would otherwise pin a reviewer to a presentation with no
+   * control left on the page to get back out of it. */
   var VARIANTS = { inline: 'Inline', line: 'Linie', seg: 'Segmented',
                    'switch': 'Switch', rows: 'Zeilen' };
 
   function variant() {
-    try { return VARIANTS[sessionStorage.getItem(VARIANT_KEY)] ? sessionStorage.getItem(VARIANT_KEY) : 'inline'; }
-    catch (e) { return 'seg'; }
+    try {
+      var v = new URLSearchParams(location.search).get('variant');
+      return VARIANTS[v] ? v : 'inline';
+    } catch (e) { return 'inline'; }
   }
-  function setVariant(v) { try { sessionStorage.setItem(VARIANT_KEY, v); } catch (e) {} }
 
   // The term belongs in the control only when there is no term dropdown under
   // it. With the dropdown present the trigger already names it, and repeating it
@@ -1503,18 +1509,7 @@
       var flag = el('div', 'aaas-flag');
       flag.innerHTML =
         '<span class="aaas-flag-title">Prototyp · Art as a Service</span>' +
-        '<span class="aaas-flag-note">GLOB-2053, verbindliche Konditionen</span>' +
-        '<span class="aaas-flag-spec aaas-flag-variant">' +
-          Object.keys(VARIANTS).map(function (k) {
-            return '<button type="button" data-aaas-variant="' + k + '"' +
-              (variant() === k ? ' aria-pressed="true"' : '') + '>' + VARIANTS[k] + '</button>';
-          }).join('') + '</span>';
-      flag.addEventListener('click', function (e) {
-        var v = e.target.closest('[data-aaas-variant]');
-        if (!v) return;
-        setVariant(v.getAttribute('data-aaas-variant'));
-        location.reload();
-      });
+        '<span class="aaas-flag-note">GLOB-2053, verbindliche Konditionen</span>';
       document.body.appendChild(flag);
     }
   }
