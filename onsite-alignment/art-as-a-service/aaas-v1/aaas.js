@@ -273,10 +273,7 @@
            '</div>' +
            '<div class="price-to-pay"><div>Heute fällig</div><div>' + money(q.dueToday) + '</div></div>' +
            '<div class="shipping-added">Danach ' + money(q.monthly) + ' im Monat, ' +
-             TERMS.months + ' Monate.</div>' +
-           '<p class="aaas-note aaas-xborder">Mieten ist nicht in allen Lieferländern ' +
-             'verfügbar. Im Pilotbetrieb: Österreich, die Schweiz und der internationale ' +
-             'Shop.</p>';
+             TERMS.months + ' Monate.</div>';
   }
 
   function renderCart(q, p) {
@@ -836,13 +833,40 @@
     return null;
   }
 
+  /* The captured summary describes the work that happened to be in the cart at
+   * capture time. Point every part of it at the chosen variant so the size, the
+   * finishing, the image and the price agree with the PDP and the drawer. */
+  function applyCartItemToSummary(aside, priceEl, item) {
+    priceEl.textContent = money(item.gross);
+    priceEl.dataset.aaasBuy = money(item.gross);
+    var img = aside.querySelector('.article img, .cart-items-container img');
+    if (img && item.image) img.setAttribute('src', item.image);
+    var name = aside.querySelector('.article-name, .cart-items-container .name');
+    if (name && item.title) name.textContent = item.title;
+    // the size sits in its own .mt-1 line inside .product-finishing, and the
+    // summary carries a desktop and a mobile copy of it
+    aside.querySelectorAll('.product-finishing, .product-finishing-mobile').forEach(function (box) {
+      var size = box.querySelector('.mt-1');
+      if (size && item.size) size.textContent = item.size + ' cm';
+      // the finishing is the box's own text, ahead of that size line
+      [].forEach.call(box.childNodes, function (n) {
+        if (n.nodeType === 3 && n.nodeValue.trim() && item.finishing) n.nodeValue = item.finishing;
+      });
+    });
+  }
+
   function initCheckout() {
     var aside = document.querySelector('aside');
     var priceEl = checkoutItemPrice();
     if (!aside || !priceEl) return;
-    var gross = parseMoney(priceEl.textContent);
+    // The captured summary holds whatever was in the cart when the page was
+    // grabbed, so on its own the checkout quoted a different work from the one
+    // just chosen. The stored item wins whenever there is one.
+    var item = cartItem();
+    var gross = (item && item.gross) || parseMoney(priceEl.textContent);
     if (!gross) return;
-    var q = quote(gross, FALLBACK_SHIPPING);
+    var q = quote(gross, (item && item.shipping) || FALLBACK_SHIPPING);
+    if (item) applyCartItemToSummary(aside, priceEl, item);
 
     fillShopExpress();
     if (!priceEl.dataset.aaasBuy) priceEl.dataset.aaasBuy = priceEl.textContent.trim();
@@ -1351,7 +1375,9 @@
     var host = document.querySelector('[data-aaas-success]');
     if (!host) return;
     var renting = mode() === 'rent';
-    var q = quote(parseFloat(host.getAttribute('data-gross')), FALLBACK_SHIPPING);
+    var item = cartItem();
+    var q = quote((item && item.gross) || parseFloat(host.getAttribute('data-gross')),
+                  (item && item.shipping) || FALLBACK_SHIPPING);
     var order = host.getAttribute('data-order');
     var panel = function (cls, inner) { return '<div class="aaas-sx-panel ' + cls + '">' + inner + '</div>'; };
 
@@ -1436,7 +1462,9 @@
   function initAccount() {
     var host = document.querySelector('[data-aaas-account]');
     if (!host) return;
-    var q = quote(parseFloat(host.getAttribute('data-gross')), FALLBACK_SHIPPING);
+    var acctItem = cartItem();
+    var q = quote((acctItem && acctItem.gross) || parseFloat(host.getAttribute('data-gross')),
+                  (acctItem && acctItem.shipping) || FALLBACK_SHIPPING);
     // the fixture says 14 months paid, which is impossible on spec B's 12-month
     // term, so clamp it and derive the end date from the term rather than a fixture
     var paid = Math.min(parseInt(host.getAttribute('data-months-paid'), 10) || 0, TERMS.months);
