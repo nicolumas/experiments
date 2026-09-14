@@ -571,6 +571,16 @@ img{display:block;max-width:100%;height:auto}
   .wc-mrail .s .idx{font-size:1.1rem;font-weight:700;color:var(--color-text-secondary)}
   .wc-mrail .s.filled{border-style:solid;border-color:var(--color-charcoal-900);background:#fff}
   .wc-mrail .s img{width:100%;height:100%;object-fit:contain;padding:8%}
+  /* tap a work to reveal its remove control */
+  .lt-hang__x{
+    display:grid;place-items:center;position:absolute;top:-1.1rem;right:-1.1rem;
+    width:2.8rem;height:2.8rem;border-radius:50%;border:0;padding:0;cursor:pointer;
+    background:var(--color-charcoal-900);color:var(--color-ivory-100);
+    opacity:0;pointer-events:none;transition:opacity var(--lt-t-fast) var(--lt-ease);
+  }
+  .lt-hang__art.is-picked{z-index:6}
+  .lt-hang__art.is-picked img{box-shadow:var(--lt-wall-shadow),0 0 0 2px var(--color-charcoal-900)}
+  .lt-hang__art.is-picked .lt-hang__x{opacity:1;pointer-events:auto}
   .wc-mbar__row{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;margin-bottom:1rem}
   .wc-mbar__count{font-size:1.2rem;font-weight:700;letter-spacing:.1em;color:var(--color-text-secondary)}
   .wc-mbar__k{font-size:1.1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary)}
@@ -2258,9 +2268,12 @@ img{display:block;max-width:100%;height:auto}
     var wall = hang.getBoundingClientRect();
     var p = pos[el.dataset.code];
     drag = { el: el, code: el.dataset.code, t: t, wall: wall, moved: false,
+             sx: e.clientX, sy: e.clientY,
              dx: e.clientX - (wall.left + p.x / 100 * wall.width),
              dy: e.clientY - (wall.top + p.y / 100 * wall.height) };
-    el.setPointerCapture(e.pointerId);
+    /* capture can refuse if the pointer is already gone; the drag still works
+       off the document listeners, so it must not abort the rest of setup */
+    try { el.setPointerCapture(e.pointerId); } catch (err) {}
     el.classList.add("is-dragging");
     e.preventDefault();
   }
@@ -2271,7 +2284,8 @@ img{display:block;max-width:100%;height:auto}
     var p = clampPos({ x: (e.clientX - drag.dx - w.left) / w.width * 100,
                        y: (e.clientY - drag.dy - w.top) / w.height * 100 }, t);
     p = snap(p, t);
-    drag.moved = true;
+    /* a couple of pixels of jitter is a tap, not an arrangement */
+    if (Math.abs(e.clientX - drag.sx) > 4 || Math.abs(e.clientY - drag.sy) > 4) drag.moved = true;
     pos[drag.code] = p;
     drag.el.style.left = p.x + "%";
     drag.el.style.top = p.y + "%";
@@ -2282,9 +2296,26 @@ img{display:block;max-width:100%;height:auto}
     if (!drag) return;
     drag.el.classList.remove("is-dragging");
     hideGuides();
-    if (drag.moved){ arranged = true; track("wall_arrange", { item_id: drag.code, selected: kept.length }); }
+    if (drag.moved){
+      arranged = true;
+      track("wall_arrange", { item_id: drag.code, selected: kept.length });
+    } else if (MOBILE.matches){
+      /* No hover on a phone, so a tap is what reveals the remove control. */
+      pick(drag.el);
+    }
     drag = null;
   }
+
+  function pick(el){
+    var on = el && el.classList.contains("is-picked");
+    hang.querySelectorAll(".lt-hang__art").forEach(function(a){ a.classList.remove("is-picked"); });
+    if (el && !on){
+      el.classList.add("is-picked");
+      track("wall_pick", { item_id: el.dataset.code });
+    }
+  }
+  /* tapping the bare wall puts the work down again */
+  hang.addEventListener("pointerdown", function(e){ if (e.target === hang) pick(null); });
 
   /* Snap to the edges and centre lines of the other works, which is what makes
      a hand-made arrangement read as deliberate rather than approximate. */
@@ -2549,6 +2580,10 @@ img{display:block;max-width:100%;height:auto}
     $("dropHint").textContent = coarse
       ? "Tap Add below to hang an edition here"
       : "Drag an edition here, or tap Add below";
+    var arrange = document.querySelector(".lt-wall__hint .lt-note");
+    if (arrange) arrange.textContent = coarse
+      ? "Drag to arrange. Tap a work to remove it."
+      : "Drag to arrange. Arrow keys nudge.";
   })();
 
   /* ── the phone's two-step: choose, then review ─────────────────────── */
