@@ -509,7 +509,6 @@ img{display:block;max-width:100%;height:auto}
    tray, then review the wall with its own bar. */
 .wc-rhead{display:none}
 .wc-mbar{display:none}
-#modeSeg{display:none}
 @media(max-width:759px){
   .wc-rhead{display:flex;justify-content:space-between;align-items:baseline;gap:1.2rem;margin-bottom:1.2rem}
   .wc-back{
@@ -518,12 +517,6 @@ img{display:block;max-width:100%;height:auto}
     color:var(--color-text-secondary);display:inline-flex;align-items:center;gap:.6rem;
   }
   .wc-back .lt-ic{width:1.4rem;height:1.4rem}
-  .wc-seg{display:inline-flex;border:1px solid var(--color-border-default);margin-bottom:1.6rem}
-  .wc-seg button{
-    appearance:none;background:none;border:0;cursor:pointer;font:inherit;padding:.8rem 1.4rem;
-    font-size:1.1rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-secondary);
-  }
-  .wc-seg button[aria-pressed="true"]{background:var(--color-charcoal-900);color:var(--color-ivory-100)}
 
   /* one view at a time. Review is a screen of its own, so the masthead and
      everything below the curator step out of the way. */
@@ -536,7 +529,6 @@ img{display:block;max-width:100%;height:auto}
   body.m-review .lt-strip,
   body.m-review .lt-foot,
   body.m-review .lt-sec:not(#table-sec){display:none}
-  body.m-review #modeSeg{display:inline-flex}
   /* the mobile site-header is 122 px tall and sticky, so the review screen
      has to start below it the way the masthead does */
   body.m-review #table-sec{padding-top:14rem}
@@ -547,9 +539,12 @@ img{display:block;max-width:100%;height:auto}
   .wc-tray__ctrls{display:none}
   .wc-tray{margin-top:0}
 
-  /* plain vs on a wall */
-  .wc-canvas.is-plain{background:var(--color-surface-muted)}
-  .wc-canvas.is-plain .wc-room{opacity:0}
+  /* No room photograph on a phone: at 350 px the render reads as a thumbnail
+     rather than a room. The wall keeps the plate's proportions and scale, so
+     the arrangement and the cm readout stay true. */
+  .wc-room{display:none}
+  .wc-frame{width:100%;aspect-ratio:1600/966}
+  .wc-canvas{background:var(--color-surface-muted);width:100%}
 
   /* the sticky bars */
   .wc-mbar{
@@ -1580,10 +1575,6 @@ img{display:block;max-width:100%;height:auto}
         <h2 class="t-h3">Your wall</h2>
         <button type="button" class="wc-back" id="backToChoose"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg>Keep choosing</button>
       </div>
-      <div class="wc-seg" role="group" aria-label="Preview mode" id="modeSeg">
-        <button type="button" data-mode="room" aria-pressed="true">On a wall</button>
-        <button type="button" data-mode="plain" aria-pressed="false">Plain</button>
-      </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
           <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-hallway.webp" alt="A living room with a long teak credenza against a pale wall." width="1600" height="966">
@@ -1876,6 +1867,7 @@ img{display:block;max-width:100%;height:auto}
      ════════════════════════════════════════════════════════════════════ */
   var $ = function(id){ return document.getElementById(id); };
   var tray = $("tray"), rail = $("rail"), cgrid = $("cgrid"), hang = $("hang");
+  var MOBILE = window.matchMedia("(max-width: 759px)");
 
   /* ── the rooms ─────────────────────────────────────────────────────────
      Each plate carries its own measurement. pctPerCm is the width of one cm
@@ -2124,10 +2116,26 @@ img{display:block;max-width:100%;height:auto}
 
   function plane(){ return room.wall; }
 
+  function grid(n){
+    var cols = n <= 2 ? Math.max(n, 1) : 3;
+    return { cols: cols, rows: Math.ceil(Math.max(n, 1) / cols) };
+  }
+
   function tileSize(){
     var w = hang.offsetWidth, h = hang.offsetHeight;
     if (!w || !h) return null;
-    var pxPerCm = w * room.pctPerCm;
+    var pxPerCm;
+    if (MOBILE.matches){
+      /* No photograph to be in scale with, so the block is sized to be read:
+         it fills 82% of the ground, and because every edition is 34 cm the
+         relative sizes and the 4 cm gaps stay exact. */
+      var g = grid(kept.length);
+      var cmW = g.cols * 34 + (g.cols - 1) * 4;
+      var cmH = g.rows * 34 + (g.rows - 1) * 4;
+      pxPerCm = Math.min(w * 0.82 / cmW, h * 0.82 / cmH);
+    } else {
+      pxPerCm = w * room.pctPerCm;
+    }
     var px = 34 * pxPerCm;
     return { px: px, pxPerCm: pxPerCm, wPct: px / w * 100, hPct: px / h * 100, w: w, h: h };
   }
@@ -2141,7 +2149,9 @@ img{display:block;max-width:100%;height:auto}
     var rows = Math.ceil(count / cols);
     var blockW = cols * t.wPct + (cols - 1) * gapH;
     var blockH = rows * t.hPct + (rows - 1) * gapV;
-    var x0 = room.anchor.x - blockW / 2, y0 = room.anchor.y - blockH, out = [];
+    var x0 = MOBILE.matches ? 50 - blockW / 2 : room.anchor.x - blockW / 2;
+    var y0 = MOBILE.matches ? 50 - blockH / 2 : room.anchor.y - blockH;
+    var out = [];
     for (var i = 0; i < count; i++){
       out.push({ x: x0 + (i % cols) * (t.wPct + gapH),
                  y: y0 + Math.floor(i / cols) * (t.hPct + gapV) });
@@ -2150,7 +2160,7 @@ img{display:block;max-width:100%;height:auto}
   }
 
   function clampPos(p, t){
-    var P = plane();
+    var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
     return {
       x: Math.min(Math.max(p.x, P.l), P.r - t.wPct),
       y: Math.min(Math.max(p.y, P.t), P.b - t.hPct)
@@ -2540,9 +2550,6 @@ img{display:block;max-width:100%;height:auto}
   })();
 
   /* ── the phone's two-step: choose, then review ─────────────────────── */
-  var MOBILE = window.matchMedia("(max-width: 759px)");
-  var mode = "room";
-
   function mView(v){
     document.body.classList.toggle("m-choose", v === "choose");
     document.body.classList.toggle("m-review", v === "review");
@@ -2551,7 +2558,7 @@ img{display:block;max-width:100%;height:auto}
     if (!kept.length) return;
     mView("review");
     window.scrollTo(0, 0);
-    /* The canvas measured zero while it was display:none, so anything hung
+    /* The wall measured zero while it was display:none, so anything hung
        before this point has no usable position. Lay it out once it has a box. */
     requestAnimationFrame(function(){ arranged = false; pos = {}; render(); });
     track("view_wall_review", {selected: kept.length});
@@ -2564,17 +2571,6 @@ img{display:block;max-width:100%;height:auto}
   $("backToChoose").addEventListener("click", goChoose);
   $("mSurprise").addEventListener("click", function(){ $("surprise").click(); });
   $("mAdd").addEventListener("click", onAction);
-
-  Array.prototype.forEach.call(document.querySelectorAll(".wc-seg button"), function(b){
-    b.addEventListener("click", function(){
-      mode = b.dataset.mode;
-      Array.prototype.forEach.call(document.querySelectorAll(".wc-seg button"), function(x){
-        x.setAttribute("aria-pressed", x === b ? "true" : "false");
-      });
-      $("canvas").classList.toggle("is-plain", mode === "plain");
-      track("wall_mode", {mode: mode});
-    });
-  });
 
   /* the sticky tray: nine slots, a count, and a gated step forward */
   function renderMobile(n, total){
@@ -2607,7 +2603,6 @@ img{display:block;max-width:100%;height:auto}
       if (!document.body.classList.contains("m-review")) mView("choose");
     } else {
       document.body.classList.remove("m-choose", "m-review");
-      $("canvas").classList.remove("is-plain");
       requestAnimationFrame(function(){ arranged = false; pos = {}; render(); });
     }
   }
