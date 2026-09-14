@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0909", kicker: "Latest · today",        weekday: "Wednesday", date: "9 September", year: "2026", short: "9 Sep", upcoming: true },
+      { id: "s0914", kicker: "Latest · today",        weekday: "Monday",    date: "14 September", year: "2026", short: "14 Sep", upcoming: true },
+      { id: "s0909", kicker: "Previous",              weekday: "Wednesday", date: "9 September", year: "2026", short: "9 Sep" },
       { id: "s0908", kicker: "Previous",              weekday: "Tuesday",   date: "8 September", year: "2026", short: "8 Sep" },
       { id: "s0901", kicker: "Previous",              weekday: "Tuesday",   date: "1 September", year: "2026", short: "1 Sep" },
       { id: "s0831", kicker: "Previous",              weekday: "Monday",    date: "31 August", year: "2026", short: "31 Aug" },
@@ -169,6 +170,13 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Monday 14 September ─────────────────────────────
+      { s: "s0914", feature: true, title: "Slim Aarons — Curate your wall", href: "slim-aarons-wall-curator/", desc: "The nine archive editions rebuilt on the Wall Curator's model: a room you drag onto, an edition tray, nine slots, and a price per edition that falls as the wall fills. Scale is measured off the room plate, so a 34 cm edition hangs at 34 cm." },
+      { s: "s0914", cluster: "Curate your wall", title: "Three already hung", href: "slim-aarons-wall-curator/?keep=saa114,saa117,saa119" },
+      { s: "s0914", cluster: "Curate your wall", title: "The complete series, all nine", href: "slim-aarons-wall-curator/?keep=saa114,saa115,saa116,saa117,saa118,saa119,saa120,saa121,saa122" },
+      { s: "s0914", cluster: "Curate your wall", title: "Cart rule suspended, nine at 249", href: "slim-aarons-wall-curator/?rule=off" },
+      { s: "s0914", cluster: "Curate your wall", title: "Control — plain collection grid", href: "slim-aarons-wall-curator/?v=control" },
+
       // ── Wednesday 9 September ───────────────────────────
       { s: "s0909", feature: true, title: "PDP — Audience flow, die nächste Edition", href: "pdp-audience-flow/", desc: "Where the next-best-edition recommendation belongs on the PDP, and what may drive it. Four placements against the live zone-4 control, on a tiered source ladder whose price band follows the configured size." },
       { s: "s0909", cluster: "Audience flow", title: "Control — zone 4 at the page bottom", href: "pdp-audience-flow/?reco=control" },
