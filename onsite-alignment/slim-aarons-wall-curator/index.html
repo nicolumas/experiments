@@ -350,6 +350,22 @@ img{display:block;max-width:100%;height:auto}
 @media(hover:hover){ .lt-hang__art:hover img{box-shadow:var(--lt-wall-shadow),0 0 0 1px rgba(28,26,24,.28)} }
 .lt-hang__art.is-dragging{cursor:grabbing;z-index:5}
 .lt-hang__art.is-dragging img{box-shadow:0 2px 3px rgba(28,26,24,.34),0 14px 22px -8px rgba(28,26,24,.34)}
+/* take a work off the wall where it hangs. Pointer devices only: a phone has
+   no hover, and the slot row underneath already carries a remove control. */
+.lt-hang__x{display:none}
+@media(hover:hover) and (min-width:760px){
+  .lt-hang__x{
+    position:absolute;top:-.9rem;right:-.9rem;width:2.2rem;height:2.2rem;border-radius:50%;
+    border:0;padding:0;cursor:pointer;display:grid;place-items:center;
+    background:var(--color-charcoal-900);color:var(--color-ivory-100);
+    opacity:0;transform:scale(.8);pointer-events:none;
+    transition:opacity var(--lt-t-fast) var(--lt-ease),transform var(--lt-t-fast) var(--lt-ease);
+  }
+  .lt-hang__art:hover .lt-hang__x,
+  .lt-hang__art:focus-within .lt-hang__x,
+  .lt-hang__x:focus-visible{opacity:1;transform:none;pointer-events:auto}
+  .lt-hang__art.is-dragging .lt-hang__x{opacity:0;pointer-events:none}
+}
 
 /* alignment guides, drawn only while dragging */
 .lt-guide{position:absolute;background:var(--color-charcoal-900);opacity:.55;pointer-events:none;z-index:4}
@@ -2178,14 +2194,26 @@ img{display:block;max-width:100%;height:auto}
       if ((!arranged || !pos[code]) && slots[i]) pos[code] = slots[i];
       if (hang.querySelector('[data-code="' + code + '"]')) return;
       var s = SLIDES.find(function(x){ return x.code === code; });
-      var b = document.createElement("button");
-      b.type = "button";
+      var b = document.createElement("div");
       b.className = "lt-hang__art";
       b.dataset.code = code;
+      b.setAttribute("role", "button");
+      b.setAttribute("tabindex", "0");
       b.setAttribute("aria-label", "Move " + s.title + " on the wall. Arrow keys nudge.");
-      b.innerHTML = '<img src="' + src(code, 640) + '" alt="" loading="lazy">';
+      b.innerHTML = '<img src="' + src(code, 640) + '" alt="" loading="lazy">' +
+        '<button type="button" class="lt-hang__x" aria-label="Take ' + s.title + ' off the wall">' +
+          '<svg class="lt-ic lt-ic--sm"><use href="#lc-x"/></svg>' +
+        '</button>';
       b.addEventListener("pointerdown", startDrag);
       b.addEventListener("keydown", nudge);
+      /* the X must not start a drag on its way to being clicked */
+      var x = b.querySelector(".lt-hang__x");
+      x.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+      x.addEventListener("click", function(e){
+        e.stopPropagation();
+        track("deselect_item", {item_id:code, item_name:s.title, source:"wall"});
+        toggle(code);
+      });
       hang.appendChild(b);
     });
 
