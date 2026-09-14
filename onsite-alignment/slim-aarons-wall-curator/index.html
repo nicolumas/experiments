@@ -504,6 +504,7 @@ img{display:block;max-width:100%;height:auto}
   cursor:pointer;padding:0;
 }
 .wc-build__grid{display:grid;gap:2.4rem}
+.wc-addmore{display:none}
 @media(min-width:1000px){
   /* slots and summary share the row instead of stacking under a full-width
      strip, which is what left the right half of the section empty */
@@ -599,6 +600,10 @@ img{display:block;max-width:100%;height:auto}
   .lt-hang__art.is-picked{z-index:6}
   .lt-hang__art.is-picked img{box-shadow:var(--lt-wall-shadow),0 0 0 2px var(--color-charcoal-900)}
   .lt-hang__art.is-picked .lt-hang__x{opacity:1;pointer-events:auto}
+  /* the second route back to choosing, where the empty slots make the gap
+     obvious; the link at the top of the screen is off by the time you get here */
+  .wc-addmore{display:inline-flex;align-items:center;justify-content:center;gap:.8rem;width:100%;margin-top:1.6rem}
+  .wc-addmore .lt-ic{width:1.4rem;height:1.4rem}
   .wc-mbar__row{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;margin-bottom:1rem}
   .wc-mbar__count{font-size:1.2rem;font-weight:700;letter-spacing:.1em;color:var(--color-text-secondary)}
   .wc-mbar__k{font-size:1.1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary)}
@@ -1562,6 +1567,7 @@ img{display:block;max-width:100%;height:auto}
   <symbol id="lc-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="lc-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
   <symbol id="lc-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="lc-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
   <symbol id="lc-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
   <symbol id="lc-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
   <symbol id="lc-image-off" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"/><line x1="13.5" x2="6" y1="13.5" y2="21"/><line x1="18" x2="21" y1="12" y2="15"/><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59"/><path d="M21 15V5a2 2 0 0 0-2-2H9"/></symbol>
@@ -1607,7 +1613,7 @@ img{display:block;max-width:100%;height:auto}
       <div id="canvasBlock">
       <div class="wc-rhead" id="reviewHead">
         <h2 class="t-h3">Your wall</h2>
-        <button type="button" class="wc-back" id="backToChoose"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg>Keep choosing</button>
+        <button type="button" class="wc-back" id="backToChoose"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg>Add more</button>
       </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
@@ -1659,6 +1665,7 @@ img{display:block;max-width:100%;height:auto}
 
         <div class="wc-build__grid">
           <div class="wc-slots" id="slots"></div>
+          <button type="button" class="lt-btn lt-btn--ghost wc-addmore" id="addMore"><svg class="lt-ic"><use href="#lc-plus"/></svg>Add more editions</button>
 
           <div class="wc-sum">
           <div class="wc-sum__line" id="lineBase" hidden><span id="baseLabel">&nbsp;</span><b class="lt-strike" id="baseTotal">&ndash;</b></div>
@@ -2121,6 +2128,7 @@ img{display:block;max-width:100%;height:auto}
     }
 
     $("dropHint").hidden = (n > 0);
+    $("addMore").hidden = (n === 9);
     renderMobile(n, total);
     renderWall(n);
     syncUrl();
@@ -2627,6 +2635,7 @@ img{display:block;max-width:100%;height:auto}
   }
   $("toReview").addEventListener("click", goReview);
   $("backToChoose").addEventListener("click", goChoose);
+  $("addMore").addEventListener("click", goChoose);
   $("mAdd").addEventListener("click", onAction);
 
   /* the sticky tray: nine slots, a count, and a gated step forward */
