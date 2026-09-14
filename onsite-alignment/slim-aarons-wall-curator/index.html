@@ -411,6 +411,7 @@ img{display:block;max-width:100%;height:auto}
 
 /* ══ CURATOR (Wall Curator model) ═════════════════════════════════════════ */
 
+#table-sec{padding-top:0}
 .wc-head{display:flex;flex-direction:column;gap:1.2rem;margin-bottom:2.4rem;align-items:center;text-align:center}
 
 /* the room canvas */
@@ -500,6 +501,80 @@ img{display:block;max-width:100%;height:auto}
 @media(max-width:759px){
   .wc-card{flex:0 0 15rem}
   .wc-hint{font-size:1.1rem;padding:.9rem 1.4rem;width:80%;text-align:center}
+}
+
+/* ══ MOBILE: the curator's two-step, choose then review ═══════════════════ */
+/* Desktop keeps everything on one page. Below 760 the page becomes the two
+   views the Wall Curator uses on a phone: pick from a grid against a sticky
+   tray, then review the wall with its own bar. */
+.wc-rhead{display:none}
+.wc-mbar{display:none}
+#modeSeg{display:none}
+@media(max-width:759px){
+  .wc-rhead{display:flex;justify-content:space-between;align-items:baseline;gap:1.2rem;margin-bottom:1.2rem}
+  .wc-back{
+    appearance:none;background:none;border:0;padding:0;cursor:pointer;font:inherit;
+    font-size:1.2rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--color-text-secondary);display:inline-flex;align-items:center;gap:.6rem;
+  }
+  .wc-back .lt-ic{width:1.4rem;height:1.4rem}
+  .wc-seg{display:inline-flex;border:1px solid var(--color-border-default);margin-bottom:1.6rem}
+  .wc-seg button{
+    appearance:none;background:none;border:0;cursor:pointer;font:inherit;padding:.8rem 1.4rem;
+    font-size:1.1rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-secondary);
+  }
+  .wc-seg button[aria-pressed="true"]{background:var(--color-charcoal-900);color:var(--color-ivory-100)}
+
+  /* one view at a time. Review is a screen of its own, so the masthead and
+     everything below the curator step out of the way. */
+  .wc-head{display:none}
+  body.m-choose #canvasBlock,
+  body.m-choose .wc-cap,
+  body.m-choose .wc-build{display:none}
+  body.m-review .wc-tray,
+  body.m-review .lt-mast,
+  body.m-review .lt-strip,
+  body.m-review .lt-foot,
+  body.m-review .lt-sec:not(#table-sec){display:none}
+  body.m-review #modeSeg{display:inline-flex}
+  /* the mobile site-header is 122 px tall and sticky, so the review screen
+     has to start below it the way the masthead does */
+  body.m-review #table-sec{padding-top:14rem}
+
+  /* the tray is a grid on a phone, not a carousel */
+  .wc-carousel{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;overflow:visible;padding-bottom:0}
+  .wc-card{flex:none}
+  .wc-tray__ctrls{display:none}
+  .wc-tray{margin-top:0}
+
+  /* plain vs on a wall */
+  .wc-canvas.is-plain{background:var(--color-surface-muted)}
+  .wc-canvas.is-plain .wc-room{opacity:0}
+
+  /* the sticky bars */
+  .wc-mbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;display:block;
+    background:var(--lt-ground);border-top:1px solid var(--color-border-default);
+    padding:1.2rem 1.6rem calc(1.2rem + env(safe-area-inset-bottom));
+  }
+  body.m-review .wc-mbar--choose{display:none}
+  body.m-choose .wc-mbar--review{display:none}
+  .wc-mrail{display:flex;gap:.5rem;min-width:0;margin-bottom:1rem}
+  .wc-mrail .s{
+    position:relative;flex:1;aspect-ratio:1/1;border:1px dashed var(--color-border-default);
+    background:var(--color-surface-muted);display:grid;place-items:center;overflow:hidden;
+  }
+  .wc-mrail .s .idx{font-size:1.1rem;font-weight:700;color:var(--color-text-secondary)}
+  .wc-mrail .s.filled{border-style:solid;border-color:var(--color-charcoal-900);background:#fff}
+  .wc-mrail .s img{width:100%;height:100%;object-fit:contain;padding:8%}
+  .wc-mbar__row{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;margin-bottom:1rem}
+  .wc-mbar__count{font-size:1.2rem;font-weight:700;letter-spacing:.1em;color:var(--color-text-secondary)}
+  .wc-mbar__k{font-size:1.1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary)}
+  .wc-mbar__v{font-family:UtileDisplayLumas,Georgia,serif;font-size:2.2rem;line-height:1}
+  .wc-mbar .wc-surprise{padding:.9rem 1.4rem}
+
+  /* the bar must not sit on top of the last thing on the page */
+  body.m-choose,body.m-review{padding-bottom:17rem}
 }
 
 /* ══ QUICK VIEW ═══════════════════════════════════════════════════════════ */
@@ -1492,7 +1567,7 @@ img{display:block;max-width:100%;height:auto}
   </div>
 
   <!-- ══ THE CURATOR ═══════════════════════════════════════════════════ -->
-  <main class="lt-sec" id="table-sec" style="padding-top:0">
+  <main class="lt-sec" id="table-sec">
     <div class="lt-wrap">
 
       <div class="wc-head">
@@ -1500,6 +1575,15 @@ img{display:block;max-width:100%;height:auto}
       </div>
 
       <!-- room canvas -->
+      <div id="canvasBlock">
+      <div class="wc-rhead" id="reviewHead">
+        <h2 class="t-h3">Your wall</h2>
+        <button type="button" class="wc-back" id="backToChoose"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg>Keep choosing</button>
+      </div>
+      <div class="wc-seg" role="group" aria-label="Preview mode" id="modeSeg">
+        <button type="button" data-mode="room" aria-pressed="true">On a wall</button>
+        <button type="button" data-mode="plain" aria-pressed="false">Plain</button>
+      </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
           <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-hallway.webp" alt="A living room with a long teak credenza against a pale wall." width="1600" height="966">
@@ -1510,6 +1594,7 @@ img{display:block;max-width:100%;height:auto}
         </span>
         <p class="wc-hint" id="dropHint">Drag an edition here, or tap Add below</p>
       </div>
+      </div><!-- /canvasBlock -->
       <div class="wc-cap">
         <p class="lt-note" id="wallDims">&nbsp;</p>
         <div class="lt-wall__hint" id="wallHint">
@@ -1563,6 +1648,25 @@ img{display:block;max-width:100%;height:auto}
 
     </div>
   </main>
+
+  <!-- ══ MOBILE BARS (the two-step, phone only) ═══════════════════════ -->
+  <div class="wc-mbar wc-mbar--choose" id="mChooseBar">
+    <div class="wc-mrail" id="mRail" aria-hidden="true"></div>
+    <div class="wc-mbar__row">
+      <span class="wc-mbar__count" id="mCount">0 / 9</span>
+      <button type="button" class="wc-surprise" id="mSurprise"><svg class="lt-ic"><use href="#lc-sparkle"/></svg>Surprise me</button>
+    </div>
+    <button type="button" class="lt-btn lt-btn--block" id="toReview" disabled>Choose an edition</button>
+  </div>
+
+  <div class="wc-mbar wc-mbar--review" id="mReviewBar">
+    <div class="wc-mbar__row">
+      <span class="wc-mbar__k">Your wall</span>
+      <span class="wc-mbar__v" id="mTotal">&euro;0</span>
+    </div>
+    <!-- ABLYFT-GOAL: ATC (primary) -->
+    <button type="button" class="lt-btn lt-btn--block" id="mAdd" disabled>Choose an edition</button>
+  </div>
 
   <!-- ══ CONTROL GRID (control variant only) ═══════════════════════════ -->
   <section class="lt-sec" id="control-sec" hidden>
@@ -1994,6 +2098,7 @@ img{display:block;max-width:100%;height:auto}
     }
 
     $("dropHint").hidden = (n > 0);
+    renderMobile(n, total);
     renderWall(n);
     syncUrl();
   }
@@ -2433,6 +2538,82 @@ img{display:block;max-width:100%;height:auto}
       ? "Tap Add below to hang an edition here"
       : "Drag an edition here, or tap Add below";
   })();
+
+  /* ── the phone's two-step: choose, then review ─────────────────────── */
+  var MOBILE = window.matchMedia("(max-width: 759px)");
+  var mode = "room";
+
+  function mView(v){
+    document.body.classList.toggle("m-choose", v === "choose");
+    document.body.classList.toggle("m-review", v === "review");
+  }
+  function goReview(){
+    if (!kept.length) return;
+    mView("review");
+    window.scrollTo(0, 0);
+    /* The canvas measured zero while it was display:none, so anything hung
+       before this point has no usable position. Lay it out once it has a box. */
+    requestAnimationFrame(function(){ arranged = false; pos = {}; render(); });
+    track("view_wall_review", {selected: kept.length});
+  }
+  function goChoose(){
+    mView("choose");
+    window.scrollTo(0, 0);
+  }
+  $("toReview").addEventListener("click", goReview);
+  $("backToChoose").addEventListener("click", goChoose);
+  $("mSurprise").addEventListener("click", function(){ $("surprise").click(); });
+  $("mAdd").addEventListener("click", onAction);
+
+  Array.prototype.forEach.call(document.querySelectorAll(".wc-seg button"), function(b){
+    b.addEventListener("click", function(){
+      mode = b.dataset.mode;
+      Array.prototype.forEach.call(document.querySelectorAll(".wc-seg button"), function(x){
+        x.setAttribute("aria-pressed", x === b ? "true" : "false");
+      });
+      $("canvas").classList.toggle("is-plain", mode === "plain");
+      track("wall_mode", {mode: mode});
+    });
+  });
+
+  /* the sticky tray: nine slots, a count, and a gated step forward */
+  function renderMobile(n, total){
+    var rail = $("mRail");
+    rail.innerHTML = "";
+    for (var i = 0; i < 9; i++){
+      var d = document.createElement("span");
+      d.className = "s";
+      var code = kept[i];
+      if (code){
+        d.className += " filled";
+        d.innerHTML = '<img src="' + src(code,640) + '" alt="">';
+      } else {
+        d.innerHTML = '<span class="idx">' + (i + 1) + '</span>';
+      }
+      rail.appendChild(d);
+    }
+    $("mCount").textContent = n + " / 9";
+    $("mTotal").textContent = euro(total);
+    var go = $("toReview"), add = $("mAdd");
+    go.disabled = add.disabled = (n === 0);
+    go.textContent = n === 0 ? "Choose an edition" : (n === 9 ? "See your wall" : "See your wall \u00b7 " + n);
+    add.textContent = ctaLabel(n);
+    add.dataset.action = "cart";
+  }
+
+  /* crossing the breakpoint hands the page back to whichever layout owns it */
+  function syncViewport(){
+    if (MOBILE.matches){
+      if (!document.body.classList.contains("m-review")) mView("choose");
+    } else {
+      document.body.classList.remove("m-choose", "m-review");
+      $("canvas").classList.remove("is-plain");
+      requestAnimationFrame(function(){ arranged = false; pos = {}; render(); });
+    }
+  }
+  MOBILE.addEventListener ? MOBILE.addEventListener("change", syncViewport)
+                          : MOBILE.addListener(syncViewport);
+  syncViewport();
 
   /* ── the tray carousel ──────────────────────────────────────────────── */
   (function(){
