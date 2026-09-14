@@ -467,6 +467,7 @@ img{display:block;max-width:100%;height:auto}
 .wc-card__b{padding:1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
 .wc-card__n{font-size:1.1rem;font-weight:700;letter-spacing:.14em;color:var(--color-text-secondary)}
 .wc-card__t{font-size:1.2rem;line-height:1.25;flex:1}
+.wc-card__add.is-remove{color:var(--color-text-secondary)}
 .wc-card__add{
   appearance:none;border:0;border-top:1px solid var(--color-border-default);background:none;cursor:pointer;font:inherit;
   font-size:1.1rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:1rem;width:100%;
@@ -569,7 +570,13 @@ img{display:block;max-width:100%;height:auto}
     background:var(--color-surface-muted);display:grid;place-items:center;overflow:hidden;
   }
   .wc-mrail .s .idx{font-size:1.1rem;font-weight:700;color:var(--color-text-secondary)}
-  .wc-mrail .s.filled{border-style:solid;border-color:var(--color-charcoal-900);background:#fff}
+  .wc-mrail .s.filled{border-style:solid;border-color:var(--color-charcoal-900);background:#fff;padding:0;cursor:pointer}
+  .wc-mrail .s .x{
+    position:absolute;inset:0;display:grid;place-items:center;
+    background:rgba(28,26,24,.55);color:var(--color-ivory-100);opacity:0;
+    transition:opacity var(--lt-t-fast) var(--lt-ease);
+  }
+  .wc-mrail .s.filled:active .x{opacity:1}
   .wc-mrail .s img{width:100%;height:100%;object-fit:contain;padding:8%}
   /* tap a work to reveal its remove control */
   .lt-hang__x{
@@ -609,8 +616,7 @@ img{display:block;max-width:100%;height:auto}
 .lt-qv__close{appearance:none;background:none;border:1px solid var(--color-border-default);width:3.6rem;height:3.6rem;border-radius:50%;cursor:pointer;color:var(--color-text-primary);flex:0 0 auto;display:grid;place-items:center;padding:0}
 .lt-qv__close:hover{background:var(--color-charcoal-900);color:var(--color-ivory-100);border-color:var(--color-charcoal-900)}
 .lt-qv__img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--color-border-subtle)}
-.lt-qv__quote{font-family:UtileDisplayLumas,Georgia,serif;font-size:2.0rem;line-height:1.35;margin:0;border-left:2px solid var(--color-charcoal-900);padding-left:1.6rem}
-.lt-qv__panel #qvStory{margin:-.8rem 0 0}
+.lt-qv__artist{margin:.6rem 0 0;font-size:1.2rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary)}
 .lt-qv__spec{display:grid;grid-template-columns:auto 1fr;gap:.8rem 2rem;margin:0;font-size:1.3rem}
 .lt-qv__spec dt{color:var(--color-text-secondary)}
 .lt-qv__spec dd{margin:0}
@@ -1744,20 +1750,15 @@ img{display:block;max-width:100%;height:auto}
   <div class="lt-qv__panel" id="qvPanel">
     <div class="lt-qv__head">
       <div>
-        <p class="t-eyebrow" id="qvNum">Edition 01 of 9</p>
-        <h2 class="t-h3" id="qvTitle" style="margin-top:.6rem">&nbsp;</h2>
+        <h2 class="t-h3" id="qvTitle">&nbsp;</h2>
+        <p class="lt-qv__artist" id="qvArtist">Slim Aarons</p>
       </div>
       <button type="button" class="lt-qv__close" data-qv-close aria-label="Close"><svg class="lt-ic"><use href="#lc-x"/></svg></button>
     </div>
     <img class="lt-qv__img" id="qvImg" alt="">
-    <p class="lt-qv__quote" id="qvQuote">&nbsp;</p>
-    <p class="t-body secondary" id="qvStory" style="font-size:1.5rem">&nbsp;</p>
     <dl class="lt-qv__spec">
-      <dt>Written by</dt><dd>Slim Aarons, on the mount</dd>
-      <dt>Place</dt><dd id="qvPlace">&nbsp;</dd>
-      <dt>Format</dt><dd>34 &times; 34 cm, acrylic glass mount</dd>
-      <dt>Single price</dt><dd class="tnum">&euro;249</dd>
-      <dt>Reference</dt><dd id="qvRef">&nbsp;</dd>
+      <dt>Size and finish</dt><dd>34 &times; 34 cm, acrylic glass mount</dd>
+      <dt>SKU</dt><dd id="qvRef">&nbsp;</dd>
     </dl>
     <div class="lt-qv__foot">
       <button type="button" class="lt-btn lt-btn--block" id="qvKeep">Keep this edition</button>
@@ -2050,7 +2051,10 @@ img{display:block;max-width:100%;height:auto}
       var on = kept.indexOf(c.dataset.code) > -1;
       c.classList.toggle("is-on", on);
       c.querySelector(".wc-card__fig").setAttribute("draggable", on ? "false" : "true");
-      c.querySelector(".wc-card__add span").textContent = on ? "Added" : "Add";
+      var add = c.querySelector(".wc-card__add");
+      add.querySelector("span").textContent = on ? "Remove" : "Add";
+      add.querySelector("use").setAttribute("href", on ? "#lc-x" : "#lc-plus");
+      add.classList.toggle("is-remove", on);
     });
 
     /* dots and slots */
@@ -2387,13 +2391,9 @@ img{display:block;max-width:100%;height:auto}
   function openQv(i){
     qvIdx = i;
     var s = SLIDES[i];
-    $("qvNum").textContent = "Edition " + num(i) + " of 9";
     $("qvTitle").textContent = s.title;
     $("qvImg").src = src(s.code, 1280);
     $("qvImg").alt = alt(s, i);
-    $("qvQuote").textContent = s.hand;
-    $("qvStory").textContent = s.story;
-    $("qvPlace").textContent = s.place;
     $("qvRef").textContent = s.code.toUpperCase();
     $("qvLink").href = s.url;
     syncQvKeep();
@@ -2416,8 +2416,13 @@ img{display:block;max-width:100%;height:auto}
   }
   $("qvKeep").addEventListener("click", function(){
     if (qvIdx < 0) return;
-    toggle(SLIDES[qvIdx].code);
+    var code = SLIDES[qvIdx].code, adding = kept.indexOf(code) < 0;
+    /* Keeping puts the edition in the selection, which is both what hangs on
+       the wall and what the cart totals, so the drawer steps out of the way
+       to show it land. Removing leaves the drawer open. */
+    toggle(code);
     syncQvKeep();
+    if (adding) closeQv();
   });
   Array.prototype.forEach.call(qv.querySelectorAll("[data-qv-close]"), function(el){
     el.addEventListener("click", closeQv);
@@ -2613,13 +2618,23 @@ img{display:block;max-width:100%;height:auto}
     var rail = $("mRail");
     rail.innerHTML = "";
     for (var i = 0; i < 9; i++){
-      var d = document.createElement("span");
-      d.className = "s";
       var code = kept[i];
+      var d;
       if (code){
-        d.className += " filled";
-        d.innerHTML = '<img src="' + src(code,640) + '" alt="">';
+        var sl = SLIDES.find(function(x){ return x.code === code; });
+        d = document.createElement("button");
+        d.type = "button";
+        d.className = "s filled";
+        d.setAttribute("aria-label", "Remove " + sl.title);
+        d.innerHTML = '<img src="' + src(code,640) + '" alt="">' +
+                      '<span class="x" aria-hidden="true"><svg class="lt-ic lt-ic--sm"><use href="#lc-x"/></svg></span>';
+        (function(c){ d.addEventListener("click", function(){
+          track("deselect_item", {item_id:c, source:"tray_rail"});
+          toggle(c);
+        }); })(code);
       } else {
+        d = document.createElement("span");
+        d.className = "s";
         d.innerHTML = '<span class="idx">' + (i + 1) + '</span>';
       }
       rail.appendChild(d);
