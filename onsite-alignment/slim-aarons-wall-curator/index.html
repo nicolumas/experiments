@@ -471,8 +471,9 @@ img{display:block;max-width:100%;height:auto}
 .wc-card__add{
   appearance:none;border:0;border-top:1px solid var(--color-border-default);background:none;cursor:pointer;font:inherit;
   font-size:1.1rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:1rem;width:100%;
-  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;color:var(--color-text-primary);
+  display:block;position:relative;text-align:center;color:var(--color-text-primary);
 }
+.wc-card__add .lt-ic{position:absolute;left:1.2rem;top:50%;transform:translateY(-50%)}
 @media(hover:hover){.wc-card__add:hover{background:var(--color-surface-muted)}}
 .wc-card__info{
   position:absolute;top:.8rem;right:.8rem;width:2.8rem;height:2.8rem;border-radius:50%;
@@ -2112,6 +2113,10 @@ img{display:block;max-width:100%;height:auto}
     renderMobile(n, total);
     renderWall(n);
     syncUrl();
+
+    /* an empty wall is not a wall to review, so the phone steps back to the
+       choosing screen rather than sitting on an empty room */
+    if (n === 0 && MOBILE.matches && document.body.classList.contains("m-review")) goChoose();
   }
 
 
