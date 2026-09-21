@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0914", kicker: "Latest · today",        weekday: "Monday",    date: "14 September", year: "2026", short: "14 Sep", upcoming: true },
+      { id: "s0922", kicker: "Latest · today",        weekday: "Tuesday",   date: "22 September", year: "2026", short: "22 Sep", upcoming: true },
+      { id: "s0914", kicker: "Previous",              weekday: "Monday",    date: "14 September", year: "2026", short: "14 Sep" },
       { id: "s0909", kicker: "Previous",              weekday: "Wednesday", date: "9 September", year: "2026", short: "9 Sep" },
       { id: "s0908", kicker: "Previous",              weekday: "Tuesday",   date: "8 September", year: "2026", short: "8 Sep" },
       { id: "s0901", kicker: "Previous",              weekday: "Tuesday",   date: "1 September", year: "2026", short: "1 Sep" },
@@ -170,6 +171,9 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Tuesday 22 September ───────────────────────────
+      { s: "s0922", feature: true, title: "Open studio: a visit with Marianna Gefen", href: "marianna-gefen/", desc: "The artist-in-focus page for the autumn new releases, built as a CMS fragment the content team can install directly. The magazine interview runs as questions, each one answered by the photograph beside it. Works are not live yet, so the page carries no links and the grid is a placeholder." },
+
       // ── Monday 14 September ─────────────────────────────
       { s: "s0914", feature: true, title: "Slim Aarons — Curate your wall", href: "slim-aarons-wall-curator/", desc: "The nine archive editions rebuilt on the Wall Curator's model: a room you drag onto, an edition tray, nine slots, and a price per edition that falls as the wall fills. Scale is measured off the room plate, so a 34 cm edition hangs at 34 cm." },
       { s: "s0914", cluster: "Curate your wall", title: "Three already hung", href: "slim-aarons-wall-curator/?keep=saa114,saa117,saa119" },
