@@ -447,7 +447,9 @@ img{display:block;max-width:100%;height:auto}
   font-size:1.2rem;letter-spacing:.04em;transition:opacity var(--lt-t) var(--lt-ease);
 }
 .wc-hint[hidden]{display:none}
-.wc-cap{display:flex;justify-content:space-between;align-items:baseline;gap:1.6rem;flex-wrap:wrap;margin-top:1.2rem}
+.wc-cap{display:flex;justify-content:space-between;align-items:baseline;gap:3.2rem;flex-wrap:wrap;margin-top:1.2rem}
+/* the readouts belong together; the control is its own thing */
+.wc-cap__read{display:flex;gap:2rem;flex-wrap:wrap;align-items:baseline;min-width:0}
 
 /* the edition tray */
 .wc-tray{margin-top:4rem}
@@ -484,6 +486,8 @@ img{display:block;max-width:100%;height:auto}
 /* the builder */
 .wc-build{margin-top:4.8rem;border-top:1px solid var(--color-border-default);padding-top:2.4rem}
 .wc-build__head{display:flex;justify-content:space-between;align-items:flex-end;gap:2.4rem;flex-wrap:wrap;margin-bottom:1.8rem}
+/* title, progress and control each stand on their own */
+.wc-build__head>*{flex:0 0 auto}
 .wc-build__count{display:flex;align-items:center;gap:1.2rem}
 .wc-build__n{font-family:UtileDisplayLumas,Georgia,serif;font-size:2.4rem;line-height:1}
 .wc-dots{display:flex;gap:.5rem}
@@ -503,6 +507,10 @@ img{display:block;max-width:100%;height:auto}
   background:var(--color-charcoal-900);color:var(--color-ivory-100);border:0;display:grid;place-items:center;
   cursor:pointer;padding:0;
 }
+/* the room's own add to cart. On a phone the review screen already carries one
+   in its sticky bar, so this is the pointer layout only. */
+.wc-roomcta{display:none}
+@media(min-width:760px){.wc-roomcta{display:block;max-width:38rem;margin:2.4rem auto 0}}
 .wc-build__grid{display:grid;gap:2.4rem}
 .wc-addmore{display:none}
 @media(min-width:1000px){
@@ -517,6 +525,12 @@ img{display:block;max-width:100%;height:auto}
 .wc-sum{margin:2.4rem 0 0;display:flex;flex-direction:column;gap:.9rem;max-width:52rem;width:100%}
 .wc-sum__line{display:flex;align-items:baseline;justify-content:space-between;gap:1.6rem;font-size:1.3rem}
 .wc-sum__line--total{border-top:1px solid var(--color-border-default);padding-top:1.2rem;font-size:1.5rem;font-weight:700}
+.wc-sum__line--total b{font-size:2.2rem;line-height:1}
+/* the price advantage is the argument this page makes, so it is read at the
+   weight of the total rather than as a footnote. No status colour: s03 keeps
+   green and red for functional UI. */
+.wc-sum__line.lt-line--save{font-size:1.5rem;font-weight:700;color:var(--color-text-primary)}
+.wc-sum__line.lt-line--save b{font-weight:700;font-size:1.6rem;color:var(--color-text-primary)}
 .wc-sum .lt-btn{margin-top:1rem}
 .wc-sum .lt-applied{text-align:left}
 
@@ -1627,11 +1641,16 @@ img{display:block;max-width:100%;height:auto}
       </div>
       </div><!-- /canvasBlock -->
       <div class="wc-cap">
-        <p class="lt-note" id="wallDims">&nbsp;</p>
-        <div class="lt-wall__hint" id="wallHint">
-          <p class="lt-note">Drag to arrange. Arrow keys nudge.</p>
-          <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+        <div class="wc-cap__read">
+          <p class="lt-note" id="wallDims">&nbsp;</p>
+          <p class="lt-note" id="wallHint">Drag to arrange. Arrow keys nudge.</p>
         </div>
+        <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+      </div>
+
+      <div class="wc-roomcta">
+        <!-- ABLYFT-GOAL: ATC (primary) -->
+        <button type="button" class="lt-btn lt-btn--block" id="ctaRoom" disabled>Choose an edition</button>
       </div>
 
       <!-- edition tray -->
@@ -1659,8 +1678,8 @@ img{display:block;max-width:100%;height:auto}
           <div class="wc-build__count">
             <span class="wc-build__n"><span id="count">0</span>/9</span>
             <span class="wc-dots" id="dots" aria-hidden="true"></span>
-            <button type="button" class="lt-btn lt-btn--ghost" id="clearBtn" disabled>Clear wall</button>
           </div>
+          <button type="button" class="lt-btn lt-btn--ghost" id="clearBtn" disabled>Clear wall</button>
         </div>
 
         <div class="wc-build__grid">
@@ -2108,16 +2127,16 @@ img{display:block;max-width:100%;height:auto}
     var comparable = ruleOn && save > 0;
     $("baseLabel").textContent = n ? n + (n === 1 ? " edition" : " editions") + " at the single price" : "\u00a0";
     $("baseTotal").textContent = n ? euro(n * SINGLE) : "–";
-    $("valSave").textContent = save > 0 ? euro(save) : "–";
+    $("valSave").textContent = save > 0 ? "-" + euro(save) : "–";
     $("valTotal").textContent = euro(total);
     $("sumUnits").textContent = n ? "Subtotal, " + n + " \u00d7 " + euro(per) : "Subtotal";
     $("lineBase").hidden = !comparable;
     $("lineSave").hidden = !comparable;
 
-    var cta = $("cta"), alt2 = $("altCta");
-    cta.disabled = $("clearBtn").disabled = (n === 0);
-    cta.textContent = ctaLabel(n);
-    cta.dataset.action = "cart";
+    var cta = $("cta"), alt2 = $("altCta"), ctaRoom = $("ctaRoom");
+    cta.disabled = ctaRoom.disabled = $("clearBtn").disabled = (n === 0);
+    cta.textContent = ctaRoom.textContent = ctaLabel(n);
+    cta.dataset.action = ctaRoom.dataset.action = "cart";
     if (ruleOn && n >= 1 && n <= 8){
       var left = 9 - n;
       alt2.hidden = false;
@@ -2502,7 +2521,7 @@ img{display:block;max-width:100%;height:auto}
     });
     var saveRow = $("cartSave");
     saveRow.hidden = save <= 0;
-    saveRow.querySelector("b").textContent = euro(save);
+    saveRow.querySelector("b").textContent = "-" + euro(save);
     $("cartTotal").textContent = euro(totalFor(n));
   }
 
@@ -2562,6 +2581,7 @@ img{display:block;max-width:100%;height:auto}
     else addToCart();
   }
   $("cta").addEventListener("click", onAction);
+  $("ctaRoom").addEventListener("click", onAction);
   $("altCta").addEventListener("click", onAction);
 
   $("clearBtn").addEventListener("click", function(){
@@ -2609,7 +2629,7 @@ img{display:block;max-width:100%;height:auto}
     $("dropHint").textContent = coarse
       ? "Tap Add below to hang an edition here"
       : "Drag an edition here, or tap Add below";
-    var arrange = document.querySelector(".lt-wall__hint .lt-note");
+    var arrange = $("wallHint");
     if (arrange) arrange.textContent = coarse
       ? "Drag to arrange. Tap a work to remove it."
       : "Drag to arrange. Arrow keys nudge.";
