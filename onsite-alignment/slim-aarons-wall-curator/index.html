@@ -2182,9 +2182,18 @@ img{display:block;max-width:100%;height:auto}
 
   function plane(){ return room.wall; }
 
+  /* How many works sit on each row, per count. Three across for every count
+     left four hanging as three plus a lone one, which reads as the nine grid
+     with holes in it rather than as an arrangement of four. */
+  var ROWS = {
+    1: [1], 2: [2], 3: [3], 4: [2, 2], 5: [3, 2],
+    6: [3, 3], 7: [4, 3], 8: [4, 4], 9: [3, 3, 3]
+  };
+  function rowsFor(n){ return ROWS[Math.max(1, Math.min(9, n))]; }
+
   function grid(n){
-    var cols = n <= 2 ? Math.max(n, 1) : 3;
-    return { cols: cols, rows: Math.ceil(Math.max(n, 1) / cols) };
+    var r = rowsFor(n);
+    return { cols: Math.max.apply(null, r), rows: r.length };
   }
 
   function tileSize(){
@@ -2208,20 +2217,23 @@ img{display:block;max-width:100%;height:auto}
 
   /* the tidy arrangement: up to three across, hanging from a fixed baseline */
   function defaultSlots(count){
-    var t = tileSize(); if (!t) return [];
+    var t = tileSize(); if (!t || count < 1) return [];
     var gapH = 4 * t.pxPerCm / t.w * 100;
     var gapV = 4 * t.pxPerCm / t.h * 100;
-    var cols = count <= 2 ? Math.max(count, 1) : 3;
-    var rows = Math.ceil(count / cols);
-    var blockW = cols * t.wPct + (cols - 1) * gapH;
-    var blockH = rows * t.hPct + (rows - 1) * gapV;
-    var x0 = MOBILE.matches ? 50 - blockW / 2 : room.anchor.x - blockW / 2;
+    var rows = rowsFor(count);
+    var blockH = rows.length * t.hPct + (rows.length - 1) * gapV;
+    var cx = MOBILE.matches ? 50 : room.anchor.x;
     var y0 = MOBILE.matches ? 50 - blockH / 2 : room.anchor.y - blockH;
     var out = [];
-    for (var i = 0; i < count; i++){
-      out.push({ x: x0 + (i % cols) * (t.wPct + gapH),
-                 y: y0 + Math.floor(i / cols) * (t.hPct + gapV) });
-    }
+    /* every row is centred on the block, so a short last row sits under the
+       middle of the one above rather than flush left */
+    rows.forEach(function(cols, r){
+      var rowW = cols * t.wPct + (cols - 1) * gapH;
+      var x0 = cx - rowW / 2;
+      for (var c = 0; c < cols && out.length < count; c++){
+        out.push({ x: x0 + c * (t.wPct + gapH), y: y0 + r * (t.hPct + gapV) });
+      }
+    });
     return out;
   }
 
