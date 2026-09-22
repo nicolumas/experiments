@@ -2294,20 +2294,44 @@ img{display:block;max-width:100%;height:auto}
 
   /* Nothing to slide back to when a work arrives from the tray, so search
      outward from where it was dropped until it is clear of everything. */
-  function placeFree(code, p, t){
-    if (!overlaps(code, p, t)) return p;
-    var stepX = t.wPct + 0.6, stepY = t.hPct + 0.6;
-    for (var ring = 1; ring <= 6; ring++){
-      for (var dy = -ring; dy <= ring; dy++){
-        for (var dx = -ring; dx <= ring; dx++){
-          if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue;
-          var cand = clampPos({ x: p.x + dx * stepX, y: p.y + dy * stepY }, t);
-          if (!overlaps(code, cand, t)) return cand;
-        }
-      }
-    }
-    return p;
+  /* The nearest place on the wall where a work does not sit on another one.
+     First choice is a spot beside, above or below a work already hanging,
+     exactly one gap away, so a work added later joins the arrangement's rhythm
+     instead of landing on a half measure of its own. Failing that the whole
+     plane is swept. The old search stepped out in rings and clamped each
+     candidate back inside the plane, so near an edge every ring collapsed onto
+     the same blocked spot and the search gave up and returned an overlapping
+     position: that is what put one edition on top of another. */
+  function freePos(code, want, t){
+    if (!overlaps(code, want, t)) return clampPos(want, t);
+    var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
+    var cw = t.wPct + 4 * t.pxPerCm / t.w * 100;
+    var ch = t.hPct + 4 * t.pxPerCm / t.h * 100;
+    var inside = function(c){
+      return c.x >= P.l - 0.01 && c.x + t.wPct <= P.r + 0.01 &&
+             c.y >= P.t - 0.01 && c.y + t.hPct <= P.b + 0.01;
+    };
+    var best = null, bestD = Infinity;
+    var weigh = function(c){
+      if (!inside(c) || overlaps(code, c, t)) return;
+      var d = (c.x - want.x) * (c.x - want.x) + (c.y - want.y) * (c.y - want.y);
+      if (d < bestD){ bestD = d; best = c; }
+    };
+    var around = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1],
+                  [-1,-0.5],[1,-0.5],[-1,0.5],[1,0.5]];
+    kept.forEach(function(other){
+      var q = pos[other];
+      if (!q || other === code) return;
+      around.forEach(function(d){ weigh({ x: q.x + d[0] * cw, y: q.y + d[1] * ch }); });
+    });
+    if (best) return best;
+
+    for (var y = P.t; y <= P.b - t.hPct + 0.01; y += t.hPct / 2)
+      for (var x = P.l; x <= P.r - t.wPct + 0.01; x += t.wPct / 2) weigh({ x: x, y: y });
+    return best || clampPos(want, t);
   }
+
+  function placeFree(code, p, t){ return freePos(code, p, t); }
 
   /* ── creative hangs ───────────────────────────────────────────────────
      Every edition is the same square, so a hang is only ever interesting in
@@ -2525,12 +2549,7 @@ img{display:block;max-width:100%;height:auto}
     for (var j = 0; j < slots.length; j++){
       if (!overlaps(code, slots[j], t)) return slots[j];
     }
-    var p = slots[i], step = t.wPct + 1;
-    for (var k = 1; k <= 12; k++){
-      var cand = clampPos({ x: p.x + (k % 4) * step, y: p.y + Math.floor(k / 4) * t.hPct }, t);
-      if (!overlaps(code, cand, t)) return cand;
-    }
-    return p;
+    return freePos(code, slots[i], t);
   }
 
   function renderWall(n){
