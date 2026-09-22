@@ -100,6 +100,12 @@
       transition:border-color 160ms var(--ease-out); }
     .channel-line a:hover { border-color:var(--charcoal-900); }
 
+    /* ── Full-bleed gallery teaser ─────────────────────── */
+    /* .image-band--short caps the height; re-anchor it on the faces rather than
+       the default 18%, which would crop them out of a landscape frame. */
+    .gallery-teaser img { object-position:50% 45%; }
+    @media (max-width:699px){ .gallery-teaser img { max-height:none; } }  /* portrait phone: show it whole */
+
     /* ── Sticky mobile booking bar ─────────────────────── */
     .sticky-book { position:fixed; left:0; right:0; bottom:0; z-index:40; display:none;
       padding:1.2rem 1.6rem calc(1.2rem + env(safe-area-inset-bottom));
@@ -1109,17 +1115,24 @@
     </section>
 
     <!-- ══ VISIT A GALLERY ══ -->
+    <!-- Full-bleed teaser. Brandbook s09 forbids darkening layers over artwork and
+         this frame carries two works, so the copy sits BELOW the image, never on it. -->
     <section id="adv-gallery" class="section surface-raised">
-      <div class="wrap band">
-        <figure class="room-figure reveal" style="margin:0">
-          <img src="assets/scenes/gallery-event.jpg?v=10" width="1202" height="1600" alt="Two guests viewing Slim Aarons editions at a LUMAS gallery" loading="lazy">
-          <figcaption class="caption">Guests with Slim Aarons editions at a LUMAS gallery, Budapest.</figcaption>
-        </figure>
-        <div class="reveal">
-          <p class="eyebrow">Visit a gallery</p>
-          <h2 class="display-h2 mt-s">There is nothing like standing in front of a real work.</h2>
-          <p class="body-large txt-secondary measure mt-m">Nineteen galleries, with or without an appointment. See the editions at full scale, and meet the Art Consultant who knows them.</p>
-          <a class="btn btn--primary" href="#book" style="margin-top:clamp(2rem,2.6vw,2.8rem)" data-goal="cta_click" data-cta="gallery_book">Book a consultation</a>
+      <figure class="image-band image-band--short gallery-teaser reveal">
+        <img src="assets/scenes/gallery-conversation.jpg" width="1600" height="1066"
+             alt="Four guests in conversation in front of two editions at a LUMAS gallery" loading="lazy">
+        <figcaption class="caption">An evening at a LUMAS gallery.</figcaption>
+      </figure>
+      <div class="wrap mt-l">
+        <div class="band" style="align-items:end">
+          <div class="reveal">
+            <p class="eyebrow">Visit a gallery</p>
+            <h2 class="display-h2 mt-s">There is nothing like standing in front of a real work.</h2>
+          </div>
+          <div class="reveal">
+            <p class="body-large txt-secondary measure">Nineteen galleries, with or without an appointment. See the editions at full scale, and meet the Art Consultant who knows them.</p>
+            <a class="btn btn--primary" href="#book" style="margin-top:clamp(2rem,2.6vw,2.8rem)" data-goal="cta_click" data-cta="gallery_book">Book a consultation</a>
+          </div>
         </div>
       </div>
 
