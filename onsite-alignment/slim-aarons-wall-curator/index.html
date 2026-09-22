@@ -463,7 +463,8 @@ img{display:block;max-width:100%;height:auto}
   transition:border-color var(--lt-t-fast) var(--lt-ease),opacity var(--lt-t-fast) var(--lt-ease);
 }
 .wc-card.is-on{border-color:var(--color-charcoal-900);opacity:.45}
-.wc-card__fig{display:block;background:#fff;cursor:grab}
+.wc-card__fig{display:block;background:#fff;cursor:pointer}
+@media(hover:hover){.wc-card__fig{cursor:grab}}
 .wc-card__fig img{width:100%;aspect-ratio:1/1;object-fit:contain;pointer-events:none}
 .wc-card.is-dragging .wc-card__fig{cursor:grabbing}
 .wc-card__b{padding:1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
@@ -1979,6 +1980,9 @@ img{display:block;max-width:100%;height:auto}
     figure.addEventListener("keydown", function(e){
       if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(s.code); }
     });
+    /* the Add button was read as the only target; the artwork is the obvious
+       one, and a completed HTML5 drag fires no click, so the two do not fight */
+    figure.addEventListener("click", function(){ toggle(s.code); });
     tray.appendChild(b);
 
     /* the product carousel -------------------------------------------- */
@@ -2221,6 +2225,32 @@ img{display:block;max-width:100%;height:auto}
     return out;
   }
 
+  /* Every edition is the same 34 cm square, so an overlap is simply both
+     centres being closer than one tile on each axis. The epsilon lets frames
+     touch edge to edge, which is a real salon hang, without counting as a stack. */
+  function overlaps(code, p, t){
+    var eps = 0.15;
+    for (var i = 0; i < kept.length; i++){
+      var other = kept[i];
+      if (other === code) continue;
+      var q = pos[other];
+      if (!q) continue;
+      if (Math.abs(p.x - q.x) < t.wPct - eps && Math.abs(p.y - q.y) < t.hPct - eps) return true;
+    }
+    return false;
+  }
+
+  /* Slide along whichever axis is still free, the way a dragged object behaves
+     against a wall, rather than refusing the whole move. */
+  function avoid(code, next, cur, t){
+    if (!overlaps(code, next, t)) return next;
+    var alongX = { x: next.x, y: cur.y };
+    if (!overlaps(code, alongX, t)) return alongX;
+    var alongY = { x: cur.x, y: next.y };
+    if (!overlaps(code, alongY, t)) return alongY;
+    return cur;
+  }
+
   function clampPos(p, t){
     var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
     return {
@@ -2230,6 +2260,21 @@ img{display:block;max-width:100%;height:auto}
   }
 
   /* The canvas is permanent here: the room is the page, not a reveal. */
+  /* The tidy grid never collides with itself, but a work added after the
+     visitor has arranged the wall by hand can land under one they moved. */
+  function freeSlot(code, slots, i, t){
+    if (!overlaps(code, slots[i], t)) return slots[i];
+    for (var j = 0; j < slots.length; j++){
+      if (!overlaps(code, slots[j], t)) return slots[j];
+    }
+    var p = slots[i], step = t.wPct + 1;
+    for (var k = 1; k <= 12; k++){
+      var cand = clampPos({ x: p.x + (k % 4) * step, y: p.y + Math.floor(k / 4) * t.hPct }, t);
+      if (!overlaps(code, cand, t)) return cand;
+    }
+    return p;
+  }
+
   function renderWall(n){
     if (n === 0){
       hang.querySelectorAll(".lt-hang__art").forEach(function(el){ el.remove(); });
@@ -2248,7 +2293,7 @@ img{display:block;max-width:100%;height:auto}
     var t = tileSize();
 
     kept.forEach(function(code, i){
-      if ((!arranged || !pos[code]) && slots[i]) pos[code] = slots[i];
+      if ((!arranged || !pos[code]) && slots[i]) pos[code] = t ? freeSlot(code, slots, i, t) : slots[i];
       if (hang.querySelector('[data-code="' + code + '"]')) return;
       var s = SLIDES.find(function(x){ return x.code === code; });
       var b = document.createElement("div");
@@ -2331,6 +2376,7 @@ img{display:block;max-width:100%;height:auto}
     var p = clampPos({ x: (e.clientX - drag.dx - w.left) / w.width * 100,
                        y: (e.clientY - drag.dy - w.top) / w.height * 100 }, t);
     p = snap(p, t);
+    p = avoid(drag.code, p, pos[drag.code], t);
     /* a couple of pixels of jitter is a tap, not an arrangement */
     if (Math.abs(e.clientX - drag.sx) > 4 || Math.abs(e.clientY - drag.sy) > 4) drag.moved = true;
     pos[drag.code] = p;
@@ -2406,6 +2452,7 @@ img{display:block;max-width:100%;height:auto}
     var step = e.shiftKey ? 3 : 0.6;
     var p = clampPos({ x: pos[code].x + d[0] * step,
                        y: pos[code].y + d[1] * step * (t.wPct / t.hPct) }, t);
+    p = avoid(code, p, pos[code], t);
     pos[code] = p;
     e.currentTarget.style.left = p.x + "%";
     e.currentTarget.style.top = p.y + "%";
