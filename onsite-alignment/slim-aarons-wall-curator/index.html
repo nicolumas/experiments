@@ -2575,6 +2575,18 @@ img{display:block;max-width:100%;height:auto}
 
   var lastHang = -1;
   $("surpriseBtn").addEventListener("click", function(){
+    /* an empty wall has nothing to rearrange, so surprise picks the editions
+       as well: a few at random, then a hang for them */
+    if (!kept.length){
+      var pool = SLIDES.map(function(sl){ return sl.code; });
+      for (var i = pool.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1)), swap = pool[i];
+        pool[i] = pool[j]; pool[j] = swap;
+      }
+      kept = pool.slice(0, 3 + Math.floor(Math.random() * 3));
+      track("surprise_fill", { added: kept.length });
+      render();
+    }
     var n = kept.length, t = tileSize();
     if (!n || !t) return;
     var options = hangs(n, t), tries = 0, chosen = null;
