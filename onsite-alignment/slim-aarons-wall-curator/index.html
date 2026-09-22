@@ -2660,9 +2660,16 @@ img{display:block;max-width:100%;height:auto}
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
     hang.classList.add("is-over");
+    /* run the same alignment the drop will use, purely for its guides, so the
+       edges show while the edition is still in the air rather than after it lands */
+    var t = tileSize();
+    if (!t) return;
+    var b = hang.getBoundingClientRect();
+    snap(clampPos({ x: (e.clientX - b.left) / b.width * 100 - t.wPct / 2,
+                    y: (e.clientY - b.top) / b.height * 100 - t.hPct / 2 }, t), t, dragCode);
   });
   hang.addEventListener("dragleave", function(e){
-    if (e.target === hang) hang.classList.remove("is-over");
+    if (e.target === hang){ hang.classList.remove("is-over"); hideGuides(); }
   });
   hang.addEventListener("drop", function(e){
     e.preventDefault();
