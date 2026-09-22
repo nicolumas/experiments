@@ -1647,7 +1647,7 @@ img{display:block;max-width:100%;height:auto}
       </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
-          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-hallway.webp" alt="A living room with a long teak credenza against a pale wall." width="1600" height="966">
+          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1800" height="1012">
           <div class="wc-zone" id="hang">
             <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
             <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
@@ -1942,28 +1942,26 @@ img{display:block;max-width:100%;height:auto}
   var tray = $("tray"), rail = $("rail"), cgrid = $("cgrid"), hang = $("hang");
   var MOBILE = window.matchMedia("(max-width: 759px)");
 
-  /* ── the rooms ─────────────────────────────────────────────────────────
-     Each plate carries its own measurement. pctPerCm is the width of one cm
-     as a percentage of the photograph's width, read off the plate rather than
-     guessed; wall is the hangable rectangle in percentages; anchor is where a
-     tidy block hangs (x centre, y baseline). */
-  /* One room. The two other plates are measured and sitting in assets if this
-     ever wants a switcher again:
-       wall-study.webp   1350x950  pctPerCm 0.002037  wall{t:18,b:72,l:5,r:96}  anchor{x:53,y:69}
-       wall-dining.webp  1330x920  pctPerCm 0.002060  wall{t:25,b:73,l:7,r:88}  anchor{x:44,y:70}
-     pctPerCm is the width of one cm as a percentage of the photograph's width,
-     read off the plate rather than guessed; wall is the hangable rectangle;
-     anchor is where a tidy block hangs (x centre, y baseline). */
+  /* ── the room ──────────────────────────────────────────────────────────
+     pctPerCm is the width of one cm as a fraction of the photograph's width,
+     read off the plate rather than guessed; wall is the hangable rectangle in
+     percentages; anchor is where a tidy block hangs (x centre, y baseline).
+     The earlier hallway plate is still in assets as wall-hallway.webp, measured
+     at pctPerCm 0.002808, wall{t:10,b:66,l:5,r:95}, anchor{x:52,y:63}. */
   var room = {
-    id:"living", name:"Living room", file:"wall-hallway.webp", w:1600, h:966,
-    alt:"A living room with a long teak credenza against a pale wall.",
-    pctPerCm:0.002808, wall:{t:10, b:66, l:5, r:95}, anchor:{x:52, y:63},
-    /* Things standing on the credenza that a hung work must not cross. Read off
-       the plate: the table lamp on the left, the stone disc and vase on the
-       right. Only the automatic hangs respect these; a visitor dragging by hand
+    id:"study", name:"Study", file:"wall-study.webp", w:1800, h:1012,
+    alt:"A study with a long rosewood credenza against a pale plaster wall.",
+    /* Scale read off the plate: the Knoll credenza is 64.8 cm tall and runs from
+       69.8% to 91.3% of the plate height, so one cm is 3.358 px at 1800, which is
+       0.001866 of the width. A 34 cm edition therefore sits 6.3% of the wall wide. */
+    pctPerCm:0.001866, wall:{t:13, b:67, l:17, r:79}, anchor:{x:50, y:65},
+    /* Things a hung work must not cross. Read off the plate: the paper lantern
+       hanging in front of the wall, and the decanter and glasses standing on the
+       credenza. Only the automatic hangs respect these; a visitor dragging by hand
        may still put a work wherever they want it. */
-    objects:[ {l:12, t:37, r:27, b:70}, {l:68, t:49, r:86, b:70} ]
+    objects:[ {l:42, t:0, r:58, b:19.5}, {l:26, t:60, r:34.5, b:70} ]
   };
+
 
   function src(code, w){ return IMG + code + "-" + w + ".webp"; }
   function alt(s, i){
@@ -2308,68 +2306,86 @@ img{display:block;max-width:100%;height:auto}
      how it is spaced. Each of these keeps at least one tile plus a gap between
      neighbours on the axis that matters, so none of them can overlap by
      construction; the result is checked against that anyway before it is used. */
+  /* Rows of decreasing width, widest at the bottom. */
+  function pyramidRows(n){
+    var base = 1;
+    while (base * (base + 1) / 2 < n) base++;
+    var rows = [], left = n;
+    for (var w = base; w > 0 && left > 0; w--){ rows.push(Math.min(w, left)); left -= Math.min(w, left); }
+    return rows.reverse();                   /* narrow row first, drawn top down */
+  }
+
   function hangs(n, t){
     var gH = 4 * t.pxPerCm / t.w * 100, gV = 4 * t.pxPerCm / t.h * 100;
-    var stepX = t.wPct + gH, stepY = t.hPct + gV;
+    /* One cell is a work plus the gap beside it. Every position below is a whole
+       or a half cell, so the distance between any two neighbours is always one of
+       the same few values. That is what lets an odd shape still read as hung on
+       purpose rather than as works dropped where they fell. */
+    var cw = t.wPct + gH, ch = t.hPct + gV;
+    var cells = function(list){
+      return list.map(function(c){ return { x: c[0] * cw, y: c[1] * ch }; });
+    };
+    var rnd = function(k){ return Math.floor(Math.random() * k); };
+    var stack = function(rows, shift){
+      var wide = Math.max.apply(null, rows), list = [], i = 0;
+      rows.forEach(function(cols, r){
+        var off = (wide - cols) / 2 + (shift ? shift(r) : 0);
+        for (var c = 0; c < cols && i < n; c++, i++) list.push([off + c, r]);
+      });
+      return cells(list);
+    };
     var out = [];
 
-    /* salon: the tidy rows, loosened. Alternate rows shift half a tile and each
-       work lifts or drops a little, the way a hand-hung wall actually sits. */
+    /* brick: the tidy rows, alternate ones shifted exactly half a cell */
     out.push(function(){
-      var rows = rowsFor(n), list = [], i = 0;
-      var lean = (Math.random() * 0.3 - 0.15);
-      rows.forEach(function(cols, r){
-        var rowW = cols * t.wPct + (cols - 1) * gH;
-        var x0 = -rowW / 2 + (r % 2 ? stepX * (0.15 + Math.random() * 0.2) : stepX * lean);
-        for (var c = 0; c < cols && i < n; c++, i++){
-          list.push({ x: x0 + c * stepX,
-                      y: r * stepY + (Math.random() * 2 - 1) * gV * 1.1 });
-        }
-      });
-      return list;
+      var lead = rnd(2);
+      return stack(rowsFor(n), function(r){ return (r % 2 === lead) ? 0.5 : 0; });
     });
 
-    /* two rows, split unevenly, each one loosened. The wide hangs cannot fit a
-       full set, so this is what keeps a nine-work wall from having one answer. */
+    /* pyramid: rows narrowing upward, each centred on the one below */
+    out.push(function(){ return stack(pyramidRows(n)); });
+
+    /* staircase: one cell along, half a cell up, work after work */
     out.push(function(){
-      var top = Math.max(1, Math.round(n / 2) + (Math.random() < 0.5 ? 0 : 1));
-      if (top >= n) top = n - 1;
-      var split = [top, n - top], list = [], i = 0;
-      split.forEach(function(cols, r){
-        if (!cols) return;
-        var rowW = cols * t.wPct + (cols - 1) * gH;
-        var x0 = -rowW / 2 + (Math.random() * 0.3 - 0.15) * stepX;
-        for (var c = 0; c < cols && i < n; c++, i++){
-          list.push({ x: x0 + c * stepX,
-                      y: r * stepY + (Math.random() * 2 - 1) * gV });
-        }
-      });
-      return list;
+      var list = [], dir = rnd(2) ? 1 : -1;
+      for (var i = 0; i < n; i++) list.push([i, dir * i * 0.5]);
+      return cells(list);
     });
 
-    /* staircase: each work a step up and along */
+    /* one line, every other work riding exactly half a cell higher */
     out.push(function(){
-      var list = [];
-      for (var i = 0; i < n; i++) list.push({ x: i * stepX, y: -i * stepY * 0.55 });
-      return list;
+      var lead = rnd(2), list = [];
+      for (var i = 0; i < n; i++) list.push([i, (i % 2 === lead) ? 0.5 : 0]);
+      return cells(list);
     });
 
-    /* two stacks, one starting lower than the other */
+    /* two columns, the second dropped half a cell */
     out.push(function(){
       var left = Math.ceil(n / 2), list = [];
       for (var i = 0; i < n; i++){
         var col = i < left ? 0 : 1;
-        var row = i < left ? i : i - left;
-        list.push({ x: col * stepX, y: row * stepY + (col ? stepY * 0.45 : 0) });
+        list.push([col, (i < left ? i : i - left) + (col ? 0.5 : 0)]);
       }
-      return list;
+      return cells(list);
     });
 
-    /* one line, every other work riding higher */
+    /* a filled rectangle with a corner or two deliberately left empty: the
+       silhouette is irregular, the spacing inside it never is */
     out.push(function(){
-      var list = [];
-      for (var i = 0; i < n; i++) list.push({ x: i * stepX, y: (i % 2) * stepY * 0.5 });
-      return list;
+      var cols = n <= 4 ? 2 : (n <= 6 ? 3 : 4);
+      var rows = Math.ceil((n + 2) / cols);
+      if (rows < 2) return null;
+      var keep = [];
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) keep.push([c, r]);
+      var corners = [[cols - 1, 0], [0, rows - 1], [0, 0], [cols - 1, rows - 1]];
+      var start = rnd(corners.length);
+      for (var k = 0; keep.length > n && k < corners.length; k++){
+        var cnr = corners[(start + k) % corners.length];
+        for (var j = 0; j < keep.length; j++){
+          if (keep[j][0] === cnr[0] && keep[j][1] === cnr[1]){ keep.splice(j, 1); break; }
+        }
+      }
+      return keep.length === n ? cells(keep) : null;
     });
 
     return out;
@@ -2415,8 +2431,8 @@ img{display:block;max-width:100%;height:auto}
      keeps its shape while clearing the lamp and the vases. */
   function clearObjects(list, t){
     var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
-    var offsets = [[0,0],[0,-5],[0,-10],[0,-16],[0,-22],[-7,0],[7,0],
-                   [-7,-10],[7,-10],[-12,-16],[12,-16],[0,-28]];
+    var offsets = [[0,0],[0,-5],[0,-10],[0,-16],[0,-22],[0,4],[0,8],[-7,0],[7,0],
+                   [-7,-10],[7,-10],[-12,-16],[12,-16],[-14,0],[14,0],[0,-28]];
     for (var k = 0; k < offsets.length; k++){
       var dx = offsets[k][0], dy = offsets[k][1];
       var moved = list.map(function(p){ return { x: p.x + dx, y: p.y + dy }; });
@@ -2664,7 +2680,9 @@ img{display:block;max-width:100%;height:auto}
     var options = hangs(n, t), fits = [];
     options.forEach(function(build, i){
       for (var attempt = 0; attempt < 3; attempt++){
-        var placed = place(build(), t);
+        var raw = build();
+        if (!raw) continue;
+        var placed = place(raw, t);
         if (placed && !stacked(placed, t)){ fits.push({ i: i, at: placed }); return; }
       }
     });
