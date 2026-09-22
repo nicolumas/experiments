@@ -1647,7 +1647,7 @@ img{display:block;max-width:100%;height:auto}
       </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
-          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1188" height="728">
+          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1044" height="693">
           <div class="wc-zone" id="hang">
             <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
             <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
@@ -1949,21 +1949,24 @@ img{display:block;max-width:100%;height:auto}
      The earlier hallway plate is still in assets as wall-hallway.webp, measured
      at pctPerCm 0.002808, wall{t:10,b:66,l:5,r:95}, anchor{x:52,y:63}. */
   var room = {
-    id:"study", name:"Study", file:"wall-study.webp", w:1188, h:728,
+    id:"study", name:"Study", file:"wall-study.webp", w:1044, h:693,
     alt:"A study with a long rosewood credenza against a pale plaster wall.",
     /* Scale read off the plate, not guessed. The Knoll credenza is 64.8 cm tall
        and stands 217.6 px high on the uncropped 1800 px photograph, so one cm is
        3.358 px. Cross-checked against the rocks glass (8.7 cm, 3.37 px/cm) and the
        carriage clock (10 cm wide, 3.4 px/cm). Cropping does not rescale pixels, so
-       on this 1188 px crop one cm is still 3.358 px, which is 0.002827 of the
-       width: a 34 cm edition sits 9.61% of the plate wide. */
-    pctPerCm:0.002827, wall:{t:3, b:58, l:6, r:96}, anchor:{x:52, y:56},
+       one cm is still 3.358 px here, which is 0.003216 of this 1044 px crop: a
+       34 cm edition sits 10.94% of the plate wide. The room block is capped at
+       62vh, so what an edition measures on screen follows the plate's HEIGHT, and
+       the wall above the credenza has to keep room for three rows: 34 x 3 plus two
+       4 cm gaps is 110 cm, which is why the crop comes off the bottom, not the top. */
+    pctPerCm:0.003216, wall:{t:3, b:60, l:3, r:97}, anchor:{x:52, y:58},
     /* Things a hung work must not cross. The decanter and glasses standing on the
-       credenza; the clock and the book sit below the plane, the paper lantern is
-       outside this crop. Only the automatic hangs respect these, a visitor dragging
-       by hand may put a work wherever they want it. */
-    objects:[ {l:15, t:52, r:30.5, b:65} ]
+       credenza; the clock and the book sit below the plane. Only the automatic
+       hangs respect these, a visitor dragging by hand may put a work anywhere. */
+    objects:[ {l:16, t:54, r:29, b:68} ]
   };
+
 
 
 
