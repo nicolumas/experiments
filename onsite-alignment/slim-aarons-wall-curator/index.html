@@ -343,13 +343,23 @@ img{display:block;max-width:100%;height:auto}
 .lt-hang__art{
   position:absolute;padding:0;border:0;background:none;cursor:grab;
   width:var(--tile,70px);height:var(--tile,70px);
-  transition:box-shadow var(--lt-t-fast) var(--lt-ease);
+  /* Everything that is not the visitor's own hand eases: tidying, surprising,
+     a snap correction on release. The drag itself turns this off so the work
+     tracks the pointer exactly. */
+  transition:left var(--lt-t) var(--lt-ease), top var(--lt-t) var(--lt-ease),
+             transform var(--lt-t-fast) var(--lt-ease),
+             box-shadow var(--lt-t-fast) var(--lt-ease);
 }
 .lt-hang__art img{width:100%;height:100%;object-fit:contain;background:#fff;box-shadow:var(--lt-wall-shadow);pointer-events:none}
 .lt-hang__art:focus-visible{outline:2px solid var(--color-charcoal-900);outline-offset:3px}
 @media(hover:hover){ .lt-hang__art:hover img{box-shadow:var(--lt-wall-shadow),0 0 0 1px rgba(28,26,24,.28)} }
-.lt-hang__art.is-dragging{cursor:grabbing;z-index:5}
-.lt-hang__art.is-dragging img{box-shadow:0 2px 3px rgba(28,26,24,.34),0 14px 22px -8px rgba(28,26,24,.34)}
+.lt-hang__art.is-dragging{
+  cursor:grabbing;z-index:5;transform:scale(1.035);
+  transition:transform var(--lt-t-fast) var(--lt-ease), box-shadow var(--lt-t-fast) var(--lt-ease);
+}
+.lt-hang__art.is-dragging img{box-shadow:0 3px 5px rgba(28,26,24,.30),0 18px 30px -10px rgba(28,26,24,.38)}
+/* the work a tap has picked out on a phone lifts the same way */
+.lt-hang__art.is-picked{transform:scale(1.02)}
 /* take a work off the wall where it hangs. Pointer devices only: a phone has
    no hover, and the slot row underneath already carries a remove control. */
 .lt-hang__x{display:none}
@@ -368,7 +378,11 @@ img{display:block;max-width:100%;height:auto}
 }
 
 /* alignment guides, drawn only while dragging */
-.lt-guide{position:absolute;background:var(--color-charcoal-900);opacity:.55;pointer-events:none;z-index:4}
+.lt-guide{
+  position:absolute;background:var(--color-charcoal-900);opacity:.55;pointer-events:none;z-index:4;
+  animation:lt-guide-in var(--lt-t-fast) var(--lt-ease);
+}
+@keyframes lt-guide-in{from{opacity:0}to{opacity:.55}}
 .lt-guide--v{width:1px;top:0;bottom:0}
 .lt-guide--h{height:1px;left:0;right:0}
 .lt-guide[hidden]{display:none !important}
