@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<title>Inspired Art Magazin — Herbstausgabe</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/white/inline.css">
+<link rel="stylesheet" href="assets/white/site-header.css">
+<link rel="stylesheet" href="assets/white/main.css">
+<link rel="stylesheet" href="assets/white/bottom-nav.css">
+<link rel="stylesheet" href="assets/white/social-proof-bar.css">
+<link rel="stylesheet" href="vocabulary/page-local.css">
+</head>
+<body>
+<!-- Wrapper copied from a real CMS content page (prelive_template), verified
+     2026-09-21. Content rows sit directly inside .container: do not add an extra
+     .row/.col wrapper, or the fragment's own rows nest inside a column and the
+     layout changes. There is exactly one <main> on the real page.
+
+     .static-pages and .content are load-bearing and must both be present: a
+     stack of production rules is scoped to that pair, and without them the
+     preview silently renders the generic rule instead. The one that bites is
+     .static-pages .content .like-h2, which makes a standfirst 2rem body text;
+     outside the pair, .like-h2,h2 wins and the same paragraph previews as a
+     4.6rem display heading. .static-pages h1,h2 also sets the heading padding.
+     Neither class carries layout of its own, so adding them changes nothing
+     else. Verified against www.lumas.de/inspired-art-magazine/, 2026-09-22. -->
+<div id="app" class="content-container">
+<main id="main-content" tabindex="-1">
+<div class="container static-pages">
+<div class="content">
+{% set sorting_revenue = '' ~ ( 'werkgrid.sorting.revenue_product' | trans ) ~ '' %}
+
+<div class="row mb-2">
+    <div class="col-lg-12 text-center">
+        <picture>
+            <source media="(max-width: 760px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-inspired-teaser-500x320.webp">
+            <source media="(max-width: 979px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-inspired-teaser-900x460.webp">
+            <source media="(max-width: 1259px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-inspired-teaser-1220x540.webp">
+            <source media="(min-width: 1260px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-inspired-teaser-1920x720.webp">
+            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-inspired-teaser-1220x540.jpg" alt="Wohnraum mit einer großformatigen Porträtedition über einer Sideboard" title="Inspired Art Magazin" width="1220" height="540">
+        </picture>
+        <a data-style-override="position:absolute;left:0%;top:0%;width:100%;height:100%;z-index:2;" href="/pictures/marta_contreras_simo/philomene/" title="Marta Contreras Simó: Philomène"></a>
+    </div>
+</div>
+
+<div class="row mb-1 mt-2">
+    <div class="col-md-12 text-center text-wrap-balance">
+        <h1>Inspiriert von 12 neuen<br>
+            Künstlern &amp; 90 neuen Editionen.</h1>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <p class="like-h2 text-wrap-pretty">Für uns bedeutet die Liebe zur Kunst vor allem eines: neugierig zu bleiben. Unter die Oberfläche zu schauen. Und Positionen zu entdecken, die neue Horizonte eröffnen. Inspired bringt dich näher an die Künstler, Ideen und Prozesse hinter unseren Neuheiten.</p>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-lg-12 text-center">
+        <div class="row hidden-sm hidden-xs">
+            <div class="col-md-6 text-right">
+                <a href="" data-scroll-to="#all_works" class="btn btn-secondary">Alle Neuheiten entdecken</a>
+            </div>
+            <div class="col-md-6 text-left">
+                <a href="/neue-kuenstler/" class="btn btn-secondary">Alle neuen Künstler entdecken</a>
+            </div>
+        </div>
+        <div class="row hidden-lg hidden-md">
+            <div class="col-sm-12 col-xs-12 mb-2">
+                <a href="" data-scroll-to="#all_works" class="btn btn-secondary">Alle Neuheiten entdecken</a>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+                <a href="/neue-kuenstler/" class="btn btn-secondary">Alle neuen Künstler entdecken</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="mb-3">
+
+<div class="row mb-2">
+    <div class="col-md-12 text-center">
+        <h3>Neuheiten auf einen Blick</h3>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-lg-12">
+        {{ spyCmsProductSearch({
+            'number_of_results': '12',
+            'filter': {
+                'keyword.general': 'art_magazine_new_artist',
+            },
+            'masonry': false,
+            'show_filter': false,
+            'sorting': sorting_revenue,
+        }) }}
+    </div>
+</div>
+
+<div class="row mb-3 text-center">
+    <div class="col-md-12">
+        <a href="" data-scroll-to="#all_works" class="btn btn-secondary">Alle neuen Editionen ansehen</a>
+    </div>
+</div>
+
+<div class="bgcolor_brand-color-light mb-4 pt-4 pb-3 pl-2 pr-2">
+    <div class="row mb-1">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <p class="uppercase color_gold">Was die kunstwelt bewegt</p>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-10 col-md-offset-1 text-center text-wrap-balance">
+            <h2>Highlights aus unserem Art Magazin</h2>
+        </div>
+    </div>
+    <div class="row text-align-viewport">
+        <div class="block-tiles content-start" data-columns="3" data-navigation="dots" data-overflow="slider">
+            <div class="col-md-2 mb-2">
+                <a href="/TODO-200-years-of-photography/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-01.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-01.jpg" alt="Zwei gerahmte Winterfotografien über einem Esstisch" title="200 Years of Photography" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h3 class="mb-1">200 Jahre Fotografie</h3>
+                    <p class="lead mb-2">Ein Blick auf die Geschichte einer außergewöhnlichen Kunstform – und ihre Zukunft. Wir feiern, was Geschichte geschrieben hat – und jene, die das Medium weiterdenken.</p>
+                    <a href="/TODO-200-years-of-photography/" class="underline uppercase">Jetzt entdecken</a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-2">
+                <a href="/artists/masters/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-02.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-02.jpg" alt="Gerahmte malerische Landschaftsedition an einer dunkelgrünen Wand" title="New Master Editions" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h3 class="mb-1">Neue Master Editionen</h3>
+                    <p class="lead mb-2">Damien Hirst, Peter Doig, Daniel Richter und Takashi Murakami: Mit diesen Werken prägen herausragende Stimmen der Gegenwartskunst den aktuellen Diskurs.</p>
+                    <a href="/artists/masters/" class="underline uppercase">Jetzt ansehen</a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-2">
+                <a href="/TODO-axel-crieger/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-03.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-03.jpg" alt="Salonwand mit einem Raster schwarz-weißer Fotoeditionen" title="Axel Crieger" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h3 class="mb-1">Axel Criegers Grammar of Glamour</h3>
+                    <p class="lead mb-2">Hollywood, neu erfunden: Die Gesichter, die alle Welt kennt, in Szenen, die es so nie gegeben hat – wie verschollene Aufnahmen aus einer glamourösen Vergangenheit.</p>
+                    <a href="/TODO-axel-crieger/" class="underline uppercase">Mehr erfahren</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-10 col-md-offset-1 text-center text-wrap-balance">
+        <h2>Neue Editionen unserer beliebtesten Künstler</h2>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12 text-center">
+        <a href="/highlights/bestseller/" class="btn btn-secondary">Entdecke unsere Bestseller</a>
+    </div>
+</div>
+
+<div class="row mb-3 flex items-center flex-wrap">
+    <div class="col-md-6 text-center mb-2">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <figure>
+                    <a href="/pictures/daria_petrilli/the_dance_teacher/">
+                        <picture>
+                            <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x1058-04.webp">
+                            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-820x1058-04.jpg" alt="Daria Petrilli, The Dance Teacher, hung above a kitchen island" title="Daria Petrilli: The Dance Teacher" width="820" height="1058">
+                        </picture>
+                    </a>
+                    <figcaption class="text-left">
+                        <p><span>The Dance Teacher</span></p>
+                        <p><small><strong class="uppercase">Daria Petrilli</strong></small></p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <figure>
+                    <a href="/pictures/massimo_colonna/funivia_ii/">
+                        <picture>
+                            <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x1058-05.webp">
+                            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-820x1058-05.jpg" alt="Massimo Colonna, Funivia II" title="Massimo Colonna: Funivia II" width="820" height="1058">
+                        </picture>
+                    </a>
+                    <figcaption class="text-left">
+                        <p><span>Funivia II</span></p>
+                        <p><small><strong class="uppercase">Massimo Colonna</strong></small></p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-lg-12 text-center">
+        <picture>
+            <source media="(max-width: 760px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-500x225-06.webp">
+            <source media="(max-width: 979px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-900x405-06.webp">
+            <source media="(max-width: 1259px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-1220x549-06.webp">
+            <source media="(min-width: 1260px)" type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-1920x864-06.webp">
+            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-1220x549-06.jpg" alt="Moments enchantés by Isabelle Menin hung above a sofa, with Palm trees palm springs by Stefanie Schneider on the left wall" title="Isabelle Menin: Moments enchantés" width="1220" height="549">
+        </picture>
+        <a data-style-override="position:absolute;left:0%;top:0%;width:100%;height:100%;z-index:2;" href="/pictures/isabelle_menin/moments_enchantes/" title="Isabelle Menin: Moments enchantés"></a>
+        <div class="tooltipp-bottom-right">
+            <div class="text-right">Künstler: Stefanie Schneider, Isabelle Menin</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3 flex items-center flex-wrap">
+    <div class="col-md-6 text-center mb-2">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="mb-3">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-zitat-820x201-07.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-zitat-820x201-07.jpg" alt="My images emerge in those fleeting moments when perception condenses." title="Werner Pawlok" width="820" height="201">
+                    </picture>
+                </div>
+                <figure>
+                    <a href="/pictures/werner_pawlok/palazzo_biscari_vi_catania/">
+                        <picture>
+                            <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x612-07.webp">
+                            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-820x612-07.jpg" alt="Werner Pawlok, Palazzo Biscari VI, Catania" title="Werner Pawlok: Palazzo Biscari VI, Catania" width="820" height="612">
+                        </picture>
+                    </a>
+                    <figcaption class="text-left">
+                        <p><span>Palazzo Biscari VI, Catania</span></p>
+                        <p><small><strong class="uppercase">Werner Pawlok</strong></small></p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <figure>
+                    <a href="/pictures/beatrice_hug/mystic_sphaera/">
+                        <picture>
+                            <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x1000-08.webp">
+                            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-820x1000-08.jpg" alt="Mystic Sphaera hung above a marble sideboard, with sculptures by Guido Deleu and Thomas Vincent" title="Beatrice Hug: Mystic Sphaera" width="820" height="1000">
+                        </picture>
+                    </a>
+                    <figcaption class="text-left">
+                        <p><small><strong class="uppercase">Beatrice Hug, Guido Deleu, Thomas Vincent</strong></small></p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bgcolor_brand-color-light mb-4 pt-4 pb-3 pl-2 pr-2">
+    <div class="row mb-1">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <p class="uppercase color_gold">Exklusive Einblicke</p>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h2 class="text-wrap-balance">Hinter dem Werk – Geschichten aus dem Atelier</h2>
+        </div>
+    </div>
+    <div class="row text-align-viewport">
+        <div class="block-tiles content-start" data-columns="3" data-navigation="dots" data-overflow="slider">
+            <div class="col-md-2 mb-2">
+                <a href="/TODO-marianna-gefen/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-09.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-09.jpg" alt="Marianna Gefen in ihrem Atelier, beim Sortieren von Papierarbeiten" title="Marianna Gefen" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h4 class="mb-1">Marianna Gefen</h4>
+                    <p class="lead mb-2">Ein Blick in das Atelier der Malerin – und ein Gespräch über die Angst vor dem weißen Blatt, Papier mit Vergangenheit und den Zauber des Zufalls.</p>
+                    <a href="/TODO-marianna-gefen/" class="underline uppercase">Einblick erhalten</a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-2">
+                <a href="/artist/daniel_kordan/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-10.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-10.jpg" alt="Kontaktbogen mit Fotografen bei der Arbeit im Gelände" title="Daniel Kordan" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h4 class="mb-1">Auf Expedition mit Daniel Kordan</h4>
+                    <p class="lead mb-2">Begleite den Fotografen durch einen Tag an Bord durch Grönland und die Antarktis – auf der Suche nach dem Moment, wo die Natur selbst zum Kunstwerk wird.</p>
+                    <a href="/artist/daniel_kordan/" class="underline uppercase">Mehr erfahren</a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-2">
+                <a href="/TODO-andres-galeano/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x680-11.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-2" src="magazin/2026-10/inspired/lp-kachel-820x680-11.jpg" alt="Andrés Galeano in seinem Atelier, umgeben von Farbtafeln und Drucksachen" title="Andrés Galeano" width="820" height="680">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h4 class="mb-1">Andrés Galeano</h4>
+                    <p class="lead mb-2">Aus fremden Erinnerungen entsteht ein neuer Horizont: Andrés Galeano setzt gefundene Himmelsbilder zu einer neuen Perspektive zusammen.</p>
+                    <a href="/TODO-andres-galeano/" class="underline uppercase">Jetzt entdecken</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-1" id="techniques">
+    <div class="col-md-10 col-md-offset-1 text-center text-wrap-balance">
+        <p class="mb-1 uppercase color_gold">INNOVATIVE TECHNIKEN</p>
+        <h2>Neue Dimensionen der Kunst</h2>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <p class="lead text-wrap-pretty">Die Idee endet nicht mit dem Motiv. Wenn künstlerische Handschrift, Format und Ausführung zusammengedacht werden, eröffnen sich neue Wege, Kunst zu erleben: Außergewöhnliche Materialien, präzise Fertigung und innovative Techniken sorgen für unverwechselbare Kunsterlebnisse.</p>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12 text-align-viewport">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/multi-phase/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x597-12.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-1" src="magazin/2026-10/inspired/lp-kachel-820x597-12.jpg" alt="Large framed edition on a wall in a study with autumn windows" title="Kunst in Bewegung – Multi Phase" width="820" height="597">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h4 class="mb-1 text-wrap-balance">Kunst in Bewegung – Multi Phase</h4>
+                    <p class="lead mb-2 text-wrap-pretty">Motive, die sich mit jedem Blickwinkel verändern – und kontinuierlich eine neue Wirkung entfalten: Die Lentikulartechnik erweckt jede Facette eines Werks zum Leben.</p>
+                    <a href="/multi-phase/" class="underline uppercase">Mehr erfahren</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <a href="/TODO-string-art/">
+                    <picture>
+                        <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x597-13.webp">
+                        <img property="schema:image" class="max-w-full width-full height-auto mb-1" src="magazin/2026-10/inspired/lp-kachel-820x597-13.jpg" alt="String-art edition by Niki Hare, the words What Now woven in red thread across nails" title="Strings Attached – Kunst aus Nagel und Faden" width="820" height="597">
+                    </picture>
+                </a>
+                <div class="mb-2">
+                    <h4 class="mb-1 text-wrap-balance">Strings Attached – Kunst aus Nagel und Faden</h4>
+                    <p class="lead mb-2 text-wrap-pretty">Bei unseren String Art Editionen wird Spannung zum künstlerischen Prinzip – ganz wörtlich: Ein einziger, meterlanger Faden spannt sich über Tausende Nägel, verdichtet sich zu Form und Schrift und macht aus dem Werk ein außergewöhnliches Objekt mit greifbarer Präsenz.</p>
+                    <a href="/TODO-string-art/" class="underline uppercase">Mehr erfahren</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bgcolor_brand-color-light mb-3 pt-4 pb-3 pl-2 pr-2">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row flex items-center flex-wrap-reverse">
+                <div class="col-md-6 col-sm-12 col-xs-12 mb-2 text-center">
+                    <a href="/magazin/">
+                        <picture>
+                            <source type="image/webp" srcset="magazin/2026-10/inspired/lp-kachel-820x512-14.webp">
+                            <img property="schema:image" class="max-w-full width-full height-auto" src="magazin/2026-10/inspired/lp-kachel-820x512-14.jpg" alt="Die neue Ausgabe von Inspired auf einem Holztisch" title="Inspired Art Magazin" width="820" height="597">
+                        </picture>
+                    </a>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 mb-2 text-align-viewport">
+                    <h3 class="mb-2">INSPIRED<br>
+                        DAS NEUE ART MAGAZIN</h3>
+                    <p class="lead mb-3 text-wrap-pretty">12 neue Künstler und 90 neue Editionen zuhause erleben – in der neuesten Ausgabe von Inspired. Bestell dir jetzt deine Gratisausgabe und starte inspiriert in den Herbst.</p>
+                    <a href="/magazin/" class="btn btn-secondary mb-1">Magazin hier gratis abrufen</a>
+                    <a href="/TODO-flipbook-url/" target="_blank" class="btn btn-secondary">Jetzt durchblättern</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-1" id="all_works">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <h2 class="text-wrap-balance no-padding">90 neue Editionen – mit Leidenschaft entdeckt, mit Sorgfalt kuratiert</h2>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        {{ spyCmsProductSearch({
+            'number_of_results': '0',
+            'filter': {
+                'keyword.general': 'art_magazine_new_artist',
+            },
+            'masonry': true,
+            'show_filter': true,
+            'sorting': sorting_revenue,
+        }) }}
+    </div>
+</div>
+
+</div>
+</div>
+</main>
+</div>
+<!-- Preview only. The shop handles [data-scroll-to] with its own JavaScript; the
+     fragment must never carry a <script>. Without this the button looks broken
+     locally even though the markup is correct. -->
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('[data-scroll-to]');
+  if (!a) return;
+  var t = document.querySelector(a.getAttribute('data-scroll-to'));
+  if (!t) return;
+  e.preventDefault();
+  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>
