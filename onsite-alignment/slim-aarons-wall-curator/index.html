@@ -1957,7 +1957,12 @@ img{display:block;max-width:100%;height:auto}
   var room = {
     id:"living", name:"Living room", file:"wall-hallway.webp", w:1600, h:966,
     alt:"A living room with a long teak credenza against a pale wall.",
-    pctPerCm:0.002808, wall:{t:10, b:66, l:5, r:95}, anchor:{x:52, y:63}
+    pctPerCm:0.002808, wall:{t:10, b:66, l:5, r:95}, anchor:{x:52, y:63},
+    /* Things standing on the credenza that a hung work must not cross. Read off
+       the plate: the table lamp on the left, the stone disc and vase on the
+       right. Only the automatic hangs respect these; a visitor dragging by hand
+       may still put a work wherever they want it. */
+    objects:[ {l:12, t:37, r:27, b:70}, {l:68, t:49, r:86, b:70} ]
   };
 
   function src(code, w){ return IMG + code + "-" + w + ".webp"; }
@@ -2252,7 +2257,7 @@ img{display:block;max-width:100%;height:auto}
         out.push({ x: x0 + c * (t.wPct + gapH), y: y0 + r * (t.hPct + gapV) });
       }
     });
-    return out;
+    return clearObjects(out, t) || out;
   }
 
   /* Every edition is the same 34 cm square, so an overlap is simply both
@@ -2312,12 +2317,31 @@ img{display:block;max-width:100%;height:auto}
        work lifts or drops a little, the way a hand-hung wall actually sits. */
     out.push(function(){
       var rows = rowsFor(n), list = [], i = 0;
+      var lean = (Math.random() * 0.3 - 0.15);
       rows.forEach(function(cols, r){
         var rowW = cols * t.wPct + (cols - 1) * gH;
-        var x0 = -rowW / 2 + (r % 2 ? stepX * 0.22 : 0);
+        var x0 = -rowW / 2 + (r % 2 ? stepX * (0.15 + Math.random() * 0.2) : stepX * lean);
         for (var c = 0; c < cols && i < n; c++, i++){
           list.push({ x: x0 + c * stepX,
-                      y: r * stepY + (((i * 7) % 3) - 1) * gV * 0.9 });
+                      y: r * stepY + (Math.random() * 2 - 1) * gV * 1.1 });
+        }
+      });
+      return list;
+    });
+
+    /* two rows, split unevenly, each one loosened. The wide hangs cannot fit a
+       full set, so this is what keeps a nine-work wall from having one answer. */
+    out.push(function(){
+      var top = Math.max(1, Math.round(n / 2) + (Math.random() < 0.5 ? 0 : 1));
+      if (top >= n) top = n - 1;
+      var split = [top, n - top], list = [], i = 0;
+      split.forEach(function(cols, r){
+        if (!cols) return;
+        var rowW = cols * t.wPct + (cols - 1) * gH;
+        var x0 = -rowW / 2 + (Math.random() * 0.3 - 0.15) * stepX;
+        for (var c = 0; c < cols && i < n; c++, i++){
+          list.push({ x: x0 + c * stepX,
+                      y: r * stepY + (Math.random() * 2 - 1) * gV });
         }
       });
       return list;
@@ -2372,7 +2396,38 @@ img{display:block;max-width:100%;height:auto}
     var ry = Math.max.apply(null, moved.map(function(p){ return p.y; })) + t.hPct;
     var shiftX = bx < P.l ? P.l - bx : (rx > P.r ? P.r - rx : 0);
     var shiftY = by < P.t ? P.t - by : (ry > P.b ? P.b - ry : 0);
-    return moved.map(function(p){ return { x: p.x + shiftX, y: p.y + shiftY }; });
+    var settled = moved.map(function(p){ return { x: p.x + shiftX, y: p.y + shiftY }; });
+    return clearObjects(settled, t);
+  }
+
+  function hitsObject(p, t){
+    if (MOBILE.matches) return false;          /* the phone hangs on plain ground */
+    var obs = room.objects || [], pad = 1.2;
+    for (var i = 0; i < obs.length; i++){
+      var o = obs[i];
+      if (p.x < o.r + pad && p.x + t.wPct > o.l - pad &&
+          p.y < o.b + pad && p.y + t.hPct > o.t - pad) return true;
+    }
+    return false;
+  }
+
+  /* Move a whole composition, never one work out of it, so the arrangement
+     keeps its shape while clearing the lamp and the vases. */
+  function clearObjects(list, t){
+    var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
+    var offsets = [[0,0],[0,-5],[0,-10],[0,-16],[0,-22],[-7,0],[7,0],
+                   [-7,-10],[7,-10],[-12,-16],[12,-16],[0,-28]];
+    for (var k = 0; k < offsets.length; k++){
+      var dx = offsets[k][0], dy = offsets[k][1];
+      var moved = list.map(function(p){ return { x: p.x + dx, y: p.y + dy }; });
+      var inside = moved.every(function(p){
+        return p.x >= P.l - 0.01 && p.x + t.wPct <= P.r + 0.01 &&
+               p.y >= P.t - 0.01 && p.y + t.hPct <= P.b + 0.01;
+      });
+      if (!inside) continue;
+      if (moved.every(function(p){ return !hitsObject(p, t); })) return moved;
+    }
+    return null;
   }
 
   function clampPos(p, t){
@@ -2603,20 +2658,26 @@ img{display:block;max-width:100%;height:auto}
     }
     var n = kept.length, t = tileSize();
     if (!n || !t) return;
-    var options = hangs(n, t), tries = 0, chosen = null;
-    /* never the same one twice running, and never one that will not fit */
-    while (tries < 12 && !chosen){
-      var i = Math.floor(Math.random() * options.length);
-      if (options.length > 1 && i === lastHang){ tries++; continue; }
-      var placed = place(options[i](), t);
-      if (placed && !stacked(placed, t)){ chosen = placed; lastHang = i; }
-      tries++;
-    }
-    if (!chosen) return;
+    /* Which hangs can hold this many works on this wall at all? At nine the
+       staircase and the zigzag are simply too wide, so the fitting set is
+       gathered first and the choice made from that. */
+    var options = hangs(n, t), fits = [];
+    options.forEach(function(build, i){
+      for (var attempt = 0; attempt < 3; attempt++){
+        var placed = place(build(), t);
+        if (placed && !stacked(placed, t)){ fits.push({ i: i, at: placed }); return; }
+      }
+    });
+    if (!fits.length) return;
+    var pool = fits.filter(function(f){ return f.i !== lastHang; });
+    if (!pool.length) pool = fits;          /* only one shape fits: use it, it varies */
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    var chosen = pick.at;
+    lastHang = pick.i;
     arranged = true;
     kept.forEach(function(code, k){ pos[code] = chosen[k]; });
     syncWall();
-    track("wall_surprise", { hang: lastHang, selected: n });
+    track("wall_surprise", { hang: lastHang, fitting: fits.length, selected: n });
   });
 
   function stacked(list, t){
