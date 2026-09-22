@@ -595,7 +595,9 @@ img{display:block;max-width:100%;height:auto}
      rather than a room. The wall keeps the plate's proportions and scale, so
      the arrangement and the cm readout stay true. */
   .wc-room{display:none}
-  .wc-frame{width:100%;aspect-ratio:1600/966}
+  /* the ratio comes from the room config at boot, so changing the plate cannot
+     leave the phone's ground the shape of the plate before it */
+  .wc-frame{width:100%;aspect-ratio:var(--wc-plate)}
   .wc-canvas{background:var(--color-surface-muted);width:100%}
 
   /* the sticky bars */
@@ -1942,6 +1944,17 @@ img{display:block;max-width:100%;height:auto}
   var tray = $("tray"), rail = $("rail"), cgrid = $("cgrid"), hang = $("hang");
   var MOBILE = window.matchMedia("(max-width: 759px)");
 
+  /* The phone shows no photograph, but the ground keeps the plate's shape so an
+     arrangement reads the same on both. Read off the <img> itself, which is the
+     one place the plate's size is written down: the stylesheet had it hardcoded
+     and it went stale the moment the room changed, and a copy on the room object
+     had gone stale across three crops before anything read it. */
+  function syncPlateRatio(){
+    var img = $("roomPhoto");
+    var w = img.getAttribute("width"), h = img.getAttribute("height");
+    if (w && h) document.documentElement.style.setProperty("--wc-plate", w + " / " + h);
+  }
+
   /* ── the room ──────────────────────────────────────────────────────────
      pctPerCm is the width of one cm as a fraction of the photograph's width,
      read off the plate rather than guessed; wall is the hangable rectangle in
@@ -1949,7 +1962,7 @@ img{display:block;max-width:100%;height:auto}
      The earlier hallway plate is still in assets as wall-hallway.webp, measured
      at pctPerCm 0.002808, wall{t:10,b:66,l:5,r:95}, anchor{x:52,y:63}. */
   var room = {
-    id:"study", name:"Study", file:"wall-study.webp", w:1044, h:693,
+    id:"study", name:"Study", file:"wall-study.webp",
     alt:"A study with a long rosewood credenza against a pale plaster wall.",
     /* Scale read off the plate, not guessed. The Knoll credenza is 64.8 cm tall
        and stands 217.6 px high on the uncropped 1800 px photograph, so one cm is
@@ -1966,6 +1979,7 @@ img{display:block;max-width:100%;height:auto}
        hangs respect these, a visitor dragging by hand may put a work anywhere. */
     objects:[ {l:17, t:55, r:32, b:68} ]
   };
+  syncPlateRatio();
 
 
 

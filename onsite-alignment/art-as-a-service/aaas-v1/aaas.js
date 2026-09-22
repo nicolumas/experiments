@@ -3,7 +3,8 @@
  * Every number derives from the binding conditions in GLOB-2053:
  *   monthly rent      3.75 % of the GROSS price
  *   provisioning fee  one month's rent, once, never credited against a buyout
- *   minimum term      36 months, fixed (there is deliberately no term selector)
+ *   minimum term      36 months. The contract itself is OPEN ENDED, so there is
+ *                     no end date and no total: never show one.
  *   buyout            any time; 80 % of rent paid so far is credited
  *   return/exchange   only from month 36
  *   withdrawal        60 days from delivery
@@ -73,8 +74,6 @@
       monthly: monthly,
       provisioning: monthly,                       // exactly one month's rent
       dueToday: round2(monthly * 2 + shipping),
-      totalRent: round2(monthly * TERMS.months),
-      totalCost: round2(monthly * TERMS.months + monthly + shipping),
       // Buyout falls by 80 % of each month's rent and reaches zero here. For every
       // artwork that lands on month 34, two months BEFORE return and exchange
       // unlock at 36. Surfacing it is more honest than hiding it.
@@ -123,7 +122,7 @@
     return '<div class="aaas-mode-switch' + (cls ? ' ' + cls : '') + '">' +
       '<button type="button" class="aaas-mode-btn" data-mode="buy">Kaufen' +
         '<small>' + money(q.gross) + ' einmalig</small></button>' +
-      '<button type="button" class="aaas-mode-btn" data-mode="rent">Mieten' +
+      '<button type="button" class="aaas-mode-btn" data-mode="rent">Art as a Service' +
         '<small>' + money(q.monthly) + ' im Monat</small></button>' +
       '</div>';
   }
@@ -139,7 +138,7 @@
     return '<button type="button" class="aaas-ms" role="switch" ' + (attrs || '') +
       ' aria-checked="' + renting + '">' +
       '<span class="aaas-ms-track"><span class="aaas-ms-knob"></span></span>' +
-      '<span class="aaas-ms-text">Mieten statt kaufen' +
+      '<span class="aaas-ms-text">Art as a Service' +
         '<span class="aaas-ms-sep" aria-hidden="true"> · </span>' +
         '<b>' + money(q.monthly) + '</b> im Monat' +
         (renting ? termSuffix() : '') +
@@ -199,7 +198,11 @@
   /* ---------- conditions drawer (short, scannable) ---------- */
 
   function openConditions() {
-    var q = pdpQuote();
+    // the fly-out opens from the checkout too, where there is no PDP price to read
+    var item = cartItem();
+    var q = document.querySelector('.pdp-price-container')
+      ? pdpQuote()
+      : quote((item && item.gross) || 0, (item && item.shipping) || FALLBACK_SHIPPING);
     var old = document.getElementById('aaas-drawer');
     if (old) old.remove();
 
@@ -209,35 +212,29 @@
     d.innerHTML =
       '<div class="aaas-drawer-inner">' +
         '<div class="aaas-drawer-head">' +
-          '<h2 id="aaas-drawer-title">Mieten statt kaufen</h2>' +
+          '<h2 id="aaas-drawer-title">Art as a Service</h2>' +
           '<button type="button" class="aaas-close" aria-label="Schließen">&times;</button>' +
         '</div>' +
         '<div class="aaas-drawer-body">' +
-          '<p class="aaas-lede">Du nimmst das Werk heute mit nach Hause und entscheidest später, ' +
-            'ob es bleibt.</p>' +
-          '<div class="aaas-figures">' +
-            figure('Monatsmiete', '<b>' + money(q.monthly) + '</b>', TERMS.months + ' Monate Mindestlaufzeit') +
-            figure('Heute fällig', '<b>' + money(q.dueToday) + '</b>',
-                   'Miete, Bereitstellung und Versand') +
-            figure('Gesamt über ' + TERMS.months + ' Monate', '<b>' + money(q.totalCost) + '</b>') +
-          '</div>' +
+          '<p class="aaas-lede">Das Werk hängt ab heute bei dir. Du zahlst monatlich, ' +
+            'und du entscheidest später, ob es bleibt.</p>' +
+          '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>im Monat</span></div>' +
           '<ul class="aaas-points">' +
-            '<li>' + Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden ' +
-              'angerechnet, wenn du das Werk übernimmst. Das Bereitstellungsentgelt nicht.</li>' +
-            '<li>Übernehmen kannst du jederzeit. Ab dem ' + q.ownedFromMonth + '. Monat liegt der ' +
-              'Übernahmepreis bei ' + money(0) + '.</li>' +
-            '<li>Tauschen und zurückgeben kannst du ab Monat ' + TERMS.months + '. Ein früherer ' +
-              'Tausch kostet ' + Math.round(TERMS.exchangeEarlyShare * 100) + ' % des ' +
-              'Kaufpreises und ein neues Bereitstellungsentgelt.</li>' +
-            '<li>Kündigungsfrist ' + TERMS.noticeDays + ' Tage zum Monatsende.</li>' +
+            '<li>Ohne Kaufpreis starten: heute ' + money(q.dueToday) + ', danach ' +
+              money(q.monthly) + ' im Monat.</li>' +
+            '<li>' + Math.round(TERMS.credit * 100) + ' % deiner Zahlungen werden angerechnet, ' +
+              'wenn du das Werk übernimmst. Ab Monat ' + q.ownedFromMonth + ' gehört es dir ' +
+              'ohne weitere Zahlung.</li>' +
+            '<li>Nach der Mindestlaufzeit von ' + TERMS.months + ' Monaten tauschst du das Werk ' +
+              'gegen ein anderes oder gibst es zurück.</li>' +
           '</ul>' +
-          '<p class="aaas-note">' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung, ' +
-            'dabei trägst du den Rückversand und die Miete für die Nutzungsdauer. Zahlung per ' +
-            'SEPA-Lastschrift oder Kreditkarte. Das Werk bleibt bis zur Übernahme Eigentum ' +
-            'von LUMAS.</p>' +
+          '<p class="aaas-note">Mindestlaufzeit ' + TERMS.months + ' Monate, danach läuft der ' +
+            'Vertrag weiter, bis du übernimmst, tauschst oder zurückgibst. Zahlung per ' +
+            'SEPA-Lastschrift oder Kreditkarte.</p>' +
         '</div>' +
         '<div class="aaas-drawer-foot">' +
-          '<button type="button" class="aaas-btn" data-aaas-rent>In den Warenkorb, zur Miete</button>' +
+          '<button type="button" class="aaas-btn" data-aaas-rent>Mit Art as a Service ' +
+            'in den Warenkorb</button>' +
         '</div>' +
       '</div>';
 
@@ -273,7 +270,7 @@
            '</div>' +
            '<div class="price-to-pay"><div>Heute fällig</div><div>' + money(q.dueToday) + '</div></div>' +
            '<div class="shipping-added">Danach ' + money(q.monthly) + ' im Monat, ' +
-             TERMS.months + ' Monate.</div>';
+             'Mindestlaufzeit ' + TERMS.months + ' Monate.</div>';
   }
 
   function renderCart(q, p) {
@@ -308,7 +305,7 @@
         // item and the pinned bottom: one coherent decision block
         '<div class="cart-overlay-bottom">' +
           '<div class="aaas-cart-mode">' +
-            '<div class="aaas-label">Kaufen oder mieten</div>' +
+            '<div class="aaas-label">Kauf oder Art as a Service</div>' +
             // the PDP decides with a switch, so the cart repeats that control
             // rather than offering the same choice in another shape
             switchControl(q, renting, 'data-mode="' + (renting ? 'buy' : 'rent') + '"') +
@@ -352,18 +349,20 @@
   function conflictCopy(existing, asRent) {
     if (existing.rent && asRent) {
       return {
-        label: 'Nur ein Werk pro Mietvertrag',
-        lede: 'Ein Mietvertrag gilt für ein Werk. Du hast bereits ein Werk zur Miete im Warenkorb.',
-        keep: 'Bisherige Miete behalten',
-        swap: 'Stattdessen dieses Werk mieten'
+        label: 'Nur ein Werk pro Vertrag',
+        lede: 'Ein Vertrag gilt für ein Werk. Du hast bereits ein Werk über Art as a ' +
+              'Service im Warenkorb.',
+        keep: 'Bisheriges Werk behalten',
+        swap: 'Stattdessen dieses Werk nehmen'
       };
     }
     return {
-      label: 'Miete und Kauf getrennt bestellen',
-      lede: 'Ein gemietetes und ein gekauftes Werk lassen sich nicht zusammen bestellen. ' +
-            'Schließe die Miete ab, danach kannst du das zweite Werk kaufen.',
-      keep: 'Miete behalten',
-      swap: existing.rent ? 'Miete verwerfen und dieses Werk kaufen' : 'Stattdessen dieses Werk mieten'
+      label: 'Kauf und Art as a Service getrennt bestellen',
+      lede: 'Art as a Service und ein Kauf lassen sich nicht zusammen bestellen. ' +
+            'Schließe das eine ab, danach kannst du das zweite Werk kaufen.',
+      keep: 'Auswahl behalten',
+      swap: existing.rent ? 'Auswahl verwerfen und dieses Werk kaufen'
+                          : 'Stattdessen Art as a Service'
     };
   }
 
@@ -389,8 +388,8 @@
         '<div class="aaas-cf" role="alert">' +
           '<div class="aaas-label">' + c.label + '</div>' +
           '<p class="aaas-cf-lede">' + c.lede + '</p>' +
-          conflictWork(existing, existing.rent ? 'Zur Miete im Warenkorb' : 'Im Warenkorb') +
-          conflictWork(incoming, asRent ? 'Neu, zur Miete' : 'Neu, zum Kauf') +
+          conflictWork(existing, existing.rent ? 'Art as a Service, im Warenkorb' : 'Im Warenkorb') +
+          conflictWork(incoming, asRent ? 'Neu, Art as a Service' : 'Neu, zum Kauf') +
         '</div>' +
         '<div class="cart-overlay-bottom">' +
           '<div class="aaas-cf-actions">' +
@@ -468,13 +467,13 @@
    * the URL rather than sessionStorage is deliberate, since a stored value from
    * an earlier session would otherwise pin a reviewer to a presentation with no
    * control left on the page to get back out of it. */
-  var VARIANTS = { inline: 'Inline', line: 'Linie', seg: 'Segmented',
+  var VARIANTS = { offer: 'Angebot', inline: 'Inline', line: 'Linie', seg: 'Segmented',
                    'switch': 'Switch', rows: 'Zeilen' };
 
   function variant() {
     try {
       var v = new URLSearchParams(location.search).get('variant');
-      return VARIANTS[v] ? v : 'inline';
+      return VARIANTS[v] ? v : 'offer';
     } catch (e) { return 'inline'; }
   }
 
@@ -500,18 +499,18 @@
           '<span class="aaas-moderow-name">' + label + '</span>' +
           '<b class="aaas-moderow-price">' + price + '</b></label>';
       };
-      return '<div class="aaas-moderows" role="radiogroup" aria-label="Kaufen oder mieten">' +
+      return '<div class="aaas-moderows" role="radiogroup" aria-label="Kauf oder Art as a Service">' +
         row('buy', 'Kaufen', money(q.gross)) +
-        row('rent', 'Mieten', money(q.monthly) + ' im Monat') +
+        row('rent', 'Art as a Service', money(q.monthly) + ' im Monat') +
       '</div>';
     }
 
     // seg: the prices stay in the buy box's own price line, not inside the control
-    return '<div class="aaas-seg" role="group" aria-label="Kaufen oder mieten">' +
+    return '<div class="aaas-seg" role="group" aria-label="Kauf oder Art as a Service">' +
       '<button type="button" class="aaas-seg-btn" data-pdpmode="buy" aria-pressed="' +
         (!renting) + '">Kaufen</button>' +
       '<button type="button" class="aaas-seg-btn" data-pdpmode="rent" aria-pressed="' +
-        renting + '">Mieten</button>' +
+        renting + '">Art as a Service</button>' +
     '</div>' +
     '<div class="aaas-seg-price">' + (renting
       ? '<b>' + money(q.monthly) + '</b> im Monat' + termSuffix()
@@ -654,6 +653,14 @@
     // the mode changes back
     transformBuyBox(q, inline && renting);
 
+    if (variant() === 'offer') {
+      transformBuyBox(q, false);
+      line.className = 'aaas-offer-wrap';
+      line.innerHTML = offerBlock(q);
+      line.querySelector('#aaas-open').addEventListener('click', openConditions);
+      return;
+    }
+
     if (inline) {
       line.className = 'aaas-inline';
       line.innerHTML = inlineControl(q, renting) + (renting ? inlineDetail(q) : '');
@@ -712,6 +719,18 @@
     return p ? p.textContent.trim() : '';
   }
 
+  /* The PDP offers Art as a Service as information, at the same weight as the
+   * price, and nothing on the page switches: a mixed basket cannot be handled,
+   * so the decision is made once, deliberately, in the fly-out. The offer is
+   * never called renting, and the amount is exact rather than a "from" price. */
+  function offerBlock(q) {
+    return '<div class="aaas-offer">' +
+      '<span class="aaas-offer-text">Oder <button type="button" class="aaas-offer-link" ' +
+        'id="aaas-open">Art as a Service</button>: nur <b>' + money(q.monthly) +
+        '</b> im Monat</span>' +
+    '</div>';
+  }
+
   function inlineControl(q, renting) {
     return '<button type="button" class="aaas-ms aaas-ms-quiet" role="switch" ' +
       'data-pdptoggle aria-checked="' + renting + '">' +
@@ -731,14 +750,12 @@
   function inlineDetail(q) {
     return '<div class="aaas-inline-detail">' +
       '<dl class="aaas-facts">' +
-        fact('Monatsmiete', money(q.monthly), rateLabel()) +
+        fact('Monatlich', money(q.monthly), 'Mindestlaufzeit ' + TERMS.months + ' Monate') +
         fact('Bereitstellungsentgelt', money(q.provisioning),
              'einmalig, entspricht einer Monatsmiete') +
         fact('Versand', money(q.shipping), 'einmalig') +
         fact('Heute fällig', money(q.dueToday), null, true) +
         fact('Ab Monat 2 monatlich', money(q.monthly)) +
-        fact('Gesamt über ' + TERMS.months + ' Monate', money(q.totalCost),
-             'inklusive Bereitstellung und Versand') +
       '</dl>' +
       '<p class="aaas-note">Übernehmen kannst du jederzeit. ' +
         Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden angerechnet, ' +
@@ -902,7 +919,7 @@
       panel.id = 'aaas-mode';
       // the same switch as the PDP and the cart. syncSwitches keeps it in step:
       // unlike the cart, this panel is built once and never re-rendered.
-      panel.innerHTML = '<div class="aaas-label">Kaufen oder mieten</div>' +
+      panel.innerHTML = '<div class="aaas-label">Kauf oder Art as a Service</div>' +
         switchControl(q, mode() === 'rent',
           'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"') +
         '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
@@ -928,6 +945,13 @@
 
       document.addEventListener('click', function (e) {
         if (!e.target.closest) return;
+
+        // the summary's "Alle Details" opens the same fly-out as the PDP
+        if (e.target.closest('#aaas-open-checkout')) {
+          e.preventDefault();
+          openConditions();
+          return;
+        }
 
         // the real customer step submits to the live shop; here it advances
         var real = e.target.closest('#loginForm_submit');
@@ -969,13 +993,12 @@
       summary.hidden = !renting;
       summary.innerHTML = renting
         ? '<table class="aaas-breakdown"><tbody>' +
-            '<tr><th scope="row">Monatsmiete<span class="aaas-sub">' + rateLabel() +
-              '</span></th><td>' + money(q.monthly) + '</td></tr>' +
+            '<tr><th scope="row">Monatlich<span class="aaas-sub">Mindestlaufzeit ' +
+              TERMS.months + ' Monate</span></th><td>' + money(q.monthly) + '</td></tr>' +
             '<tr><th scope="row">Bereitstellungsentgelt<span class="aaas-sub">einmalig, entspricht einer Monatsmiete</span></th><td>' + money(q.provisioning) + '</td></tr>' +
             '<tr><th scope="row">Versand<span class="aaas-sub">einmalig</span></th><td>' + money(q.shipping) + '</td></tr>' +
             '<tr class="aaas-row-major"><th scope="row">Heute fällig</th><td>' + money(q.dueToday) + '</td></tr>' +
             '<tr><th scope="row">Ab Monat 2 monatlich</th><td>' + money(q.monthly) + '</td></tr>' +
-            '<tr><th scope="row">Gesamt über ' + TERMS.months + ' Monate<span class="aaas-sub">inklusive Bereitstellung und Versand</span></th><td>' + money(q.totalCost) + '</td></tr>' +
           '</tbody></table>'
         : '';
     }
@@ -1185,10 +1208,10 @@
       '<p>' + (card
         ? 'Du autorisierst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von dieser Karte ' +
           'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Die Autorisierung ' +
-          'gilt für die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.'
+          'gilt für die Dauer des Vertrags.'
         : 'Du ermächtigst LUMAS, monatlich <b>' + money(q.monthly) + '</b> von deinem Konto ' +
           'einzuziehen, erstmals <b>' + money(q.dueToday) + '</b> zum Start. Das Mandat gilt ' +
-          'für die Dauer des Mietvertrags über ' + TERMS.months + ' Monate.') + '</p>' +
+          'für die Dauer des Vertrags.') + '</p>' +
       '<p>Du kannst die Zahlungsart jederzeit in deinem Konto ändern.</p></div>';
   }
 
@@ -1215,14 +1238,12 @@
     }
     node.innerHTML =
       '<h3>Das buchst du</h3>' +
-      '<p>Du schließt einen Mietvertrag über <b>' + TERMS.months + ' Monate</b> ab. Heute werden ' +
-        '<b>' + money(q.dueToday) + '</b> abgebucht, danach monatlich <b>' + money(q.monthly) +
-        '</b> per SEPA-Lastschrift oder Kreditkarte.</p>' +
-      '<p>Übernehmen kannst du jederzeit. 80 % deiner gezahlten Miete werden angerechnet, ab dem ' +
-        q.ownedFromMonth + '. Monat liegt der Übernahmepreis bei ' + money(0) + '. Tausch und ' +
-        'Rückgabe sind ab Monat ' + TERMS.months + ' möglich.</p>' +
-      '<p>' + TERMS.withdrawalDays + ' Tage Widerrufsrecht ab Lieferung. Es gelten die ' +
-        'Mietbedingungen und die Widerrufsbelehrung.</p>';
+      '<p><b>' + money(q.dueToday) + '</b> heute, danach <b>' + money(q.monthly) +
+        '</b> im Monat. Mindestlaufzeit ' + TERMS.months + ' Monate, der Vertrag läuft ' +
+        'danach weiter.</p>' +
+      '<p>Übernehmen kannst du jederzeit, ab Monat ' + q.ownedFromMonth + ' ohne weitere ' +
+        'Zahlung. <button type="button" class="aaas-link" id="aaas-open-checkout">' +
+        'Alle Details zu Art as a Service</button></p>';
   }
 
   function toggleRow(label, on) {
@@ -1306,7 +1327,7 @@
         toggleRow('Lieferadresse entspricht Rechnungsadresse', true) +
         toggleRow('So schnell wie möglich versenden', true) +
         (renting
-          ? '<p class="aaas-note">Das Werk bleibt während der Mietzeit Eigentum von LUMAS und wird an ' +
+          ? '<p class="aaas-note">Das Werk bleibt bis zur Übernahme Eigentum von LUMAS und wird an ' +
             'dieser Adresse genutzt. Wenn du umziehst, sag uns bitte Bescheid.</p>'
           : '') +
         '<div class="aaas-actions">' +
@@ -1341,7 +1362,7 @@
       '<h2 class="aaas-step-title">Zahlung</h2>' +
       '<p class="aaas-note" style="margin-top:0">' +
         (renting
-          ? 'Für die Miete brauchen wir eine Zahlungsart, die wiederkehrend belastet werden ' +
+          ? 'Für Art as a Service brauchen wir eine Zahlungsart, die wiederkehrend belastet werden ' +
             'kann. Rechnung, PayPal und die Express-Zahlarten stehen deshalb nicht zur Verfügung.'
           : 'Bitte wähle eine der verfügbaren Zahlungsarten.') +
       '</p>' +
@@ -1350,8 +1371,8 @@
       '<div id="aaas-rentconsent">' + (renting ? rentConsent(q, chosen) : '') + '</div>' +
       '<p class="aaas-legal">' +
         (renting
-          ? 'Mit dem Abschluss schließt du einen Mietvertrag über ' + TERMS.months +
-            ' Monate ab. Es gelten unsere <a href="#">Mietbedingungen</a> und unsere ' +
+          ? 'Mit dem Abschluss schließt du einen Vertrag mit einer Mindestlaufzeit von ' +
+            TERMS.months + ' Monaten ab. Es gelten unsere <a href="#">Vertragsbedingungen</a> und unsere ' +
             '<a href="#">Datenschutzerklärung</a>. Informationen zum Widerrufsrecht, ' +
             TERMS.withdrawalDays + ' Tage ab Lieferung, findest du <a href="#">hier</a>.'
           : 'Mit dem Abschluss dieses Kaufs akzeptierst du unsere <a href="#">AGB</a> sowie ' +
@@ -1360,7 +1381,7 @@
       '</p>' +
       '<div class="aaas-actions">' +
         '<button type="button" class="btn aaas-next" data-step="4">' +
-          (renting ? 'Zahlungspflichtig mieten' : 'Jetzt bestellen') + '</button>' +
+          'Zahlungspflichtig bestellen</button>' +
       '</div>';
   }
 
@@ -1379,7 +1400,7 @@
     host.classList.remove('aaas-hidden-by-step');
     host.innerHTML =
       '<div class="aaas-confirm">' +
-        '<h2>' + (renting ? 'Deine Miete läuft' : 'Danke für deine Bestellung') + '</h2>' +
+        '<h2>' + (renting ? 'Art as a Service läuft' : 'Danke für deine Bestellung') + '</h2>' +
         (renting
           ? '<p class="aaas-lede">Du hast das Werk gemietet, nicht gekauft. Es bleibt bis zu einer ' +
             'Übernahme Eigentum von LUMAS.</p>' +
@@ -1424,8 +1445,9 @@
     var order = host.getAttribute('data-order');
     var panel = function (cls, inner) { return '<div class="aaas-sx-panel ' + cls + '">' + inner + '</div>'; };
 
+    // the minimum term is not celebrated here: it lives in the account dashboard
     var figures = !renting ? '' : panel('aaas-sx-figures',
-      '<div class="aaas-label">Deine Miete</div>' +
+      '<div class="aaas-label">Art as a Service</div>' +
       '<div class="aaas-grid">' +
         '<div><div class="aaas-stat-label">Heute abgebucht</div>' +
           '<div class="aaas-stat-value">' + money(q.dueToday) + '</div></div>' +
@@ -1433,12 +1455,10 @@
           '<div class="aaas-stat-value">' + money(q.monthly) + '</div></div>' +
         '<div><div class="aaas-stat-label">Nächste Abbuchung</div>' +
           '<div class="aaas-stat-value">' + addMonths(1) + '</div></div>' +
-        '<div><div class="aaas-stat-label">Mindestlaufzeit endet</div>' +
-          '<div class="aaas-stat-value">' + addMonths(TERMS.months) + '</div></div>' +
       '</div>' +
-      '<p class="aaas-note">Den Mietvertrag schicken wir dir per E-Mail, er liegt auch in deinem ' +
+      '<p class="aaas-note">Deinen Vertrag schicken wir dir per E-Mail, er liegt auch in deinem ' +
         'Konto. Übernahme, Tausch und Rückgabe steuerst du dort.</p>' +
-      '<div class="aaas-actions"><a class="btn" href="account-rental.html">Zu deiner Miete</a></div>');
+      '<div class="aaas-actions"><a class="btn" href="account-rental.html">Zu deinem Konto</a></div>');
 
     host.innerHTML =
       '<div class="aaas-sx">' +
@@ -1446,9 +1466,26 @@
           '<h1>' + (renting ? 'Das Werk zieht bei dir ein' : 'Die Kunst hat ihren Platz gefunden') + '</h1>' +
           '<p>Wir haben deine Bestellung erhalten: #' + order + '.<br>' +
             (renting
-              ? 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und deinem Mietvertrag.'
+              ? 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und deinem Vertrag.'
               : 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und der Übersicht deiner Bestellung.') +
           '</p>' +
+        '</div>' +
+        '<div class="aaas-sx-row">' +
+          panel('aaas-sx-account', '<h2>Erstelle dein kostenloses LUMAS Konto</h2>' +
+            '<ul class="aaas-points"><li>Bestellungen und Abbuchungen im Blick behalten.</li>' +
+            '<li>' + (renting ? 'Vertrag und Zahlungen jederzeit einsehen.' :
+              'Lieferungen einfach verfolgen.') + '</li></ul>' +
+            // a real <form>: the shop only floats its labels inside "main form"
+            '<form class="aaas-form" novalidate>' +
+              field('aaas_sx_mail', 'E-Mail', 'email', '') +
+              field('aaas_sx_pass', 'Passwort', 'password', '') +
+            '</form>' +
+            '<button type="button" class="aaas-btn">Konto anlegen</button>' +
+            '<p class="aaas-legal">Mit der Registrierung akzeptierst du unsere <a href="#">AGB</a> ' +
+              'und unsere <a href="#">Datenschutzerklärung</a>.</p>') +
+          panel('', '<h2>' + (renting ? 'Zeig, was bei dir hängt' : 'Zeig dein neues Meisterwerk') + '</h2>' +
+            '<p class="aaas-note">Lass deine Freunde sehen, was jetzt bei dir an der Wand hängt.</p>' +
+            '<button type="button" class="aaas-pill">Jetzt teilen</button>') +
         '</div>' +
         figures +
         '<div class="aaas-sx-row">' +
@@ -1477,26 +1514,7 @@
             '</div>' +
             '<a class="aaas-link" href="pdp.html">Werk ansehen</a>' +
           '</div>') +
-        '<div class="aaas-sx-row">' +
-          panel('aaas-sx-account', '<h2>Erstelle dein kostenloses LUMAS Konto</h2>' +
-            '<ul class="aaas-points"><li>Bestellungen und Abbuchungen im Blick behalten.</li>' +
-            '<li>' + (renting ? 'Mietvertrag und Laufzeit jederzeit einsehen.' :
-              'Lieferungen einfach verfolgen.') + '</li></ul>' +
-            '<div class="aaas-form" style="grid-template-columns:1fr">' +
-              field('aaas_sx_mail', 'E-Mail', 'email', '') +
-              field('aaas_sx_pass', 'Passwort', 'password', '') +
-            '</div>' +
-            '<button type="button" class="aaas-btn">Konto anlegen</button>' +
-            '<p class="aaas-legal">Mit der Registrierung akzeptierst du unsere <a href="#">AGB</a> ' +
-              'und unsere <a href="#">Datenschutzerklärung</a>.</p>') +
-          '<div class="aaas-sx-stack">' +
-            panel('', '<h2>' + (renting ? 'Zeig, was bei dir hängt' : 'Zeig dein neues Meisterwerk') + '</h2>' +
-              '<p class="aaas-note">Lass deine Freunde sehen, was jetzt bei dir an der Wand hängt.</p>' +
-              '<button type="button" class="aaas-pill">Jetzt teilen</button>') +
-            panel('', '<h2>Werde LUMAS Fan</h2>' +
-              '<p class="aaas-note">Folge uns für neue Editionen und Einblicke.</p>') +
-          '</div>' +
-        '</div>' +
+        // the newsletter panel is gone: every order is subscribed anyway
       '</div>';
   }
 
@@ -1594,7 +1612,7 @@
 
     var rows = '';
     for (var i = 0; i < 4 && paid - i > 0; i++) {
-      rows += '<tr><td>Rate ' + (paid - i) + ' von ' + TERMS.months + '</td>' +
+      rows += '<tr><td>Rate ' + (paid - i) + '</td>' +
               '<td>' + shift(host.getAttribute('data-next'), i + 1) + '</td>' +
               '<td>Bezahlt</td><td>' + money(q.monthly) + '</td></tr>';
     }
@@ -1614,11 +1632,11 @@
     };
     var NAV = [
       ['Dashboard', 'dash'], ['Profil', 'user'], ['Adressen', 'pin'],
-      ['Bestellungen', 'doc'], ['Mieten', 'rent'], ['Editionsverlauf', 'chart'],
+      ['Bestellungen', 'doc'], ['Art as a Service', 'rent'], ['Editionsverlauf', 'chart'],
       ['E-Mail Einstellungen', 'mail'], ['Verbundene Konten', 'link'], ['Abmelden', 'out']
     ];
     var nav = NAV.map(function (n) {
-      var cur = n[0] === 'Mieten' ? ' aria-current="page"' : '';
+      var cur = n[0] === 'Art as a Service' ? ' aria-current="page"' : '';
       return '<a href="#"' + cur + '><svg viewBox="0 0 24 24" aria-hidden="true">' +
              ICON[n[1]] + '</svg>' + n[0] + '</a>';
     }).join('');
@@ -1627,12 +1645,12 @@
       '<div class="aaas-acct">' +
         '<div class="aaas-acct-head">' +
           '<h1>Willkommen ' + host.getAttribute('data-name') + '</h1>' +
-          '<p>Dein LUMAS-Konto. Hier findest du deine Bestellhistorie, deine Miete und Informationen.</p>' +
+          '<p>Dein LUMAS-Konto. Hier findest du deine Bestellhistorie, deine Verträge und Informationen.</p>' +
         '</div>' +
         '<div class="aaas-acct-body">' +
           '<nav class="aaas-acct-nav">' + nav + '</nav>' +
           '<div class="aaas-acct-main">' +
-            '<div class="aaas-label">Dein gemietetes Werk</div>' +
+            '<div class="aaas-label">Dein Werk über Art as a Service</div>' +
             '<div class="aaas-panel"><div class="aaas-panel-inner">' +
               '<div class="aaas-card-head">' +
                 '<img src="' + host.getAttribute('data-image') + '" alt="">' +
@@ -1643,15 +1661,12 @@
                   '</div></div>' +
               '</div>' +
               '<div class="aaas-progress"><span style="width:' + pct + '%"></span></div>' +
-              '<div class="aaas-progress-legend"><span>Monat ' + paid + ' von ' + TERMS.months + '</span>' +
-                '<span>Mindestlaufzeit endet ' + endDate + '</span></div>' +
-              '<p class="aaas-note">Kündigungsfrist ' + TERMS.noticeDays +
-                ' Tage zum Monatsende.</p>' +
+              '<div class="aaas-progress-legend"><span>Monat ' + paid + '</span></div>' +
               '<div class="aaas-grid">' +
-                stat('Monatsmiete', money(q.monthly)) +
+                stat('Monatlich', money(q.monthly)) +
                 stat('Nächste Abbuchung', host.getAttribute('data-next')) +
                 stat('Übernahmepreis heute', money(buyoutAt(q, paid))) +
-                stat('Bereits gezahlt', money(round2(q.monthly * paid))) +
+                stat('Bereits angerechnet', money(round2(TERMS.credit * q.monthly * paid))) +
               '</div>' +
             '</div></div>' +
 
@@ -1672,7 +1687,7 @@
             '<div class="aaas-label" style="margin-top:var(--sp-6)">Zum Laufzeitende</div>' +
             '<div class="aaas-options">' +
               '<div class="aaas-option"><h4>Übernehmen</h4>Jederzeit möglich. ' +
-                Math.round(TERMS.credit * 100) + ' % deiner gezahlten Miete werden angerechnet, ' +
+                Math.round(TERMS.credit * 100) + ' % deiner Zahlungen werden angerechnet, ' +
                 'das Bereitstellungsentgelt nicht. Aktuell ' + money(buyoutAt(q, paid)) +
                 '.</div>' +
               '<div class="aaas-option" data-locked><h4>Tauschen</h4>Ab Monat ' + TERMS.months +
@@ -1691,6 +1706,8 @@
               '<p class="aaas-note">Ruf uns an unter 030 30 30 69 69 oder schreib uns über ' +
                 'das <a href="#">Kontaktformular</a>. Wir wickeln Übernahme, Tausch und ' +
                 'Rückgabe persönlich mit dir ab.</p>' +
+              '<p class="aaas-note">Mindestlaufzeit endet ' + endDate + '. ' +
+                'Kündigungsfrist ' + TERMS.noticeDays + ' Tage zum Monatsende.</p>' +
             '</div></div>' +
           '</div>' +
         '</div>' +

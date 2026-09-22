@@ -239,6 +239,60 @@
   }
 }
 
+/* ---------- PDP: the Art as a Service offer ----------
+ * Equal weight to the price, not a footnote under it: hairlines top and bottom,
+ * the amount in the body-bold face. It states an offer and links to the
+ * fly-out; nothing on the page switches, because a mixed basket cannot be
+ * handled and the decision belongs in one place. */
+
+.aaas-offer-wrap { margin: var(--sp-4) 0 var(--sp-5); }
+
+.aaas-offer {
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  font-family: var(--font-body);
+  font-size: 1.6rem;
+  line-height: 1.45;
+  color: var(--color-text-primary);
+}
+
+.aaas-offer b { font-family: var(--font-body-bold); font-weight: 400; }
+
+.aaas-offer-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aaas-offer-link:hover { opacity: .7; }
+}
+
+.aaas-offer-link:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+/* the fly-out leads with the amount, once */
+.aaas-offer-figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin: var(--sp-5) 0 var(--sp-4);
+}
+
+.aaas-offer-figure b {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.aaas-offer-figure span { font-size: 1.5rem; color: var(--color-text-secondary); }
+
 /* ---------- PDP, inline presentation ----------
  * The quiet line from spec A carrying spec B's switch. No rule above it and no
  * section label: in buy mode the page gains one line of text and nothing else,

@@ -132,6 +132,39 @@
       vis.addEventListener('close', function () { if (vform && vsucc && vsucc.hidden === false) { vform.reset(); vform.hidden = false; vsucc.hidden = true; } });
     }
 
+    // ── Before / after wall slider (visualisation demo) ──
+    // The two plates are the same render with and without the artwork, so the
+    // "before" layer is clipped rather than resized — nothing can drift.
+    document.querySelectorAll('[data-ba]').forEach(function (root) {
+      var before = root.querySelector('[data-ba-before]');
+      var handle = root.querySelector('[data-ba-handle]');
+      var range  = root.querySelector('[data-ba-range]');
+      if (!before || !handle || !range) return;
+
+      var reported = false;
+      function paint(pct) {
+        pct = Math.max(0, Math.min(100, pct));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left = pct + '%';
+      }
+      function setFromPointer(clientX) {
+        var r = root.getBoundingClientRect();
+        var pct = ((clientX - r.left) / r.width) * 100;
+        range.value = pct;
+        paint(pct);
+        if (!reported) { reported = true; track('visualisation_compare', { variant: variant }); }
+      }
+
+      range.addEventListener('input', function () {
+        paint(parseFloat(range.value));
+        if (!reported) { reported = true; track('visualisation_compare', { variant: variant }); }
+      });
+      root.addEventListener('pointerdown', function (e) { setFromPointer(e.clientX); });
+      root.addEventListener('pointermove', function (e) { if (e.buttons === 1) setFromPointer(e.clientX); });
+
+      paint(parseFloat(range.value));
+    });
+
     // ── Reveal on scroll (reveal in-view immediately) ─────
     var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
     var vh = window.innerHeight || document.documentElement.clientHeight;
