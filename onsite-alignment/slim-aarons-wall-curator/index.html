@@ -2394,6 +2394,34 @@ img{display:block;max-width:100%;height:auto}
       return cells(list);
     });
 
+    /* zigzag: within a row every other work rides half a cell higher, and the
+       rows sit a cell and a half apart so the run reads as one band that folds
+       rather than as stacked lines. At nine this is taller than the wall above
+       the credenza, so it simply is not offered there. */
+    out.push(function(){
+      var rows = rowsFor(n).slice();
+      if (rnd(2)) rows.reverse();
+      var wide = Math.max.apply(null, rows), lead = rnd(2), list = [], i = 0;
+      rows.forEach(function(cols, r){
+        var x0 = (wide - cols) / 2;
+        for (var c = 0; c < cols && i < n; c++, i++)
+          list.push([x0 + c, r * 1.5 + ((c % 2 === lead) ? 0.5 : 0)]);
+      });
+      return cells(list);
+    });
+
+    /* chevron: one run that dips to the middle and climbs out again, or the
+       other way up. Only where the works stand in a single line. */
+    out.push(function(){
+      if (n < 3 || n > cap) return null;
+      var up = rnd(2), mid = (n - 1) / 2, list = [];
+      for (var i = 0; i < n; i++){
+        var step = Math.round(Math.abs(i - mid) * 2) / 2 * 0.5;
+        list.push([i, up ? step : -step]);
+      }
+      return cells(list);
+    });
+
     /* two columns, the second dropped half a cell */
     out.push(function(){
       var left = Math.ceil(n / 2), list = [];
@@ -2522,8 +2550,20 @@ img{display:block;max-width:100%;height:auto}
     var slots = defaultSlots(kept.length);
     var t = tileSize();
 
+    /* While nobody has moved anything the wall is simply the tidy grid, so each
+       work takes its own slot and nothing needs testing: the slots never overlap
+       each other. Testing as we go would test against the previous count's grid,
+       which is still on the wall at that moment, and that is what used to
+       scatter the block when the ninth arrived and the rows reshaped.
+       Once the visitor has arranged the wall, a newly added work is the only one
+       that needs a free spot found for it. */
     kept.forEach(function(code, i){
-      if ((!arranged || !pos[code]) && slots[i]) pos[code] = t ? freeSlot(code, slots, i, t) : slots[i];
+      if (!slots[i]) return;
+      if (!arranged) pos[code] = slots[i];
+      else if (!pos[code]) pos[code] = t ? freeSlot(code, slots, i, t) : slots[i];
+    });
+
+    kept.forEach(function(code){
       if (hang.querySelector('[data-code="' + code + '"]')) return;
       var s = SLIDES.find(function(x){ return x.code === code; });
       var b = document.createElement("div");
