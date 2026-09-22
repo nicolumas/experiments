@@ -452,7 +452,7 @@ img{display:block;max-width:100%;height:auto}
 .wc-cap__read{display:flex;gap:2rem;flex-wrap:wrap;align-items:baseline;min-width:0}
 
 /* the edition tray */
-.wc-tray{margin-top:4rem}
+.wc-tray{margin-top:2.4rem}
 .wc-tray__head{display:flex;justify-content:space-between;align-items:flex-end;gap:2.4rem;flex-wrap:wrap;margin-bottom:1.6rem}
 .wc-tray__ctrls{display:flex;align-items:center;gap:1.2rem;flex:0 0 auto}
 .wc-carousel{display:flex;gap:1.6rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:.4rem}
@@ -511,7 +511,7 @@ img{display:block;max-width:100%;height:auto}
 /* the room's own add to cart. On a phone the review screen already carries one
    in its sticky bar, so this is the pointer layout only. */
 .wc-roomcta{display:none}
-@media(min-width:760px){.wc-roomcta{display:block;max-width:38rem;margin:2.4rem auto 0}}
+@media(min-width:760px){.wc-roomcta{display:block;max-width:38rem;margin:1.6rem auto 0}}
 .wc-build__grid{display:grid;gap:2.4rem}
 .wc-addmore{display:none}
 @media(min-width:1000px){
@@ -2251,6 +2251,23 @@ img{display:block;max-width:100%;height:auto}
     return cur;
   }
 
+  /* Nothing to slide back to when a work arrives from the tray, so search
+     outward from where it was dropped until it is clear of everything. */
+  function placeFree(code, p, t){
+    if (!overlaps(code, p, t)) return p;
+    var stepX = t.wPct + 0.6, stepY = t.hPct + 0.6;
+    for (var ring = 1; ring <= 6; ring++){
+      for (var dy = -ring; dy <= ring; dy++){
+        for (var dx = -ring; dx <= ring; dx++){
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue;
+          var cand = clampPos({ x: p.x + dx * stepX, y: p.y + dy * stepY }, t);
+          if (!overlaps(code, cand, t)) return cand;
+        }
+      }
+    }
+    return p;
+  }
+
   function clampPos(p, t){
     var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
     return {
@@ -2375,7 +2392,7 @@ img{display:block;max-width:100%;height:auto}
     var w = drag.wall, t = drag.t;
     var p = clampPos({ x: (e.clientX - drag.dx - w.left) / w.width * 100,
                        y: (e.clientY - drag.dy - w.top) / w.height * 100 }, t);
-    p = snap(p, t);
+    p = snap(p, t, drag.code);
     p = avoid(drag.code, p, pos[drag.code], t);
     /* a couple of pixels of jitter is a tap, not an arrangement */
     if (Math.abs(e.clientX - drag.sx) > 4 || Math.abs(e.clientY - drag.sy) > 4) drag.moved = true;
@@ -2412,10 +2429,10 @@ img{display:block;max-width:100%;height:auto}
 
   /* Snap to the edges and centre lines of the other works, which is what makes
      a hand-made arrangement read as deliberate rather than approximate. */
-  function snap(p, t){
+  function snap(p, t, self){
     var vT = [], hT = [];
     kept.forEach(function(code){
-      if (code === drag.code) return;
+      if (code === self) return;
       var o = pos[code]; if (!o) return;
       vT.push(o.x, o.x + t.wPct / 2, o.x + t.wPct);
       hT.push(o.y, o.y + t.hPct / 2, o.y + t.hPct);
@@ -2654,10 +2671,14 @@ img{display:block;max-width:100%;height:auto}
     if (!code || kept.indexOf(code) > -1) return;
     var t = tileSize();
     if (t){
-      /* land it where it was dropped, centred under the cursor, then snap */
+      /* land it where it was dropped, centred under the cursor, aligned to what
+         is already hanging, and never on top of it */
       var b = hang.getBoundingClientRect();
       var p = clampPos({ x: (e.clientX - b.left) / b.width * 100 - t.wPct / 2,
                          y: (e.clientY - b.top) / b.height * 100 - t.hPct / 2 }, t);
+      p = clampPos(snap(p, t, code), t);
+      p = placeFree(code, p, t);
+      hideGuides();
       arranged = true;
       pos[code] = p;
     }
