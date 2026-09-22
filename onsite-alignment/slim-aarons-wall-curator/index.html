@@ -1647,7 +1647,7 @@ img{display:block;max-width:100%;height:auto}
       </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
-          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1368" height="769">
+          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1188" height="728">
           <div class="wc-zone" id="hang">
             <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
             <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
@@ -1949,20 +1949,22 @@ img{display:block;max-width:100%;height:auto}
      The earlier hallway plate is still in assets as wall-hallway.webp, measured
      at pctPerCm 0.002808, wall{t:10,b:66,l:5,r:95}, anchor{x:52,y:63}. */
   var room = {
-    id:"study", name:"Study", file:"wall-study.webp", w:1368, h:769,
+    id:"study", name:"Study", file:"wall-study.webp", w:1188, h:728,
     alt:"A study with a long rosewood credenza against a pale plaster wall.",
     /* Scale read off the plate, not guessed. The Knoll credenza is 64.8 cm tall
        and stands 217.6 px high on the uncropped 1800 px photograph, so one cm is
        3.358 px. Cross-checked against the rocks glass (8.7 cm, 3.37 px/cm) and the
-       carriage clock (10 cm wide, 3.4 px/cm). This plate is that photograph cropped
-       to 76% a side, so one cm is still 3.358 px on 1368, which is 0.002455 of the
-       width: a 34 cm edition sits 8.35% of the plate wide. */
-    pctPerCm:0.002455, wall:{t:3, b:62, l:9, r:92}, anchor:{x:52.6, y:60},
+       carriage clock (10 cm wide, 3.4 px/cm). Cropping does not rescale pixels, so
+       on this 1188 px crop one cm is still 3.358 px, which is 0.002827 of the
+       width: a 34 cm edition sits 9.61% of the plate wide. */
+    pctPerCm:0.002827, wall:{t:3, b:58, l:6, r:96}, anchor:{x:52, y:56},
     /* Things a hung work must not cross. The decanter and glasses standing on the
-       credenza; the paper lantern is outside this crop. Only the automatic hangs
-       respect these, a visitor dragging by hand may put a work wherever they want. */
-    objects:[ {l:20, t:55, r:32.5, b:63} ]
+       credenza; the clock and the book sit below the plane, the paper lantern is
+       outside this crop. Only the automatic hangs respect these, a visitor dragging
+       by hand may put a work wherever they want it. */
+    objects:[ {l:15, t:52, r:30.5, b:65} ]
   };
+
 
 
 
@@ -2318,6 +2320,11 @@ img{display:block;max-width:100%;height:auto}
     return rows.reverse();                   /* narrow row first, drawn top down */
   }
 
+  /* A hang has to read as a block on the wall, not as a stripe across it. Up to
+     five works may stand in one line; past that nothing gets wider than four, so
+     the nine can never end up strung out in a single row. */
+  function maxCols(n){ return n <= 5 ? n : Math.ceil(Math.sqrt(n)) + 1; }
+
   function hangs(n, t){
     var gH = 4 * t.pxPerCm / t.w * 100, gV = 4 * t.pxPerCm / t.h * 100;
     /* One cell is a work plus the gap beside it. Every position below is a whole
@@ -2325,10 +2332,15 @@ img{display:block;max-width:100%;height:auto}
        the same few values. That is what lets an odd shape still read as hung on
        purpose rather than as works dropped where they fell. */
     var cw = t.wPct + gH, ch = t.hPct + gV;
+    var cap = maxCols(n);
     var cells = function(list){
+      var wide = 0;
+      list.forEach(function(c){ wide = Math.max(wide, c[0]); });
+      if (wide + 1 > cap) return null;       /* too far across: not this hang */
       return list.map(function(c){ return { x: c[0] * cw, y: c[1] * ch }; });
     };
     var rnd = function(k){ return Math.floor(Math.random() * k); };
+    /* Lay rows out, each centred on the widest, with an optional per-row shift. */
     var stack = function(rows, shift){
       var wide = Math.max.apply(null, rows), list = [], i = 0;
       rows.forEach(function(cols, r){
@@ -2339,14 +2351,31 @@ img{display:block;max-width:100%;height:auto}
     };
     var out = [];
 
-    /* brick: the tidy rows, alternate ones shifted exactly half a cell */
+    /* brick: the tidy rows, alternate ones shifted exactly half a cell, and the
+       short row as happy at the bottom as at the top */
     out.push(function(){
+      var rows = rowsFor(n).slice();
+      if (rnd(2)) rows.reverse();
       var lead = rnd(2);
-      return stack(rowsFor(n), function(r){ return (r % 2 === lead) ? 0.5 : 0; });
+      return stack(rows, function(r){ return (r % 2 === lead) ? 0.5 : 0; });
     });
 
     /* pyramid: rows narrowing upward, each centred on the one below */
     out.push(function(){ return stack(pyramidRows(n)); });
+
+    /* the same rows the other way up, widest at the top */
+    out.push(function(){ return stack(pyramidRows(n).slice().reverse()); });
+
+    /* wedge: those rows flushed to one side instead of centred */
+    out.push(function(){
+      var rows = pyramidRows(n), left = rnd(2);
+      var wide = Math.max.apply(null, rows), list = [], i = 0;
+      rows.forEach(function(cols, r){
+        var off = left ? 0 : wide - cols;
+        for (var c = 0; c < cols && i < n; c++, i++) list.push([off + c, r]);
+      });
+      return cells(list);
+    });
 
     /* staircase: one cell along, half a cell up, work after work */
     out.push(function(){
@@ -2375,7 +2404,7 @@ img{display:block;max-width:100%;height:auto}
     /* a filled rectangle with a corner or two deliberately left empty: the
        silhouette is irregular, the spacing inside it never is */
     out.push(function(){
-      var cols = n <= 4 ? 2 : (n <= 6 ? 3 : 4);
+      var cols = Math.min(cap, n <= 4 ? 2 : (n <= 6 ? 3 : 4));
       var rows = Math.ceil((n + 2) / cols);
       if (rows < 2) return null;
       var keep = [];
