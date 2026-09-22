@@ -450,6 +450,7 @@ img{display:block;max-width:100%;height:auto}
 .wc-cap{display:flex;justify-content:space-between;align-items:baseline;gap:3.2rem;flex-wrap:wrap;margin-top:.8rem}
 /* the readouts belong together; the control is its own thing */
 .wc-cap__read{display:flex;gap:2rem;flex-wrap:wrap;align-items:baseline;min-width:0}
+.wc-cap__acts{display:flex;gap:2rem;align-items:baseline;flex:0 0 auto}
 
 /* the edition tray */
 .wc-tray{margin-top:1.6rem}
@@ -1646,7 +1647,10 @@ img{display:block;max-width:100%;height:auto}
           <p class="lt-note" id="wallDims">&nbsp;</p>
           <p class="lt-note" id="wallHint">Drag to arrange. Arrow keys nudge.</p>
         </div>
-        <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+        <span class="wc-cap__acts">
+          <button type="button" class="lt-btn lt-btn--ghost" id="surpriseBtn">Surprise me</button>
+          <button type="button" class="lt-btn lt-btn--ghost" id="tidyBtn">Tidy up</button>
+        </span>
       </div>
 
       <div class="wc-roomcta">
@@ -2280,6 +2284,83 @@ img{display:block;max-width:100%;height:auto}
     return p;
   }
 
+  /* ── creative hangs ───────────────────────────────────────────────────
+     Every edition is the same square, so a hang is only ever interesting in
+     how it is spaced. Each of these keeps at least one tile plus a gap between
+     neighbours on the axis that matters, so none of them can overlap by
+     construction; the result is checked against that anyway before it is used. */
+  function hangs(n, t){
+    var gH = 4 * t.pxPerCm / t.w * 100, gV = 4 * t.pxPerCm / t.h * 100;
+    var stepX = t.wPct + gH, stepY = t.hPct + gV;
+    var out = [];
+
+    /* salon: the tidy rows, loosened. Alternate rows shift half a tile and each
+       work lifts or drops a little, the way a hand-hung wall actually sits. */
+    out.push(function(){
+      var rows = rowsFor(n), list = [], i = 0;
+      rows.forEach(function(cols, r){
+        var rowW = cols * t.wPct + (cols - 1) * gH;
+        var x0 = -rowW / 2 + (r % 2 ? stepX * 0.22 : 0);
+        for (var c = 0; c < cols && i < n; c++, i++){
+          list.push({ x: x0 + c * stepX,
+                      y: r * stepY + (((i * 7) % 3) - 1) * gV * 0.9 });
+        }
+      });
+      return list;
+    });
+
+    /* staircase: each work a step up and along */
+    out.push(function(){
+      var list = [];
+      for (var i = 0; i < n; i++) list.push({ x: i * stepX, y: -i * stepY * 0.55 });
+      return list;
+    });
+
+    /* two stacks, one starting lower than the other */
+    out.push(function(){
+      var left = Math.ceil(n / 2), list = [];
+      for (var i = 0; i < n; i++){
+        var col = i < left ? 0 : 1;
+        var row = i < left ? i : i - left;
+        list.push({ x: col * stepX, y: row * stepY + (col ? stepY * 0.45 : 0) });
+      }
+      return list;
+    });
+
+    /* one line, every other work riding higher */
+    out.push(function(){
+      var list = [];
+      for (var i = 0; i < n; i++) list.push({ x: i * stepX, y: (i % 2) * stepY * 0.5 });
+      return list;
+    });
+
+    return out;
+  }
+
+  /* Lay a relative composition onto the wall: centre it on the room's anchor,
+     then push it back inside the hangable plane if it spills. */
+  function place(list, t){
+    var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
+    var xs = list.map(function(p){ return p.x; }), ys = list.map(function(p){ return p.y; });
+    var minX = Math.min.apply(null, xs), maxX = Math.max.apply(null, xs) + t.wPct;
+    var minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys) + t.hPct;
+    if (maxX - minX > P.r - P.l || maxY - minY > P.b - P.t) return null;
+
+    var cx = MOBILE.matches ? 50 : room.anchor.x;
+    var dx = cx - (minX + maxX) / 2;
+    var dy = (MOBILE.matches ? 50 - (minY + maxY) / 2
+                             : room.anchor.y - maxY);
+    var moved = list.map(function(p){ return { x: p.x + dx, y: p.y + dy }; });
+
+    var bx = Math.min.apply(null, moved.map(function(p){ return p.x; }));
+    var by = Math.min.apply(null, moved.map(function(p){ return p.y; }));
+    var rx = Math.max.apply(null, moved.map(function(p){ return p.x; })) + t.wPct;
+    var ry = Math.max.apply(null, moved.map(function(p){ return p.y; })) + t.hPct;
+    var shiftX = bx < P.l ? P.l - bx : (rx > P.r ? P.r - rx : 0);
+    var shiftY = by < P.t ? P.t - by : (ry > P.b ? P.b - ry : 0);
+    return moved.map(function(p){ return { x: p.x + shiftX, y: p.y + shiftY }; });
+  }
+
   function clampPos(p, t){
     var P = MOBILE.matches ? { t: 2, b: 98, l: 2, r: 98 } : plane();
     return {
@@ -2491,6 +2572,34 @@ img{display:block;max-width:100%;height:auto}
   document.addEventListener("pointermove", onDragMove);
   document.addEventListener("pointerup", endDrag);
   document.addEventListener("pointercancel", endDrag);
+
+  var lastHang = -1;
+  $("surpriseBtn").addEventListener("click", function(){
+    var n = kept.length, t = tileSize();
+    if (!n || !t) return;
+    var options = hangs(n, t), tries = 0, chosen = null;
+    /* never the same one twice running, and never one that will not fit */
+    while (tries < 12 && !chosen){
+      var i = Math.floor(Math.random() * options.length);
+      if (options.length > 1 && i === lastHang){ tries++; continue; }
+      var placed = place(options[i](), t);
+      if (placed && !stacked(placed, t)){ chosen = placed; lastHang = i; }
+      tries++;
+    }
+    if (!chosen) return;
+    arranged = true;
+    kept.forEach(function(code, k){ pos[code] = chosen[k]; });
+    syncWall();
+    track("wall_surprise", { hang: lastHang, selected: n });
+  });
+
+  function stacked(list, t){
+    for (var i = 0; i < list.length; i++)
+      for (var j = i + 1; j < list.length; j++)
+        if (Math.abs(list[i].x - list[j].x) < t.wPct - 0.15 &&
+            Math.abs(list[i].y - list[j].y) < t.hPct - 0.15) return true;
+    return false;
+  }
 
   $("tidyBtn").addEventListener("click", function(){
     arranged = false;
