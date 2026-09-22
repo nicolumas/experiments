@@ -2178,7 +2178,7 @@ img{display:block;max-width:100%;height:auto}
      themselves, their layout is preserved and only new editions get a slot. */
   var arranged = false;
   var dragCode = null;       /* the edition currently dragged out of the tray */
-  var SNAP = 0.6;            /* percent of wall width */
+  var SNAP = 0.25;          /* fraction of one edition, so ~22 px on desktop */
 
   function plane(){ return room.wall; }
 
@@ -2437,8 +2437,8 @@ img{display:block;max-width:100%;height:auto}
       vT.push(o.x, o.x + t.wPct / 2, o.x + t.wPct);
       hT.push(o.y, o.y + t.hPct / 2, o.y + t.hPct);
     });
-    var v = nearest([p.x, p.x + t.wPct / 2, p.x + t.wPct], vT, SNAP);
-    var h = nearest([p.y, p.y + t.hPct / 2, p.y + t.hPct], hT, SNAP * (t.hPct / t.wPct));
+    var v = nearest([p.x, p.x + t.wPct / 2, p.x + t.wPct], vT, t.wPct * SNAP);
+    var h = nearest([p.y, p.y + t.hPct / 2, p.y + t.hPct], hT, t.hPct * SNAP);
     if (v){ p.x += v.delta; showGuide("guideV", "left", v.at); } else hideGuide("guideV");
     if (h){ p.y += h.delta; showGuide("guideH", "top", h.at); } else hideGuide("guideH");
     return p;
