@@ -1647,7 +1647,7 @@ img{display:block;max-width:100%;height:auto}
       </div>
       <div class="wc-canvas" id="canvas">
         <span class="wc-frame">
-          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1800" height="1012">
+          <img class="wc-room" id="roomPhoto" src="assets/slim-aarons-slides/wall-study.webp" alt="A study with a long rosewood credenza against a pale plaster wall." width="1368" height="769">
           <div class="wc-zone" id="hang">
             <span class="lt-guide lt-guide--v" id="guideV" hidden></span>
             <span class="lt-guide lt-guide--h" id="guideH" hidden></span>
@@ -1949,18 +1949,21 @@ img{display:block;max-width:100%;height:auto}
      The earlier hallway plate is still in assets as wall-hallway.webp, measured
      at pctPerCm 0.002808, wall{t:10,b:66,l:5,r:95}, anchor{x:52,y:63}. */
   var room = {
-    id:"study", name:"Study", file:"wall-study.webp", w:1800, h:1012,
+    id:"study", name:"Study", file:"wall-study.webp", w:1368, h:769,
     alt:"A study with a long rosewood credenza against a pale plaster wall.",
-    /* Scale read off the plate: the Knoll credenza is 64.8 cm tall and runs from
-       69.8% to 91.3% of the plate height, so one cm is 3.358 px at 1800, which is
-       0.001866 of the width. A 34 cm edition therefore sits 6.3% of the wall wide. */
-    pctPerCm:0.001866, wall:{t:13, b:67, l:17, r:79}, anchor:{x:50, y:65},
-    /* Things a hung work must not cross. Read off the plate: the paper lantern
-       hanging in front of the wall, and the decanter and glasses standing on the
-       credenza. Only the automatic hangs respect these; a visitor dragging by hand
-       may still put a work wherever they want it. */
-    objects:[ {l:42, t:0, r:58, b:19.5}, {l:26, t:60, r:34.5, b:70} ]
+    /* Scale read off the plate, not guessed. The Knoll credenza is 64.8 cm tall
+       and stands 217.6 px high on the uncropped 1800 px photograph, so one cm is
+       3.358 px. Cross-checked against the rocks glass (8.7 cm, 3.37 px/cm) and the
+       carriage clock (10 cm wide, 3.4 px/cm). This plate is that photograph cropped
+       to 76% a side, so one cm is still 3.358 px on 1368, which is 0.002455 of the
+       width: a 34 cm edition sits 8.35% of the plate wide. */
+    pctPerCm:0.002455, wall:{t:3, b:62, l:9, r:92}, anchor:{x:52.6, y:60},
+    /* Things a hung work must not cross. The decanter and glasses standing on the
+       credenza; the paper lantern is outside this crop. Only the automatic hangs
+       respect these, a visitor dragging by hand may put a work wherever they want. */
+    objects:[ {l:20, t:55, r:32.5, b:63} ]
   };
+
 
 
   function src(code, w){ return IMG + code + "-" + w + ".webp"; }
