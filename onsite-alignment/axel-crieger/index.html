@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axel Crieger — concept board</title>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<script src="../assets/gate.js"></script>
+<style>
+@font-face{font-family:'ArchivoLocal';src:url('../assets/fonts/archivo.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#5A5752; --charcoal-500:#908C87;
+  --ivory-200:#F7F1E9; --ivory-300:#F4EDE2; --bone-100:#F0EBE3; --bone-200:#EAE2D8;
+  --page:#FFFFFF;
+  --font-display:'UtileDisplay','Utile Display Trial',Georgia,'Times New Roman',serif;
+  --font-body:'ArchivoLocal',Archivo,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --gutter:4rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:62.5%;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--charcoal-900);font-family:var(--font-body);font-size:1.5rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+
+.wrap{max-width:1440px;margin-inline:auto;padding-inline:var(--gutter)}
+@media (max-width:759px){:root{--gutter:1.6rem}}
+
+.eyebrow{font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--charcoal-700);margin:0}
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(4.2rem,7vw,7.2rem);line-height:1.04;letter-spacing:-.025em;margin:1.6rem 0 0}
+h2{font-family:var(--font-display);font-weight:400;font-size:clamp(3.2rem,4.4vw,4.6rem);line-height:1.12;letter-spacing:-.015em;margin:0}
+h3{font-family:var(--font-display);font-weight:400;font-size:clamp(2.4rem,2.8vw,3.2rem);line-height:1.12;margin:0}
+h4{font-family:var(--font-display);font-weight:400;font-size:2.2rem;line-height:1.25;margin:0}
+p{margin:0 0 1.6rem}
+p:last-child{margin-bottom:0}
+.lede{font-size:1.8rem;line-height:1.6;font-weight:300}
+.sub{color:var(--charcoal-700)}
+.small{font-size:1.3rem;line-height:1.55;color:var(--charcoal-700)}
+strong{font-weight:700}
+
+/* ── masthead ─────────────────────────────────── */
+.mast{padding-block:7rem 5rem;border-bottom:1px solid var(--bone-200)}
+.mast-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:var(--gutter);align-items:end}
+@media (max-width:899px){.mast-grid{grid-template-columns:1fr;align-items:start}}
+.mast dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.6rem 2.4rem;font-size:1.3rem;align-self:end}
+.mast dt{color:var(--charcoal-500);letter-spacing:.14em;text-transform:uppercase;font-size:1.1rem;font-weight:700;padding-top:.3rem}
+.mast dd{margin:0;color:var(--charcoal-700)}
+
+/* ── generic section ──────────────────────────── */
+section{padding-block:7rem}
+@media (max-width:759px){section{padding-block:4.8rem}}
+.band{background:var(--bone-100)}
+.band-dark{background:var(--charcoal-900);color:var(--ivory-300)}
+.band-dark h2,.band-dark h3,.band-dark h4{color:var(--ivory-200)}
+.band-dark .sub,.band-dark .small,.band-dark .eyebrow,
+.band-dark .w-meta,.band-dark .w-note{color:#B8B2A9}
+
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:var(--gutter);align-items:start;margin-bottom:4.8rem}
+@media (max-width:899px){.sec-head{grid-template-columns:1fr;gap:2.4rem;margin-bottom:3.2rem}}
+.sec-head .eyebrow{margin-bottom:1.2rem}
+
+/* ── have / not ───────────────────────────────── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter)}
+@media (max-width:759px){.two{grid-template-columns:1fr;gap:3.2rem}}
+.two ul{margin:0;padding:0;list-style:none}
+.two li{padding:1.4rem 0;border-top:1px solid var(--bone-200);font-size:1.5rem}
+.two li:first-child{border-top:0;padding-top:0}
+.band-dark .two li{border-top-color:rgba(244,237,226,.15)}
+
+/* ── approaches ───────────────────────────────── */
+.appr{display:grid;grid-template-columns:repeat(3,1fr);gap:3.2rem}
+@media (max-width:999px){.appr{grid-template-columns:1fr;gap:2.4rem}}
+.card{border:1px solid var(--bone-200);background:var(--page);padding:3.2rem 2.8rem;display:flex;flex-direction:column}
+.card.chosen{border-color:var(--charcoal-900);border-width:2px}
+.tag{align-self:flex-start;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;background:var(--charcoal-900);color:var(--ivory-300);padding:.6rem 1rem;margin-bottom:1.6rem}
+.tag.off{background:transparent;color:var(--charcoal-500);border:1px solid var(--bone-200)}
+.card h3{margin-bottom:1.6rem}
+.card .why{margin-top:auto;padding-top:2.4rem;font-size:1.3rem;line-height:1.55;color:var(--charcoal-700);border-top:1px solid var(--bone-200)}
+
+/* ── movements ────────────────────────────────── */
+.mv + .mv{margin-top:7rem}
+.mv-head{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1fr);gap:var(--gutter);align-items:baseline;margin-bottom:3.2rem}
+@media (max-width:899px){.mv-head{grid-template-columns:1fr;gap:1.2rem;margin-bottom:2.4rem}}
+.mv-head .eyebrow{margin-bottom:.8rem}
+
+.works{display:grid;grid-template-columns:repeat(4,1fr);gap:3.2rem 2.4rem}
+@media (max-width:999px){.works{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:659px){.works{grid-template-columns:repeat(2,1fr);gap:2.4rem 1.6rem}}
+.work figure{margin:0}
+.work .frame{display:flex;align-items:flex-end;justify-content:center;height:17rem}
+@media (max-width:659px){.work .frame{height:12rem}}
+.work img{max-height:100%;width:auto;object-fit:contain;transition:opacity .22s var(--ease)}
+.work figcaption{margin-top:1.2rem}
+.w-title{font-size:1.3rem;font-weight:700;letter-spacing:.01em}
+.w-meta{font-size:1.2rem;color:var(--charcoal-700)}
+.w-note{font-size:1.2rem;color:var(--charcoal-700);font-style:italic}
+
+/* ── problems ─────────────────────────────────── */
+.prob{display:grid;grid-template-columns:26rem minmax(0,1fr);gap:4rem;align-items:start;padding-block:4rem;border-top:1px solid var(--bone-200)}
+@media (max-width:759px){.prob{grid-template-columns:1fr;gap:2.4rem}}
+.prob:first-of-type{border-top:0;padding-top:0}
+.prob .shot{display:flex;align-items:flex-start;justify-content:flex-start}
+.prob .shot img{max-height:24rem;width:auto}
+.opts{margin:2.4rem 0 0;padding:0;list-style:none;counter-reset:o}
+.opts li{counter-increment:o;padding:1.6rem 0 1.6rem 4rem;border-top:1px solid var(--bone-200);position:relative}
+.opts li::before{content:counter(o,upper-alpha);position:absolute;left:0;top:1.6rem;font-size:1.1rem;font-weight:700;letter-spacing:.18em;color:var(--charcoal-500)}
+.opts li.pick::before{color:var(--charcoal-900)}
+.opts .o-t{font-weight:700;font-size:1.5rem}
+.opts .o-d{font-size:1.3rem;color:var(--charcoal-700)}
+.pickmark{font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-left:.8rem}
+
+/* ── questions ────────────────────────────────── */
+.qs{margin:0;padding:0;list-style:none;counter-reset:q}
+.qs li{counter-increment:q;display:grid;grid-template-columns:5rem minmax(0,1fr);gap:2.4rem;padding:2.8rem 0;border-top:1px solid rgba(244,237,226,.15)}
+@media (max-width:659px){.qs li{grid-template-columns:1fr;gap:.8rem}}
+.qs li::before{content:"0" counter(q);font-family:var(--font-display);font-size:2.4rem;color:#8A837A;line-height:1}
+.qs .q-t{font-size:1.8rem;margin-bottom:.6rem}
+
+footer{padding-block:4.8rem;border-top:1px solid var(--bone-200)}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap mast-grid">
+    <div>
+      <p class="eyebrow">Concept board · 23 September 2026</p>
+      <h1>Axel Crieger</h1>
+      <p class="lede sub" style="margin-top:2.4rem;max-width:52ch">A landing page reached by QR from the autumn magazine, live on 1 October with the works. It has to tell a story, and there is no artist media to tell it with: no portrait, no studio, no film. Only seventeen pictures and the page in the magazine.</p>
+    </div>
+    <dl>
+      <dt>Live</dt><dd>1 October 2026, with the catalogue</dd>
+      <dt>Entry</dt><dd>QR from the magazine, lumas.com/crieger</dd>
+      <dt>Build</dt><dd>CMS content page, documented classes only</dd>
+      <dt>Works</dt><dd>17 in the feed, 3 formats each, €240 to €1,110 print</dd>
+      <dt>Status</dt><dd>Direction agreed, four questions open</dd>
+    </dl>
+  </div>
+</header>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Where we start</p>
+        <h2>The material, honestly</h2>
+      </div>
+      <p class="lede">The brief said there is no artist content. That is half true. There is no media, but the magazine page is finished, approved editorial prose, and it is the strongest writing anyone will produce about this work before October.</p>
+    </div>
+    <div class="two">
+      <div>
+        <p class="eyebrow" style="margin-bottom:2rem">We have</p>
+        <ul>
+          <li>Seventeen works, every image verified and hotlinkable at full resolution.</li>
+          <li>The magazine spread: Hollywood given a second reality, Hepburn at Katz's rather than Tiffany's, the "grammar of glamour", Warhol, <em>Interview</em>, Beuys.</li>
+          <li>A few room renders from the design team.</li>
+          <li>Real prices and three formats per work.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:2rem">We do not have</p>
+        <ul>
+          <li>Any photograph of the artist.</li>
+          <li>Studio or process material, and no film.</li>
+          <li>A single word of artwork description in the feed. Every record is empty.</li>
+          <li>Anything the artist has said in his own voice.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">The decision</p>
+        <h2>Three directions</h2>
+      </div>
+      <p class="lede">Same works, same toolkit, same date. What changes is the organising idea, and how much writing each one needs before the first of the month.</p>
+    </div>
+    <div class="appr">
+      <article class="card chosen">
+        <span class="tag">Chosen</span>
+        <h3>Photographs that never happened</h3>
+        <p>The page presents itself as an archive of images that look recovered and cannot exist. Each caption states the impossible fact plainly: who, where, and the year it could not have been. The artist arrives late, as the answer to the question the page has been asking.</p>
+        <p class="why">Turns the missing artist content into the mechanism rather than an apology. Work that claims to be found is better served by an absent author than by a studio portrait we do not have. It is also the only direction where the reveal is the sales argument: you wanted it to be real, it is not, you can own it.</p>
+      </article>
+      <article class="card">
+        <span class="tag off">Folded in</span>
+        <h3>The grammar of glamour</h3>
+        <p>Entertainment Weekly's phrase becomes the structure. Crieger reuses a fixed vocabulary, and each chapter teaches one term of it before the works arrive.</p>
+        <p class="why">Not taken whole, because a taxonomy explains the work well and moves the reader very little. Its chapter logic survives as the three movements inside the chosen direction.</p>
+      </article>
+      <article class="card">
+        <span class="tag off">Not taken</span>
+        <h3>One picture, told properly</h3>
+        <p>The whole top of the page spent on a single work, read slowly, the way a gallerist would walk you through it. Then the collection opens out behind it.</p>
+        <p class="why">Least copy, highest bar on that copy. Ruled out because a work is never cropped here, so a long essay cannot cut into detail, and the remaining sixteen become an afterthought grid.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">The page</p>
+        <h2>Three movements</h2>
+      </div>
+      <p class="lede">The grammar, cast. Fifteen works carry the story, each one captioned with the fact that cannot be true. The remaining two are dealt with below.</p>
+    </div>
+
+    <div class="mv">
+      <div class="mv-head">
+        <div>
+          <p class="eyebrow">Movement I</p>
+          <h3>The icon</h3>
+        </div>
+        <p class="sub">A face you know, standing somewhere she never stood. The caption does the work, and the page has not yet said who made any of this.</p>
+      </div>
+      <div class="works">
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr20_full.jpg" alt="Katz Deli by Axel Crieger, Audrey Hepburn outside Katz's Delicatessen"></div><figcaption><div class="w-title">Katz Deli</div><div class="w-meta">2022</div><div class="w-note">Opens the page</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr41_full.jpg" alt="Madison Avenue by Axel Crieger"></div><figcaption><div class="w-title">Madison Avenue</div><div class="w-meta">2014</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr50_full.jpg" alt="Birdie by Axel Crieger"></div><figcaption><div class="w-title">Birdie</div><div class="w-meta">2015</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr17_full.jpg" alt="Brooklyn by Axel Crieger"></div><figcaption><div class="w-title">Brooklyn</div><div class="w-meta">2022</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr38_full.jpg" alt="Central Park by Axel Crieger"></div><figcaption><div class="w-title">Central Park</div><div class="w-meta">2014</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr08_full.jpg" alt="Fairytale by Axel Crieger"></div><figcaption><div class="w-title">Fairytale</div><div class="w-meta">2018</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr29_full.jpg" alt="Rive Gauche by Axel Crieger"></div><figcaption><div class="w-title">Rive Gauche</div><div class="w-meta">2013</div></figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band-dark">
+  <div class="wrap">
+    <div class="mv">
+      <div class="mv-head">
+        <div>
+          <p class="eyebrow">Movement II</p>
+          <h3>The machine</h3>
+        </div>
+        <p class="sub">The vehicle as co-star. Yacht, car, jet, crop duster. Speed is the glamour and the human is almost incidental. This is the movement that earns the charcoal band, and the CMS gives it to us without a single custom rule.</p>
+      </div>
+      <div class="works">
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr23_full.jpg" alt="Drive by Axel Crieger"></div><figcaption><div class="w-title">Drive</div><div class="w-meta">2014</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr14_full.jpg" alt="Elegant by Axel Crieger"></div><figcaption><div class="w-title">Elegant</div><div class="w-meta">2016</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr53_full.jpg" alt="North by Northwest by Axel Crieger"></div><figcaption><div class="w-title">North by Northwest</div><div class="w-meta">2016</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr05_full.jpg" alt="Review by Axel Crieger"></div><figcaption><div class="w-title">Review</div><div class="w-meta">2015</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr32_full.jpg" alt="Sans Soucis by Axel Crieger"></div><figcaption><div class="w-title">Sans Soucis</div><div class="w-meta">2016</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr44_full.jpg" alt="C'est la vie by Axel Crieger"></div><figcaption><div class="w-title">C'est la vie</div><div class="w-meta">2014</div></figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="mv">
+      <div class="mv-head">
+        <div>
+          <p class="eyebrow">Movement III</p>
+          <h3>The stage</h3>
+        </div>
+        <p class="sub">Architecture as the set, the figure placed on it like a performer. The shortest movement, and the one that hands over to the reveal.</p>
+      </div>
+      <div class="works">
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr02_full.jpg" alt="Sicilian Flip by Axel Crieger"></div><figcaption><div class="w-title">Sicilian Flip</div><div class="w-meta">2023</div><div class="w-note">Newest work</div></figcaption></figure>
+        <figure class="work"><div class="frame"><img src="https://img.lumas.com/showimg_acr11_full.jpg" alt="Requiem by Axel Crieger"></div><figcaption><div class="w-title">Requiem</div><div class="w-meta">2019</div></figcaption></figure>
+      </div>
+      <p class="small" style="margin-top:3.2rem;max-width:62ch">After this, the turn: every one of these was built. The magazine paragraph lands here almost verbatim, and it needs no portrait, because the absence has been the device all along. Then the editions, all formats, real prices.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Open</p>
+        <h2>Two works cause problems</h2>
+      </div>
+      <p class="lede">Both need a decision before the page is written, and neither is a design question.</p>
+    </div>
+
+    <div class="prob">
+      <div class="shot"><img src="https://img.lumas.com/showimg_acr47_full.jpg" alt="Imagen by Axel Crieger, the only work in colour"></div>
+      <div>
+        <h4>Imagen, 2016</h4>
+        <p class="sub" style="margin-top:1.2rem">Sixteen works are sepia and silver. This one is saturated blue and red, and there is no Hollywood in it at all. Dropped into any movement it breaks the spell the page spends five screens building.</p>
+        <ul class="opts">
+          <li><span class="o-t">Leave it out of the story.</span> <span class="o-d">It still appears in the closing edition grid, where a break in tone reads as range rather than error.</span></li>
+          <li class="pick"><span class="o-t">Give it the last word.<span class="pickmark">Proposed</span></span> <span class="o-d">Placed alone after the reveal, as the proof that the sepia was a choice and not a habit. Colour arriving late becomes the page's final turn.</span></li>
+          <li><span class="o-t">Put it in The stage.</span> <span class="o-d">Defensible, since it is a constructed tableau against a wall of frames, but a colour shift mid-page will read as a mistake.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prob">
+      <div class="shot"><img src="https://img.lumas.com/showimg_acr01_full.jpg" alt="Rive Gauche, Grace Kelly by Axel Crieger"></div>
+      <div>
+        <h4>Rive Gauche, Grace Kelly, 2012</h4>
+        <p class="sub" style="margin-top:1.2rem">Near identical to <em>Rive Gauche</em> (2013), which is already in Movement I. It is also the only discontinued work in the set, so it cannot be sold on 1 October.</p>
+        <p class="sub"><strong>Proposed:</strong> leave it off the page entirely. A work nobody can buy, standing next to its own twin, costs more than it gives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band-dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Before writing</p>
+        <h2>Four questions</h2>
+      </div>
+      <p class="lede">Everything else is settled. These four change the copy, so they come first.</p>
+    </div>
+    <ul class="qs">
+      <li><div><div class="q-t">Imagen</div><p class="small">Out of the story, last word after the reveal, or inside The stage.</p></div></li>
+      <li><div><div class="q-t">Rive Gauche, Grace Kelly</div><p class="small">Confirm it comes off the page, or say why it stays.</p></div></li>
+      <li><div><div class="q-t">German address form</div><p class="small">The brand book puts the magazine's editorial voice in <em>Sie</em> and the web in <em>du</em>, and this page sits between them. The two are never mixed in one asset. The narrative sections can avoid direct address entirely, which leaves the question live only at the close.</p></div></li>
+      <li><div><div class="q-t">Locales on 1 October</div><p class="small">Assumed DE, EN and FR. Copy is written inline per locale in the CMS, so each language is separate work rather than a key swap.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="small">Concept board, not a prototype. The page itself is built next, as a CMS fragment. Artwork images load live from the LUMAS catalogue and are shown whole, at true ratio, never cropped and never dimmed.</p>
+  </div>
+</footer>
+
+</body>
+</html>
