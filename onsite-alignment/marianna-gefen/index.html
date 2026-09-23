@@ -16,10 +16,20 @@
 <!-- Wrapper copied from a real CMS content page (prelive_template), verified
      2026-09-21. Content rows sit directly inside .container: do not add an extra
      .row/.col wrapper, or the fragment's own rows nest inside a column and the
-     layout changes. There is exactly one <main> on the real page. -->
+     layout changes. There is exactly one <main> on the real page.
+
+     .static-pages and .content are load-bearing and must both be present: a
+     stack of production rules is scoped to that pair, and without them the
+     preview silently renders the generic rule instead. The one that bites is
+     .static-pages .content .like-h2, which makes a standfirst 2rem body text;
+     outside the pair, .like-h2,h2 wins and the same paragraph previews as a
+     4.6rem display heading. .static-pages h1,h2 also sets the heading padding.
+     Neither class carries layout of its own, so adding them changes nothing
+     else. Verified against www.lumas.de/inspired-art-magazine/, 2026-09-22. -->
 <div id="app" class="content-container">
 <main id="main-content" tabindex="-1">
-<div class="container">
+<div class="container static-pages">
+<div class="content">
 <div class="row mb-4">
   <div class="col-md-12 text-center">
     <picture>
@@ -40,7 +50,7 @@
 
 <div class="row mb-3">
   <div class="col-md-6 col-md-offset-3 text-center">
-    <p class="lead text-wrap-balance">She is terrified of a blank sheet of paper, so she never begins with one. A morning at the desk of Marianna Gefen, where twenty works are underway at once and the best of them are decided by knowing when to stop.</p>
+    <p class="lead text-wrap-pretty">Marianna Gefen has been painting since she was five. Today, she teaches Fine&nbsp;Art herself. Her work appears in galleries around the world and in leading publications from <i>The New York Times</i> to <i>Vogue</i>. A conversation about her fear of the white page, the personality of old paper and why sometimes the best thing an artist can do&nbsp;is&nbsp;stop.</p>
   </div>
 </div>
 
@@ -60,8 +70,8 @@
         </picture>
       </div>
       <div class="col-md-6 col-sm-12 mb-2 text-align-viewport">
-        <p class="lead mb-1 text-wrap-pretty">Marianna Gefen works at a long desk set against the window, with pencils, charcoal, watercolours and ink laid out in front of her, and the watercolour set she has painted with since her fifth birthday.</p>
-        <p class="lead mb-1 text-wrap-pretty">What she does not keep is a blank page. Every sheet she draws on has been somewhere first: a flea market in Spain, a stationery shop in the former East, a pad that belonged to a schoolchild fifty years&nbsp;ago.</p>
+        <p class="lead mb-1 text-wrap-balance">On Marianna Gefen's desk, everything has its place. In her work, chance does too.</p>
+        <p class="lead mb-1 text-wrap-pretty">Pencils, charcoal, and ink lie ready beside the same watercolour set she got on her fifth birthday. What you won't find is a blank page: Gefen prefers paper that already comes with a history. Every sheet she draws on has been somewhere first: a flea market in Spain, a stationery shop in the former East, a pad that belonged to a schoolchild fifty years ago.</p>
         <p class="lead text-wrap-pretty">We asked her to take us across the desk.</p>
       </div>
     </div>
@@ -203,6 +213,7 @@
   </div>
 </div>
 
+</div>
 </div>
 </main>
 </div>
