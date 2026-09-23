@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axel Crieger — Fotografien, die es nie gegeben hat</title>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<script src="../assets/gate.js"></script>
+<style>
+@font-face{font-family:'ArchivoLocal';src:url('../assets/fonts/archivo.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  --charcoal-900:#1C1A18; --charcoal-700:#5A5752;
+  --ivory-200:#F7F1E9; --ivory-300:#F4EDE2; --bone-100:#F0EBE3; --bone-200:#EAE2D8;
+  --page:#FFFFFF;
+  --font-display:'UtileDisplay','Utile Display Trial',Georgia,serif;
+  --font-body:'ArchivoLocal',Archivo,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --gutter:6rem; --maxw:1600px;
+}
+@media (max-width:1219px){:root{--gutter:3.2rem}}
+@media (max-width:759px){:root{--gutter:1.6rem}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:62.5%;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--charcoal-900);
+  font-family:var(--font-body);font-size:1.5rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+
+h1,h2,h3{font-family:var(--font-display);font-weight:400;margin:0}
+h1{font-size:clamp(3.8rem,6.4vw,7.2rem);line-height:1.04;letter-spacing:-.025em}
+h2{font-size:clamp(3rem,4.2vw,4.6rem);line-height:1.12;letter-spacing:-.015em}
+h3{font-size:clamp(2.2rem,2.6vw,3rem);line-height:1.12}
+p{margin:0 0 1.6rem}
+p:last-child{margin-bottom:0}
+
+.eyebrow{font-size:1.1rem;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;color:var(--charcoal-700);margin:0 0 1.6rem}
+.lede{font-size:clamp(1.7rem,1.9vw,2rem);line-height:1.6;font-weight:300}
+.small{font-size:1.3rem;line-height:1.55;color:var(--charcoal-700)}
+
+/* ── reveal ───────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(1.6rem);transition:opacity .52s var(--ease),transform .52s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+/* ── hero ─────────────────────────────────────────── */
+.hero{padding-top:clamp(2.4rem,3.5vw,5.6rem);padding-bottom:clamp(4.8rem,7vw,9rem)}
+.hero__grid{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1fr);
+  gap:var(--gutter);align-items:center}
+@media (max-width:1023px){.hero__grid{grid-template-columns:1fr;gap:3.2rem}
+  .hero__art{order:-1}}
+.hero__art img{width:auto;max-width:100%;max-height:74vh;margin-inline:auto}
+@media (max-width:1023px){.hero__art img{width:100%;max-height:none}}
+.hero .lede{color:var(--charcoal-700)}
+.hero__cap{margin-top:3.2rem;max-width:42ch}
+
+/* ── sections ─────────────────────────────────────── */
+.mv{padding-block:clamp(5.6rem,8vw,11rem)}
+.band{background:var(--bone-100)}
+.dark{background:var(--charcoal-900);color:var(--ivory-300)}
+.dark h2,.dark h3{color:var(--ivory-200)}
+.dark .eyebrow,.dark .small,.dark .cap__meta{color:#B8B2A9}
+.dark .cap__line{color:var(--ivory-200)}
+
+.mv__head{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr);gap:var(--gutter);
+  align-items:end;margin-bottom:clamp(3.2rem,5vw,7rem)}
+@media (max-width:899px){.mv__head{grid-template-columns:1fr;gap:1.6rem;margin-bottom:3.2rem}}
+.mv__head .lede{color:var(--charcoal-700)}
+.dark .mv__head .lede{color:#B8B2A9}
+
+/* ── plates ───────────────────────────────────────── */
+.plate{margin-bottom:clamp(4.8rem,7vw,9rem)}
+.plate:last-child{margin-bottom:0}
+
+/* wide: one work, caption offset beside it on desktop */
+.plate--wide .plate__grid{display:grid;grid-template-columns:minmax(0,1fr) 30rem;
+  gap:var(--gutter);align-items:end}
+@media (max-width:1023px){.plate--wide .plate__grid{grid-template-columns:1fr;gap:2rem}}
+
+/* pair: two works, captions under each */
+.plate--pair .plate__grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter)}
+@media (max-width:759px){.plate--pair .plate__grid{grid-template-columns:1fr;gap:4rem}}
+
+/* offset: nudges the second of a pair down on desktop for editorial rhythm */
+@media (min-width:1024px){.plate--pair.is-offset .plate__cell:nth-child(2){margin-top:7rem}}
+
+figure{margin:0}
+.cap{margin-top:1.6rem;max-width:46ch}
+.cap__line{font-size:clamp(1.6rem,1.7vw,1.8rem);line-height:1.5;margin:0 0 .8rem}
+.cap__meta{font-size:1.2rem;letter-spacing:.06em;color:var(--charcoal-700)}
+.cap__meta .t{font-weight:700;letter-spacing:.01em}
+
+/* ── the turn ─────────────────────────────────────── */
+.turn{padding-block:clamp(6rem,9vw,13rem)}
+.turn__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--gutter);align-items:start}
+@media (max-width:899px){.turn__grid{grid-template-columns:1fr;gap:2.4rem}}
+.turn h2{margin-bottom:2rem}
+.turn__body p{font-size:clamp(1.5rem,1.6vw,1.7rem);line-height:1.65;color:var(--charcoal-700)}
+.turn__lead{font-family:var(--font-display);font-size:clamp(2.2rem,2.6vw,3rem);
+  line-height:1.2;color:var(--charcoal-900);margin-bottom:2.4rem}
+
+/* ── coda ─────────────────────────────────────────── */
+.coda{padding-block:clamp(5.6rem,8vw,11rem)}
+.coda__text{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--gutter);
+  margin-top:clamp(2.4rem,3vw,4rem);align-items:start}
+@media (max-width:899px){.coda__text{grid-template-columns:1fr;gap:1.6rem}}
+
+/* ── editions ─────────────────────────────────────── */
+.ed{padding-block:clamp(5.6rem,8vw,11rem)}
+.ed__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(3.2rem,4vw,5.6rem) var(--gutter)}
+@media (max-width:1219px){.ed__grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:899px){.ed__grid{grid-template-columns:repeat(2,1fr);gap:3.2rem 2.4rem}}
+.ed__item{display:block}
+.ed__item img{transition:opacity .22s var(--ease)}
+@media (hover:hover){.ed__item:hover img{opacity:.82}}
+.ed__t{margin-top:1.2rem;font-size:1.3rem;font-weight:700}
+.ed__y{font-size:1.2rem;color:var(--charcoal-700)}
+.ed__p{font-size:1.2rem;color:var(--charcoal-700);font-variant-numeric:tabular-nums}
+
+.cta-row{margin-top:clamp(4rem,5vw,6.4rem)}
+.btn{display:inline-block;font-family:var(--font-body);font-size:1.2rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;padding:1.6rem 2.8rem;border-radius:0;
+  background:var(--charcoal-900);color:var(--ivory-300);border:0;
+  transition:background-color .22s var(--ease)}
+@media (hover:hover){.btn:hover{background:#34302B}}
+.btn--ghost{background:transparent;color:var(--charcoal-900);padding:.4rem 0 .6rem;
+  border-bottom:.1rem solid var(--charcoal-900);letter-spacing:.1rem;font-size:1.3rem;
+  font-weight:400;text-transform:none;margin-left:2.8rem}
+@media (hover:hover){.btn--ghost:hover{background:transparent;opacity:.7}}
+@media (max-width:559px){.btn{display:block;text-align:center}
+  .btn--ghost{display:inline-block;margin:2.4rem 0 0}}
+
+footer{padding-block:4.8rem;border-top:1px solid var(--bone-200)}
+.slot{background:#FFF6D6;padding:.2rem .6rem;font-size:1.2rem}
+</style>
+</head>
+<body>
+
+<!-- ══ AUFTAKT ══════════════════════════════════════ -->
+<header class="hero">
+  <div class="wrap hero__grid">
+    <div class="rv">
+      <p class="eyebrow">Neu bei LUMAS</p>
+      <h1>Fotografien,<br>die es nie<br>gegeben hat</h1>
+      <p class="lede" style="margin-top:2.8rem">Du erkennst das Gesicht sofort. Die Adresse stimmt nicht.</p>
+      <div class="cap hero__cap">
+        <p class="cap__line">Audrey Hepburn vor Katz's Delicatessen. Das Frühstück, das nie stattgefunden hat.</p>
+        <p class="cap__meta"><span class="t">Katz Deli</span>, 2022</p>
+      </div>
+    </div>
+    <figure class="hero__art rv">
+      <img src="https://img.lumas.com/showimg_acr20_full.jpg" width="1600" height="1200"
+           alt="Katz Deli von Axel Crieger: eine Frau im schwarzen Kleid vor Katz's Delicatessen in New York">
+    </figure>
+  </div>
+</header>
+
+<!-- ══ SATZ I · DIE IKONE ═══════════════════════════ -->
+<section class="mv band">
+  <div class="wrap">
+    <div class="mv__head rv">
+      <div>
+        <p class="eyebrow">Satz I</p>
+        <h2>Die Ikone</h2>
+      </div>
+      <p class="lede">Ein Gesicht, das du kennst, an einem Ort, an dem es nie stand.</p>
+    </div>
+
+    <div class="plate plate--pair is-offset rv">
+      <div class="plate__grid">
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr41_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Madison Avenue von Axel Crieger">
+            <figcaption class="cap">
+              <p class="cap__line">Marilyn Monroe auf der Madison Avenue. Die Stadt verwischt, sie bleibt scharf.</p>
+              <p class="cap__meta"><span class="t">Madison Avenue</span>, 2014</p>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr50_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Birdie von Axel Crieger">
+            <figcaption class="cap">
+              <p class="cap__line">Ein Dach über Manhattan, ein Schwarm Vögel, und eine Frau, die dort nie gesessen hat.</p>
+              <p class="cap__meta"><span class="t">Birdie</span>, 2015</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="plate plate--wide rv">
+      <div class="plate__grid">
+        <figure>
+          <img src="https://img.lumas.com/showimg_acr17_full.jpg" width="1600" height="1200" loading="lazy"
+               alt="Brooklyn von Axel Crieger: eine Figur vor der Manhattan Bridge">
+        </figure>
+        <figcaption class="cap">
+          <p class="cap__line">Unter der Manhattan Bridge wartet jemand, den du zu kennen glaubst.</p>
+          <p class="cap__meta"><span class="t">Brooklyn</span>, 2022</p>
+        </figcaption>
+      </div>
+    </div>
+
+    <div class="plate plate--pair rv">
+      <div class="plate__grid">
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr38_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Central Park von Axel Crieger">
+            <figcaption class="cap">
+              <p class="cap__line">Sie dreht sich um. Der Park hinter ihr ist schon fast keiner mehr.</p>
+              <p class="cap__meta"><span class="t">Central Park</span>, 2014</p>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr08_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Fairytale von Axel Crieger">
+            <figcaption class="cap">
+              <p class="cap__line">Paris, ein Balkongitter, ein Blick. Die Szene hat es gegeben, nur nie so.</p>
+              <p class="cap__meta"><span class="t">Fairytale</span>, 2018</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="plate plate--wide rv">
+      <div class="plate__grid">
+        <figure>
+          <img src="https://img.lumas.com/showimg_acr29_full.jpg" width="1600" height="1200" loading="lazy"
+               alt="Rive Gauche von Axel Crieger: eine Frau in einem Pariser Fenster, dahinter der Eiffelturm">
+        </figure>
+        <figcaption class="cap">
+          <p class="cap__line">Ein Fenster zur Rive Gauche. Der Eiffelturm steht zu nah, um echt zu sein.</p>
+          <p class="cap__meta"><span class="t">Rive Gauche</span>, 2013</p>
+        </figcaption>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SATZ II · DIE MASCHINE ═══════════════════════ -->
+<section class="mv dark">
+  <div class="wrap">
+    <div class="mv__head rv">
+      <div>
+        <p class="eyebrow">Satz II</p>
+        <h2>Die Maschine</h2>
+      </div>
+      <p class="lede">Das Fahrzeug spielt mit. Yacht, Wagen, Jet, Doppeldecker. Die Geschwindigkeit ist der Glanz, der Mensch fast nebensächlich.</p>
+    </div>
+
+    <div class="plate plate--wide rv">
+      <div class="plate__grid">
+        <figure>
+          <img src="https://img.lumas.com/showimg_acr23_full.jpg" width="1600" height="1200" loading="lazy"
+               alt="Drive von Axel Crieger: ein Sportwagen in voller Fahrt">
+        </figure>
+        <figcaption class="cap">
+          <p class="cap__line">Ein E-Type bei voller Fahrt. Der Fahrer sitzt vollkommen ruhig darin.</p>
+          <p class="cap__meta"><span class="t">Drive</span>, 2014</p>
+        </figcaption>
+      </div>
+    </div>
+
+    <div class="plate plate--pair is-offset rv">
+      <div class="plate__grid">
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr14_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Elegant von Axel Crieger: ein Privatjet und eine Figur davor">
+            <figcaption class="cap">
+              <p class="cap__line">Die Turbinen laufen. Er steht davor, als hätte er alle Zeit.</p>
+              <p class="cap__meta"><span class="t">Elegant</span>, 2016</p>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr53_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="North by Northwest von Axel Crieger: ein moderner Innenraum, draußen ein Flugzeug">
+            <figcaption class="cap">
+              <p class="cap__line">Drinnen ein Sessel, draußen ein Flugzeug im Tiefflug. Beides im selben Bild.</p>
+              <p class="cap__meta"><span class="t">North by Northwest</span>, 2016</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="plate plate--wide rv">
+      <div class="plate__grid">
+        <figure>
+          <img src="https://img.lumas.com/showimg_acr05_full.jpg" width="1600" height="1200" loading="lazy"
+               alt="Review von Axel Crieger: eine Segelyacht in Schräglage">
+        </figure>
+        <figcaption class="cap">
+          <p class="cap__line">Eine Yacht legt sich in den Wind. Niemand weit und breit, außer einem.</p>
+          <p class="cap__meta"><span class="t">Review</span>, 2015</p>
+        </figcaption>
+      </div>
+    </div>
+
+    <div class="plate plate--pair rv">
+      <div class="plate__grid">
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr32_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Sans Soucis von Axel Crieger: eine Figur auf einem Yachtdeck">
+            <figcaption class="cap">
+              <p class="cap__line">Teakdeck, offene See, und eine Ruhe, die zu keiner Geschwindigkeit passt.</p>
+              <p class="cap__meta"><span class="t">Sans Soucis</span>, 2016</p>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr44_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="C'est la vie von Axel Crieger: eine Figur an Deck einer Yacht">
+            <figcaption class="cap">
+              <p class="cap__line">Jemand sitzt an Deck, als wäre das Meer eine Kulisse. Genau das ist es.</p>
+              <p class="cap__meta"><span class="t">C'est la vie</span>, 2014</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SATZ III · DIE BÜHNE ═════════════════════════ -->
+<section class="mv">
+  <div class="wrap">
+    <div class="mv__head rv">
+      <div>
+        <p class="eyebrow">Satz III</p>
+        <h2>Die Bühne</h2>
+      </div>
+      <p class="lede">Architektur als Bühnenbild, die Figur darauf gestellt wie eine Darstellerin.</p>
+    </div>
+
+    <div class="plate plate--pair is-offset rv">
+      <div class="plate__grid">
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr02_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Sicilian Flip von Axel Crieger: zwei Figuren vor einer Kolonnade">
+            <figcaption class="cap">
+              <p class="cap__line">Eine Kolonnade, zwei Auftritte, ein Zug an der Zigarette. Die Architektur spielt mit.</p>
+              <p class="cap__meta"><span class="t">Sicilian Flip</span>, 2023</p>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="plate__cell">
+          <figure>
+            <img src="https://img.lumas.com/showimg_acr11_full.jpg" width="1600" height="1200" loading="lazy"
+                 alt="Requiem von Axel Crieger: eine Figur vor einem Galerieschaufenster">
+            <figcaption class="cap">
+              <p class="cap__line">Vor einer Galerie steht ein Mann, dessen Bilder drinnen hängen.</p>
+              <p class="cap__meta"><span class="t">Requiem</span>, 2019</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DIE WENDUNG ══════════════════════════════════ -->
+<section class="turn band">
+  <div class="wrap turn__grid">
+    <div class="rv">
+      <p class="eyebrow">Die Wendung</p>
+      <h2>Keines dieser Bilder wurde gefunden</h2>
+    </div>
+    <div class="turn__body rv">
+      <p class="turn__lead">Jedes wurde gebaut.</p>
+      <p>Axel Crieger setzt Fotografie, Collage und digitale Nachbearbeitung so lange zusammen, bis aus Wirklichkeit Fiktion wird und aus Ikonen Legenden. Entertainment Weekly hat seine Bildsprache die Grammar of Glamour genannt. Er selbst bewegte sich früh in jenem kulturellen Kosmos, den seine Werke heute zitieren: Er begegnete Andy Warhol, wurde in dessen Magazin Interview veröffentlicht und erhielt Anerkennung von Joseph Beuys.</p>
+      <p>Crieger setzt dort an, wo Mythos und Realität längst verschwimmen. Dort, wo das kollektive Bild das bloß Biografische überlagert. Genau in diesem Zwischenraum wird seine Fiktion zur zweiten Wirklichkeit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DER SCHLUSS · IMAGEN ═════════════════════════ -->
+<section class="coda">
+  <div class="wrap">
+    <figure class="rv">
+      <img src="https://img.lumas.com/showimg_acr47_full.jpg" width="1600" height="1200" loading="lazy"
+           alt="Imagen von Axel Crieger: das einzige Werk der Serie in Farbe">
+    </figure>
+    <div class="coda__text">
+      <div class="rv"><h2>Und dann das hier</h2></div>
+      <div class="rv">
+        <p class="lede" style="color:var(--charcoal-700)">Sechzehn Werke in Sepia und Silber, und eines in Farbe. Das Sepia war nie eine Gewohnheit. Es war eine Entscheidung.</p>
+        <p class="cap__meta" style="margin-top:2rem"><span class="t">Imagen</span>, 2016</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DIE EDITIONEN ════════════════════════════════ -->
+<section class="ed band" id="editionen">
+  <div class="wrap">
+    <div class="mv__head rv">
+      <div>
+        <p class="eyebrow">Kompass</p>
+        <h2>Die Editionen</h2>
+      </div>
+      <p class="lede">Sechzehn Werke, jedes in drei Formaten, gerahmt oder ungerahmt. Ab 240 Euro.</p>
+    </div>
+
+    <div class="ed__grid rv" id="edgrid"></div>
+
+    <div class="cta-row rv">
+      <a class="btn" href="#edgrid">Werk sichern</a>
+      <a class="btn btn--ghost" href="https://www.lumas.de/pictures/axel_crieger/katz_deli/">Alle Editionen ansehen</a>
+    </div>
+    <p class="small" style="margin-top:2.4rem">
+      <span class="slot">SLOT</span> Der zweite Button zeigt auf eine PDP, weil es für Axel Crieger noch keine Künstlerseite gibt. Vor dem 1. Oktober auf die echte Künstler-URL umhängen.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="small">Entwurf der Landingpage zum Herbstmagazin, Stand 23. September 2026. Werke laden live aus dem LUMAS Katalog, vollständig, im echten Seitenverhältnis, nie beschnitten und nie abgedunkelt. Die verifizierte CMS Fassung entsteht über <code>/cms-page axel-crieger</code>.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var WORKS = [
+    ['acr20','Katz Deli',2022,'katz_deli'],
+    ['acr41','Madison Avenue',2014,'madison_avenue'],
+    ['acr50','Birdie',2015,'birdie'],
+    ['acr17','Brooklyn',2022,'brooklyn'],
+    ['acr38','Central Park',2014,'central_park'],
+    ['acr08','Fairytale',2018,'fairytale'],
+    ['acr29','Rive Gauche',2013,'rive_gauche'],
+    ['acr23','Drive',2014,'drive'],
+    ['acr14','Elegant',2016,'elegant'],
+    ['acr53','North by Northwest',2016,'north_by_northwest'],
+    ['acr05','Review',2015,'review'],
+    ['acr32','Sans Soucis',2016,'sans_soucis'],
+    ['acr44',"C'est la vie",2014,'cest_la_vie'],
+    ['acr02','Sicilian Flip',2023,'sicilian_flip'],
+    ['acr11','Requiem',2019,'requiem'],
+    ['acr47','Imagen',2016,'imagen']
+  ];
+  var grid = document.getElementById('edgrid');
+  if (grid) {
+    grid.innerHTML = WORKS.map(function (w) {
+      return '<a class="ed__item" href="https://www.lumas.de/pictures/axel_crieger/' + w[3] + '/">' +
+        '<img src="https://img.lumas.com/showimg_' + w[0] + '_full.jpg" width="1600" height="1200" loading="lazy" alt="' +
+        w[1].replace(/"/g, '&quot;') + ' von Axel Crieger">' +
+        '<span class="ed__t">' + w[1] + '</span>' +
+        '<span class="ed__y">' + w[2] + '</span>' +
+        '<span class="ed__p">3 Formate, ab 240 &euro;</span>' +
+        '</a>';
+    }).join('');
+    [].forEach.call(grid.querySelectorAll('.ed__t,.ed__y,.ed__p'), function (el) { el.style.display = 'block'; });
+  }
+
+  var rv = [].slice.call(document.querySelectorAll('.rv'));
+  if (document.hidden || !('IntersectionObserver' in window)) {
+    rv.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  rv.forEach(function (el) { io.observe(el); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) rv.forEach(function (el) { el.classList.add('in'); });
+  });
+})();
+</script>
+</body>
+</html>
