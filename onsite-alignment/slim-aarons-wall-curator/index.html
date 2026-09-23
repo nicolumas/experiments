@@ -725,6 +725,60 @@ img{display:block;max-width:100%;height:auto}
 .lt-card .lt-btn{padding:1rem 1.6rem;font-size:1.1rem}
 
 /* ══ MISC ═════════════════════════════════════════════════════════════════ */
+/* ── the three states ──────────────────────────────────────────────────
+   An edition already in the basket, a failed add, and the offer not running.
+   Nothing is laid over an artwork: the basket state is told in the tray and
+   in the summary, never as a badge on the work itself. */
+.wc-card.is-incart .wc-card__fig{cursor:default}
+.wc-card.is-incart .wc-card__add{
+  color:var(--color-status-success);cursor:default;background:var(--color-status-success-bg);
+}
+.wc-card.is-incart .wc-card__add:hover{background:var(--color-status-success-bg)}
+/* an edition in the basket cannot be taken off the wall here, so it is not
+   given a control that looks as though it can */
+.lt-hang__art.is-incart .lt-hang__x{display:none}
+.wc-sum__line--basket{color:var(--color-status-success)}
+
+.lt-err{
+  display:flex;gap:1rem;align-items:flex-start;text-align:left;
+  background:var(--color-status-error-bg);border-left:2px solid var(--color-status-error);
+  padding:1.2rem 1.4rem;margin-bottom:1.2rem;font-size:1.3rem;line-height:1.4;
+}
+.lt-err[hidden]{display:none}
+.lt-err .lt-ic{color:var(--color-status-error);flex:none;margin-top:.2rem}
+.lt-err b{display:block;font-weight:700;margin-bottom:.2rem}
+.lt-err button{
+  appearance:none;background:none;border:0;padding:0;margin-top:.8rem;cursor:pointer;font:inherit;
+  display:block;
+  font-size:1.2rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:underline;text-underline-offset:.3rem;color:var(--color-text-primary);
+}
+.lt-btn.is-busy{opacity:.65;pointer-events:none}
+
+/* the prototype's own state switch, not part of the page being tested */
+.lt-states{
+  position:fixed;left:1.2rem;bottom:1.2rem;z-index:92;max-width:26rem;
+  background:var(--color-charcoal-900);color:var(--color-ivory-100);
+}
+.lt-states__tab{
+  appearance:none;background:none;border:0;cursor:pointer;font:inherit;color:inherit;width:100%;
+  display:flex;align-items:center;justify-content:space-between;gap:1.2rem;padding:.7rem 1.2rem;
+  font-size:1.0rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+}
+.lt-states__body{display:none;padding:.2rem 1.2rem 1.2rem}
+.lt-states.is-open .lt-states__body{display:block}
+.lt-states__row{
+  display:flex;align-items:center;justify-content:space-between;gap:1.2rem;
+  padding-top:1rem;margin-top:1rem;border-top:1px solid rgba(244,237,226,.18);
+}
+.lt-states__k{font-size:1.1rem;color:rgba(244,237,226,.74)}
+.lt-states__seg{display:flex;border:1px solid rgba(244,237,226,.3);flex:none}
+.lt-states__seg button{
+  appearance:none;background:none;border:0;cursor:pointer;font:inherit;color:inherit;
+  padding:.4rem .9rem;font-size:1.0rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+}
+.lt-states__seg button[aria-pressed="true"]{background:var(--color-ivory-100);color:var(--color-charcoal-900)}
+@media(max-width:1079px){.lt-states{bottom:auto;top:8rem;left:auto;right:1.2rem;max-width:22rem}}
 .lt-vpill{
   position:fixed;left:1.2rem;bottom:1.2rem;z-index:90;background:var(--color-charcoal-900);
   color:var(--color-ivory-100);font-size:1.0rem;font-weight:700;letter-spacing:.14em;
@@ -1614,14 +1668,14 @@ img{display:block;max-width:100%;height:auto}
           <h1 class="t-h1">Curate your wall from Slim Aarons&rsquo; own&nbsp;archive</h1>
         </div>
         <div class="lt-mast__body">
-          <p>Nine editions from Slim Aarons&rsquo; own slide box, 34 &times; 34 cm each. Arrange them on the wall and try different combinations. Every edition you add lowers the price of the ones already&nbsp;chosen.</p>
+          <p>Nine editions from Slim Aarons&rsquo; own slide box, 34 &times; 34 cm each. Arrange them on the wall and try different combinations.<span id="mastAdv"> Every edition you add lowers the price of the ones already&nbsp;chosen.</span></p>
         </div>
       </div>
       <dl class="lt-facts">
         <div><dt>The series</dt><dd>9 editions, each 34 &times; 34 cm</dd></div>
         <div><dt>Print</dt><dd>Acrylic glass mount</dd></div>
         <div><dt>One edition</dt><dd class="tnum">&euro;249</dd></div>
-        <div><dt>All nine</dt><dd class="tnum" id="factNine">&euro;149 each</dd></div>
+        <div id="factNineRow"><dt id="factNineK">All nine</dt><dd class="tnum" id="factNine">&euro;149 each</dd></div>
       </dl>
     </div>
   </header>
@@ -1710,7 +1764,16 @@ img{display:block;max-width:100%;height:auto}
           <div class="wc-sum">
           <div class="wc-sum__line" id="lineBase" hidden><span id="baseLabel">&nbsp;</span><b class="lt-strike" id="baseTotal">&ndash;</b></div>
           <div class="wc-sum__line lt-line--save" id="lineSave" hidden><span>Price advantage</span><b id="valSave">&ndash;</b></div>
+          <div class="wc-sum__line wc-sum__line--basket" id="lineBasket" hidden><span id="basketLabel">&nbsp;</span><b>&nbsp;</b></div>
           <div class="wc-sum__line wc-sum__line--total"><span id="sumUnits">Subtotal</span><b id="valTotal">&euro;0</b></div>
+          <div class="lt-err" id="cartErr" role="alert" hidden>
+            <svg class="lt-ic" aria-hidden="true"><use href="#lc-info"/></svg>
+            <span>
+              <b>We could not add this to your basket.</b>
+              Your wall is saved, nothing has been lost. Try again, or come back in a moment.
+              <button type="button" id="errRetry">Try again</button>
+            </span>
+          </div>
           <!-- ABLYFT-GOAL: ATC (primary) -->
           <button type="button" class="lt-btn lt-btn--block" id="cta" disabled>Choose an edition</button>
           <div class="lt-alt"><button type="button" class="lt-btn lt-btn--ghost" id="altCta" hidden></button></div>
@@ -1735,6 +1798,10 @@ img{display:block;max-width:100%;height:auto}
     <div class="wc-mbar__row">
       <span class="wc-mbar__k">Your wall</span>
       <span class="wc-mbar__v" id="mTotal">&euro;0</span>
+    </div>
+    <div class="lt-err" id="mCartErr" role="alert" hidden>
+      <svg class="lt-ic" aria-hidden="true"><use href="#lc-info"/></svg>
+      <span><b>We could not add this to your basket.</b>Your wall is saved. Try again.</span>
     </div>
     <!-- ABLYFT-GOAL: ATC (primary) -->
     <button type="button" class="lt-btn lt-btn--block" id="mAdd" disabled>Choose an edition</button>
@@ -1847,6 +1914,44 @@ img{display:block;max-width:100%;height:auto}
   </div>
 </div>
 
+<!-- ══ PROTOTYPE STATE SWITCH (not part of the page under test) ═══════ -->
+<div class="lt-states" id="states">
+  <button type="button" class="lt-states__tab" id="statesTab" aria-expanded="false" aria-controls="statesBody">
+    <span id="statesNow">States</span>
+    <svg class="lt-ic lt-ic--sm" aria-hidden="true"><use href="#lc-chevron-down"/></svg>
+  </button>
+  <div class="lt-states__body" id="statesBody">
+    <div class="lt-states__row">
+      <span class="lt-states__k">The offer</span>
+      <span class="lt-states__seg" data-state="offer">
+        <button type="button" data-val="on">Running</button>
+        <button type="button" data-val="off">Ended</button>
+      </span>
+    </div>
+    <div class="lt-states__row">
+      <span class="lt-states__k">Already in basket</span>
+      <span class="lt-states__seg" data-state="incart">
+        <button type="button" data-val="">None</button>
+        <button type="button" data-val="saa114,saa117,saa120">Three</button>
+      </span>
+    </div>
+    <div class="lt-states__row">
+      <span class="lt-states__k">Add to basket</span>
+      <span class="lt-states__seg" data-state="fail">
+        <button type="button" data-val="">Works</button>
+        <button type="button" data-val="1">Fails</button>
+      </span>
+    </div>
+    <div class="lt-states__row">
+      <span class="lt-states__k">Artwork images</span>
+      <span class="lt-states__seg" data-state="err">
+        <button type="button" data-val="">Load</button>
+        <button type="button" data-val="1">Fail</button>
+      </span>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -1905,12 +2010,23 @@ img{display:block;max-width:100%;height:auto}
   /* ── url params ──────────────────────────────────────────────────── */
   var params  = new URLSearchParams(location.search);
   var variant = params.get("v") === "control" ? "control" : "table";
-  var ruleOn  = params.get("rule") !== "off";
-  var forceErr = params.get("err") === "1";
+  /* The offer is a cart rule, so it can simply not be running. When it is off
+     the wall keeps working at the single price and every word about the price
+     advantage comes off the page. ?rule=off is kept as the older spelling. */
+  var ruleOn  = params.get("offer") !== "off" && params.get("rule") !== "off";
+  var forceErr = params.get("err") === "1";          /* broken artwork images */
+  var failCart = params.get("fail") === "1";         /* the add to basket fails */
+
+  /* Editions the visitor already has in the basket. They are still theirs, so
+     they count towards the tier, but they are not added a second time. */
+  var inCart = (params.get("incart") || "").split(",").filter(function(c){
+    return SLIDES.some(function(s){ return s.code === c; });
+  });
 
   var kept = (params.get("keep") || "").split(",").filter(function(c){
     return SLIDES.some(function(s){ return s.code === c; });
   });
+  inCart.forEach(function(c){ if (kept.indexOf(c) < 0) kept.push(c); });
 
   /* ── analytics stubs. Each name is the GA4 event it becomes. ─────── */
   function track(name, data){
@@ -1920,6 +2036,15 @@ img{display:block;max-width:100%;height:auto}
   }
 
   /* ── pricing ─────────────────────────────────────────────────────── */
+  function inBasket(code){ return inCart.indexOf(code) > -1; }
+  /* What the basket will hold: the wall and whatever is already in it, counted
+     once. The tier is a cart rule, so it is this number that sets the price,
+     not the number of editions the visitor is adding in this go. */
+  function basketCodes(){
+    return inCart.concat(kept.filter(function(c){ return !inBasket(c); }));
+  }
+  function toAdd(){ return kept.filter(function(c){ return !inBasket(c); }); }
+
   function tier(n){ return ruleOn ? PRICE[Math.max(0, Math.min(9, n))] : SINGLE; }
   function totalFor(n){ return n * tier(n); }
   function euro(v){ return "€" + v.toLocaleString("en-GB"); }
@@ -1931,6 +2056,7 @@ img{display:block;max-width:100%;height:auto}
 
 
   function ctaLabel(n){
+    if (kept.length && !n) return "Everything on your wall is in your basket";
     if (n === 0) return "Choose an edition";
     if (n === 9) return "Add the complete series to cart";
     if (n === 1) return "Add to cart";
@@ -2109,6 +2235,9 @@ img{display:block;max-width:100%;height:auto}
   var lastTier = tier(kept.length);
 
   function toggle(code){
+    /* it is in the basket, so taking it off the wall would be a basket action,
+       which this page does not own */
+    if (inBasket(code)){ toast("That edition is already in your basket."); return; }
     var i = kept.indexOf(code);
     var slide = SLIDES.find(function(s){ return s.code === code; });
     if (i > -1){
@@ -2141,21 +2270,28 @@ img{display:block;max-width:100%;height:auto}
   }
 
   function render(){
-    var n = kept.length, per = tier(n), total = totalFor(n), save = n * SINGLE - total;
+    var n = kept.length;
+    var N = basketCodes().length, adding = toAdd().length;
+    var per = tier(N), total = totalFor(N), save = N * SINGLE - total;
 
-    /* tray cards dim once their edition is on the wall */
+    /* tray cards dim once their edition is on the wall, and say so plainly once
+       it is in the basket, where it can neither be added again nor taken off
+       the wall from here */
     Array.prototype.forEach.call(tray.children, function(c){
-      var on = kept.indexOf(c.dataset.code) > -1;
-      c.classList.toggle("is-on", on);
-      c.querySelector(".wc-card__fig").setAttribute("draggable", on ? "false" : "true");
+      var code = c.dataset.code;
+      var mine = inBasket(code), on = kept.indexOf(code) > -1;
+      c.classList.toggle("is-incart", mine);
+      c.classList.toggle("is-on", on && !mine);
+      c.querySelector(".wc-card__fig").setAttribute("draggable", (on || mine) ? "false" : "true");
       var add = c.querySelector(".wc-card__add");
-      add.querySelector("span").textContent = on ? "Remove" : "Add";
-      add.querySelector("use").setAttribute("href", on ? "#lc-x" : "#lc-plus");
-      add.classList.toggle("is-remove", on);
+      add.querySelector("span").textContent = mine ? "In your basket" : (on ? "Remove" : "Add");
+      add.querySelector("use").setAttribute("href", mine ? "#lc-check" : (on ? "#lc-x" : "#lc-plus"));
+      add.classList.toggle("is-remove", on && !mine);
+      add.disabled = mine;
     });
 
     /* dots and slots */
-    Array.prototype.forEach.call($("dots").children, function(el, i){ el.classList.toggle("on", i < n); });
+    Array.prototype.forEach.call($("dots").children, function(el, i){ el.classList.toggle("on", i < N); });
     var slots = $("slots");
     slots.innerHTML = "";
     for (var i = 0; i < 9; i++){
@@ -2178,28 +2314,34 @@ img{display:block;max-width:100%;height:auto}
       track("tier_cross", {from:lastTier, to:per, direction: per < lastTier ? "up" : "down", selected:n});
       lastTier = per;
     }
-    $("count").textContent = n;
+    $("count").textContent = N;
     $("tableTitle").textContent = n === 0 ? "Build your wall"
       : n + (n === 1 ? " edition" : " editions") + " on the wall";
 
     /* summary */
     var comparable = ruleOn && save > 0;
-    $("baseLabel").textContent = n ? n + (n === 1 ? " edition" : " editions") + " at the single price" : "\u00a0";
-    $("baseTotal").textContent = n ? euro(n * SINGLE) : "–";
+    $("baseLabel").textContent = N ? N + (N === 1 ? " edition" : " editions") + " at the single price" : "\u00a0";
+    $("baseTotal").textContent = N ? euro(N * SINGLE) : "–";
     $("valSave").textContent = save > 0 ? "-" + euro(save) : "–";
     $("valTotal").textContent = euro(total);
-    $("sumUnits").textContent = n ? "Subtotal, " + n + " \u00d7 " + euro(per) : "Subtotal";
+    $("sumUnits").textContent = !N ? "Subtotal"
+      : (inCart.length ? "Basket total, " : "Subtotal, ") + N + " \u00d7 " + euro(per);
     $("lineBase").hidden = !comparable;
     $("lineSave").hidden = !comparable;
+    $("lineBasket").hidden = !inCart.length;
+    $("basketLabel").textContent = inCart.length
+      ? inCart.length + (inCart.length === 1 ? " edition is" : " editions are") + " already in your basket"
+      : "\u00a0";
 
     var cta = $("cta"), alt2 = $("altCta"), ctaRoom = $("ctaRoom");
-    cta.disabled = ctaRoom.disabled = $("clearBtn").disabled = (n === 0);
-    cta.textContent = ctaRoom.textContent = ctaLabel(n);
+    cta.disabled = ctaRoom.disabled = (adding === 0);
+    $("clearBtn").disabled = (n === 0);
+    cta.textContent = ctaRoom.textContent = ctaLabel(adding);
     cta.dataset.action = ctaRoom.dataset.action = "cart";
-    if (ruleOn && n >= 1 && n <= 8){
-      var left = 9 - n;
+    if (ruleOn && N >= 1 && N <= 8){
+      var left = 9 - N;
       alt2.hidden = false;
-      alt2.textContent = (left === 1 ? "Add the ninth" : "Add the remaining " + WORD[left]) + " \u00b7 " + euro(costToComplete(n));
+      alt2.textContent = (left === 1 ? "Add the ninth" : "Add the remaining " + WORD[left]) + " \u00b7 " + euro(costToComplete(N));
       alt2.dataset.action = "complete";
     } else {
       alt2.hidden = true;
@@ -2207,7 +2349,7 @@ img{display:block;max-width:100%;height:auto}
 
     $("dropHint").hidden = (n > 0);
     $("addMore").hidden = (n === 9);
-    renderMobile(n, total);
+    renderMobile(n, adding, N, total);
     renderWall(n);
     syncUrl();
 
@@ -2641,6 +2783,10 @@ img{display:block;max-width:100%;height:auto}
       if (kept.indexOf(el.dataset.code) < 0) el.remove();
     });
 
+    hang.querySelectorAll(".lt-hang__art").forEach(function(el){
+      el.classList.toggle("is-incart", inBasket(el.dataset.code));
+    });
+
     if (t) hang.querySelectorAll(".lt-hang__art").forEach(function(el){
       var p = clampPos(pos[el.dataset.code], t);
       pos[el.dataset.code] = p;
@@ -2925,9 +3071,10 @@ img{display:block;max-width:100%;height:auto}
   var cart = $("ltCart"), cartList = $("cartList");
 
   function fillCart(){
-    var n = kept.length, each = tier(n), save = n * SINGLE - totalFor(n);
+    var codes = basketCodes(), n = codes.length;
+    var each = tier(n), save = n * SINGLE - totalFor(n);
     cartList.innerHTML = "";
-    kept.forEach(function(code){
+    codes.forEach(function(code){
       var s = SLIDES.filter(function(x){ return x.code === code; })[0];
       if (!s) return;
       var li = document.createElement("li");
@@ -2950,12 +3097,13 @@ img{display:block;max-width:100%;height:auto}
 
   var cartOpener = null;
   function openCart(){
+    var codes = basketCodes();
     cartOpener = document.activeElement;
     fillCart();
     cart.hidden = false; cart.classList.add("is-open");
     document.body.style.overflow = "hidden";
     $("cartCta").focus();
-    track("view_cart", {items: kept.slice(), quantity: kept.length, value: totalFor(kept.length)});
+    track("view_cart", {items: codes, quantity: codes.length, value: totalFor(codes.length)});
   }
   function closeCart(){
     cart.classList.remove("is-open"); cart.hidden = true;
@@ -2983,14 +3131,47 @@ img{display:block;max-width:100%;height:auto}
     }
   });
 
-  function addToCart(){
-    var n = kept.length; if (!n) return;
-    track("add_to_cart", {
-      items: kept.slice(), quantity: n, value: totalFor(n),
-      price_per_edition: tier(n), saving: n * SINGLE - totalFor(n), surface: "light_table"
+  var addBusy = false;
+
+  function showCartErr(on){
+    $("cartErr").hidden = !on;
+    $("mCartErr").hidden = !on;
+  }
+  function setAddBusy(on){
+    addBusy = on;
+    ["cta", "ctaRoom", "mAdd"].forEach(function(id){
+      var b = $(id); if (!b) return;
+      b.classList.toggle("is-busy", on);
+      b.setAttribute("aria-busy", on ? "true" : "false");
+      if (on){ b.dataset.idle = b.textContent; b.textContent = "Adding to your basket"; }
+      else if (b.dataset.idle){ b.textContent = b.dataset.idle; delete b.dataset.idle; }
     });
-    if (qv.classList.contains("is-open")) closeQv();
-    openCart();
+  }
+
+  function addToCart(){
+    var adding = toAdd();
+    if (!adding.length || addBusy) return;
+    showCartErr(false);
+    setAddBusy(true);
+    /* the shop answers in its own time, and sometimes it answers badly */
+    setTimeout(function(){
+      setAddBusy(false);
+      var N = basketCodes().length;
+      if (failCart){
+        showCartErr(true);
+        $("errRetry").focus();
+        track("add_to_cart_error", { items: adding, quantity: adding.length, reason: "cart_unavailable" });
+        return;
+      }
+      track("add_to_cart", {
+        items: adding, quantity: adding.length, value: totalFor(N),
+        price_per_edition: tier(N), saving: N * SINGLE - totalFor(N), surface: "light_table"
+      });
+      adding.forEach(function(c){ inCart.push(c); });
+      render();
+      if (qv.classList.contains("is-open")) closeQv();
+      openCart();
+    }, 550);
   }
 
   function completeBox(){
@@ -3087,13 +3268,18 @@ img{display:block;max-width:100%;height:auto}
     mView("choose");
     window.scrollTo(0, 0);
   }
+  $("errRetry").addEventListener("click", function(){
+    track("add_to_cart_retry", { quantity: toAdd().length });
+    addToCart();
+  });
+
   $("toReview").addEventListener("click", goReview);
   $("backToChoose").addEventListener("click", goChoose);
   $("addMore").addEventListener("click", goChoose);
   $("mAdd").addEventListener("click", onAction);
 
   /* the sticky tray: nine slots, a count, and a gated step forward */
-  function renderMobile(n, total){
+  function renderMobile(n, adding, N, total){
     var rail = $("mRail");
     rail.innerHTML = "";
     for (var i = 0; i < 9; i++){
@@ -3118,12 +3304,13 @@ img{display:block;max-width:100%;height:auto}
       }
       rail.appendChild(d);
     }
-    $("mCount").textContent = n + " / 9";
+    $("mCount").textContent = N + " / 9";
     $("mTotal").textContent = euro(total);
     var go = $("toReview"), add = $("mAdd");
-    go.disabled = add.disabled = (n === 0);
+    go.disabled = (n === 0);
+    add.disabled = (adding === 0);
     go.textContent = n === 0 ? "Choose an edition" : (n === 9 ? "See your wall" : "See your wall \u00b7 " + n);
-    add.textContent = ctaLabel(n);
+    add.textContent = ctaLabel(adding);
     add.dataset.action = "cart";
   }
 
@@ -3168,9 +3355,20 @@ img{display:block;max-width:100%;height:auto}
     var isControl = variant === "control";
     $("table-sec").hidden = isControl;
     $("control-sec").hidden = !isControl;
+    /* With the offer not running the wall keeps working, at the single price,
+       and every word about the price advantage comes off the page: the line in
+       the masthead, the offer bar, the ladder, the completion prompt and the
+       two summary rows, which the render already gates on ruleOn. */
     $("offerBar").hidden = !isControl || !ruleOn;
-    $("applied").textContent = ruleOn ? "The price advantage is applied in the cart." : "\u20ac249 each.";
-    $("factNine").innerHTML = ruleOn ? "&euro;149 each" : "&euro;249 each";
+    $("applied").textContent = ruleOn
+      ? "The price advantage is applied in the cart."
+      : "Every edition is \u20ac249.";
+    /* with the offer off there is only one price, so the second price fact
+       would only repeat the first */
+    $("factNineRow").hidden = !ruleOn;
+    $("mastAdv").hidden = !ruleOn;
+    var ladder = document.querySelector(".lt-ladder__label");
+    if (ladder) ladder.closest("div").hidden = !ruleOn;
 
     var pill = document.querySelector(".lt-vpill");
     var isDefault = (variant === "table" && ruleOn);
@@ -3187,6 +3385,46 @@ img{display:block;max-width:100%;height:auto}
     render();
     track("view_item_list", {item_list_name:"slim_aarons_archive_slides", items:SLIDES.length});
   }
+
+  /* ── the state switch ───────────────────────────────────────────────
+     Each control rewrites one url parameter and reloads. A prototype that
+     flips these in place would need every state to be reversible in code,
+     which is work that teaches nothing about the design. */
+  (function(){
+    var box = $("states"), tab = $("statesTab");
+    var now = {
+      offer:  ruleOn ? "on" : "off",
+      incart: inCart.join(","),
+      fail:   failCart ? "1" : "",
+      err:    forceErr ? "1" : ""
+    };
+    tab.addEventListener("click", function(){
+      var open = box.classList.toggle("is-open");
+      tab.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    box.querySelectorAll(".lt-states__seg").forEach(function(seg){
+      var key = seg.dataset.state;
+      seg.querySelectorAll("button").forEach(function(b){
+        b.setAttribute("aria-pressed", b.dataset.val === now[key] ? "true" : "false");
+        b.addEventListener("click", function(){
+          var u = new URL(location.href);
+          if (b.dataset.val) u.searchParams.set(key === "offer" ? "offer" : key, b.dataset.val);
+          else u.searchParams.delete(key === "offer" ? "offer" : key);
+          if (key === "offer" && b.dataset.val === "on") u.searchParams.delete("offer");
+          if (key === "offer" && b.dataset.val === "off") u.searchParams.set("offer", "off");
+          u.searchParams.delete("rule");
+          location.href = u.toString();
+        });
+      });
+    });
+    var said = [];
+    if (!ruleOn) said.push("offer ended");
+    if (inCart.length) said.push(inCart.length + " in basket");
+    if (failCart) said.push("cart fails");
+    if (forceErr) said.push("images fail");
+    if (variant === "control") said.push("control");
+    $("statesNow").textContent = said.length ? said.join(" \u00b7 ") : "Default state";
+  })();
 
   document.addEventListener("keydown", function(e){
     if ((e.key === "v" || e.key === "V") && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){
