@@ -142,7 +142,7 @@ img{display:block;max-width:100%;height:auto}
 .lt-mast__lead{display:flex;flex-direction:column;gap:1.8rem;min-width:0}
 .lt-mast__body{display:flex;flex-direction:column;gap:1.6rem;min-width:0}
 .lt-mast__body p{margin:0 auto;font-size:1.7rem;line-height:1.6;color:var(--color-text-secondary);max-width:64ch}
-.lt-facts{display:flex;flex-wrap:wrap;margin:1.4rem auto 0;border-top:1px solid var(--color-border-default);border-bottom:1px solid var(--color-border-default);width:100%;max-width:98rem;text-align:center}
+.lt-facts{display:flex;flex-wrap:wrap;margin:5.6rem auto 0;border-top:1px solid var(--color-border-default);border-bottom:1px solid var(--color-border-default);width:100%;text-align:center}
 .lt-facts>div{flex:1 1 16rem;padding:1.4rem 2rem 1.6rem;border-right:1px solid var(--color-border-subtle)}
 .lt-facts>div:last-child{border-right:0}
 .lt-facts dt{font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin:0 0 .5rem}
@@ -577,6 +577,7 @@ img{display:block;max-width:100%;height:auto}
   body.m-choose .wc-cap,
   body.m-choose .wc-build{display:none}
   body.m-review .wc-tray,
+  body.m-review .lt-facts,
   body.m-review .lt-mast,
   body.m-review .lt-strip,
   body.m-review .lt-foot,
@@ -778,7 +779,7 @@ img{display:block;max-width:100%;height:auto}
   padding:.4rem .9rem;font-size:1.0rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
 }
 .lt-states__seg button[aria-pressed="true"]{background:var(--color-ivory-100);color:var(--color-charcoal-900)}
-@media(max-width:1079px){.lt-states{bottom:auto;top:8rem;left:auto;right:1.2rem;max-width:22rem}}
+@media(max-width:1079px){.lt-states{bottom:auto;top:14rem;left:auto;right:1.2rem;max-width:22rem}}
 .lt-vpill{
   position:fixed;left:1.2rem;bottom:1.2rem;z-index:90;background:var(--color-charcoal-900);
   color:var(--color-ivory-100);font-size:1.0rem;font-weight:700;letter-spacing:.14em;
@@ -1671,12 +1672,6 @@ img{display:block;max-width:100%;height:auto}
           <p>Nine editions from Slim Aarons&rsquo; own slide box, 34 &times; 34 cm each. Arrange them on the wall and try different combinations.<span id="mastAdv"> Every edition you add lowers the price of the ones already&nbsp;chosen.</span></p>
         </div>
       </div>
-      <dl class="lt-facts">
-        <div><dt>The series</dt><dd>9 editions, each 34 &times; 34 cm</dd></div>
-        <div><dt>Print</dt><dd>Acrylic glass mount</dd></div>
-        <div><dt>One edition</dt><dd class="tnum">&euro;249</dd></div>
-        <div id="factNineRow"><dt id="factNineK">All nine</dt><dd class="tnum" id="factNine">&euro;149 each</dd></div>
-      </dl>
     </div>
   </header>
 
@@ -1781,6 +1776,17 @@ img{display:block;max-width:100%;height:auto}
           </div>
         </div>
       </section>
+
+      <!-- The facts sit after the builder, which puts them under the summary
+           and the add to cart on a laptop. On a phone the builder is hidden
+           while choosing, so the same position lands them under the artwork
+           thumbnails: one place in the markup, right in both layouts. -->
+      <dl class="lt-facts">
+        <div><dt>The series</dt><dd>9 editions, each 34&nbsp;&times;&nbsp;34&nbsp;cm</dd></div>
+        <div><dt>Print</dt><dd>Acrylic glass mount</dd></div>
+        <div><dt>One edition</dt><dd class="tnum">&euro;249</dd></div>
+        <div id="factNineRow"><dt id="factNineK">All nine</dt><dd class="tnum" id="factNine">&euro;149 each</dd></div>
+      </dl>
 
     </div>
   </main>
