@@ -100,7 +100,21 @@
       transition:border-color 160ms var(--ease-out); }
     .channel-line a:hover { border-color:var(--charcoal-900); }
 
+    /* ── Consultant portrait, squared off ──────────────── */
+    /* The 3:4 source ran tall next to the copy. 1:1 drops the empty floor and
+       keeps the whole seascape edition, both women and the gesture, so
+       [never-crop-artworks] is untouched: the crop takes room, not art.
+       aspect-ratio + object-fit, never max-height, which does not resolve
+       against aspect-ratio. */
+    .room-figure--square img { aspect-ratio:1/1; object-fit:cover; object-position:50% 16%; }
+
     /* ── Full-bleed gallery teaser ─────────────────────── */
+    /* .section pads top by up to 10rem, and this section is surface-raised, so
+       that padding rendered as a stray cream stripe above the image. The band is
+       the section's first child, so it takes the top edge and the tonal change
+       happens at the photograph, not 100px before it. */
+    .section--opens-with-band { padding-top:0; }
+
     /* .image-band--short caps the height; re-anchor it on the faces rather than
        the default 18%, which would crop them out of a landscape frame. */
     .gallery-teaser img { object-position:50% 45%; }
@@ -1029,7 +1043,7 @@
           <h2 class="display-h2 mt-s">Pick your person, pick your time</h2>
           <p class="body-large txt-secondary measure mt-m">Every LUMAS gallery has its own Art Consultant. Choose the one nearest you and take a 30-minute slot in their calendar. They work on the gallery floor every day, hanging the editions and choosing the frames, so they answer from the work itself, not from a catalogue.</p>
         </div>
-        <figure class="room-figure reveal" style="margin:0">
+        <figure class="room-figure room-figure--square reveal" style="margin:0">
           <img src="assets/scenes/consultant-dialogue.jpg" width="1052" height="1400" alt="A LUMAS Art Consultant talking a guest through a seascape edition" loading="lazy">
           <figcaption class="caption">An Art Consultant talks a guest through a work, LUMAS Budapest.</figcaption>
         </figure>
@@ -1117,7 +1131,7 @@
     <!-- ══ VISIT A GALLERY ══ -->
     <!-- Full-bleed teaser. Brandbook s09 forbids darkening layers over artwork and
          this frame carries two works, so the copy sits BELOW the image, never on it. -->
-    <section id="adv-gallery" class="section surface-raised">
+    <section id="adv-gallery" class="section section--opens-with-band surface-raised">
       <figure class="image-band image-band--short gallery-teaser reveal">
         <img src="assets/scenes/gallery-viewing.jpg" width="1600" height="1066"
              alt="A guest studying a row of editions at a LUMAS gallery" loading="lazy">
