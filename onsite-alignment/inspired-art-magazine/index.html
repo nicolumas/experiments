@@ -12,15 +12,20 @@
 <link rel="stylesheet" href="assets/white/social-proof-bar.css">
 <link rel="stylesheet" href="vocabulary/page-local.css">
 <style>
-.preview-rail{display:flex;gap:1.5rem;overflow-x:auto;padding:0 0 1.5rem;align-items:flex-start;}
-.preview-rail>.product-wrapper{flex:0 0 190px;}
-.preview-rail .product-wrapper a.product-link.image-container{height:200px!important;
-  display:flex!important;align-items:center;justify-content:center;}
-.preview-rail .product-wrapper a.product-link.image-container picture{display:flex;
-  align-items:center;justify-content:center;height:100%;}
-.preview-rail .product-wrapper a.product-link.image-container img{max-height:200px!important;
-  max-width:190px!important;width:auto!important;height:auto!important;
-  aspect-ratio:auto!important;object-fit:contain!important;}
+/* Preview-only rail: every artwork the same height, width follows its own
+   aspect ratio, and no box behind it. */
+.preview-rail{display:flex;gap:2rem;overflow-x:auto;padding:0 0 1.5rem;align-items:flex-start;}
+.preview-rail>.product-wrapper{flex:0 0 auto;background:none!important;}
+.preview-rail .product-container,
+.preview-rail .product-container .top,
+.preview-rail .product-container .bottom{background:none!important;}
+.preview-rail a.product-link.image-container{height:auto!important;background:none!important;
+  display:block!important;}
+.preview-rail a.product-link.image-container picture{display:block;background:none!important;}
+.preview-rail img.catalog-product-image{height:200px!important;width:auto!important;
+  max-width:none!important;max-height:none!important;aspect-ratio:auto!important;
+  object-fit:contain!important;display:block;}
+.preview-rail .bottom{max-width:260px;}
 .preview-rail::-webkit-scrollbar{height:6px;}
 .preview-rail::-webkit-scrollbar-thumb{background:#d8d2c6;border-radius:3px;}
 </style>
