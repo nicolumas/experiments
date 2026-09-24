@@ -183,32 +183,62 @@
 })();
 
 /* ── Booker ────────────────────────────────────────────────────────────────
-   Time first, place second. Slots are real: assets/data/availability.json is a
-   snapshot of the Microsoft Bookings calendars behind lumas.de/booking/galerie/,
-   so "available now" means the gallery calendar is genuinely open.
+   One question — when — then the answer: which consultants are free.
+
+   The earlier version asked for the format first, then printed a gallery ×
+   time matrix and left the reader to find their own time in it. A visitor
+   arrives wanting "now" or "four o'clock", not a particular gallery's diary,
+   so the question is asked once and the result is a short list of people,
+   each with the single soonest time they can actually see you.
+
+   Slots are real: assets/data/availability.json is a snapshot of the Microsoft
+   Bookings calendars behind lumas.de/booking/galerie/. That file is regenerated
+   live and deliberately carries no staff names, so the consultant behind each
+   gallery is mapped here instead.
    A gallery slot hands off to that gallery's real booking form. A video slot
    opens a REQUEST, because Bookings has no video service configured yet.     */
 (function () {
   const root = document.querySelector('[data-booker]');
   if (!root) return;
 
+  // Slug → the person, so the answer is a face and a name rather than a branch.
+  // Keys match availability.json; portraits are the same files the carousel uses.
+  const CONSULTANTS = {
+    'berlin-mitte':  { name: 'Maike Hahn',                   portrait: 'assets/team/berlin.webp' },
+    'berlin-kudamm': { name: 'Lioba Wachter',                portrait: 'assets/team/berlin-kudamm.webp' },
+    'munich':        { name: 'Giselle Huber',                portrait: 'assets/team/munich.webp' },
+    'hamburg':       { name: 'Nereisse De Lacoudraye Harter', portrait: 'assets/team/hamburg.webp' },
+    'frankfurt':     { name: 'Lenka Heller-Salfer',          portrait: 'assets/team/frankfurt.webp' },
+    'stuttgart':     { name: 'Alexander Rukatukl',           portrait: 'assets/team/stuttgart.webp' },
+    'hannover':      { name: 'Claudia Brauckmann',           portrait: 'assets/team/hannover.webp' },
+    'dortmund':      { name: 'Lisa Kipper',                  portrait: 'assets/team/dortmund.webp' },
+    'mannheim':      { name: 'Larissa Thoma',                portrait: 'assets/team/mannheim.webp' },
+    'vienna':        { name: 'Bastian Bernstetter',          portrait: 'assets/team/vienna.webp' },
+    'zurich':        { name: 'Claudia Tvrdon',               portrait: 'assets/team/zurich.webp' }
+  };
+
   const results = root.querySelector('[data-results]');
   const status  = root.querySelector('[data-status]');
   const meta    = root.querySelector('[data-meta]');
-  const citySel = root.querySelector('[data-city]');
+  const cityBtn  = root.querySelector('[data-city-btn]');
+  const cityList = root.querySelector('[data-city-list]');
+  const cityVal  = root.querySelector('#bk-city-value');
+  const howBtns  = [...root.querySelectorAll('[data-how-btn]')];
   const fromSel = root.querySelector('[data-from]');
+  const atWrap  = root.querySelector('[data-at-wrap]');
   const dateInp = root.querySelector('[data-when-date]');
   const chips   = [...root.querySelectorAll('[data-when]')];
-  const modes   = [...root.querySelectorAll('[data-mode-btn]')];
 
   let data = null;
-  let mode = 'gallery';
   let when = 'now';
   let pickedDate = '';
+  let how = 'gallery';
+  let city = '';
 
-  const pad = (n) => String(n).padStart(2, '0');
-  const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const pad  = (n) => String(n).padStart(2, '0');
+  const iso  = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const mins = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+  const mode = () => how;
 
   // The galleries all sit in Europe/Berlin, so "now" is that clock, not the
   // viewer's. A collector in New York asking for "today" means the gallery's day.
@@ -220,12 +250,17 @@
     return { date: `${f.year}-${f.month}-${f.day}`, minutes: Number(f.hour) * 60 + Number(f.minute) };
   };
 
+  // Slots land on the hour and the half hour, so the picker offers nothing that
+  // could never match.
   for (let h = 8; h <= 20; h++) {
     for (const m of ['00', '30']) {
       const v = `${pad(h)}:${m}`;
       fromSel.insertAdjacentHTML('beforeend', `<option value="${v}">${v}</option>`);
     }
   }
+
+  const dayName = (day) =>
+    new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
   function targetDate() {
     const now = berlinNow();
@@ -243,63 +278,109 @@
     return mins(fromSel.value);
   }
 
-  function render() {
-    if (!data) return;
+  // Everyone free on the chosen day at or after the chosen time, soonest first.
+  function matches() {
     const day = targetDate();
     const from = floor();
-    const city = citySel.value;
-    const rows = [];
-
+    const out = [];
     Object.entries(data.galleries).forEach(([slug, g]) => {
       if (city && slug !== city) return;
       const slots = (g.days[day] || []).filter((t) => mins(t) >= from);
-      if (slots.length) rows.push({ slug, g, slots });
+      if (slots.length) out.push({ slug, g, slots, person: CONSULTANTS[slug] });
     });
-    rows.sort((a, b) => mins(a.slots[0]) - mins(b.slots[0]) || a.g.city.localeCompare(b.g.city));
+    out.sort((a, b) => mins(a.slots[0]) - mins(b.slots[0]) || a.g.city.localeCompare(b.g.city));
+    return out;
+  }
 
-    const label = when === 'now' ? 'still free today'
-      : when === 'tomorrow' ? 'free tomorrow'
-      : when === 'today' ? 'free today'
-      : `free on ${new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}`;
+  // When the asked-for time has nothing, offer the nearest real opening rather
+  // than a dead end. This is the whole point of asking for a time first.
+  function nextOpening() {
+    const fromDay = targetDate();
+    const fromMin = floor();
+    let best = null;
+    Object.entries(data.galleries).forEach(([slug, g]) => {
+      if (city && slug !== city) return;
+      Object.keys(g.days).sort().forEach((day) => {
+        if (day < fromDay) return;
+        g.days[day].forEach((t) => {
+          if (day === fromDay && mins(t) < fromMin) return;
+          const key = `${day} ${t}`;
+          if (!best || key < best.key) best = { key, day, time: t, slug, g, person: CONSULTANTS[slug] };
+        });
+      });
+    });
+    return best;
+  }
+
+  // One card, one action. The card itself is the link (gallery) or the button
+  // (video), so there is nothing interactive nested inside it.
+  function cardHtml(row) {
+    const day = targetDate();
+    const t = row.slots[0];
+    const inner = `
+      <img class="bk-card__face" src="${row.person.portrait}" width="40" height="40" alt="" loading="lazy">
+      <span class="bk-card__id">
+        <span class="bk-card__name">${row.person.name}</span>
+        <span class="caption bk-card__where">${row.g.city}</span>
+      </span>
+      <span class="bk-card__time"><span class="visually-hidden">Book </span>${t}</span>`;
+    return mode() === 'gallery'
+      ? `<a class="bk-card" href="${row.g.bookingUrl}" target="_blank" rel="noopener"
+            data-goal="advisor_booking_click" data-advisor="${row.slug}" data-slot="${day} ${t}">${inner}</a>`
+      : `<button class="bk-card" type="button" data-video-slot data-city="${row.g.city}"
+            data-advisor="${row.slug}" data-slot="${day} ${t}" data-goal="video_request_open">${inner}</button>`;
+  }
+
+  function render() {
+    if (!data) return;
+    atWrap.hidden = when === 'now';
+
+    const day  = targetDate();
+    const rows = matches();
+    const now  = berlinNow();
+    const whenWord = day === now.date ? 'today'
+      : when === 'tomorrow' ? 'tomorrow'
+      : `on ${new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}`;
+
+    results.innerHTML = '';
+    root.querySelectorAll('.bk-empty, .bk-note').forEach((n) => n.remove());
 
     if (!rows.length) {
-      status.textContent = city
-        ? 'Nothing left in that gallery for the time you picked. Try another day, or clear the gallery filter.'
-        : 'Nothing left for the time you picked. Try another day.';
-      results.innerHTML = '';
+      const next = nextOpening();
+      status.textContent = when === 'now'
+        ? `Nobody is free for the rest of ${whenWord === 'today' ? 'today' : whenWord}.`
+        : `Nobody is free from ${fromSel.value} ${whenWord}.`;
       meta.textContent = '';
+      if (next) {
+        results.insertAdjacentHTML('afterend', `
+          <div class="bk-empty">
+            <p class="bk-empty__lead">The next opening is <strong>${dayName(next.day)} at ${next.time}</strong>,
+            with ${next.person.name} in ${next.g.city}.</p>
+            <p class="bk-empty__act"><button class="btn btn--ghost" type="button"
+               data-jump="${next.day}" data-jump-time="${next.time}">Show that time</button></p>
+          </div>`);
+      } else {
+        results.insertAdjacentHTML('afterend',
+          `<div class="bk-empty"><p class="bk-empty__lead">Nothing is open in the days we can see.
+           Call the galleries on +49 30 3030 6969 and we will find you a time.</p></div>`);
+      }
       return;
     }
 
-    const total = rows.reduce((n, r) => n + r.slots.length, 0);
-    status.textContent = `${total} ${total === 1 ? 'appointment' : 'appointments'} ${label}, across ${rows.length} ${rows.length === 1 ? 'gallery' : 'galleries'}.`;
+    const soonest = rows[0].slots[0];
+    const uniform = rows.every((r) => r.slots[0] === soonest);
+    const who = `${rows.length} ${rows.length === 1 ? 'consultant' : 'consultants'}`;
+    status.textContent = uniform
+      ? `${who} can see you at ${soonest} ${whenWord}.`
+      : `${who} ${rows.length === 1 ? 'is' : 'are'} free ${whenWord}, the soonest at ${soonest}.`;
 
-    results.innerHTML = rows.map(({ slug, g, slots }) => {
-      const show = slots.slice(0, 8);
-      const rest = slots.length - show.length;
-      const chipsHtml = show.map((t) => (
-        mode === 'gallery'
-          ? `<a class="bk-slot" href="${g.bookingUrl}" target="_blank" rel="noopener"
-                data-goal="advisor_booking_click" data-advisor="${slug}" data-slot="${day} ${t}">${t}</a>`
-          : `<button class="bk-slot" type="button" data-video-slot data-city="${g.city}"
-                data-slot="${day} ${t}" data-goal="video_request_open">${t}</button>`
-      )).join('');
-      return `<div class="bk-row">
-        <div>
-          <p class="bk-row__city">${g.city}</p>
-          <p class="caption bk-row__addr">${g.address}</p>
-        </div>
-        <div class="bk-row__slots">${chipsHtml}${rest > 0 ? `<a class="bk-slot bk-slot--more" href="${g.bookingUrl}" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="${slug}">+${rest} more</a>` : ''}</div>
-      </div>`;
-    }).join('');
+    results.innerHTML = rows.map(cardHtml).join('');
 
-    meta.innerHTML = mode === 'gallery'
+    meta.innerHTML = mode() === 'gallery'
       ? `Times are the galleries’ own booking calendars, in Central European Time. Picking one opens that gallery’s booking form.`
       : `Times are the consultants’ real gallery calendars, in Central European Time.`;
 
-    const note = root.querySelector('.bk-note');
-    if (note) note.remove();
-    if (mode === 'video') {
+    if (mode() === 'video') {
       meta.insertAdjacentHTML('afterend',
         `<p class="bk-note">A video call is booked as a request: we confirm by email, usually within the hour.
          <!-- FIXME (production): Bookings has one service per gallery, in-gallery only. Add a
@@ -320,35 +401,99 @@
     chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
     render();
   });
+  // Naming a time is itself an answer to "when", so it lifts "now" into "today".
   fromSel.addEventListener('change', () => { if (when === 'now') setWhen('today'); else render(); });
-  citySel.addEventListener('change', render);
-  modes.forEach((b) => b.addEventListener('click', () => {
-    mode = b.dataset.modeBtn;
-    modes.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-    track('booking_mode_switch', { mode });
+  function setHow(v) {
+    how = v;
+    howBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.howBtn === v)));
+    track('booking_mode_switch', { mode: how });
     render();
+  }
+  howBtns.forEach((b) => b.addEventListener('click', () => setHow(b.dataset.howBtn)));
+
+  /* ── City listbox ──────────────────────────────────────────────────────
+     A native <select> draws its open list with the OS, so this is a real
+     listbox: button + role="listbox" + roving focus on the options.        */
+  const opts = () => [...cityList.querySelectorAll('[role="option"]')];
+
+  function openList(focusSelected) {
+    cityList.hidden = false;
+    cityBtn.setAttribute('aria-expanded', 'true');
+    const o = opts();
+    (o.find((x) => x.getAttribute('aria-selected') === 'true') || o[0])?.focus();
+    if (!focusSelected) o[0]?.focus();
+  }
+  function closeList(refocus) {
+    cityList.hidden = true;
+    cityBtn.setAttribute('aria-expanded', 'false');
+    if (refocus) cityBtn.focus();
+  }
+  function chooseCity(opt) {
+    city = opt.dataset.value;
+    opts().forEach((o) => o.setAttribute('aria-selected', String(o === opt)));
+    cityVal.textContent = opt.textContent;
+    closeList(true);
+    render();
+  }
+
+  cityBtn.addEventListener('click', () => (cityList.hidden ? openList(true) : closeList(true)));
+  cityBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault(); openList(true);
+    }
+  });
+  cityList.addEventListener('click', (e) => {
+    const opt = e.target.closest('[role="option"]');
+    if (opt) chooseCity(opt);
+  });
+  cityList.addEventListener('keydown', (e) => {
+    const o = opts();
+    const i = o.indexOf(document.activeElement);
+    if (e.key === 'Escape') { e.preventDefault(); closeList(true); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); o[Math.min(i + 1, o.length - 1)]?.focus(); }
+    else if (e.key === 'ArrowUp')   { e.preventDefault(); o[Math.max(i - 1, 0)]?.focus(); }
+    else if (e.key === 'Home')      { e.preventDefault(); o[0]?.focus(); }
+    else if (e.key === 'End')       { e.preventDefault(); o[o.length - 1]?.focus(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (i > -1) chooseCity(o[i]); }
+    else if (e.key === 'Tab') closeList(false);
+  });
+  document.addEventListener('click', (e) => {
+    if (!cityList.hidden && !e.target.closest('[data-city]')) closeList(false);
+  });
+
+  // Hero "Book a video call" preselects the format without changing the question.
+  document.querySelectorAll('[data-mode="video"]').forEach((a) => a.addEventListener('click', () => {
+    setHow('video');
   }));
 
-  // Hero "Book a video call" lands on the video tab, not just the anchor.
-  document.querySelectorAll('[data-mode="video"]').forEach((a) => a.addEventListener('click', () => {
-    const btn = root.querySelector('[data-mode-btn="video"]');
-    if (btn) btn.click();
-  }));
+  root.addEventListener('click', (e) => {
+    // The empty state's offer of the nearest real opening.
+    const jump = e.target.closest('[data-jump]');
+    if (!jump) return;
+    const nowDate = berlinNow().date;
+    pickedDate = jump.dataset.jump;
+    dateInp.value = pickedDate;
+    fromSel.value = jump.dataset.jumpTime;
+    when = pickedDate === nowDate ? 'today' : 'date';
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(when === 'today' && c.dataset.when === 'today')));
+    track('booking_next_opening', { slot: `${jump.dataset.jump} ${jump.dataset.jumpTime}` });
+    render();
+  });
 
   // A video slot is a request, so it confirms in place rather than handing off.
   results.addEventListener('click', (e) => {
     const slot = e.target.closest('[data-video-slot]');
     if (!slot) return;
-    const row = slot.closest('.bk-row');
+    const card = slot;
     track('video_request_open', { slot: slot.dataset.slot, city: slot.dataset.city });
     root.querySelectorAll('.bk-req').forEach((n) => n.remove());
-    root.querySelectorAll('.bk-slot[aria-pressed="true"]').forEach((n) => n.removeAttribute('aria-pressed'));
+    root.querySelectorAll('.bk-card[aria-pressed="true"]').forEach((n) => n.removeAttribute('aria-pressed'));
     slot.setAttribute('aria-pressed', 'true');
     const [day, time] = slot.dataset.slot.split(' ');
-    const nice = new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
-    row.insertAdjacentHTML('beforeend', `
+    const who = CONSULTANTS[slot.dataset.advisor];
+    card.insertAdjacentHTML('afterend', `
       <form class="bk-req" data-req>
-        <p class="bk-req__head">Video call · ${nice} at ${time} CET · with the ${slot.dataset.city} gallery</p>
+        <p class="bk-req__head">Video call · ${dayName(day)} at ${time} CET · with ${who ? who.name : `the ${slot.dataset.city} gallery`}</p>
         <div class="bk-req__fields">
           <label class="visually-hidden" for="bk-req-name">Your name</label>
           <input id="bk-req-name" name="name" type="text" placeholder="Your name" required autocomplete="name">
@@ -358,14 +503,14 @@
         </div>
         <p class="caption txt-secondary bk-req__note">We confirm by email, usually within the hour. Nothing is charged.</p>
       </form>`);
-    row.querySelector('#bk-req-name').focus();
+    results.querySelector('#bk-req-name').focus();
   });
 
   results.addEventListener('submit', (e) => {
     const form = e.target.closest('[data-req]');
     if (!form) return;
     e.preventDefault();
-    track('video_request_submit', { slot: form.closest('.bk-row').querySelector('[aria-pressed="true"]')?.dataset.slot });
+    track('video_request_submit', { slot: results.querySelector('.bk-card[aria-pressed="true"]')?.dataset.slot });
     form.innerHTML = '<p class="bk-req__head">Requested. We will confirm by email, usually within the hour.</p>';
   });
 
@@ -373,9 +518,12 @@
     .then((r) => r.json())
     .then((json) => {
       data = json;
+      cityList.insertAdjacentHTML('beforeend',
+        `<li class="lmsel__opt" role="option" tabindex="-1" data-value="" aria-selected="true">Any city</li>`);
       Object.entries(data.galleries)
         .sort((a, b) => a[1].city.localeCompare(b[1].city))
-        .forEach(([slug, g]) => citySel.insertAdjacentHTML('beforeend', `<option value="${slug}">${g.city}</option>`));
+        .forEach(([slug, g]) => cityList.insertAdjacentHTML('beforeend',
+          `<li class="lmsel__opt" role="option" tabindex="-1" data-value="${slug}">${g.city}</li>`));
       const now = berlinNow();
       dateInp.min = now.date;
       fromSel.value = `${pad(Math.min(20, Math.max(8, Math.ceil(now.minutes / 60))))}:00`;

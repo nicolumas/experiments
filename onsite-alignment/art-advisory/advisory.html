@@ -33,7 +33,7 @@
 <!-- LUMAS-NAV-KIT:CSS:END -->
   <style>
     /* sticky-nav offset so smooth-scrolled in-page anchors don't tuck under the nav */
-    #book, #visualise, #adv-gallery { scroll-margin-top: calc(var(--nav-h, 71px) + var(--pagebar-h, 48px) + 16px); }
+    #book, #visualise, #adv-gallery { scroll-margin-top: calc(var(--nav-h, 71px) + 16px); }
 
     /* ── Hero trust line ───────────────────────────────── */
     .hero__trust { display:flex; flex-wrap:wrap; gap:0.8rem 1.6rem; margin-top:clamp(2rem,2.6vw,2.8rem);
@@ -48,18 +48,6 @@
     body { padding-top:var(--nav-h, 71px); }
 
     /* ── Page bar · sticks under the site-header ───────── */
-    .pagebar { position:sticky; top:var(--nav-h, 71px); z-index:30;
-      background:rgba(255,255,255,0.94); backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--border-subtle); }
-    .pagebar__inner { display:flex; align-items:center; justify-content:space-between; gap:1.6rem;
-      min-height:48px; padding-top:0.6rem; padding-bottom:0.6rem; }
-    .pagebar__title { font-size:1.2rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-secondary); }
-    .pagebar__book { font-size:1.2rem; letter-spacing:0.14em; text-transform:uppercase;
-      padding:0.9rem 1.8rem; background:var(--charcoal-900); color:var(--ivory-100);
-      transition:background-color 200ms var(--ease-out); }
-    .pagebar__book:hover { background:var(--charcoal-800); }
-    /* On mobile the sticky bottom bar already carries the CTA, so the bar is just a label. */
-    @media (max-width:759px){ .pagebar__book { display:none; } .pagebar__inner { min-height:40px; } }
 
     /* ── Before / after wall slider ────────────────────── */
     .ba { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; background:var(--bone-300);
@@ -108,17 +96,14 @@
     .hero__art-sub:first-of-type { object-position:50% 18%; }
     @media (max-width:759px){ .hero__art-main { aspect-ratio:4/3; } }
 
-    /* ── Booker · time first ───────────────────────────── */
+    /* ── Booker · one question, then people ───────────────
+       The page asks WHEN once, at the top, and answers with WHO is free.
+       Format and city are preferences on the answer, not gates in front of
+       it: a consultant free at 16:00 is free at 16:00 either way.        */
     .booker { border:1px solid var(--border-default); background:var(--ivory-100); }
-    .booker__modes { display:flex; border-bottom:1px solid var(--border-default); }
-    .booker__mode { flex:1 1 0; padding:1.5rem 1.2rem; font-size:1.2rem; letter-spacing:0.14em;
-      text-transform:uppercase; background:transparent; border:0; cursor:pointer;
-      color:var(--text-secondary); transition:background-color 200ms var(--ease-out), color 200ms var(--ease-out); }
-    .booker__mode + .booker__mode { border-left:1px solid var(--border-default); }
-    .booker__mode[aria-selected="true"] { background:var(--charcoal-900); color:var(--ivory-100); }
-    .booker__body { padding:clamp(2rem,3vw,3.2rem); }
-    .booker__controls { display:flex; flex-wrap:wrap; gap:clamp(1.6rem,2.4vw,2.8rem); align-items:flex-end;
-      padding-bottom:clamp(1.8rem,2.4vw,2.4rem); border-bottom:1px solid var(--border-subtle); }
+    .booker__ask { display:flex; flex-wrap:wrap; align-items:center; gap:1.2rem 2rem;
+      padding:clamp(1.8rem,2.6vw,2.6rem) clamp(2rem,3vw,3.2rem);
+      border-bottom:1px solid var(--border-default); }
     .chipset { display:flex; flex-wrap:wrap; gap:0.8rem; }
     .chip { font-size:1.3rem; padding:0.9rem 1.6rem; border:1px solid var(--border-default);
       background:transparent; cursor:pointer; color:var(--text-primary);
@@ -128,39 +113,121 @@
     .chip--field { display:inline-flex; align-items:center; gap:0.8rem; cursor:default; padding-block:0.6rem; }
     .chip__label { font-size:1.3rem; }
     .chip__input { font:inherit; font-size:1.3rem; border:0; background:transparent; color:inherit; cursor:pointer; }
-    .booker__selects { display:flex; gap:clamp(1.2rem,2vw,2rem); margin-left:auto; }
-    .booker__field { display:flex; flex-direction:column; gap:0.5rem; }
-    .booker__field select { font:inherit; font-size:1.4rem; padding:0.8rem 1.2rem; background:transparent;
-      border:1px solid var(--border-default); color:var(--text-primary); cursor:pointer; }
-    .booker__status { margin-top:clamp(1.8rem,2.4vw,2.4rem); font-size:1.5rem; }
-    .booker__results { display:grid; gap:1px; background:var(--border-subtle); margin-top:1.6rem; }
+    .booker__at { display:inline-flex; align-items:center; gap:0.8rem; }
+    .booker__at[hidden] { display:none; }
+    .booker__at label { font-size:1.3rem; color:var(--text-secondary); }
+    .booker__at select, .booker__field select { font:inherit; font-size:1.4rem; padding:0.8rem 1.2rem;
+      background:transparent; border:1px solid var(--border-default); color:var(--text-primary); cursor:pointer; }
+
+    .booker__answer { padding:clamp(2rem,3vw,3.2rem); }
+    .booker__answer-head { display:flex; flex-wrap:wrap; gap:1.4rem 2.4rem;
+      align-items:flex-end; justify-content:space-between; }
+    .booker__status { font-size:1.7rem; margin:0; max-width:44ch; }
+    .booker__filters { display:flex; gap:clamp(1.2rem,2vw,1.8rem); }
+    /* min-width:0 or the longest option name ("Berlin, Kurfürstendamm") sets an
+       intrinsic floor that beats the flex basis and pushes the select past the
+       panel edge on a phone. */
+    .booker__field { display:flex; flex-direction:column; gap:0.5rem; min-width:0; }
+    .booker__field select { max-width:100%; }
+
+    /* The answer is eleven near-identical people, so it tiles rather than lists:
+       a stacked list put ~1600px between each name and its button and ran to
+       1450px of scroll. Each card is one link, so there is one tab stop per
+       person and no nested interactive elements. */
+    /* A two-state choice reads better as a segmented control than as a dropdown:
+       both options are legible without opening anything. */
+    .seg { display:inline-flex; border:1px solid var(--border-default); }
+    .seg__btn { font:inherit; font-size:1.3rem; padding:0.9rem 1.6rem; background:transparent;
+      border:0; cursor:pointer; color:var(--text-secondary); white-space:nowrap;
+      transition:background-color 180ms var(--ease-out), color 180ms var(--ease-out); }
+    .seg__btn + .seg__btn { border-left:1px solid var(--border-default); }
+    .seg__btn:hover { color:var(--text-primary); }
+    .seg__btn[aria-pressed="true"] { background:var(--charcoal-900); color:var(--ivory-100); }
+    .seg__btn:focus-visible { outline:2px solid var(--border-focus); outline-offset:-2px; }
+
+    /* A native <select> renders its open list with the OS, which no CSS can reach,
+       so the city picker is a real listbox: button + role="listbox". */
+    .lmsel { position:relative; display:flex; flex-direction:column; gap:0.5rem; min-width:0; }
+    .lmsel__btn { display:flex; align-items:center; justify-content:space-between; gap:1.2rem;
+      font:inherit; font-size:1.4rem; padding:0.8rem 1.2rem; min-width:17rem; width:100%;
+      background:var(--surface-page); border:1px solid var(--border-default);
+      color:var(--text-primary); cursor:pointer; text-align:left;
+      transition:border-color 180ms var(--ease-out); }
+    .lmsel__btn:hover, .lmsel__btn[aria-expanded="true"] { border-color:var(--charcoal-900); }
+    .lmsel__btn:focus-visible { outline:2px solid var(--border-focus); outline-offset:2px; }
+    .lmsel__value { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .lmsel__chev { width:1.1rem; height:1.1rem; flex:none; transition:transform 180ms var(--ease-out); }
+    .lmsel__btn[aria-expanded="true"] .lmsel__chev { transform:rotate(180deg); }
+    /* The list sizes to its longest city rather than to the button, or
+       "Berlin, Kurfürstendamm" wraps onto two lines inside an option. */
+    .lmsel__list { position:absolute; top:calc(100% + 0.4rem); left:0; z-index:40;
+      min-width:100%; width:max-content; max-width:min(34rem, 78vw);
+      margin:0; padding:0.4rem 0; list-style:none; background:var(--surface-page);
+      border:1px solid var(--charcoal-900); max-height:30rem; overflow-y:auto; }
+    .lmsel__list[hidden] { display:none; }
+    .lmsel__opt { font-size:1.4rem; padding:0.9rem 1.6rem; cursor:pointer; white-space:nowrap; }
+    .lmsel__opt:hover, .lmsel__opt:focus-visible { background:var(--bone-100); outline:0; }
+    .lmsel__opt[aria-selected="true"] { background:var(--charcoal-900); color:var(--ivory-100); }
+
+    .booker__results { display:grid; gap:1.2rem; grid-template-columns:1fr;
+      margin-top:clamp(1.8rem,2.4vw,2.4rem); }
     .booker__results:empty { display:none; }
-    .bk-row { background:var(--ivory-100); padding:clamp(1.6rem,2vw,2rem) 0; display:grid;
-      grid-template-columns:minmax(0,22rem) 1fr; gap:clamp(1.2rem,2vw,2.4rem); align-items:start; }
-    .bk-row__city { font-size:1.7rem; }
-    .bk-row__addr { color:var(--text-secondary); margin-top:0.4rem; }
-    .bk-row__slots { display:flex; flex-wrap:wrap; gap:0.8rem; }
-    .bk-slot { font-size:1.4rem; padding:0.9rem 1.4rem; border:1px solid var(--border-default);
-      background:transparent; color:var(--text-primary); cursor:pointer; text-decoration:none;
-      transition:background-color 200ms var(--ease-out), color 200ms var(--ease-out); }
-    .bk-slot:hover { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
-    .bk-slot--more { border-style:dashed; color:var(--text-secondary); }
-    .bk-row__none { color:var(--text-secondary); }
+    /* Thresholds are set by the longest name ("Nereisse De Lacoudraye Harter"),
+       not by taste: a column narrower than ~390px wraps it onto a second line
+       and the row heights go ragged. */
+    @media (min-width:640px){  .booker__results { grid-template-columns:repeat(2,1fr); } }
+    @media (min-width:1100px){ .booker__results { grid-template-columns:repeat(3,1fr); } }
+    @media (min-width:1800px){ .booker__results { grid-template-columns:repeat(4,1fr); } }
+
+    .bk-card { display:grid; grid-template-columns:4rem minmax(0,1fr) auto;
+      gap:0 1.2rem; align-items:center; width:100%; text-align:left;
+      padding:1.2rem 1.4rem; border:1px solid var(--border-subtle);
+      background:var(--surface-page); color:var(--text-primary);
+      font:inherit; cursor:pointer; text-decoration:none;
+      transition:border-color 180ms var(--ease-out), background-color 180ms var(--ease-out); }
+    .bk-card:hover { border-color:var(--charcoal-900); background:var(--ivory-100); }
+    .bk-card:focus-visible { outline:2px solid var(--border-focus); outline-offset:2px; }
+    .bk-card__face { width:4rem; height:4rem; border-radius:50%; object-fit:cover;
+      display:block; background:var(--bone-300); border:1px solid var(--border-subtle); }
+    /* Blocks, not inline: the city keeps the same position in every card, which
+       is what makes the list scannable when you are looking for your own. */
+    .bk-card__id { min-width:0; }
+    .bk-card__name, .bk-card__where { display:block; }
+    .bk-card__name { font-size:1.6rem; line-height:1.25; margin:0; }
+    .bk-card__where { color:var(--text-secondary); margin:0.2rem 0 0; }
+    .bk-card__time { font-size:1.5rem; font-weight:700; white-space:nowrap;
+      padding:0.6rem 1rem; border:1px solid var(--border-default); }
+    .bk-card:hover .bk-card__time { border-color:var(--charcoal-900);
+      background:var(--charcoal-900); color:var(--ivory-100); }
+    .bk-card[aria-pressed="true"] { border-color:var(--charcoal-900); }
+    .bk-card[aria-pressed="true"] .bk-card__time { background:var(--charcoal-900);
+      border-color:var(--charcoal-900); color:var(--ivory-100); }
+    .bk-req { grid-column:1 / -1; }
+
     .booker__meta { margin-top:clamp(1.6rem,2vw,2rem); }
     .booker__meta:empty { display:none; }
     .bk-note { margin-top:1.6rem; padding:1.4rem 1.6rem; border-left:2px solid var(--charcoal-900);
       background:var(--bone-100); font-size:1.4rem; }
+    .bk-empty { margin-top:clamp(1.8rem,2.4vw,2.4rem); padding:clamp(1.8rem,2.4vw,2.2rem);
+      background:var(--bone-100); border-left:2px solid var(--charcoal-900); }
+    .bk-empty__lead { font-size:1.6rem; margin:0; }
+    .bk-empty__act { margin-top:1.4rem; }
+
     @media (max-width:759px){
-      .booker__selects { margin-left:0; width:100%; }
-      .booker__field { flex:1 1 0; }
-      .bk-row { grid-template-columns:1fr; }
+      /* Each filter takes its own row. flex:1 1 0 squeezed the segmented control
+         to 119px while its two nowrap labels needed 182px, so they spilled out
+         of their own box. */
+      .booker__filters { width:100%; flex-wrap:wrap; }
+      .booker__field, .lmsel { flex:1 1 100%; min-width:0; }
+      .seg { display:flex; width:100%; }
+      .seg__btn { flex:1 1 0; text-align:center; padding-inline:1rem; }
+      .lmsel__btn { min-width:0; }
     }
 
     .visually-hidden { position:absolute; width:1px; height:1px; margin:-1px; padding:0;
       overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
 
     /* ── Video-call request, inline in the row ─────────── */
-    .bk-slot[aria-pressed="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
     .bk-req { grid-column:1 / -1; margin-top:1.6rem; padding:clamp(1.6rem,2vw,2rem);
       background:var(--bone-100); border-left:2px solid var(--charcoal-900); }
     .bk-req__head { font-size:1.5rem; }
@@ -1046,12 +1113,6 @@
 
 <!-- LUMAS-NAV-KIT:MARKUP:END -->
 
-  <!-- ══ PAGE BAR · sits under the real site-header, keeps booking one click away ══ -->
-  <div class="pagebar">
-    <div class="wrap pagebar__inner">
-      <span class="pagebar__title">Art advisory</span>
-      <a class="pagebar__book" href="#book" data-goal="cta_click" data-cta="nav_book">Book a consultation</a>
-    </div>
   </div>
 
   <main>
@@ -1095,39 +1156,49 @@
         <div class="section-head reveal">
           <p class="eyebrow">Book a consultation</p>
           <h2 class="display-h2 mt-s">When suits you?</h2>
-          <p class="body-large txt-secondary measure mt-m">Thirty minutes with an Art Consultant, free and with no obligation. Pick a time and we will show you where it is open.</p>
+          <p class="body-large txt-secondary measure mt-m">Thirty minutes with an Art Consultant, free and with no obligation. Tell us when, and we will show you who is free.</p>
         </div>
 
         <div class="booker reveal" data-booker>
-          <div class="booker__modes" role="tablist" aria-label="How you would like to meet">
-            <button class="booker__mode" type="button" role="tab" aria-selected="true" data-mode-btn="gallery">In a gallery</button>
-            <button class="booker__mode" type="button" role="tab" aria-selected="false" data-mode-btn="video">Video call</button>
+          <div class="booker__ask">
+            <div class="chipset" role="group" aria-label="When would you like to meet">
+              <button class="chip" type="button" data-when="now" aria-pressed="true">Available now</button>
+              <button class="chip" type="button" data-when="today" aria-pressed="false">Today</button>
+              <button class="chip" type="button" data-when="tomorrow" aria-pressed="false">Tomorrow</button>
+              <span class="chip chip--field">
+                <label class="chip__label" for="bk-date">Another day</label>
+                <input class="chip__input" id="bk-date" type="date" data-when-date>
+              </span>
+            </div>
+            <span class="booker__at" data-at-wrap hidden>
+              <label for="bk-from">from</label>
+              <select id="bk-from" data-from></select>
+            </span>
           </div>
 
-          <div class="booker__body">
-            <div class="booker__controls">
-              <div class="chipset" role="group" aria-label="When">
-                <button class="chip" type="button" data-when="now" aria-pressed="true">Available now</button>
-                <button class="chip" type="button" data-when="today" aria-pressed="false">Today</button>
-                <button class="chip" type="button" data-when="tomorrow" aria-pressed="false">Tomorrow</button>
-                <span class="chip chip--field">
-                  <label class="chip__label" for="bk-date">Another day</label>
-                  <input class="chip__input" id="bk-date" type="date" data-when-date>
-                </span>
-              </div>
-              <div class="booker__selects">
+          <div class="booker__answer">
+            <div class="booker__answer-head">
+              <p class="booker__status" data-status role="status" aria-live="polite"></p>
+              <div class="booker__filters">
                 <span class="booker__field">
-                  <label class="caption" for="bk-from">From</label>
-                  <select id="bk-from" data-from></select>
+                  <span class="caption" id="bk-how-label">How you meet</span>
+                  <span class="seg" role="group" aria-labelledby="bk-how-label">
+                    <button class="seg__btn" type="button" data-how-btn="gallery" aria-pressed="true">In a gallery</button>
+                    <button class="seg__btn" type="button" data-how-btn="video" aria-pressed="false">Video call</button>
+                  </span>
                 </span>
-                <span class="booker__field">
-                  <label class="caption" for="bk-city">Where</label>
-                  <select id="bk-city" data-city><option value="">Any gallery</option></select>
+                <span class="lmsel" data-city>
+                  <span class="caption" id="bk-city-label">Where</span>
+                  <button class="lmsel__btn" type="button" data-city-btn
+                          aria-haspopup="listbox" aria-expanded="false"
+                          aria-labelledby="bk-city-label bk-city-value">
+                    <span class="lmsel__value" id="bk-city-value">Any city</span>
+                    <svg class="lmsel__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+                  </button>
+                  <ul class="lmsel__list" role="listbox" aria-labelledby="bk-city-label" data-city-list hidden></ul>
                 </span>
               </div>
             </div>
-
-            <p class="booker__status" data-status role="status" aria-live="polite"></p>
             <div class="booker__results" data-results></div>
             <p class="booker__meta caption txt-secondary" data-meta></p>
           </div>
@@ -1141,7 +1212,7 @@
             <p class="eyebrow">Optional, and worth it</p>
             <h3 class="display-h3 mt-s">Send a photo of your wall before you come</h3>
             <p class="body-large txt-secondary measure mt-m">Your consultant places the work on your wall at true scale, in the size and frame you are considering, and brings it to the appointment. You spend the thirty minutes deciding, not imagining.</p>
-            <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="prep_wall" style="margin-top:clamp(1.8rem,2.4vw,2.4rem)">Send your wall</button>
+            <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="prep_wall" style="margin-top:clamp(1.8rem,2.4vw,2.4rem)">Request a visualisation</button>
             <p class="caption txt-secondary" style="margin-top:1.2rem">Not required. You can book without it.</p>
           </div>
           <figure class="prep__proof" style="margin:0">
@@ -1378,15 +1449,13 @@
       if (!h) return;
       var px = Math.round(h.getBoundingClientRect().height);
       if (px > 0) document.documentElement.style.setProperty('--nav-h', px + 'px');
-      var bar = document.querySelector('.pagebar');
-      if (bar) document.documentElement.style.setProperty('--pagebar-h', Math.round(bar.getBoundingClientRect().height) + 'px');
     }
     window.addEventListener('load', measure);
     window.addEventListener('resize', measure);
     document.addEventListener('DOMContentLoaded', measure);
   })();
 </script>
-  <script src="assets/site.js?v=15"></script>
+  <script src="assets/site.js?v=24"></script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
