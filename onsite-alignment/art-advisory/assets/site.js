@@ -181,3 +181,207 @@
     }
   });
 })();
+
+/* ── Booker ────────────────────────────────────────────────────────────────
+   Time first, place second. Slots are real: assets/data/availability.json is a
+   snapshot of the Microsoft Bookings calendars behind lumas.de/booking/galerie/,
+   so "available now" means the gallery calendar is genuinely open.
+   A gallery slot hands off to that gallery's real booking form. A video slot
+   opens a REQUEST, because Bookings has no video service configured yet.     */
+(function () {
+  const root = document.querySelector('[data-booker]');
+  if (!root) return;
+
+  const results = root.querySelector('[data-results]');
+  const status  = root.querySelector('[data-status]');
+  const meta    = root.querySelector('[data-meta]');
+  const citySel = root.querySelector('[data-city]');
+  const fromSel = root.querySelector('[data-from]');
+  const dateInp = root.querySelector('[data-when-date]');
+  const chips   = [...root.querySelectorAll('[data-when]')];
+  const modes   = [...root.querySelectorAll('[data-mode-btn]')];
+
+  let data = null;
+  let mode = 'gallery';
+  let when = 'now';
+  let pickedDate = '';
+
+  const pad = (n) => String(n).padStart(2, '0');
+  const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const mins = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+
+  // The galleries all sit in Europe/Berlin, so "now" is that clock, not the
+  // viewer's. A collector in New York asking for "today" means the gallery's day.
+  const berlinNow = () => {
+    const f = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hour12: false
+    }).formatToParts(new Date()).reduce((a, p) => (a[p.type] = p.value, a), {});
+    return { date: `${f.year}-${f.month}-${f.day}`, minutes: Number(f.hour) * 60 + Number(f.minute) };
+  };
+
+  for (let h = 8; h <= 20; h++) {
+    for (const m of ['00', '30']) {
+      const v = `${pad(h)}:${m}`;
+      fromSel.insertAdjacentHTML('beforeend', `<option value="${v}">${v}</option>`);
+    }
+  }
+
+  function targetDate() {
+    const now = berlinNow();
+    if (when === 'today' || when === 'now') return now.date;
+    if (when === 'tomorrow') {
+      const d = new Date(`${now.date}T12:00:00`); d.setDate(d.getDate() + 1); return iso(d);
+    }
+    return pickedDate || now.date;
+  }
+
+  function floor() {
+    const now = berlinNow();
+    if (when === 'now') return now.minutes;               // only what is still ahead today
+    if (targetDate() === now.date) return Math.max(mins(fromSel.value), now.minutes);
+    return mins(fromSel.value);
+  }
+
+  function render() {
+    if (!data) return;
+    const day = targetDate();
+    const from = floor();
+    const city = citySel.value;
+    const rows = [];
+
+    Object.entries(data.galleries).forEach(([slug, g]) => {
+      if (city && slug !== city) return;
+      const slots = (g.days[day] || []).filter((t) => mins(t) >= from);
+      if (slots.length) rows.push({ slug, g, slots });
+    });
+    rows.sort((a, b) => mins(a.slots[0]) - mins(b.slots[0]) || a.g.city.localeCompare(b.g.city));
+
+    const label = when === 'now' ? 'still free today'
+      : when === 'tomorrow' ? 'free tomorrow'
+      : when === 'today' ? 'free today'
+      : `free on ${new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}`;
+
+    if (!rows.length) {
+      status.textContent = city
+        ? 'Nothing left in that gallery for the time you picked. Try another day, or clear the gallery filter.'
+        : 'Nothing left for the time you picked. Try another day.';
+      results.innerHTML = '';
+      meta.textContent = '';
+      return;
+    }
+
+    const total = rows.reduce((n, r) => n + r.slots.length, 0);
+    status.textContent = `${total} ${total === 1 ? 'appointment' : 'appointments'} ${label}, across ${rows.length} ${rows.length === 1 ? 'gallery' : 'galleries'}.`;
+
+    results.innerHTML = rows.map(({ slug, g, slots }) => {
+      const show = slots.slice(0, 8);
+      const rest = slots.length - show.length;
+      const chipsHtml = show.map((t) => (
+        mode === 'gallery'
+          ? `<a class="bk-slot" href="${g.bookingUrl}" target="_blank" rel="noopener"
+                data-goal="advisor_booking_click" data-advisor="${slug}" data-slot="${day} ${t}">${t}</a>`
+          : `<button class="bk-slot" type="button" data-video-slot data-city="${g.city}"
+                data-slot="${day} ${t}" data-goal="video_request_open">${t}</button>`
+      )).join('');
+      return `<div class="bk-row">
+        <div>
+          <p class="bk-row__city">${g.city}</p>
+          <p class="caption bk-row__addr">${g.address}</p>
+        </div>
+        <div class="bk-row__slots">${chipsHtml}${rest > 0 ? `<a class="bk-slot bk-slot--more" href="${g.bookingUrl}" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="${slug}">+${rest} more</a>` : ''}</div>
+      </div>`;
+    }).join('');
+
+    meta.innerHTML = mode === 'gallery'
+      ? `Times are the galleries’ own booking calendars, in Central European Time. Picking one opens that gallery’s booking form.`
+      : `Times are the consultants’ real gallery calendars, in Central European Time.`;
+
+    const note = root.querySelector('.bk-note');
+    if (note) note.remove();
+    if (mode === 'video') {
+      meta.insertAdjacentHTML('afterend',
+        `<p class="bk-note">A video call is booked as a request: we confirm by email, usually within the hour.
+         <!-- FIXME (production): Bookings has one service per gallery, in-gallery only. Add a
+              "Kunstberatung per Videocall" service and this becomes a direct booking like the other tab. --></p>`);
+    }
+  }
+
+  function setWhen(v) {
+    when = v;
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.when === v)));
+    render();
+  }
+
+  chips.forEach((c) => c.addEventListener('click', () => setWhen(c.dataset.when)));
+  dateInp.addEventListener('change', () => {
+    pickedDate = dateInp.value;
+    when = 'date';
+    chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
+    render();
+  });
+  fromSel.addEventListener('change', () => { if (when === 'now') setWhen('today'); else render(); });
+  citySel.addEventListener('change', render);
+  modes.forEach((b) => b.addEventListener('click', () => {
+    mode = b.dataset.modeBtn;
+    modes.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    track('booking_mode_switch', { mode });
+    render();
+  }));
+
+  // Hero "Book a video call" lands on the video tab, not just the anchor.
+  document.querySelectorAll('[data-mode="video"]').forEach((a) => a.addEventListener('click', () => {
+    const btn = root.querySelector('[data-mode-btn="video"]');
+    if (btn) btn.click();
+  }));
+
+  // A video slot is a request, so it confirms in place rather than handing off.
+  results.addEventListener('click', (e) => {
+    const slot = e.target.closest('[data-video-slot]');
+    if (!slot) return;
+    const row = slot.closest('.bk-row');
+    track('video_request_open', { slot: slot.dataset.slot, city: slot.dataset.city });
+    root.querySelectorAll('.bk-req').forEach((n) => n.remove());
+    root.querySelectorAll('.bk-slot[aria-pressed="true"]').forEach((n) => n.removeAttribute('aria-pressed'));
+    slot.setAttribute('aria-pressed', 'true');
+    const [day, time] = slot.dataset.slot.split(' ');
+    const nice = new Date(`${day}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+    row.insertAdjacentHTML('beforeend', `
+      <form class="bk-req" data-req>
+        <p class="bk-req__head">Video call · ${nice} at ${time} CET · with the ${slot.dataset.city} gallery</p>
+        <div class="bk-req__fields">
+          <label class="visually-hidden" for="bk-req-name">Your name</label>
+          <input id="bk-req-name" name="name" type="text" placeholder="Your name" required autocomplete="name">
+          <label class="visually-hidden" for="bk-req-mail">Your email</label>
+          <input id="bk-req-mail" name="email" type="email" placeholder="Your email" required autocomplete="email">
+          <button class="btn btn--primary" type="submit">Request this time</button>
+        </div>
+        <p class="caption txt-secondary bk-req__note">We confirm by email, usually within the hour. Nothing is charged.</p>
+      </form>`);
+    row.querySelector('#bk-req-name').focus();
+  });
+
+  results.addEventListener('submit', (e) => {
+    const form = e.target.closest('[data-req]');
+    if (!form) return;
+    e.preventDefault();
+    track('video_request_submit', { slot: form.closest('.bk-row').querySelector('[aria-pressed="true"]')?.dataset.slot });
+    form.innerHTML = '<p class="bk-req__head">Requested. We will confirm by email, usually within the hour.</p>';
+  });
+
+  fetch('assets/data/availability.json')
+    .then((r) => r.json())
+    .then((json) => {
+      data = json;
+      Object.entries(data.galleries)
+        .sort((a, b) => a[1].city.localeCompare(b[1].city))
+        .forEach(([slug, g]) => citySel.insertAdjacentHTML('beforeend', `<option value="${slug}">${g.city}</option>`));
+      const now = berlinNow();
+      dateInp.min = now.date;
+      fromSel.value = `${pad(Math.min(20, Math.max(8, Math.ceil(now.minutes / 60))))}:00`;
+      render();
+    })
+    .catch(() => {
+      status.textContent = 'Live times are not loading. Every gallery’s booking form is still one click away below.';
+    });
+})();

@@ -100,6 +100,84 @@
       transition:border-color 160ms var(--ease-out); }
     .channel-line a:hover { border-color:var(--charcoal-900); }
 
+    /* ── Hero art · three frames, people-first ─────────── */
+    .hero__art--stack { display:grid; grid-template-columns:1fr 1fr; gap:clamp(0.8rem,1vw,1.2rem); }
+    .hero__art--stack img { width:100%; display:block; }
+    .hero__art-main { grid-column:1 / -1; aspect-ratio:16/10; object-fit:cover; object-position:50% 42%; }
+    .hero__art-sub { aspect-ratio:1/1; object-fit:cover; }
+    .hero__art-sub:first-of-type { object-position:50% 18%; }
+    @media (max-width:759px){ .hero__art-main { aspect-ratio:4/3; } }
+
+    /* ── Booker · time first ───────────────────────────── */
+    .booker { border:1px solid var(--border-default); background:var(--ivory-100); }
+    .booker__modes { display:flex; border-bottom:1px solid var(--border-default); }
+    .booker__mode { flex:1 1 0; padding:1.5rem 1.2rem; font-size:1.2rem; letter-spacing:0.14em;
+      text-transform:uppercase; background:transparent; border:0; cursor:pointer;
+      color:var(--text-secondary); transition:background-color 200ms var(--ease-out), color 200ms var(--ease-out); }
+    .booker__mode + .booker__mode { border-left:1px solid var(--border-default); }
+    .booker__mode[aria-selected="true"] { background:var(--charcoal-900); color:var(--ivory-100); }
+    .booker__body { padding:clamp(2rem,3vw,3.2rem); }
+    .booker__controls { display:flex; flex-wrap:wrap; gap:clamp(1.6rem,2.4vw,2.8rem); align-items:flex-end;
+      padding-bottom:clamp(1.8rem,2.4vw,2.4rem); border-bottom:1px solid var(--border-subtle); }
+    .chipset { display:flex; flex-wrap:wrap; gap:0.8rem; }
+    .chip { font-size:1.3rem; padding:0.9rem 1.6rem; border:1px solid var(--border-default);
+      background:transparent; cursor:pointer; color:var(--text-primary);
+      transition:background-color 200ms var(--ease-out), border-color 200ms var(--ease-out); }
+    .chip:hover { border-color:var(--charcoal-900); }
+    .chip[aria-pressed="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
+    .chip--field { display:inline-flex; align-items:center; gap:0.8rem; cursor:default; padding-block:0.6rem; }
+    .chip__label { font-size:1.3rem; }
+    .chip__input { font:inherit; font-size:1.3rem; border:0; background:transparent; color:inherit; cursor:pointer; }
+    .booker__selects { display:flex; gap:clamp(1.2rem,2vw,2rem); margin-left:auto; }
+    .booker__field { display:flex; flex-direction:column; gap:0.5rem; }
+    .booker__field select { font:inherit; font-size:1.4rem; padding:0.8rem 1.2rem; background:transparent;
+      border:1px solid var(--border-default); color:var(--text-primary); cursor:pointer; }
+    .booker__status { margin-top:clamp(1.8rem,2.4vw,2.4rem); font-size:1.5rem; }
+    .booker__results { display:grid; gap:1px; background:var(--border-subtle); margin-top:1.6rem; }
+    .booker__results:empty { display:none; }
+    .bk-row { background:var(--ivory-100); padding:clamp(1.6rem,2vw,2rem) 0; display:grid;
+      grid-template-columns:minmax(0,22rem) 1fr; gap:clamp(1.2rem,2vw,2.4rem); align-items:start; }
+    .bk-row__city { font-size:1.7rem; }
+    .bk-row__addr { color:var(--text-secondary); margin-top:0.4rem; }
+    .bk-row__slots { display:flex; flex-wrap:wrap; gap:0.8rem; }
+    .bk-slot { font-size:1.4rem; padding:0.9rem 1.4rem; border:1px solid var(--border-default);
+      background:transparent; color:var(--text-primary); cursor:pointer; text-decoration:none;
+      transition:background-color 200ms var(--ease-out), color 200ms var(--ease-out); }
+    .bk-slot:hover { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
+    .bk-slot--more { border-style:dashed; color:var(--text-secondary); }
+    .bk-row__none { color:var(--text-secondary); }
+    .booker__meta { margin-top:clamp(1.6rem,2vw,2rem); }
+    .booker__meta:empty { display:none; }
+    .bk-note { margin-top:1.6rem; padding:1.4rem 1.6rem; border-left:2px solid var(--charcoal-900);
+      background:var(--bone-100); font-size:1.4rem; }
+    @media (max-width:759px){
+      .booker__selects { margin-left:0; width:100%; }
+      .booker__field { flex:1 1 0; }
+      .bk-row { grid-template-columns:1fr; }
+    }
+
+    .visually-hidden { position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+      overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
+
+    /* ── Video-call request, inline in the row ─────────── */
+    .bk-slot[aria-pressed="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
+    .bk-req { grid-column:1 / -1; margin-top:1.6rem; padding:clamp(1.6rem,2vw,2rem);
+      background:var(--bone-100); border-left:2px solid var(--charcoal-900); }
+    .bk-req__head { font-size:1.5rem; }
+    .bk-req__fields { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:1.2rem; }
+    .bk-req__fields input { font:inherit; font-size:1.4rem; padding:0.9rem 1.2rem; flex:1 1 18rem;
+      border:1px solid var(--border-default); background:var(--ivory-100); color:var(--text-primary); }
+    .bk-req__note { margin-top:1rem; }
+
+    /* ── Prep · optional wall photo, given real weight ─── */
+    .prep { display:grid; grid-template-columns:1fr 1fr; gap:clamp(2.4rem,4vw,5.6rem);
+      align-items:center; margin-top:clamp(4rem,6vw,7.2rem); }
+    @media (max-width:899px){ .prep { grid-template-columns:1fr; } }
+    .ba--compact img { aspect-ratio:16/10; object-fit:cover; }
+
+    /* ── People head ───────────────────────────────────── */
+    .people-head { align-items:end; margin-bottom:clamp(3.2rem,4.5vw,5.6rem); }
+
     /* ── Consultant portrait, squared off ──────────────── */
     /* The 3:4 source ran tall next to the copy. 1:1 drops the empty floor and
        keeps the whole seascape edition, both women and the gesture, so
@@ -984,69 +1062,120 @@
         <div class="hero__text">
           <p class="eyebrow hero__eyebrow reveal">Personal art advisory</p>
           <h1 class="display-h1 hero__title reveal">Choose your art with the person who hangs it</h1>
-          <p class="body-large hero__lede measure reveal">Sit down with an Art Consultant in your nearest gallery, or send us a photo of your wall and see the work in your room before you decide.</p>
+          <p class="body-large hero__lede measure reveal">Thirty minutes with an Art Consultant who works on the gallery floor. In the gallery, or by video call from wherever you are.</p>
           <div class="hero__actions reveal">
-            <a class="btn btn--primary" href="#book" data-goal="cta_click" data-cta="hero_book">Book a consultation</a>
-            <a class="btn btn--ghost" href="#visualise" data-goal="cta_click" data-cta="hero_visualise">See it on your wall</a>
+            <a class="btn btn--primary" href="#book" data-goal="cta_click" data-cta="hero_book_gallery">Book in a gallery</a>
+            <a class="btn btn--ghost" href="#book" data-mode="video" data-goal="cta_click" data-cta="hero_book_video">Book a video call</a>
           </div>
           <p class="hero__trust reveal"><span>30 minutes</span><span>Free, with no obligation</span><span>19 galleries</span></p>
         </div>
-        <div class="hero__art reveal">
-          <img src="assets/scenes/hanging-the-work.jpg" width="1600" height="1600"
+        <!-- Three frames, not one: the hang, the conversation, the room. The page is
+             about people, so people carry the hero. -->
+        <div class="hero__art hero__art--stack reveal">
+          <img class="hero__art-main" src="assets/scenes/hanging-the-work.jpg" width="1600" height="1600"
                alt="Two LUMAS gallery specialists hanging a large contemporary painting" loading="eager">
+          <img class="hero__art-sub" src="assets/scenes/consultant-dialogue.jpg" width="1052" height="1400"
+               alt="A LUMAS Art Consultant talking a guest through a seascape edition" loading="eager">
+          <img class="hero__art-sub" src="assets/scenes/gallery-conversation.jpg" width="1600" height="1066"
+               alt="Guests in conversation in front of two editions at a LUMAS gallery" loading="lazy">
         </div>
       </div>
     </section>
 
-    <!-- ══ VISUALISATION · shown, not described ══ -->
-    <section id="visualise" class="section surface-raised">
+    <!-- ══ BOOK · time first, person second ══════════════════════════════════
+         The user wants a slot, not a particular calendar. So the page asks
+         "when?" before "who?", and the consultant carousel below answers "who".
+         Slots come from assets/data/availability.json, harvested from the real
+         Microsoft Bookings calendars behind lumas.de/booking/galerie/<id>/
+         (GetStaffAvailability). Gallery windows only: no staff names or ids.
+         FIXME (production): this is a build-time snapshot. Wire the same call
+         server-side, or the Bookings Graph API, so it stays live. -->
+    <section id="book" class="section surface-raised">
       <div class="wrap">
-        <div class="band" style="align-items:start;margin-bottom:clamp(2.8rem,3.6vw,4rem)">
-          <div class="section-head reveal" style="margin-bottom:0">
-            <p class="eyebrow">Visualisation</p>
-            <h2 class="display-h2 mt-s">See the work on your wall, before you decide</h2>
+        <div class="section-head reveal">
+          <p class="eyebrow">Book a consultation</p>
+          <h2 class="display-h2 mt-s">When suits you?</h2>
+          <p class="body-large txt-secondary measure mt-m">Thirty minutes with an Art Consultant, free and with no obligation. Pick a time and we will show you where it is open.</p>
+        </div>
+
+        <div class="booker reveal" data-booker>
+          <div class="booker__modes" role="tablist" aria-label="How you would like to meet">
+            <button class="booker__mode" type="button" role="tab" aria-selected="true" data-mode-btn="gallery">In a gallery</button>
+            <button class="booker__mode" type="button" role="tab" aria-selected="false" data-mode-btn="video">Video call</button>
           </div>
-          <div class="reveal">
-            <p class="body-large txt-secondary measure">Send your Art Consultant a photo of the room. They place the work on your wall at true scale, in the size and frame you are considering, and talk you through what changes. Drag to see it.</p>
-            <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="visualise_primary" style="margin-top:clamp(2rem,2.6vw,2.8rem)">Send us your wall</button>
+
+          <div class="booker__body">
+            <div class="booker__controls">
+              <div class="chipset" role="group" aria-label="When">
+                <button class="chip" type="button" data-when="now" aria-pressed="true">Available now</button>
+                <button class="chip" type="button" data-when="today" aria-pressed="false">Today</button>
+                <button class="chip" type="button" data-when="tomorrow" aria-pressed="false">Tomorrow</button>
+                <span class="chip chip--field">
+                  <label class="chip__label" for="bk-date">Another day</label>
+                  <input class="chip__input" id="bk-date" type="date" data-when-date>
+                </span>
+              </div>
+              <div class="booker__selects">
+                <span class="booker__field">
+                  <label class="caption" for="bk-from">From</label>
+                  <select id="bk-from" data-from></select>
+                </span>
+                <span class="booker__field">
+                  <label class="caption" for="bk-city">Where</label>
+                  <select id="bk-city" data-city><option value="">Any gallery</option></select>
+                </span>
+              </div>
+            </div>
+
+            <p class="booker__status" data-status role="status" aria-live="polite"></p>
+            <div class="booker__results" data-results></div>
+            <p class="booker__meta caption txt-secondary" data-meta></p>
           </div>
         </div>
 
-        <figure class="reveal" style="margin:0">
-          <div class="ba" data-ba>
-            <img src="assets/visualise/wall-after.jpg" width="1600" height="900"
-                 alt="A living room with Massimo Colonna's Blue Riad hanging on the wall" loading="lazy">
-            <div class="ba__before" data-ba-before>
-              <img src="assets/visualise/wall-before.jpg" width="1600" height="900"
-                   alt="The same living room with an empty wall" loading="lazy">
-            </div>
-            <span class="ba__tag ba__tag--l">Your wall</span>
-            <span class="ba__tag ba__tag--r">With the work</span>
-            <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
-                   aria-label="Drag to compare the empty wall with the work in place" data-ba-range>
-            <div class="ba__handle" data-ba-handle>
-              <span class="ba__grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l-4 6 4 6M15 6l4 6-4 6"/></svg></span>
-            </div>
+        <!-- Optional, but worth real estate: the single thing that makes the
+             thirty minutes land better. Framed as preparation for the
+             appointment, not as a separate tool. -->
+        <aside class="prep reveal">
+          <div class="prep__text">
+            <p class="eyebrow">Optional, and worth it</p>
+            <h3 class="display-h3 mt-s">Send a photo of your wall before you come</h3>
+            <p class="body-large txt-secondary measure mt-m">Your consultant places the work on your wall at true scale, in the size and frame you are considering, and brings it to the appointment. You spend the thirty minutes deciding, not imagining.</p>
+            <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="prep_wall" style="margin-top:clamp(1.8rem,2.4vw,2.4rem)">Send your wall</button>
+            <p class="caption txt-secondary" style="margin-top:1.2rem">Not required. You can book without it.</p>
           </div>
-          <figcaption class="caption ba__note txt-secondary">Massimo Colonna, <em>Blue Riad</em>, 146 × 180 cm, shown in a collector’s living room. Room visualisation by a LUMAS Art Consultant.</figcaption>
-        </figure>
-
-        <p class="body-small txt-secondary reveal" style="margin-top:2rem">On every artwork page you can also hold up your phone and place the work in the room yourself, with the room view.</p>
+          <figure class="prep__proof" style="margin:0">
+            <div class="ba ba--compact" data-ba>
+              <img src="assets/visualise/wall-after.jpg" width="1600" height="900"
+                   alt="A living room with Massimo Colonna's Blue Riad hanging on the wall" loading="lazy">
+              <div class="ba__before" data-ba-before>
+                <img src="assets/visualise/wall-before.jpg" width="1600" height="900"
+                     alt="The same living room with an empty wall" loading="lazy">
+              </div>
+              <span class="ba__tag ba__tag--l">Your wall</span>
+              <span class="ba__tag ba__tag--r">With the work</span>
+              <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
+                     aria-label="Drag to compare the empty wall with the work in place" data-ba-range>
+              <div class="ba__handle" data-ba-handle>
+                <span class="ba__grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l-4 6 4 6M15 6l4 6-4 6"/></svg></span>
+              </div>
+            </div>
+            <figcaption class="caption ba__note txt-secondary">Massimo Colonna, <em>Blue Riad</em>, 146 × 180 cm, in a collector’s living room.</figcaption>
+          </figure>
+        </aside>
       </div>
     </section>
 
-    <!-- ══ BOOK · the people and the booking, in one ══ -->
-    <section id="book" class="wrap section hairline-top">
-      <div class="band" style="align-items:center;margin-bottom:clamp(3.2rem,4.5vw,5.6rem)">
-        <div class="section-head reveal" style="margin-bottom:0">
-          <p class="eyebrow">Book a consultation</p>
-          <h2 class="display-h2 mt-s">Pick your person, pick your time</h2>
-          <p class="body-large txt-secondary measure mt-m">Every LUMAS gallery has its own Art Consultant. Choose the one nearest you and take a 30-minute slot in their calendar. They work on the gallery floor every day, hanging the editions and choosing the frames, so they answer from the work itself, not from a catalogue.</p>
+    <!-- ══ WHO · the people, with the copy merged into the carousel ══ -->
+    <section id="people" class="wrap section hairline-top">
+      <!-- The copy sits with the faces it describes. No separate band, no
+           second photograph: the carousel IS the argument. -->
+      <div class="people-head band reveal">
+        <div>
+          <p class="eyebrow">Who you will be sitting with</p>
+          <h2 class="display-h2 mt-s">Pick your person</h2>
         </div>
-        <figure class="room-figure room-figure--square reveal" style="margin:0">
-          <img src="assets/scenes/consultant-dialogue.jpg" width="1052" height="1400" alt="A LUMAS Art Consultant talking a guest through a seascape edition" loading="lazy">
-          <figcaption class="caption">An Art Consultant talks a guest through a work, LUMAS Budapest.</figcaption>
-        </figure>
+        <p class="body-large txt-secondary measure">Every LUMAS gallery has its own Art Consultant. They work the gallery floor every day, hanging the editions and choosing the frames, so they answer from the work itself, not from a catalogue.</p>
       </div>
 
       <figure class="consultant-quote reveal">
@@ -1182,14 +1311,14 @@
   <footer class="footer">
     <div class="wrap footer__grid">
       <div>
-        <h4>Book a consultation</h4>
+        <h4>Book in a gallery</h4>
         <p>Thirty minutes with the Art Consultant at your nearest gallery. Free, and with no obligation.</p>
         <a class="btn btn--inverse" href="#book" data-goal="cta_click" data-cta="footer_book">Book a consultation</a>
       </div>
       <div>
-        <h4>See it on your wall</h4>
-        <p>Send a photo of the room and we place the work in it, at true scale.</p>
-        <a class="link-underline" style="border-color:rgba(244,237,226,0.4);color:var(--ivory-100)" href="#visualise" data-goal="cta_click" data-cta="footer_visualise">Request a visualisation <span class="arrow">→</span></a>
+        <h4>Book a video call</h4>
+        <p>The same consultant and the same thirty minutes, from wherever you are.</p>
+        <a class="link-underline" style="border-color:rgba(244,237,226,0.4);color:var(--ivory-100)" href="#book" data-mode="video" data-goal="cta_click" data-cta="footer_book_video">Find a time <span class="arrow">→</span></a>
       </div>
       <div>
         <h4>Since 2004</h4>
@@ -1257,7 +1386,7 @@
     document.addEventListener('DOMContentLoaded', measure);
   })();
 </script>
-  <script src="assets/site.js?v=13"></script>
+  <script src="assets/site.js?v=15"></script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
