@@ -252,12 +252,28 @@
   border-top: 1px solid var(--color-border-default);
   border-bottom: 1px solid var(--color-border-default);
   font-family: var(--font-body);
-  font-size: 1.6rem;
-  line-height: 1.45;
+  /* The buy price renders at 32px. At 16px this line read as a footnote beside
+     it, so the alternative looked like small print rather than a second way to
+     own the work. 20px for the sentence and 26px for the amount closes the gap
+     to roughly 1.2x while the buy price stays the larger of the two. */
+  font-size: 2rem;
+  line-height: 1.4;
   color: var(--color-text-primary);
 }
 
-.aaas-offer b { font-family: var(--font-body-bold); font-weight: 400; }
+.aaas-offer b {
+  font-family: var(--font-body-bold);
+  font-weight: 400;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+/* 375px still has to hold "Oder Art as a Service: nur € 20,59 im Monat" without
+   the amount forcing a third line. */
+@media (max-width: 480px) {
+  .aaas-offer { font-size: 1.8rem; }
+  .aaas-offer b { font-size: 2.2rem; }
+}
 
 .aaas-offer-link {
   padding: 0;
@@ -1500,4 +1516,34 @@
   .aaas-sx-head h1 { font-size: 2.8rem; }
 
   /* keep the prototype marker clear of the primary action */
+}
+
+
+/* ---------- cart and checkout: one mode for the whole order ----------
+ * Mixed carts do not exist. The switch converts every line, and the scope
+ * sentence says so on both surfaces rather than leaving it to the terms. */
+
+.aaas-scope {
+  margin: var(--sp-3) 0 0;
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  line-height: 1.5;
+  /* secondary, not tertiary: tertiary is 3.34:1 and fails AA */
+  color: var(--color-text-secondary);
+}
+
+/* With one line in the cart the rule is still true but less urgent, so it is
+   stated once and quietly rather than argued. */
+.aaas-scope-single { color: var(--color-text-secondary); }
+
+.aaas-scope .aaas-link { font-size: inherit; }
+
+/* The fly-out is informational now, so its foot carries a note and a dismiss,
+   not an add-to-cart. */
+.aaas-foot-note {
+  margin: 0 0 var(--sp-3);
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
 }

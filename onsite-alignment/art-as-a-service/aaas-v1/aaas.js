@@ -97,20 +97,55 @@
   function mode() { try { return sessionStorage.getItem(MODE_KEY) || 'buy'; } catch (e) { return 'buy'; } }
   function setMode(v) { try { sessionStorage.setItem(MODE_KEY, v); } catch (e) {} }
 
-  // A single stored item is enough to express the pilot's rule: a rental contract
-  // covers one work, and a rental cannot share a cart with a purchase (GLOB-2053,
-  // "keine gemischten Warenkörbe").
-  var CART_KEY = 'aaas-cart';
+  /* The cart is a LIST, and the buy-or-rent mode is a property of the cart, not
+   * of a line. That is the whole of "keine gemischten Warenkörbe" (GLOB-2053):
+   * switching to Art as a Service converts every line at once, and switching
+   * back converts them all back. There is no per-item mode to reconcile, so the
+   * old conflict state has nothing left to resolve and is gone. */
+  var CART_KEY = 'aaas-cart-lines';
 
-  function cartItem() {
-    try { return JSON.parse(sessionStorage.getItem(CART_KEY) || 'null'); } catch (e) { return null; }
+  function cartLines() {
+    try {
+      var v = JSON.parse(sessionStorage.getItem(CART_KEY) || 'null');
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
   }
 
-  function setCartItem(o) {
+  function setCartLines(list) {
     try {
-      if (o) sessionStorage.setItem(CART_KEY, JSON.stringify(o));
+      if (list && list.length) sessionStorage.setItem(CART_KEY, JSON.stringify(list));
       else sessionStorage.removeItem(CART_KEY);
     } catch (e) {}
+  }
+
+  function addToCart(p) {
+    var list = cartLines();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].sku === p.sku) { list[i] = p; setCartLines(list); return list; }
+    }
+    list.push(p);
+    setCartLines(list);
+    return list;
+  }
+
+  // The checkout and the success page still read one representative line for the
+  // summary they were built around.
+  function cartItem() {
+    var list = cartLines();
+    return list.length ? list[0] : null;
+  }
+
+  function setCartItem(o) { setCartLines(o ? [o] : []); }
+
+  // Totals for the whole cart, in whichever mode the cart is in.
+  function cartQuote() {
+    var lines = cartLines();
+    var gross = 0, shipping = 0;
+    lines.forEach(function (l) {
+      gross += l.gross || 0;
+      shipping = Math.max(shipping, l.shipping || 0);   // one delivery, not one per line
+    });
+    return quote(gross, shipping);
   }
 
   function figure(label, value, sub) {
@@ -232,23 +267,18 @@
             'Vertrag weiter, bis du übernimmst, tauschst oder zurückgibst. Zahlung per ' +
             'SEPA-Lastschrift oder Kreditkarte.</p>' +
         '</div>' +
+        // No add-to-cart here. The PDP only explains Art as a Service; the
+        // choice is made once for the whole cart, in the cart or the checkout.
         '<div class="aaas-drawer-foot">' +
-          '<button type="button" class="aaas-btn" data-aaas-rent>Mit Art as a Service ' +
-            'in den Warenkorb</button>' +
+          '<p class="aaas-foot-note">Du wählst Art as a Service später im Warenkorb, ' +
+            'für deine ganze Bestellung.</p>' +
+          '<button type="button" class="aaas-btn" data-aaas-done>Verstanden</button>' +
         '</div>' +
       '</div>';
 
     document.body.appendChild(d);
     d.querySelector('.aaas-close').addEventListener('click', function () { d.close(); });
-    d.querySelector('[data-aaas-rent]').addEventListener('click', function () {
-      d.close();
-      attemptAdd(true);
-    });
-    var buyNow = d.querySelector('[data-aaas-buy]');
-    if (buyNow) buyNow.addEventListener('click', function () {
-      d.close();
-      attemptAdd(false);
-    });
+    d.querySelector('[data-aaas-done]').addEventListener('click', function () { d.close(); });
     if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
   }
 
@@ -273,10 +303,31 @@
              'Mindestlaufzeit ' + TERMS.months + ' Monate.</div>';
   }
 
+  function cartLineMarkup(l, q, renting) {
+    // Each line shows the mode the whole cart is in. There is no per-line control.
+    var lq = quote(l.gross || 0, 0);
+    return '<div class="item" data-sku="' + l.sku + '">' +
+      '<a href="' + l.href + '"><picture class="product-image">' +
+        '<img src="' + l.image + '" alt="' + l.title + '"></picture></a>' +
+      '<div class="item-meta">' +
+        '<div class="name">' + l.title + '</div>' +
+        '<div class="artist-name">' + l.artist + '</div>' +
+        '<div class="finishing">GRÖSSE: ' + l.size +
+          (l.finishing ? '&nbsp;|&nbsp;' + l.finishing : '') + '</div>' +
+        '<div class="price">' + (renting
+          ? money(lq.monthly) + ' im Monat'
+          : money(l.gross)) + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
   function renderCart(q, p) {
     var shell = document.querySelector('.cart-overlay');
     if (!shell) return;
     var renting = mode() === 'rent';
+    var lines = cartLines();
+    if (!lines.length && p) lines = addToCart(p);
+    q = cartQuote();
 
     shell.innerHTML =
       '<div class="backdrop"></div>' +
@@ -288,31 +339,25 @@
         // with it. The close button already provides the way out.
         '<button class="icon-close" aria-label="Schließen"></button>' +
         '<div class="title">Warenkorb</div>' +
-        '<div class="items"><div class="item" data-sku="' + p.sku + '">' +
-          '<a href="' + p.href + '"><picture class="product-image">' +
-            '<img src="' + p.image + '" alt="' + p.title + '"></picture></a>' +
-          '<div class="item-meta">' +
-            '<div class="name">' + p.title + '</div>' +
-            '<div class="artist-name">' + p.artist + '</div>' +
-            '<div class="finishing">GRÖSSE: ' + p.size +
-              (p.finishing ? '&nbsp;|&nbsp;' + p.finishing : '') + '</div>' +
-            '<div class="price">' + (renting
-              ? money(q.monthly) + ' im Monat'
-              : money(q.gross)) + '</div>' +
-          '</div>' +
-        '</div></div>' +
+        '<div class="items">' +
+          lines.map(function (l) { return cartLineMarkup(l, q, renting); }).join('') +
+        '</div>' +
         // the switch sits with the money, not stranded in the void between the
-        // item and the pinned bottom: one coherent decision block
+        // items and the pinned bottom: one coherent decision block
         '<div class="cart-overlay-bottom">' +
           '<div class="aaas-cart-mode">' +
             '<div class="aaas-label">Kauf oder Art as a Service</div>' +
-            // the PDP decides with a switch, so the cart repeats that control
-            // rather than offering the same choice in another shape
             switchControl(q, renting, 'data-mode="' + (renting ? 'buy' : 'rent') + '"') +
+            // the rule stated where it applies, not buried in terms
+            '<p class="aaas-scope' + (lines.length > 1 ? '' : ' aaas-scope-single') + '">' +
+              (renting
+                ? 'Art as a Service gilt für deine ganze Bestellung.'
+                : 'Art as a Service gilt immer für die ganze Bestellung, nicht für einzelne Werke.') +
+              ' <button type="button" class="aaas-link" data-aaas-info>So funktioniert Art as a Service</button>' +
+            '</p>' +
           '</div>' +
           // express checkout is left out of the drawer entirely for now. It also
           // cannot carry a recurring SEPA mandate, so it never applied to renting.
-          // (.has-payment-options stays on the container: it drives the grid sizing.)
           '<div class="cart-totals">' +
             cartTotals(q, renting) +
             '<div class="button"><a href="checkout.html" class="btn">Zur Kasse</a></div>' +
@@ -329,104 +374,25 @@
     shell.querySelector('.icon-close').addEventListener('click', closeCart);
     shell.querySelector('.backdrop').addEventListener('click', closeCart);
     shell.addEventListener('click', function (e) {
-      var b = e.target.closest && e.target.closest('[data-mode]');
+      if (!e.target.closest) return;
+      if (e.target.closest('[data-aaas-info]')) { openConditions(); return; }
+      var b = e.target.closest('[data-mode]');
       if (!b) return;
-      var m = b.getAttribute('data-mode');
-      setMode(m);
-      p.rent = (m === 'rent');
-      setCartItem(p);                              // keep the stored item in step
-      renderCart(q, p);                            // re-render in the chosen mode
+      setMode(b.getAttribute('data-mode'));         // one mode for the whole cart
+      renderCart(cartQuote(), null);
     });
   }
 
-  /* ---------- mixed-cart conflict ----------
-   * GLOB-2053 rules out mixed carts, and the pilot's contract covers one work.
-   * Reachable without contrivance: each size is its own SKU, so adding a second
-   * variant while a rental is in the cart is a real path. The state offers a
-   * choice rather than a dead end, since refusing without a way forward is worse
-   * than the conflict itself. */
+  /* The mixed-cart conflict state is gone on purpose. It existed because a line
+   * carried its own mode, so adding a second work could contradict the first.
+   * The mode is now a property of the cart, so that contradiction cannot be
+   * expressed and there is nothing to resolve. */
 
-  function conflictCopy(existing, asRent) {
-    if (existing.rent && asRent) {
-      return {
-        label: 'Nur ein Werk pro Vertrag',
-        lede: 'Ein Vertrag gilt für ein Werk. Du hast bereits ein Werk über Art as a ' +
-              'Service im Warenkorb.',
-        keep: 'Bisheriges Werk behalten',
-        swap: 'Stattdessen dieses Werk nehmen'
-      };
-    }
-    return {
-      label: 'Kauf und Art as a Service getrennt bestellen',
-      lede: 'Art as a Service und ein Kauf lassen sich nicht zusammen bestellen. ' +
-            'Schließe das eine ab, danach kannst du das zweite Werk kaufen.',
-      keep: 'Auswahl behalten',
-      swap: existing.rent ? 'Auswahl verwerfen und dieses Werk kaufen'
-                          : 'Stattdessen Art as a Service'
-    };
-  }
-
-  function conflictWork(it, note) {
-    return '<div class="aaas-cf-work">' +
-      '<img src="' + (it.image || '') + '" alt="">' +
-      '<div class="aaas-cf-meta"><b>' + (it.title || '') + '</b>' +
-        '<span>' + (it.artist || '') + '</span>' +
-        (it.size ? '<span>' + it.size + '</span>' : '') + '</div>' +
-      '<span class="aaas-cf-tag">' + note + '</span></div>';
-  }
-
-  function renderConflict(existing, incoming, asRent) {
-    var shell = document.querySelector('.cart-overlay');
-    if (!shell) return;
-    var c = conflictCopy(existing, asRent);
-
-    shell.innerHTML =
-      '<div class="backdrop"></div><div class="arrow-up"></div>' +
-      '<div class="cart-overlay-container has-payment-options">' +
-        '<button class="icon-close" aria-label="Schließen"></button>' +
-        '<div class="title">Warenkorb</div>' +
-        '<div class="aaas-cf" role="alert">' +
-          '<div class="aaas-label">' + c.label + '</div>' +
-          '<p class="aaas-cf-lede">' + c.lede + '</p>' +
-          conflictWork(existing, existing.rent ? 'Art as a Service, im Warenkorb' : 'Im Warenkorb') +
-          conflictWork(incoming, asRent ? 'Neu, Art as a Service' : 'Neu, zum Kauf') +
-        '</div>' +
-        '<div class="cart-overlay-bottom">' +
-          '<div class="aaas-cf-actions">' +
-            '<button type="button" class="aaas-btn" data-cf="keep">' + c.keep + '</button>' +
-            '<button type="button" class="aaas-btn aaas-btn-secondary" data-cf="swap">' + c.swap + '</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-
-    shell.querySelector('.icon-close').addEventListener('click', closeCart);
-    shell.querySelector('.backdrop').addEventListener('click', closeCart);
-    shell.addEventListener('click', function (e) {
-      var b = e.target.closest && e.target.closest('[data-cf]');
-      if (!b) return;
-      if (b.getAttribute('data-cf') === 'swap') {
-        setCartItem(incoming);
-        setMode(asRent ? 'rent' : 'buy');
-      }
-      openCart();
-    });
-  }
-
-  function attemptAdd(asRent) {
+  function attemptAdd() {
     var p = product();
     p.gross = pdpGross();
     p.shipping = pdpShipping();
-    p.rent = asRent;
-
-    var have = cartItem();
-    // two purchases can share a cart; anything involving a rental cannot
-    if (have && have.sku !== p.sku && (have.rent || asRent)) {
-      renderConflict(have, p, asRent);
-      lockScroll();
-      return;
-    }
-    setCartItem(p);
-    setMode(asRent ? 'rent' : 'buy');
+    addToCart(p);
     openCart();
   }
 
@@ -857,8 +823,8 @@
       if (atc.hasAttribute('data-aaas-cta') || /in den warenkorb/i.test(atc.textContent || '')) {
         e.preventDefault();
         e.stopPropagation();
-        // the PDP decides buy vs rent, so the add follows that choice
-        attemptAdd(mode() === 'rent');
+        // the PDP no longer decides buy vs rent: it adds, and the cart chooses
+        attemptAdd();
       }
     }, true);
   }
@@ -878,22 +844,59 @@
   /* The captured summary describes the work that happened to be in the cart at
    * capture time. Point every part of it at the chosen variant so the size, the
    * finishing, the image and the price agree with the PDP and the drawer. */
-  function applyCartItemToSummary(aside, priceEl, item) {
-    priceEl.textContent = money(item.gross);
-    priceEl.dataset.aaasBuy = money(item.gross);
-    var img = aside.querySelector('.article img, .cart-items-container img');
-    if (img && item.image) img.setAttribute('src', item.image);
-    var name = aside.querySelector('.article-name, .cart-items-container .name');
-    if (name && item.title) name.textContent = item.title;
+  /* Fill ONE summary line from one cart line. Scoped to that line's own block:
+   * scoping these edits to the whole aside overwrote the cloned second line
+   * with the first line's size, which is exactly what it looked like. */
+  function fillSummaryLine(row, l) {
+    var img = row.querySelector('img');
+    if (img && l.image) img.setAttribute('src', l.image);
+    var name = row.querySelector('.product-name, .article-name, .name');
+    if (name && l.title) name.textContent = l.title;
+    var artist = row.querySelector('.cart-artist');
+    if (artist && l.artist) artist.textContent = l.artist;
     // the size sits in its own .mt-1 line inside .product-finishing, and the
     // summary carries a desktop and a mobile copy of it
-    aside.querySelectorAll('.product-finishing, .product-finishing-mobile').forEach(function (box) {
+    row.querySelectorAll('.product-finishing, .product-finishing-mobile').forEach(function (box) {
       var size = box.querySelector('.mt-1');
-      if (size && item.size) size.textContent = item.size + ' cm';
+      if (size && l.size) size.textContent = l.size + ' cm';
       // the finishing is the box's own text, ahead of that size line
       [].forEach.call(box.childNodes, function (n) {
-        if (n.nodeType === 3 && n.nodeValue.trim() && item.finishing) n.nodeValue = item.finishing;
+        if (n.nodeType === 3 && n.nodeValue.trim() && l.finishing) n.nodeValue = l.finishing;
       });
+    });
+    // the gross is parked on the row so the mode switch can re-price it later
+    row.dataset.aaasGross = String(l.gross || 0);
+  }
+
+  /* The captured summary carries exactly one article block. Rather than invent a
+   * second look for it, the block is cloned for each further cart line. */
+  function renderSummaryLines(aside, lines) {
+    var rows = aside.querySelectorAll('.cart-items-container .cart-item');
+    var proto = rows[0];
+    if (!proto || !lines.length) return;
+    // drop clones from a previous render so this is idempotent
+    aside.querySelectorAll('.cart-item[data-aaas-extra]').forEach(function (n) { n.remove(); });
+    fillSummaryLine(proto, lines[0]);
+    var last = proto;
+    lines.slice(1).forEach(function (l) {
+      var copy = proto.cloneNode(true);
+      copy.dataset.aaasExtra = '1';
+      fillSummaryLine(copy, l);
+      last.parentNode.insertBefore(copy, last.nextSibling);
+      last = copy;
+    });
+  }
+
+  /* Re-price every summary line for the cart's mode. One mode for the whole
+   * order, so this never has to reconcile two. */
+  function priceSummaryLines(renting) {
+    document.querySelectorAll('.cart-items-container .cart-item').forEach(function (row) {
+      var g = Number(row.dataset.aaasGross || 0);
+      var el = row.querySelector('.article-price');
+      if (!el || !g) return;
+      el.innerHTML = renting
+        ? money(quote(g, 0).monthly) + '<span class="aaas-sub">im Monat, ' + TERMS.months + ' Monate</span>'
+        : money(g);
     });
   }
 
@@ -904,11 +907,19 @@
     // The captured summary holds whatever was in the cart when the page was
     // grabbed, so on its own the checkout quoted a different work from the one
     // just chosen. The stored item wins whenever there is one.
+    /* The whole cart is quoted, not the first line. Before the cart became a
+     * list this was the same number; with two works in it, quoting one line
+     * understated every figure in the summary. */
+    var lines = cartLines();
     var item = cartItem();
-    var gross = (item && item.gross) || parseMoney(priceEl.textContent);
+    var gross = lines.length
+      ? lines.reduce(function (n, l) { return n + (l.gross || 0); }, 0)
+      : parseMoney(priceEl.textContent);
     if (!gross) return;
-    var q = quote(gross, (item && item.shipping) || FALLBACK_SHIPPING);
-    if (item) applyCartItemToSummary(aside, priceEl, item);
+    var q = lines.length ? cartQuote()
+                         : quote(gross, (item && item.shipping) || FALLBACK_SHIPPING);
+    if (lines.length) renderSummaryLines(aside, lines);
+    priceEl.dataset.aaasBuy = money(gross);
 
     fillShopExpress();
     if (!priceEl.dataset.aaasBuy) priceEl.dataset.aaasBuy = priceEl.textContent.trim();
@@ -922,9 +933,13 @@
       panel.innerHTML = '<div class="aaas-label">Kauf oder Art as a Service</div>' +
         switchControl(q, mode() === 'rent',
           'data-mode="' + (mode() === 'rent' ? 'buy' : 'rent') + '"') +
+        // same sentence as the cart: the mode is a property of the order
+        '<p class="aaas-scope">Art as a Service gilt für deine ganze Bestellung. ' +
+          '<button type="button" class="aaas-link" data-aaas-info>So funktioniert Art as a Service</button></p>' +
         '<div class="aaas-rent-summary" id="aaas-rent-summary" hidden></div>';
       host.insertAdjacentElement('beforebegin', panel);
       panel.addEventListener('click', function (e) {
+        if (e.target.closest('[data-aaas-info]')) { openConditions(); return; }
         var b = e.target.closest('[data-mode]');
         if (!b) return;
         setMode(b.getAttribute('data-mode'));
@@ -987,6 +1002,8 @@
         ? money(q.monthly) + '<span class="aaas-sub">im Monat, ' + TERMS.months + ' Monate</span>'
         : priceEl.dataset.aaasBuy;
     }
+    // all-or-nothing: every line follows the cart's mode
+    priceSummaryLines(renting);
 
     var summary = document.getElementById('aaas-rent-summary');
     if (summary) {
