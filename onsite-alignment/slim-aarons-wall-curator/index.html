@@ -234,6 +234,7 @@ img{display:block;max-width:100%;height:auto}
 }
 
 .lt-table-foot{display:flex;justify-content:space-between;align-items:center;gap:1.6rem;flex-wrap:wrap;margin-top:1.6rem}
+#trayBasket{display:none}
 .lt-note{font-size:1.1rem;letter-spacing:.02em;color:var(--color-text-secondary);margin:0}
 
 /* ══ LEDGER ═══════════════════════════════════════════════════════════════ */
@@ -576,6 +577,7 @@ img{display:block;max-width:100%;height:auto}
   body.m-choose #canvasBlock,
   body.m-choose .wc-cap,
   body.m-choose .wc-build{display:none}
+  body.m-choose #trayBasket:not([hidden]){display:block}
   body.m-review .wc-tray,
   body.m-review .lt-facts,
   body.m-review .lt-mast,
@@ -1710,6 +1712,10 @@ img{display:block;max-width:100%;height:auto}
       <div class="wc-cap">
         <div class="wc-cap__read">
           <p class="lt-note" id="wallDims">&nbsp;</p>
+          <!-- Editions bought from a product page count towards the tier without
+               ever having been hung, so the count can run ahead of the wall. This
+               says so next to the count itself, where the two disagree. -->
+          <p class="lt-note" id="wallBasket" hidden>&nbsp;</p>
           <p class="lt-note" id="wallHint">Drag to arrange. Arrow keys nudge.</p>
         </div>
         <span class="wc-cap__acts">
@@ -1729,6 +1735,7 @@ img{display:block;max-width:100%;height:auto}
           <div>
             <p class="t-eyebrow">Edition tray</p>
             <p class="lt-note" style="margin-top:.6rem" id="trayHint">Nine editions, 34 &times; 34 cm each.</p>
+            <p class="lt-note" style="margin-top:.6rem" id="trayBasket" hidden>&nbsp;</p>
           </div>
           <div class="wc-tray__ctrls">
             <button type="button" class="lt-round" id="trayPrev" aria-label="Previous editions" aria-controls="tray"><svg class="lt-ic"><use href="#lc-arrow-left"/></svg></button>
@@ -2321,6 +2328,16 @@ img{display:block;max-width:100%;height:auto}
       lastTier = per;
     }
     $("count").textContent = N;
+    var nb = inCart.length;
+    var basketNote = nb === 9
+      ? "All nine editions are already in your\u00a0basket."
+      : "The count includes " + WORD[nb] + " edition" + (nb === 1 ? "" : "s") +
+        " already in your basket. Adding more lowers " + (nb === 1 ? "its" : "their") +
+        " price\u00a0too.";
+    ["wallBasket", "trayBasket"].forEach(function(id){
+      $(id).hidden = !nb;
+      if (nb) $(id).textContent = basketNote;
+    });
     $("tableTitle").textContent = n === 0 ? "Build your wall"
       : n + (n === 1 ? " edition" : " editions") + " on the wall";
 
