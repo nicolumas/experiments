@@ -271,7 +271,8 @@
               'endet.</dd>' +
           '</dl>' +
           '<details class="aaas-details">' +
-            '<summary>Die Details</summary>' +
+            '<summary>Die Details<span class="aaas-plus" aria-hidden="true"></span>' +
+            '</summary>' +
             '<ul>' +
               '<li>Mindestlaufzeit ' + TERMS.months + ' Monate. Danach l\u00e4uft der Vertrag ' +
                 'monatlich weiter, ohne festes Enddatum.</li>' +

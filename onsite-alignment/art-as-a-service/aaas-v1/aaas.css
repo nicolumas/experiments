@@ -799,15 +799,63 @@
 
 .aaas-details { font-size: 1.3rem; color: var(--color-text-secondary); }
 
+/* An accordion row, not a disclosure triangle: full-width hit area, the label
+   left and a plus right, so it reads as "there is more here" rather than as a
+   select. The native marker has to be removed in two ways, one of them still
+   -webkit- prefixed in Safari. */
 .aaas-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--color-border-default);
   cursor: pointer;
+  list-style: none;
   font-family: var(--font-body);
   font-size: 1.4rem;
   color: var(--color-text-primary);
 }
 
+.aaas-details summary::-webkit-details-marker { display: none; }
+
+.aaas-details summary:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* two hairlines; opening rotates the upright one flat, so the plus becomes a
+   minus rather than swapping glyph */
+.aaas-plus {
+  position: relative;
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.aaas-plus::before,
+.aaas-plus::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-text-primary);
+  transition: transform 220ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.aaas-plus::after { transform: rotate(90deg); }
+
+.aaas-details[open] .aaas-plus::after { transform: rotate(0deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .aaas-plus::before,
+  .aaas-plus::after { transition: none; }
+}
+
 .aaas-details ul {
-  margin: var(--sp-3) 0 0;
+  margin: 0 0 var(--sp-4);
   padding-left: var(--sp-4);
   line-height: 1.6;
 }
