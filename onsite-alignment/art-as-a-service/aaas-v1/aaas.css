@@ -144,6 +144,17 @@
 .pdp-products .sizes { padding-bottom: .2rem; }       /* was 20px */
 .pdp-products dimension-preview { margin-bottom: 0; } /* was 20px; renders empty here */
 .pdp-price-container { margin-top: 1.6rem; }          /* was flush against the dropdown */
+/* The container reserves 50px for campaign rows that never render here, and
+   align-items:end still leaves the empty row below the price. That dead space
+   plus its own bottom margin opened a 30px hole between the price and the Art
+   as a Service line, which read as two separate blocks. Let it size to its
+   content and let the offer carry the gap. */
+.pdp-price-container { min-height: 0; margin-bottom: 0; }
+/* 32px made the buy price the loudest thing in the buy box, louder than the
+   work's title, and 24px was still shouting. 20px reads first on weight and
+   position rather than on size, and it lets the Art as a Service line sit
+   directly under it at body size. */
+.pdp-price-container .price { font-size: 2rem; }      /* was 3.2rem */
 
 /* ---------- PDP entry point ---------- */
 
@@ -240,23 +251,23 @@
 }
 
 /* ---------- PDP: the Art as a Service offer ----------
- * Equal weight to the price, not a footnote under it: hairlines top and bottom,
- * the amount in the body-bold face. It states an offer and links to the
- * fly-out; nothing on the page switches, because a mixed basket cannot be
- * handled and the decision belongs in one place. */
+ * Equal weight to the price, not a footnote under it: the amount in the
+ * body-bold face, one hairline below to close the price block. No rule between
+ * the price and this line — the two belong together, and a divider split them
+ * into two announcements. It states an offer and links to the fly-out; nothing
+ * on the page switches, because a mixed basket cannot be handled and the
+ * decision belongs in one place. */
 
-.aaas-offer-wrap { margin: var(--sp-4) 0 var(--sp-5); }
+.aaas-offer-wrap { margin: var(--sp-1) 0 var(--sp-5); }
 
 .aaas-offer {
-  padding: var(--sp-4) 0;
-  border-top: 1px solid var(--color-border-default);
+  padding: 0 0 var(--sp-3);
   border-bottom: 1px solid var(--color-border-default);
   font-family: var(--font-body);
-  /* The buy price renders at 32px. At 16px this line read as a footnote beside
-     it, so the alternative looked like small print rather than a second way to
-     own the work. 20px for the sentence and 26px for the amount closes the gap
-     to roughly 1.2x while the buy price stays the larger of the two. */
-  font-size: 2rem;
+  /* The buy price renders at 20px. This line runs at body size and carries its
+     weight in the bold amount alone, so it reads as the second way to own the
+     work without competing with the price. One line at 375px, no override. */
+  font-size: 1.4rem;
   line-height: 1.4;
   color: var(--color-text-primary);
 }
@@ -264,15 +275,8 @@
 .aaas-offer b {
   font-family: var(--font-body-bold);
   font-weight: 400;
-  font-size: 2.6rem;
+  font-size: 1.5rem;
   line-height: 1;
-}
-
-/* 375px still has to hold "Oder Art as a Service: nur € 20,59 im Monat" without
-   the amount forcing a third line. */
-@media (max-width: 480px) {
-  .aaas-offer { font-size: 1.8rem; }
-  .aaas-offer b { font-size: 2.2rem; }
 }
 
 .aaas-offer-link {
