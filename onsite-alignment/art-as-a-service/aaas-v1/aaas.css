@@ -730,11 +730,13 @@
 }
 
 /* ---------- fly-out: the Art as a Service explainer ----------
- * Four beats and nothing else: what it is, what it costs, what you decide at
- * the end, then the contract in a fold. An earlier version narrated the same
- * argument twice, once as prose and again as three numbered steps, and read as
- * a brochure. The section label sits in the head beside the close button so the
- * headline can carry the promise. */
+ * Five beats: what it is, what it costs, what the rent buys back, what you
+ * decide at the end, then the contract in a fold. One version narrated all of
+ * this twice, as prose and again as three numbered steps, and read as a
+ * brochure; stripping it to bare facts lost the reason anyone would want this.
+ * This keeps the craft and the human line, without the scaffolding. The section
+ * label sits in the head beside the close button so the headline can carry the
+ * promise. */
 
 .aaas-drawer-eyebrow {
   margin: 0;
@@ -765,6 +767,14 @@
 }
 
 /* keep / exchange / return: three parallel answers, aligned so they compare */
+/* the one number that decides whether renting is worth it */
+.aaas-credit {
+  margin: 0 0 var(--sp-5);
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+}
+
 .aaas-decide {
   margin: 0 0 var(--sp-3);
   padding-top: var(--sp-4);
@@ -1628,10 +1638,10 @@
 
 .aaas-scope .aaas-link { font-size: inherit; }
 
-/* The fly-out is informational now, so its foot carries a note and a dismiss,
-   not an add-to-cart. */
+/* The fly-out is informational, so its foot carries one line about where the
+   choice is actually made, and no button at all. */
 .aaas-foot-note {
-  margin: 0 0 var(--sp-3);
+  margin: 0;
   font-family: var(--font-body);
   font-size: 1.3rem;
   line-height: 1.5;

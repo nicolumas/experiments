@@ -252,13 +252,17 @@
         '</div>' +
         '<div class="aaas-drawer-body">' +
           '<h2 id="aaas-drawer-title">Erst erleben, dann entscheiden.</h2>' +
-          '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir, ' +
-            'fertig zum Aufh\u00e4ngen. Du zahlst monatlich, ohne Kaufpreis vorab.</p>' +
+          '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir: ' +
+            'handsigniert, in Galeriequalit\u00e4t, fertig zum Aufh\u00e4ngen. Du zahlst ' +
+            'monatlich und h\u00e4ltst dir alle Optionen offen.</p>' +
           '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>/ Monat</span></div>' +
-          '<p class="aaas-figure-note">Erste Zahlung bei Bestellung. ' +
-            Math.round(TERMS.credit * 100) + ' % jeder Zahlung werden auf den Kaufpreis ' +
-            'angerechnet.</p>' +
-          '<p class="aaas-decide">Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
+          '<p class="aaas-figure-note">Kein Kaufpreis vorab. Die erste Zahlung ist bei ' +
+            'Bestellung f\u00e4llig.</p>' +
+          '<p class="aaas-credit">' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung ' +
+            'werden auf den Kaufpreis angerechnet. Beh\u00e4ltst du das Werk, z\u00e4hlt der ' +
+            'Gro\u00dfteil deiner Zahlungen bereits mit.</p>' +
+          '<p class="aaas-decide">Das Zuhause ver\u00e4ndert sich, der Geschmack auch. ' +
+            'Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
           '<dl class="aaas-choices">' +
             '<dt>Behalten</dt><dd>Deine angerechneten Zahlungen flie\u00dfen in den ' +
               'Kaufpreis ein.</dd>' +
@@ -282,18 +286,18 @@
             '</ul>' +
           '</details>' +
         '</div>' +
-        // No add-to-cart here. The PDP only explains Art as a Service; the
+        // Nothing to act on here. The PDP only explains Art as a Service; the
         // choice is made once for the whole cart, in the cart or the checkout.
+        // So the foot states where that happens and the close control is the
+        // header's x, plus Esc and the backdrop that <dialog> gives us.
         '<div class="aaas-drawer-foot">' +
           '<p class="aaas-foot-note">Du w\u00e4hlst Art as a Service sp\u00e4ter im Warenkorb, ' +
             'f\u00fcr deine ganze Bestellung.</p>' +
-          '<button type="button" class="aaas-btn" data-aaas-done>Verstanden</button>' +
         '</div>' +
       '</div>';
 
     document.body.appendChild(d);
     d.querySelector('.aaas-close').addEventListener('click', function () { d.close(); });
-    d.querySelector('[data-aaas-done]').addEventListener('click', function () { d.close(); });
     if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
   }
 
