@@ -252,31 +252,20 @@
         '</div>' +
         '<div class="aaas-drawer-body">' +
           '<h2 id="aaas-drawer-title">Erst erleben, dann entscheiden.</h2>' +
-          '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir: ' +
-            'handsigniert, gerahmt, in Galeriequalit\u00e4t. Du zahlst monatlich und h\u00e4ltst ' +
-            'dir alle Optionen offen. Ob sie bleibt, entscheidest du.</p>' +
+          '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir, ' +
+            'fertig zum Aufh\u00e4ngen. Du zahlst monatlich, ohne Kaufpreis vorab.</p>' +
           '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>/ Monat</span></div>' +
-          '<p class="aaas-figure-note">Kein Kaufpreis vorab. Die erste Zahlung ist bei ' +
-            'Bestellung f\u00e4llig.</p>' +
-          '<ol class="aaas-steps">' +
-            '<li><h3>Jetzt aufh\u00e4ngen</h3>' +
-              '<p>Dein Werk kommt fertig zum Aufh\u00e4ngen. Keine hohe Einmalzahlung, ' +
-              'nur ein monatlicher Betrag.</p></li>' +
-            '<li><h3>Jeder Monat z\u00e4hlt</h3>' +
-              '<p>' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung werden auf den ' +
-              'Kaufpreis angerechnet. Beh\u00e4ltst du das Werk, z\u00e4hlt der Gro\u00dfteil ' +
-              'deiner Zahlungen also bereits mit.</p></li>' +
-            '<li><h3>Behalten, tauschen oder zur\u00fcckgeben</h3>' +
-              '<p>Das Zuhause ver\u00e4ndert sich, der Geschmack auch. Nach ' + TERMS.months +
-              ' Monaten entscheidest du:</p>' +
-              '<dl class="aaas-choices">' +
-                '<dt>Behalten</dt><dd>Deine angerechneten Zahlungen flie\u00dfen in den ' +
-                  'Kaufpreis ein.</dd>' +
-                '<dt>Tauschen</dt><dd>W\u00e4hle eine andere Edition.</dd>' +
-                '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck, dein Vertrag ' +
-                  'endet.</dd>' +
-              '</dl></li>' +
-          '</ol>' +
+          '<p class="aaas-figure-note">Erste Zahlung bei Bestellung. ' +
+            Math.round(TERMS.credit * 100) + ' % jeder Zahlung werden auf den Kaufpreis ' +
+            'angerechnet.</p>' +
+          '<p class="aaas-decide">Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
+          '<dl class="aaas-choices">' +
+            '<dt>Behalten</dt><dd>Deine angerechneten Zahlungen flie\u00dfen in den ' +
+              'Kaufpreis ein.</dd>' +
+            '<dt>Tauschen</dt><dd>W\u00e4hle eine andere Edition.</dd>' +
+            '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck, dein Vertrag ' +
+              'endet.</dd>' +
+          '</dl>' +
           '<details class="aaas-details">' +
             '<summary>Die Details</summary>' +
             '<ul>' +
