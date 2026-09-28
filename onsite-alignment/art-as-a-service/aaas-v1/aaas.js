@@ -247,31 +247,57 @@
     d.innerHTML =
       '<div class="aaas-drawer-inner">' +
         '<div class="aaas-drawer-head">' +
-          '<h2 id="aaas-drawer-title">Art as a Service</h2>' +
-          '<button type="button" class="aaas-close" aria-label="Schließen">&times;</button>' +
+          '<p class="aaas-drawer-eyebrow">Art as a Service</p>' +
+          '<button type="button" class="aaas-close" aria-label="Schlie\u00dfen">&times;</button>' +
         '</div>' +
         '<div class="aaas-drawer-body">' +
-          '<p class="aaas-lede">Das Werk hängt ab heute bei dir. Du zahlst monatlich, ' +
-            'und du entscheidest später, ob es bleibt.</p>' +
-          '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>im Monat</span></div>' +
-          '<ul class="aaas-points">' +
-            '<li>Ohne Kaufpreis starten: heute ' + money(q.dueToday) + ', danach ' +
-              money(q.monthly) + ' im Monat.</li>' +
-            '<li>' + Math.round(TERMS.credit * 100) + ' % deiner Zahlungen werden angerechnet, ' +
-              'wenn du das Werk übernimmst. Ab Monat ' + q.ownedFromMonth + ' gehört es dir ' +
-              'ohne weitere Zahlung.</li>' +
-            '<li>Nach der Mindestlaufzeit von ' + TERMS.months + ' Monaten tauschst du das Werk ' +
-              'gegen ein anderes oder gibst es zurück.</li>' +
-          '</ul>' +
-          '<p class="aaas-note">Mindestlaufzeit ' + TERMS.months + ' Monate, danach läuft der ' +
-            'Vertrag weiter, bis du übernimmst, tauschst oder zurückgibst. Zahlung per ' +
-            'SEPA-Lastschrift oder Kreditkarte.</p>' +
+          '<h2 id="aaas-drawer-title">Erst erleben, dann entscheiden.</h2>' +
+          '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir: ' +
+            'handsigniert, gerahmt, in Galeriequalit\u00e4t. Du zahlst monatlich und h\u00e4ltst ' +
+            'dir alle Optionen offen. Ob sie bleibt, entscheidest du.</p>' +
+          '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>/ Monat</span></div>' +
+          '<p class="aaas-figure-note">Kein Kaufpreis vorab. Die erste Zahlung ist bei ' +
+            'Bestellung f\u00e4llig.</p>' +
+          '<ol class="aaas-steps">' +
+            '<li><h3>Jetzt aufh\u00e4ngen</h3>' +
+              '<p>Dein Werk kommt fertig zum Aufh\u00e4ngen. Keine hohe Einmalzahlung, ' +
+              'nur ein monatlicher Betrag.</p></li>' +
+            '<li><h3>Jeder Monat z\u00e4hlt</h3>' +
+              '<p>' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung werden auf den ' +
+              'Kaufpreis angerechnet. Beh\u00e4ltst du das Werk, z\u00e4hlt der Gro\u00dfteil ' +
+              'deiner Zahlungen also bereits mit.</p></li>' +
+            '<li><h3>Behalten, tauschen oder zur\u00fcckgeben</h3>' +
+              '<p>Das Zuhause ver\u00e4ndert sich, der Geschmack auch. Nach ' + TERMS.months +
+              ' Monaten entscheidest du:</p>' +
+              '<dl class="aaas-choices">' +
+                '<dt>Behalten</dt><dd>Deine angerechneten Zahlungen flie\u00dfen in den ' +
+                  'Kaufpreis ein.</dd>' +
+                '<dt>Tauschen</dt><dd>W\u00e4hle eine andere Edition.</dd>' +
+                '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck, dein Vertrag ' +
+                  'endet.</dd>' +
+              '</dl></li>' +
+          '</ol>' +
+          '<details class="aaas-details">' +
+            '<summary>Die Details</summary>' +
+            '<ul>' +
+              '<li>Mindestlaufzeit ' + TERMS.months + ' Monate. Danach l\u00e4uft der Vertrag ' +
+                'monatlich weiter, ohne festes Enddatum.</li>' +
+              '<li>Zahlung per SEPA-Lastschrift oder Kreditkarte.</li>' +
+              // Open point, left visible on purpose: the rent credit reaches the
+              // full price two months before the minimum term ends, and the epic
+              // and the marketing copy disagree on which of the two wins. This
+              // stays a bracketed placeholder until that is decided, so it cannot
+              // ship as prose by accident.
+              '<li class="aaas-todo">[Eigentumsregel, sobald ' + q.ownedFromMonth + ' vs. ' +
+                TERMS.months + ' gekl\u00e4rt ist]</li>' +
+            '</ul>' +
+          '</details>' +
         '</div>' +
         // No add-to-cart here. The PDP only explains Art as a Service; the
         // choice is made once for the whole cart, in the cart or the checkout.
         '<div class="aaas-drawer-foot">' +
-          '<p class="aaas-foot-note">Du wählst Art as a Service später im Warenkorb, ' +
-            'für deine ganze Bestellung.</p>' +
+          '<p class="aaas-foot-note">Du w\u00e4hlst Art as a Service sp\u00e4ter im Warenkorb, ' +
+            'f\u00fcr deine ganze Bestellung.</p>' +
           '<button type="button" class="aaas-btn" data-aaas-done>Verstanden</button>' +
         '</div>' +
       '</div>';
