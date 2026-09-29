@@ -254,6 +254,27 @@
        against aspect-ratio. */
     .room-figure--square img { aspect-ratio:1/1; object-fit:cover; object-position:50% 16%; }
 
+    /* ── Hero points ───────────────────────────────────── */
+    .hero__points { list-style:none; margin:clamp(1.8rem,2.4vw,2.4rem) 0 0; padding:0;
+      display:grid; gap:0.8rem; }
+    .hero__points li { position:relative; padding-left:1.8rem; font-size:1.5rem;
+      line-height:1.5; color:var(--text-secondary); }
+    /* a rule, not a bullet glyph: the page has no other dotted list and a round
+       bullet reads as UI chrome against the editorial type */
+    .hero__points li::before { content:""; position:absolute; left:0; top:0.95em;
+      width:0.9rem; height:1px; background:var(--charcoal-900); }
+
+    /* ── Send us your space · the collector story folded in ─ */
+    .space-quote { margin:clamp(2.8rem,4vw,4rem) 0 0; padding-top:clamp(2rem,2.6vw,2.8rem);
+      border-top:1px solid var(--border-subtle); }
+    /* .story-lead only ever carried its type inside .collector__text, which this
+       section replaced, so the pull-quote has to bring its own. */
+    .space-quote .story-lead { margin:0; font-family:var(--font-display); font-weight:400;
+      font-size:clamp(1.9rem,2.2vw,2.4rem); line-height:1.3; }
+    .space-quote figcaption { margin-top:clamp(1.4rem,2vw,1.8rem); }
+
+    .benefits__note { margin-top:clamp(2.4rem,3.2vw,3.6rem); }
+
     /* ── Full-bleed gallery teaser ─────────────────────── */
     /* .section pads top by up to 10rem, and this section is surface-raised, so
        that padding rendered as a stray cream stripe above the image. The band is
@@ -1125,6 +1146,11 @@
           <p class="eyebrow hero__eyebrow reveal">Personal art advisory</p>
           <h1 class="display-h1 hero__title reveal">Choose your art with the person who hangs it</h1>
           <p class="body-large hero__lede measure reveal">Thirty minutes with an Art Consultant who works on the gallery floor. In the gallery, or by video call from wherever you are.</p>
+          <ul class="hero__points reveal">
+            <li>Free and without obligation, with a LUMAS gallerist</li>
+            <li>Art Concierge Service: the work presented in your own space</li>
+            <li>A personal offer on the works you chose</li>
+          </ul>
           <div class="hero__actions reveal">
             <a class="btn btn--primary" href="#book" data-goal="cta_click" data-cta="hero_book_gallery">Book in a gallery</a>
             <a class="btn btn--ghost" href="#book" data-mode="video" data-goal="cta_click" data-cta="hero_book_video">Book a video call</a>
@@ -1204,96 +1230,6 @@
             <p class="booker__meta caption txt-secondary" data-meta></p>
           </div>
         </div>
-
-        <!-- Optional, but worth real estate: the single thing that makes the
-             thirty minutes land better. Framed as preparation for the
-             appointment, not as a separate tool. -->
-        <aside class="prep reveal">
-          <div class="prep__text">
-            <p class="eyebrow">Optional, and worth it</p>
-            <h3 class="display-h3 mt-s">Send a photo of your wall before you come</h3>
-            <p class="body-large txt-secondary measure mt-m">Your consultant places the work on your wall at true scale, in the size and frame you are considering, and brings it to the appointment. You spend the thirty minutes deciding, not imagining.</p>
-            <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="prep_wall" style="margin-top:clamp(1.8rem,2.4vw,2.4rem)">Request a visualisation</button>
-            <p class="caption txt-secondary" style="margin-top:1.2rem">Not required. You can book without it.</p>
-          </div>
-          <figure class="prep__proof" style="margin:0">
-            <div class="ba ba--compact" data-ba>
-              <img src="assets/visualise/wall-after.jpg" width="1600" height="900"
-                   alt="A living room with Massimo Colonna's Blue Riad hanging on the wall" loading="lazy">
-              <div class="ba__before" data-ba-before>
-                <img src="assets/visualise/wall-before.jpg" width="1600" height="900"
-                     alt="The same living room with an empty wall" loading="lazy">
-              </div>
-              <span class="ba__tag ba__tag--l">Your wall</span>
-              <span class="ba__tag ba__tag--r">With the work</span>
-              <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
-                     aria-label="Drag to compare the empty wall with the work in place" data-ba-range>
-              <div class="ba__handle" data-ba-handle>
-                <span class="ba__grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l-4 6 4 6M15 6l4 6-4 6"/></svg></span>
-              </div>
-            </div>
-            <figcaption class="caption ba__note txt-secondary">Massimo Colonna, <em>Blue Riad</em>, 146 × 180 cm, in a collector’s living room.</figcaption>
-          </figure>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ══ WHO · the people, with the copy merged into the carousel ══ -->
-    <section id="people" class="wrap section hairline-top">
-      <!-- The copy sits with the faces it describes. No separate band, no
-           second photograph: the carousel IS the argument. -->
-      <div class="people-head band reveal">
-        <div>
-          <p class="eyebrow">Who you will be sitting with</p>
-          <h2 class="display-h2 mt-s">Pick your person</h2>
-        </div>
-        <p class="body-large txt-secondary measure">Every LUMAS gallery has its own Art Consultant. They work the gallery floor every day, hanging the editions and choosing the frames, so they answer from the work itself, not from a catalogue.</p>
-      </div>
-
-      <figure class="consultant-quote reveal">
-        <blockquote class="story-lead">“Art, to us, is more than a picture: it is conversation, discovery and surprise.”</blockquote>
-        <figcaption class="consultant-quote__by">
-          <span class="person__portrait consultant-quote__ph"><img src="assets/team/munich.webp" width="168" height="168" alt="Giselle Huber, LUMAS Art Consultant in Munich" loading="lazy"></span>
-          <span class="story-attr" style="margin:0">Giselle Huber · Art Consultant, Munich</span>
-        </figcaption>
-      </figure>
-
-      <!-- Booking URLs are the REAL per-gallery Microsoft Bookings forms behind
-           lumas.de/booking/galerie/<id>/ ("Persönliche Kunstberatung", 30 min).
-           Paris, London, New York, Budapest and Miami have no booking form yet,
-           and Frankfurt Airport's is broken upstream — those cards link to the
-           gallery page instead. -->
-      <div class="carousel carousel--people" data-carousel="team">
-        <div class="carousel__viewport">
-          <div class="carousel__track">
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/berlin.webp" width="168" height="168" alt="Maike Hahn, LUMAS Art Consultant, Berlin Mitte" loading="lazy"></div><p class="person__name">Maike Hahn</p><p class="caption person__role">Berlin, Mitte</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201101/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="berlin-mitte">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/berlin-kudamm.webp" width="168" height="168" alt="Lioba Wachter, LUMAS Art Consultant, Berlin Kurfürstendamm" loading="lazy"></div><p class="person__name">Lioba Wachter</p><p class="caption person__role">Berlin, Kurfürstendamm</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201201/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="berlin-kudamm">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/munich.webp" width="168" height="168" alt="Giselle Huber, LUMAS Art Consultant, Munich" loading="lazy"></div><p class="person__name">Giselle Huber</p><p class="caption person__role">Munich</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201601/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="munich">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/hamburg.webp" width="168" height="168" alt="Nereisse De Lacoudraye Harter, LUMAS Art Consultant, Hamburg" loading="lazy"></div><p class="person__name">Nereisse De Lacoudraye Harter</p><p class="caption person__role">Hamburg</p><a class="book-link" href="https://www.lumas.de/booking/galerie/203901/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="hamburg">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/frankfurt.webp" width="168" height="168" alt="Lenka Heller-Salfer, LUMAS Art Consultant, Frankfurt" loading="lazy"></div><p class="person__name">Lenka Heller-Salfer</p><p class="caption person__role">Frankfurt</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201401/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="frankfurt">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/frankfurt-airport.webp" width="168" height="168" alt="Wie Gang Hu, LUMAS Art Consultant, Frankfurt Airport" loading="lazy"></div><p class="person__name">Wie Gang Hu</p><p class="caption person__role">Frankfurt Airport</p><!-- FIXME (production): lumas.de/booking/galerie/201402/ 404s, although the Frankfurt Airport gallery page links to it. Routed to the gallery page until that redirect is repaired. -->
-            <a class="book-link book-link--muted" href="https://www.lumas.de/galerien/fraport/" target="_blank" rel="noopener" data-goal="gallery_open" data-advisor="fraport">Contact the gallery <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/stuttgart.webp" width="168" height="168" alt="Alexander Rukatukl, LUMAS Art Consultant, Stuttgart" loading="lazy"></div><p class="person__name">Alexander Rukatukl</p><p class="caption person__role">Stuttgart</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201701/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="stuttgart">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/hannover.webp" width="168" height="168" alt="Claudia Brauckmann, LUMAS Art Consultant, Hannover" loading="lazy"></div><p class="person__name">Claudia Brauckmann</p><p class="caption person__role">Hannover</p><a class="book-link" href="https://www.lumas.de/booking/galerie/202901/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="hannover">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/dortmund.webp" width="168" height="168" alt="Lisa Kipper, LUMAS Art Consultant, Dortmund" loading="lazy"></div><p class="person__name">Lisa Kipper</p><p class="caption person__role">Dortmund</p><a class="book-link" href="https://www.lumas.de/booking/galerie/204001/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="dortmund">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/mannheim.webp" width="168" height="168" alt="Larissa Thoma, LUMAS Art Consultant, Mannheim" loading="lazy"></div><p class="person__name">Larissa Thoma</p><p class="caption person__role">Mannheim</p><a class="book-link" href="https://www.lumas.de/booking/galerie/203601/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="mannheim">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/vienna.webp" width="168" height="168" alt="Bastian Bernstetter, LUMAS Art Consultant, Vienna" loading="lazy"></div><p class="person__name">Bastian Bernstetter</p><p class="caption person__role">Vienna</p><a class="book-link" href="https://www.lumas.de/booking/galerie/202001/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="vienna">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/zurich.webp" width="168" height="168" alt="Claudia Tvrdon, LUMAS Art Consultant, Zürich" loading="lazy"></div><p class="person__name">Claudia Tvrdon</p><p class="caption person__role">Zürich</p><a class="book-link" href="https://www.lumas.de/booking/galerie/201901/" target="_blank" rel="noopener" data-goal="advisor_booking_click" data-advisor="zurich">Book 30 minutes <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/budapest.webp" width="168" height="168" alt="Eva Wikonkal, LUMAS Art Consultant, Budapest" loading="lazy"></div><p class="person__name">Eva Wikonkal</p><p class="caption person__role">Budapest</p><a class="book-link book-link--muted" href="https://www.lumas.de/galerien/budapest/" target="_blank" rel="noopener" data-goal="gallery_open" data-advisor="budapest">Contact the gallery <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/new-york.webp" width="168" height="168" alt="Lauren Colonna, LUMAS Art Consultant, New York SoHo" loading="lazy"></div><p class="person__name">Lauren Colonna</p><p class="caption person__role">New York, SoHo</p><a class="book-link book-link--muted" href="https://www.lumas.de/galerien/new-york-soho/" target="_blank" rel="noopener" data-goal="gallery_open" data-advisor="new-york">Contact the gallery <span class="arrow">→</span></a></article>
-            <article class="slide slide--consultant reveal"><div class="person__portrait"><img src="assets/team/miami.webp" width="168" height="168" alt="Taylor Bloom, LUMAS Art Consultant, Miami" loading="lazy"></div><p class="person__name">Taylor Bloom</p><p class="caption person__role">Miami</p><a class="book-link book-link--muted" href="https://www.lumas.de/galerien/" target="_blank" rel="noopener" data-goal="gallery_open" data-advisor="miami">Contact the gallery <span class="arrow">→</span></a></article>
-          </div>
-        </div>
-        <button class="carousel__btn carousel__btn--prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <button class="carousel__btn carousel__btn--next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
-        <p class="carousel__count" data-count>01 / 15</p>
-      </div>
-
-      <div class="channel-line reveal">
-        <span class="channel-line__k">Rather talk first?</span>
-        <a href="tel:+493030306969" data-goal="contact_phone" data-cta="line_phone">+49 30 3030 6969</a>
-        <a href="https://wa.me/493030306969" target="_blank" rel="noopener" data-goal="contact_whatsapp" data-cta="line_whatsapp">WhatsApp</a>
-        <a href="https://lumas.atlassian.net/servicedesk/customer/portal/2" target="_blank" rel="noopener" data-goal="contact_email" data-cta="line_email">Email</a>
       </div>
     </section>
 
@@ -1303,29 +1239,59 @@
       <div class="section-head reveal">
         <p class="eyebrow">What you get</p>
         <h2 class="display-h2">What happens in those thirty minutes</h2>
+        <p class="body-large txt-secondary measure mt-m">You talk, we listen, and you see the editions at full scale. Nothing is decided in the room unless you want it to be.</p>
       </div>
       <ul class="benefits">
-        <li class="benefit reveal"><span class="benefit__t">The work</span><span class="benefit__d">A short selection chosen by hand for your room and your taste, with the reasoning behind each one.</span></li>
-        <li class="benefit reveal"><span class="benefit__t">The scale</span><span class="benefit__d">The right size for the wall, from petite editions to museum format, judged against the room rather than a thumbnail.</span></li>
-        <li class="benefit reveal"><span class="benefit__t">The frame</span><span class="benefit__d">Frame, mount and finish held against your interior, with the samples in hand.</span></li>
-        <li class="benefit reveal"><span class="benefit__t">The wall</span><span class="benefit__d">A visualisation of the work in your room, then framing, delivery and hanging handled for you.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">You tell us the room</span><span class="benefit__d">The wall, the light, what is already hanging and what you keep coming back to. A photo on your phone is enough.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">We pull the works</span><span class="benefit__d">A short selection off the gallery floor, at full scale, with the reason each one is in front of you.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">We settle size and frame</span><span class="benefit__d">Petite to museum format, judged against your room rather than a thumbnail, with the frame and mount samples in your hands.</span></li>
+        <li class="benefit reveal"><span class="benefit__t">You leave with an offer</span><span class="benefit__d">A personal offer on the works you chose, held for you. Nothing to sign in the gallery.</span></li>
       </ul>
+      <!-- The wall photo is requested in the booking confirmation email, not on
+           the page: it is preparation for an appointment that already exists. -->
+      <p class="body-small txt-secondary reveal benefits__note">Once you have booked, the confirmation email asks for a photo of your wall, so your consultant can prepare the room before you arrive.</p>
       </div>
     </section>
 
-    <!-- ══ COLLECTOR STORY ══ -->
-    <section class="wrap section hairline-top">
-      <div class="collector">
-        <figure class="collector__media reveal" style="margin:0">
-          <img src="assets/collector/story.webp?v=9" width="820" height="650" alt="An Erin Cone portrait edition above a sideboard in a collector's home" loading="lazy">
-        </figure>
-        <div class="collector__text reveal">
-          <p class="eyebrow">Collector story</p>
-          <p class="story-lead mt-m">“I didn’t want a piece you eventually stop noticing. I wanted something I enjoy every single day.”</p>
-          <p class="body-copy mt-m">Natacha from Mannheim had long been drawn to the works of Erin Cone. Her daughter asked, <em>“Why a faceless woman in the living room?”</em> The answer came not in words, but in the space itself: a visualisation made visible what the artwork could become, and ultimately convinced everyone.</p>
-          <p class="body-copy mt-m">“It’s not just an aesthetic upgrade. It’s an investment in quality of life.”<span class="story-attr">Natacha Waller, Mannheim, 2026</span></p>
-          <button class="btn btn--ghost" type="button" data-open-visualisation data-goal="cta_click" data-cta="collector_visualisation" style="margin-top:clamp(2rem,3vw,3.2rem)">Send us your wall</button>
+    <!-- ══ SEND US YOUR SPACE ══════════════════════════════════════════════
+         The second way in, and no longer tied to an appointment: the wall photo
+         used to sit inside the booking section as preparation. Asking for it
+         before a booked appointment belongs in the confirmation email, so here
+         it stands on its own with its own promise. The collector story is folded
+         in as the proof rather than kept as a section of its own: it is a story
+         about exactly this service. -->
+    <section id="space" class="wrap section hairline-top">
+      <div class="band" style="align-items:center">
+        <div class="reveal">
+          <p class="eyebrow">No appointment needed</p>
+          <h2 class="display-h2 mt-s">Or send us a photo of your space</h2>
+          <p class="body-large txt-secondary measure mt-m">We come back within 48 hours with works chosen for your wall, placed in your room at true scale, in the size and frame we would suggest. Free, and with no obligation.</p>
+          <button class="btn btn--primary" type="button" data-open-visualisation data-goal="cta_click" data-cta="space_primary" style="margin-top:clamp(2rem,2.6vw,2.8rem)">Send us your space</button>
+
+          <figure class="space-quote">
+            <blockquote class="story-lead">“I didn’t want a piece you eventually stop noticing. I wanted something I enjoy every single day.”</blockquote>
+            <figcaption class="body-copy txt-secondary">Natacha from Mannheim had long been drawn to the works of Erin Cone. Her daughter asked, <em>“Why a faceless woman in the living room?”</em> The answer came not in words, but in the space itself: seeing the work on the wall convinced everyone.<span class="story-attr">Natacha Waller, Mannheim, 2026</span></figcaption>
+          </figure>
         </div>
+
+        <figure class="reveal" style="margin:0">
+          <div class="ba" data-ba>
+            <img src="assets/visualise/wall-after.jpg" width="1600" height="900"
+                 alt="A living room with Massimo Colonna's Blue Riad hanging on the wall" loading="lazy">
+            <div class="ba__before" data-ba-before>
+              <img src="assets/visualise/wall-before.jpg" width="1600" height="900"
+                   alt="The same living room with an empty wall" loading="lazy">
+            </div>
+            <span class="ba__tag ba__tag--l">Your wall</span>
+            <span class="ba__tag ba__tag--r">With the work</span>
+            <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
+                   aria-label="Drag to compare the empty wall with the work in place" data-ba-range>
+            <div class="ba__handle" data-ba-handle>
+              <span class="ba__grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l-4 6 4 6M15 6l4 6-4 6"/></svg></span>
+            </div>
+          </div>
+          <figcaption class="caption ba__note txt-secondary">Massimo Colonna, <em>Blue Riad</em>, 146 × 180 cm, in a collector’s living room.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -1346,7 +1312,6 @@
           </div>
           <div class="reveal">
             <p class="body-large txt-secondary measure">Nineteen galleries, with or without an appointment. See the editions at full scale, and meet the Art Consultant who knows them.</p>
-            <a class="btn btn--primary" href="#book" style="margin-top:clamp(2rem,2.6vw,2.8rem)" data-goal="cta_click" data-cta="gallery_book">Book a consultation</a>
           </div>
         </div>
       </div>
@@ -1456,7 +1421,7 @@
     document.addEventListener('DOMContentLoaded', measure);
   })();
 </script>
-  <script src="assets/site.js?v=24"></script>
+  <script src="assets/site.js?v=25"></script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
