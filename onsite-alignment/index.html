@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s0928", kicker: "Latest · today",        weekday: "Monday",    date: "28 September", year: "2026", short: "28 Sep", upcoming: true },
+      { id: "s0929", kicker: "Latest · today",        weekday: "Tuesday",   date: "29 September", year: "2026", short: "29 Sep", upcoming: true },
+      { id: "s0928", kicker: "Previous",              weekday: "Monday",    date: "28 September", year: "2026", short: "28 Sep" },
       { id: "s0923", kicker: "Previous",              weekday: "Wednesday", date: "23 September", year: "2026", short: "23 Sep" },
       { id: "s0922", kicker: "Previous",              weekday: "Tuesday",   date: "22 September", year: "2026", short: "22 Sep" },
       { id: "s0914", kicker: "Previous",              weekday: "Monday",    date: "14 September", year: "2026", short: "14 Sep" },
@@ -173,6 +174,8 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Tuesday 29 September ───────────────────────────
+      { s: "s0929", feature: true, title: "The Story of Art", href: "story-of-art/", desc: "A love letter to limited editions, told as one long scroll: from cave walls to the artist\u2019s eye to signed editions made for real homes, ending on three works and the ways into the collection." },
       // ── Tuesday 22 September ───────────────────────────
       { s: "s0922", feature: true, title: "Inspired Art Magazine \u2014 autumn issue (EN)", href: "inspired-art-magazine/", desc: "The autumn Inspired hub page rebuilt as a CMS fragment using only the allowlist vocabulary, with the real campaign imagery in place. Both work grids run on the art_magazine_new_artist keyword. Several artwork links point at works that are not online yet, so they redirect to the artist page." },
       { s: "s0922", feature: true, title: "Inspired Art Magazin \u2014 Herbstausgabe (DE)", href: "inspired-art-magazine/de.html", desc: "The German edition of the same fragment: copy consistently in du, German store slugs (neue-kuenstler, magazin), and the same imagery and grids as the English page." },
