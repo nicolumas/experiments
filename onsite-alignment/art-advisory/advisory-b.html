@@ -264,8 +264,6 @@
     .hero__points li::before { content:""; position:absolute; left:0; top:0.95em;
       width:0.9rem; height:1px; background:var(--charcoal-900); }
 
-    .benefits__note { margin-top:clamp(2.4rem,3.2vw,3.6rem); }
-
     /* ── Version B picker · no calendar on the page ────── */
     .picker { border:1px solid var(--border-default); background:var(--ivory-100);
       padding:clamp(2rem,3vw,3.2rem); }
@@ -300,9 +298,11 @@
       background:var(--bone-100); }
     .pcard__ph img { width:100%; height:100%; object-fit:cover; display:block; }
     .pcard__body { grid-area:body; min-width:0; }
-    .pcard__name { font-size:1.6rem; }
-    .pcard__where { color:var(--text-secondary); margin-top:0.2rem; }
-    .pcard__addr { display:block; }
+    .pcard__city { font-size:1.9rem; line-height:1.25; }
+    .pcard__with { margin-top:0.4rem; font-size:1.45rem; color:var(--text-secondary); }
+    /* --text-tertiary is 3.3:1 on this ground and fails AA, so the address takes
+       secondary too and separates by size alone. */
+    .pcard__addr { margin-top:0.4rem; font-size:1.25rem; line-height:1.45; color:var(--text-secondary); }
     .pcard__cta { grid-area:cta; margin-top:1.4rem; padding-top:1.2rem;
       border-top:1px solid var(--border-subtle); font-size:1.35rem; }
     .pcard--muted .pcard__cta { color:var(--text-secondary); }
@@ -1276,9 +1276,6 @@
         <li class="benefit reveal"><span class="benefit__t">We settle size and frame</span><span class="benefit__d">Petite to museum format, judged against your room rather than a thumbnail, with the frame and mount samples in your hands.</span></li>
         <li class="benefit reveal"><span class="benefit__t">You leave with an offer</span><span class="benefit__d">A personal offer on the works you chose, held for you. Nothing to sign in the gallery.</span></li>
       </ul>
-      <!-- The wall photo is requested in the booking confirmation email, not on
-           the page: it is preparation for an appointment that already exists. -->
-      <p class="body-small txt-secondary reveal benefits__note">Once you have booked, the confirmation email asks for a photo of your wall, so your consultant can prepare the room before you arrive.</p>
       </div>
     </section>
 
@@ -1445,7 +1442,7 @@
   })();
 </script>
   <script src="assets/site.js?v=25"></script>
-  <script src="assets/picker.js?v=2"></script>
+  <script src="assets/picker.js?v=3"></script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->

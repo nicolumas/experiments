@@ -65,11 +65,13 @@
 
     return '<article class="pcard' + (g.bookable ? '' : ' pcard--muted') + '">' +
       portrait +
+      /* The gallery leads. The consultant had the headline and the city was set
+       * as small print under it, which made a grid of sixteen cards read as a
+       * list of strangers rather than a list of places. */
       '<div class="pcard__body">' +
-        '<p class="pcard__name">' + esc(g.consultant || g.city) + '</p>' +
-        '<p class="caption pcard__where">' + esc(g.city) +
-          (g.address ? '<span class="pcard__addr">' + esc(g.address) + '</span>' : '') +
-        '</p>' +
+        '<p class="pcard__city">' + esc(g.city) + '</p>' +
+        (g.consultant ? '<p class="pcard__with">with ' + esc(g.consultant) + '</p>' : '') +
+        (g.address ? '<p class="pcard__addr">' + esc(g.address) + '</p>' : '') +
       '</div>' +
       '<a class="pcard__cta" href="' + esc(href) + '" target="_blank" rel="noopener" ' +
         'data-goal="' + (g.bookable ? 'advisor_booking_click' : 'gallery_open') + '" ' +
