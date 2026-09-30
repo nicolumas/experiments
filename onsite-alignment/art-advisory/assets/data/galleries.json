@@ -1,0 +1,194 @@
+{
+ "note": "Version B carries no availability. Times live in Microsoft Bookings, which owns the calendar.",
+ "videoPilotUrl": "https://bookings.cloud.microsoft/book/lumasgaleriehamburg@lumas.com/?ismsaljsauthenabled=true",
+ "videoPilotGallery": "hamburg",
+ "regions": [
+  {
+   "id": "north",
+   "name": "North",
+   "blurb": "Hamburg, Hannover and both Berlin galleries"
+  },
+  {
+   "id": "west",
+   "name": "West",
+   "blurb": "Rhine-Ruhr and Frankfurt"
+  },
+  {
+   "id": "south",
+   "name": "South",
+   "blurb": "Munich, Stuttgart and Mannheim"
+  },
+  {
+   "id": "dach",
+   "name": "Austria & Switzerland",
+   "blurb": "Vienna and Zurich"
+  },
+  {
+   "id": "intl",
+   "name": "International",
+   "blurb": "Paris, London, New York, Budapest"
+  }
+ ],
+ "galleries": [
+  {
+   "slug": "vienna",
+   "city": "Vienna",
+   "address": "Wollzeile 1–3 1010 Wien",
+   "region": "dach",
+   "consultant": "Bastian Bernstetter",
+   "portrait": "assets/team/vienna.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/202001/"
+  },
+  {
+   "slug": "zurich",
+   "city": "Zurich",
+   "address": "Marktgasse 7 8001 Zürich",
+   "region": "dach",
+   "consultant": "Claudia Tvrdon",
+   "portrait": "assets/team/zurich.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201901/"
+  },
+  {
+   "slug": "budapest",
+   "city": "Budapest",
+   "address": "",
+   "region": "intl",
+   "consultant": null,
+   "portrait": null,
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/budapest/"
+  },
+  {
+   "slug": "london",
+   "city": "London",
+   "address": "",
+   "region": "intl",
+   "consultant": null,
+   "portrait": null,
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/london/"
+  },
+  {
+   "slug": "new-york-soho",
+   "city": "New York, SoHo",
+   "address": "",
+   "region": "intl",
+   "consultant": null,
+   "portrait": null,
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/new-york-soho/"
+  },
+  {
+   "slug": "paris",
+   "city": "Paris",
+   "address": "",
+   "region": "intl",
+   "consultant": null,
+   "portrait": null,
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/paris/"
+  },
+  {
+   "slug": "berlin-kudamm",
+   "city": "Berlin, Kurfürstendamm",
+   "address": "Fasanenstraße 73",
+   "region": "north",
+   "consultant": "Lioba Wachter",
+   "portrait": "assets/team/berlin-kudamm.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201201/"
+  },
+  {
+   "slug": "berlin-mitte",
+   "city": "Berlin, Mitte",
+   "address": "Die Hackeschen Höfe, Hof II  Rosenthaler Straße 40/41  10178 Berlin ",
+   "region": "north",
+   "consultant": "Maike Hahn",
+   "portrait": "assets/team/berlin.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201101/"
+  },
+  {
+   "slug": "hamburg",
+   "city": "Hamburg",
+   "address": "Kaufmannshaus Große Bleichen 31 20354 Hamburg",
+   "region": "north",
+   "consultant": "Nereisse De Lacoudraye Harter",
+   "portrait": "assets/team/hamburg.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/203901/"
+  },
+  {
+   "slug": "hannover",
+   "city": "Hannover",
+   "address": "Luisenstraße 10-11  30159 Hannover",
+   "region": "north",
+   "consultant": "Claudia Brauckmann",
+   "portrait": "assets/team/hannover.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/202901/"
+  },
+  {
+   "slug": "mannheim",
+   "city": "Mannheim",
+   "address": "N6 3-7/Kunststraße  68161 Mannheim",
+   "region": "south",
+   "consultant": "Larissa Thoma",
+   "portrait": "assets/team/mannheim.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/203601/"
+  },
+  {
+   "slug": "munich",
+   "city": "Munich",
+   "address": "Brienner Straße 3 80333 München",
+   "region": "south",
+   "consultant": "Giselle Huber",
+   "portrait": "assets/team/munich.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201601/"
+  },
+  {
+   "slug": "stuttgart",
+   "city": "Stuttgart",
+   "address": "Lange Str. 3 70173 Stuttgart",
+   "region": "south",
+   "consultant": "Alexander Rukatukl",
+   "portrait": "assets/team/stuttgart.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201701/"
+  },
+  {
+   "slug": "dortmund",
+   "city": "Dortmund",
+   "address": "Schwarze-Brüder-Str. 1 44137 Dortmund",
+   "region": "west",
+   "consultant": "Lisa Kipper",
+   "portrait": "assets/team/dortmund.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/204001/"
+  },
+  {
+   "slug": "frankfurt",
+   "city": "Frankfurt",
+   "address": "Kaiserstraße 13 60311 Frankfurt/Main",
+   "region": "west",
+   "consultant": "Lenka Heller-Salfer",
+   "portrait": "assets/team/frankfurt.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201401/"
+  },
+  {
+   "slug": "fraport",
+   "city": "Frankfurt Airport",
+   "address": "",
+   "region": "west",
+   "consultant": null,
+   "portrait": null,
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/fraport/"
+  }
+ ]
+}
