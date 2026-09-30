@@ -270,7 +270,10 @@
             '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck, dein Vertrag ' +
               'endet.</dd>' +
           '</dl>' +
-          '<details class="aaas-details">' +
+          // open on load: the terms are the answer to the question the panel
+          // raises, so they are not something to go looking for. The control
+          // stays, it just starts expanded.
+          '<details class="aaas-details" open>' +
             '<summary>Die Details<span class="aaas-plus" aria-hidden="true"></span>' +
             '</summary>' +
             '<ul>' +
