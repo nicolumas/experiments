@@ -256,9 +256,8 @@
             'handsigniert, fertig zum Aufh\u00e4ngen. Du zahlst monatlich und h\u00e4ltst ' +
             'dir alle Optionen offen.</p>' +
           '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>/ Monat</span></div>' +
-          '<p class="aaas-figure-note">Kein Kaufpreis vorab. Die erste Zahlung ist bei ' +
-            'Bestellung f\u00e4llig.</p>' +
-          '<p class="aaas-credit">' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung ' +
+          '<p class="aaas-figure-note">Kein Kaufpreis vorab, die erste Zahlung ist bei ' +
+            'Bestellung f\u00e4llig. ' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung ' +
             'werden auf den Kaufpreis angerechnet.</p>' +
           '<p class="aaas-decide">Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
           '<dl class="aaas-choices">' +
@@ -266,23 +265,20 @@
             '<dt>Tauschen</dt><dd>W\u00e4hle eine andere Edition.</dd>' +
             '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck.</dd>' +
           '</dl>' +
+          // Of the two candidate ownership rules, the prototype states the one
+          // its own arithmetic produces: at 80 % credit the buyout reaches zero
+          // in month 34, which is what the PDP detail block already says. The
+          // 36-month reading stays a question for the epic, not a second answer
+          // in the UI.
+          //
+          // The terms also absorb the old footer's one line. Nothing here is
+          // actionable, so a bordered foot was 80px of chrome around a sentence
+          // that belongs with the other qualifiers.
           '<p class="aaas-terms">Mindestlaufzeit ' + TERMS.months + ' Monate, danach ohne ' +
-            'festes Enddatum. Zahlung per SEPA-Lastschrift oder Kreditkarte.</p>' +
-          // Open point, left visible on purpose: the rent credit reaches the
-          // full price two months before the minimum term ends, and the epic
-          // and the marketing copy disagree on which of the two wins. This
-          // stays a bracketed placeholder until that is decided, so it cannot
-          // ship as prose by accident.
-          '<p class="aaas-todo">[Eigentumsregel, sobald ' + q.ownedFromMonth + ' vs. ' +
-            TERMS.months + ' gekl\u00e4rt ist]</p>' +
-        '</div>' +
-        // Nothing to act on here. The PDP only explains Art as a Service; the
-        // choice is made once for the whole cart, in the cart or the checkout.
-        // So the foot states where that happens and the close control is the
-        // header's x, plus Esc and the backdrop that <dialog> gives us.
-        '<div class="aaas-drawer-foot">' +
-          '<p class="aaas-foot-note">Du w\u00e4hlst Art as a Service sp\u00e4ter im Warenkorb, ' +
-            'f\u00fcr deine ganze Bestellung.</p>' +
+            'festes Enddatum. \u00dcbernehmen kannst du jederzeit, ab Monat ' +
+            q.ownedFromMonth + ' ohne weitere Zahlung. Zahlung per SEPA-Lastschrift oder ' +
+            'Kreditkarte. Art as a Service w\u00e4hlst du sp\u00e4ter im Warenkorb, f\u00fcr ' +
+            'deine ganze Bestellung.</p>' +
         '</div>' +
       '</div>';
 
