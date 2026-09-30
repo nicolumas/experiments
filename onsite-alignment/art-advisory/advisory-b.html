@@ -264,7 +264,7 @@
     .hero__points li::before { content:""; position:absolute; left:0; top:0.95em;
       width:0.9rem; height:1px; background:var(--charcoal-900); }
 
-    /* ── Version B picker · no calendar on the page ────── */
+    /* ── Version B picker · two routes, one map ────────── */
     .picker { border:1px solid var(--border-default); background:var(--ivory-100);
       padding:clamp(2rem,3vw,3.2rem); }
     .picker__step + .picker__step { margin-top:clamp(2.4rem,3.2vw,3.6rem); }
@@ -282,31 +282,109 @@
     .mode:hover { border-color:var(--charcoal-900); }
     .mode[aria-pressed="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
     .mode__t { display:block; font-size:1.6rem; }
-    .mode__d { display:block; margin-top:0.6rem; font-size:1.35rem; line-height:1.5;
-      color:var(--text-secondary); }
+    .mode__d { display:block; margin-top:0.6rem; font-size:1.35rem; line-height:1.5; color:var(--text-secondary); }
     .mode[aria-pressed="true"] .mode__d { color:rgba(244,237,226,0.75); }
 
-    .picker__hint { margin-top:1.2rem; min-height:1.6em; }
+    .routes { display:flex; flex-wrap:wrap; gap:0.8rem; }
+    .route { font-size:1.4rem; padding:1rem 1.8rem; border:1px solid var(--border-default);
+      background:transparent; color:var(--text-primary); cursor:pointer;
+      transition:background-color 200ms var(--ease-out), border-color 200ms var(--ease-out); }
+    .route:hover { border-color:var(--charcoal-900); }
+    .route[aria-pressed="true"] { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
+    .picker__pane { margin-top:clamp(2rem,2.6vw,2.8rem); }
+    .picker__pane[hidden] { display:none; }
 
-    .picker__results { display:grid; grid-template-columns:repeat(auto-fill,minmax(31rem,1fr));
-      gap:1.2rem; margin-top:clamp(2.4rem,3.2vw,3.6rem); }
-    .picker__results:empty { display:none; }
-    .pcard { display:grid; grid-template-columns:auto 1fr; grid-template-areas:"ph body" "cta cta";
-      gap:0 1.4rem; align-items:center; padding:1.6rem; background:var(--surface-page);
+    /* ── the fast lane ─────────────────────────────────── */
+    .soon { display:flex; flex-wrap:wrap; align-items:center; gap:clamp(1.6rem,3vw,3.2rem);
+      padding:clamp(1.8rem,2.6vw,2.6rem); background:var(--surface-page);
       border:1px solid var(--border-subtle); }
-    .pcard__ph { grid-area:ph; width:5.2rem; height:5.2rem; border-radius:50%; overflow:hidden;
+    .soon__when { display:flex; align-items:baseline; gap:1rem; }
+    .soon__time { font-family:var(--font-display); font-size:clamp(3.2rem,4.5vw,4.4rem); line-height:1; }
+    .soon__day { font-size:1.5rem; color:var(--text-secondary); }
+    .soon__where { min-width:0; }
+    .soon__city { font-size:1.7rem; }
+    .soon__cta { margin-left:auto; }
+    @media (max-width:699px){ .soon__cta { margin-left:0; width:100%; justify-content:center; } }
+    .soon__none { color:var(--text-secondary); }
+
+    /* ── the map ───────────────────────────────────────── */
+    /* Brand has three colours and the art supplies the rest, so the map is drawn
+       in them: bone land, a hairline border, charcoal pins. No tile imagery,
+       which would drag a fourth palette onto the page. */
+    .mapwrap { background:var(--surface-page); border:1px solid var(--border-subtle);
+      padding:clamp(1.2rem,2vw,2rem); }
+    /* The frame is 1000x765, so at full column width the map ran 820px tall and
+       took over the section. Capped, and the viewBox letterboxes it. */
+    .mp { width:100%; height:auto; max-height:min(56vh,540px); display:block; margin-inline:auto; }
+    /* bone-200 is LIGHTER than bone-100, so filling the home countries with it
+       made them recede behind their neighbours. Neighbours take the lightest
+       bone and the three that hold galleries take the darkest. */
+    .mp__n { fill:var(--bone-300); stroke:var(--border-subtle); stroke-width:1.2; }
+    .mp__h { fill:var(--bone-100); stroke:var(--border-default); stroke-width:1.4; }
+    .mp__pin { cursor:pointer; }
+    .mp__hit { fill:transparent; }
+    .mp__dot { fill:var(--charcoal-900); transition:r 180ms var(--ease-out); }
+    .mp__label { font-family:var(--font-body); font-size:17px;
+      fill:var(--text-primary); pointer-events:none;
+      paint-order:stroke; stroke:var(--surface-page); stroke-width:4px; stroke-linejoin:round; }
+    .mp__pin--muted .mp__dot { fill:none; stroke:var(--charcoal-900); stroke-width:2; }
+    .mp__pin--off { opacity:.28; pointer-events:none; }
+    .mp__pin:hover .mp__dot, .mp__pin:focus-visible .mp__dot { r:10; }
+    .mp__pin:focus-visible { outline:none; }
+    .mp__pin:focus-visible .mp__hit { fill:rgba(28,26,24,.08); }
+    .mp__pin.is-on .mp__dot { r:11; fill:var(--charcoal-900); stroke:var(--surface-page); stroke-width:3; }
+
+    /* On a phone the height cap squeezed the map to 275px wide, which put the
+       labels at 4.7px. So the cap comes off, the map takes the full width, and
+       the labels come off instead: sixteen of them cannot be set legibly at
+       that scale whatever the size. The dot is the target and the card below
+       names what you picked, which is the same job in two steps. */
+    @media (max-width:699px) {
+      .mp { max-height:none; }
+      .mp__label { display:none; }
+      .mp__dot { r:11; }
+      .mp__pin.is-on .mp__dot { r:16; }
+      /* a 44px touch target at this scale is roughly 60 viewBox units */
+      .mp__hit { r:34; }   /* pins are for orientation on a phone, not for tapping */
+      .mapwrap { padding:1rem; }
+    }
+
+    /* the full chooser is the phone's way in; desktop reads the map labels */
+    .offmap--all { display:none; }
+    @media (max-width:699px){
+      .offmap--all { display:flex; }
+      /* these are the only way to choose on a phone, so they take a real
+         touch target rather than the desktop chip height */
+      .offmap__b { min-height:44px; padding-inline:1.5rem; }
+    }
+
+    .offmap { display:flex; flex-wrap:wrap; align-items:center; gap:0.8rem; margin-top:1.4rem; }
+    .offmap__b { font-size:1.35rem; padding:0.7rem 1.3rem; border:1px solid var(--border-default);
+      background:transparent; color:var(--text-primary); cursor:pointer; }
+    .offmap__b:hover { border-color:var(--charcoal-900); }
+    .offmap__b.is-on { background:var(--charcoal-900); border-color:var(--charcoal-900); color:var(--ivory-100); }
+
+    .picker__detail { margin-top:clamp(1.6rem,2.2vw,2.2rem); }
+    .pick__hint { color:var(--text-secondary); }
+    /* the labels are only hidden on a phone, so only there does the hint have to
+       explain the dots */
+    .pick__tap { display:none; }
+    @media (max-width:699px){ .pick__tap { display:inline; } .pick__point { display:none; } }
+    .pick { display:flex; flex-wrap:wrap; align-items:center; gap:clamp(1.4rem,2.4vw,2.4rem);
+      padding:clamp(1.6rem,2.2vw,2.2rem); background:var(--surface-page);
+      border:1px solid var(--border-subtle); }
+    .pick__ph { width:5.6rem; height:5.6rem; flex:0 0 auto; border-radius:50%; overflow:hidden;
       background:var(--bone-100); }
-    .pcard__ph img { width:100%; height:100%; object-fit:cover; display:block; }
-    .pcard__body { grid-area:body; min-width:0; }
-    .pcard__city { font-size:1.9rem; line-height:1.25; }
-    .pcard__with { margin-top:0.4rem; font-size:1.45rem; color:var(--text-secondary); }
-    /* --text-tertiary is 3.3:1 on this ground and fails AA, so the address takes
-       secondary too and separates by size alone. */
-    .pcard__addr { margin-top:0.4rem; font-size:1.25rem; line-height:1.45; color:var(--text-secondary); }
-    .pcard__cta { grid-area:cta; margin-top:1.4rem; padding-top:1.2rem;
-      border-top:1px solid var(--border-subtle); font-size:1.35rem; }
-    .pcard--muted .pcard__cta { color:var(--text-secondary); }
-    .picker__none { margin-top:clamp(2.4rem,3.2vw,3.6rem); color:var(--text-secondary); }
+    .pick__ph img { width:100%; height:100%; object-fit:cover; display:block; }
+    .pick__body { min-width:0; }
+    .pick__city { font-size:1.9rem; line-height:1.25; }
+    .pick__with { margin-top:0.4rem; font-size:1.45rem; color:var(--text-secondary); }
+    /* --text-tertiary is 3.3:1 here and fails AA, so the street takes secondary
+       and separates by size alone. */
+    .pick__addr { margin-top:0.4rem; font-size:1.25rem; line-height:1.45; color:var(--text-secondary); }
+    .pick__cta { margin-left:auto; }
+    @media (max-width:699px){ .pick__cta { margin-left:0; width:100%; justify-content:center; } }
+
     .picker__meta { margin-top:clamp(1.8rem,2.4vw,2.4rem); }
     .picker__meta:empty { display:none; }
 
@@ -1226,8 +1304,8 @@
       <div class="wrap">
         <div class="section-head reveal">
           <p class="eyebrow">Book a consultation</p>
-          <h2 class="display-h2 mt-s">Who would you like to see?</h2>
-          <p class="body-large txt-secondary measure mt-m">Thirty minutes with an Art Consultant, free and with no obligation. Choose how you would like to meet and who with. Times are in their calendar, on the next step.</p>
+          <h2 class="display-h2 mt-s">When and where suits you?</h2>
+          <p class="body-large txt-secondary measure mt-m">Thirty minutes with an Art Consultant, free and with no obligation. Take the next slot going, or pick the gallery you want on the map. Either way the times live in that gallery’s calendar.</p>
         </div>
 
         <div class="picker reveal" data-picker>
@@ -1246,17 +1324,31 @@
             </div>
           </div>
 
-          <!-- 2 · where -->
+          <!-- 2 · the two routes. Someone who wants it over with and someone who
+               wants a particular room are not the same customer, so they are not
+               made to walk the same path. -->
           <div class="picker__step">
-            <p class="picker__q"><span class="picker__n">2</span> <span data-where-q>Which gallery?</span></p>
-            <div class="chipset" role="group" aria-label="Region">
-              <button class="chip" type="button" data-region="all" aria-pressed="true">All galleries</button>
+            <p class="picker__q"><span class="picker__n">2</span> Where and when?</p>
+            <div class="routes" role="group" aria-label="How would you like to choose">
+              <button class="route" type="button" data-route="soonest" aria-pressed="true">
+                Give me the next possible slot
+              </button>
+              <button class="route" type="button" data-route="choose" aria-pressed="false">
+                Choose my gallery
+              </button>
             </div>
-            <p class="picker__hint caption txt-secondary" data-region-blurb></p>
+
+            <div class="picker__pane" data-pane="soonest">
+              <div data-soonest></div>
+            </div>
+
+            <div class="picker__pane" data-pane="choose" hidden>
+              <div class="mapwrap" data-map></div>
+              <div data-offmap></div>
+              <div class="picker__detail" data-detail></div>
+            </div>
           </div>
 
-          <!-- 3 · who -->
-          <div class="picker__results" data-results></div>
           <p class="picker__meta caption txt-secondary" data-meta></p>
         </div>
       </div>
@@ -1441,7 +1533,7 @@
   })();
 </script>
   <script src="assets/site.js?v=25"></script>
-  <script src="assets/picker.js?v=4"></script>
+  <script src="assets/picker.js?v=11"></script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script src="../_nav/nav.js"></script>
 <!-- LUMAS-NAV-KIT:JS:END -->
