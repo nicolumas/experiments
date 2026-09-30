@@ -253,42 +253,28 @@
         '<div class="aaas-drawer-body">' +
           '<h2 id="aaas-drawer-title">Erst erleben, dann entscheiden.</h2>' +
           '<p class="aaas-lede">Deine Edition h\u00e4ngt vom ersten Tag an bei dir: ' +
-            'handsigniert, in Galeriequalit\u00e4t, fertig zum Aufh\u00e4ngen. Du zahlst ' +
-            'monatlich und h\u00e4ltst dir alle Optionen offen.</p>' +
+            'handsigniert, fertig zum Aufh\u00e4ngen. Du zahlst monatlich und h\u00e4ltst ' +
+            'dir alle Optionen offen.</p>' +
           '<div class="aaas-offer-figure"><b>' + money(q.monthly) + '</b><span>/ Monat</span></div>' +
           '<p class="aaas-figure-note">Kein Kaufpreis vorab. Die erste Zahlung ist bei ' +
             'Bestellung f\u00e4llig.</p>' +
           '<p class="aaas-credit">' + Math.round(TERMS.credit * 100) + ' % jeder Zahlung ' +
-            'werden auf den Kaufpreis angerechnet. Beh\u00e4ltst du das Werk, z\u00e4hlt der ' +
-            'Gro\u00dfteil deiner Zahlungen bereits mit.</p>' +
-          '<p class="aaas-decide">Das Zuhause ver\u00e4ndert sich, der Geschmack auch. ' +
-            'Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
+            'werden auf den Kaufpreis angerechnet.</p>' +
+          '<p class="aaas-decide">Nach ' + TERMS.months + ' Monaten entscheidest du:</p>' +
           '<dl class="aaas-choices">' +
-            '<dt>Behalten</dt><dd>Deine angerechneten Zahlungen flie\u00dfen in den ' +
-              'Kaufpreis ein.</dd>' +
+            '<dt>Behalten</dt><dd>Deine Zahlungen flie\u00dfen in den Kaufpreis ein.</dd>' +
             '<dt>Tauschen</dt><dd>W\u00e4hle eine andere Edition.</dd>' +
-            '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck, dein Vertrag ' +
-              'endet.</dd>' +
+            '<dt>Zur\u00fcckgeben</dt><dd>Du schickst das Werk zur\u00fcck.</dd>' +
           '</dl>' +
-          // open on load: the terms are the answer to the question the panel
-          // raises, so they are not something to go looking for. The control
-          // stays, it just starts expanded.
-          '<details class="aaas-details" open>' +
-            '<summary>Die Details<span class="aaas-plus" aria-hidden="true"></span>' +
-            '</summary>' +
-            '<ul>' +
-              '<li>Mindestlaufzeit ' + TERMS.months + ' Monate. Danach l\u00e4uft der Vertrag ' +
-                'monatlich weiter, ohne festes Enddatum.</li>' +
-              '<li>Zahlung per SEPA-Lastschrift oder Kreditkarte.</li>' +
-              // Open point, left visible on purpose: the rent credit reaches the
-              // full price two months before the minimum term ends, and the epic
-              // and the marketing copy disagree on which of the two wins. This
-              // stays a bracketed placeholder until that is decided, so it cannot
-              // ship as prose by accident.
-              '<li class="aaas-todo">[Eigentumsregel, sobald ' + q.ownedFromMonth + ' vs. ' +
-                TERMS.months + ' gekl\u00e4rt ist]</li>' +
-            '</ul>' +
-          '</details>' +
+          '<p class="aaas-terms">Mindestlaufzeit ' + TERMS.months + ' Monate, danach ohne ' +
+            'festes Enddatum. Zahlung per SEPA-Lastschrift oder Kreditkarte.</p>' +
+          // Open point, left visible on purpose: the rent credit reaches the
+          // full price two months before the minimum term ends, and the epic
+          // and the marketing copy disagree on which of the two wins. This
+          // stays a bracketed placeholder until that is decided, so it cannot
+          // ship as prose by accident.
+          '<p class="aaas-todo">[Eigentumsregel, sobald ' + q.ownedFromMonth + ' vs. ' +
+            TERMS.months + ' gekl\u00e4rt ist]</p>' +
         '</div>' +
         // Nothing to act on here. The PDP only explains Art as a Service; the
         // choice is made once for the whole cart, in the cart or the checkout.
