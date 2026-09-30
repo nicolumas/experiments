@@ -601,39 +601,47 @@
 
 .aaas-drawer-foot .aaas-btn + .aaas-btn { margin-top: var(--sp-2); }
 
-/* ---------- conditions drawer ---------- */
+/* ---------- conditions pop-up ----------
+ * A centred modal, not a side sheet. The panel explains one thing and then
+ * gets out of the way, so it does not need the page-edge geometry a sheet
+ * implies, and the same shape can serve every step: PDP, cart, checkout and
+ * account all open this one dialog. */
 
 .aaas-drawer {
-  border: 0;
+  border: 1px solid var(--color-border-default);
   padding: 0;
-  margin: 0 0 0 auto;
-  height: 100%;
-  max-height: 100%;
-  width: min(44rem, 100vw);
-  max-width: 100vw;
+  /* a <dialog> is inset 0 in the top layer, so auto margins centre it */
+  margin: auto;
+  width: min(48rem, calc(100vw - var(--sp-8)));
+  max-width: calc(100vw - var(--sp-8));
+  /* fit-content, not auto: a modal dialog is inset 0, and an auto height there
+     solves the position equation by stretching to the max instead of hugging
+     its content, which left a band of dead space above the foot. */
+  height: fit-content;
+  max-height: 84vh;
   background: var(--color-surface-page);
   color: var(--color-text-primary);
   font-family: var(--font-body);
 
-  /* enters from the edge it is anchored to, so the motion explains the geometry.
+  /* it appears where it already is, so there is nothing to animate but presence.
      exit is faster than enter: the user has already decided. */
-  translate: 100% 0;
   opacity: 0;
+  scale: .98;
   transition:
-    translate var(--motion-fast, 220ms) var(--motion-easing, ease-out),
+    scale var(--motion-fast, 220ms) var(--motion-easing, ease-out),
     opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
     overlay var(--motion-fast, 220ms) allow-discrete,
     display var(--motion-fast, 220ms) allow-discrete;
 }
 
 .aaas-drawer[open] {
-  translate: 0 0;
   opacity: 1;
+  scale: 1;
   transition-duration: var(--motion-default, 320ms);
 }
 
 @starting-style {
-  .aaas-drawer[open] { translate: 100% 0; opacity: 0; }
+  .aaas-drawer[open] { opacity: 0; scale: .98; }
 }
 
 .aaas-drawer::backdrop {
@@ -650,7 +658,9 @@
   .aaas-drawer[open]::backdrop { background: rgba(0, 0, 0, 0); }
 }
 
-.aaas-drawer-inner { display: flex; flex-direction: column; height: 100%; }
+/* The dialog sizes to its content up to 84vh, so the inner column has to carry
+   the same ceiling: a percentage height would have nothing to resolve against. */
+.aaas-drawer-inner { display: flex; flex-direction: column; max-height: 84vh; }
 
 .aaas-drawer-head {
   display: flex;
@@ -678,7 +688,9 @@
   color: var(--color-text-primary);
 }
 
-.aaas-drawer-body { flex: 1; overflow-y: auto; padding: 0 var(--sp-6) var(--sp-6); }
+/* min-height:0 or the body refuses to shrink below its content and scrolls the
+   whole dialog instead of itself */
+.aaas-drawer-body { flex: 1; min-height: 0; overflow-y: auto; padding: 0 var(--sp-6) var(--sp-6); }
 
 .aaas-drawer-foot {
   padding: var(--sp-4) var(--sp-6) var(--sp-6);
@@ -1576,7 +1588,7 @@
 
   .aaas-drawer,
   .aaas-drawer[open] {
-    translate: 0 0;
+    scale: 1;
     transition:
       opacity var(--motion-fast, 220ms) var(--motion-easing, ease-out),
       overlay var(--motion-fast, 220ms) allow-discrete,
@@ -1584,39 +1596,24 @@
   }
 
   @starting-style {
-    .aaas-drawer[open] { translate: 0 0; opacity: 0; }
+    .aaas-drawer[open] { scale: 1; opacity: 0; }
   }
 }
 
-/* On mobile the conditions panel is a bottom sheet, not a side sheet: it enters
-   from the edge it is anchored to, and sizes to its content instead of standing
-   full height with dead space under the copy. */
+/* Still centred on a phone, just with tighter gutters and a little more of the
+   viewport, so the pop-up behaves the same way everywhere. */
 @media (max-width: 760px) {
   .aaas-drawer {
-    width: 100vw;
-    max-width: 100vw;
-    height: auto;
+    width: calc(100vw - var(--sp-6));
+    max-width: calc(100vw - var(--sp-6));
     max-height: 88vh;
-    margin: auto 0 0;
-    translate: 0 100%;
   }
 
-  .aaas-drawer[open] { translate: 0 0; }
+  .aaas-drawer-inner { max-height: 88vh; }
 
-  @starting-style {
-    .aaas-drawer[open] { translate: 0 100%; }
-  }
-
-  .aaas-drawer-inner { height: auto; max-height: 88vh; }
-}
-
-@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
-  .aaas-drawer,
-  .aaas-drawer[open] { translate: 0 0; }
-
-  @starting-style {
-    .aaas-drawer[open] { translate: 0 0; }
-  }
+  .aaas-drawer-head { padding: var(--sp-5) var(--sp-5) var(--sp-3); }
+  .aaas-drawer-body { padding: 0 var(--sp-5) var(--sp-5); }
+  .aaas-drawer-foot { padding: var(--sp-3) var(--sp-5) var(--sp-5); }
 }
 
 /* ---------- mobile refinements ----------
