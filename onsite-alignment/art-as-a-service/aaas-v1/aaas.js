@@ -981,13 +981,6 @@
       document.addEventListener('click', function (e) {
         if (!e.target.closest) return;
 
-        // the summary's "Alle Details" opens the same fly-out as the PDP
-        if (e.target.closest('#aaas-open-checkout')) {
-          e.preventDefault();
-          openConditions();
-          return;
-        }
-
         // the real customer step submits to the live shop; here it advances
         var real = e.target.closest('#loginForm_submit');
         var nav = e.target.closest('.aaas-next, .aaas-back');
@@ -1060,9 +1053,6 @@
         .classList.toggle('aaas-hidden-by-rent', renting && !keep);
     });
 
-    // the commitment stays visible in the summary panel for the whole flow, so it
-    // is never out of sight while the customer works through the steps
-    renderConsent(q, renting);
     // the live flow leaves the checkout for a real success page
     if (step() >= 4) { window.location.href = 'success.html'; return; }
     renderSteps(q);
@@ -1261,26 +1251,6 @@
     if (detail) detail.innerHTML = chosen === CARD ? cardFields() : '';
     var consent = document.getElementById('aaas-rentconsent');
     if (consent) consent.innerHTML = renting ? rentConsent(q, chosen) : '';
-  }
-
-  function renderConsent(q, renting) {
-    var node = document.getElementById('aaas-consent');
-    if (!renting) { if (node) node.remove(); return; }
-    if (!node) {
-      var anchor = document.querySelector('aside .cart-items-container') || document.querySelector('aside');
-      if (!anchor) return;
-      node = el('div', 'aaas-consent');
-      node.id = 'aaas-consent';
-      anchor.insertAdjacentElement('afterend', node);
-    }
-    node.innerHTML =
-      '<h3>Das buchst du</h3>' +
-      '<p><b>' + money(q.dueToday) + '</b> heute, danach <b>' + money(q.monthly) +
-        '</b> im Monat. Mindestlaufzeit ' + TERMS.months + ' Monate, der Vertrag läuft ' +
-        'danach weiter.</p>' +
-      '<p>Übernehmen kannst du jederzeit, ab Monat ' + q.ownedFromMonth + ' ohne weitere ' +
-        'Zahlung. <button type="button" class="aaas-link" id="aaas-open-checkout">' +
-        'Alle Details zu Art as a Service</button></p>';
   }
 
   function toggleRow(label, on) {

@@ -1036,11 +1036,10 @@
 .aaas-consent b { font-family: var(--font-body-bold); font-weight: 400; }
 
 /* ---------- checkout summary panel fixes ----------
- * The checkout resets padding on elements inside the summary panel, which
- * flattened the consent block to zero on all four sides and left the item
- * flush against the totals above it. Both need to out-specify that reset. */
-
-#aaas-consent.aaas-consent { padding: var(--sp-5); }
+ * The checkout resets padding on elements inside the summary panel, which left
+ * the item flush against the totals above it. This has to out-specify that
+ * reset. (The sibling rule here padded the summary's booking block, which is
+ * gone; .aaas-consent itself stays, the payment step's mandate still uses it.) */
 
 .spc-container aside .cart-items-container { padding-top: var(--sp-6); }
 
