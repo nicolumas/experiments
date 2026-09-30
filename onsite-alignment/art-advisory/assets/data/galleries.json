@@ -1,5 +1,5 @@
 {
- "note": "All 19 LUMAS galleries. Version B carries no availability: Microsoft Bookings owns the calendar.",
+ "note": "All open LUMAS galleries. London is left out while it is temporarily closed for its move. Version B carries no availability: Microsoft Bookings owns the calendar.",
  "videoPilotUrl": "https://bookings.cloud.microsoft/book/lumasgaleriehamburg@lumas.com/?ismsaljsauthenabled=true",
  "videoPilotGallery": "hamburg",
  "regions": [
@@ -59,16 +59,6 @@
    "portrait": "assets/team/budapest.webp",
    "bookable": false,
    "galleryUrl": "https://www.lumas.de/galerien/budapest/"
-  },
-  {
-   "slug": "london",
-   "city": "London",
-   "address": "",
-   "region": "intl",
-   "consultant": null,
-   "portrait": null,
-   "bookable": false,
-   "galleryUrl": "https://www.lumas.de/galerien/london/"
   },
   {
    "slug": "miami",
