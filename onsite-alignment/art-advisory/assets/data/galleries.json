@@ -1,5 +1,5 @@
 {
- "note": "Version B carries no availability. Times live in Microsoft Bookings, which owns the calendar.",
+ "note": "All 19 LUMAS galleries. Version B carries no availability: Microsoft Bookings owns the calendar.",
  "videoPilotUrl": "https://bookings.cloud.microsoft/book/lumasgaleriehamburg@lumas.com/?ismsaljsauthenabled=true",
  "videoPilotGallery": "hamburg",
  "regions": [
@@ -55,8 +55,8 @@
    "city": "Budapest",
    "address": "",
    "region": "intl",
-   "consultant": null,
-   "portrait": null,
+   "consultant": "Eva Wikonkal",
+   "portrait": "assets/team/budapest.webp",
    "bookable": false,
    "galleryUrl": "https://www.lumas.de/galerien/budapest/"
   },
@@ -71,24 +71,34 @@
    "galleryUrl": "https://www.lumas.de/galerien/london/"
   },
   {
+   "slug": "miami",
+   "city": "Miami Beach",
+   "address": "",
+   "region": "intl",
+   "consultant": "Taylor Bloom",
+   "portrait": "assets/team/miami.webp",
+   "bookable": false,
+   "galleryUrl": "https://www.lumas.de/galerien/miami/"
+  },
+  {
    "slug": "new-york-soho",
    "city": "New York, SoHo",
    "address": "",
    "region": "intl",
-   "consultant": null,
-   "portrait": null,
+   "consultant": "Lauren Colonna",
+   "portrait": "assets/team/new-york.webp",
    "bookable": false,
    "galleryUrl": "https://www.lumas.de/galerien/new-york-soho/"
   },
   {
    "slug": "paris",
-   "city": "Paris",
+   "city": "Paris, Saint-Germain",
    "address": "",
    "region": "intl",
    "consultant": null,
    "portrait": null,
    "bookable": false,
-   "galleryUrl": "https://www.lumas.de/galerien/paris/"
+   "galleryUrl": "https://www.lumas.de/galerien/paris-saint-germain/"
   },
   {
    "slug": "berlin-kudamm",
@@ -161,6 +171,16 @@
    "bookingUrl": "https://www.lumas.de/booking/galerie/201701/"
   },
   {
+   "slug": "koeln",
+   "city": "Cologne",
+   "address": "Mittelstraße 15 50672 Köln",
+   "region": "west",
+   "consultant": "Mirco Schneider",
+   "portrait": "assets/team/koeln.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201501/"
+  },
+  {
    "slug": "dortmund",
    "city": "Dortmund",
    "address": "Schwarze-Brüder-Str. 1 44137 Dortmund",
@@ -169,6 +189,16 @@
    "portrait": "assets/team/dortmund.webp",
    "bookable": true,
    "bookingUrl": "https://www.lumas.de/booking/galerie/204001/"
+  },
+  {
+   "slug": "duesseldorf",
+   "city": "Düsseldorf",
+   "address": "Grünstraße 8 40212 Düsseldorf",
+   "region": "west",
+   "consultant": "Agata Wierigs",
+   "portrait": "assets/team/duesseldorf.webp",
+   "bookable": true,
+   "bookingUrl": "https://www.lumas.de/booking/galerie/201801/"
   },
   {
    "slug": "frankfurt",
@@ -185,8 +215,8 @@
    "city": "Frankfurt Airport",
    "address": "",
    "region": "west",
-   "consultant": null,
-   "portrait": null,
+   "consultant": "Wie Gang Hu",
+   "portrait": "assets/team/frankfurt-airport.webp",
    "bookable": false,
    "galleryUrl": "https://www.lumas.de/galerien/fraport/"
   }
