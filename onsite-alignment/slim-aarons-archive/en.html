@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/inline.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/site-header.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/main.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/bottom-nav.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/social-proof-bar.css">
+<link rel="stylesheet" href="assets/page-local.css">
+<script src="../assets/gate.js"></script>
+<title>Slim Aarons · Slide Collectables</title>
+<style>
+/* STAKEHOLDER PREVIEW ONLY: lays out the static stand-ins for the SKU carousel. Not in the CMS fragment. */
+.preview-rail{display:flex;gap:2rem;overflow-x:auto;padding:0 0 1.5rem;align-items:flex-start;}
+.preview-rail>.product-wrapper{flex:0 0 auto;background:none!important;}
+.preview-rail .product-container,
+.preview-rail .product-container .top,
+.preview-rail .product-container .bottom{background:none!important;}
+.preview-rail a.product-link.image-container{height:auto!important;background:none!important;display:block!important;}
+.preview-rail a.product-link.image-container picture{display:block;background:none!important;}
+.preview-rail img.catalog-product-image{height:300px!important;width:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;display:block;}
+.preview-rail .bottom{max-width:300px;}
+.preview-rail::-webkit-scrollbar{height:6px;}
+.preview-rail::-webkit-scrollbar-thumb{background:#d8d2c6;border-radius:3px;}
+</style>
+</head>
+<body>
+<!-- Wrapper copied from a real CMS content page (prelive_template), verified
+     2026-09-21. Content rows sit directly inside .container: do not add an extra
+     .row/.col wrapper, or the fragment's own rows nest inside a column and the
+     layout changes. There is exactly one <main> on the real page.
+
+     .static-pages and .content are load-bearing and must both be present: a
+     stack of production rules is scoped to that pair, and without them the
+     preview silently renders the generic rule instead. The one that bites is
+     .static-pages .content .like-h2, which makes a standfirst 2rem body text;
+     outside the pair, .like-h2,h2 wins and the same paragraph previews as a
+     4.6rem display heading. .static-pages h1,h2 also sets the heading padding.
+     Neither class carries layout of its own, so adding them changes nothing
+     else. Verified against www.lumas.de/inspired-art-magazine/, 2026-09-22. -->
+<div id="app" class="content-container">
+<main id="main-content" tabindex="-1">
+<div class="container static-pages">
+<div class="content">
+
+<div class="row mt-3 mb-1">
+  <div class="col-md-12 text-center">
+    <p class="headline-block color-secondary mb-1">Slim Aarons &middot; Slide Collectables</p>
+    <h1 class="text-wrap-balance">Curate your wall<br>from Slim Aarons&rsquo; own&nbsp;archive</h1>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-10 col-md-offset-1 text-center text-wrap-balance">
+    <p class="lead">Nine photographic works from the Slim Aarons archive, 34 &times; 34&nbsp;cm each, with his handwritten notes on every mount. Arrange them on the wall and try different combinations.</p>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <div class="bg-muted px-3 pt-2 pb-2 text-center text-wrap-balance">
+      <p class="mb-0"><strong>The more of the nine, the greater your collector&rsquo;s&nbsp;advantage.</strong> One edition is &euro;249. All nine are &euro;149 each.</p>
+    </div>
+  </div>
+</div>
+
+<!-- STAKEHOLDER PREVIEW ONLY: stand-in for {{ renderComponent('series-wall') }}. Not in the CMS fragment. -->
+<div class="row mb-3">
+  <div class="col-md-12">
+    <div class="bg-muted px-3 pt-4 pb-4 text-center">
+      <p class="headline-block color-secondary mb-1">The wall &middot; series-wall</p>
+      <h2 class="like-h3 text-wrap-balance">The wall appears here</h2>
+      <p class="mb-2 text-wrap-pretty">In the CMS, <code>{{ renderComponent('series-wall') }}</code> renders the Wall Curator at this point: the room, the edition tray, the wall builder, the price and add to cart.</p>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <img class="max-w-full width-full height-auto mb-2" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/wall-study.webp" alt="" width="1122" height="722">
+        </div>
+      </div>
+      <p class="mb-0"><a href="../slim-aarons-wall-curator/" class="btn btn-secondary">Open the wall prototype</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <table class="col-sm-12 table-bordered text-center hidden-xs">
+      <tbody>
+        <tr>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">The series</h2>
+              <p class="mb-0">9 editions, each 34&nbsp;&times;&nbsp;34&nbsp;cm</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">Technique</h2>
+              <p class="mb-0">Photographic print under acrylic glass</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">One edition</h2>
+              <p class="mb-0">&euro;249</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">All nine</h2>
+              <p class="mb-0">&euro;149 each</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="col-sm-12 table-bordered text-center hidden-sm hidden-md hidden-lg">
+      <tbody>
+        <tr>
+          <td class="align-top" width="50%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">The series</h2>
+              <p class="mb-0">9 editions, each 34&nbsp;&times;&nbsp;34&nbsp;cm</p>
+            </div>
+          </td>
+          <td class="align-top" width="50%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">Technique</h2>
+              <p class="mb-0">Photographic print under acrylic glass</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top" width="50%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">One edition</h2>
+              <p class="mb-0">&euro;249</p>
+            </div>
+          </td>
+          <td class="align-top" width="50%">
+            <div class="px-2 py-2">
+              <h2 class="headline-block color-secondary mb-1">All nine</h2>
+              <p class="mb-0">&euro;149 each</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="bg-inverse px-3 pt-5 pb-5">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+          <p class="headline-block mb-1">The archive</p>
+          <h2 class="text-wrap-balance">The picture editor&rsquo;s&nbsp;cut</h2>
+          <p class="lead mb-0 text-wrap-pretty">A shoot came back from the lab as a box of slides. Somebody set them out on a light table, leaned in with a loupe, and decided which frames the world would ever see. Everything else went back in the&nbsp;box.</p>
+          <p class="lead mt-2 mb-0 text-wrap-pretty">These nine came out again with his own notes still on the mounts: places, names, years, box numbers. Each one is a small piece of photographic&nbsp;history.</p>
+          <p class="like-h3 mt-3 mb-1 text-wrap-balance">&ldquo;I photograph attractive people doing attractive things in attractive&nbsp;places.&rdquo;</p>
+          <p class="headline-block color-secondary mb-0">Slim Aarons</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row mb-2">
+  <div class="col-md-12 text-center">
+    <p class="headline-block color-secondary mb-1">What arrives</p>
+    <h2 class="text-wrap-balance">The particulars</h2>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <table class="col-sm-12 table-bordered text-left hidden-xs">
+      <tbody>
+        <tr>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Format</h3>
+              <p class="mb-0 text-wrap-pretty">34 &times; 34 cm, square. Every edition is the same size, so any combination hangs on one&nbsp;grid.</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Technique</h3>
+              <p class="mb-0 text-wrap-pretty">Photographic print on an aluminium composite panel, finished with acrylic glass. The rounded corners take the form of a slide mount, a nod to analogue&nbsp;photography.</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Edition</h3>
+              <p class="mb-0 text-wrap-pretty">Limited edition per motif, carrying the Slim Aarons estate&nbsp;stamp.</p>
+            </div>
+          </td>
+          <td class="align-top" width="25%">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Delivery</h3>
+              <p class="mb-0 text-wrap-pretty">Framing options are shown on each work&rsquo;s page. Ships in 5 to 7 days, 60-day&nbsp;returns.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="col-sm-12 table-bordered text-left hidden-sm hidden-md hidden-lg">
+      <tbody>
+        <tr>
+          <td class="align-top">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Format</h3>
+              <p class="mb-0 text-wrap-pretty">34 &times; 34 cm, square. Every edition is the same size, so any combination hangs on one&nbsp;grid.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Technique</h3>
+              <p class="mb-0 text-wrap-pretty">Photographic print on an aluminium composite panel, finished with acrylic glass. The rounded corners take the form of a slide mount, a nod to analogue&nbsp;photography.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Edition</h3>
+              <p class="mb-0 text-wrap-pretty">Limited edition per motif, carrying the Slim Aarons estate&nbsp;stamp.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top">
+            <div class="px-2 py-2">
+              <h3 class="headline-block color-secondary mb-1">Delivery</h3>
+              <p class="mb-0 text-wrap-pretty">Framing options are shown on each work&rsquo;s page. Ships in 5 to 7 days, 60-day&nbsp;returns.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col-md-12 text-center">
+    <p class="headline-block color-secondary mb-1">The nine</p>
+    <h2 class="text-wrap-balance">All nine Slide&nbsp;Collectables</h2>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-lg-12">
+    <!-- STAKEHOLDER PREVIEW ONLY: static stand-ins for spyCmsSkuProductCarousel. Not in the CMS fragment. -->
+<div class="preview-rail">
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Eden-Roc Pool" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa114-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Eden-Roc Pool</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Lounging In Verbier" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa115-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Lounging In Verbier</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Hotel Du Cap-Eden-Roc" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa116-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Hotel Du Cap-Eden-Roc</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Poolside Gossip" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa117-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Poolside Gossip</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Pop And Society" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa118-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Pop And Society</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Leisure In Antibes" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa119-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Leisure In Antibes</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Bahamas Speed Week" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa120-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Bahamas Speed Week</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="El Venero" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa121-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">El Venero</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+<product-card class="product-wrapper square" style="display:block;">
+<article class="product-container">
+<section class="top">
+<a class="product-link image-container" tabindex="-1">
+<picture><img alt="Vuccino And Rava" class="catalog-product-image" src="../slim-aarons-wall-curator/assets/slim-aarons-slides/saa122-640.webp" width="640" height="640"></picture>
+</a>
+</section>
+<section class="bottom">
+<div class="info">
+<a class="catalog-product-link">
+<div class="name">Vuccino And Rava</div>
+<div class="artist"><span>Slim Aarons</span></div>
+</a>
+</div>
+<div class="product-meta">
+<div class="price"><span class="no-wrap"><strong>&euro;&nbsp;249</strong></span></div>
+</div>
+</section>
+</article>
+</product-card>
+</div>
+  </div>
+</div>
+
+</div>
+</div>
+</main>
+</div>
+<!-- Preview only. The shop handles [data-scroll-to] with its own JavaScript; the
+     fragment must never carry a <script>. Without this the button looks broken
+     locally even though the markup is correct. -->
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('[data-scroll-to]');
+  if (!a) return;
+  var t = document.querySelector(a.getAttribute('data-scroll-to'));
+  if (!t) return;
+  e.preventDefault();
+  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+// Preview only. The shop applies [data-style-override] from its own bundle
+// (app-components, module 2829). Without this an image hotspot collapses to zero
+// width locally and reads as missing even though the markup is correct.
+document.querySelectorAll('[data-style-override]').forEach(function (el) {
+  el.style.cssText += el.dataset.styleOverride;
+});
+// Preview only. In the shop, block-tiles.js turns .block-tiles[data-overflow="slider"]
+// into a scroll-snap carousel and adds arrows or dots. Marking it ready lets the
+// production CSS lay the tiles out; the navigation itself is not emulated.
+document.querySelectorAll('.block-tiles[data-overflow="slider"]').forEach(function (el) {
+  var columns = Number(el.dataset.columns) || 1;
+  var tablet = columns === 3 ? 2 : Math.min(columns, 3);
+  var show = innerWidth < 760 ? 1 : innerWidth < 980 ? tablet : columns;
+  el.dataset.scrollCarouselReady = 'true';
+  el.style.setProperty('--slides-to-show', show);
+});
+</script>
+</body>
+</html>
