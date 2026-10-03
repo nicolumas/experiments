@@ -19,7 +19,6 @@
   margin-bottom: clamp(1.6rem, 2.4vw, 3.2rem);
 }
 
-.gallery-programme .gp-eyebrow,
 .gallery-programme .gp-format {
   color: var(--color-text-secondary);
   margin: 0 0 0.6rem;
