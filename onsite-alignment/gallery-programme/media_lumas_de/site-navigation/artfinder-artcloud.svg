@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 86">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #6e7789;
+      }
+
+      .cls-2 {
+        fill: #c8cdd8;
+      }
+
+      .cls-3 {
+        fill: #5c6579;
+      }
+
+      .cls-4 {
+        fill: #edeef1;
+        stroke: #ebedf0;
+        stroke-width: .5px;
+      }
+
+      .cls-5 {
+        fill: #4e5568;
+      }
+
+      .cls-6 {
+        fill: #8e98aa;
+      }
+
+      .cls-7 {
+        fill: #a2aab8;
+      }
+
+      .cls-8 {
+        fill: #bfc6d2;
+      }
+
+      .cls-9 {
+        fill: #9ba4b4;
+      }
+    </style>
+  </defs>
+  <rect class="cls-4" x=".25" y=".25" width="213.5" height="85.5" rx="7.75" ry="7.75"/>
+  <g>
+    <rect class="cls-6" x="18.51" y="20.93" width="21.22" height="26.36" rx="7.07" ry="7.07" transform="translate(-3.41 3.23) rotate(-6)"/>
+    <rect class="cls-3" x="53.23" y="48.57" width="19.29" height="14.14" rx="5.14" ry="5.14" transform="translate(2.98 114.48) rotate(-86)"/>
+    <rect class="cls-3" x="106.32" y="20.82" width="12.39" height="9.09" rx="3.3" ry="3.3" transform="translate(79.37 135.84) rotate(-86)"/>
+    <rect class="cls-1" x="84.09" y="35.07" width="12.86" height="17.36" rx="4.82" ry="4.82" transform="translate(-2.17 4.8) rotate(-3)"/>
+    <rect class="cls-8" x="106.91" y="53.39" width="12.22" height="9" rx="3.21" ry="3.21" transform="translate(51.22 168.83) rotate(-88)"/>
+    <rect class="cls-8" x="66.25" y="17.25" width="12.22" height="9" rx="3.21" ry="3.21" transform="translate(58.3 95.98) rotate(-96)"/>
+    <rect class="cls-2" x="124.59" y="28" width="9.64" height="12.86" rx="3.54" ry="3.54" transform="translate(-2.51 11.41) rotate(-5)"/>
+    <rect class="cls-9" x="137.45" y="47.29" width="16.07" height="12.22" rx="4.5" ry="4.5" transform="translate(77.18 192.5) rotate(-84)"/>
+    <rect class="cls-5" x="163.81" y="26.07" width="19.29" height="24.43" rx="6.43" ry="6.43" transform="translate(-2.25 12.19) rotate(-4)"/>
+    <rect class="cls-7" x="184.71" y="53.39" width="12.86" height="9.64" rx="3.54" ry="3.54" transform="translate(123 246.04) rotate(-87)"/>
+  </g>
+</svg>

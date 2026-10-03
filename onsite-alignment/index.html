@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1002", kicker: "Latest · today",        weekday: "Thursday",  date: "2 October", year: "2026", short: "2 Oct", upcoming: true },
+      { id: "s1003", kicker: "Latest · today",        weekday: "Saturday",  date: "3 October", year: "2026", short: "3 Oct", upcoming: true },
+      { id: "s1002", kicker: "Previous",              weekday: "Thursday",  date: "2 October", year: "2026", short: "2 Oct" },
       { id: "s0929", kicker: "Previous",              weekday: "Tuesday",   date: "29 September", year: "2026", short: "29 Sep" },
       { id: "s0928", kicker: "Previous",              weekday: "Monday",    date: "28 September", year: "2026", short: "28 Sep" },
       { id: "s0923", kicker: "Previous",              weekday: "Wednesday", date: "23 September", year: "2026", short: "23 Sep" },
@@ -176,6 +177,8 @@
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
       // ── Tuesday 29 September ───────────────────────────
+      { s: "s1003", feature: true, title: "Gallery page programme block (DE)", href: "gallery-programme/", desc: "The Hamburg gallery page cloned with its single event teaser replaced by a compact programme list, the gallery-page follow-up to LM-13093." },
+      { s: "s1003", cluster: "Gallery programme", title: "Live page today, for comparison", href: "gallery-programme/live.html" },
       { s: "s1002", feature: true, title: "Homepage hero: type clear of the chat card (DE)", href: "homepage-chat-safe-space/", desc: "The lumas.de homepage cloned with the three hero slides re-set so the headline clears the LiveChat greeting card on desktop and tablet." },
       { s: "s1002", feature: true, title: "Slim Aarons — Slide Collectables (DE)", href: "slim-aarons-archive/", desc: "The landing page around the Wall Curator, built as an installable CMS fragment: page head, the series facts directly under the wall, the archive story closing on Slim Aarons\u2019 own line, the particulars, and the nine as the shop\u2019s SKU carousel. Here the wall and the carousel are stand-ins; in the CMS they are renderComponent('series-wall') and spyCmsSkuProductCarousel." },
       { s: "s1002", cluster: "Slide Collectables", title: "English edition", href: "slim-aarons-archive/en.html" },

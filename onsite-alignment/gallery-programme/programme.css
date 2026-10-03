@@ -1,0 +1,140 @@
+/* Gallery page programme block (follow-up to LM-13093).
+   Replaces the single image+button event teaser on a gallery page with a
+   list of that gallery's upcoming occurrences. Uses production's own
+   tokens only (--font-*, --color-*), so the handoff is a class rename. */
+
+.gallery-programme {
+  background: var(--color-surface-raised);
+  padding: clamp(2.4rem, 3.2vw, 4.8rem) clamp(2rem, 4vw, 6.4rem);
+  margin: 0 0 4rem;
+  color: var(--color-text-primary);
+  text-align: left;
+}
+
+.gallery-programme .gp-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2.4rem;
+  margin-bottom: clamp(1.6rem, 2.4vw, 3.2rem);
+}
+
+.gallery-programme .gp-eyebrow,
+.gallery-programme .gp-format {
+  color: var(--color-text-secondary);
+  margin: 0 0 0.6rem;
+  text-align: left;
+}
+
+.gallery-programme .gp-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.8rem, 3vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.gallery-programme .gp-link {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-link);
+  text-decoration: none;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--color-text-primary);
+  transition: border-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-programme .gp-link:focus-visible {
+  outline: 1px solid var(--color-border-focus);
+  outline-offset: 0.4rem;
+}
+
+.gallery-programme .gp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.gallery-programme .gp-row {
+  display: grid;
+  grid-template-columns: minmax(16rem, 20%) minmax(0, 1fr) auto;
+  column-gap: clamp(2.4rem, 4vw, 6rem);
+  align-items: start;
+  padding: clamp(1.6rem, 2vw, 2.4rem) 0;
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.gallery-programme .gp-date {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.gallery-programme .gp-time {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: var(--color-text-secondary);
+  margin: 0.2rem 0 0;
+}
+
+.gallery-programme .gp-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 1.8vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-align: left;
+  margin: 0 0 0.4rem;
+  padding: 0;
+}
+
+.gallery-programme .gp-text {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  max-width: 72ch;
+  margin: 0;
+}
+
+.gallery-programme .gp-cta {
+  align-self: center;
+}
+
+/* production underlines every link in an <li> on static pages
+   (.static-pages li a:not(.btn)...), which doubled the border line */
+.gallery-programme .gp-list li a.gp-link:not(.btn):not(.btn-icon-inverse) {
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .gallery-programme .gp-link:hover {
+    border-color: transparent;
+  }
+}
+
+@media (max-width: 759px) {
+  .gallery-programme .gp-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gallery-programme .gp-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .gallery-programme .gp-cta {
+    justify-self: start;
+    /* 44px touch target without changing the visual underline */
+    padding-top: 1.9rem;
+  }
+}

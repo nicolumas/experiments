@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 86">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #edeef1;
+        stroke: #ebedf0;
+        stroke-width: .5px;
+      }
+
+      .cls-2 {
+        fill: #495564;
+      }
+
+      .cls-3 {
+        fill: #d5d8de;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x=".25" y=".25" width="213.5" height="85.5" rx="7.75" ry="7.75"/>
+  <path class="cls-3" d="M27.5,60h159c.82843,0,1.5.67157,1.5,1.5h0c0,.82843-.67157,1.5-1.5,1.5H27.5c-.82843,0-1.5-.67157-1.5-1.5h0c0-.82843.67157-1.5,1.5-1.5Z"/>
+  <path class="cls-3" d="M27.5,44h159c.82843,0,1.5.67157,1.5,1.5h0c0,.82843-.67157,1.5-1.5,1.5H27.5c-.82843,0-1.5-.67157-1.5-1.5h0c0-.82843.67157-1.5,1.5-1.5Z"/>
+  <path class="cls-3" d="M27.5,28h159c.82843,0,1.5.67157,1.5,1.5h0c0,.82843-.67157,1.5-1.5,1.5H27.5c-.82843,0-1.5-.67157-1.5-1.5h0c0-.82843.67157-1.5,1.5-1.5Z"/>
+  <circle class="cls-2" cx="154" cy="29" r="4"/>
+  <circle class="cls-2" cx="44" cy="61" r="4"/>
+  <circle class="cls-2" cx="124" cy="45" r="4"/>
+</svg>
