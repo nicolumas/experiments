@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkyves_zed=self.webpackChunkyves_zed||[]).push([[431],{431:function(e,t,n){n.r(t),t.default={init(){document.querySelectorAll(".btn.save-cart").forEach(e=>{e.addEventListener("click",function(){let e=this.dataset.link,t=prompt(this.dataset.prompt,"");t.length>0&&(window.location.href=e+"?name="+encodeURIComponent(t))})})}}}}]);

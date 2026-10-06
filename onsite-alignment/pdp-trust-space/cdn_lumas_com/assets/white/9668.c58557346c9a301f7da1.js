@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkyves_zed=self.webpackChunkyves_zed||[]).push([[9668],{9668:function(e,n,t){t.d(n,["getLocalePrefix",0,()=>{let e=new URL(window.location).pathname;return e.match(/^\/(en|fr)\//)?e.substring(0,3):""}])}}]);
