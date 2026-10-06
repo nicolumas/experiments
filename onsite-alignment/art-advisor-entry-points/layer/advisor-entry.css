@@ -1,0 +1,205 @@
+/* Art Advisor entry points on the lumas.de clone (see advisor-entry.js).
+   Uses production's own type families and colour variables, so the additions read as
+   part of the shop. Every selector is prefixed .aa- and nothing restyles production
+   markup, except .aa-hidden, which hides the classic homepage finder while the
+   free-text version (3.5) is shown. */
+
+.aa-hidden { display: none !important; }
+
+.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pdp, .aa-pill, .aa-classic-label {
+  --aa-ink: var(--primitive-charcoal-900, #1c1a18);
+  --aa-ink-2: var(--primitive-charcoal-700, #5a5752);
+  --aa-bone: var(--primitive-bone-200, #eae2d8);
+  --aa-raised: var(--color-surface-raised, #f7f1e9);
+  --aa-line: var(--primitive-charcoal-200, #d5d2cc);
+  --aa-ease: cubic-bezier(.2, .8, .2, 1);
+  font-family: archivo, medium-fallback, arial, sans-serif;
+  color: var(--aa-ink);
+  box-sizing: border-box;
+}
+
+/* the Art Advisor signature ---------------------------------------------------
+   One mark (sparkle + ART ADVISOR), one surface (Bone), one call to action
+   ("Ask the Art Advisor"), one motion (the sparkle turns slightly on hover; it never animates by itself).
+   Every entry point uses all four, so the feature is recognisable anywhere. */
+.aa-mark { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 10px;
+  font: 700 11px/1 archivo, medium-fallback, arial, sans-serif; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--aa-ink, #1c1a18); }
+.aa-mark svg { width: 15px; height: 15px; flex: 0 0 auto; }
+.aa-mark svg, .aa-row-icon svg, .aa-pdp-icon svg, .aa-pill-icon svg { transform-origin: 50% 50%;
+  transition: transform .32s var(--aa-ease, cubic-bezier(.2,.8,.2,1)); }
+:is(.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pdp, .aa-pill, .aa-nav-card):hover :is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon) svg {
+  transform: rotate(18deg); }
+
+/* shared controls ------------------------------------------------------------- */
+.aa-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px;
+  background: var(--aa-ink, #1c1a18); color: #fff; border: 0; border-radius: 0; cursor: pointer;
+  font: 700 12px/1 archivo, medium-fallback, arial, sans-serif; letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; transition: background .22s var(--aa-ease, ease);
+}
+.aa-btn:hover { background: #000; color: #fff; }
+.aa-link {
+  background: none; border: 0; padding: 0; cursor: pointer; color: var(--aa-ink, #1c1a18);
+  font: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.aa-link:hover { color: #000; }
+
+/* the advisor as a window over the shop ------------------------------------------
+   Desktop: a large window with the shop dimmed behind it. Phones: a sheet from the bottom
+   that leaves a sliver of the shop visible. Square, like every other LUMAS surface. */
+html.aa-window-open { overflow: hidden; }
+.aa-window { width: min(1240px, calc(100vw - 64px)); height: min(880px, calc(100dvh - 64px)); max-width: none; max-height: none;
+  margin: auto; padding: 0; border: 0; border-radius: 0; background: var(--primitive-ivory-50, #fefdf9);
+  box-shadow: 0 24px 80px rgba(28, 26, 24, .32); overflow: hidden; }
+.aa-window[open] { animation: aa-window-in .32s cubic-bezier(.2, .8, .2, 1) both; }
+.aa-window::backdrop { background: rgba(28, 26, 24, .45); animation: aa-backdrop-in .32s ease both; }
+.aa-window-frame { display: block; width: 100%; height: 100%; border: 0; }
+@keyframes aa-window-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes aa-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 759px) {
+  .aa-window { width: 100vw; height: calc(100dvh - 16px); margin: auto 0 0; box-shadow: 0 -8px 32px rgba(28, 26, 24, .25); }
+  @keyframes aa-window-in { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+@media (prefers-reduced-motion: reduce) { .aa-window[open], .aa-window::backdrop { animation: none; } }
+
+/* 3.1 search overlay row ------------------------------------------------------- */
+.aa-row { display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; line-height: 1.45; }
+.aa-row--lead { padding: 14px 16px; margin: 0 0 12px; background: var(--aa-bone); }
+.aa-row--lead:hover, .aa-row--lead:focus-visible { background: var(--primitive-bone-300, #e2d8cc); color: var(--aa-ink); }
+.aa-row-icon { flex: 0 0 auto; display: flex; }
+.aa-row-text { flex: 1; min-width: 0; }
+.aa-row-text strong { font-weight: 700; }
+.aa-row-kbd { flex: 0 0 auto; font: 12px/1 archivo, medium-fallback, arial, sans-serif; color: var(--aa-ink-2);
+  border: 1px solid var(--aa-line); padding: 4px 6px; background: rgba(255, 255, 255, .6); }
+.aa-row--quiet { padding: 12px 0 4px; color: var(--aa-ink-2); gap: 8px; }
+.aa-row--quiet .aa-row-icon svg { width: 15px; height: 15px; }
+.aa-row--quiet:hover { color: var(--aa-ink); }
+/* empty field: the start bar sits above "Most wanted", full width */
+.aa-row-cta { flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  white-space: nowrap; padding-bottom: 2px; border-bottom: 1px solid currentColor; }
+.aa-row--start .aa-row-text strong { margin-right: 4px; }
+/* production's term list is a <dl> of <dd>; the row spans it */
+.autocomplete-container .aa-row--lead { margin: 8px 0 8px; }
+
+/* 3.4 Artfinder menu: production's desktop grid is five fixed columns; with the Art Advisor
+   card it needs six, or the last card (Art Cloud) wraps onto a row of its own */
+@media (min-width: 992px) {
+  .menu.discovery dl:has(> .aa-nav-card) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* 3.8 slim bar at the top of every listing page */
+.aa-listbar { margin: 0 0 20px; }
+
+/* 3.3 banner on conversational or failing searches ---------------------------- */
+.aa-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px 40px; align-items: center;
+  margin: 0 0 32px; padding: 28px 32px; background: var(--aa-bone); }
+.aa-banner .aa-mark { margin-bottom: 12px; }
+.aa-banner-title { margin: 0 0 6px; font: 400 26px/1.15 utile-display, utile-display-fallback, arial, sans-serif; }
+.aa-banner-text { margin: 0; font-size: 15px; color: var(--aa-ink-2); }
+.aa-banner-form { display: flex; gap: 8px; }
+.aa-banner-input { flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; border: 1px solid var(--primitive-charcoal-300, #c7c3be);
+  border-radius: 4px; background: #fff; color: var(--aa-ink); font: 16px archivo, medium-fallback, arial, sans-serif; }
+.aa-banner-input:focus { outline: none; border-color: var(--aa-ink); box-shadow: 0 0 0 1px var(--aa-ink); }
+.aa-classic-label { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--aa-ink-2); }
+
+/* 3.2 tile inside the results grid ------------------------------------------- */
+.aa-tile { position: relative; display: flex; flex-direction: column; gap: 10px; margin: 0 0 24px; padding: 28px 22px 24px;
+  background: var(--aa-bone); }
+.aa-tile .aa-mark { margin: 0; }
+.aa-tile-title { margin: 0; font: 400 22px/1.2 utile-display, utile-display-fallback, arial, sans-serif; }
+.aa-tile-text { margin: 0 0 8px; font-size: 14px; line-height: 1.5; }
+/* the tile can be as narrow as a product column (≈150 px): the button spans it and may wrap */
+.aa-tile .aa-btn { align-self: stretch; width: 100%; white-space: normal; text-align: center; line-height: 1.3;
+  padding: 12px 14px; letter-spacing: .1em; }
+.aa-tile-close { position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border: 0; background: none;
+  font-size: 20px; line-height: 1; color: var(--aa-ink-2); cursor: pointer; }
+.aa-tile-close:hover { color: var(--aa-ink); }
+
+/* 3.5 homepage free-text finder ------------------------------------------------ */
+.aa-finder { padding: 40px 20px 36px; background: var(--aa-bone); text-align: center; }
+.aa-finder .aa-mark { margin-bottom: 14px; }
+.aa-finder-title { margin: 0 0 8px; font: 400 32px/1.15 utile-display, utile-display-fallback, arial, sans-serif; }
+.aa-finder-sub { margin: 0 0 22px; font-size: 15px; color: var(--aa-ink-2); }
+.aa-finder-form { display: flex; gap: 8px; max-width: 640px; margin: 0 auto 16px; }
+.aa-finder-input { flex: 1; min-width: 0; min-height: 48px; padding: 0 16px; border: 1px solid var(--primitive-charcoal-300, #c7c3be);
+  border-radius: 4px; background: #fff; color: var(--aa-ink); font: 16px archivo, medium-fallback, arial, sans-serif; }
+.aa-finder-input:focus { outline: none; border-color: var(--aa-ink); box-shadow: 0 0 0 1px var(--aa-ink); }
+.aa-finder-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 18px; max-width: 640px; }
+.aa-chip { min-height: 40px; padding: 0 16px; border: 1px solid var(--primitive-charcoal-300, #c7c3be); border-radius: 2px;
+  background: transparent; color: var(--aa-ink); font: 13px archivo, medium-fallback, arial, sans-serif; cursor: pointer;
+  transition: background .22s var(--aa-ease); }
+.aa-chip { background: rgba(255, 255, 255, .55); }
+.aa-chip:hover { background: #fff; border-color: var(--aa-ink); }
+.aa-finder-switch { margin: 0; font-size: 13px; color: var(--aa-ink-2); }
+.aa-finder-switch--classic { padding: 12px 0 8px; text-align: center; font: 13px archivo, medium-fallback, arial, sans-serif; }
+
+/* 3.6 product page ----------------------------------------------------------- */
+.aa-pdp { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: center; margin: 14px 0 6px;
+  padding: 12px 14px; background: var(--aa-bone); font-size: 14px; }
+.aa-pdp-icon { grid-row: span 2; display: flex; }
+.aa-pdp-icon svg { width: 18px; height: 18px; }
+.aa-pdp-text { margin: 0; color: var(--aa-ink-2); }
+.aa-pdp .aa-link { justify-self: start; font-weight: 700; }
+
+/* 3.7 return pill after a handoff ---------------------------------------------- */
+.aa-pill { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 9000;
+  display: flex; align-items: stretch; background: var(--aa-ink); color: #fff; box-shadow: 0 8px 24px rgba(28, 26, 24, .22);
+  animation: aa-fade .32s var(--aa-ease) both; }
+.aa-pill button { border: 0; background: none; color: inherit; cursor: pointer; font: 13px archivo, medium-fallback, arial, sans-serif; }
+.aa-pill-icon { display: inline-flex; vertical-align: -3px; margin-right: 8px; }
+.aa-pill-icon svg { width: 16px; height: 16px; }
+.aa-pill-back { min-height: 44px; padding: 0 18px; font-weight: 700 !important; letter-spacing: .04em; white-space: nowrap; }
+.aa-pill-back span { font-weight: 400; opacity: .8; }
+.aa-pill-close { width: 40px; font-size: 18px !important; border-left: 1px solid rgba(255, 255, 255, .2) !important; }
+.aa-pill { transition: opacity .22s var(--aa-ease), visibility .22s; }
+.aa-pill--away { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes aa-fade { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translateX(-50%); } }
+
+@media (max-width: 759px) {
+  .aa-banner { grid-template-columns: 1fr; padding: 22px 18px; margin: 0 0 20px; }
+  .aa-banner-title { font-size: 22px; }
+  .aa-banner-form { flex-direction: column; }
+  .aa-finder { padding: 32px 16px 28px; }
+  .aa-finder-title { font-size: 26px; }
+  .aa-finder-form { flex-direction: column; }
+  .aa-row-kbd { display: none; }
+  /* phones: icon + text on the first row, the call to action under the text */
+  .aa-row--start { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: start; }
+  .aa-row--start .aa-row-cta { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aa-pill, .aa-mark svg, .aa-row-icon svg, .aa-pdp-icon svg, .aa-pill-icon svg { animation: none !important; transition: none !important; transform: none !important; }
+}
+
+/* presenter panel (walk-through tool, not part of the shop) ------------------ */
+.aa-panel { position: fixed; right: 16px; bottom: 16px; z-index: 2147483000; font: 13px/1.45 archivo, medium-fallback, arial, sans-serif;
+  color: #1c1a18; }
+.aa-panel-toggle { min-height: 36px; padding: 0 14px; border: 1px solid #1c1a18; background: #fff; color: #1c1a18; cursor: pointer;
+  font: 700 11px archivo, medium-fallback, arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 4px 16px rgba(28, 26, 24, .14); }
+.aa-panel[data-open="true"] .aa-panel-toggle { background: #1c1a18; color: #fff; }
+.aa-panel-body { display: none; position: absolute; right: 0; bottom: 44px; width: 320px; max-height: min(78vh, 640px); overflow: auto;
+  padding: 16px; background: #fff; border: 1px solid #d5d2cc; box-shadow: 0 12px 40px rgba(28, 26, 24, .18); }
+.aa-panel[data-open="true"] .aa-panel-body { display: block; }
+.aa-panel-h { margin: 14px 0 6px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #5a5752; }
+.aa-panel-h:first-child { margin-top: 0; }
+.aa-panel-toggles label { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
+.aa-panel-num { display: inline-block; min-width: 26px; font-variant-numeric: tabular-nums; color: #5a5752; }
+.aa-panel-class { margin: 0; padding: 8px 10px; background: #f7f1e9; }
+.aa-panel-class span { color: #5a5752; font-size: 12px; }
+.aa-panel-demos { margin: 0; padding: 0 0 0 16px; }
+.aa-panel-demos a { color: #1c1a18; }
+.aa-panel-events { margin: 0; padding: 0; list-style: none; font-size: 12px; }
+.aa-panel-events li { padding: 3px 0; border-top: 1px solid #f0ebe3; overflow-wrap: anywhere; }
+.aa-panel-events span { color: #5a5752; font-variant-numeric: tabular-nums; }
+.aa-panel-clear { margin-left: 6px; border: 0; background: none; color: #5a5752; text-decoration: underline; cursor: pointer;
+  font: inherit; text-transform: none; letter-spacing: 0; }
+.aa-panel-short { display: none; }
+@media (max-width: 759px) {
+  /* a small tab in the corner on phones, so it does not cover the shop */
+  .aa-panel { right: auto; left: 8px; bottom: calc(8px + env(safe-area-inset-bottom)); }
+  .aa-panel-toggle { min-height: 32px; padding: 0 9px; opacity: .85; }
+  .aa-panel-long { display: none; }
+  .aa-panel-short { display: inline; }
+  .aa-panel-body { right: auto; left: 0; width: calc(100vw - 16px); }
+}

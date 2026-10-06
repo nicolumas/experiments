@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 86">
+  <!-- Art Advisor card for the Artfinder menu: same frame, palette and line weight as
+       media.lumas.de/site-navigation/artfinder-*.svg, with the Art Advisor sparkle as its mark -->
+  <rect x=".25" y=".25" width="213.5" height="85.5" rx="7.75" ry="7.75" fill="#edeef1" stroke="#ebedf0" stroke-width=".5"/>
+  <!-- the sparkle (Lucide "sparkles", scaled) -->
+  <g transform="translate(62 19) scale(2)" fill="none" stroke="#495564" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#495564"/>
+    <path d="M20 3v4M22 5h-4M4 17v2M5 18H3"/>
+  </g>
+  <!-- a work on the wall, dashed like the room-upload frame -->
+  <rect x="118.5" y="20.5" width="40" height="45" rx="3.5" fill="none" stroke="#abb2bd" stroke-dasharray="2 2"/>
+  <rect x="125" y="27" width="27" height="32" rx="2" fill="#9ea6b2"/>
+  <path d="M125 52l7-7 6 6 4-4 10 8v2a2 2 0 0 1-2 2h-23a2 2 0 0 1-2-2z" fill="#edeef1" opacity=".55"/>
+</svg>

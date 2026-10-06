@@ -1,0 +1,1673 @@
+<!doctype html>
+<html lang="en">
+<head><meta name="robots" content="noindex,nofollow"><script src="../../assets/gate.js"></script><script src="../_static/data.js"></script><script src="../_static/static.js"></script><script src="../_static/advisor-data.js"></script><script src="../_static/advisor-backend.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>LUMAS Art Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,500;100,700&display=swap">
+<link rel="stylesheet" href="fonts.css">
+<style>
+  /* LUMAS Brandbook: Charcoal, Ivory, Bone (s03). Utile Display for display, Archivo for web UI. */
+  :root {
+    --charcoal:#1D1D1D; --ivory:#FEFDF9; --bone:#EBE5D9;
+    --ink:var(--charcoal);
+    --ink-2:rgba(29,29,29,.72);   /* secondary text, ~7:1 on ivory */
+    --ink-3:rgba(29,29,29,.62);   /* tertiary text, ~5:1 on ivory */
+    --line:rgba(29,29,29,.12); --line-strong:rgba(29,29,29,.28);
+    --ivory-200:#F7F1E9;          /* V2 surface/raised: the lighter ivory for highlighted areas */
+    --bg:var(--ivory); --surface:var(--ivory-200); --wall:var(--bone);
+    --font-display:"Utile Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font-text:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --ease:cubic-bezier(.2,.8,.2,1);
+    /* layer scale: wall pieces < phone action sheet < overlay < size menu */
+    --z-piece:4; --z-sheet:40; --z-overlay:50; --z-menu:60;
+    /* legacy names still read by inline styles */
+    --panel:var(--ivory); --panel2:var(--bone); --text:var(--ink); --muted:var(--ink-2);
+    --accent:var(--charcoal); --accent2:#000; --bad:#B5352A;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; height:100vh; height:100dvh; display:flex; flex-direction:column; background:var(--bg); color:var(--ink);
+    font:400 16px/1.6 var(--font-text); font-variation-settings:"wdth" 100;
+    -webkit-font-smoothing:antialiased; }
+  button, input, textarea { font-family:inherit; }
+  :focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  textarea:focus-visible, .chip-field:focus-visible { outline:none; }
+
+  /* small functional labels: uppercase, tracked (s04) */
+  .sc-refine, .upload-btn, .collink,
+  .sc-card .artist, .sc-card .sc-form, .wall-surface .wall-dim, .wall-piece .wp-artist,
+  .swap-head {
+    font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; line-height:1.4;
+  }
+
+  /* centred title, actions on the right (three-column grid keeps the title truly centred) */
+  header { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 24px; height:64px;
+    background:var(--bg); border-bottom:1px solid var(--line); flex:0 0 auto; }
+  /* the same sparkle the shop's entry points carry, so the handoff reads as one feature */
+  .brand { display:flex; align-items:center; gap:8px; color:var(--ink); }
+  .brand-mark { flex:0 0 auto; }
+  .brand-name { font:400 22px/1 var(--font-display); }
+  .header-actions { justify-self:end; display:flex; gap:4px; }
+  .back-link { color:var(--ink-2); text-decoration:none; font-size:14px; transition:color .22s var(--ease); }
+  .back-link:hover { color:var(--ink); }
+  /* shop filters carried into the first message */
+  .handoff-filters { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; }
+  .hf-label { flex:0 0 100%; font-size:12px; color:var(--ink-2); }
+  .hf-chip { display:inline-flex; align-items:center; min-height:26px; padding:0 10px; border-radius:2px;
+    background:rgba(255,255,255,.7); font-size:13px; }
+  @media (max-width:760px){ .back-link { display:inline-flex; align-items:center; min-height:44px; padding:0 8px; font-size:20px; }
+    .back-link .back-label { display:none; } }
+  .icon-btn { width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center;
+    color:var(--ink); text-decoration:none; border:0; background:transparent; padding:0; cursor:pointer;
+    transition:background .22s var(--ease); }
+  .icon-btn:hover { background:var(--surface); }
+  /* closed state (standalone): the app collapses to a launcher in the corner */
+  .launcher { display:none; position:fixed; right:24px; bottom:max(24px, env(safe-area-inset-bottom)); z-index:var(--z-sheet);
+    min-height:48px; padding:0 24px; background:var(--ink); color:var(--ivory); border:0; border-radius:0; cursor:pointer;
+    font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; transition:background .22s var(--ease); }
+  .launcher:hover { background:#000; }
+  body.is-closed > header, body.is-closed > .content { display:none; }
+  body.is-closed .launcher { display:block; animation:sheet-in .22s var(--ease) both; }
+
+  .content { flex:1; display:flex; min-height:0; }
+  /* The chat keeps a readable width; the sidecar yields space instead of crushing it. */
+  .chatcol { flex:1; display:flex; flex-direction:column; min-width:min(340px, 100%); }
+  main { flex:1; overflow-y:auto; }
+  .wrap { max-width:720px; margin:0 auto; padding:40px 32px 24px; width:100%; }
+
+  /* empty state: an editorial opening instead of a blank page */
+  /* one shared measure: eyebrow, headline, copy, prompts and upload all align to the same edges */
+  .intro { padding:6vh 0 4px; }
+  /* the opening message in Utile Display: two lines at most, balanced */
+  .greeting-title { font:400 clamp(28px, 3.4vw, 44px)/1.1 var(--font-display); margin:0 0 16px; text-wrap:balance; }
+  .greeting { margin:0; color:var(--ink-2); text-wrap:pretty; }
+  .welcome { padding:24px 0; }
+  .sugg-label { margin:0 0 12px; font-size:13px; color:var(--ink-2); }
+  /* starter prompts: the same square outlined buttons as the quick-reply chips */
+  .starters { display:flex; flex-wrap:wrap; gap:8px; }
+  .starter { background:transparent; border:1px solid var(--line-strong); border-radius:2px; color:var(--ink);
+    padding:9px 16px; font:inherit; font-size:14px; line-height:1.4; text-align:left; cursor:pointer;
+    transition:background .22s var(--ease), border-color .22s var(--ease); }
+  .starter:hover { background:var(--surface); border-color:var(--surface); }
+  /* room photo: its own Bone panel, so it reads as a different kind of action from the prompts */
+  .upload-tile { display:flex; align-items:center; gap:16px; width:100%; margin-top:24px; padding:20px;
+    background:var(--surface); border:1px solid transparent; color:var(--ink); text-align:left; cursor:pointer;
+    font:inherit; transition:border-color .22s var(--ease); }
+  .upload-tile:hover { border-color:var(--ink); }
+  .upload-tile svg { flex:0 0 auto; }
+  .ut-text { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .ut-title { font-size:16px; font-weight:500; }
+  .ut-help { font-size:13px; color:var(--ink-2); }
+  .ut-action { flex:0 0 auto; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    padding-bottom:2px; border-bottom:1px solid var(--ink); }
+  .wrap:has(.msg) .welcome { display:none; }
+
+  .msg { margin:28px 0; display:flex; }
+  .msg.user { justify-content:flex-end; }
+  .bubble { max-width:80%; }
+  /* the visitor's words sit on Bone; the advisor speaks on the page itself, no bubble */
+  .msg.user .bubble { background:var(--surface); color:var(--ink); padding:12px 18px; white-space:pre-wrap; }
+  .msg.bot .bubble { max-width:100%; padding:0; }
+  .msg.bot .bubble p { margin:0 0 14px; } .msg.bot .bubble p:last-child { margin-bottom:0; }
+  /* one recommended work per line (removable together with its text) */
+  .msg.bot .bubble .art-line { margin:0 0 14px; padding-left:34px; position:relative; }
+  .msg.bot .bubble .art-line:last-child { margin-bottom:0; }
+  .msg.bot .bubble .art-line .artref:first-child { position:absolute; left:0; top:3px; margin:0; }
+  .msg.bot .bubble ul { margin:8px 0; padding-left:20px; } .msg.bot .bubble li { margin:4px 0; }
+  .msg.bot .bubble strong { font-weight:500; }
+  .msg.bot .bubble a { color:inherit; text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+  .msg.bot .bubble a:hover { color:var(--ink-2); }
+
+  .composer { flex:0 0 auto; background:var(--bg); padding:16px 32px 24px; }
+  /* outlined field (V2 input: 4px radius, hairline, charcoal on focus) with the send icon inside */
+  .inputbar { max-width:656px; margin:0 auto; display:flex; gap:12px; align-items:flex-end;
+    background:#fff; border:1px solid var(--line-strong); border-radius:4px; padding:6px 6px 6px 16px;
+    transition:border-color .22s var(--ease), box-shadow .22s var(--ease); }
+  .inputbar:focus-within { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink); }
+  textarea { flex:1; background:transparent; border:0; color:var(--ink); font:inherit; resize:none;
+    max-height:140px; outline:none; overflow-y:hidden; padding:8px 0; }
+  textarea::placeholder { color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .send { flex:0 0 auto; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center;
+    background:var(--ink); color:var(--ivory); border:0; border-radius:0; cursor:pointer; transition:background .22s var(--ease); }
+  .send:hover { background:#000; }
+  .send:disabled { background:var(--line-strong); cursor:not-allowed; }
+  .hint { max-width:656px; margin:10px auto 0; color:var(--ink-3); font-size:13px; text-align:left; }
+  .hint:empty { display:none; }
+
+  /* Suggestions sidecar */
+  .sidecar { flex:0 0 360px; width:360px; border-left:1px solid var(--line); background:var(--bg);
+    display:flex; flex-direction:column; min-height:0; transition:flex-basis .32s var(--ease), width .32s var(--ease); }
+  /* Expanded: grows to the left into a wide multi-column grid of all motifs. */
+  .sidecar.expanded { flex:0 1 min(780px, 72vw); width:min(780px, 72vw); min-width:0; }
+  /* Masonry: full-height tiles packed per column. row spans are computed in JS
+     (layoutMasonry) from each card's height; grid-auto-rows is the base unit. */
+  .sidecar.expanded .sc-list { display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    grid-auto-rows:1px; row-gap:0; column-gap:24px; align-content:start; align-items:start; }
+  .sidecar.expanded .sc-card { min-width:0; }
+  .sc-head { flex:0 0 auto; display:flex; align-items:center; gap:10px; padding:14px 24px; min-height:64px;
+    border-bottom:1px solid var(--line); }
+  .sc-title { font:400 22px/1.2 var(--font-display); }
+  .sc-count { color:var(--ink-3); font-size:13px; }
+  .sc-actions { margin-left:auto; display:flex; gap:8px; }
+  .sc-refine, .sc-toggle { background:transparent; border:1px solid var(--ink); color:var(--ink);
+    border-radius:0; padding:9px 14px; white-space:nowrap; cursor:pointer; transition:background .22s var(--ease), color .22s var(--ease); }
+  .sc-toggle { width:36px; height:36px; padding:0; font-size:16px; line-height:1; border-color:var(--line-strong); }
+  .sc-refine:hover, .sc-toggle:hover { background:var(--ink); color:var(--ivory); border-color:var(--ink); }
+  .sc-list { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:32px; }
+  .sc-empty { color:var(--ink-2); font-size:13px; }
+  /* bare artwork at its true ratio; number, × and text live beneath it, never on it */
+  .sc-card { position:relative; background:transparent; flex:0 0 auto; }
+  .sc-card .thumb { display:block; overflow:hidden; }
+  .sc-card.is-new { animation:card-in .52s var(--ease) both; }
+  @keyframes sheet-in { from { opacity:0; } to { opacity:1; } }
+  @keyframes card-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+  .sc-card img { width:100%; height:auto; display:block; background:var(--surface);
+    transition:transform .52s var(--ease); }
+  .sc-card .thumb:hover img { transform:scale(1.02); }
+  /* number and remove sit in the image corners; artist, title and wishlist beneath */
+  .sc-media { position:relative; }
+  /* corner controls keep the original's placement (24px, 7px in, always visible) in brand form: square, no shadow */
+  .sc-media .sc-num { position:absolute; top:7px; left:7px; z-index:1; min-width:24px; height:24px; padding:0 7px; }
+  .sc-card .meta { padding:12px 0 0; display:flex; align-items:flex-start; gap:12px; }
+  .sc-card .meta-text { flex:1; min-width:0; }
+  .sc-card .artist { color:var(--ink-2); overflow-wrap:anywhere; flex:1; min-width:0; }
+  .sc-card .title { font:400 18px/1.3 var(--font-display); margin:4px 0 0; overflow-wrap:anywhere; }
+  .sc-card .title a { color:inherit; text-decoration:none; } .sc-card .title a:hover { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+  .sc-card .size { font-size:13px; color:var(--ink-2); margin-top:4px; }
+  .sc-card .sc-form { display:inline-block; margin-top:8px; color:var(--ink-2);
+    border:1px solid var(--line-strong); border-radius:2px; padding:2px 8px; }
+  .sc-card .price { font-size:13px; margin-top:2px; }
+  .sc-card .close { position:absolute; top:7px; right:7px; z-index:1; width:24px; height:24px; padding:0;
+    border:1px solid var(--line); border-radius:0; background:var(--ivory); color:var(--ink); font-size:16px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .22s var(--ease), color .22s var(--ease); }
+  .sc-card .close:hover { background:var(--ink); color:var(--ivory); }
+  .sc-card .wish { flex:0 0 auto; width:32px; height:32px; margin:-4px -6px 0 0; border:0; background:transparent; padding:0;
+    color:var(--ink-3); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:color .22s var(--ease), transform .22s var(--ease); }
+  .sc-card .wish:hover { color:var(--ink); }
+  .wish:active { transform:scale(.88); }
+  .wish[aria-pressed="true"] { color:var(--ink); }
+  .wish[aria-pressed="true"] svg { fill:currentColor; }
+  /* number of the work's mention in the chat */
+  .sc-num, .artref, .wall-piece .wp-num { display:inline-flex; align-items:center; justify-content:center;
+    min-width:22px; height:22px; padding:0 6px; background:var(--ink); color:var(--ivory);
+    font:500 13px/1 var(--font-text); font-variant-numeric:tabular-nums; }
+  .artref { margin:0 6px 0 2px; vertical-align:2px; }
+
+  /* wall-arrangement mode: works drawn to scale, freely draggable on a fixed non-scrolling canvas */
+  .sidecar.wallmode.expanded { flex:0 1 min(1100px, 88vw); width:min(1100px, 88vw); }
+  .sidecar.expanded .sc-list.wall { display:block; position:relative; overflow:hidden; padding:0; }
+  /* Bone surface = the visitor's wall, drawn to scale, with its width × height above it */
+  .wall-surface { position:absolute; background:var(--wall); }
+  /* "cm" is a unit, so the dimension label keeps its case */
+  /* the space an arrangement needs when it is larger than the wall: dashed, same scale */
+  .wall-need { position:absolute; border:1px dashed rgba(29,29,29,.45); pointer-events:none; }
+  /* band below the wall: what doesn't fit, two ways to fix it, and works set aside */
+  .wall-band { position:absolute; left:24px; right:24px; bottom:16px; display:flex; align-items:center; gap:16px 24px;
+    flex-wrap:wrap; padding:12px 16px; background:var(--ivory); border:1px solid var(--line); z-index:var(--z-piece); }
+  .wall-fit { flex:1 1 320px; display:flex; align-items:center; gap:12px 16px; flex-wrap:wrap; }
+  .wall-fit-text { margin:0; flex:1 1 220px; font-size:14px; line-height:1.4; }
+  .wall-fit-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .wall-aside { display:flex; align-items:center; gap:8px; }
+  .wall-aside-label { font-size:13px; color:var(--ink-2); margin-right:4px; }
+  .aside-thumb { position:relative; height:44px; padding:0; border:1px solid var(--line); background:var(--surface); cursor:pointer;
+    transition:border-color .22s var(--ease); }
+  .aside-thumb:hover { border-color:var(--ink); }
+  .aside-thumb img { display:block; height:100%; width:auto; }
+  .aside-num { position:absolute; top:3px; left:3px; min-width:16px; height:16px; padding:0 4px; background:var(--ink); color:var(--ivory);
+    font:500 11px/16px var(--font-text); text-align:center; }
+  .wall-surface .wall-dim { position:absolute; top:-26px; left:0; width:100%; text-align:center; color:var(--ink-2);
+    text-transform:none; letter-spacing:.06em; font-size:13px; font-weight:500; font-variant-numeric:tabular-nums; }
+  .wall-piece { position:absolute; background:var(--ivory); cursor:grab; touch-action:none; user-select:none;
+    box-shadow:0 14px 36px -14px rgba(29,29,29,.35); transition:box-shadow .22s var(--ease); }
+  .wall-piece.dragging { cursor:grabbing; z-index:5; box-shadow:0 22px 48px -16px rgba(29,29,29,.45); }
+  .wall-piece:hover, .wall-piece:focus-within, .wall-piece.selected { z-index:4; }
+  .wall-piece .wp-thumb { display:block; width:100%; height:100%; }
+  .wall-piece img { display:block; width:100%; height:100%; object-fit:contain;
+    -webkit-user-drag:none; user-select:none; }
+  /* original placement in brand form: number inside top-left, tools inside top-right on hover */
+  .wall-piece .wp-num { position:absolute; top:6px; left:6px; z-index:2; }
+  .wall-piece .chrome { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .22s var(--ease); }
+  .wall-piece:hover .chrome, .wall-piece:focus-within .chrome, .wall-piece.selected .chrome { opacity:1; }
+  .wall-piece:hover .wp-tools, .wall-piece:focus-within .wp-tools, .wall-piece.selected .wp-tools { pointer-events:auto; }
+  .wall-piece.selected { z-index:4; outline:2px solid var(--ink); outline-offset:2px; }
+  @media (pointer:coarse){ .wall-piece .wp-btn { width:40px; height:40px; } }
+  .wall-piece .wp-tools { position:absolute; top:6px; right:6px; display:flex; gap:4px; }
+  .wall-piece .wp-btn { width:28px; height:28px; border:1px solid var(--line-strong); border-radius:0;
+    background:var(--ivory); color:var(--ink); cursor:pointer; padding:0; line-height:1;
+    display:flex; align-items:center; justify-content:center; transition:background .22s var(--ease), color .22s var(--ease); }
+  .wall-piece .wp-btn:hover { background:var(--ink); color:var(--ivory); border-color:var(--ink); }
+  .wall-piece .wp-close { font-size:18px; }
+  /* caption overlay on hover, as in the original: artist + title bottom-left over a soft charcoal fade */
+  .wall-piece .wp-cap { position:absolute; left:0; right:0; bottom:0; padding:28px 10px 9px; color:var(--ivory);
+    background:linear-gradient(to top, rgba(29,29,29,.72), rgba(29,29,29,0)); }
+  .wall-piece .wp-artist { color:rgba(254,253,249,.85); overflow-wrap:anywhere; }
+  .wall-piece .wp-title { font:400 16px/1.25 var(--font-display); margin-top:2px; overflow-wrap:anywhere; }
+  /* size picker popover */
+  .wall-ctx { position:fixed; z-index:var(--z-menu); min-width:200px; max-width:280px; max-height:60vh; overflow-y:auto;
+    background:var(--ivory); border:1px solid var(--line-strong); padding:6px;
+    box-shadow:0 8px 32px rgba(29,29,29,.12); }
+  .wall-ctx button { display:block; width:100%; text-align:left; background:transparent; border:0;
+    color:var(--ink); font:inherit; font-size:14px; padding:9px 10px; cursor:pointer; font-variant-numeric:tabular-nums; }
+  .wall-ctx button:hover { background:var(--surface); }
+  .wall-ctx button[aria-current="true"] { font-weight:700; }
+  .wall-ctx .ctx-back { color:var(--ink-2); border-bottom:1px solid var(--line); margin-bottom:4px; }
+  .wall-ctx .ctx-note { padding:9px 10px; font-size:13px; color:var(--ink-2); }
+
+  /* quick-reply chips under a bot message */
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  /* chips carry whole answers, so they read in sentence case rather than as uppercase labels */
+  .chip { background:transparent; border:1px solid var(--line-strong); color:var(--ink); font-size:14px; line-height:1.4;
+    border-radius:2px; padding:9px 16px; cursor:pointer; transition:background .22s var(--ease), border-color .22s var(--ease); }
+  .chip:hover { background:var(--surface); border-color:var(--surface); }
+  /* fillable "own answer" chip: a text field + send arrow */
+  .chip-input { display:inline-flex; align-items:center; gap:6px; padding:3px 3px 3px 14px;
+    background:transparent; cursor:text; text-transform:none; letter-spacing:0; font-weight:400; }
+  .chip-input:hover { background:transparent; border-color:var(--ink); }
+  .chip-field { border:0; background:transparent; outline:none; font:inherit; font-size:14px;
+    color:var(--ink); width:170px; min-width:80px; }
+  .chip-field::placeholder { color:var(--ink-3); }
+  .chip-send { border:0; background:var(--ink); color:var(--ivory); width:30px; height:30px; flex:0 0 auto;
+    border-radius:0; cursor:pointer; font-size:15px; line-height:1; display:flex;
+    align-items:center; justify-content:center; padding:0; }
+  .chip-send:hover { background:#000; }
+  /* room-photo: offer button + uploaded thumbnail */
+  .upload-btn { display:inline-block; margin-top:18px; background:transparent; border:1px solid var(--ink);
+    color:var(--ink); border-radius:0; padding:12px 20px; cursor:pointer; transition:background .22s var(--ease), color .22s var(--ease); }
+  .upload-btn:hover { background:var(--ink); color:var(--ivory); }
+  .msg.user .bubble .room-thumb { display:block; max-width:240px; width:100%; height:auto; }
+  .msg.user .bubble .room-cap { font-size:13px; color:var(--ink-2); margin-top:8px; }
+  /* replacement candidates shown in the chat (click to swap into the wall slot) */
+  .swap-row { margin-top:18px; }
+  .swap-head { color:var(--ink-2); margin-bottom:10px; }
+  .swap-cards { display:flex; flex-wrap:wrap; gap:16px; }
+  .swap-card { width:136px; padding:0; background:transparent; border:0; cursor:pointer; text-align:left; }
+  .swap-card img { display:block; width:100%; height:110px; object-fit:contain; object-position:left bottom;
+    background:transparent; outline:1px solid transparent; outline-offset:4px; transition:outline-color .22s var(--ease); }
+  .swap-card:hover img { outline-color:var(--line-strong); }
+  .swap-card.selected img { outline:2px solid var(--ink); }
+  .swap-card .swap-cap { display:block; padding:8px 0 0; font-size:13px; line-height:1.4; color:var(--ink);
+    max-height:56px; overflow:hidden; }
+  /* in-chat link to the personal collection page: a primary button */
+  .msg.bot .bubble a.collink, .collink { display:inline-block; margin-top:18px; background:var(--ink);
+    color:var(--ivory); text-decoration:none; padding:14px 24px; border-radius:0; }
+  .msg.bot .bubble a.collink:hover, .collink:hover { background:#000; color:var(--ivory); }
+
+  .spin { display:inline-block; width:12px; height:12px; border:1.5px solid var(--line-strong);
+    border-top-color:var(--ink); border-radius:50%; animation:sp .8s linear infinite; vertical-align:-1px; }
+  @keyframes sp { to { transform:rotate(360deg); } }
+  .err { color:var(--bad); font-size:14px; }
+
+  /* "the advisor is searching" indicator */
+  .searching { display:flex; align-items:center; gap:10px; color:var(--ink-2); font-size:14px; margin-top:4px; }
+  .searching .dots { display:inline-flex; gap:3px; }
+  .searching .dots i { width:4px; height:4px; border-radius:50%; background:var(--ink-3); display:inline-block;
+    animation:blink 1.2s infinite both; }
+  .searching .dots i:nth-child(2){ animation-delay:.2s; } .searching .dots i:nth-child(3){ animation-delay:.4s; }
+  @keyframes blink { 0%,80%,100%{ opacity:.2; } 40%{ opacity:1; } }
+
+  /* full-window overlay shown while the selection is being assembled */
+  .toast { position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(254,253,249,.82); z-index:var(--z-overlay); }
+  .toast.show { display:flex; }
+  .toast .box { background:var(--ivory); border:1px solid var(--line-strong); padding:22px 28px;
+    display:flex; align-items:center; gap:14px; font-size:15px; max-width:80%; }
+  .toast .box .spin { width:18px; height:18px; }
+
+  @media (prefers-reduced-motion:reduce){
+    *, *::before, *::after { transition:none !important; animation-duration:.01ms !important; }
+  }
+
+  @media (max-width:760px){
+    .content { flex-direction:column; }
+    /* Stacked: the chat scrolls inside its share instead of pushing the panel off-screen. */
+    .chatcol { min-height:0; }
+    .wrap { padding:28px 16px 16px; }
+    .composer { padding:12px 16px 16px; }
+    .inputbar, .hint { max-width:688px; }   /* = .wrap 720 minus the 16px phone gutters */
+    .welcome { padding:20px 0 8px; }
+    .intro { padding-top:3vh; }
+    .upload-tile { padding:16px; }
+    .ut-action { display:none; }
+    .sidecar, .sidecar.expanded, .sidecar.wallmode.expanded { flex:0 0 auto; width:auto; border-left:0; border-top:1px solid var(--line); max-height:42vh; }
+    .sc-head { padding:12px 16px; min-height:0; flex-wrap:wrap; row-gap:10px; }
+    .sc-actions { flex-wrap:wrap; }
+    .sc-list { flex-direction:row; flex-wrap:nowrap; overflow-x:auto; padding:16px; gap:20px; }
+    .sc-card { flex:0 0 auto; width:min-content; }
+    /* the short horizontal strip caps the image height; the work keeps its full ratio, never cropped */
+    .sc-card img { height:22vh; width:auto; max-width:none; }
+    .sc-card .meta { min-width:150px; }
+    /* On narrow screens the panel is stacked/horizontal; the expand toggle is a no-op. */
+    .sidecar.expanded .sc-list { display:flex; }
+    .sc-toggle { display:none; }
+    /* The wall canvas holds only absolutely positioned pieces, so it needs an explicit height. */
+    .sidecar.wallmode.expanded { height:42vh; }
+    header { padding:0 8px; height:56px; padding-top:env(safe-area-inset-top); }
+    /* the panel heights follow the visible viewport, not the one behind the browser bars */
+    .sidecar, .sidecar.expanded, .sidecar.wallmode.expanded { max-height:42dvh; }
+    /* phone width caps the wall's size, so the panel only needs enough height to show it whole */
+    .sidecar.wallmode.expanded { height:46dvh; max-height:46dvh; }
+    .sidecar.wallmode.expanded.has-band { height:62dvh; max-height:62dvh; }
+    /* compact fit note on phones: one line of text, both fixes side by side */
+    .wall-band { left:12px; right:12px; bottom:10px; padding:10px 12px; gap:8px; }
+    .wall-fit { gap:8px; }
+    .wall-fit-text { flex-basis:100%; font-size:13px; }
+    .wall-fit-actions { width:100%; flex-wrap:nowrap; }
+    .wall-fit-actions .sc-refine { flex:1; padding:0 8px; letter-spacing:.08em; }
+    .sc-card img { height:22dvh; }
+    /* suggestion strip: swipe with snapping, no scroll chaining into the page */
+    .sc-list { scroll-snap-type:x mandatory; overscroll-behavior-x:contain; scroll-padding-inline:16px; }
+    .sc-card { scroll-snap-align:start; }
+    .composer { padding-bottom:max(16px, env(safe-area-inset-bottom)); }
+  }
+
+  /* touch screens: 44px targets without changing the visual size of small controls */
+  @media (pointer:coarse){
+    .chip, .starter { min-height:44px; padding:11px 16px; }
+    .chip-input { min-height:44px; }
+    .chip-field { font-size:16px; }               /* below 16px iOS zooms the page on focus */
+    .chip-send { width:38px; height:38px; }
+    .send { width:44px; height:44px; }
+    .icon-btn { width:44px; height:44px; }
+    .sc-refine { min-height:44px; padding:0 16px; }
+    .sc-card .close::before, .sc-card .wish::before { content:""; position:absolute; inset:-10px; }
+    .sc-card .wish { position:relative; width:44px; height:44px; margin:-10px -12px 0 0; }
+    .wall-ctx button { min-height:44px; }
+    .wall-piece { -webkit-touch-callout:none; }
+    .sc-card img, .wall-piece img { -webkit-touch-callout:none; }
+  }
+
+  /* phones: a selected wall piece gets a bottom action sheet instead of tools that clip at the canvas edge */
+  @media (pointer:coarse) and (max-width:760px){
+    .wall-piece .chrome { position:static; }
+    .wall-piece:not(.selected) .chrome { display:none; }
+    .wall-piece.selected .chrome { position:fixed; top:var(--sheet-top, auto); bottom:auto; left:0; right:0;
+      min-height:var(--sheet-h, 64px); z-index:var(--z-sheet); display:flex; align-items:center; gap:12px;
+      padding:8px 16px; opacity:1; background:var(--ivory); border-bottom:1px solid var(--line);
+      animation:sheet-in .22s var(--ease) both; }
+    .wall-piece.selected .wp-cap { position:static; flex:1; min-width:0; max-width:none; padding:0; border:0; background:none; color:var(--ink); }
+    .wall-piece.selected .wp-artist { color:var(--ink-2); }
+    .wall-piece.selected .wp-tools { position:static; pointer-events:auto; gap:8px; }
+    .wall-piece .wp-btn { width:44px; height:44px; }
+  }
+
+  /* no sticky hover fills after a tap on touch screens */
+  @media (hover:none){
+    .chip:hover, .starter:hover { background:transparent; border-color:var(--line-strong); }
+    .sc-refine:hover, .upload-btn:hover { background:transparent; color:var(--ink); }
+    .upload-tile:hover { border-color:transparent; }
+    .sc-card .close:hover { background:var(--ivory); color:var(--ink); }
+    .sc-card .thumb:hover img { transform:none; }
+    .wall-piece .wp-btn:hover { background:var(--ivory); color:var(--ink); border-color:var(--line-strong); }
+    .chip:active, .starter:active { background:var(--surface); }
+    .sc-refine:active, .wall-piece .wp-btn:active, .sc-card .close:active { background:var(--ink); color:var(--ivory); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div><a class="back-link" id="back-link" hidden></a></div>
+  <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg><span class="brand-name" data-i18n="brandSub">Art Advisor</span></div>
+  <div class="header-actions">
+    <a class="icon-btn" href="/reset" title="New chat" aria-label="New chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></a>
+    <button class="icon-btn" id="minimise-btn" type="button" title="Minimise" aria-label="Minimise" hidden onclick="minimiseAdvisor()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+    <button class="icon-btn" type="button" title="Close" aria-label="Close" onclick="closeAdvisor()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+</header>
+
+<div class="content">
+  <div class="chatcol">
+    <main><div class="wrap" id="chat">
+      <div class="intro">
+        <h1 class="greeting-title" data-i18n="welcomeTitle">Which work belongs in your room?</h1>
+        <p class="greeting" data-i18n="welcomeBody"></p>
+      </div>
+      <section class="welcome">
+        <p class="sugg-label" data-i18n="suggestionsLabel">Suggestions</p>
+        <div class="starters">
+          <button class="starter" data-i18n="starter1" onclick="sendMessage(this.textContent, false)"></button>
+          <button class="starter" data-i18n="starter2" onclick="sendMessage(this.textContent, false)"></button>
+          <button class="starter" data-i18n="starter3" onclick="sendMessage(this.textContent, false)"></button>
+        </div>
+        <button class="upload-tile" onclick="pickRoomPhoto()">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>
+          <span class="ut-text">
+            <span class="ut-title" data-i18n="uploadTitle">Upload a photo of your room</span>
+            <span class="ut-help" data-i18n="uploadHelp"></span>
+          </span>
+          <span class="ut-action" data-i18n="uploadAction">Choose photo</span>
+        </button>
+      </section>
+    </div></main>
+    <div class="composer">
+      <div class="inputbar">
+        <textarea id="input" rows="1" data-i18n-ph="placeholder" placeholder="Frage zu LUMAS & Werken – oder Raum beschreiben…" oninput="autogrow(this)" onkeydown="onKey(event)"></textarea>
+        <button class="send" id="send" title="Send" aria-label="Send" onclick="send()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+      </div>
+      <div class="hint" id="hint" data-i18n="hint"></div>
+    </div>
+  </div>
+  <aside class="sidecar" id="sidecar" style="display:none">
+    <div class="sc-head">
+      <button class="sc-toggle" id="sc-toggle" onclick="toggleExpand()" title="Ausklappen">«</button>
+      <span class="sc-title" data-i18n="suggestions">Suggestions</span><span class="sc-count" id="sc-count"></span>
+      <div class="sc-actions">
+        <button class="sc-refine" id="sc-arrange" data-i18n="wallArrange" onclick="autoArrangeWall()" style="display:none">Auto-arrange</button>
+      </div>
+    </div>
+    <div class="sc-list" id="sc-list"></div>
+  </aside>
+</div>
+
+<button class="launcher" id="launcher" type="button" onclick="openAdvisor()" aria-label="Open the Art Advisor">Art Advisor</button>
+<div class="toast" id="overlay"><div class="box"><span class="spin"></span><span id="overlay-msg"></span></div></div>
+<div class="wall-ctx" id="wall-ctx" style="display:none"></div>
+<input type="file" id="room-file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="uploadRoomPhoto(this.files[0]); this.value='';">
+
+<script>
+// Static UI strings, keyed by language. Dynamic strings (prices, status, toasts) are
+// localized inline in their own functions.
+const T = {
+  de: {
+    title: 'LUMAS Kunstberater',
+    brandSub: 'Kunstberater',
+    newChat: 'Neuer Chat',
+    logout: 'Abmelden',
+    send: 'Senden',
+    placeholder: 'Fragen Sie nach Werken oder beschreiben Sie Ihren Raum',
+    hint: '',
+    suggestions: 'Vorschläge',
+    refine: 'Verfeinern',
+    export: 'Export',
+    removeTitle: 'Entfernen', wishAdd: 'Merken', wishRemove: 'Nicht mehr merken',
+    wallReplace: 'Ersatz suchen', wallSize: 'Andere Größe', wallRemove: 'Werk entfernen',
+    wallTooBig: 'Zusammen brauchen diese Werke {need}. Ihre Wand misst {wall}.',
+    wallSmaller: 'Kleinere Größen wählen', wallAside: 'Ein Werk beiseitelegen', wallAsideLabel: 'Beiseitegelegt', wallReturn: 'Wieder aufhängen',
+    wallBack: '‹ Zurück', wallNoSizes: 'Keine weiteren Größen', wallLoading: 'Größen werden geladen…',
+    roomUpload: 'Foto des Raums hochladen', roomAnalyzing: 'Ihr Foto wird analysiert', roomCaption: 'Foto meines Raums',
+    roomError: 'Das Foto konnte nicht analysiert werden.', wallArrange: 'Automatisch anordnen',
+    swapPick: 'Ersatz wählen', swapAdd: 'Werk hinzufügen',
+    viewCollection: 'Meine Auswahl',
+    collectionLink: 'Ihre Auswahl ansehen →',
+    collectionBusy: 'Ihre Auswahl wird zusammengestellt',
+    welcomeTitle: 'Welches Werk passt zu Ihrem Raum?',
+    welcomeBody: 'Beschreiben Sie Raum, Stimmung oder ein Werk, das Sie mögen. Wir schlagen passende Editionen vor und hängen mehrere Werke maßstabsgetreu an Ihre Wand.',
+    suggestionsLabel: 'Vorschläge',
+    starter1: 'Ruhige Fotografie für das Wohnzimmer',
+    starter2: 'Ein großes Werk über dem Sofa',
+    starter3: 'Mehrere Werke für eine Wand',
+    uploadTitle: 'Foto Ihres Raums hochladen',
+    uploadHelp: 'Wir sehen uns Licht, Farben und Stil an und schlagen passende Werke vor.',
+    uploadAction: 'Foto wählen',
+  },
+  en: {
+    title: 'LUMAS Art Advisor',
+    brandSub: 'Art Advisor',
+    newChat: 'New chat',
+    logout: 'Log out',
+    send: 'Send',
+    placeholder: 'What are you looking for?',
+    hint: '',
+    suggestions: 'Suggestions',
+    refine: 'Refine',
+    export: 'Export',
+    removeTitle: 'Remove', wishAdd: 'Save to wishlist', wishRemove: 'Remove from wishlist',
+    wallReplace: 'Find a replacement', wallSize: 'Different size', wallRemove: 'Remove work',
+    wallTooBig: 'Together these works need {need}. Your wall is {wall}.',
+    wallSmaller: 'Use smaller sizes', wallAside: 'Set one aside', wallAsideLabel: 'Set aside', wallReturn: 'Hang again',
+    wallBack: '‹ Back', wallNoSizes: 'No other sizes', wallLoading: 'Loading sizes…',
+    roomUpload: 'Upload a photo of the room', roomAnalyzing: 'Analysing your photo', roomCaption: 'Photo of my room',
+    roomError: 'Could not analyse the photo.', wallArrange: 'Auto-arrange',
+    swapPick: 'Choose a replacement', swapAdd: 'Add a work',
+    viewCollection: 'My selection',
+    collectionLink: 'View your selection →',
+    collectionBusy: 'Your selection is being assembled',
+    welcomeTitle: 'Which work belongs in your room?',
+    welcomeBody: 'Describe the room, the mood or a work you love. We suggest editions that fit and hang several works to scale on your wall.',
+    suggestionsLabel: 'Suggestions',
+    starter1: 'Calm photography for the living room',
+    starter2: 'One large work above the sofa',
+    starter3: 'Several works for one wall',
+    uploadTitle: 'Upload a photo of your room',
+    uploadHelp: 'We look at the light, colours and style to suggest works that fit.',
+    uploadAction: 'Choose photo',
+  },
+};
+
+// Handoff from the shop (see prototype/advisor-entry-points): ?q= the visitor's words, sent as the
+// first message; ?lang=de for the German shop; ?return= the shop page to go back to.
+const _params = new URLSearchParams(location.search);
+let LANG = _params.get('lang') === 'de' ? 'de' : 'en';
+const RETURN_URL = _params.get('return');
+const HANDOFF_Q = (_params.get('q') || '').trim();
+// the shop filters the visitor had applied (labels as the shop shows them), carried into the chat
+const HANDOFF_FILTERS = (()=>{ try { return JSON.parse(_params.get('filters') || '[]').filter(x=>typeof x==='string' && x.trim()); } catch(e){ return []; } })();
+// Served under the shop's own origin (/art-advisor/): product links stay in the same tab and site.
+const EMBEDDED = /\/art-advisor\//.test(location.pathname);   // also under the published copy's subpath
+// opened as a window over the shop (an iframe on the shop's origin, ?embed=1)
+const IN_WINDOW = EMBEDDED && window.parent !== window;
+// product links: same tab when embedded; from the window they open in the shop page itself
+const LINK_TARGET = IN_WINDOW ? ' target="_top"' : EMBEDDED ? '' : ' target="_blank" rel="noopener"';
+function shopUrl(u){
+  if(!EMBEDDED || !u || !/^https:\/\/www\.lumas\.de\//.test(u)) return u;
+  // English advisor -> the shop's English pages (lumas.de/en/...)
+  const [base, hash] = u.replace(/^https:\/\/www\.lumas\.de(\/en(?=\/))?/, LANG === 'en' ? '/en' : '').split('#');
+  const local = base + (base.includes('?') ? '&' : '?') + 'from=advisor' + (hash ? '#'+hash : '');
+  return window.aaShopLink ? window.aaShopLink(local) : local;   // the published static copy maps it to its own pages
+}
+const cards = {};            // motif_id -> card data (from artworks events)
+const suggestions = {};      // motif_id -> card, currently pinned in the sidecar
+let sugOrder = [];           // motif_ids in true insertion order (object keys don't preserve it for numeric ids)
+let cardNumbers = {};        // motif_id -> its GLOBAL number = 1-based position in sugOrder (kept works)
+const removed = new Set();   // motif_ids the user dismissed
+const setAside = new Set();  // wall works taken off the wall because the arrangement didn't fit
+const _sizesCache = {};      // motif_id -> size options from /motif/sizes
+let _noSmaller = false;      // smaller sizes were tried and still don't fit
+const botMessages = [];      // {el, raw} for every bot bubble that pinned works — re-rendered on renumber
+let wallMode = false;        // multiple works for one wall → scale-accurate arrangement in the expanded sidecar
+let wallSize = null;         // {w,h} in mm: the customer's wall area, drawn as a grey surface to scale
+const wallPos = {};          // motif_id -> {x,y} px position on the wall canvas (user-draggable)
+let _wallArea = null;        // {l,t,w,h} px of the grey wall surface — drags are kept inside it
+let turnArtIds = [];         // [[art:ID]] works pinned in the CURRENT turn (a full wall arrangement)
+const chat = document.getElementById('chat');
+
+// Re-label every static element tagged with data-i18n / data-i18n-ph for the current LANG.
+function applyI18n(){
+  const t = T[LANG] || T.de;
+  document.title = t.title;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n'); if (t[k] != null) el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const k = el.getAttribute('data-i18n-ph'); if (t[k] != null) el.placeholder = t[k];
+  });
+  const tb = document.getElementById('sc-toggle');
+  if (tb) tb.title = sidecarExpanded ? (LANG==='de'?'Einklappen':'Collapse')
+                                     : (LANG==='de'?'Als Raster ausklappen':'Expand to grid');
+}
+
+function setLang(l){
+  LANG=l;
+  try { localStorage.setItem('vac_lang', l); } catch(e){}
+  document.querySelectorAll('.langbtn').forEach(b=>b.classList.toggle('active', b.dataset.lang===l));
+  applyI18n();
+  renderSidecar();
+}
+function autogrow(t){ t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,140)+'px';
+  t.style.overflowY = t.scrollHeight>140 ? 'auto' : 'hidden'; }
+function onKey(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); } }
+function esc(s){ return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function euro(cents){ return cents==null ? '' : '€'+(cents/100).toLocaleString(LANG==='de'?'de-DE':'en-US'); }
+
+// --- wishlist (heart) ---
+// Not connected to the shop wishlist yet: saved works are remembered in this browser only.
+const _ICON_HEART = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
+const wishlist = new Set((function(){ try { return JSON.parse(localStorage.getItem('vac_wishlist')||'[]'); } catch(e){ return []; } })());
+function wishButtonHTML(id, cls){
+  const on = wishlist.has(String(id)), tr = T[LANG] || T.de, label = on ? tr.wishRemove : tr.wishAdd;
+  return '<button class="'+cls+'" data-wish="'+escAttr(id)+'" aria-pressed="'+on+'" title="'+escAttr(label)+'" aria-label="'+escAttr(label)+'" onclick="toggleWishlist(\''+esc(id)+'\')">'+_ICON_HEART+'</button>';
+}
+function toggleWishlist(id){
+  id = String(id);
+  if(wishlist.has(id)) wishlist.delete(id); else wishlist.add(id);
+  try { localStorage.setItem('vac_wishlist', JSON.stringify([...wishlist])); } catch(e){}
+  const on = wishlist.has(id), tr = T[LANG] || T.de, label = on ? tr.wishRemove : tr.wishAdd;
+  document.querySelectorAll('[data-wish="'+_cssId(id)+'"]').forEach(b=>{
+    b.setAttribute('aria-pressed', on); b.title = label; b.setAttribute('aria-label', label);
+  });
+}
+
+// --- suggestions sidecar ---
+function sidecarCardHTML(id, c){
+  // Artist + title only: no size or price in the overview tile.
+  const clk = 'onclick="recordClick(\''+esc(id)+'\')"';
+  const img = c.image_url ? '<a class="thumb" href="'+(c.product_url||'#')+'"'+LINK_TARGET+' '+clk+'><img src="'+c.image_url+'" loading="lazy" alt=""></a>' : '';
+  const t = c.product_url ? '<a href="'+c.product_url+'"'+LINK_TARGET+' '+clk+'>'+esc(c.title||'')+'</a>' : esc(c.title||'');
+  const tr = T[LANG] || T.de;
+  const num = cardNumbers[id];
+  const badge = num ? '<span class="sc-num">'+num+'</span>' : '';
+  // Flag three-dimensional pieces so the customer sees it's a sculpture/object, not a print.
+  const formTag = c.form==='sculpture' ? '<div class="sc-form">'+(LANG==='de'?'Skulptur':'Sculpture')+'</div>' : '';
+  const close = '<button class="close" title="'+esc(tr.removeTitle)+'" aria-label="'+esc(tr.removeTitle)+'" onclick="removeSuggestion(\''+esc(id)+'\')">×</button>';
+  // Works not shown before fade in one after another rather than appearing all at once.
+  let reveal = '';
+  if(!_revealed.has(id)){ _revealed.add(id); reveal = ' is-new" style="animation-delay:'+(_revealQueue++ * 160)+'ms'; }
+  return '<div class="sc-card'+reveal+'">'
+    + '<div class="sc-media">'+img+badge+close+'</div>'
+    + '<div class="meta"><div class="meta-text"><div class="artist">'+esc(c.artist||'')+'</div>'
+    + '<div class="title">'+t+'</div>'+formTag+'</div>'+wishButtonHTML(id, 'wish')+'</div></div>';
+}
+// The single source of truth for numbering: a work's number is its 1-based position in the
+// current selection (sugOrder). Kept in sync on every panel change so the chat and the cards
+// always agree, and a removed/evicted work simply drops out (no number anywhere).
+function recomputeNumbers(){ cardNumbers = {}; sugOrder.forEach((id,i)=>{ cardNumbers[id]=i+1; }); }
+// Re-render every past bot message so the whole history reflects the current selection:
+// removed works lose their number AND their text line; a message whose works were all removed
+// disappears entirely. Called after a removal/eviction.
+function rerenderChatWorks(){
+  for(let i=botMessages.length-1; i>=0; i--){
+    const bm = botMessages[i];
+    const html = renderBody(bm.raw, false);
+    if(!/class="art-line"/.test(html)){          // no recommended works remain in this bubble
+      const row = bm.el.closest('.msg'); if(row) row.remove();
+      botMessages.splice(i, 1);
+    } else {
+      bm.el.innerHTML = html;
+    }
+  }
+}
+// When the customer removes an art token, remove that token's TEXT together with the removed
+// works so a partial sentence never lingers. (Kept for any legacy callers.)
+function rerenderChatBadges(){ rerenderChatWorks(); }
+const _revealed = new Set();   // card ids already faded in once
+let _revealQueue = 0;          // stagger position within the current render
+function renderSidecar(){
+  _revealQueue = 0;
+  if(EMBEDDED){ try{ sessionStorage.setItem('aa:count', String(sugOrder.length)); }catch(e){} saveSnapshot(); }
+  recomputeNumbers();
+  const ids=sugOrder;
+  // Hidden until the first recommendation arrives; opens automatically then.
+  document.getElementById('sidecar').style.display = ids.length ? 'flex' : 'none';
+  document.getElementById('sc-count').textContent = ids.length ? '('+ids.length+')' : '';
+  // "My selection" appears once there is at least one kept (not-removed) piece.
+  const cb = document.getElementById('sc-collection');
+  if (cb) cb.style.display = ids.length ? '' : 'none';
+  if(!ids.length) return;
+  const list = document.getElementById('sc-list');
+  const wall = wallMode && sidecarExpanded;
+  list.classList.toggle('wall', wall);
+  const ab = document.getElementById('sc-arrange');
+  if (ab) ab.style.display = (wall && ids.length > 1) ? '' : 'none';
+  if(wall){
+    // Grey surface = the customer's wall (drawn to scale, with its dimensions), works on top.
+    const surface = '<div class="wall-surface" style="display:none"><span class="wall-dim"></span></div>'
+      + '<div class="wall-need" style="display:none"></div>';
+    const onWall = ids.filter(id=>!setAside.has(id));
+    list.innerHTML = surface + onWall.map(id=>wallPieceHTML(id, suggestions[id])).join('') + wallBandHTML();
+    scheduleWall();
+    return;
+  }
+  // Newest suggestions on top: reverse the true insertion order.
+  const ordered=[...ids].reverse();
+  list.innerHTML = ordered.map(id=>sidecarCardHTML(id, suggestions[id])).join('');
+  scheduleMasonry();
+}
+// Masonry: size each tile's grid-row span to its rendered height (full images, no overlap).
+const _MASONRY_GAP = 14;
+function layoutMasonry(){
+  if(!sidecarExpanded) return;
+  document.querySelectorAll('#sc-list .sc-card').forEach(card=>{
+    const h = card.getBoundingClientRect().height;
+    if(h) card.style.gridRowEnd = 'span ' + (Math.ceil(h) + _MASONRY_GAP);
+  });
+}
+function scheduleMasonry(){
+  if(!sidecarExpanded) return;
+  // Recompute as images finish loading (they change the tile height).
+  document.querySelectorAll('#sc-list img').forEach(img=>{
+    if(!img.complete) img.addEventListener('load', layoutMasonry, {once:true});
+  });
+  requestAnimationFrame(layoutMasonry);
+}
+let _resizeRaf;
+window.addEventListener('resize', ()=>{ cancelAnimationFrame(_resizeRaf);
+  _resizeRaf=requestAnimationFrame(()=>{ layoutMasonry(); layoutWall(); }); });
+
+// --- wall-arrangement mode (multiple works to scale on one wall) ---
+function enterWallMode(){
+  wallMode = true;
+  sidecarExpanded = true;
+  const sc = document.getElementById('sidecar');
+  sc.classList.add('expanded'); sc.classList.add('wallmode');  // wallmode widens it to the max
+  const b = document.getElementById('sc-toggle');
+  if(b){ b.textContent='»'; b.title = LANG==='de'?'Einklappen':'Collapse'; }
+  renderSidecar();  // switch to the arrangement even if works were already pinned this turn
+}
+function wallPieceHTML(id, c){
+  const tr = T[LANG] || T.de;
+  const num = cardNumbers[id];
+  const badge = num ? '<span class="wp-num">'+num+'</span>' : '';
+  const clk = 'onclick="recordClick(\''+esc(id)+'\')"';
+  const inner = c.image_url ? '<img src="'+c.image_url+'" loading="lazy" alt="" draggable="false">' : '';
+  const thumb = c.product_url
+    ? '<a class="wp-thumb" href="'+escAttr(c.product_url)+'"'+LINK_TARGET+' '+clk+'>'+inner+'</a>'
+    : '<span class="wp-thumb">'+inner+'</span>';
+  const jid = esc(id);
+  return '<div class="wall-piece" data-id="'+escAttr(id)+'" data-w="'+(c.width_mm||0)+'" data-h="'+(c.height_mm||0)+'" tabindex="0">'
+    + thumb + badge
+    + '<div class="chrome">'
+    +   '<div class="wp-tools">'
+    +     '<button class="wp-btn" title="'+escAttr(tr.wallReplace)+'" aria-label="'+escAttr(tr.wallReplace)+'" onclick="requestReplacement(\''+jid+'\')">'+_ICON_SWAP+'</button>'
+    +     '<button class="wp-btn" title="'+escAttr(tr.wallSize)+'" aria-label="'+escAttr(tr.wallSize)+'" onclick="openSizeMenu(event,\''+jid+'\')">'+_ICON_SIZE+'</button>'
+    +     '<button class="wp-btn wp-close" title="'+escAttr(tr.removeTitle)+'" aria-label="'+escAttr(tr.removeTitle)+'" onclick="removeSuggestion(\''+jid+'\')">×</button>'
+    +   '</div>'
+    +   '<div class="wp-cap"><div class="wp-artist">'+esc(c.artist||'')+'</div><div class="wp-title">'+esc(c.title||'')+'</div></div>'
+    + '</div></div>';
+}
+// Inline SVG icons for the hover toolbar (crisp at any size, no external assets).
+const _ICON_SWAP = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg>';
+const _ICON_SIZE = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+// Fit ALL pieces inside the canvas (no scrolling): one shared px-per-mm so a single centred row
+// fits both the width and the height. Sizes stay correct RELATIVE to each other. Pieces the user
+// has dragged keep their saved position; the rest sit on a shared centre line.
+const _WALL_GAP = 18, _WALL_MARGIN = 22, _WALL_PXMAX = 0.5;
+function scheduleWall(){
+  // Re-fit now and again after the sidecar's width transition settles (clientWidth changes).
+  requestAnimationFrame(layoutWall);
+  document.getElementById('sidecar').addEventListener('transitionend', layoutWall, {once:true});
+}
+function layoutWall(){
+  if(!(wallMode && sidecarExpanded)) return;
+  const list = document.getElementById('sc-list');
+  const pieces = [...list.querySelectorAll('.wall-piece')];
+  const surface = list.querySelector('.wall-surface');
+  const W = list.clientWidth, H = list.clientHeight, M = _WALL_MARGIN, LABEL = 26;
+  if(!pieces.length){ if(surface) surface.style.display='none'; _wallArea=null; return; }
+  const dims = pieces.map(p=>({p, id:p.dataset.id, w:(+p.dataset.w)||600, h:(+p.dataset.h)||600}));
+
+  if(wallSize && surface){
+    // Arrange the salon in REAL millimetres (relative to the wall), then pick ONE shared scale so
+    // both the wall AND the cluster fit the panel. Works stay true-to-size to the wall and to each
+    // other — the backend sizes the works so the cluster fits the wall with a margin.
+    const GMM = 60;  // ~6 cm consistent spacing
+    const mm = dims.map(d=>({id:d.id, pw:d.w, ph:d.h}));
+    const salMM = salonLayout(mm, {l:0, t:0, w:wallSize.w, h:wallSize.h}, GMM);
+    const fits = salMM.blockW <= wallSize.w && salMM.blockH <= wallSize.h;
+    // When it doesn't fit (or works are set aside) a band below the wall explains it and offers fixes.
+    const band = list.querySelector('.wall-band');
+    const showBand = !fits || setAside.size > 0;
+    updateWallBand(band, fits, salMM);
+    // phones: the panel grows while the note is showing, so the wall keeps a usable size
+    const sidecar = document.getElementById('sidecar');
+    if(sidecar.classList.contains('has-band') !== showBand){
+      sidecar.classList.toggle('has-band', showBand);
+      if(list.clientHeight !== H){ requestAnimationFrame(layoutWall); return; }
+    }
+    const RESERVE = showBand && band ? band.offsetHeight + 16 : 0;
+    const Hv = H - RESERVE;
+    const pxpm = Math.max(0.004, Math.min(
+      (W - 2*M) / wallSize.w, (Hv - 2*M - LABEL) / wallSize.h,
+      (W - 2*M) / Math.max(wallSize.w, salMM.blockW), (Hv - 2*M - LABEL) / Math.max(wallSize.h, salMM.blockH)));
+    const sw = Math.round(wallSize.w*pxpm), sh = Math.round(wallSize.h*pxpm);
+    const sl = Math.round((W - sw)/2), st = Math.max(LABEL, Math.round((Hv - sh + LABEL)/2));
+    const area = {l:sl, t:st, w:sw, h:sh};
+    _wallArea = area;
+    surface.style.display='block';
+    surface.style.left=sl+'px'; surface.style.top=st+'px'; surface.style.width=sw+'px'; surface.style.height=sh+'px';
+    const dim = surface.querySelector('.wall-dim');
+    if(dim) dim.textContent = Math.round(wallSize.w/10)+' × '+Math.round(wallSize.h/10)+' cm';
+    // dashed outline of the space the arrangement really needs, drawn to the same scale as the wall
+    const need = list.querySelector('.wall-need');
+    if(need){
+      need.style.display = fits ? 'none' : 'block';
+      if(!fits){
+        need.style.left = Math.round(area.l + (wallSize.w - salMM.blockW)/2*pxpm)+'px';
+        need.style.top = Math.round(area.t + (wallSize.h - salMM.blockH)/2*pxpm)+'px';
+        need.style.width = Math.round(salMM.blockW*pxpm)+'px'; need.style.height = Math.round(salMM.blockH*pxpm)+'px';
+      }
+    }
+    dims.forEach(d=>{ d.pw=Math.max(16,Math.round(d.w*pxpm)); d.ph=Math.max(16,Math.round(d.h*pxpm));
+                      d.p.style.width=d.pw+'px'; d.p.style.height=d.ph+'px'; });
+    dims.forEach(d=>{
+      let px, py;
+      if(wallPos[d.id]){ px = wallPos[d.id].x; py = wallPos[d.id].y; }
+      else { px = area.l + salMM.pos[d.id].x*pxpm; py = area.t + salMM.pos[d.id].y*pxpm; }
+      px = Math.max(0, Math.min(px, W - d.pw)); py = Math.max(0, Math.min(py, Hv - d.ph));
+      d.p.style.left = Math.round(px)+'px'; d.p.style.top = Math.round(py)+'px';
+    });
+    return;
+  }
+
+  // No wall size yet: fit the works to the canvas and salon-arrange (px space).
+  if(surface) surface.style.display='none';
+  _wallArea = null;
+  const sumW = dims.reduce((s,d)=>s+d.w,0), maxH = Math.max(...dims.map(d=>d.h));
+  const pxpm = Math.max(0.02, Math.min(_WALL_PXMAX, (W - _WALL_GAP*(dims.length+1))/Math.max(1,sumW),
+                                                    (H - 2*M)/Math.max(1,maxH)));
+  dims.forEach(d=>{ d.pw=Math.max(20,Math.round(d.w*pxpm)); d.ph=Math.max(20,Math.round(d.h*pxpm));
+                    d.p.style.width=d.pw+'px'; d.p.style.height=d.ph+'px'; });
+  const G = Math.max(8, Math.min(22, Math.round(60*pxpm)));
+  const sal = salonLayout(dims, {l:0,t:0,w:W,h:H}, G);
+  dims.forEach(d=>{
+    let px, py;
+    if(wallPos[d.id]){ px = wallPos[d.id].x; py = wallPos[d.id].y; }
+    else { px = sal.pos[d.id].x; py = sal.pos[d.id].y; }
+    px = Math.max(0, Math.min(px, W - d.pw)); py = Math.max(0, Math.min(py, H - d.ph));
+    d.p.style.left = Math.round(px)+'px'; d.p.style.top = Math.round(py)+'px';
+  });
+}
+// Balanced salon ("Petersburger Hängung") layout: uniform spacing G, the whole read as one centred
+// block, largest piece anchored in the middle. Rows adapt to the area's shape. Works in whatever
+// unit the caller passes (dims.pw/ph, area and G in the same unit); returns positions + block size
+// in that unit. Sizes are kept true-to-scale — never enlarged to fill.
+function salonLayout(dims, area, G){
+  const N = dims.length;
+  // largest in the middle of a sequence: [ … 3rd, 1st in centre, 2nd … ]
+  const centerOut = arr => { const s=[...arr].sort((a,b)=>b.ph*b.pw - a.ph*a.pw), r=[];
+    s.forEach((it,i)=> i%2 ? r.unshift(it) : r.push(it)); return r; };
+  const rowW = row => row.reduce((s,d)=>s+d.pw,0) + G*Math.max(0,row.length-1);
+  const rowH = row => Math.max(...row.map(d=>d.ph));
+
+  // Partition into R rows, balancing row widths (assign each piece, tallest first, to the
+  // currently-narrowest row). Evaluate R = 1..N and keep the block that best suits the wall.
+  let best = null;
+  for(let R=1; R<=N; R++){
+    const rows = Array.from({length:R}, ()=>[]);
+    [...dims].sort((a,b)=>b.ph - a.ph).forEach(d=>{
+      rows.sort((x,y)=>rowW(x)-rowW(y)); rows[0].push(d);
+    });
+    const used = rows.filter(r=>r.length);
+    const blockW = Math.max(...used.map(rowW));
+    const blockH = used.reduce((s,r)=>s+rowH(r),0) + G*(used.length-1);
+    const fits = blockW<=area.w && blockH<=area.h;
+    const over = Math.max(0,blockW-area.w)/area.w + Math.max(0,blockH-area.h)/area.h;
+    const aspectCost = Math.abs((blockW/Math.max(1,blockH)) - (area.w/Math.max(1,area.h)));
+    const cost = fits ? aspectCost : 100 + over;      // prefer fitting; then closest aspect
+    if(!best || cost < best.cost) best = {rows:used, blockW, blockH, cost};
+  }
+  // Vertical order: tallest row in the middle, others alternating out.
+  const orderedRows = centerOutRows(best.rows.map(r=>({r, h:rowH(r)})));
+  const pos = {};
+  let y = area.t + (area.h - best.blockH)/2;
+  orderedRows.forEach(({r})=>{
+    const h = rowH(r), w = rowW(r);
+    const cy = y + h/2;
+    let x = area.l + (area.w - w)/2;
+    centerOut(r).forEach(d=>{ pos[d.id] = {x, y: cy - d.ph/2}; x += d.pw + G; });
+    y += h + G;
+  });
+  return {pos, blockW: best.blockW, blockH: best.blockH};
+}
+function centerOutRows(rows){ const s=[...rows].sort((a,b)=>b.h-a.h), r=[];
+  s.forEach((it,i)=> i%2 ? r.unshift(it) : r.push(it)); return r; }
+// Reset any manual drags and re-run the salon arrangement.
+function autoArrangeWall(){
+  Object.keys(wallPos).forEach(k=>delete wallPos[k]);
+  renderSidecar();
+}
+// A fresh full arrangement replaces the wall: drop every piece not in the new set (they leave the
+// wall for good) and lay the new set out cleanly (fresh salon).
+function reconcileWallSet(ids){
+  setAside.clear(); _noSmaller = false;   // a fresh arrangement starts with everything on the wall
+  const keep = new Set(ids);
+  let changed = false;
+  for(const id of [...sugOrder]){ if(!keep.has(id)){ removed.add(id); delete suggestions[id]; changed = true; } }
+  if(!changed) return;
+  sugOrder = ids.filter(id=>suggestions[id]);
+  Object.keys(wallPos).forEach(k=>delete wallPos[k]);   // fresh salon for the new set
+  renderSidecar();
+  rerenderChatWorks();
+}
+
+// --- drag to rearrange pieces on the wall canvas ---
+let _drag = null;  // {el,id,dx,dy,x0,y0,moved}
+let _suppressClick = false;
+function onWallPointerDown(e){
+  if(e.button !== 0) return;                      // left button only
+  const p = e.target.closest('.wall-piece'); if(!p || !wallMode) return;
+  if(e.target.closest('.wp-tools')) return;       // let the hover icons work (no drag)
+  const list = document.getElementById('sc-list'); const lr = list.getBoundingClientRect();
+  const pr = p.getBoundingClientRect();
+  _drag = {el:p, id:p.dataset.id, dx:e.clientX-pr.left, dy:e.clientY-pr.top,
+           x0:e.clientX, y0:e.clientY, moved:false};
+  p.classList.add('dragging');
+  try{ p.setPointerCapture(e.pointerId); }catch(_){}
+}
+function onWallPointerMove(e){
+  if(!_drag) return;
+  if(!_drag.moved && Math.hypot(e.clientX-_drag.x0, e.clientY-_drag.y0) > 4) _drag.moved = true;
+  const list = document.getElementById('sc-list'); const lr = list.getBoundingClientRect();
+  let x = e.clientX - lr.left - _drag.dx, y = e.clientY - lr.top - _drag.dy;
+  // Keep the piece inside the wall surface (if known), else inside the canvas.
+  const a = _wallArea;
+  const minX = a ? a.l : 0, maxX = (a ? a.l+a.w : list.clientWidth) - _drag.el.offsetWidth;
+  const minY = a ? a.t : 0, maxY = (a ? a.t+a.h : list.clientHeight) - _drag.el.offsetHeight;
+  x = Math.max(minX, Math.min(x, Math.max(minX, maxX)));
+  y = Math.max(minY, Math.min(y, Math.max(minY, maxY)));
+  _drag.el.style.left = Math.round(x)+'px'; _drag.el.style.top = Math.round(y)+'px';
+  wallPos[_drag.id] = {x, y};
+}
+function onWallPointerUp(){
+  if(!_drag) return;
+  _drag.el.classList.remove('dragging');
+  if(_drag.moved) _suppressClick = true;   // a drag shouldn't also open the product link
+  _drag = null;
+}
+// Right-click a piece → context menu (replace / different size / remove).
+let ctxTargetId = null;
+function closeCtx(){ document.getElementById('wall-ctx').style.display='none'; }
+function showCtxAt(m, x, y){
+  m.style.display='block';
+  const w=m.offsetWidth, h=m.offsetHeight;
+  m.style.left = Math.max(6, Math.min(x, window.innerWidth - w - 6))+'px';
+  m.style.top  = Math.max(6, Math.min(y, window.innerHeight - h - 6))+'px';
+}
+async function showSizes(){
+  const t=T[LANG]||T.de, m=document.getElementById('wall-ctx'), id=ctxTargetId;
+  m.innerHTML = '<div class="ctx-note">'+esc(t.wallLoading)+'</div>';
+  let sizes=[];
+  try{ const r=await fetch('/motif/sizes',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({motif_id:id})}); if(r.ok) sizes=((await r.json()).sizes||[]).map(x=>({...x, product_url: shopUrl(x.product_url)})); }catch(e){}
+  const cur = suggestions[id]||cards[id]||{};
+  const rows = sizes.map(s=>{
+    const cm = Math.round((s.width_mm||0)/10)+' × '+Math.round((s.height_mm||0)/10)+' cm';
+    const price = s.price_from_cents!=null ? ' · '+(LANG==='de'?'ab ':'from ')+euro(s.price_from_cents) : '';
+    const on = s.sku===cur.sku ? ' aria-current="true"' : '';
+    return '<button data-act="pick" data-sku="'+escAttr(s.sku||'')+'" data-w="'+(s.width_mm||0)+'" data-h="'
+      +(s.height_mm||0)+'" data-url="'+escAttr(s.product_url||'')+'" data-price="'+(s.price_from_cents==null?'':s.price_from_cents)+'"'+on+'>'
+      + esc(cm)+esc(price)+'</button>';
+  }).join('');
+  m.innerHTML = '<div class="ctx-note">'+esc(t.wallSize)+'</div>'
+    + (rows || '<div class="ctx-note">'+esc(t.wallNoSizes)+'</div>');
+  // keep the menu on-screen after resizing its content
+  showCtxAt(m, parseFloat(m.style.left)||40, parseFloat(m.style.top)||40);
+}
+function applySizeTo(id, size){
+  [cards[id], suggestions[id]].forEach(c=>{ if(!c) return;
+    c.sku=size.sku||c.sku; c.width_mm=size.width_mm||null; c.height_mm=size.height_mm||null;
+    c.product_url=size.product_url||c.product_url; c.price_from_cents=size.price_from_cents==null?null:size.price_from_cents; c.size_matched=true; });
+}
+function applySize(b){
+  const id=ctxTargetId; if(!id) return;
+  const p=b.dataset.price;
+  applySizeTo(id, {sku:b.dataset.sku, width_mm:+b.dataset.w||null, height_mm:+b.dataset.h||null,
+    product_url:b.dataset.url, price_from_cents: p==='' ? null : +p});
+  _noSmaller = false;
+  closeCtx(); renderSidecar();
+}
+
+// --- when the works don't fit the wall together ---
+function wallBandHTML(){
+  const t = T[LANG] || T.de;
+  const aside = [...setAside].filter(id=>suggestions[id]).map(id=>{
+    const c = suggestions[id], label = t.wallReturn+': '+(c.artist||'')+', '+(c.title||'');
+    return '<button class="aside-thumb" title="'+escAttr(label)+'" aria-label="'+escAttr(label)+'" onclick="returnToWall(\''+esc(id)+'\')">'
+      + (c.image_url ? '<img src="'+c.image_url+'" alt="">' : '') + '<span class="aside-num">'+(cardNumbers[id]||'')+'</span></button>';
+  }).join('');
+  return '<div class="wall-band" style="display:none">'
+    + '<div class="wall-fit"><p class="wall-fit-text"></p><div class="wall-fit-actions">'
+    +   '<button class="sc-refine fit-smaller" onclick="fitWithSmallerSizes()">'+esc(t.wallSmaller)+'</button>'
+    +   '<button class="sc-refine fit-aside" onclick="setOneAside()">'+esc(t.wallAside)+'</button>'
+    + '</div></div>'
+    + (aside ? '<div class="wall-aside"><span class="wall-aside-label">'+esc(t.wallAsideLabel)+'</span>'+aside+'</div>' : '')
+    + '</div>';
+}
+function updateWallBand(band, fits, sal){
+  if(!band) return;
+  const t = T[LANG] || T.de, onWall = sugOrder.filter(id=>!setAside.has(id)).length;
+  band.style.display = (!fits || setAside.size) ? 'flex' : 'none';
+  const fit = band.querySelector('.wall-fit');
+  fit.style.display = fits ? 'none' : '';
+  if(!fits){
+    const cm = v => Math.round(v/10);
+    band.querySelector('.wall-fit-text').textContent = t.wallTooBig
+      .replace('{need}', cm(sal.blockW)+'\u00a0×\u00a0'+cm(sal.blockH)+'\u00a0cm').replace('{wall}', cm(wallSize.w)+'\u00a0×\u00a0'+cm(wallSize.h)+'\u00a0cm');   // keep each measurement on one line
+    band.querySelector('.fit-smaller').style.display = _noSmaller ? 'none' : '';
+    band.querySelector('.fit-aside').style.display = onWall > 1 ? '' : 'none';
+  }
+}
+async function _loadSizes(id){
+  if(_sizesCache[id]) return _sizesCache[id];
+  try{ const r = await fetch('/motif/sizes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({motif_id:id})});
+       _sizesCache[id] = r.ok ? ((await r.json()).sizes||[]).map(x=>({...x, product_url: shopUrl(x.product_url)})) : []; }catch(e){ _sizesCache[id] = []; }
+  return _sizesCache[id];
+}
+// Step the largest works down to their next real size, one at a time, until the arrangement fits.
+async function fitWithSmallerSizes(){
+  const ids = sugOrder.filter(id=>!setAside.has(id));
+  await Promise.all(ids.map(_loadSizes));
+  const area = c => (c.width_mm||0)*(c.height_mm||0);
+  const fits = () => { const s = salonLayout(ids.map(id=>({id, pw:suggestions[id].width_mm||600, ph:suggestions[id].height_mm||600})),
+                          {l:0,t:0,w:wallSize.w,h:wallSize.h}, 60);
+                      return s.blockW <= wallSize.w && s.blockH <= wallSize.h; };
+  for(let guard=0; guard<40 && !fits(); guard++){
+    const next = ids.map(id=>{ const c = suggestions[id];
+        const smaller = (_sizesCache[id]||[]).filter(s=>s.width_mm*s.height_mm < area(c)).sort((a,b)=>b.width_mm*b.height_mm - a.width_mm*a.height_mm)[0];
+        return {id, a: area(c), smaller}; })
+      .filter(x=>x.smaller).sort((a,b)=>b.a - a.a)[0];
+    if(!next) break;
+    applySizeTo(next.id, next.smaller);
+  }
+  _noSmaller = !fits();
+  Object.keys(wallPos).forEach(k=>delete wallPos[k]);   // fresh, balanced arrangement
+  renderSidecar();
+}
+// Take the largest work off the wall; it waits in the 'set aside' strip and returns on a click.
+function setOneAside(){
+  const ids = sugOrder.filter(id=>!setAside.has(id)); if(ids.length < 2) return;
+  const largest = ids.reduce((a,b)=> (suggestions[b].width_mm*suggestions[b].height_mm > suggestions[a].width_mm*suggestions[a].height_mm) ? b : a);
+  setAside.add(largest); delete wallPos[largest]; _noSmaller = false;
+  selectWallPiece(null); renderSidecar();
+}
+function returnToWall(id){
+  setAside.delete(id); _noSmaller = false;
+  Object.keys(wallPos).forEach(k=>delete wallPos[k]);
+  renderSidecar();
+}
+let pendingReplaceId = null;   // the wall piece a chat replacement will swap into
+function requestReplacement(id){
+  pendingReplaceId = id;
+  const c=cards[id]||{}; const who=((c.artist||'')+' – '+(c.title||'')).trim();
+  const n = sugOrder.length;
+  const de=LANG==='de';
+  const directive = de
+    ? '[Der Kunde möchte in seiner Wandauswahl das Werk "'+who+'" ersetzen. Stelle GENAU EINE '
+      + 'Frage, in welche Richtung der Ersatz gehen soll (etwas Ähnliches wie dieses Werk oder '
+      + 'bewusst anders – anderer Stil, Stimmung, Farbe oder Motiv), warte auf die Antwort und '
+      + 'schlage dann 2–3 passende Alternativen als AUSWAHL im Chat vor: jeweils in einer eigenen '
+      + 'Zeile mit dem Token [[swap:MOTIF_ID]] vor Name (NICHT [[art:...]], nicht an die Wand '
+      + 'heften) und setze EINMAL das Token [[replace:'+id+']] in die Nachricht. Übergib '
+      + 'avail_width_mm/avail_height_mm und wall_slots='+n+' an die Suche, damit die Alternativen '
+      + 'zur Wand passen. Wenn etwas Ähnliches gewünscht ist, nutze similar_to_motif_id = '+id+'.]'
+    : '[The customer wants to replace the work "'+who+'" in their wall selection. Ask EXACTLY ONE '
+      + 'question about the direction (something similar to this piece or deliberately different — '
+      + 'other style, mood, colour or subject), wait for the answer, then offer 2–3 alternatives as '
+      + 'a CHOICE in the chat: each on its own line beginning with the token [[swap:MOTIF_ID]] '
+      + 'before the name (NOT [[art:...]], do not pin them to the wall) and include ONCE the token '
+      + '[[replace:'+id+']]. Pass avail_width_mm/avail_height_mm and wall_slots='+n+' to the search '
+      + 'so the alternatives fit the wall. If they want something similar, use '
+      + 'similar_to_motif_id = '+id+'.]';
+  sendMessage(directive, false, true);
+}
+// Swap a chat-chosen candidate into a wall slot. If the visitor has arranged the wall manually,
+// keep every other piece exactly where it is and drop the new work into the freed spot WITHOUT
+// overlaps; otherwise just re-run the salon.
+function _cssId(id){ return (window.CSS && CSS.escape) ? CSS.escape(id) : id; }
+function freezeWallPositions(){
+  document.querySelectorAll('#sc-list .wall-piece').forEach(p=>{
+    wallPos[p.dataset.id] = { x: p.offsetLeft, y: p.offsetTop };
+  });
+}
+function _rectsOverlap(x,y,w,h,o){ return x < o.x+o.w && o.x < x+w && y < o.y+o.h && o.y < y+h; }
+// Nearest non-overlapping spot (within the wall area) to a target centre; null if none fits.
+function _freeSpot(w,h,cx,cy,others,area){
+  const maxX = area.l + area.w - w, maxY = area.t + area.h - h;
+  if(maxX < area.l || maxY < area.t) return null;   // piece bigger than the area
+  const step = 10; let best = null;
+  for(let y=area.t; y<=maxY; y+=step) for(let x=area.l; x<=maxX; x+=step){
+    if(others.some(o=>_rectsOverlap(x,y,w,h,o))) continue;
+    const dx=(x+w/2)-cx, dy=(y+h/2)-cy, d=dx*dx+dy*dy;
+    if(!best || d<best.d) best = {x,y,d};
+  }
+  return best;
+}
+function placeReplacement(el, candId, center){
+  const list = document.getElementById('sc-list');
+  const area = _wallArea || {l:0,t:0,w:list.clientWidth,h:list.clientHeight};
+  const w = el.offsetWidth, h = el.offsetHeight;
+  const others = [...list.querySelectorAll('.wall-piece')].filter(p=>p!==el)
+    .map(p=>({x:p.offsetLeft, y:p.offsetTop, w:p.offsetWidth, h:p.offsetHeight}));
+  const clamp=(v,a,b)=>Math.max(a, Math.min(v, Math.max(a,b)));
+  const spot = _freeSpot(w,h,center.cx,center.cy,others,area)
+            || {x: clamp(center.cx-w/2, area.l, area.l+area.w-w), y: clamp(center.cy-h/2, area.t, area.t+area.h-h)};
+  el.style.left = Math.round(spot.x)+'px'; el.style.top = Math.round(spot.y)+'px';
+  wallPos[candId] = {x: spot.x, y: spot.y};
+}
+function replacePiece(slotId, candId, originalId){
+  if(!candId || !cards[candId] || candId===slotId) return false;
+  const list = document.getElementById('sc-list');
+  const manual = Object.keys(wallPos).length > 0;   // the visitor has arranged the wall by hand
+  let center = null;
+  if(manual){
+    const oldEl = slotId ? list.querySelector('.wall-piece[data-id="'+_cssId(slotId)+'"]') : null;
+    if(oldEl) center = {cx: oldEl.offsetLeft+oldEl.offsetWidth/2, cy: oldEl.offsetTop+oldEl.offsetHeight/2};
+    else { const a=_wallArea||{l:0,t:0,w:list.clientWidth,h:list.clientHeight}; center={cx:a.l+a.w/2, cy:a.t+a.h/2}; }
+    freezeWallPositions();   // pin every current piece where it sits, so nothing else moves
+  }
+  if(slotId && slotId===originalId) removed.add(slotId);   // the original leaves for good
+  const idx = sugOrder.indexOf(slotId);
+  delete wallPos[slotId]; delete suggestions[slotId];
+  sugOrder = sugOrder.filter(x=>x!==slotId && x!==candId);
+  suggestions[candId] = cards[candId];
+  sugOrder.splice(idx>=0 ? idx : sugOrder.length, 0, candId);
+  renderSidecar();
+  if(manual){
+    const el = list.querySelector('.wall-piece[data-id="'+_cssId(candId)+'"]');
+    if(el && center) placeReplacement(el, candId, center);   // slot in without overlaps
+  }
+  rerenderChatWorks();
+  return true;
+}
+// Actions live on the hover toolbar now, not a right-click menu — suppress the native menu.
+document.getElementById('sc-list').addEventListener('contextmenu', e=>{
+  const p = e.target.closest('.wall-piece');
+  if(p && wallMode){ e.preventDefault(); selectWallPiece(p); }
+});
+// The #wall-ctx popover is now only the "different size" picker.
+async function openSizeMenu(e, id){
+  e.preventDefault(); e.stopPropagation();
+  ctxTargetId = id;
+  const m = document.getElementById('wall-ctx');
+  showCtxAt(m, e.clientX, e.clientY);
+  await showSizes();
+}
+document.getElementById('wall-ctx').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.act==='pick') applySize(b);
+});
+// Close only on an OUTSIDE press with a non-right button (mousedown, not the right-button
+// release) so the menu stays open until the user clicks elsewhere.
+document.addEventListener('mousedown', e=>{ if(e.button!==2 && !e.target.closest('#wall-ctx')) closeCtx(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeCtx(); });
+document.getElementById('sc-list').addEventListener('scroll', closeCtx, {passive:true});
+
+// Drag pieces around the wall canvas.
+document.getElementById('sc-list').addEventListener('pointerdown', onWallPointerDown);
+window.addEventListener('pointermove', onWallPointerMove);
+window.addEventListener('pointerup', onWallPointerUp);
+// A drag ends with a click on the thumb link — swallow it so we don't navigate away.
+document.getElementById('sc-list').addEventListener('click', e=>{
+  if(_suppressClick){ e.preventDefault(); e.stopPropagation(); _suppressClick=false; }
+}, true);
+// Touch has no hover: the first tap on a wall piece selects it (tools + caption), the next opens it.
+let _pointerType = 'mouse';
+document.addEventListener('pointerdown', e=>{ _pointerType = e.pointerType || 'mouse'; }, true);
+const _phoneSheet = window.matchMedia('(pointer:coarse) and (max-width:760px)');
+function selectWallPiece(piece){
+  document.querySelectorAll('#sc-list .wall-piece.selected').forEach(p=>{ if(p!==piece) p.classList.remove('selected'); });
+  if(!piece) return;
+  // On phones the action bar takes the place of the panel header, so it never covers the wall.
+  if(_phoneSheet.matches){
+    const head = document.querySelector('#sidecar .sc-head').getBoundingClientRect();
+    document.documentElement.style.setProperty('--sheet-top', head.top+'px');
+    document.documentElement.style.setProperty('--sheet-h', head.height+'px');
+  }
+  piece.classList.add('selected');
+}
+document.getElementById('sc-list').addEventListener('click', e=>{
+  if(!wallMode) return;
+  const p = e.target.closest('.wall-piece');
+  if(!p){ selectWallPiece(null); return; }
+  if(e.target.closest('.wp-tools')) return;
+  if(_pointerType !== 'mouse' && !p.classList.contains('selected')){ e.preventDefault(); selectWallPiece(p); }
+}, true);
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#sc-list') && !e.target.closest('#wall-ctx')) selectWallPiece(null);
+});
+function removeSuggestion(id){
+  // The user dismisses a piece they don't like; everything left is treated as their selection.
+  removed.add(id); delete suggestions[id]; sugOrder = sugOrder.filter(x=>x!==id); setAside.delete(id);
+  renderSidecar();          // recomputes the numbering for the remaining works
+  rerenderChatWorks();      // drop the removed work's number AND its text; empty bubbles vanish
+  // If the customer has now rejected every suggested piece, actively ask where to go instead.
+  if(!sugOrder.length && !busy) askDirection();
+}
+// Proactively ask, in one question, what direction to try after the customer cleared everything.
+function askDirection(){
+  const de = LANG==='de';
+  const directive = de
+    ? '[Der Kunde hat alle zuletzt vorgeschlagenen Werke wieder entfernt. Reagiere kurz und '
+      + 'einfühlsam und stelle GENAU EINE Frage, in welche Richtung es stattdessen gehen soll '
+      + '(z. B. anderer Stil, andere Stimmung, andere Farben, anderes Motiv oder anderer Künstler). '
+      + 'Schlage jetzt noch KEINE Werke vor und rufe search_artworks nicht auf.]'
+    : '[The customer just removed every piece you suggested. Respond briefly and warmly and ask '
+      + 'EXACTLY ONE question about what direction to try instead (e.g. a different style, mood, '
+      + 'colours, subject or artist). Do NOT suggest any works yet and do not call search_artworks.]';
+  sendMessage(directive, false, true);   // hidden: streams a bot reply with no user bubble
+}
+let sidecarExpanded = false;
+function toggleExpand(){
+  sidecarExpanded = !sidecarExpanded;
+  document.getElementById('sidecar').classList.toggle('expanded', sidecarExpanded);
+  const b = document.getElementById('sc-toggle');
+  b.textContent = sidecarExpanded ? '»' : '«';
+  b.title = sidecarExpanded ? (LANG==='de'?'Einklappen':'Collapse')
+                            : (LANG==='de'?'Als Raster ausklappen':'Expand to grid');
+  if (wallMode) renderSidecar();               // swap between the wall arrangement and the list
+  else if (sidecarExpanded) scheduleMasonry(); // size the masonry tiles once the grid is live
+}
+
+const MAX_SIDECAR = 10;
+function recordClick(id){
+  // Fire-and-forget success signal for search analytics; never blocks the click-through.
+  try{ fetch('/click', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({motif_id:id}), keepalive:true}); }catch(e){}
+}
+function addSuggestion(id){
+  if(removed.has(id) || !cards[id] || suggestions[id]) return;
+  suggestions[id]=cards[id]; sugOrder.push(id);
+  // Cap the panel at MAX_SIDECAR; drop the oldest (FIFO) to make room.
+  let evicted=false;
+  while(sugOrder.length > MAX_SIDECAR){ const old=sugOrder.shift(); delete suggestions[old]; evicted=true; }
+  renderSidecar();
+  // An eviction shifts every following work's number down by one → refresh past mentions.
+  if(evicted) rerenderChatWorks();
+}
+
+// --- assistant text rendering (markdown subset; tokens pinned to sidecar, stripped from prose) ---
+function stripEmoji(s){
+  return s.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{2190}-\u{21FF}\u{FE0F}\u{200D}]/gu,'')
+          .replace(/[ \t]{2,}/g,' ');
+}
+// The brand uses commas, colons and full stops, never dashes, between clauses. Number ranges
+// such as 2–3 keep their en dash because it is not surrounded by spaces.
+function brandPunctuation(s){
+  return s.replace(/[ \t]*—[ \t]*/g, ', ').replace(/[ \t]+–[ \t]+/g, ', ').replace(/,\s*([,.:;?])/g, '$1');
+}
+function inlineMd(escaped){
+  escaped = escaped.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    (m,label,url)=>'<a href="'+shopUrl(url)+'"'+LINK_TARGET+'>'+label+'</a>');
+  escaped = escaped.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+  return escaped;
+}
+function textToHtml(text){
+  const lines = text.split('\n'); let html=''; let i=0;
+  while(i<lines.length){
+    if(/^\s*[-*]\s+/.test(lines[i])){
+      html+='<ul>';
+      while(i<lines.length && /^\s*[-*]\s+/.test(lines[i])){
+        html+='<li>'+inlineMd(esc(lines[i].replace(/^\s*[-*]\s+/,'')))+'</li>'; i++;
+      }
+      html+='</ul>';
+    } else {
+      const t=lines[i].trim();
+      if(t) html+='<p>'+inlineMd(esc(t))+'</p>';
+      i++;
+    }
+  }
+  return html;
+}
+// "My selection" (the shareable collection page) is switched off for now: no panel button, no chat link.
+const SELECTION_ENABLED = false;
+let _collectionPending = false;
+function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
+function chipsHTML(opts){
+  if(!opts.length) return '';
+  // A fillable "own answer" chip sits among the option buttons — type + Enter/→ to send it,
+  // so the visitor can answer freely right here without leaving for the main composer.
+  const ph = LANG==='de' ? 'oder eigene Antwort…' : 'or your own answer…';
+  const send = LANG==='de' ? 'Senden' : 'Send';
+  return '<div class="chips">'
+    + opts.map(o=>'<button class="chip" data-opt="'+escAttr(o)+'">'+esc(o)+'</button>').join('')
+    + '<span class="chip chip-input"><input type="text" class="chip-field" placeholder="'+escAttr(ph)+'">'
+    + '<button class="chip-send" title="'+escAttr(send)+'" aria-label="'+escAttr(send)+'">→</button></span>'
+    + '</div>';
+}
+function renderBody(text, pin){
+  if(pin===undefined) pin=true;   // pin=false when re-rendering history (no re-pin / no side effects)
+  text = brandPunctuation(stripEmoji(text));
+  // Wall-arrangement mode (live only): show the works to scale in the expanded sidecar. The
+  // token may carry the wall size in cm: [[wall:300x240]] → a grey wall surface drawn to scale.
+  const wm = text.match(/\[\[wall(?::(\d+)x(\d+))?\]\]/);
+  if(pin && wm){
+    if(wm[1] && wm[2]) wallSize = { w:(+wm[1])*10, h:(+wm[2])*10 };  // cm → mm
+    if(!wallMode) enterWallMode(); else renderSidecar();
+  }
+  text = text.replace(/\[\[wall(?::\d+x\d+)?\]\]/g, '');
+  // Collection offer -> flag (live only; the link is appended when the turn ends).
+  if(pin && SELECTION_ENABLED && /\[\[collection\]\]/.test(text)) _collectionPending = true;
+  text = text.replace(/\[\[collection\]\]/g, '');
+  // Room-photo offer -> render an upload button in this message.
+  const showUpload = /\[\[upload\]\]/.test(text);
+  text = text.replace(/\[\[upload\]\]/g, '');
+  // Swap-candidate set target: [[replace:ID]] swaps that work; [[add]] adds a new one; else fall
+  // back to the right-click target (pendingReplaceId). Candidates themselves are [[swap:ID]].
+  let swapTarget = pendingReplaceId;
+  const repM = text.match(/\[\[replace:([^\]\s]+)\]\]/);
+  if(repM) swapTarget = repM[1];
+  if(/\[\[add\]\]/.test(text)) swapTarget = null;
+  text = text.replace(/\[\[replace:[^\]\s]+\]\]/g, '').replace(/\[\[add\]\]/g, '');
+  // Quick-reply options -> tappable chips.
+  let opts = [];
+  const mo = text.match(/\[\[options:([^\]]*)\]\]/);
+  if(mo) opts = mo[1].split('|').map(s=>s.trim()).filter(Boolean);
+  text = text.replace(/\[\[options:[^\]]*\]\]/g, '');
+  text = text.replace(/\[\[[^\]]*$/, '');   // drop any dangling partial token mid-stream
+  // Each recommended work sits on its OWN line so it can be removed with its text. A line whose
+  // work(s) the user removed is dropped entirely; a merely-evicted work keeps its text but loses
+  // its number. Non-work lines render as plain paragraphs.
+  const artRe = /\[\[art:([^\]\s]+)\]\]/g;
+  const swaps = [];   // replacement candidates \u2192 clickable chat cards (NOT pinned to the wall)
+  let html = '';
+  for(const line of text.split('\n')){
+    const sm = line.match(/\[\[swap:([^\]\s]+)\]\]/);
+    if(sm){ swaps.push({id: sm[1], caption: line.replace(/\[\[swap:[^\]\s]+\]\]/g,'').trim()}); continue; }
+    const ids = [...line.matchAll(artRe)].map(x=>x[1]);
+    if(ids.length){
+      if(pin) ids.forEach(id=>{ addSuggestion(id); if(!turnArtIds.includes(id)) turnArtIds.push(id); });
+      if(ids.every(id=>removed.has(id))) continue;   // user dismissed this work -> its line disappears
+      let body = line.replace(artRe, (m,id)=> cardNumbers[id] ? "\ue000"+id+"\ue001" : "");
+      body = inlineMd(esc(body));
+      body = body.replace(/\ue000([^\ue001]+)\ue001/g, (m,id)=>'<span class="artref">'+cardNumbers[id]+'</span>');
+      body = body.replace(/^\s+/, '').replace(/\s+([,.;:!?])/g, '$1').replace(/[ \t]{2,}/g,' ');
+      html += '<div class="art-line" data-id="'+escAttr(ids[0])+'">'+body+'</div>';
+    } else {
+      const t = line.trim();
+      if(t) html += '<p>'+inlineMd(esc(t))+'</p>';
+    }
+  }
+  return html + swapRowHTML(swaps, swapTarget) + (showUpload ? uploadBtnHTML() : '') + chipsHTML(opts);
+}
+// Replacement candidates rendered as clickable cards in the chat. Clicking one swaps it into the
+// slot of the piece being replaced (pendingReplaceId); the row remembers the current occupant so
+// the customer can keep auditioning. Not pinned to the wall.
+function swapRowHTML(swaps, target){
+  const items = swaps.filter(s=>cards[s.id]);
+  if(!items.length) return '';
+  const t = T[LANG] || T.de;
+  const tgt = escAttr(target || '');   // empty = ADD a new work; otherwise = replace that work
+  const cardsHtml = items.map(s=>{
+    const c = cards[s.id];
+    const cap = s.caption || ((c.artist||'') + (c.title ? ' \u2013 '+c.title : ''));
+    return '<button class="swap-card" data-cand="'+escAttr(s.id)+'">'
+      + (c.image_url ? '<img src="'+c.image_url+'" loading="lazy" alt="">' : '')
+      + '<span class="swap-cap">'+esc(cap)+'</span></button>';
+  }).join('');
+  return '<div class="swap-row" data-target="'+tgt+'" data-slot="'+tgt+'">'
+    + '<div class="swap-head">'+esc(target ? t.swapPick : t.swapAdd)+'</div>'
+    + '<div class="swap-cards">'+cardsHtml+'</div></div>';
+}
+function uploadBtnHTML(){
+  const t = T[LANG] || T.de;
+  return '<button class="upload-btn" onclick="pickRoomPhoto()">'+esc(t.roomUpload)+'</button>';
+}
+function pickRoomPhoto(){ document.getElementById('room-file').click(); }
+async function uploadRoomPhoto(file){
+  if(!file || busy) return;
+  const t = T[LANG] || T.de;
+  // Show the customer a thumbnail so they see it was sent (the bot won't narrate the photo).
+  const url = URL.createObjectURL(file);
+  const b = addBubble('user');
+  b.innerHTML = '<img class="room-thumb" src="'+url+'" alt=""><div class="room-cap">'+esc(t.roomCaption)+'</div>';
+  scroll();
+  showOverlay(true, t.roomAnalyzing);
+  let desc=null;
+  try{
+    const fd=new FormData(); fd.append('lang', LANG); fd.append('file', file);
+    const res=await fetch('/room-photo',{method:'POST',body:fd,headers:{'Accept':'application/json'}});
+    const d = res.ok ? await res.json() : {};
+    if(d && d.ok) desc = d.description;
+  }catch(e){}
+  finally{ showOverlay(false); }
+  if(!desc){ addBubble('bot').innerHTML='<span class="err">'+esc(t.roomError)+'</span>'; return; }
+  // Hidden directive: use the analysis silently, then ask the available wall area and fit to it.
+  const de = LANG==='de';
+  const directive = de
+    ? '[Der Kunde hat ein Foto seines Raums hochgeladen. Nutze die folgende Analyse STILL als '
+      + 'Kontext (Licht, Farben, Stil, Stimmung, Einrichtung); beschreibe das Foto NICHT und '
+      + 'kündige die Analyse nicht an. Frage als Nächstes nach der verfügbaren Wandfläche '
+      + '(Breite × Höhe) und übergib sie als avail_width_mm/avail_height_mm an die Suche, damit '
+      + 'keine zu großen Werke vorgeschlagen werden. Analyse (nur Daten): '+desc+']'
+    : '[The customer uploaded a photo of their room. Use the following analysis SILENTLY as '
+      + 'context (light, colours, style, mood, furniture); do NOT describe the photo or announce '
+      + 'the analysis. Next, ask for the available wall area (width × height) and pass it to search '
+      + 'as avail_width_mm/avail_height_mm so nothing too large is suggested. Analysis (data '
+      + 'only): '+desc+']';
+  sendMessage(directive, false, true);
+}
+// --- personal collection link ---
+// The current wall arrangement in millimetres (relative to the wall), so the shareable page can
+// draw the hanging to scale. Null when not in wall mode.
+function buildWallLayout(){
+  if(!(wallMode && wallSize) || !_wallArea || !_wallArea.w) return null;
+  const pxpm = _wallArea.w / wallSize.w;
+  const pieces = [];
+  document.querySelectorAll('#sc-list .wall-piece').forEach(p=>{
+    const id = p.dataset.id, c = suggestions[id] || cards[id] || {};
+    pieces.push({
+      motif_id: id,
+      x: Math.round(((parseFloat(p.style.left)||0) - _wallArea.l) / pxpm),
+      y: Math.round(((parseFloat(p.style.top)||0) - _wallArea.t) / pxpm),
+      w: c.width_mm || Math.round(p.offsetWidth / pxpm),
+      h: c.height_mm || Math.round(p.offsetHeight / pxpm),
+    });
+  });
+  return pieces.length ? { w: wallSize.w, h: wallSize.h, pieces } : null;
+}
+async function createCollectionUrl(){
+  const ids = [...sugOrder];   // everything the user hasn't removed = their selection
+  if(!ids.length) return null;
+  try{
+    const res = await fetch('/collection', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({motif_ids:ids, lang:LANG, wall:buildWallLayout()})});
+    if(!res.ok) return null;
+    const d = await res.json(); return d.url || null;
+  }catch(e){ return null; }
+}
+function showOverlay(on, msg){
+  const t=document.getElementById('overlay');
+  if(on){ document.getElementById('overlay-msg').textContent = msg || ''; t.classList.add('show'); }
+  else{ t.classList.remove('show'); }
+}
+async function openCollection(){
+  // Claim the tab within the click gesture (so it isn't popup-blocked after the await).
+  const w = window.open('', '_blank');
+  showOverlay(true, (T[LANG]||T.de).collectionBusy);
+  try{
+    const url = await createCollectionUrl();
+    if(url){ if(w){ w.location = url; } else { window.open(url, '_blank', 'noopener'); } }
+    else if(w){ w.close(); }
+  } finally { showOverlay(false); }
+}
+async function appendCollectionLink(bot){
+  // Assembling runs an LLM pass and takes a moment — show the overlay so it doesn't look stuck.
+  showOverlay(true, (T[LANG]||T.de).collectionBusy);
+  let url;
+  try{ url = await createCollectionUrl(); }
+  finally{ showOverlay(false); }
+  if(!url) return;
+  const a=document.createElement('a'); a.className='collink'; a.href=url;
+  a.target='_blank'; a.rel='noopener'; a.textContent=(T[LANG]||T.de).collectionLink;
+  bot.appendChild(a); scroll();
+}
+// Delegated: tapping a quick-reply chip (or submitting the fill-in chip) sends it as the message.
+function submitChipInput(wrap){
+  const inp = wrap && wrap.querySelector('.chip-field');
+  const v = inp && inp.value.trim();
+  if(v && !busy){ inp.value=''; sendMessage(v, false); }
+}
+chat.addEventListener('click', e=>{
+  if(busy) return;
+  // Replacement candidate → swap it into the piece's wall slot (audition: keep the row clickable).
+  const sc = e.target.closest('.swap-card');
+  if(sc){
+    const row = sc.closest('.swap-row');
+    if(replacePiece(row.dataset.slot, sc.dataset.cand, row.dataset.target)){
+      row.dataset.slot = sc.dataset.cand;   // next click swaps this one out
+      row.querySelectorAll('.swap-card').forEach(x=>x.classList.toggle('selected', x===sc));
+    }
+    return;
+  }
+  const s = e.target.closest('.chip-send');
+  if(s){ submitChipInput(s.closest('.chip-input')); return; }
+  const b = e.target.closest('.chip');
+  if(b && !b.classList.contains('chip-input')) sendMessage(b.getAttribute('data-opt'), false);
+});
+chat.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && e.target.classList.contains('chip-field')){
+    e.preventDefault(); submitChipInput(e.target.closest('.chip-input'));
+  }
+});
+
+function statusText(s){
+  const de = LANG==='de';
+  switch(s){
+    case 'searching_artworks': return de?'Ich durchsuche die LUMAS Editionen':'Searching the LUMAS editions';
+    case 'searching_knowledge': return de?'Ich sehe in den LUMAS Informationen nach':'Checking LUMAS information';
+    case 'found': return de?'Werke gefunden, ich stelle Ihre Vorschläge zusammen':'Works found, putting your suggestions together';
+    case 'working': return de?'Einen Moment':'One moment';
+    default: return '';
+  }
+}
+function statusHTML(s){
+  return '<div class="searching"><span class="spin"></span> '+esc(statusText(s))
+    +'<span class="dots"><i></i><i></i><i></i></span></div>';
+}
+function setBusyHint(on){
+  document.getElementById('hint').textContent = on
+    ? (LANG==='de' ? 'Einen Moment, der Kunstberater sucht passende Werke'
+                   : 'One moment, the advisor is finding works that fit')
+    : (T[LANG]||T.de).hint;   // localized default hint
+}
+
+function addBubble(role){
+  const row=document.createElement('div'); row.className='msg '+role;
+  const b=document.createElement('div'); b.className='bubble';
+  row.appendChild(b); chat.appendChild(row); scroll();
+  return b;
+}
+function scroll(){ const m=document.querySelector('main'); m.scrollTop=m.scrollHeight; }
+
+let busy=false;
+async function sendMessage(text, isRefine, hidden){
+  if(busy || !text) return;
+  // `hidden` sends an internal directive (e.g. "ask for a new direction") — stream the bot's
+  // reply but show no user bubble for the instruction.
+  if(!hidden) addBubble('user').textContent = isRefine ? (LANG==='de'?'(Vorschläge verfeinern)':'(Refine suggestions)') : text;
+  const bot=addBubble('bot');
+  busy=true; document.getElementById('send').disabled=true; setBusyHint(true);
+  _collectionPending=false;
+  turnArtIds=[];
+  let acc=''; let statusState='working';
+  const render=()=>{
+    const body = renderBody(acc);
+    bot.innerHTML = body + (statusState ? statusHTML(statusState) : (body ? '' : '<span class="spin"></span>'));
+    scroll();
+  };
+  render();
+  try{
+    const res=await fetch('/chat/stream',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text, lang:LANG, kept:[...sugOrder], removed:[...removed]})});
+    if(!res.ok || !res.body){ bot.innerHTML='<span class="err">Error '+res.status+'</span>'; return; }
+    const reader=res.body.getReader(); const dec=new TextDecoder(); let buf='';
+    while(true){
+      const {value,done}=await reader.read(); if(done) break;
+      buf+=dec.decode(value,{stream:true});
+      let idx;
+      while((idx=buf.indexOf('\n\n'))>=0){
+        const block=buf.slice(0,idx); buf=buf.slice(idx+2);
+        let ev='message', data='';
+        for(const line of block.split('\n')){
+          if(line.startsWith('event:')) ev=line.slice(6).trim();
+          else if(line.startsWith('data:')) data+=line.slice(5).trim();
+        }
+        if(!data) continue;
+        let obj; try{ obj=JSON.parse(data); }catch(e){ continue; }
+        if(ev==='delta'){ statusState=''; acc+=obj.text||''; render(); }
+        else if(ev==='status'){ statusState=obj.state||'working'; render(); }
+        else if(ev==='artworks'){ (obj.artworks||[]).forEach(a=>{ a.product_url = shopUrl(a.product_url); cards[a.motif_id]=a; if(suggestions[a.motif_id]) suggestions[a.motif_id]=a; }); statusState='found'; renderSidecar(); render(); }
+        else if(ev==='error'){ statusState=''; bot.innerHTML='<span class="err">'+esc(obj.error||'error')+'</span>'; }
+        else if(ev==='done'){ statusState=''; render(); }
+      }
+    }
+    statusState=''; render();
+    // Remember messages that pinned works so their inline numbers can be refreshed later
+    // (when the user removes a piece and everything renumbers).
+    if(acc.includes('[[art:')){ bot.dataset.bm = String(botMessages.length); botMessages.push({el: bot, raw: acc}); }
+    // Wall mode: a fresh [[art]] arrangement IS the new wall set → remove any earlier works.
+    if(wallMode && turnArtIds.length) reconcileWallSet(turnArtIds);
+    if(_collectionPending) await appendCollectionLink(bot);
+  }catch(e){ bot.innerHTML='<span class="err">'+esc(String(e))+'</span>'; }
+  finally{ busy=false; document.getElementById('send').disabled=false; setBusyHint(false); document.getElementById('input').focus(); saveSnapshot(); }
+}
+// Close: embedded (pop-up / panel iframe) it asks the host page to close it; standalone it
+// collapses to a launcher button, keeping the conversation, so every format can be tried.
+// In a window, Esc closes it (focus sits inside this frame, so the shop's dialog never sees the key);
+// an open size menu takes the first Esc, as it does on its own.
+document.addEventListener('keydown', e=>{
+  if(e.key !== 'Escape' || !IN_WINDOW) return;
+  if(document.getElementById('wall-ctx').style.display === 'block') return;
+  minimiseAdvisor();   // Esc tucks the window away; only × ends the consultation
+});
+// minimise: the shop hides the window but keeps this frame running, so nothing is lost
+function minimiseAdvisor(){
+  saveSnapshot(true);
+  if(window.parent !== window) window.parent.postMessage({type:'lumas-art-advisor:minimise'}, location.origin);
+}
+function closeAdvisor(){
+  saveSnapshot(true);
+  // a window over the shop asks the shop to close it; a full page goes back to where it came from
+  if(window.parent !== window){ window.parent.postMessage({type:'lumas-art-advisor:close'}, location.origin); return; }
+  if(RETURN_URL){ location.href = RETURN_URL; return; }
+  closeCtx(); selectWallPiece(null);
+  document.body.classList.add('is-closed');
+  document.getElementById('launcher').focus();
+}
+function openAdvisor(){
+  document.body.classList.remove('is-closed');
+  document.getElementById('input').focus();
+  if(wallMode) requestAnimationFrame(layoutWall); else scheduleMasonry();
+}
+function send(){
+  const input=document.getElementById('input'); const t=input.value.trim();
+  if(!t) return; input.value=''; autogrow(input); sendMessage(t, false);
+}
+// Apply the stored/initial language to the whole window on load (sets active toggle,
+// re-labels static chrome, renders the sidecar).
+setLang(LANG);
+if(IN_WINDOW){
+  const m = document.getElementById('minimise-btn'); m.hidden = false;
+  const label = LANG==='de' ? 'Minimieren' : 'Minimise'; m.title = label; m.setAttribute('aria-label', label);
+}
+if(RETURN_URL && !IN_WINDOW){   // in a window the shop is right behind it: no back link
+  const back = document.getElementById('back-link');
+  const backLabel = LANG==='de' ? 'Zurück zu LUMAS' : 'Back to LUMAS';
+  back.href = RETURN_URL; back.setAttribute('aria-label', backLabel); back.hidden = false;
+  back.innerHTML = '<span aria-hidden="true">← </span><span class="back-label">'+backLabel+'</span>';
+}
+// the shop's 'Zurück zur Beratung' pill reads these (same origin when embedded)
+function shareAdvisorState(){
+  try{ sessionStorage.setItem('aa:active','1'); sessionStorage.setItem('aa:count', String(sugOrder.length));
+       sessionStorage.setItem('aa:depth','0'); }catch(e){}
+}
+if(EMBEDDED){ shareAdvisorState(); window.addEventListener('pageshow', shareAdvisorState); }
+// Embedded in the shop, a visit to a product page and back must not lose the conversation, and the
+// browser's back/forward cache is not guaranteed. The whole chat state is kept for the session.
+// var, not let: renderSidecar() runs during start-up before this line, and must find it falsy
+var _snapshotReady = false;   // nothing is saved until the stored conversation has been restored
+function saveSnapshot(force){
+  // force: the window is closing or the page unloading, so keep even a reply still streaming in
+  if(!EMBEDDED || !_snapshotReady || (busy && !force)) return;
+  try{ sessionStorage.setItem('aa:snapshot', JSON.stringify({
+    chat: chat.innerHTML, raws: botMessages.map(b=>b.raw), cards, suggestions, sugOrder,
+    removed: [...removed], wallMode, wallSize, wallPos, setAside: [...setAside], sidecarExpanded, lang: LANG })); }catch(e){}
+}
+function restoreSnapshot(){
+  let snap = null;
+  try{ snap = JSON.parse(sessionStorage.getItem('aa:snapshot') || 'null'); }catch(e){}
+  if(!snap || snap.lang !== LANG || !snap.sugOrder) return false;
+  chat.innerHTML = snap.chat;
+  Object.assign(cards, snap.cards); Object.assign(suggestions, snap.suggestions); Object.assign(wallPos, snap.wallPos);
+  sugOrder = snap.sugOrder; snap.removed.forEach(x=>removed.add(x)); (snap.setAside||[]).forEach(x=>setAside.add(x));
+  wallSize = snap.wallSize; sugOrder.forEach(id=>_revealed.add(id));   // no entrance animation on return
+  chat.querySelectorAll('[data-bm]').forEach(el=>botMessages.push({el, raw: snap.raws[+el.dataset.bm]}));
+  if(snap.wallMode) enterWallMode();
+  else { if(snap.sidecarExpanded) toggleExpand(); renderSidecar(); }
+  scroll();
+  return true;
+}
+// 'New chat' starts over, keeping the language and window settings (the server's /reset would drop them)
+document.querySelector('header a.icon-btn[href$="reset"]')?.addEventListener('click', e=>{
+  e.preventDefault();
+  try{ sessionStorage.removeItem('aa:snapshot'); }catch(err){}
+  fetch('/reset', {redirect:'manual'}).catch(()=>{}).finally(()=> location.reload());
+});
+if(HANDOFF_Q){
+  try{ sessionStorage.removeItem('aa:snapshot'); }catch(e){}   // a new question from the shop is a new conversation
+  // drop q from the address so a reload does not ask twice, then send it as the visitor's first message
+  _params.delete('q'); _params.delete('filters');
+  history.replaceState(null, '', location.pathname + (_params.toString() ? '?'+_params : ''));
+  fetch('/reset', {redirect:'manual'}).catch(()=>{}).finally(()=> sendHandoff(HANDOFF_Q, HANDOFF_FILTERS));
+} else if(EMBEDDED){
+  restoreSnapshot();
+}
+_snapshotReady = true;
+// closing the window removes this frame; leaving for a product page unloads it: save either way
+window.addEventListener('pagehide', ()=> saveSnapshot(true));
+// The visitor's words as their first message, with the shop filters shown under them and passed to
+// the advisor as context, so the conversation starts where the visitor was.
+function sendHandoff(q, filters){
+  if(!filters.length) return sendMessage(q, false);
+  const b = addBubble('user');
+  b.innerHTML = esc(q) + '<span class="handoff-filters"><span class="hf-label">'
+    + esc(LANG==='de' ? 'Aus deinen Filtern' : 'From your filters') + '</span>'
+    + filters.map(f=>'<span class="hf-chip">'+esc(f)+'</span>').join('') + '</span>';
+  const context = LANG==='de' ? '[Im Shop aktive Filter: ' + filters.join(', ') + '. Berücksichtige sie bei den Vorschlägen.]'
+                             : '[Filters active in the shop: ' + filters.join(', ') + '. Take them into account in the suggestions.]';
+  sendMessage(q + '\n' + context, false, true);
+}
+</script>
+</body>
+</html>
