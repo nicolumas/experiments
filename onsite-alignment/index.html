@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1003", kicker: "Latest · today",        weekday: "Saturday",  date: "3 October", year: "2026", short: "3 Oct", upcoming: true },
+      { id: "s1007", kicker: "Latest · today",        weekday: "Wednesday", date: "7 October", year: "2026", short: "7 Oct", upcoming: true },
+      { id: "s1003", kicker: "Previous",              weekday: "Saturday",  date: "3 October", year: "2026", short: "3 Oct" },
       { id: "s1002", kicker: "Previous",              weekday: "Thursday",  date: "2 October", year: "2026", short: "2 Oct" },
       { id: "s0929", kicker: "Previous",              weekday: "Tuesday",   date: "29 September", year: "2026", short: "29 Sep" },
       { id: "s0928", kicker: "Previous",              weekday: "Monday",    date: "28 September", year: "2026", short: "28 Sep" },
@@ -176,6 +177,12 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Wednesday 7 October ───────────────────────────
+      { s: "s1007", feature: true, title: "Deine Galerie: gallery stock on PDP and PLP (DE)", href: "deine-galerie/", desc: "Our version of Saturn\u2019s \u201cMein Markt\u201d on lumas.de clones: a gallery picker in the header, a size-aware \u201cVorr\u00e4tig in Hamburg\u201d pill on the PDP and an in-stock filter on the PLP, all driven by real SAP gallery stock." },
+      { s: "s1007", cluster: "Deine Galerie", title: "PLP: Bestseller with the in-stock filter", href: "deine-galerie/bestseller.html" },
+      { s: "s1007", cluster: "Deine Galerie", title: "PDP: selected size in your gallery", href: "deine-galerie/frida.html" },
+      { s: "s1007", cluster: "Deine Galerie", title: "PDP: nearest gallery, 132 km", href: "deine-galerie/incantata-iii.html" },
+      { s: "s1007", cluster: "Deine Galerie", title: "PDP: no gallery nearby, postcode search", href: "deine-galerie/gun.html" },
       // ── Tuesday 29 September ───────────────────────────
       { s: "s1003", feature: true, title: "Gallery page programme block (DE)", href: "gallery-programme/", desc: "The Hamburg gallery page cloned with its single event teaser replaced by a compact programme list, the gallery-page follow-up to LM-13093." },
       { s: "s1003", cluster: "Gallery programme", title: "Live page today, for comparison", href: "gallery-programme/live.html" },
