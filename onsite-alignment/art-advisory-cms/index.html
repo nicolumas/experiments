@@ -1331,9 +1331,7 @@ document.querySelectorAll('.block-tiles[data-overflow="slider"]').forEach(functi
 #galerien-map .maplibregl-popup-content a{color:#1C1A18;text-decoration:underline}
 #galerien-map .maplibregl-popup-close-button{font-size:18px;padding:2px 8px}
 #galerien-map .lumas-pin{width:23px;height:28px;cursor:pointer}
-#galerien-map .lp-actions{display:flex;flex-direction:column;gap:8px;margin:12px 0 10px}
-#galerien-map .lp-actions .btn{text-decoration:none;text-align:center;width:100%;box-sizing:border-box}
-#galerien-map .maplibregl-popup-content .lp-actions .btn:not(.btn-secondary){color:#fff}
+#galerien-map .lp-actions{display:flex;flex-direction:column;gap:6px;margin:10px 0 12px}
 #galerien-map .lp-contact{display:flex;align-items:center;gap:8px}
 #galerien-map .lp-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid #1C1A18;border-radius:50%;color:#1C1A18;text-decoration:none}
 #galerien-map .lp-dir{margin-left:auto}
@@ -1361,7 +1359,7 @@ G.forEach(function(g){
   var ico={mail:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>',
            tel:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>'};
   var html='<h5><a href="'+BASE+g.url+'">'+esc(g.name)+'</a></h5>'+g.addr.map(function(a){return '<p>'+esc(a)+'</p>'}).join('')+
-    '<div class="lp-actions"><a class="btn btn-sm" href="'+BASE+g.book+'">In person appointment</a><a class="btn btn-sm btn-secondary" href="'+g.video+'">Book a video call</a></div>'+
+    '<div class="lp-actions"><a href="'+BASE+g.book+'">In person appointment</a><a href="'+g.video+'">Book a video call</a></div>'+
     '<div class="lp-contact">'+(g.mail?'<a class="lp-icon" href="mailto:'+g.mail+'" aria-label="Email '+esc(g.mail)+'" title="'+esc(g.mail)+'">'+ico.mail+'</a>':'')+
     (g.tel?'<a class="lp-icon" href="tel:'+g.tel+'" aria-label="Call '+esc(g.telLabel)+'" title="'+esc(g.telLabel)+'">'+ico.tel+'</a>':'')+
     '<a class="lp-dir" href="'+(g.route||('https://www.google.com/maps/dir/?api=1&destination='+g.lat+','+g.lng))+'" target="_blank" rel="noopener">Directions</a></div>';
