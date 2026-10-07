@@ -88,8 +88,18 @@ html.aa-window-open { overflow: hidden; }
   .menu.discovery dl:has(> .aa-nav-card) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 
-/* 3.8 slim bar at the top of every listing page */
+/* 3.8 slim bar at the top of every listing page; it sticks above production's filter toolbar */
 .aa-listbar { margin: 0 0 20px; }
+.aa-has-listbar > .aa-listbar { position: sticky; top: var(--aa-listbar-top, 0px); z-index: 33; }
+.aa-listbar-marker { height: 0; }
+/* phones: production's toolbar sticks at 0, not via --top-offset */
+@media (max-width: 1023px) { .aa-has-listbar .filters-toolbar { top: calc(var(--aa-listbar-top, 0px) + var(--aa-listbar-h, 0px)); } }
+@media (max-width: 759px) {
+  /* stuck on a phone it compacts to the mark and the call to action, so the results keep the screen */
+  .aa-listbar--stuck.aa-row--start { display: flex; align-items: center; padding-top: 10px; padding-bottom: 10px; }
+  .aa-listbar--stuck .aa-row-text { display: none; }
+  .aa-listbar--stuck .aa-row-cta { margin-left: auto; }
+}
 
 /* 3.3 banner on conversational or failing searches ---------------------------- */
 .aa-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px 40px; align-items: center;
@@ -101,6 +111,20 @@ html.aa-window-open { overflow: hidden; }
 .aa-banner-input { flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; border: 1px solid var(--primitive-charcoal-300, #c7c3be);
   border-radius: 4px; background: #fff; color: var(--aa-ink); font: 16px archivo, medium-fallback, arial, sans-serif; }
 .aa-banner-input:focus { outline: none; border-color: var(--aa-ink); box-shadow: 0 0 0 1px var(--aa-ink); }
+/* 0 hits: in place of production's empty state, centred like it */
+.aa-banner--zero { display: block; max-width: 760px; margin: 8px auto 56px; padding: 40px 48px 32px; text-align: center; }
+.aa-zero-line { margin: 0 0 24px; font-size: 14px; color: var(--aa-ink-2); }
+.aa-banner--zero .aa-mark { justify-content: center; }
+.aa-banner--zero .aa-banner-title { margin: 0 0 10px; font-size: clamp(28px, 3vw, 40px); letter-spacing: -.015em; }
+.aa-banner--zero .aa-banner-text { max-width: 52ch; margin: 0 auto 24px; text-wrap: balance; }
+.aa-banner--zero .aa-banner-form { max-width: 560px; margin: 0 auto; }
+.aa-zero-classic { margin-top: 18px; border: 0; background: none; cursor: pointer; font: 13px archivo, medium-fallback, arial, sans-serif;
+  color: var(--aa-ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.aa-zero-classic:hover { color: var(--aa-ink); }
+/* production gives every button in its empty state a magnifier */
+.aa-banner--zero button::before, .aa-banner--zero button::after { content: none !important; display: none !important; }
+.aa-banner--zero button { background-image: none !important; }
+.aa-banner--zero .aa-btn { background-color: var(--aa-ink) !important; }
 .aa-classic-label { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--aa-ink-2); }
 
 /* 3.2 tile inside the results grid ------------------------------------------- */
@@ -175,6 +199,7 @@ html.aa-window-open { overflow: hidden; }
   .aa-banner { grid-template-columns: 1fr; padding: 22px 18px; margin: 0 0 20px; }
   .aa-banner-title { font-size: 22px; }
   .aa-banner-form { flex-direction: column; }
+  .aa-banner--zero { padding: 28px 18px 24px; margin-bottom: 40px; }
   .aa-finder { padding: 32px 16px 28px; }
   .aa-finder-title { font-size: 26px; }
   .aa-finder-form { flex-direction: column; }

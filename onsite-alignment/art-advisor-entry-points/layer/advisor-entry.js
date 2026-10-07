@@ -72,6 +72,10 @@
       bannerText: 'Er versteht Räume, Stimmungen und Anlässe, und er kennt alle Editionen.',
       bannerInput: 'Deine Frage an den Art Advisor',
       bannerButton: 'Art Advisor fragen',
+      zeroLine: q => `Keine Edition passt zu ${quoted(q.replace(/ (\S+)$/, '\u00a0$1'))}.`,
+      zeroTitle: 'Lass den Art Advisor suchen',
+      zeroText: 'Beschreib deinen Raum, eine Stimmung oder einen Anlass. Der Art\u00a0Advisor kennt alle Editionen und schlägt die passenden\u00a0vor.',
+      zeroClassic: 'Oder starte eine neue Suche',
       classicLabel: 'Treffer der klassischen Suche',
       tileTitle: n => `${n.toLocaleString('de-DE')} Editionen sind viel.`,
       tileText: q => `Erzähl dem Art Advisor von deinem Raum, und er grenzt ${q} für dich ein.`,
@@ -105,6 +109,10 @@
       bannerText: 'It understands rooms, moods and occasions, and it knows every edition.',
       bannerInput: 'Your question for the Art Advisor',
       bannerButton: 'Ask the Art Advisor',
+      zeroLine: q => `No editions match ${quoted(q.replace(/ (\S+)$/, '\u00a0$1'))}.`,
+      zeroTitle: 'Let the Art Advisor find it',
+      zeroText: 'Describe your room, a mood or an occasion. The Art\u00a0Advisor knows every edition and suggests the ones that\u00a0fit.',
+      zeroClassic: 'Or start a new search',
       classicLabel: 'Results from the classic search',
       tileTitle: n => `${n.toLocaleString('en-GB')} editions is a lot.`,
       tileText: q => `Tell the Art Advisor about your room and it will narrow down ${q} for you.`,
@@ -433,6 +441,8 @@
     lastPlaced = false;
     decorating = true;
     document.querySelectorAll('.aa-banner, .aa-tile, .aa-classic-label, .aa-listbar').forEach(n => n.remove());
+    document.querySelectorAll('.aa-zero-hidden').forEach(n => n.classList.remove('aa-hidden', 'aa-zero-hidden'));
+    unstickListbar();
     decorating = false;
     if (!q) return;
     const result = isSearchPage ? classify(q, await suggest(q), hits) : { cls: 'B', signals: ['category page', hits + ' hits'] };
@@ -441,8 +451,41 @@
     const filtersAttr = esc(JSON.stringify(filters));
     const page = parseInt(new URLSearchParams(PAGE.search).get('page') || '1', 10);
 
+    // 0 hits: the Art Advisor takes the place of production's "sorry" line and "Start a new search"
+    // field, with the classic search one click away; production's "How to find" block stays below
+    const zero = document.querySelector('.no-result-search');
+    const zeroForm = zero?.querySelector(':scope > form');
+    if (on.banner && isSearchPage && hits === 0 && zeroForm) {
+      const block = el(`<section class="aa-banner aa-banner--zero" data-aa-query="${esc(q)}" data-aa-filters="${filtersAttr}" data-aa-key="${esc(key)}">
+        <p class="aa-zero-line">${COPY.zeroLine(q)}</p>
+        ${mark()}
+        <h2 class="aa-banner-title">${COPY.zeroTitle}</h2>
+        <p class="aa-banner-text">${COPY.zeroText}</p>
+        <form class="aa-banner-form">
+          <input class="aa-banner-input" name="q" value="${esc(q)}" aria-label="${COPY.bannerInput}">
+          <button class="aa-btn" type="submit">${COPY.bannerButton}</button>
+        </form>
+        <button class="aa-link aa-zero-classic" type="button">${COPY.zeroClassic}</button>
+      </section>`);
+      const classic = [...zeroForm.children].slice(0, 2);   // the "0 hits" line and the new-search field
+      classic.forEach(n => n.classList.add('aa-hidden', 'aa-zero-hidden'));
+      block.querySelector('form').addEventListener('submit', e => {
+        e.preventDefault();
+        goToAdvisor(block.querySelector('input').value.trim() || q, 'banner-zero', filters);
+      });
+      block.querySelector('.aa-zero-classic').addEventListener('click', e => {
+        classic.forEach(n => n.classList.remove('aa-hidden'));
+        e.currentTarget.remove();
+        zeroForm.querySelector('input[type=search], input[name=q], input')?.focus();
+        track('advisor_finder_switch', { to: 'classic', placement: 'banner-zero' });
+      });
+      zero.insertBefore(block, zeroForm);
+      lastPlaced = true;
+      trackView('banner-zero', result.cls);
+      return;
+    }
+
     if (on.banner && isSearchPage && (result.cls === 'C' || hits <= 3)) {
-      const zero = document.querySelector('.no-result-search');
       const banner = el(`<section class="aa-banner" data-aa-query="${esc(q)}" data-aa-filters="${filtersAttr}" data-aa-key="${esc(key)}">
         <div class="aa-banner-copy">
           ${mark()}
@@ -477,7 +520,7 @@
         <span class="aa-row-text">${filters.length ? COPY.listBarFiltered(hits) : COPY.listBar}</span>
         <span class="aa-row-cta">${COPY.emptyCta}</span></a>`);
       const anchor = document.querySelector('.catalog-wrapper');
-      if (anchor) { anchor.parentElement.insertBefore(bar, anchor); lastPlaced = true; trackView('listing-bar', result.cls); }
+      if (anchor) { anchor.parentElement.insertBefore(bar, anchor); stickListbar(bar); lastPlaced = true; trackView('listing-bar', result.cls); }
     }
 
     if (on.tile && result.cls === 'B' && hits >= 12 && page === 1 && ss.get('aa:tile-dismissed') !== '1') {
@@ -664,6 +707,54 @@
     document.querySelector('.aa-pill')?.remove();
     returnPill();
   });
+
+  // ---- 3.8 sticky --------------------------------------------------------------------
+  // The listing bar stays on screen while the visitor scrolls the results. It sticks where production's
+  // filter toolbar would (under the sticky header on desktop, the top of the screen on phones), and the
+  // toolbar and the filter sidebar move down by its height. Production positions both from
+  // --top-offset on desktop, so the wrapper gets that variable raised; the phone toolbar sits at 0.
+  let listbarSync = null;
+  function stickListbar(bar) {
+    const wrap = bar.parentElement;
+    // whether it is stuck, from a marker just above it (its own height changes when it compacts)
+    const marker = el('<div class="aa-listbar-marker" aria-hidden="true"></div>');
+    wrap.insertBefore(marker, bar);
+    let line = 0;
+    const stuck = () => bar.classList.toggle('aa-listbar--stuck', marker.getBoundingClientRect().bottom < line);
+    // production's own stick line, read with this layer's offsets lifted (synchronously, so never painted)
+    const place = () => {
+      if (!bar.isConnected) return;
+      wrap.classList.remove('aa-has-listbar');
+      wrap.style.removeProperty('--top-offset');
+      const toolbar = wrap.querySelector('.filters-toolbar');
+      line = toolbar ? parseFloat(getComputedStyle(toolbar).top) || 0 : 0;
+      const viaVariable = line > 0;   // desktop: production's --top-offset; phones: a plain 0
+      wrap.classList.add('aa-has-listbar');
+      wrap.style.setProperty('--aa-listbar-top', line + 'px');
+      wrap.style.setProperty('--aa-listbar-h', bar.offsetHeight + 'px');
+      if (viaVariable) wrap.style.setProperty('--top-offset', line + bar.offsetHeight + 'px');
+      stuck();
+    };
+    const resize = new ResizeObserver(place);
+    resize.observe(bar);
+    const header = document.querySelector('site-header');
+    if (header) resize.observe(header);
+    addEventListener('scroll', stuck, { passive: true });
+    addEventListener('resize', place);
+    listbarSync = { wrap, marker, resize, place, stuck };
+    place();
+  }
+  function unstickListbar() {
+    if (!listbarSync) return;
+    const { wrap, marker, resize, place, stuck } = listbarSync;
+    resize.disconnect();
+    removeEventListener('scroll', stuck);
+    removeEventListener('resize', place);
+    marker.remove();
+    wrap.classList.remove('aa-has-listbar');
+    ['--top-offset', '--aa-listbar-top', '--aa-listbar-h'].forEach(v => wrap.style.removeProperty(v));
+    listbarSync = null;
+  }
 
   // ---- 3.9 side tab ---------------------------------------------------------------------
   // Not in the concept (added on request, after Westwing): a small sticky square on the right edge of
