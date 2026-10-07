@@ -1071,9 +1071,13 @@ html{font-size:62.5%}
       <div class="mb-5" id="galleries">
         <div class="row flex flex-wrap">
           <div class="col-md-5 col-xs-12 mb-3">
-            <lm-tabs>
-              <div class="tabs">
-              <div class="tab-slide" id="meet-in-person" data-label="Meet in person">
+            <section class="tab-slider">
+              <div class="tab-content">
+              <div class="tab-pane active" id="meet-in-person" role="tabpanel" aria-label="Meet in person">
+                <ul class="nav nav-tabs flex-gap-1 mb-2" role="tablist" aria-label="How would you like to meet?">
+                  <li class="nav-item flex-1" role="presentation"><button type="button" class="btn width-full" role="tab" data-target-panel="#meet-in-person" aria-selected="true">Meet in person</button></li>
+                  <li class="nav-item flex-1" role="presentation"><button type="button" class="btn btn-secondary width-full" role="tab" data-target-panel="#video-call" aria-selected="false">Video call</button></li>
+                </ul>
                 <p class="mt-2 mb-1 text-wrap-pretty">Sit with the works at full scale, frames and samples in&nbsp;hand.</p>
                 <p class="headline-block color-secondary mt-2 mb-1">North</p>
                 <hr class="m-0">
@@ -1202,7 +1206,11 @@ html{font-size:62.5%}
                 </details>
                 <hr class="m-0">
               </div>
-              <div class="tab-slide" id="video-call" data-label="Video call">
+              <div class="tab-pane" id="video-call" role="tabpanel" aria-label="Video call">
+                <ul class="nav nav-tabs flex-gap-1 mb-2" role="tablist" aria-label="How would you like to meet?">
+                  <li class="nav-item flex-1" role="presentation"><button type="button" class="btn btn-secondary width-full" role="tab" data-target-panel="#meet-in-person" aria-selected="false">Meet in person</button></li>
+                  <li class="nav-item flex-1" role="presentation"><button type="button" class="btn width-full" role="tab" data-target-panel="#video-call" aria-selected="true">Video call</button></li>
+                </ul>
                 <p class="mt-2 mb-1 text-wrap-pretty">The same consultants, from wherever you are. Visit them later if you would like&nbsp;to.</p>
                 <p class="headline-block color-secondary mt-2 mb-1">North</p>
                 <hr class="m-0">
@@ -1332,7 +1340,7 @@ html{font-size:62.5%}
                 <hr class="m-0">
               </div>
               </div>
-            </lm-tabs>
+            </section>
           </div>
           <div class="col-md-7 hidden-xs hidden-sm mb-3">
             <picture>
@@ -1544,6 +1552,19 @@ document.querySelectorAll('.block-tiles[data-overflow="slider"]').forEach(functi
 </script>
 <script src="https://cdn.lumas.de/assets/white/runtime.js?v=6d1756f2dc0316b4bce1d5dd286b0946668ffbb2"></script>
 <script src="https://cdn.lumas.de/assets/white/compare-images.js?v=6d1756f2dc0316b4bce1d5dd286b0946668ffbb2"></script>
+<!-- PREVIEW-NAV-TABS -->
+<script>const activateTab = e => {
+  const navTabs = e.target.parentNode.parentNode;
+  const oldSelectedNavTab = navTabs.querySelector('.nav-item [aria-selected="true"]');
+  const targetPanel = document.querySelector(e.target.dataset.targetPanel);
+  oldSelectedNavTab.setAttribute('aria-selected', 'false');
+  e.target.setAttribute('aria-selected', 'true');
+  targetPanel.parentNode.querySelector('.active').classList.remove('active');
+  targetPanel.classList.add('active');
+};
+document.querySelectorAll('.nav-tabs:not([data-no-js]) .nav-item').forEach(navItem => {
+  navItem.addEventListener('click', activateTab);
+});</script>
 <!-- LUMAS-NAV-KIT:JS:BEGIN -->
 <script>
 /* ===========================================================================
