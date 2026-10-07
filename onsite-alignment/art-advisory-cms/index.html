@@ -1071,11 +1071,9 @@ html{font-size:62.5%}
       <div class="mb-5" id="galleries">
         <div class="row flex flex-wrap">
           <div class="col-md-5 col-xs-12 mb-3">
-            <div class="flex flex-gap-1 mb-2" role="group" aria-label="How would you like to meet?">
-              <a href="#meet-in-person" class="btn flex-1 text-center" data-advisory-mode="person" aria-pressed="true">Meet in person</a>
-              <a href="#video-call" class="btn btn-secondary flex-1 text-center" data-advisory-mode="video" aria-pressed="false">Video call</a>
-            </div>
-              <div id="meet-in-person" data-advisory-panel="person">
+            <lm-tabs>
+              <div class="tabs">
+              <div class="tab-slide" id="meet-in-person" data-label="Meet in person">
                 <p class="mt-2 mb-1 text-wrap-pretty">Sit with the works at full scale, frames and samples in&nbsp;hand.</p>
                 <p class="headline-block color-secondary mt-2 mb-1">North</p>
                 <hr class="m-0">
@@ -1204,7 +1202,7 @@ html{font-size:62.5%}
                 </details>
                 <hr class="m-0">
               </div>
-              <div id="video-call" data-advisory-panel="video">
+              <div class="tab-slide" id="video-call" data-label="Video call">
                 <p class="mt-2 mb-1 text-wrap-pretty">The same consultants, from wherever you are. Visit them later if you would like&nbsp;to.</p>
                 <p class="headline-block color-secondary mt-2 mb-1">North</p>
                 <hr class="m-0">
@@ -1333,116 +1331,17 @@ html{font-size:62.5%}
                 </details>
                 <hr class="m-0">
               </div>
+              </div>
+            </lm-tabs>
           </div>
-          <div class="col-md-7 hidden-xs hidden-sm flex mb-3">
-            <div id="advisory-map" class="flex-1 border" role="region" aria-label="Map of the LUMAS galleries in Germany"></div>
+          <div class="col-md-7 hidden-xs hidden-sm mb-3">
+            <picture>
+              <source type="image/webp" srcset="assets/lp/art-advisory/galerien-karte-660x880.webp">
+              <img property="schema:image" class="max-w-full width-full height-auto border" src="assets/lp/art-advisory/galerien-karte-660x880.jpg" alt="Map of Germany with the twelve LUMAS galleries: Hamburg, Hannover, two in Berlin, Dortmund, Düsseldorf, Cologne, Frankfurt, Frankfurt Airport, Mannheim, Stuttgart and Munich" title="LUMAS galleries in Germany" width="660" height="880">
+            </picture>
           </div>
         </div>
       </div>
-
-<script>
-  var advisoryVideo = 'https://bookings.cloud.microsoft/book/lumasgaleriehamburg@lumas.com/';
-  var advisoryGalleries = [
-    ['Berlin, Kurfürstendamm', '201201', 'berlin-kurfuerstendamm', 'Fasanenstraße 73, 10719 Berlin', 'Mon–Fri 11:00–19:00 · Sat 10:00–19:00', 52.502301, 13.32759],
-    ['Berlin, Mitte', '201101', 'berlin-mitte', 'Rosenthaler Straße 40/41, Hackesche Höfe, Hof II, 10178 Berlin', 'Mon–Sat 11:00–19:00 · Sun 13:00–18:00', 52.524019, 13.402248],
-    ['Hamburg', '203901', 'hamburg', 'Große Bleichen 31, 20354 Hamburg', 'Mon–Sat 10:00–19:00', 53.552406, 9.988411],
-    ['Hannover', '202901', 'hannover', 'Luisenstraße 10-11, 30159 Hannover', 'Mon–Fri 10:00–19:00 · Sat 10:00–18:00', 52.374874, 9.740481],
-    ['Cologne', '201501', 'koeln', 'Mittelstraße 15, 50672 Köln', 'Mon–Sat 10:00–19:00', 50.93683, 6.942798],
-    ['Dortmund', '204001', 'dortmund', 'Schwarze-Brüder-Straße 1, 44137 Dortmund', 'Mon–Sat 10:00–18:00', 51.513972, 7.463379],
-    ['Düsseldorf', '201801', 'duesseldorf', 'Grünstraße 8, 40212 Düsseldorf', 'Mon–Sat 10:00–18:00', 51.221708, 6.780144],
-    ['Frankfurt', '201401', 'frankfurt', 'Kaiserstraße 13, 60311 Frankfurt am Main', 'Mon–Fri 10:30–19:00 · Sat 10:00–19:00', 50.111029, 8.676114],
-    ['Frankfurt Airport', null, 'fraport', 'Terminal 3, Non-Schengen Marktplatz, 60549 Frankfurt am Main', 'Daily 06:00–21:30', 50.035316, 8.573204],
-    ['Mannheim', '203601', 'mannheim', 'N6 3-7, Kunststraße, 68161 Mannheim', 'Mon–Sat 11:00–18:30', 49.484852, 8.47007],
-    ['Munich', '201601', 'muenchen', 'Brienner Straße 3, 80333 München', 'Mon–Sat 10:00–19:00', 48.142805, 11.576651],
-    ['Stuttgart', '201701', 'stuttgart', 'Lange Straße 3, 70173 Stuttgart', 'Mon–Fri 11:00–19:00 · Sat 10:00–19:00', 48.775514, 9.17468]
-  ];
-  var advisoryMode = 'person';
-  var advisoryInfoWindow = null;
-  function setAdvisoryMode(mode) {
-    advisoryMode = mode;
-    document.querySelectorAll('[data-advisory-mode]').forEach(function (b) {
-      var on = b.getAttribute('data-advisory-mode') === mode;
-      b.classList.toggle('btn-secondary', !on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
-    document.querySelectorAll('[data-advisory-panel]').forEach(function (panel) {
-      panel.hidden = panel.getAttribute('data-advisory-panel') !== mode;
-    });
-    if (advisoryInfoWindow) advisoryInfoWindow.close();
-  }
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-advisory-mode]');
-    if (!b) return;
-    e.preventDefault();
-    setAdvisoryMode(b.getAttribute('data-advisory-mode'));
-  });
-  setAdvisoryMode('person');
-  function advisoryInfo(g) {
-    var lang = 'https://www.lumas.de';
-    var person = g[1]
-      ? '<a href="' + lang + '/booking/galerie/' + g[1] + '/">Meet in person →</a>'
-      : '<a href="' + lang + '/galerien/' + g[2] + '/">Contact the gallery →</a>';
-    return '<div class="googlemaps"><p class="font-medium mb-1">' + g[0] + '</p>' +
-      '<p class="color-secondary mb-1">' + g[3] + '</p>' +
-      '<p class="mb-1">' + g[4] + '</p>' +
-      '<p class="mb-1">' + (advisoryMode === 'video' ? '<a href="' + advisoryVideo + '">Book a video call →</a>' : person) + '</p>' +
-      '<p class="mb-0"><a href="https://www.google.com/maps/dir/?api=1&destination=' + g[5] + ',' + g[6] + '" target="_blank" rel="noopener">Directions</a></p></div>';
-  }
-  function initAdvisoryMap() {
-    var el = document.getElementById('advisory-map');
-    if (!el) return;
-    var map = new google.maps.Map(el, {
-      disableDefaultUI: true,
-      zoomControl: true,
-      gestureHandling: 'cooperative',
-      styles: [
-        { elementType: 'geometry', stylers: [{ color: '#F7F1E9' }] },
-        { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
-        { elementType: 'labels.text.fill', stylers: [{ color: '#5A5752' }] },
-        { elementType: 'labels.text.stroke', stylers: [{ color: '#F7F1E9' }] },
-        { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#908C87' }] },
-        { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ color: '#E2D8CC' }] },
-        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#FFFFFF' }] },
-        { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#EAE2D8' }] },
-        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#E2D8CC' }] }
-      ]
-    });
-    var bounds = new google.maps.LatLngBounds();
-    var info = advisoryInfoWindow = new google.maps.InfoWindow();
-    advisoryGalleries.forEach(function (g) {
-      var pos = new google.maps.LatLng(g[5], g[6]);
-      bounds.extend(pos);
-      var marker = new google.maps.Marker({
-        position: pos,
-        map: map,
-        title: g[0],
-        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: '#1C1A18', fillOpacity: 1, strokeColor: '#F7F1E9', strokeWeight: 2 }
-      });
-      marker.addListener('click', function () { info.setContent(advisoryInfo(g)); info.open(map, marker); });
-    });
-    map.fitBounds(bounds, 40);
-    var userMoved = false;
-    map.addListener('dragstart', function () { userMoved = true; });
-    if (window.ResizeObserver) {
-      new ResizeObserver(function () { if (!userMoved) map.fitBounds(bounds, 40); }).observe(el);
-    }
-  }
-</script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
-<style>#advisory-map .leaflet-tile-pane{filter:grayscale(1) sepia(.22) brightness(1.06) contrast(.88)}#advisory-map{background:#F7F1E9}
-.preview-standin{position:absolute;left:8px;bottom:8px;z-index:500;background:#1C1A18;color:#F7F1E9;font:11px/1.4 sans-serif;padding:4px 8px}
-#advisory-map .leaflet-popup-content-wrapper{border-radius:0}</style>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>(function(){var el=document.getElementById('advisory-map');if(!el)return;
-var map=L.map(el,{scrollWheelZoom:false,attributionControl:true});
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18}).addTo(map);
-var b=[];advisoryGalleries.forEach(function(g){b.push([g[5],g[6]]);
-L.circleMarker([g[5],g[6]],{radius:7,color:'#F7F1E9',weight:2,fillColor:'#1C1A18',fillOpacity:1}).addTo(map).bindPopup(advisoryInfo(g)).bindTooltip(g[0]);});
-map.fitBounds(b,{padding:[40,40]});var moved=false;map.on('dragstart',function(){moved=true});new ResizeObserver(function(){map.invalidateSize();if(!moved)map.fitBounds(b,{padding:[40,40]})}).observe(el);
-var t=document.createElement('div');t.className='preview-standin';t.textContent='Preview stand-in. Live page: Google Map, V2 styling';el.appendChild(t);})();</script>
 
       <div class="row mb-3">
         <div class="col-lg-5 col-md-10">
