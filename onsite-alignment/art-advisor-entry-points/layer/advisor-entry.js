@@ -35,6 +35,7 @@
     ['pdp', '3.6', 'Product page link'],
     ['pill', '3.7', 'Back-to-consultation pill'],
     ['listbar', '3.8', 'Listing top bar (every listing page)'],
+    ['sidetab', '3.9', 'Side tab (every page)'],
   ];
 
   const ls = {
@@ -81,6 +82,7 @@
       start: 'Art Advisor fragen',
       hide: 'Ausblenden',
       endConsult: 'Beratung schließen',
+      sideTab: 'Art Advisor fragen',
       navText: 'Beschreib deinen Raum oder Anlass, wir finden gemeinsam dein Werk',
       finderTitle: 'Finde deine Edition',
       finderSub: 'Beschreib deinen Raum, deinen Anlass oder deine Stimmung.',
@@ -113,6 +115,7 @@
       start: 'Ask the Art Advisor',
       hide: 'Hide',
       endConsult: 'Close consultation',
+      sideTab: 'Ask the Art Advisor',
       navText: 'Describe your room or occasion and we find your work together',
       finderTitle: 'Find your edition',
       finderSub: 'Describe your room, your occasion or your mood.',
@@ -662,64 +665,141 @@
     returnPill();
   });
 
+  // ---- 3.9 side tab ---------------------------------------------------------------------
+  // Not in the concept (added on request, after Westwing): a small sticky square on the right edge of
+  // every page that opens the advisor without a question. It steps aside while the window is open and
+  // while the dock (3.7) is showing, so there is only ever one way back into a running consultation.
+  function sideTab() {
+    if (!on.sidetab || document.querySelector('.aa-sidetab')) return;
+    const tab = el(`<button class="aa-sidetab" type="button" aria-label="${COPY.sideTab}">
+      <span class="aa-sidetab-label" aria-hidden="true">${COPY.sideTab}</span>
+      <span class="aa-sidetab-icon" aria-hidden="true">${ICON_SPARKLE}</span>
+    </button>`);
+    tab.addEventListener('click', () => goToAdvisor('', 'side-tab'));
+    document.body.append(tab);
+    const sync = () => {
+      const dock = document.querySelector('.aa-pill');
+      tab.classList.toggle('aa-sidetab--away', !!(advisorWindow?.open || (dock && !dock.classList.contains('aa-pill--away'))));
+    };
+    // it never covers a small control of the page (a carousel arrow, a button): it moves up or down
+    // to the nearest free spot beside it, and tucks away only when there is none; large links such
+    // as whole product cards and full-width rows do not count
+    const PHONE = matchMedia('(max-width: 759px)');
+    const CONTROL = 'a, button, input, select, textarea, label, summary, [role=button], [tabindex]:not([tabindex="-1"])';
+    const GAP = 8;   // keep this much clear around a control
+    const blocked = shift => {
+      // measured where it would rest, not where it is: a tucked tab is off screen, a hovered one wider
+      const size = tab.querySelector('.aa-sidetab-icon').offsetWidth;
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight - (document.querySelector('.aa-bar-main')?.offsetHeight || 0);   // above the presenter bar
+      const top = (PHONE.matches ? vh - 16 - size : (vh - size) / 2) + shift;
+      if (top < 80 || top + size > vh - 16) return true;
+      const xs = [vw - size - GAP, vw - size / 2, vw - 2], ys = [top - GAP, top + size / 2, top + size + GAP];
+      return xs.some(x => ys.some(y => document.elementsFromPoint(x, y).some(node => {
+        if (tab.contains(node) || node.closest('.aa-panel')) return false;
+        const control = node.closest(CONTROL);
+        if (!control) return false;
+        const box = control.getBoundingClientRect();
+        // full-width rows (footer links, list items) only lose their empty far end
+        return box.width * box.height < 160 * 160 && box.width < vw / 2;
+      })));
+    };
+    // rest first, then the nearest spots (phones only move up from the corner)
+    const SHIFTS = [0, 64, -64, 128, -128, 192, -192];
+    let pending = false;
+    const checkCollision = () => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        if (tab.classList.contains('aa-sidetab--away')) return;
+        const free = SHIFTS.filter(d => !PHONE.matches || d <= 0).find(d => !blocked(d));
+        tab.classList.toggle('aa-sidetab--tucked', free === undefined);
+        if (free !== undefined) tab.style.setProperty('--aa-tab-shift', free + 'px');
+      });
+    };
+    addEventListener('scroll', checkCollision, { passive: true });
+    addEventListener('resize', checkCollision);
+    setInterval(checkCollision, 700);   // carousels move without scrolling
+    new MutationObserver(sync).observe(document.body, { childList: true, subtree: false, attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    sync();
+    checkCollision();
+    trackView('side-tab', 'n/a');
+  }
+
   // ---- presenter panel ----------------------------------------------------------------
   // Lucide "sparkles" at the site's 1.5px line weight, marking the Art Advisor bar and row
   const ICON_SPARKLE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>';
-  const DEMOS = {
+  // the walk-through: [number label, short label, entry points it shows, shop path]
+  const DEMO_SETS = {
     en: [
-      ['Homepage (3.4, 3.5)', '/en/'],
-      ['Search: dratwa (class A)', '/en/search/?q=dratwa'],
-      ['Search: blue abstract (B, 3.2)', '/en/search/?q=blue+abstract'],
-      ['Search: gift … (C, 3.3)', '/en/search/?q=gift+for+my+mother%2C+she+loves+nature'],
-      ['Search: 0 hits (3.3)', '/en/search/?q=what+goes+with+a+beige+wall'],
-      ['Category with filters → advisor (3.2, 3.8)', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
-      ['Search with filters → advisor (3.2, 3.8)', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
-      ['Product page (3.6)', '/en/pictures/luc_dratwa/mountain_view/'],
+      ['Homepage', '3.4 · 3.5 · 3.9', '/en/'],
+      ['dratwa', 'search, class A', '/en/search/?q=dratwa'],
+      ['blue abstract', 'search, class B · 3.2', '/en/search/?q=blue+abstract'],
+      ['Gift …', 'search, class C · 3.3', '/en/search/?q=gift+for+my+mother%2C+she+loves+nature'],
+      ['0 hits', 'search, rescue · 3.3', '/en/search/?q=what+goes+with+a+beige+wall'],
+      ['Category + filters', '3.2 · 3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
+      ['Search + filters', '3.2 · 3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
+      ['Product page', '3.6', '/en/pictures/luc_dratwa/mountain_view/'],
     ],
     de: [
-      ['Homepage (3.4, 3.5)', '/'],
-      ['Search: dratwa (class A)', '/search/?q=dratwa'],
-      ['Search: blau abstrakt (B, 3.2)', '/search/?q=blau+abstrakt'],
-      ['Search: Geschenk … (C, 3.3)', '/search/?q=geschenk+f%C3%BCr+meine+mutter%2C+sie+mag+natur'],
-      ['Search: 0 hits (3.3)', '/search/?q=was+passt+zu+einer+beigen+wand'],
-      ['Category with filters → advisor (3.2, 3.8)', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
-      ['Search with filters → advisor (3.2, 3.8)', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
-      ['Product page (3.6)', '/pictures/luc_dratwa/mountain_view/'],
+      ['Homepage', '3.4 · 3.5 · 3.9', '/'],
+      ['dratwa', 'search, class A', '/search/?q=dratwa'],
+      ['blau abstrakt', 'search, class B · 3.2', '/search/?q=blau+abstrakt'],
+      ['Geschenk …', 'search, class C · 3.3', '/search/?q=geschenk+f%C3%BCr+meine+mutter%2C+sie+mag+natur'],
+      ['0 hits', 'search, rescue · 3.3', '/search/?q=was+passt+zu+einer+beigen+wand'],
+      ['Category + filters', '3.2 · 3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
+      ['Search + filters', '3.2 · 3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
+      ['Product page', '3.6', '/pictures/luc_dratwa/mountain_view/'],
     ],
-  }[LOCALE];
+  };
+  const DEMOS = DEMO_SETS[LOCALE];
+  const ICON_SLIDERS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>';
+  // one shop address, whatever the parameter order
+  const pageId = (path, search = '') => {
+    const params = [...new URLSearchParams(search)].filter(([k]) => k !== 'from').sort((x, y) => (x[0] + x[1] < y[0] + y[1] ? -1 : 1));
+    return path + '?' + new URLSearchParams(params);
+  };
   let panel = null;
+  // presenter bar along the bottom of every page (prototype chrome, not part of the shop)
   function buildPanel() {
-    panel = el(`<aside class="aa-panel" data-open="${ls.get('aa-panel-open', false)}">
-      <button class="aa-panel-toggle" type="button" aria-expanded="false" aria-label="Entry points"><span class="aa-panel-long">Entry points</span><span class="aa-panel-short">EP</span></button>
-      <div class="aa-panel-body">
-        <p class="aa-panel-h">Art Advisor entry points</p>
-        <div class="aa-panel-toggles">${ENTRIES.map(([id, num, label]) => `
-          <label><input type="checkbox" data-aa-toggle="${id}" ${on[id] ? 'checked' : ''}><span class="aa-panel-num">${num}</span> ${esc(label)}</label>`).join('')}
-        </div>
-        <p class="aa-panel-h">Advisor opens as</p>
-        <div class="aa-panel-toggles">
-          <label><input type="radio" name="aa-open" value="window" ${OPEN_MODE === 'window' ? 'checked' : ''}> Window over the shop</label>
-          <label><input type="radio" name="aa-open" value="page" ${OPEN_MODE === 'page' ? 'checked' : ''}> Full page</label>
-        </div>
-        <p class="aa-panel-h">Empty search field (3.1)</p>
-        <div class="aa-panel-toggles">
-          <label><input type="radio" name="aa-empty" value="bar" ${EMPTY_VARIANT === 'bar' ? 'checked' : ''}> Bar above the tiles</label>
-          <label><input type="radio" name="aa-empty" value="tile" ${EMPTY_VARIANT === 'tile' ? 'checked' : ''}> Tile in "Most wanted"</label>
-        </div>
-        <p class="aa-panel-h">Query class</p>
-        <p class="aa-panel-class" data-aa-class>Type in the search field or open a search.</p>
-        <p class="aa-panel-h">Walk-through</p>
-        <ul class="aa-panel-demos">${DEMOS.map(([label, href]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}
-          <li><a href="${PAGE.pathname + (PAGE.search ? PAGE.search + '&' : '?')}pristine">This page without the layer</a></li>
-          <li><a href="${LOCALE === 'en' ? (PAGE.pathname.replace(/^\/en/, '') || '/') : '/en' + PAGE.pathname}${PAGE.search}">${LOCALE === 'en' ? 'Same page in German' : 'Same page in English'}</a></li></ul>
-        <p class="aa-panel-h">Events <button type="button" class="aa-panel-clear">clear</button></p>
-        <ol class="aa-panel-events" data-aa-events></ol>
+    const here = pageId(PAGE.pathname, PAGE.search);
+    const step = DEMOS.findIndex(([, , href]) => pageId(...href.split(/(?=\?)/)) === here);
+    // a walk-through page switches to its counterpart (category slugs and search words differ by
+    // language); any other page just gains or loses /en
+    const other = step >= 0 ? DEMO_SETS[LOCALE === 'en' ? 'de' : 'en'][step][2]
+      : (LOCALE === 'en' ? (PAGE.pathname.replace(/^\/en/, '') || '/') : '/en' + PAGE.pathname) + PAGE.search;
+    const langs = LOCALE === 'en' ? [['EN', '#', true], ['DE', other, false]] : [['EN', other, false], ['DE', '#', true]];
+    const chip = (attrs, label) => `<label class="aa-bar-chip"><input ${attrs}><span>${label}</span></label>`;
+    panel = el(`<aside class="aa-panel" role="region" aria-label="Prototype controls">
+      <div class="aa-panel-body" id="aa-panel-body" hidden>
+        <section><p class="aa-panel-h">Entry points</p>
+          <div class="aa-bar-chips">${ENTRIES.map(([id, num, label]) => chip(`type="checkbox" data-aa-toggle="${id}" ${on[id] ? 'checked' : ''}`, `<b>${num}</b> ${esc(label)}`)).join('')}</div></section>
+        <section><p class="aa-panel-h">Advisor opens as</p>
+          <div class="aa-bar-chips">${chip(`type="radio" name="aa-open" value="window" ${OPEN_MODE === 'window' ? 'checked' : ''}`, 'Window over the shop')}${chip(`type="radio" name="aa-open" value="page" ${OPEN_MODE === 'page' ? 'checked' : ''}`, 'Full page')}</div>
+          <p class="aa-panel-h">Empty search field (3.1)</p>
+          <div class="aa-bar-chips">${chip(`type="radio" name="aa-empty" value="bar" ${EMPTY_VARIANT === 'bar' ? 'checked' : ''}`, 'Bar above the tiles')}${chip(`type="radio" name="aa-empty" value="tile" ${EMPTY_VARIANT === 'tile' ? 'checked' : ''}`, 'Tile in “Most wanted”')}</div>
+          <p class="aa-panel-h"><a class="aa-bar-link" href="${PAGE.pathname + (PAGE.search ? PAGE.search + '&' : '?')}pristine">This page without the layer →</a></p></section>
+        <section><p class="aa-panel-h">Query class</p>
+          <p class="aa-panel-class" data-aa-class>Type in the search field or open a search.</p></section>
+        <section><p class="aa-panel-h">Events <button type="button" class="aa-panel-clear">clear</button></p>
+          <ol class="aa-panel-events" data-aa-events></ol></section>
+      </div>
+      <div class="aa-bar-main">
+        <span class="aa-bar-title">Art Advisor</span>
+        <nav class="aa-bar-pages" aria-label="Walk-through">${DEMOS.map(([label, shows, href], i) =>
+          `<a href="${href}" title="${esc(label + ': ' + shows)}" ${i === step ? 'aria-current="page"' : ''}><b>${i + 1}</b><span>${esc(label)}</span></a>`).join('')}</nav>
+        <button type="button" class="aa-panel-toggle" aria-expanded="false" aria-controls="aa-panel-body">${ICON_SLIDERS}<span>Entry points</span></button>
+        <div class="aa-bar-lang" role="group" aria-label="Shop language">${langs.map(([l, href, current]) => `<a href="${href}" ${current ? 'aria-current="true"' : ''}>${l}</a>`).join('')}</div>
       </div>
     </aside>`);
     const toggle = panel.querySelector('.aa-panel-toggle');
-    const setOpen = open => { panel.dataset.open = String(open); toggle.setAttribute('aria-expanded', String(open)); ls.set('aa-panel-open', open); };
+    const body = panel.querySelector('.aa-panel-body');
+    const setOpen = open => { body.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); ls.set('aa-panel-open', open); };
     setOpen(ls.get('aa-panel-open', false));
-    toggle.addEventListener('click', () => setOpen(panel.dataset.open !== 'true'));
+    toggle.addEventListener('click', () => setOpen(body.hidden));
+    panel.querySelector('.aa-bar-lang [aria-current]').addEventListener('click', e => e.preventDefault());
     panel.querySelectorAll('[data-aa-toggle]').forEach(cb => cb.addEventListener('change', () => {
       on[cb.dataset.aaToggle] = cb.checked;
       ls.set(STORE, on);
@@ -728,7 +808,9 @@
     panel.querySelectorAll('input[name=aa-open]').forEach(r => r.addEventListener('change', () => { ls.set('aa-open-mode', r.value); location.reload(); }));
     panel.querySelectorAll('input[name=aa-empty]').forEach(r => r.addEventListener('change', () => { ls.set('aa-empty-variant', r.value); location.reload(); }));
     panel.querySelector('.aa-panel-clear').addEventListener('click', () => { events.length = 0; ls.set('aa-events', events); renderEventLog(); });
+    document.documentElement.classList.add('aa-has-bar');
     document.body.append(panel);
+    panel.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: 'center', block: 'nearest' });
     renderEventLog();
     renderPanelClass();
   }
@@ -764,6 +846,7 @@
     whenPresent('edition-finder', homepageFinder);
     whenPresent('.pdp-actions .button-container', productPage);
     returnPill();
+    sideTab();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
