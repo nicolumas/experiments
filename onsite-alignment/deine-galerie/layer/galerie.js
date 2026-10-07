@@ -15,32 +15,32 @@
 
   const EN = (document.documentElement.lang || '').startsWith('en') || location.pathname.startsWith('/en/');
   const T = EN ? {
-    gallery: 'Gallery', choose: 'Choose gallery', yourGallery: 'Your gallery', inStock: 'In stock in',
+    gallery: 'Gallery', choose: 'Choose gallery', myGallery: 'My gallery', yourGallery: 'Your gallery', inStock: 'In stock in',
     inStockShort: 'In stock', inN: n => `In stock in ${n} galleries`, otherSize: 'Other size in',
     openToday: h => `Open today ${h}`, closedToday: 'Closed today', toGallery: 'Visit gallery', route: 'Directions',
     ipNote: 'Chosen from your approximate location.', remember: 'Save as my gallery', change: 'Change gallery',
     plz: 'Postcode', search: 'Search', plzBad: 'Please enter a five-digit postcode.', plzUnknown: 'We do not know this postcode.',
     allWith: 'All galleries with this work', alsoIn: 'Also in stock in', otherGallery: 'Choose another gallery',
     near: 'Which gallery is near you?', nearSub: 'We show you which works you can take home the same day.',
-    mineTxt: s => `${s} cm is on hand there. You can see the work in person and take it home the same day.`,
-    mineOtherTxt: (g, s) => `The size you selected is not on hand in ${g}. On hand there: ${s} cm.`,
-    pickSize: s => `Select ${s}`,
-    nearTxt: (g, d) => `Not on hand in ${g} right now.`,
+    mineTxt: s => `${s} cm, on hand. See it in person and take it home the same day.`,
+    mineOtherTxt: 'The size you selected is not on hand here right now.',
+    pickSize: s => `Select ${s} cm`,
+    nearTxt: g => `Not on hand in ${g} right now.`,
     online: d => d ? `Ordered online, it ships in ${d} days.` : 'You can also order it online as usual.',
     countTitle: n => `On hand in ${n} galleries`, countSub: 'Enter your postcode and we show you the nearest.',
     filter: g => `In stock in ${g}`, filterNone: 'In stock at my gallery', takeHome: 'Take home today',
     filterCount: (n, g) => `${n} of these in stock in ${g}`, km: 'km', sizes: 'Sizes'
   } : {
-    gallery: 'Galerie', choose: 'Galerie wählen', yourGallery: 'Deine Galerie', inStock: 'Vorrätig in',
+    gallery: 'Galerie', choose: 'Galerie wählen', myGallery: 'Meine Galerie', yourGallery: 'Deine Galerie', inStock: 'Vorrätig in',
     inStockShort: 'Vorrätig', inN: n => `In ${n} Galerien vorrätig`, otherSize: 'Andere Größe in',
     openToday: h => `Heute geöffnet ${h}`, closedToday: 'Heute geschlossen', toGallery: 'Zur Galerie', route: 'Route planen',
     ipNote: 'Nach deinem ungefähren Standort gewählt.', remember: 'Als meine Galerie merken', change: 'Galerie ändern',
     plz: 'Postleitzahl', search: 'Suchen', plzBad: 'Bitte gib eine fünfstellige Postleitzahl ein.', plzUnknown: 'Diese Postleitzahl kennen wir nicht.',
     allWith: 'Alle Galerien mit diesem Werk', alsoIn: 'Auch vorrätig in', otherGallery: 'Andere Galerie wählen',
     near: 'Welche Galerie ist in deiner Nähe?', nearSub: 'Wir zeigen dir, welche Werke du dort sofort mitnehmen kannst.',
-    mineTxt: s => `${s} cm ist dort vorrätig. Du kannst das Werk im Original ansehen und direkt mitnehmen.`,
-    mineOtherTxt: (g, s) => `Die gewählte Größe ist in ${g} gerade nicht vorrätig. Dort vorrätig: ${s} cm.`,
-    pickSize: s => `${s} wählen`,
+    mineTxt: s => `${s} cm, vorrätig. Du kannst das Werk im Original ansehen und direkt mitnehmen.`,
+    mineOtherTxt: 'Deine gewählte Größe ist hier gerade nicht vorrätig.',
+    pickSize: s => `${s} cm wählen`,
     nearTxt: g => `In ${g} ist das Werk gerade nicht vorrätig.`,
     online: d => d ? `Online bestellt ist es in ${d} Tagen bei dir.` : 'Online kannst du es wie gewohnt bestellen.',
     countTitle: n => `In ${n} Galerien vorrätig`, countSub: 'Mit deiner Postleitzahl zeigen wir dir die nächste.',
@@ -99,9 +99,12 @@
 
   // ---- state ----------------------------------------------------------------------------
   const KEY = 'dg:v1';
-  const DEFAULTS = { mode: 'ip', gal: IP_GUESS, placement: 'top', filter: false };
+  const DEFAULTS = { mode: 'ip', gal: IP_GUESS, placement: 'top', headerStyle: 'label', filter: false };
   // the PLP switch is a filter, not a preference: it starts off on every page load
   const S = Object.assign({}, DEFAULTS, readStore(), { filter: false });
+  // ?header=icon / ?header=label opens straight into a header option (and remembers it)
+  const headerParam = new URLSearchParams(location.search).get('header');
+  if (['label', 'short', 'icon'].includes(headerParam)) { S.headerStyle = headerParam; save(); }
   let STOCK = {};                       // gallery code → Set of size SKUs
   let dist = null;                      // gallery code → km from an entered postcode
   let plzValue = '', plzError = '';
@@ -223,13 +226,34 @@
     const top = g
       ? `${galHead(T.yourGallery, g)}${ipNote()}${galLinks(g)}<hr>`
       : `<div><p class="dg-eb">${T.yourGallery}</p><p class="dg-name">${T.near}</p><div class="dg-meta"><span>${T.nearSub}</span></div></div>`;
-    return `${top}<p class="dg-sub">${g ? T.otherGallery : T.plz}</p>${plzForm()}${galleryList(G.map(x => ({ x })), g)}`;
+    return `${top}<p class="dg-sub">${g ? T.otherGallery : T.plz}</p>${plzForm()}${galleryList(G.filter(x => x !== g).map(x => ({ x })), g)}`;
   }
 
   // ---- 1. header entry point (desktop) -------------------------------------------------
   let headerBtn = null;
+  // Two header options: the labelled entry, or an icon sized and weighted like production's header icons
+  // (same pin geometry as the shop sprite's #pin, stroke matched to #user/#cart at 22px)
+  const HEAD_ICON = '<svg class="dg-head-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-5.54 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>';
+  // label: first item of the icon row; icon: right after WhatsApp, inside production's contact group
+  function placeHeaderBtn() {
+    const aside = document.querySelector('site-header header > aside');
+    const wa = aside && aside.querySelector('.nav-container > whats-app-contact');
+    if (S.headerStyle === 'icon' && wa) {
+      if (wa.nextElementSibling !== headerBtn) wa.after(headerBtn);
+    } else if (aside && aside.firstElementChild !== headerBtn) aside.insertBefore(headerBtn, aside.firstChild);
+  }
   function headerLabel() {
     const g = cur();
+    const name = g ? `${T.gallery} ${g.n}` : T.choose;
+    if (headerBtn) {
+      headerBtn.dataset.style = S.headerStyle;
+      if (S.headerStyle === 'icon') { headerBtn.setAttribute('aria-label', name); headerBtn.title = name; }
+      else { headerBtn.removeAttribute('aria-label'); headerBtn.removeAttribute('title'); }
+    }
+    if (headerBtn) placeHeaderBtn();
+    if (S.headerStyle === 'icon') return HEAD_ICON;
+    // short: just the city once chosen, "Meine Galerie" before
+    if (S.headerStyle === 'short') return `${IC.pin}<span>${g ? `<b>${esc(g.n)}</b>` : T.myGallery}</span>${IC.chev}`;
     return `${IC.pin}<span>${g ? `${T.gallery} <b>${esc(g.n)}</b>` : T.choose}</span>${IC.chev}`;
   }
   function mountHeader() {
@@ -241,8 +265,8 @@
       headerBtn.dataset.dgAlign = 'right';
       headerBtn.setAttribute('aria-haspopup', 'dialog');
       headerBtn.setAttribute('aria-expanded', 'false');
-      headerBtn.innerHTML = headerLabel();
       aside.insertBefore(headerBtn, aside.firstChild);
+      headerBtn.innerHTML = headerLabel();
       headerBtn.addEventListener('click', e => {
         e.stopPropagation();
         if (dialog && dialogAnchor === headerBtn) return closeDialog();
@@ -306,36 +330,34 @@
       x, note: pdp.sizes.filter(s => has(x, s.sku)).map(s => s.label).join(', ')
     }));
   }
+  // Each fact appears once: the gallery in the headline, a size in the text or on the button
+  // (never both), and no gallery repeated in the list below it. "Galerie ändern" is always there.
   function popBody() {
     const st = pdpState();
     if (!st) return '';
     const g = cur();
     const online = `<p class="dg-txt dg-online">${T.online(shipDays())}</p>`;
-    const sel = st.sel.label;
+    const change = `<button type="button" class="dg-quiet" data-dg-chooser>${T.change}</button>`;
+    const alsoIn = exclude => {
+      const rows = holderRows(st, exclude);
+      return rows.length ? `<hr><p class="dg-sub">${T.alsoIn}</p>${galleryList(rows, g)}` : '';
+    };
+    const sizeButton = size => `<div class="dg-actions"><button type="button" class="dg-btn" data-dg-size="${size.sku}">${T.pickSize(size.label)}</button></div>`;
     if (st.kind === 'mine') {
-      const rest = holderRows(st, g);
-      return `${galHead(T.yourGallery, g)}<p class="dg-txt">${T.mineTxt(sel)}</p>${ipNote()}${galLinks(g)}` +
-        (rest.length ? `<hr><p class="dg-sub">${T.alsoIn}</p>${galleryList(rest, g)}` : '') + `<button type="button" class="dg-quiet" data-dg-chooser>${T.change}</button>`;
+      return `${galHead(T.yourGallery, g)}<p class="dg-txt">${T.mineTxt(st.sel.label)}</p>${ipNote()}${galLinks(g)}${alsoIn(g)}${change}`;
     }
     if (st.kind === 'mineOther') {
-      const pick = st.sizes[0];
-      return `${galHead(T.yourGallery, g)}<p class="dg-txt">${T.mineOtherTxt(g.n, st.sizes.map(s => s.label).join(', '))}</p>` +
-        `<div class="dg-actions"><button type="button" class="dg-btn" data-dg-size="${pick.sku}">${T.pickSize(pick.label)}</button></div>${online}${ipNote()}${galLinks(g)}` +
-        (holderRows(st, g).length ? `<hr><p class="dg-sub">${T.alsoIn}</p>${galleryList(holderRows(st, g), g)}` : '') +
-        `<button type="button" class="dg-quiet" data-dg-chooser>${T.change}</button>`;
+      return `${galHead(T.yourGallery, g)}<p class="dg-txt">${T.mineOtherTxt}</p>${sizeButton(st.sizes[0])}${online}${ipNote()}${galLinks(g)}${alsoIn(g)}${change}`;
     }
     if (st.kind === 'near' || st.kind === 'nearOther') {
       const there = pdp.sizes.filter(s => has(st.at, s.sku));
-      const sizesThere = there.map(s => s.label).join(', ');
-      const switchTo = st.kind === 'nearOther' && there[0]
-        ? `<div class="dg-actions"><button type="button" class="dg-btn" data-dg-size="${there[0].sku}">${T.pickSize(there[0].label)}</button></div>` : '';
-      return `${galHead(EN ? 'Nearest gallery with this work' : 'Nächste Galerie mit diesem Werk', st.at,
-        `<span>${Math.round(st.d)} ${T.km} ${EN ? 'from' : 'von'} LUMAS ${esc(g.n)}</span><span>${T.sizes}: ${esc(sizesThere)} cm</span>`)}` +
-        `<p class="dg-txt">${T.nearTxt(g.n)}</p>${switchTo}${online}${galLinks(st.at)}<hr><p class="dg-sub">${T.allWith}</p>${galleryList(holderRows(st), g)}` +
-        `<button type="button" class="dg-quiet" data-dg-chooser>${T.change}</button>`;
+      const extra = `<span>${Math.round(st.d)} ${T.km} ${EN ? 'away' : 'entfernt'}</span>` +
+        (st.kind === 'near' ? `<span>${T.sizes}: ${esc(there.map(s => s.label).join(', '))} cm</span>` : '');
+      return `${galHead(EN ? 'Nearest gallery with this work' : 'Nächste Galerie mit diesem Werk', st.at, extra)}` +
+        `<p class="dg-txt">${T.nearTxt(g.n)}</p>${st.kind === 'nearOther' ? sizeButton(there[0]) : ''}${online}${galLinks(st.at)}${alsoIn(st.at)}${change}`;
     }
     return `<div><p class="dg-eb">${EN ? 'See the original' : 'Im Original ansehen'}</p><p class="dg-name">${st.n === 1 ? 'LUMAS ' + esc(st.holders[0].n) : T.countTitle(st.n)}</p><div class="dg-meta"><span>${T.countSub}</span></div></div>` +
-      `${plzForm()}${galleryList(holderRows(st), g)}${online}`;
+      (st.n === 1 ? `${galLinks(st.holders[0])}` : `${plzForm()}${galleryList(holderRows(st), g)}`) + online + change;
   }
   let chooserMode = false;
   function pdpDialogBody() { return chooserMode ? chooserBody() : popBody(); }
@@ -409,12 +431,6 @@
       const stocked = !!g && cardSkus(card).some(s => has(g, s));
       if (stocked) shown++;
       card.classList.toggle('dg-hide', S.filter && !!g && !stocked);
-      const info = card.querySelector('.bottom .product-meta') || card.querySelector('.bottom .info');
-      let line = card.querySelector('.dg-loc');
-      if (stocked && info) {
-        if (!line) { line = document.createElement('p'); line.className = 'dg-loc'; info.appendChild(line); }
-        line.textContent = T.inStock + ' ' + g.n;
-      } else if (line) line.remove();
     });
     const count = document.querySelector('.results-count');
     if (count) {
@@ -437,7 +453,11 @@
     box.className = 'toggle-switch dg-toggle';
     box.innerHTML = toggleHTML();
     body.insertBefore(box, body.firstChild);
+    // production's sidebar treats any input change inside it as a filter change (re-query + scroll),
+    // so the switch's events stop here
+    box.addEventListener('input', e => e.stopPropagation());
     box.addEventListener('change', e => {
+      e.stopPropagation();
       if (!e.target.matches('input')) return;
       if (!cur()) {
         e.target.checked = false;
@@ -448,8 +468,10 @@
       }
       S.filter = e.target.checked; save();
       track('gallery_filter_toggle', { on: S.filter, gallery: S.gal });
+      // hiding cards makes the browser's scroll anchoring jump the page; keep the visitor where they are
+      const keepY = scrollY;
       paintCards();
-      if (S.filter) document.querySelector('.catalog-results')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      scrollTo(0, keepY);
     });
   }
   function repaintToggles() {
@@ -461,7 +483,7 @@
       paintCards();
       let pending = 0;
       const mo = new MutationObserver(muts => {
-        if (muts.every(m => [...m.addedNodes].every(n => n.nodeType !== 1 || n.classList?.contains('dg-loc') || n.classList?.contains('dg-count') || n.classList?.contains('dg-toggle')))) return;
+        if (muts.every(m => [...m.addedNodes].every(n => n.nodeType !== 1 || n.classList?.contains('dg-count') || n.classList?.contains('dg-toggle')))) return;
         cancelAnimationFrame(pending);
         pending = requestAnimationFrame(() => {
           document.querySelectorAll('.filter-sidebar .sidebar-body').forEach(mountToggle);
@@ -539,6 +561,7 @@
       body.innerHTML =
         `<p class="dg-p-h">Visitor</p>${seg('mode', [['ip', 'IP guess'], ['saved', 'Saved choice'], ['none', 'Unknown']], S.mode)}` +
         `<p class="dg-p-h">Gallery</p><select data-galsel ${S.mode === 'none' ? 'disabled' : ''}>${G.map(g => `<option value="${g.k}"${g.k === S.gal ? ' selected' : ''}>${g.n} · ${STOCK[g.k] ? STOCK[g.k].size : 0} SKUs</option>`).join('')}</select>` +
+        `<p class="dg-p-h">Header entry</p>${seg('hstyle', [['label', 'Label'], ['short', 'Short'], ['icon', 'Icon only']], S.headerStyle)}` +
         `<p class="dg-p-h">PDP pill</p>${seg('placement', [['top', 'Above artist'], ['price', 'Below price']], S.placement)}` +
         `<p class="dg-p-h">Walk-through</p><ul class="dg-p-links">${WALK.map(([u, l]) => `<li><a href="${shopHref(PREFIX + u)}">${l}</a></li>`).join('')}</ul>` +
         `<p class="dg-p-row"><a href="${STATIC ? 'https://www.lumas.de' + (STATIC.path || '/') : here + sep + 'pristine'}"${STATIC ? ' target="_blank" rel="noopener"' : ''}>${STATIC ? 'This page live on lumas.de' : 'This page without the layer'}</a> · <button type="button" data-reset>Reset</button></p>` +
@@ -556,6 +579,7 @@
       if (!t) return;
       if (t.dataset.mode) { S.mode = t.dataset.mode; if (S.mode === 'ip') S.gal = IP_GUESS; if (S.mode === 'none') S.filter = false; }
       else if (t.dataset.placement) S.placement = t.dataset.placement;
+      else if (t.dataset.hstyle) S.headerStyle = t.dataset.hstyle;
       else if (t.dataset.reset !== undefined) Object.assign(S, DEFAULTS);
       else return;
       save(); closeDialog(false); refreshAll(false); paint();

@@ -26,6 +26,11 @@
   transition: color 220ms var(--dg-ease);
 }
 site-header.desktop .dg-head { display: inline-flex; }
+/* option 2: icon only, boxed and spaced like production's .auth-link / .cart-link (28 x 31, 22px glyph) */
+.dg-head[data-style="icon"] { width: 28px; height: 31px; padding: 3px 0 0; margin-right: 3px; justify-content: center; align-items: flex-start; color: #000; }
+.dg-head[data-style="icon"] .dg-head-icon { width: 22px; height: 22px; }
+.dg-head[data-style="icon"]:focus-visible { outline-offset: 1px; }
+.nav-container > .dg-head[data-style="icon"] { margin: 0 0 0 2px; align-self: center; padding-top: 0; align-items: center; height: 22px; }
 /* production's header grid gives the icon column a fixed 250px; let it grow by the entry's width */
 site-header.desktop header { grid-template-columns: 150px minmax(0, 1fr) 280px auto !important; }
 site-header.desktop header > aside { width: auto !important; display: flex; align-items: center; }
@@ -145,9 +150,6 @@ html.dg-lock, html.dg-lock body { overflow: hidden; }
 .dg-toggle label { display: flex !important; align-items: center; font-size: 13px !important; font-weight: 500; line-height: 19.5px !important; cursor: pointer; }
 .dg-toggle label > span { flex: none; margin-right: 10px !important; }
 .dg-toggle small { display: block; padding-left: 35px; margin-top: 2px; font-size: 13px; line-height: 18px; color: var(--dg-ink2); }
-/* stock line: a full-width row under the price, same grey as the artist caption */
-.dg-loc { flex-basis: 100%; margin: 6px 0 0; font: 400 13px/18px archivo, arial, sans-serif; color: var(--dg-ink2); display: flex; align-items: center; gap: 7px; }
-.dg-loc::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--dg-ok); flex: none; }
 product-card.dg-hide { display: none !important; }
 .dg-count { margin-left: 10px; color: var(--dg-ink2); }
 .dg-count::before { content: "· "; }
@@ -187,3 +189,7 @@ html.dg-lock .dg-panel { display: none; }
 .dg-out .dg-sheet { transform: translateY(100%); transition: transform 220ms var(--dg-ease); }
 .dg-out .dg-scrim { opacity: 0; transition: opacity 220ms var(--dg-ease); }
 .dg-fly:focus { outline: none; }
+.nav-container > .dg-head[data-style="icon"] .dg-head-icon { position: relative; top: -1px; }
+
+/* no scroll-anchoring jumps when the in-stock filter hides cards */
+.catalog-results { overflow-anchor: none; }
