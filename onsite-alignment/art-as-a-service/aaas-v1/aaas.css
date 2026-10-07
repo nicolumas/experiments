@@ -85,6 +85,23 @@
 
 .aaas-hidden-by-rent { display: none !important; }
 
+/* Express in rent mode: present but visibly out of reach. Dimmed rather than
+   removed, so switching the mode does not pull a block out from above the form
+   and move the step under the cursor.
+
+   Greyscale carries the "not available" on its own; opacity only has to take
+   the edge off. At .35 the wordmarks washed out completely and the buttons read
+   as empty grey placeholders rather than as the express options you cannot use
+   right now. */
+.aaas-express-off .payment-buttons {
+  opacity: .6;
+  filter: grayscale(1);
+}
+
+/* The header carries the reason in this state, so it stays fully legible
+   while the buttons below it are the thing that reads as unavailable. */
+.aaas-express-off header { color: var(--color-text-secondary); }
+
 /* The shop centres headings, which my panels inherit: the artwork title sat
    centred above left-aligned meta. Left-align every heading the layer owns. */
 .aaas-card-title,

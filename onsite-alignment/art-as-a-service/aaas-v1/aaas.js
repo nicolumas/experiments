@@ -284,6 +284,18 @@
 
     document.body.appendChild(d);
     d.querySelector('.aaas-close').addEventListener('click', function () { d.close(); });
+
+    /* Click the backdrop to dismiss. A click on the backdrop reports the dialog
+     * itself as its target, because the panel's own content fills the element
+     * and swallows everything else. The press has to start there too: selecting
+     * text inside and releasing outside would otherwise read as a backdrop
+     * click and throw the panel away mid-gesture. */
+    var pressedBackdrop = false;
+    d.addEventListener('mousedown', function (e) { pressedBackdrop = e.target === d; });
+    d.addEventListener('click', function (e) {
+      if (pressedBackdrop && e.target === d) d.close();
+    });
+
     if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
   }
 
@@ -1018,24 +1030,51 @@
         : '';
     }
 
-    // a voucher cannot apply to a rental contract, and the express buttons skip the
-    // payment step entirely so they cannot carry a recurring SEPA mandate
-    ['.coupon-form-container', 'section.spc-express', '.payment-buttons'].forEach(function (sel) {
-      document.querySelectorAll(sel).forEach(function (n) {
-        n.classList.toggle('aaas-hidden-by-rent', renting);
-      });
-    });
-    document.querySelectorAll('section.spc-express').forEach(function (ex) {
-      var sep = ex.nextElementSibling;
-      if (sep && sep.classList.contains('separator')) sep.classList.toggle('aaas-hidden-by-rent', renting);
+    // a voucher cannot apply to a rental contract
+    document.querySelectorAll('.coupon-form-container').forEach(function (n) {
+      n.classList.toggle('aaas-hidden-by-rent', renting);
     });
 
-    // only SEPA and card can carry the recurring mandate
+    /* The express buttons skip the payment step entirely, so they cannot carry a
+     * recurring SEPA mandate and are not available for Art as a Service. They
+     * stay on the page rather than being removed: pulling a block out from above
+     * the form made the whole step jump under the cursor at the moment of
+     * switching. Dimmed and inert, with a line saying why, the step holds still
+     * and the absence is explained instead of just happening. */
+    document.querySelectorAll('section.spc-express').forEach(function (ex) {
+      ex.classList.toggle('aaas-express-off', renting);
+
+      var box = ex.querySelector('.payment-buttons');
+      // inert takes the buttons out of the tab order and stops clicks, which a
+      // dimmed appearance on its own would not
+      if (box) {
+        if (renting) box.setAttribute('inert', ''); else box.removeAttribute('inert');
+      }
+
+      // The block's own header carries the reason, rather than a line added
+      // underneath: an extra line is an extra 32px, and the point of keeping
+      // the block was that nothing moves.
+      var head = ex.querySelector('header');
+      if (head) {
+        if (head.dataset.aaasLabel == null) head.dataset.aaasLabel = head.textContent;
+        head.textContent = renting
+          ? 'Express-Zahlarten sind f\u00fcr Art as a Service nicht verf\u00fcgbar.'
+          : head.dataset.aaasLabel;
+      }
+    });
+
+    /* Only SEPA and card can carry the recurring mandate, so the ineligible
+     * methods come off the list in rent mode. Every #payment-icon-* in this
+     * markup is a <symbol> in the teaser's sprite, not a method row, and the
+     * fallback to the node itself put display:none on those symbols: a <use>
+     * pointing at a display:none symbol paints nothing, which blanked the
+     * PayPal and Apple Pay marks on the express buttons and the footer's
+     * accepted-method icons. Only act on a real row. */
     document.querySelectorAll('.payment-methods [id^="payment-icon-"]').forEach(function (n) {
-      var id = n.id.replace('payment-icon-', '');
-      var keep = /sepa|credit-card|mastercard|american-express/.test(id);
-      (n.closest('li, .payment-method, label') || n)
-        .classList.toggle('aaas-hidden-by-rent', renting && !keep);
+      var row = n.closest('li, .payment-method, label');
+      if (!row) return;
+      var keep = /sepa|credit-card|mastercard|american-express/.test(n.id.replace('payment-icon-', ''));
+      row.classList.toggle('aaas-hidden-by-rent', renting && !keep);
     });
 
     // the live flow leaves the checkout for a real success page
