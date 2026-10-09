@@ -36,6 +36,7 @@
     ['pill', '3.7', 'Back-to-consultation pill'],
     ['listbar', '3.8', 'Listing top bar (every listing page)'],
     ['sidetab', '3.9', 'Side tab (every page)'],
+    ['wishlist', '3.10', 'Wish list (saved works or empty)'],
   ];
 
   const ls = {
@@ -48,7 +49,16 @@
   };
   const on = Object.assign(Object.fromEntries(ENTRIES.map(([id]) => [id, true])), ls.get(STORE, {}));
   // what the empty search dropdown offers: a bar above the tiles, or a tile among "Most wanted"
-  const EMPTY_VARIANT = ls.get('aa-empty-variant', 'bar');
+  // how the search dropdown offers it (3.1), from quiet to most visible:
+  //   bar     a row above "Most wanted" (empty field); a row or a link once typing, by query class
+  //   tile    the first "Most wanted" tile (empty field); as bar once typing
+  //   panel   a Bone panel at the top of the dropdown with starter prompts, for every query class
+  //   column  a column of its own beside "Most wanted"; the panel once typing
+  //   field   an AI button inside the search field (visible before the dropdown opens), plus an
+  //           "Ask the AI Advisor" first line for every query class
+  const DD_VARIANT = ls.get('aa-dd-variant', ls.get('aa-empty-variant', 'bar'));
+  const EMPTY_VARIANT = DD_VARIANT === 'tile' ? 'tile' : 'bar';
+  const DD_PROMINENT = ['panel', 'column', 'field'].includes(DD_VARIANT);
   // how the advisor opens: a window over the shop (default) or the full page
   const OPEN_MODE = ls.get('aa-open-mode', 'window');
 
@@ -60,80 +70,96 @@
   const PREFIX = LOCALE === 'en' ? '/en' : '';
   // the visitor's own words, in the page language's quotation marks
   // the signature: sparkle + ART ADVISOR, the same small lockup on every entry point
-  const mark = () => `<span class="aa-mark">${ICON_SPARKLE}<span>Art Advisor</span></span>`;
+  const mark = () => `<span class="aa-mark">${ICON_SPARKLE}<span>AI Advisor</span></span>`;
   const quoted = q => (LOCALE === 'en' ? '“' + esc(q) + '”' : '„' + esc(q) + '“');
   const COPY = {
     de: {
-      rowLead: q => `<strong>Frag den Art Advisor</strong> ${q}. Er stellt dir 2–3 Fragen und schlägt passende Editionen vor.`,
-      rowQuiet: q => `${q} mit dem Art Advisor eingrenzen →`,
-      emptyBar: '<strong>Nicht sicher, wo du anfangen sollst?</strong> Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der Art Advisor schlägt passende Editionen vor.',
-      emptyCta: 'Art Advisor fragen →',
-      bannerTitle: 'Das klingt nach einer Frage für den Art Advisor',
+      rowLead: q => `<strong>Frag den AI Advisor</strong> ${q}. Er stellt dir 2–3 Fragen und schlägt passende Editionen vor.`,
+      rowQuiet: q => `${q} mit dem AI Advisor eingrenzen →`,
+      emptyBar: '<strong>Nicht sicher, wo du anfangen sollst?</strong> Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der AI Advisor schlägt passende Editionen vor.',
+      emptyCta: 'AI Advisor fragen →',
+      bannerTitle: 'Das klingt nach einer Frage für den AI Advisor',
       bannerText: 'Er versteht Räume, Stimmungen und Anlässe, und er kennt alle Editionen.',
-      bannerInput: 'Deine Frage an den Art Advisor',
-      bannerButton: 'Art Advisor fragen',
-      zeroLine: q => `Keine Edition passt zu ${quoted(q.replace(/ (\S+)$/, '\u00a0$1'))}.`,
-      zeroTitle: 'Lass den Art Advisor suchen',
-      zeroText: 'Beschreib deinen Raum, eine Stimmung oder einen Anlass. Der Art\u00a0Advisor kennt alle Editionen und schlägt die passenden\u00a0vor.',
-      zeroClassic: 'Oder starte eine neue Suche',
+      bannerInput: 'Deine Frage an den AI Advisor',
+      bannerButton: 'AI Advisor fragen',
       classicLabel: 'Treffer der klassischen Suche',
       tileTitle: n => `${n.toLocaleString('de-DE')} Editionen sind viel.`,
-      tileText: q => `Erzähl dem Art Advisor von deinem Raum, und er grenzt ${q} für dich ein.`,
+      tileText: q => `Erzähl dem AI Advisor von deinem Raum, und er grenzt ${q} für dich ein.`,
       tileTitleFiltered: n => `${n.toLocaleString('de-DE')} Editionen passen zu deiner Auswahl.`,
-      tileTextFiltered: 'Erzähl dem Art Advisor von deinem Raum, und er findet darunter dein Werk.',
-      listBar: '<strong>Nicht ganz das Richtige dabei?</strong> Der Art Advisor findet mit dir das Werk, das zu deinem Raum passt.',
-      listBarFiltered: n => `<strong>${n} Editionen in deiner Auswahl.</strong> Der Art Advisor findet darunter das Werk, das zu deinem Raum passt.`,
-      start: 'Art Advisor fragen',
+      tileTextFiltered: 'Erzähl dem AI Advisor von deinem Raum, und er findet darunter dein Werk.',
+      listBar: '<strong>Nicht ganz das Richtige dabei?</strong> Der AI Advisor findet mit dir das Werk, das zu deinem Raum passt.',
+      listBarFiltered: n => `<strong>${n} Editionen in deiner Auswahl.</strong> Der AI Advisor findet darunter das Werk, das zu deinem Raum passt.`,
+      start: 'AI Advisor fragen',
       hide: 'Ausblenden',
       endConsult: 'Beratung schließen',
-      sideTab: 'Art Advisor fragen',
+      sideTab: 'AI Advisor fragen',
+      wishTitle: 'Welches soll es werden?',
+      wishText: 'Der AI\u00a0Advisor hängt deine gemerkten Werke maßstabsgetreu an deine Wand, damit du sie nebeneinander vergleichen\u00a0kannst.',
+      wishButton: 'An meiner Wand vergleichen',
+      wishQuery: 'Welches meiner gemerkten Werke passt am besten an meine Wand?',
+      wishEmptyTitle: 'Noch nichts gemerkt?',
+      wishEmptyText: 'Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der AI\u00a0Advisor schlägt Editionen vor, die\u00a0passen.',
+      wishCta: 'Optionen ansehen',
       navText: 'Beschreib deinen Raum oder Anlass, wir finden gemeinsam dein Werk',
       finderTitle: 'Finde deine Edition',
       finderSub: 'Beschreib deinen Raum, deinen Anlass oder deine Stimmung.',
       finderPlaceholder: 'Ein ruhiges Bild über dem Sofa, eher Naturtöne …',
       finderGo: 'Fragen',
       finderChips: ['Unter € 1.000', 'Landschaft', 'Ruhig', 'Als Geschenk'],
+      ddTitle: 'Beschreib einfach, was du\u00a0suchst',
+      ddText: 'Erzähl dem AI\u00a0Advisor von deinem Raum, einer Stimmung oder einem Anlass. Er stellt dir zwei, drei Fragen und schlägt passende Editionen\u00a0vor.',
+      ddAsk: q => `Frag den AI\u00a0Advisor nach ${q}`,
+      ddPrompts: ['Etwas Ruhiges über dem Sofa', 'Ein Geschenk für jemanden, der die Natur liebt', 'Farbe für einen weißen Flur'],
+      fieldButton: 'KI',
       toClassic: 'Lieber klicken? Zum klassischen Finder',
-      toAdvisor: 'Lieber beschreiben? Zum Art Advisor Finder',
+      toAdvisor: 'Lieber beschreiben? Zum AI Advisor Finder',
       pdpText: 'Gefällt dir die Richtung, aber nicht ganz?',
-      pdpLink: 'Ähnliches im Art Advisor finden →',
+      pdpLink: 'Ähnliches im AI Advisor finden →',
       pdpQuery: (artwork, artist) => `Ähnlich wie „${artwork}“ von ${artist}, aber etwas anders`,
       pill: n => `Zurück zur Beratung${n ? ` <span>· ${n} Vorschläge</span>` : ''}`,
     },
     en: {
-      rowLead: q => `<strong>Ask the Art Advisor</strong> ${q}. It asks you 2–3 questions and suggests editions that fit.`,
-      rowQuiet: q => `Narrow down ${q} with the Art Advisor →`,
-      emptyBar: '<strong>Not sure where to start?</strong> Describe your room, a mood or an occasion, and the Art Advisor suggests editions that fit.',
-      emptyCta: 'Ask the Art Advisor →',
-      bannerTitle: 'That sounds like a question for the Art Advisor',
+      rowLead: q => `<strong>Ask the AI Advisor</strong> ${q}. It asks you 2–3 questions and suggests editions that fit.`,
+      rowQuiet: q => `Narrow down ${q} with the AI Advisor →`,
+      emptyBar: '<strong>Not sure where to start?</strong> Describe your room, a mood or an occasion, and the AI Advisor suggests editions that fit.',
+      emptyCta: 'Ask the AI Advisor →',
+      bannerTitle: 'That sounds like a question for the AI Advisor',
       bannerText: 'It understands rooms, moods and occasions, and it knows every edition.',
-      bannerInput: 'Your question for the Art Advisor',
-      bannerButton: 'Ask the Art Advisor',
-      zeroLine: q => `No editions match ${quoted(q.replace(/ (\S+)$/, '\u00a0$1'))}.`,
-      zeroTitle: 'Let the Art Advisor find it',
-      zeroText: 'Describe your room, a mood or an occasion. The Art\u00a0Advisor knows every edition and suggests the ones that\u00a0fit.',
-      zeroClassic: 'Or start a new search',
+      bannerInput: 'Your question for the AI Advisor',
+      bannerButton: 'Ask the AI Advisor',
       classicLabel: 'Results from the classic search',
       tileTitle: n => `${n.toLocaleString('en-GB')} editions is a lot.`,
-      tileText: q => `Tell the Art Advisor about your room and it will narrow down ${q} for you.`,
+      tileText: q => `Tell the AI Advisor about your room and it will narrow down ${q} for you.`,
       tileTitleFiltered: n => `${n.toLocaleString('en-GB')} editions match your selection.`,
-      tileTextFiltered: 'Tell the Art Advisor about your room and it will find your work among them.',
-      listBar: '<strong>Not quite it?</strong> The Art Advisor helps you find the work that fits your room.',
-      listBarFiltered: n => `<strong>${n.toLocaleString('en-GB')} editions in your selection.</strong> The Art Advisor finds the one that fits your room.`,
-      start: 'Ask the Art Advisor',
+      tileTextFiltered: 'Tell the AI Advisor about your room and it will find your work among them.',
+      listBar: '<strong>Not quite it?</strong> The AI Advisor helps you find the work that fits your room.',
+      listBarFiltered: n => `<strong>${n.toLocaleString('en-GB')} editions in your selection.</strong> The AI Advisor finds the one that fits your room.`,
+      start: 'Ask the AI Advisor',
       hide: 'Hide',
       endConsult: 'Close consultation',
-      sideTab: 'Ask the Art Advisor',
+      sideTab: 'Ask the AI Advisor',
+      wishTitle: 'Not sure which one?',
+      wishText: 'The AI\u00a0Advisor hangs your saved works on your wall, to scale, so you can compare them side\u00a0by\u00a0side.',
+      wishButton: 'Compare on my wall',
+      wishQuery: 'Which of my saved works suits my wall best?',
+      wishEmptyTitle: 'Nothing saved yet?',
+      wishEmptyText: 'Describe your room, a mood or an occasion, and the AI\u00a0Advisor suggests editions that\u00a0fit.',
+      wishCta: 'View options',
       navText: 'Describe your room or occasion and we find your work together',
       finderTitle: 'Find your edition',
       finderSub: 'Describe your room, your occasion or your mood.',
       finderPlaceholder: 'A calm picture above the sofa, natural tones …',
       finderGo: 'Ask',
       finderChips: ['Under € 1,000', 'Landscape', 'Calm', 'As a gift'],
+      ddTitle: 'Just describe what you are looking\u00a0for',
+      ddText: 'Tell the AI\u00a0Advisor about your room, a mood or an occasion. It asks two or three questions and suggests editions that\u00a0fit.',
+      ddAsk: q => `Ask the AI\u00a0Advisor about ${q}`,
+      ddPrompts: ['A calm piece above the sofa', 'A gift for someone who loves nature', 'Colour for a white hallway'],
+      fieldButton: 'AI',
       toClassic: 'Prefer clicking? Go to the classic finder',
-      toAdvisor: 'Prefer describing? Go to the Art Advisor finder',
+      toAdvisor: 'Prefer describing? Go to the AI Advisor finder',
       pdpText: 'Like the direction, but not quite?',
-      pdpLink: 'Find similar with the Art Advisor →',
+      pdpLink: 'Find similar with the AI Advisor →',
       pdpQuery: (artwork, artist) => `Similar to “${artwork}” by ${artist}, but a little different`,
       pill: n => `Back to your consultation${n ? ` <span>· ${n} suggestions</span>` : ''}`,
     },
@@ -157,19 +183,21 @@
   }
 
   // ---- handoff (concept section 04) -------------------------------------------
-  function advisorUrl(q, placement, filters = []) {
+  function advisorUrl(q, placement, filters = [], saved = []) {
     const ret = location.pathname + location.search;
     const params = new URLSearchParams({ lang: LOCALE, return: ret });
     if (q) params.set('q', q);
     // active PLP / search filters travel with the visitor (concept 04: &filters=)
     if (filters.length) params.set('filters', JSON.stringify(filters));
+    // works on the wish list travel the same way (3.10)
+    if (saved.length) params.set('saved', JSON.stringify(saved));
     params.set('src', placement);
     return ADVISOR + '?' + params.toString();
   }
-  function goToAdvisor(q, placement, filters = []) {
-    track('advisor_offer_click', { placement, filters: filters.length });
-    if (OPEN_MODE === 'window') openAdvisorWindow(advisorUrl(q, placement, filters));
-    else location.href = advisorUrl(q, placement, filters);
+  function goToAdvisor(q, placement, filters = [], saved = []) {
+    track('advisor_offer_click', { placement, filters: filters.length, saved: saved.length });
+    if (OPEN_MODE === 'window') openAdvisorWindow(advisorUrl(q, placement, filters, saved));
+    else location.href = advisorUrl(q, placement, filters, saved);
   }
 
   // ---- the advisor as a window over the shop --------------------------------------
@@ -185,7 +213,7 @@
     // minimised: bring the same window back, mid-conversation
     if (advisorWindow) { showAdvisorWindow(); return; }
     const src = url + (url.includes('?') ? '&' : '?') + 'embed=1';
-    advisorWindow = el(`<dialog class="aa-window" aria-label="Art Advisor"><iframe class="aa-window-frame" title="Art Advisor" src="${esc(src)}"></iframe></dialog>`);
+    advisorWindow = el(`<dialog class="aa-window" aria-label="AI Advisor"><iframe class="aa-window-frame" title="AI Advisor" src="${esc(src)}"></iframe></dialog>`);
     advisorWindow.addEventListener('click', e => { if (e.target === advisorWindow) minimiseAdvisorWindow(); });
     advisorWindow.addEventListener('cancel', e => { e.preventDefault(); minimiseAdvisorWindow(); });   // Esc on the shop side
     advisorWindow.addEventListener('close', () => {
@@ -288,6 +316,7 @@
 
   // ---- 3.1 search overlay row ----------------------------------------------------
   function overlayRow(q, cls, context) {
+    if (DD_PROMINENT) return prominentRow(q, cls);
     if (cls === 'C') {
       return el(`<a class="aa-row aa-row--lead" href="${esc(advisorUrl(q, 'overlay'))}" data-aa-placement="overlay">
         <span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>
@@ -305,8 +334,38 @@
     }
     return null;
   }
+  // panel / column / field variants: offered for every query class, the typed words carried along
+  function prominentRow(q, cls) {
+    const prompts = COPY.ddPrompts.map(p => `<button type="button" class="aa-chip" data-aa-placement="overlay-prompt" data-aa-q="${esc(p)}">${esc(p)}</button>`).join('');
+    if (DD_VARIANT === 'field') {
+      if (cls === 'empty') return el(`<div class="aa-ddfield aa-ddfield--prompts">${mark()}<div class="aa-ddpanel-prompts">${prompts}</div></div>`);
+      return el(`<a class="aa-row aa-ddfield ${cls === 'C' ? 'aa-ddfield--lead' : ''}" href="${esc(advisorUrl(q, 'overlay'))}" data-aa-placement="overlay">
+        <span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>
+        <span class="aa-row-text">${COPY.ddAsk(quoted(q))}</span>${cls === 'C' ? '<kbd class="aa-row-kbd">Enter ↵</kbd>' : ''}</a>`);
+    }
+    const typed = cls !== 'empty';
+    return el(`<div class="aa-ddpanel ${DD_VARIANT === 'column' && !typed ? 'aa-ddcol' : ''} ${typed ? 'aa-ddpanel--typed' : ''}">
+      <div class="aa-ddpanel-copy">${mark()}
+        <p class="aa-ddpanel-title">${typed ? COPY.ddAsk(quoted(q)) : COPY.ddTitle}</p>
+        ${typed ? '' : `<p class="aa-ddpanel-text">${COPY.ddText}</p>`}</div>
+      ${typed ? '' : `<div class="aa-ddpanel-prompts">${prompts}</div>`}
+      <a class="aa-btn" href="${esc(advisorUrl(typed ? q : '', typed ? 'overlay-panel' : 'overlay-empty-panel'))}" data-aa-placement="${typed ? 'overlay-panel' : 'overlay-empty-panel'}">${COPY.bannerButton}</a>
+    </div>`);
+  }
+  // the AI button inside the search field itself (field variant)
+  function searchFieldButton() {
+    if (!on.overlay || DD_VARIANT !== 'field') return;
+    document.querySelectorAll('search-focus form, nav-search form').forEach(form => {
+      if (form.querySelector('.aa-fieldbtn')) return;
+      const input = form.querySelector('input');
+      const button = el(`<button type="button" class="aa-fieldbtn" aria-label="${COPY.sideTab}" title="${COPY.sideTab}">${ICON_SPARKLE}<span>${COPY.fieldButton}</span></button>`);
+      button.addEventListener('click', () => goToAdvisor(input?.value.trim() || '', 'search-field'));
+      form.classList.add('aa-has-fieldbtn');
+      (form.querySelector('button[type=submit]') || form.lastElementChild).before(button);
+    });
+  }
   // production's dropdown closes 250 ms after the field blurs; keep focus while a row is pressed
-  document.addEventListener('pointerdown', e => { if (e.target.closest('.aa-row')) e.preventDefault(); }, true);
+  document.addEventListener('pointerdown', e => { if (e.target.closest('.aa-row, .aa-ddpanel, .aa-ddfield, .aa-fieldbtn')) e.preventDefault(); }, true);
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-aa-placement]');
     if (!a) return;
@@ -321,13 +380,15 @@
     let timer = null;
     let state = { q: null, cls: null };
     const place = () => {
-      document.querySelectorAll('.aa-row').forEach(n => { if (containers.owns(n)) n.remove(); });
+      document.querySelectorAll('.aa-row, .aa-ddpanel, .aa-ddfield').forEach(n => { if (containers.owns(n)) n.remove(); });
       const row = state.cls ? overlayRow(state.q, state.cls) : null;
       if (!row) return;
       row.dataset.aaQuery = state.q;
       const target = containers.target(state.cls);
       if (!target) return;
-      if (state.cls === 'C' || state.cls === 'empty') target.prepend(row); else target.append(row);
+      if (row.classList.contains('aa-ddcol')) target.append(row);
+      else if (DD_PROMINENT || state.cls === 'C' || state.cls === 'empty') target.prepend(row);
+      else target.append(row);
       trackView('overlay', state.cls);
     };
     const update = async () => {
@@ -368,8 +429,8 @@
       const tiles = [...dl.querySelectorAll(':scope > dd')];
       if (!tiles.length) return;
       const dd = el(`<dd class="aa-search-tile"><a href="${esc(advisorUrl('', 'overlay-tile'))}" data-aa-placement="overlay-tile" data-aa-q="">
-        <picture><img alt="Art Advisor" class="max-w-full" src="${LAYER}search-tile-art-advisor.svg"></picture>
-        <span>Art Advisor</span></a></dd>`);
+        <picture><img alt="AI Advisor" class="max-w-full" src="${LAYER}search-tile-art-advisor.svg"></picture>
+        <span>AI Advisor</span></a></dd>`);
       tiles[tiles.length - 1].classList.add('aa-hidden');
       tiles[0].before(dd);
     });
@@ -385,7 +446,7 @@
       target(cls) {
         if (cls === 'empty') return dropdown.querySelector('.suggestion-container');
         if (!auto.hidden) return auto;
-        return cls === 'C' ? dropdown.querySelector('.suggestion-container') : dropdown.querySelector('.suggestions');
+        return cls === 'C' || DD_PROMINENT ? dropdown.querySelector('.suggestion-container') : dropdown.querySelector('.suggestions');
       },
     });
   }
@@ -441,7 +502,6 @@
     lastPlaced = false;
     decorating = true;
     document.querySelectorAll('.aa-banner, .aa-tile, .aa-classic-label, .aa-listbar').forEach(n => n.remove());
-    document.querySelectorAll('.aa-zero-hidden').forEach(n => n.classList.remove('aa-hidden', 'aa-zero-hidden'));
     unstickListbar();
     decorating = false;
     if (!q) return;
@@ -451,41 +511,8 @@
     const filtersAttr = esc(JSON.stringify(filters));
     const page = parseInt(new URLSearchParams(PAGE.search).get('page') || '1', 10);
 
-    // 0 hits: the Art Advisor takes the place of production's "sorry" line and "Start a new search"
-    // field, with the classic search one click away; production's "How to find" block stays below
-    const zero = document.querySelector('.no-result-search');
-    const zeroForm = zero?.querySelector(':scope > form');
-    if (on.banner && isSearchPage && hits === 0 && zeroForm) {
-      const block = el(`<section class="aa-banner aa-banner--zero" data-aa-query="${esc(q)}" data-aa-filters="${filtersAttr}" data-aa-key="${esc(key)}">
-        <p class="aa-zero-line">${COPY.zeroLine(q)}</p>
-        ${mark()}
-        <h2 class="aa-banner-title">${COPY.zeroTitle}</h2>
-        <p class="aa-banner-text">${COPY.zeroText}</p>
-        <form class="aa-banner-form">
-          <input class="aa-banner-input" name="q" value="${esc(q)}" aria-label="${COPY.bannerInput}">
-          <button class="aa-btn" type="submit">${COPY.bannerButton}</button>
-        </form>
-        <button class="aa-link aa-zero-classic" type="button">${COPY.zeroClassic}</button>
-      </section>`);
-      const classic = [...zeroForm.children].slice(0, 2);   // the "0 hits" line and the new-search field
-      classic.forEach(n => n.classList.add('aa-hidden', 'aa-zero-hidden'));
-      block.querySelector('form').addEventListener('submit', e => {
-        e.preventDefault();
-        goToAdvisor(block.querySelector('input').value.trim() || q, 'banner-zero', filters);
-      });
-      block.querySelector('.aa-zero-classic').addEventListener('click', e => {
-        classic.forEach(n => n.classList.remove('aa-hidden'));
-        e.currentTarget.remove();
-        zeroForm.querySelector('input[type=search], input[name=q], input')?.focus();
-        track('advisor_finder_switch', { to: 'classic', placement: 'banner-zero' });
-      });
-      zero.insertBefore(block, zeroForm);
-      lastPlaced = true;
-      trackView('banner-zero', result.cls);
-      return;
-    }
-
     if (on.banner && isSearchPage && (result.cls === 'C' || hits <= 3)) {
+      const zero = document.querySelector('.no-result-search');
       const banner = el(`<section class="aa-banner" data-aa-query="${esc(q)}" data-aa-filters="${filtersAttr}" data-aa-key="${esc(key)}">
         <div class="aa-banner-copy">
           ${mark()}
@@ -578,7 +605,7 @@
     if (!dl || dl.querySelector('.aa-nav-card')) return;
     const dd = el(`<dd class="aa-nav-card">
       <a href="${esc(advisorUrl('', 'nav'))}" data-aa-placement="nav" data-aa-q="">
-        <img alt="Art Advisor" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" height="86" src="${LAYER}nav-art-advisor.svg" title="Art Advisor" width="214" style="aspect-ratio:auto;">
+        <img alt="AI Advisor" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" height="86" src="${LAYER}nav-art-advisor.svg" title="AI Advisor" width="214" style="aspect-ratio:auto;">
         <svg class="hidden-lg hidden-md"><use href="#consult"></use></svg>
         <header>Art&nbsp;Advisor</header>
         <aside>${COPY.navText}</aside>
@@ -670,7 +697,7 @@
     }
     const count = parseInt(ss.get('aa:count') || '0', 10);
     if (new URLSearchParams(location.search).get('from') === 'advisor') track('advisor_handoff_pdp', { sku: document.querySelector('make-an-offer')?.dataset.sku || document.querySelector('.add-to-cart')?.dataset.sku || '' });
-    const pill = el(`<div class="aa-pill" role="region" aria-label="Art Advisor">
+    const pill = el(`<div class="aa-pill" role="region" aria-label="AI Advisor">
       <button class="aa-pill-back" type="button"><span class="aa-pill-icon" aria-hidden="true">${ICON_SPARKLE}</span>${COPY.pill(count)}</button>
       <button class="aa-pill-close" type="button" aria-label="${COPY.endConsult}" title="${COPY.endConsult}">×</button>
     </div>`);
@@ -707,6 +734,104 @@
     document.querySelector('.aa-pill')?.remove();
     returnPill();
   });
+
+  // ---- 3.10 wish list ----------------------------------------------------------------
+  // Not in the concept (added on request). With saved works the offer fills production's own
+  // "wishlist-consultation" CMS slot under them: the Art Advisor hangs the saved works on the visitor's
+  // wall; they travel into the chat as chips. Empty, it sits in production's empty state above the
+  // Art Finder box.
+  // Stand-in: the clone never writes to the real shop, so the four saved works are set here (presenter
+  // bar: "Wish list") and their cards are production's own, taken from the share link of that list
+  // (/artworks/?l=) and turned into wish-list cards as Catalog/catalog/partials/product.twig does.
+  const SAVED_WORKS = [6521662, 3602, 6242146, 2853939];
+  const WISHLIST_STATE = ls.get('aa-wishlist-state', 'saved');
+  const isWishlistPage = PAGE.pathname === PREFIX + '/wishlist/';
+  const savedWorks = () => (on.wishlist && WISHLIST_STATE === 'saved' ? SAVED_WORKS : []);
+  function seedWishlist() {
+    if (!savedWorks().length) return;
+    whenVue(vue => {
+      SAVED_WORKS.forEach(id => { if (!vue.wishlistItems.includes(id)) vue.wishlistItems.push(id); });
+      document.querySelector('header-counter.wishlist-count')?.dispatchEvent(new CustomEvent('set', { detail: { count: vue.wishlistItems.length } }));
+    });
+  }
+  function whenVue(fn, tries = 40) {
+    if (window.vueInstance?.wishlistItems) return fn(window.vueInstance);
+    if (tries) setTimeout(() => whenVue(fn, tries - 1), 150);
+  }
+  function asWishlistCard(card) {
+    const product = JSON.parse(card.dataset.product || '{}');
+    card.dataset.isWishlist = 'true';
+    card.querySelectorAll('.top > :not(.image-container)').forEach(n => n.remove());   // status badges
+    const heart = card.querySelector('.actions wishlist-button');
+    const remove = document.createElement('wishlist-button');
+    remove.className = 'wishlist-remove';
+    ['sku', 'group-key', 'id-product-abstract'].forEach(a => heart?.hasAttribute(a) && remove.setAttribute(a, heart.getAttribute(a)));
+    card.querySelector('.top').append(remove);
+    card.querySelector('.bottom .info').innerHTML = `<div class="wishlist-artist">${esc(product.artist || '')}</div>
+      <a href="${esc(product.url || '#')}" class="wishlist-title">${esc(product.abstract_name || '')}</a><div class="wishlist-added-date"></div>`;
+    card.querySelector('.actions').innerHTML = '<button type="button" class="compare" hidden><span class="icon-check"></span></button>';
+    card.querySelector('.more-artist-link')?.remove();
+    card.querySelector('.bottom').append(el(`<a href="${esc(product.url || '#')}" class="wishlist-cta">${COPY.wishCta}</a>`));
+    return { card, label: `${product.abstract_name || ''}, ${product.artist || ''}`.replace(/&amp;/g, '&') };
+  }
+  async function wishlistPage() {
+    if (!on.wishlist || !isWishlistPage) return;
+    // delegated: production's app may redraw these parts after they are in, dropping element listeners
+    document.addEventListener('submit', e => {
+      if (!e.target.matches('.aa-wish-form')) return;
+      e.preventDefault();
+      goToAdvisor(e.target.querySelector('input').value.trim(), 'wishlist-empty');
+    });
+    document.addEventListener('click', e => {
+      const compare = e.target.closest('.aa-wish-compare');
+      if (compare) goToAdvisor(COPY.wishQuery, 'wishlist', [], JSON.parse(compare.dataset.aaSaved || '[]'));
+    });
+    const ids = savedWorks();
+    if (!ids.length) {
+      // in production's own column (the Art Finder box's), put back whenever its app redraws the section
+      const place = () => {
+        const title = document.querySelector('.wishlist-container h1.title');
+        if (!title || document.querySelector('.aa-wish')?.isConnected) return;
+        const row = el(`<div class="row mt-3"><div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 col-sm-12 col-xs-12">
+          <section class="aa-banner aa-wish aa-wish--empty">
+            <div class="aa-banner-copy">${mark()}<p class="aa-banner-title">${COPY.wishEmptyTitle}</p><p class="aa-banner-text">${COPY.wishEmptyText}</p></div>
+            <form class="aa-banner-form aa-wish-form"><input class="aa-banner-input" name="q" placeholder="${COPY.finderPlaceholder}" aria-label="${COPY.bannerInput}">
+              <button class="aa-btn" type="submit">${COPY.bannerButton}</button></form>
+          </section></div></div>`);
+        title.after(row);
+        trackView('wishlist-empty', 'n/a');
+      };
+      const container = document.querySelector('.wishlist-container');
+      if (container) new MutationObserver(place).observe(container, { childList: true, subtree: true });
+      place();
+      return;
+    }
+    // production's app redraws the saved-works section after it starts (the server copy is replaced),
+    // so the cards are fetched once and put back whenever an empty section appears
+    const path = PREFIX + '/artworks/?l=' + btoa(ids.join('|'));
+    let html = '';
+    try { html = await (await fetch(window.aaStatic ? window.aaStatic.fileFor(path) : path)).text(); } catch (e) { return; }
+    const source = [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('product-card')];
+    const saved = source.map(c => asWishlistCard(c.cloneNode(true)).label);
+    const fill = () => {
+      const section = document.querySelector('.wishlist-container section.wishlist');
+      if (!section) return;
+      if (!section.querySelector('product-card')) source.forEach(c => section.append(asWishlistCard(document.importNode(c, true)).card));
+      if (document.querySelector('.aa-wish')?.isConnected) return;
+      // the consultation slot production keeps directly under the saved works
+      const slot = section.nextElementSibling?.tagName === 'DIV' ? section.nextElementSibling : null;
+      const block = el(`<section class="aa-banner aa-wish">
+        <div class="aa-banner-copy">${mark()}<p class="aa-banner-title">${COPY.wishTitle}</p><p class="aa-banner-text">${COPY.wishText}</p></div>
+        <div class="aa-wish-action"><button class="aa-btn aa-wish-compare" type="button" data-aa-saved="${esc(JSON.stringify(saved))}">${COPY.wishButton}</button></div>
+      </section>`);
+      if (slot) slot.prepend(block); else section.after(block);
+      trackView('wishlist', 'n/a');
+    };
+    const container = document.querySelector('.wishlist-container');
+    if (!container) return;
+    new MutationObserver(fill).observe(container, { childList: true });
+    fill();
+  }
 
   // ---- 3.8 sticky --------------------------------------------------------------------
   // The listing bar stays on screen while the visitor scrolls the results. It sticks where production's
@@ -762,16 +887,31 @@
   // while the dock (3.7) is showing, so there is only ever one way back into a running consultation.
   function sideTab() {
     if (!on.sidetab || document.querySelector('.aa-sidetab')) return;
+    // every page except where the visitor is already deciding or paying: product pages, cart, checkout
+    if (/^\/(pictures|cart|checkout)(\/|$)/.test(PAGE.pathname.replace(/^\/en(?=\/)/, '')) || document.querySelector('.pdp-actions')) return;
     const tab = el(`<button class="aa-sidetab" type="button" aria-label="${COPY.sideTab}">
       <span class="aa-sidetab-label" aria-hidden="true">${COPY.sideTab}</span>
       <span class="aa-sidetab-icon" aria-hidden="true">${ICON_SPARKLE}</span>
     </button>`);
     tab.addEventListener('click', () => goToAdvisor('', 'side-tab'));
+    // first page of the visit: it slides in from the edge, opens its label for a moment, then settles
+    if (ss.get('aa:tab-intro') !== '1') {
+      ss.set('aa:tab-intro', '1');
+      tab.classList.add('aa-sidetab--pre');
+      setTimeout(() => {
+        tab.classList.remove('aa-sidetab--pre');
+        setTimeout(() => tab.classList.add('aa-sidetab--open'), 520);
+        setTimeout(() => tab.classList.remove('aa-sidetab--open'), 520 + 3200);
+      }, 1200);
+    }
     document.body.append(tab);
+    const dropdowns = [...document.querySelectorAll('.search-dropdown, search-focus .autocomplete-container')];
     const sync = () => {
       const dock = document.querySelector('.aa-pill');
-      tab.classList.toggle('aa-sidetab--away', !!(advisorWindow?.open || (dock && !dock.classList.contains('aa-pill--away'))));
+      const searching = dropdowns.some(d => !d.hidden);   // it never sits on the open search dropdown
+      tab.classList.toggle('aa-sidetab--away', !!(advisorWindow?.open || searching || (dock && !dock.classList.contains('aa-pill--away'))));
     };
+    dropdowns.forEach(d => new MutationObserver(sync).observe(d, { attributes: true, attributeFilter: ['hidden'] }));
     // it never covers a small control of the page (a carousel arrow, a button): it moves up or down
     // to the nearest free spot beside it, and tucks away only when there is none; large links such
     // as whole product cards and full-width rows do not count
@@ -833,6 +973,7 @@
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
       ['Product page', '3.6', '/en/pictures/luc_dratwa/mountain_view/'],
+      ['Wish list', '3.10', '/en/wishlist/'],
     ],
     de: [
       ['Homepage', '3.4 · 3.5 · 3.9', '/'],
@@ -843,6 +984,7 @@
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
       ['Product page', '3.6', '/pictures/luc_dratwa/mountain_view/'],
+      ['Wish list', '3.10', '/wishlist/'],
     ],
   };
   const DEMOS = DEMO_SETS[LOCALE];
@@ -869,8 +1011,11 @@
           <div class="aa-bar-chips">${ENTRIES.map(([id, num, label]) => chip(`type="checkbox" data-aa-toggle="${id}" ${on[id] ? 'checked' : ''}`, `<b>${num}</b> ${esc(label)}`)).join('')}</div></section>
         <section><p class="aa-panel-h">Advisor opens as</p>
           <div class="aa-bar-chips">${chip(`type="radio" name="aa-open" value="window" ${OPEN_MODE === 'window' ? 'checked' : ''}`, 'Window over the shop')}${chip(`type="radio" name="aa-open" value="page" ${OPEN_MODE === 'page' ? 'checked' : ''}`, 'Full page')}</div>
-          <p class="aa-panel-h">Empty search field (3.1)</p>
-          <div class="aa-bar-chips">${chip(`type="radio" name="aa-empty" value="bar" ${EMPTY_VARIANT === 'bar' ? 'checked' : ''}`, 'Bar above the tiles')}${chip(`type="radio" name="aa-empty" value="tile" ${EMPTY_VARIANT === 'tile' ? 'checked' : ''}`, 'Tile in “Most wanted”')}</div>
+          <p class="aa-panel-h">Wish list (3.10, stand-in)</p>
+          <div class="aa-bar-chips">${chip(`type="radio" name="aa-wish" value="saved" ${WISHLIST_STATE === 'saved' ? 'checked' : ''}`, '4 saved works')}${chip(`type="radio" name="aa-wish" value="empty" ${WISHLIST_STATE === 'empty' ? 'checked' : ''}`, 'Empty')}</div>
+          <p class="aa-panel-h">Search dropdown (3.1)</p>
+          <div class="aa-bar-chips">${[['bar', 'Bar'], ['tile', 'Tile'], ['panel', 'Panel'], ['column', 'Column'], ['field', 'Button in the field']].map(([v, label]) =>
+            chip(`type="radio" name="aa-dd" value="${v}" ${DD_VARIANT === v ? 'checked' : ''}`, label)).join('')}</div>
           <p class="aa-panel-h"><a class="aa-bar-link" href="${PAGE.pathname + (PAGE.search ? PAGE.search + '&' : '?')}pristine">This page without the layer →</a></p></section>
         <section><p class="aa-panel-h">Query class</p>
           <p class="aa-panel-class" data-aa-class>Type in the search field or open a search.</p></section>
@@ -878,7 +1023,7 @@
           <ol class="aa-panel-events" data-aa-events></ol></section>
       </div>
       <div class="aa-bar-main">
-        <span class="aa-bar-title">Art Advisor</span>
+        <span class="aa-bar-title">AI Advisor</span>
         <nav class="aa-bar-pages" aria-label="Walk-through">${DEMOS.map(([label, shows, href], i) =>
           `<a href="${href}" title="${esc(label + ': ' + shows)}" ${i === step ? 'aria-current="page"' : ''}><b>${i + 1}</b><span>${esc(label)}</span></a>`).join('')}</nav>
         <button type="button" class="aa-panel-toggle" aria-expanded="false" aria-controls="aa-panel-body">${ICON_SLIDERS}<span>Entry points</span></button>
@@ -897,7 +1042,8 @@
       location.reload();
     }));
     panel.querySelectorAll('input[name=aa-open]').forEach(r => r.addEventListener('change', () => { ls.set('aa-open-mode', r.value); location.reload(); }));
-    panel.querySelectorAll('input[name=aa-empty]').forEach(r => r.addEventListener('change', () => { ls.set('aa-empty-variant', r.value); location.reload(); }));
+    panel.querySelectorAll('input[name=aa-dd]').forEach(r => r.addEventListener('change', () => { ls.set('aa-dd-variant', r.value); location.reload(); }));
+    panel.querySelectorAll('input[name=aa-wish]').forEach(r => r.addEventListener('change', () => { ls.set('aa-wishlist-state', r.value); location.reload(); }));
     panel.querySelector('.aa-panel-clear').addEventListener('click', () => { events.length = 0; ls.set('aa-events', events); renderEventLog(); });
     document.documentElement.classList.add('aa-has-bar');
     document.body.append(panel);
@@ -931,11 +1077,14 @@
     overlayDesktop();
     overlayMobile();
     searchTile();
+    searchFieldButton();
     // search pages always; category pages once their client-rendered grid exists
     if (isSearchPage) watchResults(); else whenPresent('.search-results', watchResults);
     whenPresent('site-header nav > details', navCard);
     whenPresent('edition-finder', homepageFinder);
     whenPresent('.pdp-actions .button-container', productPage);
+    seedWishlist();
+    wishlistPage();
     returnPill();
     sideTab();
   }

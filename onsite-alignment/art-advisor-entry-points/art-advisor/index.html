@@ -3,7 +3,7 @@
 <head><meta name="robots" content="noindex,nofollow"><script src="../../assets/gate.js"></script><script src="../_static/data.js"></script><script src="../_static/static.js"></script><script src="../_static/advisor-data.js"></script><script src="../_static/advisor-backend.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<title>LUMAS Art Advisor</title>
+<title>LUMAS AI Advisor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,500;100,700&display=swap">
@@ -409,7 +409,7 @@
 <body>
 <header>
   <div><a class="back-link" id="back-link" hidden></a></div>
-  <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg><span class="brand-name" data-i18n="brandSub">Art Advisor</span></div>
+  <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg><span class="brand-name" data-i18n="brandSub">AI Advisor</span></div>
   <div class="header-actions">
     <a class="icon-btn" href="/reset" title="New chat" aria-label="New chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></a>
     <button class="icon-btn" id="minimise-btn" type="button" title="Minimise" aria-label="Minimise" hidden onclick="minimiseAdvisor()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
@@ -461,7 +461,7 @@
   </aside>
 </div>
 
-<button class="launcher" id="launcher" type="button" onclick="openAdvisor()" aria-label="Open the Art Advisor">Art Advisor</button>
+<button class="launcher" id="launcher" type="button" onclick="openAdvisor()" aria-label="Open the AI Advisor">AI Advisor</button>
 <div class="toast" id="overlay"><div class="box"><span class="spin"></span><span id="overlay-msg"></span></div></div>
 <div class="wall-ctx" id="wall-ctx" style="display:none"></div>
 <input type="file" id="room-file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="uploadRoomPhoto(this.files[0]); this.value='';">
@@ -503,8 +503,8 @@ const T = {
     uploadAction: 'Foto wählen',
   },
   en: {
-    title: 'LUMAS Art Advisor',
-    brandSub: 'Art Advisor',
+    title: 'LUMAS AI Advisor',
+    brandSub: 'AI Advisor',
     newChat: 'New chat',
     logout: 'Log out',
     send: 'Send',
@@ -544,6 +544,8 @@ const RETURN_URL = _params.get('return');
 const HANDOFF_Q = (_params.get('q') || '').trim();
 // the shop filters the visitor had applied (labels as the shop shows them), carried into the chat
 const HANDOFF_FILTERS = (()=>{ try { return JSON.parse(_params.get('filters') || '[]').filter(x=>typeof x==='string' && x.trim()); } catch(e){ return []; } })();
+// works saved on the shop's wish list, as "Title, Artist"
+const HANDOFF_SAVED = (()=>{ try { return JSON.parse(_params.get('saved') || '[]').filter(x=>typeof x==='string' && x.trim()); } catch(e){ return []; } })();
 // Served under the shop's own origin (/art-advisor/): product links stay in the same tab and site.
 const EMBEDDED = /\/art-advisor\//.test(location.pathname);   // also under the published copy's subpath
 // opened as a window over the shop (an iframe on the shop's origin, ?embed=1)
@@ -1647,9 +1649,9 @@ document.querySelector('header a.icon-btn[href$="reset"]')?.addEventListener('cl
 if(HANDOFF_Q){
   try{ sessionStorage.removeItem('aa:snapshot'); }catch(e){}   // a new question from the shop is a new conversation
   // drop q from the address so a reload does not ask twice, then send it as the visitor's first message
-  _params.delete('q'); _params.delete('filters');
+  _params.delete('q'); _params.delete('filters'); _params.delete('saved');
   history.replaceState(null, '', location.pathname + (_params.toString() ? '?'+_params : ''));
-  fetch('/reset', {redirect:'manual'}).catch(()=>{}).finally(()=> sendHandoff(HANDOFF_Q, HANDOFF_FILTERS));
+  fetch('/reset', {redirect:'manual'}).catch(()=>{}).finally(()=> sendHandoff(HANDOFF_Q, HANDOFF_FILTERS, HANDOFF_SAVED));
 } else if(EMBEDDED){
   restoreSnapshot();
 }
@@ -1658,15 +1660,20 @@ _snapshotReady = true;
 window.addEventListener('pagehide', ()=> saveSnapshot(true));
 // The visitor's words as their first message, with the shop filters shown under them and passed to
 // the advisor as context, so the conversation starts where the visitor was.
-function sendHandoff(q, filters){
-  if(!filters.length) return sendMessage(q, false);
+function sendHandoff(q, filters, saved = []){
+  if(!filters.length && !saved.length) return sendMessage(q, false);
   const b = addBubble('user');
-  b.innerHTML = esc(q) + '<span class="handoff-filters"><span class="hf-label">'
-    + esc(LANG==='de' ? 'Aus deinen Filtern' : 'From your filters') + '</span>'
-    + filters.map(f=>'<span class="hf-chip">'+esc(f)+'</span>').join('') + '</span>';
-  const context = LANG==='de' ? '[Im Shop aktive Filter: ' + filters.join(', ') + '. Berücksichtige sie bei den Vorschlägen.]'
-                             : '[Filters active in the shop: ' + filters.join(', ') + '. Take them into account in the suggestions.]';
-  sendMessage(q + '\n' + context, false, true);
+  const chips = (label, items) => '<span class="handoff-filters"><span class="hf-label">' + esc(label) + '</span>'
+    + items.map(f=>'<span class="hf-chip">'+esc(f)+'</span>').join('') + '</span>';
+  b.innerHTML = esc(q)
+    + (filters.length ? chips(LANG==='de' ? 'Aus deinen Filtern' : 'From your filters', filters) : '')
+    + (saved.length ? chips(LANG==='de' ? 'Aus deiner Wunschliste' : 'From your wish list', saved) : '');
+  const context = [];
+  if(filters.length) context.push(LANG==='de' ? '[Im Shop aktive Filter: ' + filters.join(', ') + '. Berücksichtige sie bei den Vorschlägen.]'
+                                              : '[Filters active in the shop: ' + filters.join(', ') + '. Take them into account in the suggestions.]');
+  if(saved.length) context.push(LANG==='de' ? '[Auf der Wunschliste gemerkte Werke: ' + saved.join('; ') + '. Vergleiche sie an der Wand der Kundin oder des Kunden.]'
+                                            : '[Works saved on the wish list: ' + saved.join('; ') + '. Compare them on the visitor\'s wall.]');
+  sendMessage(q + '\n' + context.join('\n'), false, true);
 }
 </script>
 </body>

@@ -40,6 +40,8 @@
     if (file) location.href = file;
     else window.open(live(path), '_blank', 'noopener');
   };
+  // a shop path -> the captured file to fetch (the layer reads the wish list's cards from one)
+  S.fileFor = path => captured(path) || path;
   // for the advisor (same origin, one folder down): its product links
   S.shopLink = path => { const file = captured(path); return file ? '../' + file : live(path); };
 
