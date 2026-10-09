@@ -1,0 +1,112 @@
+/* Consolidation layer: every rule is scoped to data-tidy="on" so the
+   Vorher/Nachher switch shows the untouched page. */
+
+/* 0. "Checkout" and "Warenkorb" headings in the V2 display face */
+html[data-tidy="on"] .spc-container .main-title {
+  font-family: 'UtileDisplay', 'Utile Display', Georgia, serif; font-weight: 400; letter-spacing: 0;
+}
+
+/* 1. USP bar: same five promises, one slim line instead of a 133px band */
+.tidy-usp { display: none; }
+html[data-tidy="on"] .spc-top-content > .row { display: none !important; }
+html[data-tidy="on"] .tidy-usp {
+  display: flex; justify-content: safe center; align-items: center; gap: clamp(20px, 2.6vw, 40px); flex-wrap: nowrap;
+  overflow-x: auto; scrollbar-width: none;
+  margin: 0; padding: 12px 24px; list-style: none;
+  font-size: 13px; line-height: 1.4; color: #3a3835;
+}
+html[data-tidy="on"] .tidy-usp li { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+html[data-tidy="on"] .tidy-usp img { width: 24px; height: 24px; }
+
+/* No hairlines around the bar, a beige band instead; the icon JPGs carry a white
+   disc and a ring, so multiply drops the white and the clip drops the ring */
+html[data-tidy="on"] .spc-top-content,
+html[data-tidy="on"] header:has(+ .spc-top-content) { border-bottom: 0; }
+html[data-tidy="on"] .spc-top-content { background: #f7f1e9; margin-bottom: 36px; }
+html[data-tidy="on"] .tidy-usp img { mix-blend-mode: multiply; clip-path: circle(36%); }
+
+/* 2. Sidebar list: drop the two rows the USP bar already says */
+html[data-tidy="on"] .checkout-shipment-estimation > div:has(use[href="#secure"]),
+html[data-tidy="on"] .checkout-shipment-estimation > div:has(use[href="#return"]) { display: none !important; }
+
+/* 3. Trustpilot: carousel out of the form column, one line under the sidebar list */
+html[data-tidy="on"] .spc-container main > section.container:has(iframe[src*="trustpilot"]) { display: none; }
+.tidy-proof { display: none; }
+html[data-tidy="on"] .tidy-proof {
+  display: block;
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid #eae2d8;
+  font-size: 13px; color: #5a5752;
+}
+html[data-tidy="on"] .tidy-proof .stars { color: #00b67a; letter-spacing: 1px; font-size: 14px; margin-right: 8px; }
+html[data-tidy="on"] .tidy-proof span { display: inline !important; width: auto !important; }
+html[data-tidy="on"] .tidy-proof b { color: #1c1a18; font-weight: 600; }
+
+/* 3b. Art as a Service: after the voucher box, in its own ivory box */
+html[data-tidy="on"] #aaas-mode {
+  margin: 16px 0 24px; padding: 20px; background: #f4ede2; border: 0;
+}
+html[data-tidy="on"] #aaas-mode .aaas-label { margin-top: 0; }
+html[data-tidy="on"] aside .coupon-form-container { padding-bottom: 0; margin-bottom: 0; min-height: 0; height: auto; }
+
+/* 5. "Warenkorb teilen": a quiet link, not a second button */
+html[data-tidy="on"] aside shared-cart-share button.trigger {
+  height: auto; padding: 0; border: 0; background: none;
+  text-decoration: underline; text-underline-offset: 3px; color: #5a5752;
+}
+
+/* 5b. Centre the share link on the "Warenkorb" heading (the shop pins it at top:-3.5px) */
+@media (min-width: 768px) {
+  html[data-tidy="on"] aside details > shared-cart-share { top: 6px; }
+}
+
+/* 6. Footer: no repeated promises, seals and payment logos in one compact row */
+html[data-tidy="on"] footer .checkout-teaser > .col-teaser:nth-child(n+3),
+html[data-tidy="on"] footer .footer-social { display: none !important; }
+html[data-tidy="on"] footer .checkout-teaser {
+  display: flex; justify-content: center; align-items: flex-start; gap: 64px; flex-wrap: wrap;
+  padding: 24px 16px 8px;
+}
+html[data-tidy="on"] footer .checkout-teaser > .col-teaser { width: auto; flex: 0 0 auto; padding: 0; margin: 0; }
+html[data-tidy="on"] footer .checkout-teaser .headline-block { margin-bottom: 10px; }
+html[data-tidy="on"] footer .checkout-teaser img { max-height: 44px; width: auto; }
+html[data-tidy="on"] footer .payment-methods .icons { display: flex; flex-wrap: wrap; gap: 6px; width: auto; max-width: 560px; }
+html[data-tidy="on"] footer .payment-methods { width: auto; max-width: none; }
+html[data-tidy="on"] footer .payment-methods .icons svg { width: 39px; height: 26px; margin: 0; }
+
+/* Before/after switch, prototype only */
+.tidy-switch {
+  position: fixed; right: 16px; bottom: 16px; z-index: 2147483000;
+  display: flex; background: #fff; border: 1px solid #1c1a18; font: 700 11px/1 Archivo, sans-serif;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.tidy-switch button { border: 0; background: none; padding: 10px 14px; cursor: pointer; color: #1c1a18; }
+.tidy-switch button[aria-pressed="true"] { background: #1c1a18; color: #f4ede2; }
+
+/* Mobile USP rows live in the shipping list; desktop keeps the top bar */
+.tidy-mobile-usp { display: none; }
+/* the shop forces stroke-width 0.1px on list icons (its sprite uses a large viewBox) */
+.tidy-mobile-usp svg, .tidy-mobile-usp svg * { stroke: #1c1a18; stroke-width: 1.5px !important; fill: none; }
+
+@media (max-width: 767px) {
+  /* Mobile: USPs move from the top band into the shipping list under the price */
+  html[data-tidy="on"] .spc-top-content { display: none !important; }
+  html[data-tidy="on"] .tidy-mobile-usp { display: block; }
+  html[data-tidy="on"] .checkout-shipment-estimation > div:has(use[href="#return"]) { display: block !important; }
+  html[data-tidy="on"] .checkout-shipment-estimation { display: flex; flex-direction: column; }
+  html[data-tidy="on"] .checkout-shipment-estimation > div:has(use[href="#return"]) { order: 1; }
+  html[data-tidy="on"] .tidy-mobile-usp[data-usp="proof"] { order: 2; }
+  html[data-tidy="on"] .tidy-mobile-usp[data-usp="box"] { order: 3; }
+  html[data-tidy="on"] #aaas-mode { margin: 16px 21px 24px; padding: 16px; }
+  /* Mobile: returns, 330.000 Sammler:innen and the Art security Box only, as a compact 3-up row */
+  html[data-tidy="on"] .spc-top-content { overflow: hidden; }
+  html[data-tidy="on"] .tidy-usp {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    padding: 10px 12px; overflow: visible; font-size: 11px; line-height: 1.3; text-align: center;
+  }
+  html[data-tidy="on"] .tidy-usp li { flex-direction: column; gap: 4px; white-space: normal; }
+  html[data-tidy="on"] .tidy-usp li:not([data-usp="core"]) { display: none; }
+  html[data-tidy="on"] .tidy-usp img { width: 20px; height: 20px; }
+  html[data-tidy="on"] footer .checkout-teaser { gap: 24px; }
+  html[data-tidy="on"] footer .checkout-teaser > .col-teaser,
+  html[data-tidy="on"] footer .payment-methods .icons { max-width: 100%; }
+}
