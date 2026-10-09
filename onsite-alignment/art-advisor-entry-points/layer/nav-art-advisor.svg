@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 86">
+  <style>
+    @keyframes tw { 0%, 55%, 100% { transform: scale(1); opacity: 1; } 65% { transform: scale(.15); opacity: .15; } 78% { transform: scale(1.35); opacity: 1; } 88% { transform: scale(1); } }
+    @keyframes gl { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.12) rotate(10deg); } 94% { transform: scale(.98) rotate(-2deg); } }
+    .s path { transform-box: fill-box; transform-origin: center; }
+    .s .big { animation: gl 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
+    .s .a { animation: tw 4.8s cubic-bezier(.2, .8, .2, 1) .6s infinite; }
+    .s .b { animation: tw 4.8s cubic-bezier(.2, .8, .2, 1) 2.2s infinite; }
+    @media (prefers-reduced-motion: reduce) { .s path { animation: none; } }
+  </style>
   <!-- Art Advisor card for the Artfinder menu: same frame, palette and line weight as
        media.lumas.de/site-navigation/artfinder-*.svg, with the Art Advisor sparkle as its mark -->
   <rect x=".25" y=".25" width="213.5" height="85.5" rx="7.75" ry="7.75" fill="#edeef1" stroke="#ebedf0" stroke-width=".5"/>
   <!-- the sparkle (Lucide "sparkles", scaled) -->
-  <g transform="translate(62 19) scale(2)" fill="none" stroke="#495564" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#495564"/>
-    <path d="M20 3v4M22 5h-4M4 17v2M5 18H3"/>
+  <g transform="translate(62 19) scale(2)" fill="none" stroke="#495564" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round" class="s">
+    <path class="big" d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#495564"/>
+    <path class="a" d="M20 3v4M22 5h-4"/>
+    <path class="b" d="M4 17v2M5 18H3"/>
   </g>
   <!-- a work on the wall, dashed like the room-upload frame -->
   <rect x="118.5" y="20.5" width="40" height="45" rx="3.5" fill="none" stroke="#abb2bd" stroke-dasharray="2 2"/>

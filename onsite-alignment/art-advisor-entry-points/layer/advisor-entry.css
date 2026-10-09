@@ -20,12 +20,21 @@
 
 /* the Art Advisor signature ---------------------------------------------------
    One mark (sparkle + ART ADVISOR), one surface (Bone), one call to action
-   ("Ask the Art Advisor"), one motion (the sparkle turns slightly on hover; it never animates by itself).
+   ("Ask the AI Advisor"), one motion (the sparkle's stars twinkle slowly; it turns slightly on hover).
    Every entry point uses all four, so the feature is recognisable anywhere. */
 .aa-mark { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 10px;
   font: 700 11px/1 archivo, medium-fallback, arial, sans-serif; letter-spacing: .14em; text-transform: uppercase;
   color: var(--aa-ink, #1c1a18); }
 .aa-mark svg { width: 15px; height: 15px; flex: 0 0 auto; }
+/* the sparkle's own motion: the two small stars twinkle in turn, the large one glints now and then.
+   Slow (4.8 s), with long rests, so it reads as light catching, not as a notification. */
+@keyframes aa-twinkle { 0%, 55%, 100% { transform: scale(1); opacity: 1; } 65% { transform: scale(.15); opacity: .15; } 78% { transform: scale(1.35); opacity: 1; } 88% { transform: scale(1); } }
+@keyframes aa-glint { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.12) rotate(10deg); } 94% { transform: scale(.98) rotate(-2deg); } }
+:is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path { transform-box: fill-box; transform-origin: center; }
+:is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path:nth-child(1) { animation: aa-glint 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
+:is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path:nth-child(2), :is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path:nth-child(3) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: .6s; }
+:is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path:nth-child(4), :is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path:nth-child(5) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: 2.2s; }
+@media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon, .aa-sidetab-icon, .aa-fieldbtn) svg path { animation: none !important; } }
 .aa-mark svg, .aa-row-icon svg, .aa-pdp-icon svg, .aa-pill-icon svg { transform-origin: 50% 50%;
   transition: transform .32s var(--aa-ease, cubic-bezier(.2,.8,.2,1)); }
 :is(.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pdp, .aa-pill, .aa-nav-card):hover :is(.aa-mark, .aa-row-icon, .aa-pdp-icon, .aa-pill-icon) svg {

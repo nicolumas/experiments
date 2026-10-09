@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+  <style>
+    @keyframes tw { 0%, 55%, 100% { transform: scale(1); opacity: 1; } 65% { transform: scale(.15); opacity: .15; } 78% { transform: scale(1.35); opacity: 1; } 88% { transform: scale(1); } }
+    @keyframes gl { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.12) rotate(10deg); } 94% { transform: scale(.98) rotate(-2deg); } }
+    .s path { transform-box: fill-box; transform-origin: center; }
+    .s .big { animation: gl 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
+    .s .a { animation: tw 4.8s cubic-bezier(.2, .8, .2, 1) .6s infinite; }
+    .s .b { animation: tw 4.8s cubic-bezier(.2, .8, .2, 1) 2.2s infinite; }
+    @media (prefers-reduced-motion: reduce) { .s path { animation: none; } }
+  </style>
   <!-- Art Advisor tile for the search dropdown's "Most wanted" grid (same 220x220 as its photo tiles).
        Bone ground with the Art Advisor sparkle, so it reads as a LUMAS tool, not an artwork. -->
   <rect width="220" height="220" fill="#eae2d8"/>
@@ -7,8 +16,9 @@
   <rect x="127" y="71" width="47" height="62" fill="#9ea6b2"/>
   <path d="M127 120l14-14 10 10 8-7 15 13v11h-47z" fill="#eae2d8" opacity=".5"/>
   <!-- the sparkle (Lucide "sparkles", scaled) -->
-  <g transform="translate(26 58) scale(3.6)" fill="none" stroke="#1c1a18" stroke-width=".42" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#1c1a18"/>
-    <path d="M20 3v4M22 5h-4M4 17v2M5 18H3"/>
+  <g transform="translate(26 58) scale(3.6)" fill="none" stroke="#1c1a18" stroke-width=".42" stroke-linecap="round" stroke-linejoin="round" class="s">
+    <path class="big" d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#1c1a18"/>
+    <path class="a" d="M20 3v4M22 5h-4"/>
+    <path class="b" d="M4 17v2M5 18H3"/>
   </g>
 </svg>
