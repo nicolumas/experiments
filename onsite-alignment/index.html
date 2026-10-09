@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1007", kicker: "Latest · today",        weekday: "Wednesday", date: "7 October", year: "2026", short: "7 Oct", upcoming: true },
+      { id: "s1009", kicker: "Latest · today",        weekday: "Friday",    date: "9 October", year: "2026", short: "9 Oct", upcoming: true },
+      { id: "s1007", kicker: "Previous",              weekday: "Wednesday", date: "7 October", year: "2026", short: "7 Oct" },
       { id: "s1003", kicker: "Previous",              weekday: "Saturday",  date: "3 October", year: "2026", short: "3 Oct" },
       { id: "s1002", kicker: "Previous",              weekday: "Thursday",  date: "2 October", year: "2026", short: "2 Oct" },
       { id: "s0929", kicker: "Previous",              weekday: "Tuesday",   date: "29 September", year: "2026", short: "29 Sep" },
@@ -177,6 +178,8 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Friday 9 October ───────────────────────────
+      { s: "s1009", feature: true, title: "Art advisory v2: short and simple (DE, CMS)", href: "art-advisory-cms-v2/", desc: "A shorter second version of the advisory fragment: 80+ Art Consultants in the hero, the shop\u2019s contact buttons with a ZIP-to-gallery booking step, and the gallery managers carousel." },
       // ── Wednesday 7 October ───────────────────────────
       { s: "s1007", feature: true, title: "PDP trust space under Trustpilot (DE, US)", href: "pdp-trust-space/", desc: "Seven switchable versions for the empty space under Trustpilot on a Marta Contreras PDP, from stars under the title to a consultant card with gallery booking." },
       { s: "s1007", feature: true, title: "Art Advisor entry points on lumas.de (EN, DE)", href: "art-advisor-entry-points/", desc: "All seven entry points from the Art Advisor \u00d7 search concept on a lumas.de clone, handing visitors, their words and their filters to the Art Advisor in a window." },
