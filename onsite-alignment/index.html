@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1009", kicker: "Latest · today",        weekday: "Friday",    date: "9 October", year: "2026", short: "9 Oct", upcoming: true },
+      { id: "s1012", kicker: "Latest · today",        weekday: "Monday",    date: "12 October", year: "2026", short: "12 Oct", upcoming: true },
+      { id: "s1009", kicker: "Previous",              weekday: "Friday",    date: "9 October", year: "2026", short: "9 Oct" },
       { id: "s1007", kicker: "Previous",              weekday: "Wednesday", date: "7 October", year: "2026", short: "7 Oct" },
       { id: "s1003", kicker: "Previous",              weekday: "Saturday",  date: "3 October", year: "2026", short: "3 Oct" },
       { id: "s1002", kicker: "Previous",              weekday: "Thursday",  date: "2 October", year: "2026", short: "2 Oct" },
@@ -178,6 +179,8 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      // ── Monday 12 October ───────────────────────────
+      { s: "s1012", feature: true, title: "Art advisory v4: contact options as image cards (DE, CMS)", href: "art-advisory-cms-v4/", desc: "Version 2 with the contact component as four image cards, one row on desktop: WhatsApp, email, call and book a consultation, each with a photo and a short line. Needs a change to the shared contact component." },
       // ── Friday 9 October ───────────────────────────
       { s: "s1009", feature: true, title: "Checkout, consolidated (DE)", href: "art-as-a-service/checkout-konsolidiert/", desc: "The current checkout with one light layer: USPs said once in a slim beige band (in the summary list on mobile), Art as a Service in an ivory box above the price, and a quieter footer." },
       { s: "s1009", cluster: "Checkout, consolidated", title: "Current checkout, for comparison", href: "art-as-a-service/checkout-konsolidiert/?vorher" },
