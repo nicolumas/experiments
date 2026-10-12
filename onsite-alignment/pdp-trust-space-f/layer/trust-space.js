@@ -6,7 +6,7 @@
  *   stars    Trustpilot stars under the artwork title (Claudius)
  *   usps     USP list straight under the CTA, shipping line kept (the variant tested before)
  *   assure   returns + payment, store-aware
- *   certificate  certificate of authenticity (edition + signature already sit under the title)
+ *   collectors   collector count (edition + signature already sit under the title)
  *   consult  speak with an art consultant, gallery or video (a quiet row)
  *   advisor  the art consultant as the main focus: a card straight under the CTA
  *
@@ -22,16 +22,16 @@
     { key: 'stars', label: 'Stars under title' },
     { key: 'usps', label: 'USPs under CTA' },
     { key: 'assure', label: 'Returns + payment' },
-    { key: 'certificate', label: 'Certificate' },
+    { key: 'collectors', label: 'Collectors' },
     { key: 'consult', label: 'Art consultant' },
     { key: 'advisor', label: 'Consultant card' }
   ];
-  var BUNDLE = ['assure', 'certificate'];
+  var BUNDLE = ['assure', 'collectors'];
   var VERSIONS = [
     { id: 'A', name: 'Control', note: 'Production today.', els: [] },
     { id: 'B', name: 'Stars under title', note: 'Trustpilot moves between the title and the size selection, above the fold at every resolution.', els: ['stars'] },
     { id: 'C', name: 'USPs under CTA', note: 'Returns, payment and collector count straight under the CTA. Shipping line stays. Tested before: ATC flat, revenue slightly up.', els: ['usps'] },
-    { id: 'D', name: 'Trust bundle', note: 'Three facts under Trustpilot that appear nowhere else on the page: returns, payment, certificate.', els: BUNDLE },
+    { id: 'D', name: 'Trust bundle', note: 'Three facts under Trustpilot that appear nowhere else on the page: returns, payment, collector count.', els: BUNDLE },
     { id: 'E', name: 'Bundle + consultant', note: 'D plus a quiet row: speak with an art consultant, in a gallery or by video.', els: BUNDLE.concat('consult') },
     { id: 'F', name: 'Stars + bundle + consultant', note: 'Everything except the USP list: stars under the title, the bundle where Trustpilot was, and the consultant row.', els: ['stars'].concat(BUNDLE, 'consult') },
     { id: 'G', name: 'Consultant first', note: 'The art consultant is the main focus: a compact card straight under the CTA. Gallery or video opens the booking pop-up with every gallery calendar. Video: no gallery offers a video service yet, so that tab books the same calendars for now. Add to cart stays the only solid button.', els: ['advisor'] }
@@ -41,7 +41,7 @@
     de: {
       returns: '60 Tage Rückgaberecht',
       payment: 'Bezahlen nach Lieferung oder in bis zu 36 zinsfreien Raten',
-      certificate: 'Echtheitszertifikat',
+      collectors: '350.000 zufriedene Sammler:innen weltweit',
       consultLine: 'Sprich mit unseren Art Consultants, in der Galerie oder per\u00a0Video',
       consultHref: '/kontakt/',
       advisorTitle: 'Lass dich von unseren Art\u00a0Consultants\u00a0beraten',
@@ -74,7 +74,7 @@
     us: {
       returns: '60-day returns',
       payment: 'Pay later or in installments with Klarna',
-      certificate: 'Certificate of authenticity',
+      collectors: '350,000 satisfied collectors worldwide',
       consultLine: 'Speak with an art consultant, at the gallery or by\u00a0video',
       consultHref: '/contact/',
       advisorTitle: 'Get advice from our art\u00a0consultants',
@@ -104,7 +104,6 @@
   var ICON = {
     returns: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
     payment: '<rect x="2" y="5" width="20" height="14" rx="1"/><path d="M2 10h20"/>',
-    certificate: '<circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/>',
     collectors: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
     consult: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
@@ -157,7 +156,7 @@
   function bundleHtml(on) {
     var items = [];
     if (on.assure) items.push(['returns', t.returns], ['payment', t.payment]);
-    if (on.certificate) items.push(['certificate', t.certificate]);
+    if (on.collectors) items.push(['collectors', t.collectors]);
     var html = items.map(function (i) { return '<li>' + icon(i[0]) + '<span>' + i[1] + '</span></li>'; }).join('');
     if (on.consult) {
       html += '<li class="ts-consult">' + icon('consult') + '<a href="' + t.consultHref + '" data-ts-book="gallery">' + t.consultLine + ' →</a></li>';
