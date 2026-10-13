@@ -32,7 +32,6 @@
     ['banner', '3.3', 'Results banner (question / 0–3 hits)'],
     ['nav', '3.4', 'Artfinder menu card'],
     ['finder', '3.5', 'Homepage free-text finder'],
-    ['pdp', '3.6', 'Product page link'],
     ['pill', '3.7', 'Back-to-consultation pill'],
     ['listbar', '3.8', 'Listing top bar (every listing page)'],
     ['sidetab', '3.9', 'Side tab (every page)'],
@@ -113,9 +112,6 @@
       fieldButton: 'KI',
       toClassic: 'Lieber klicken? Zum klassischen Finder',
       toAdvisor: 'Lieber beschreiben? Zum AI Advisor Finder',
-      pdpText: 'Gefällt dir die Richtung, aber nicht ganz?',
-      pdpLink: 'Ähnliches im AI Advisor finden →',
-      pdpQuery: (artwork, artist) => `Ähnlich wie „${artwork}“ von ${artist}, aber etwas anders`,
       pill: n => `Zurück zur Beratung${n ? ` <span>· ${n} Vorschläge</span>` : ''}`,
     },
     en: {
@@ -158,9 +154,6 @@
       fieldButton: 'AI',
       toClassic: 'Prefer clicking? Go to the classic finder',
       toAdvisor: 'Prefer describing? Go to the AI Advisor finder',
-      pdpText: 'Like the direction, but not quite?',
-      pdpLink: 'Find similar with the AI Advisor →',
-      pdpQuery: (artwork, artist) => `Similar to “${artwork}” by ${artist}, but a little different`,
       pill: n => `Back to your consultation${n ? ` <span>· ${n} suggestions</span>` : ''}`,
     },
   }[LOCALE];
@@ -663,28 +656,6 @@
     new IntersectionObserver((entries, obs) => { if (entries.some(x => x.isIntersecting)) { trackView('homepage-finder', 'n/a'); obs.disconnect(); } }).observe(block);
   }
 
-  // ---- 3.6 product page --------------------------------------------------------------
-  function productPage() {
-    if (!on.pdp) return;
-    const actions = document.querySelector('.pdp-actions .button-container');
-    if (!actions || document.querySelector('.aa-pdp')) return;
-    // the buy box's own title and artist; <make-an-offer> carries them too, but only on the German shop
-    const info = document.querySelector('.pdp-basic-info');
-    const artist = info?.querySelector('h1 .artist, .artist')?.textContent.trim() || '';
-    const artwork = info?.querySelector('.artwork')?.textContent.trim() || document.querySelector('make-an-offer')?.dataset.artwork || '';
-    const sku = document.querySelector('.add-to-cart')?.dataset.sku || '';
-    const q = artwork ? COPY.pdpQuery(artwork, artist) : '';
-    const box = el(`<div class="aa-pdp">
-      <span class="aa-pdp-icon" aria-hidden="true">${ICON_SPARKLE}</span>
-      <p class="aa-pdp-text">${COPY.pdpText}</p>
-      <a class="aa-link" href="${esc(advisorUrl(q, 'pdp'))}" data-aa-placement="pdp" data-aa-q="${esc(q)}">${COPY.pdpLink}</a>
-    </div>`);
-    box.dataset.sku = sku;
-    // below add-to-cart, never above it (concept 3.6)
-    actions.after(box);
-    trackView('pdp', 'n/a');
-  }
-
   // ---- 3.7 "Zurück zur Beratung" pill -------------------------------------------------
   function returnPill(afterWindow = false) {
     if (!on.pill || ss.get('aa:active') !== '1' || document.querySelector('.aa-pill') || advisorWindow?.open) return;
@@ -894,14 +865,16 @@
       <span class="aa-sidetab-icon" aria-hidden="true">${ICON_SPARKLE}</span>
     </button>`);
     tab.addEventListener('click', () => goToAdvisor('', 'side-tab'));
-    // first page of the visit: it slides in from the edge, opens its label for a moment, then settles
-    if (ss.get('aa:tab-intro') !== '1') {
+    // first landing on the homepage, once per visit: it slides in from the edge, opens to its full
+    // label while the star twinkles once, then closes and stays still
+    if (PAGE.pathname === PREFIX + '/' && ss.get('aa:tab-intro') !== '1') {
       ss.set('aa:tab-intro', '1');
       tab.classList.add('aa-sidetab--pre');
       setTimeout(() => {
         tab.classList.remove('aa-sidetab--pre');
-        setTimeout(() => tab.classList.add('aa-sidetab--open'), 520);
+        setTimeout(() => tab.classList.add('aa-sidetab--open', 'aa-sidetab--intro'), 520);
         setTimeout(() => tab.classList.remove('aa-sidetab--open'), 520 + 3200);
+        setTimeout(() => tab.classList.remove('aa-sidetab--intro'), 520 + 3200 + 400);
       }, 1200);
     }
     document.body.append(tab);
@@ -972,7 +945,6 @@
       ['0 hits', 'search, rescue · 3.3', '/en/search/?q=what+goes+with+a+beige+wall'],
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
-      ['Product page', '3.6', '/en/pictures/luc_dratwa/mountain_view/'],
       ['Wish list', '3.10', '/en/wishlist/'],
     ],
     de: [
@@ -983,7 +955,6 @@
       ['0 hits', 'search, rescue · 3.3', '/search/?q=was+passt+zu+einer+beigen+wand'],
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
-      ['Product page', '3.6', '/pictures/luc_dratwa/mountain_view/'],
       ['Wish list', '3.10', '/wishlist/'],
     ],
   };
@@ -1082,7 +1053,6 @@
     if (isSearchPage) watchResults(); else whenPresent('.search-results', watchResults);
     whenPresent('site-header nav > details', navCard);
     whenPresent('edition-finder', homepageFinder);
-    whenPresent('.pdp-actions .button-container', productPage);
     seedWishlist();
     wishlistPage();
     returnPill();
