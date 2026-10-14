@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/inline.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/site-header.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/main.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/bottom-nav.css">
+<link rel="stylesheet" href="https://cdn.lumas.de/assets/white/social-proof-bar.css">
+<link rel="stylesheet" href="assets/page-local.css">
+<script src="../assets/gate.js"></script>
+<title>Petites &amp; Darlings · Curate your quartet</title>
+</head>
+<body>
+<!-- Wrapper copied from a real CMS content page (prelive_template), verified
+     2026-09-21. Content rows sit directly inside .container: do not add an extra
+     .row/.col wrapper, or the fragment's own rows nest inside a column and the
+     layout changes. There is exactly one <main> on the real page.
+
+     .static-pages and .content are load-bearing and must both be present: a
+     stack of production rules is scoped to that pair, and without them the
+     preview silently renders the generic rule instead. The one that bites is
+     .static-pages .content .like-h2, which makes a standfirst 2rem body text;
+     outside the pair, .like-h2,h2 wins and the same paragraph previews as a
+     4.6rem display heading. .static-pages h1,h2 also sets the heading padding.
+     Neither class carries layout of its own, so adding them changes nothing
+     else. Verified against www.lumas.de/inspired-art-magazine/, 2026-09-22. -->
+<div id="app" class="content-container">
+<main id="main-content" tabindex="-1">
+<div class="container static-pages">
+<div class="content">
+
+<div class="row mt-3 mb-1">
+  <div class="col-md-12 text-center">
+    <p class="headline-block color-secondary mb-1">Petites &amp; Darlings</p>
+    <h1 class="text-wrap-balance">Curate your quartet</h1>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 text-center">
+    <p class="color-secondary text-wrap-balance">Discover how four small-format artworks can change a wall. Arrange your favourites, try different combinations, and pay for only three.</p>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="bg-inverse px-3 pt-2 pb-2 text-center">
+      <p class="headline-block mb-0">Choose four, pay for three</p>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW ONLY: stand-in for {{ spyQuartetCurator() }}, not part of the CMS fragment -->
+<iframe id="quartet-curator-preview" src="curator.html" title="Quartet curator preview" style="display:block;width:100%;height:1400px;border:0" loading="eager"></iframe>
+<script>addEventListener('message',function(e){if(e.data&&e.data.quartetHeight){document.getElementById('quartet-curator-preview').style.height=e.data.quartetHeight+'px';}});</script>
+
+<div class="row mt-4 mb-4">
+  <div class="col-md-12">
+    <div class="bg-sunken px-3 pt-5 pb-5">
+      <div class="row mb-4">
+        <div class="col-md-6 col-sm-8">
+          <p class="headline-block color-secondary mb-2">Small formats</p>
+          <h2 class="text-left text-wrap-balance">Why small artworks work beautifully together</h2>
+          <p class="lead color-secondary mb-0 text-wrap-pretty">Whether Petites or Darlings, small formats are designed to be grouped. Their modest scale invites play: rearrange, layer and revisit until a wall feels unmistakably yours.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-4 mb-3">
+          <hr class="m-0 mb-2">
+          <h3 class="like-h4 mb-1 text-wrap-balance">Pairs that converse</h3>
+          <p class="color-secondary mb-0 text-wrap-balance">A pair of small works hung side by side creates a quiet rhythm, above a console or a nightstand.</p>
+        </div>
+        <div class="col-md-4 col-sm-4 mb-3">
+          <hr class="m-0 mb-2">
+          <h3 class="like-h4 mb-1 text-wrap-balance">Grids with intent</h3>
+          <p class="color-secondary mb-0 text-wrap-pretty">A 2 &times; 2 quartet brings structure to a blank wall while keeping each piece intimate and collectable.</p>
+        </div>
+        <div class="col-md-4 col-sm-4 mb-3">
+          <hr class="m-0 mb-2">
+          <h3 class="like-h4 mb-1 text-wrap-balance">Gallery walls, gently</h3>
+          <p class="color-secondary mb-0 text-wrap-pretty">Mix orientations and let the space between them breathe. Small formats forgive experiment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+    <p class="headline-block color-secondary mb-2">FAQ</p>
+    <h2 class="text-left text-wrap-balance">Good to know</h2>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+    <hr class="m-0">
+    <details open>
+      <summary class="flex justify-between items-center py-2 cursor_pointer">
+        <span class="like-h5">How does the offer work?</span>
+        <span class="icon icon-plus text-2rem ml-2" aria-hidden="true"></span>
+      </summary>
+      <p class="color-secondary mb-2 pr-5 text-wrap-pretty">Choose any four small-format works: Petites, Darlings or a mix of both. At checkout, the lowest-priced work in your four is deducted automatically. No code needed.</p>
+    </details>
+    <hr class="m-0">
+    <details>
+      <summary class="flex justify-between items-center py-2 cursor_pointer">
+        <span class="like-h5">Can I mix Petites and Darlings?</span>
+        <span class="icon icon-plus text-2rem ml-2" aria-hidden="true"></span>
+      </summary>
+      <p class="color-secondary mb-2 pr-5 text-wrap-balance">Yes. Any four works make a quartet, and the offer applies across both collections.</p>
+    </details>
+    <hr class="m-0">
+    <details>
+      <summary class="flex justify-between items-center py-2 cursor_pointer">
+        <span class="like-h5">Are frames included?</span>
+        <span class="icon icon-plus text-2rem ml-2" aria-hidden="true"></span>
+      </summary>
+      <p class="color-secondary mb-2 pr-5 text-wrap-pretty">Every work arrives ready to hang with its specified framing. Darlings come with a passepartout and a white, brown or black frame. The details are on each work&rsquo;s page.</p>
+    </details>
+    <hr class="m-0">
+    <details>
+      <summary class="flex justify-between items-center py-2 cursor_pointer">
+        <span class="like-h5">What gift packaging is available?</span>
+        <span class="icon icon-plus text-2rem ml-2" aria-hidden="true"></span>
+      </summary>
+      <p class="color-secondary mb-2 pr-5 text-wrap-pretty">Every Petite arrives in complimentary gift packaging. Darlings can be upgraded with a premium gift box in orange, purple or pink.</p>
+    </details>
+    <hr class="m-0">
+  </div>
+</div>
+
+</div>
+</div>
+</main>
+</div>
+<!-- Preview only. The shop handles [data-scroll-to] with its own JavaScript; the
+     fragment must never carry a <script>. Without this the button looks broken
+     locally even though the markup is correct. -->
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('[data-scroll-to]');
+  if (!a) return;
+  var t = document.querySelector(a.getAttribute('data-scroll-to'));
+  if (!t) return;
+  e.preventDefault();
+  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+// Preview only. The shop applies [data-style-override] from its own bundle
+// (app-components, module 2829). Without this an image hotspot collapses to zero
+// width locally and reads as missing even though the markup is correct.
+document.querySelectorAll('[data-style-override]').forEach(function (el) {
+  el.style.cssText += el.dataset.styleOverride;
+});
+// Preview only. In the shop, block-tiles.js turns .block-tiles[data-overflow="slider"]
+// into a scroll-snap carousel and adds arrows or dots. Marking it ready lets the
+// production CSS lay the tiles out; the navigation itself is not emulated.
+document.querySelectorAll('.block-tiles[data-overflow="slider"]').forEach(function (el) {
+  var columns = Number(el.dataset.columns) || 1;
+  var tablet = columns === 3 ? 2 : Math.min(columns, 3);
+  var show = innerWidth < 760 ? 1 : innerWidth < 980 ? tablet : columns;
+  el.dataset.scrollCarouselReady = 'true';
+  el.style.setProperty('--slides-to-show', show);
+});
+</script>
+</body>
+</html>
