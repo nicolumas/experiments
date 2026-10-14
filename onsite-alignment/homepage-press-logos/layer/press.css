@@ -1,0 +1,307 @@
+/*
+ * "Bekannt aus" press strip treatments. Shop tokens only:
+ *   --font-display (Utile Display), --font-body-bold (Archivo Bold),
+ *   --color-text-primary / -secondary, --color-surface-raised, --primitive-bone-400.
+ *
+ * Every logo gets --f (optical size factor) and --r (aspect ratio) from
+ * press.js; --press-a is the height of a square mark, so each treatment and
+ * breakpoint sets one number and the whole row scales together.
+ */
+
+.press {
+  --press-a: 34px;
+  --press-gap-x: 26px;
+  --press-gap-y: 18px;
+  --press-tone: 0.86;
+  margin: 0 auto 3.2rem;
+  padding: 0 1rem;
+  max-width: 1180px;
+  text-align: center;
+}
+
+.press__label {
+  margin: 0 0 1.6rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.2;
+  word-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.press__logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--press-gap-y) var(--press-gap-x);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.press__item {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.press__logo {
+  display: block;
+  height: calc(var(--press-a) * var(--f));
+  width: calc(var(--press-a) * var(--f) * var(--r));
+  max-width: none;
+  opacity: var(--press-tone);
+}
+
+/* tablets: all seven on one line (the row is about 15.2 x --press-a wide) */
+@media (min-width: 760px) {
+  .press {
+    --press-a: 34px;
+    --press-gap-x: 26px;
+  }
+}
+
+@media (min-width: 980px) {
+  .press {
+    /* 15.2 x a + 6 gaps must stay inside the 1180 px box at every width */
+    --press-a: clamp(42px, 3.6vw, 54px);
+    --press-gap-x: clamp(32px, 2.8vw, 48px);
+    margin-bottom: 4rem;
+  }
+
+  .press__logos {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .press__label {
+    font-size: 2rem;
+  }
+}
+
+/* ---- rules: editorial hairlines, label set into the top rule ---------- */
+
+.press--rules .press__inner {
+  border-bottom: 1px solid var(--primitive-bone-400);
+  padding-bottom: 2.4rem;
+}
+
+.press--rules .press__label {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+  font-family: var(--font-body-bold);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.press--rules .press__label::before,
+.press--rules .press__label::after {
+  flex: 1 1 0;
+  height: 1px;
+  background: var(--primitive-bone-400);
+  content: '';
+}
+
+/* ---- band: ivory surface, label beside the logos on desktop ----------- */
+
+.press--band {
+  max-width: none;
+  padding: 0;
+}
+
+/* the band's padding costs the phone row its fourth logo at the default gap */
+@media (max-width: 979px) {
+  .press--band {
+    --press-gap-x: 18px;
+  }
+}
+
+.press--band .press__inner {
+  padding: 2.4rem 1.6rem;
+  background: var(--color-surface-raised);
+}
+
+.press--band .press__label {
+  color: var(--color-text-primary);
+}
+
+@media (min-width: 980px) {
+  .press--band .press__inner {
+    display: flex;
+    align-items: center;
+    gap: clamp(32px, 4vw, 72px);
+    padding: 2.8rem clamp(24px, 5vw, 96px);
+  }
+
+  .press--band .press__label {
+    flex: none;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .press--band .press__logos {
+    flex: 1 1 auto;
+  }
+
+  /* the label shares the line, so the logos get less room than in the row */
+  .press--band {
+    --press-a: clamp(32px, 3.2vw, 50px);
+    --press-gap-x: clamp(20px, 2.4vw, 48px);
+  }
+}
+
+/* ---- ticker: one slow line, pauses under the pointer ------------------ */
+
+.press--ticker .press__label {
+  margin-bottom: 1.6rem;
+  font-family: var(--font-body-bold);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.press--ticker {
+  max-width: none;
+  padding: 0;
+}
+
+.press--ticker .press__viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.press--ticker .press__logos {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0;
+  width: max-content;
+  animation: press-ticker 48s linear infinite;
+}
+
+/* padding instead of gap, so both halves are exactly equal and -50% loops */
+.press--ticker .press__item {
+  padding-right: calc(var(--press-gap-x) * 1.6);
+}
+
+.press--ticker .press__viewport:hover .press__logos {
+  animation-play-state: paused;
+}
+
+@keyframes press-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press--ticker .press__logos {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+    animation: none;
+    gap: var(--press-gap-y) var(--press-gap-x);
+  }
+
+  .press--ticker .press__item {
+    padding-right: 0;
+  }
+
+  .press--ticker .press__item[aria-hidden='true'] {
+    display: none;
+  }
+
+  .press--ticker .press__viewport {
+    mask-image: none;
+  }
+}
+
+/* ---- live: production markup, only moved ----------------------------- */
+
+.press--live {
+  max-width: none;
+  padding: 0;
+}
+
+/* ---- placement adjustments -------------------------------------------- */
+
+/* under the hero: the hero carries its own 2rem gap; the H1 needs air */
+[data-press-placement='hero'] .press {
+  margin-bottom: 3.2rem;
+}
+
+@media (min-width: 980px) {
+  [data-press-placement='hero'] .press {
+    margin-bottom: 4.8rem;
+  }
+}
+
+/* in place of the AD quote: the claim row loses its quote and attribution */
+[data-press-placement='quote'] .quote_de.claim .quote__text,
+[data-press-placement='quote'] .quote_de.claim .quote__text + span {
+  display: none;
+}
+
+[data-press-placement='quote'] .quote_de.claim {
+  margin-bottom: 2.4rem;
+}
+
+/* under the campaign tiles: clear their captions. The strip itself now
+   separates tiles from Bestseller, so production's hairline there goes. */
+[data-press-placement='tiles'] .press {
+  margin-top: 1.6rem;
+}
+
+[data-press-placement='tiles'] [data-press] + hr {
+  display: none;
+}
+
+/* above Trustpilot: the strip opens the proof section itself, so the hairline
+   production draws above Trustpilot goes; the one below Trustpilot stays */
+[data-press-placement='proof'] .press {
+  /* collapses with the rail's own 3rem margin, so the rail above keeps today's
+     ~70 px gap without the hairline */
+  margin-top: 7rem;
+  margin-bottom: 3.2rem;
+}
+
+[data-press-placement='proof'] hr:has(+ [data-press]) {
+  display: none;
+}
+
+/* ---- sticky USP bar (desktop >= 1260 only, as production) ------------- */
+
+.press-sticky {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.press-sticky__logo {
+  display: block;
+  height: calc(30px * var(--f));
+  width: calc(30px * var(--f) * var(--r));
+  max-width: none;
+}
+
+/* ---- narrow phones (360 px class): keep the 4 + 3 split, no lone logo -- */
+
+@media (max-width: 389px) {
+  .press,
+  .press--band {
+    --press-a: 30px;
+    --press-gap-x: 16px;
+  }
+}
+
+@media (max-width: 339px) {
+  .press,
+  .press--band {
+    --press-a: 26px;
+    --press-gap-x: 14px;
+  }
+}
