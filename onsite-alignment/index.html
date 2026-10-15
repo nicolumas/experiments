@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1014", kicker: "Latest · today",        weekday: "Wednesday", date: "14 October", year: "2026", short: "14 Oct", upcoming: true },
+      { id: "s1015", kicker: "Latest · today",        weekday: "Thursday",  date: "15 October", year: "2026", short: "15 Oct", upcoming: true },
+      { id: "s1014", kicker: "Previous",              weekday: "Wednesday", date: "14 October", year: "2026", short: "14 Oct" },
       { id: "s1012", kicker: "Previous",              weekday: "Monday",    date: "12 October", year: "2026", short: "12 Oct" },
       { id: "s1009", kicker: "Previous",              weekday: "Friday",    date: "9 October", year: "2026", short: "9 Oct" },
       { id: "s1007", kicker: "Previous",              weekday: "Wednesday", date: "7 October", year: "2026", short: "7 Oct" },
@@ -181,6 +182,8 @@
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
       // ── Monday 12 October ───────────────────────────
+      { s: "s1015", feature: true, title: "Checkout, consolidated, without Art as a Service (DE)", href: "checkout-ohne-aaas/", desc: "The consolidated checkout as the live shop has it today, without the Art as a Service option: USPs said once, a quieter summary and footer." },
+      { s: "s1015", cluster: "Checkout without Art as a Service", title: "Current checkout, for comparison", href: "checkout-ohne-aaas/?vorher" },
       { s: "s1014", feature: true, title: "Petites & Darlings — Kuratiere dein Quartett (DE)", href: "petites-darlings-quartet/", desc: "The standalone landing page around the Petites + Darlings wall curator, built as an installable CMS fragment from the v2 design: compact hero, dark offer bar, the curator, an ivory band on why small works belong together, and the FAQ. The curator here is the v2 prototype; in the CMS it is spyQuartetCurator()." },
       { s: "s1014", cluster: "Curate your quartet", title: "English edition", href: "petites-darlings-quartet/en.html" },
       { s: "s1014", feature: true, title: "Bekannt aus: press logos moved up the homepage (DE)", href: "homepage-press-logos/?p=tiles&s=row", desc: "Seven placements and five looks for the press-logo strip, plus the real CMS fragments in shop CSS only, switchable in a bar at the bottom." },
