@@ -115,7 +115,31 @@ def inject_layer(soup):
         soup.body.append(s)
 
 
-def build(src_name, out_name, transform=None):
+def inject_tidy(soup):
+    """The consolidated checkout: the same page plus the tidy layer.
+
+    tidy.css/tidy.js slim, dedupe and quiet what the checkout already has, and
+    the Vorher/Nachher switch they add turns the layer off again for comparison.
+    They go in after aaas.css/aaas.js so they can override them. Lives here
+    rather than in a separate build because this IS the checkout now; the
+    standalone checkout-konsolidiert page stays as its own published artifact.
+    """
+    if soup.html:
+        soup.html.attrs["data-tidy"] = "on"
+    if soup.head:
+        # the brand faces the tidy layer sets; _publish.py repoints this one
+        # level up, because the published tree is one folder deeper
+        soup.head.append(soup.new_tag(
+            "link", rel="stylesheet", href="../assets/lumas-fonts.css"))
+        soup.head.append(soup.new_tag(
+            "link", rel="stylesheet", href="tidy.css?v=%d" % _ver("tidy.css")))
+    if soup.body:
+        s = soup.new_tag("script", src="tidy.js?v=%d" % _ver("tidy.js"))
+        s.attrs["defer"] = ""
+        soup.body.append(s)
+
+
+def build(src_name, out_name, transform=None, tidy=False):
     src = os.path.join(BASE, src_name)
     if not os.path.exists(src):
         print("  missing:", src_name)
@@ -125,6 +149,8 @@ def build(src_name, out_name, transform=None):
         transform(soup)
     preload_artwork(soup)
     inject_layer(soup)
+    if tidy:
+        inject_tidy(soup)
     html = repoint_assets(str(soup))
     out = os.path.join(HERE, out_name)
     open(out, "w", encoding="utf-8").write(html)
@@ -156,7 +182,7 @@ def make_success(soup):
 
 print("building AaaS layer from baseline:")
 build("pdp.html", "pdp.html")
-build("checkout.html", "checkout.html")
+build("checkout.html", "checkout.html", tidy=True)
 build("account.html", "success.html", make_success)
 build("account.html", "account-rental.html", make_account)
 

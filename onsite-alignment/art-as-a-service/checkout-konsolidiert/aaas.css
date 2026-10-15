@@ -623,11 +623,13 @@
  * account all open this one dialog. */
 
 .aaas-drawer {
-  border: 1px solid var(--color-border-default);
+  /* 2px, not the usual hairline: this edge is what frames the picture on three
+     sides, and at 1px it read as the panel ending rather than as a frame. */
+  border: 2px solid var(--color-border-default);
   padding: 0;
   /* a <dialog> is inset 0 in the top layer, so auto margins centre it */
   margin: auto;
-  width: min(48rem, calc(100vw - var(--sp-8)));
+  width: min(76rem, calc(100vw - var(--sp-8)));
   max-width: calc(100vw - var(--sp-8));
   /* fit-content, not auto: a modal dialog is inset 0, and an auto height there
      solves the position equation by stretching to the max instead of hugging
@@ -673,9 +675,27 @@
   .aaas-drawer[open]::backdrop { background: rgba(0, 0, 0, 0); }
 }
 
-/* The dialog sizes to its content up to 84vh, so the inner column has to carry
-   the same ceiling: a percentage height would have nothing to resolve against. */
-.aaas-drawer-inner { display: flex; flex-direction: column; max-height: 90vh; }
+/* Two columns: the picture on the left, the argument on the right. The dialog
+   sizes to its content up to 90vh, so the inner grid has to carry the same
+   ceiling: a percentage height would have nothing to resolve against. */
+.aaas-drawer-inner {
+  display: grid;
+  grid-template-columns: 30rem minmax(0, 1fr);
+  max-height: 90vh;
+}
+
+/* Cover, not contain: the column's height follows the copy beside it, and a
+   letterboxed photo in a white panel would read as a mistake. This is a
+   lifestyle shot, not a reproduction of a work, so trimming its edges is fair. */
+.aaas-drawer-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.aaas-drawer-main { display: flex; flex-direction: column; min-height: 0; }
 
 .aaas-drawer-head {
   display: flex;
@@ -1025,6 +1045,11 @@
   margin: 0 0 var(--sp-3);
 }
 .aaas-sx-head p { font-size: 1.5rem; line-height: 1.6; margin: 0; }
+
+/* .aaas-actions pushes its button to the right, which is right inside a panel
+   and wrong under a centred confirmation. Centre it here instead. */
+.aaas-sx-head .aaas-actions { justify-content: center; }
+.aaas-sx-head .aaas-actions .btn { margin-left: 0; }
 
 .aaas-sx-panel { border: 1px solid var(--color-border-default); padding: var(--sp-6); margin-bottom: var(--sp-5); }
 .aaas-sx-panel h2 { font-family: var(--font-body-bold); font-size: 1.8rem; font-weight: 400; margin: 0 0 var(--sp-3); }
@@ -1553,7 +1578,11 @@
     max-height: 90vh;
   }
 
-  .aaas-drawer-inner { max-height: 90vh; }
+  /* One column on a phone, and the picture goes: the panel has to stay one
+     screen, and a photo above the copy would push the terms off it. */
+  .aaas-drawer-inner { grid-template-columns: minmax(0, 1fr); max-height: 90vh; }
+
+  .aaas-drawer-art { display: none; }
 
   .aaas-drawer-head { padding: var(--sp-5) var(--sp-5) var(--sp-3); }
   .aaas-drawer-body { padding: 0 var(--sp-5) var(--sp-5); }

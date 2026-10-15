@@ -122,13 +122,31 @@ rsync(SRC_V1, os.path.join(DEST, "aaas-v1"))
 print("staged both trees")
 print("top index: %d links rewritten" % top_index())
 
-gated = scrubbed = 0
+def repoint_fonts(path):
+    """The checkout's tidy layer loads the brand faces from the section's shared
+    assets folder. Locally that is prototype/assets/, one level above aaas-v1;
+    published it is onsite-alignment/assets/, two levels above, because the tree
+    gains the art-as-a-service/ folder. Left alone the link 404s and the page
+    silently falls back to a system face."""
+    html = open(path, encoding="utf-8", errors="surrogateescape").read()
+    if '"../assets/lumas-fonts.css"' not in html:
+        return False
+    if not DRY:
+        open(path, "w", encoding="utf-8", errors="surrogateescape").write(
+            html.replace('"../assets/lumas-fonts.css"', '"../../assets/lumas-fonts.css"'))
+    return True
+
+
+gated = scrubbed = refonted = 0
 for root, _dirs, files in os.walk(DEST):
     for f in files:
         path = os.path.join(root, f)
         if f.endswith((".html", ".js", ".json")) and scrub(path):
             scrubbed += 1
-        if f.endswith(".html") and gate(path):
-            gated += 1
-print("scrubbed %d files" % scrubbed)
+        if f.endswith(".html"):
+            if repoint_fonts(path):
+                refonted += 1
+            if gate(path):
+                gated += 1
+print("scrubbed %d files, repointed fonts in %d" % (scrubbed, refonted))
 print("gated %d pages%s" % (gated, " (dry run)" if DRY else ""))

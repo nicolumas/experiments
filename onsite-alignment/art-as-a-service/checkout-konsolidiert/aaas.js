@@ -100,7 +100,11 @@
     return n;
   }
 
-  function mode() { try { return sessionStorage.getItem(MODE_KEY) || 'buy'; } catch (e) { return 'buy'; } }
+  /* Rent is the default state of this prototype: it exists to show Art as a
+   * Service, and opening every page in buy mode meant flipping the switch
+   * before anything could be looked at. Buy is still reachable through the
+   * switch, which is what the two states are compared with. */
+  function mode() { try { return sessionStorage.getItem(MODE_KEY) || 'rent'; } catch (e) { return 'rent'; } }
   function setMode(v) { try { sessionStorage.setItem(MODE_KEY, v); } catch (e) {} }
 
   /* The cart is a LIST, and the buy-or-rent mode is a property of the cart, not
@@ -252,6 +256,13 @@
     d.setAttribute('aria-labelledby', 'aaas-drawer-title');
     d.innerHTML =
       '<div class="aaas-drawer-inner">' +
+        // Desktop only, hidden on a phone where the panel has to stay one
+        // screen. Shows what the service is before the terms explain it: the
+        // work already hanging, and the next one arriving in its box.
+        '<img class="aaas-drawer-art" src="img/aaas-room.jpg" alt="Eine Edition ' +
+          'h\u00e4ngt im Wohnraum, daneben wird eine zweite aus der LUMAS Box ' +
+          'ausgepackt." loading="lazy" width="760" height="1282">' +
+        '<div class="aaas-drawer-main">' +
         '<div class="aaas-drawer-head">' +
           '<p class="aaas-drawer-eyebrow">Art as a Service</p>' +
           '<button type="button" class="aaas-close" aria-label="Schlie\u00dfen">&times;</button>' +
@@ -285,6 +296,7 @@
             q.ownedFromMonth + ' ohne weitere Zahlung. Zahlung per SEPA-Lastschrift oder ' +
             'Kreditkarte. Art as a Service w\u00e4hlst du sp\u00e4ter im Warenkorb, f\u00fcr ' +
             'deine ganze Bestellung.</p>' +
+        '</div>' +
         '</div>' +
       '</div>';
 
@@ -1006,6 +1018,18 @@
     }
 
     applyCheckoutMode(q);
+
+    /* The summary panel is a Vue subtree and re-renders after the layer first
+     * runs, which blanks the sums rows. Fill them again whenever that happens.
+     * Guarded on "empty", so the observer cannot be re-triggered by its own
+     * write. Without this the totals only appeared once the mode was toggled. */
+    var aside = document.querySelector('aside');
+    if (aside && window.MutationObserver) {
+      new MutationObserver(function () {
+        var body = document.querySelector('aside .sums table tbody');
+        if (body && !body.textContent.trim()) renderSums(q, mode() === 'rent');
+      }).observe(aside, { childList: true, subtree: true });
+    }
   }
 
   /* The shop ships the sums table in the summary panel but leaves it empty:
@@ -1525,8 +1549,7 @@
           '<div class="aaas-stat-value">' + addMonths(1) + '</div></div>' +
       '</div>' +
       '<p class="aaas-note">Deinen Vertrag schicken wir dir per E-Mail, er liegt auch in deinem ' +
-        'Konto. Übernahme, Tausch und Rückgabe steuerst du dort.</p>' +
-      '<div class="aaas-actions"><a class="btn" href="account-rental.html">Zu deinem Konto</a></div>');
+        'Konto. Übernahme, Tausch und Rückgabe steuerst du dort.</p>');
 
     host.innerHTML =
       '<div class="aaas-sx">' +
@@ -1537,6 +1560,15 @@
               ? 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und deinem Vertrag.'
               : 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und der Übersicht deiner Bestellung.') +
           '</p>' +
+          // Rent only: account-rental.html is the rental dashboard, so from a
+          // bought order it would show a contract that does not exist. It sits
+          // here rather than down in the figures panel, where it was three
+          // blocks below the fold and read as part of the payment summary
+          // instead of as the thing to do next.
+          (renting
+            ? '<div class="aaas-actions"><a class="btn" href="account-rental.html">' +
+              'Zu deinem Konto</a></div>'
+            : '') +
         '</div>' +
         '<div class="aaas-sx-row">' +
           panel('aaas-sx-account', '<h2>Erstelle dein kostenloses LUMAS Konto</h2>' +
@@ -1733,8 +1765,6 @@
               '<div class="aaas-grid">' +
                 stat('Monatlich', money(q.monthly)) +
                 stat('Nächste Abbuchung', host.getAttribute('data-next')) +
-                stat('Übernahmepreis heute', money(buyoutAt(q, paid))) +
-                stat('Bereits angerechnet', money(round2(TERMS.credit * q.monthly * paid))) +
               '</div>' +
             '</div></div>' +
 

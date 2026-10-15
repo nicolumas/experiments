@@ -38,6 +38,12 @@
     exchangeEarlyShare: 0.30  // of the higher of the old or new work's price
   };
 
+  // This clone is the AT store, so 20 %. Prices are gross, so the tax is the
+  // share already inside the total, not something added to it.
+  var VAT_RATE = 0.20;
+
+  function vatIn(gross) { return round2(gross * VAT_RATE / (1 + VAT_RATE)); }
+
 
 
   /* ---------- money ---------- */
@@ -94,7 +100,11 @@
     return n;
   }
 
-  function mode() { try { return sessionStorage.getItem(MODE_KEY) || 'buy'; } catch (e) { return 'buy'; } }
+  /* Rent is the default state of this prototype: it exists to show Art as a
+   * Service, and opening every page in buy mode meant flipping the switch
+   * before anything could be looked at. Buy is still reachable through the
+   * switch, which is what the two states are compared with. */
+  function mode() { try { return sessionStorage.getItem(MODE_KEY) || 'rent'; } catch (e) { return 'rent'; } }
   function setMode(v) { try { sessionStorage.setItem(MODE_KEY, v); } catch (e) {} }
 
   /* The cart is a LIST, and the buy-or-rent mode is a property of the cart, not
@@ -246,6 +256,13 @@
     d.setAttribute('aria-labelledby', 'aaas-drawer-title');
     d.innerHTML =
       '<div class="aaas-drawer-inner">' +
+        // Desktop only, hidden on a phone where the panel has to stay one
+        // screen. Shows what the service is before the terms explain it: the
+        // work already hanging, and the next one arriving in its box.
+        '<img class="aaas-drawer-art" src="img/aaas-room.jpg" alt="Eine Edition ' +
+          'h\u00e4ngt im Wohnraum, daneben wird eine zweite aus der LUMAS Box ' +
+          'ausgepackt." loading="lazy" width="760" height="1282">' +
+        '<div class="aaas-drawer-main">' +
         '<div class="aaas-drawer-head">' +
           '<p class="aaas-drawer-eyebrow">Art as a Service</p>' +
           '<button type="button" class="aaas-close" aria-label="Schlie\u00dfen">&times;</button>' +
@@ -279,6 +296,7 @@
             q.ownedFromMonth + ' ohne weitere Zahlung. Zahlung per SEPA-Lastschrift oder ' +
             'Kreditkarte. Art as a Service w\u00e4hlst du sp\u00e4ter im Warenkorb, f\u00fcr ' +
             'deine ganze Bestellung.</p>' +
+        '</div>' +
         '</div>' +
       '</div>';
 
@@ -1000,6 +1018,48 @@
     }
 
     applyCheckoutMode(q);
+
+    /* The summary panel is a Vue subtree and re-renders after the layer first
+     * runs, which blanks the sums rows. Fill them again whenever that happens.
+     * Guarded on "empty", so the observer cannot be re-triggered by its own
+     * write. Without this the totals only appeared once the mode was toggled. */
+    var aside = document.querySelector('aside');
+    if (aside && window.MutationObserver) {
+      new MutationObserver(function () {
+        var body = document.querySelector('aside .sums table tbody');
+        if (body && !body.textContent.trim()) renderSums(q, mode() === 'rent');
+      }).observe(aside, { childList: true, subtree: true });
+    }
+  }
+
+  /* The shop ships the sums table in the summary panel but leaves it empty:
+   * its rows are rendered by the checkout's own Vue app, which does not run in
+   * this clone, so the capture has the <table> and the v-if comments and
+   * nothing else. Fill the shop's markup rather than inventing a block, so the
+   * shop's own CSS lays it out exactly as production does.
+   *
+   * In rent mode the bold line is "Heute fällig", not "Gesamtpreis": what the
+   * customer is charged now is two months' rent plus shipping, and calling that
+   * the total price of a 36-month contract would be false. The ongoing figures
+   * stay in the breakdown above it. */
+  function sumRow(label, value, cls) {
+    return '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + label + '</td><td></td>' +
+      '<td' + (cls === 'total' ? ' class="grand-total"' : '') + '>' + money(value) + '</td></tr>';
+  }
+
+  function renderSums(q, renting) {
+    var body = document.querySelector('aside .sums table tbody');
+    if (!body) return;
+
+    var subtotal = renting ? round2(q.monthly + q.provisioning) : q.gross;
+    var total = renting ? q.dueToday : round2(q.gross + q.shipping);
+
+    body.innerHTML =
+      sumRow(renting ? 'Erste Rate und Bereitstellungsentgelt' : 'Zwischensumme', subtotal) +
+      sumRow('Versandkosten', q.shipping) +
+      sumRow(renting ? 'Heute f\u00e4llig' : 'Gesamtpreis', total, 'total') +
+      '<tr><td><div class="included-tax"><small>(inkl. MwSt.) ' + money(vatIn(total)) +
+        '</small></div></td><td></td><td></td></tr>';
   }
 
   function applyCheckoutMode(q) {
@@ -1024,11 +1084,12 @@
               TERMS.months + ' Monate</span></th><td>' + money(q.monthly) + '</td></tr>' +
             '<tr><th scope="row">Bereitstellungsentgelt<span class="aaas-sub">einmalig, entspricht einer Monatsmiete</span></th><td>' + money(q.provisioning) + '</td></tr>' +
             '<tr><th scope="row">Versand<span class="aaas-sub">einmalig</span></th><td>' + money(q.shipping) + '</td></tr>' +
-            '<tr class="aaas-row-major"><th scope="row">Heute fällig</th><td>' + money(q.dueToday) + '</td></tr>' +
             '<tr><th scope="row">Ab Monat 2 monatlich</th><td>' + money(q.monthly) + '</td></tr>' +
           '</tbody></table>'
         : '';
     }
+
+    renderSums(q, renting);
 
     // a voucher cannot apply to a rental contract
     document.querySelectorAll('.coupon-form-container').forEach(function (n) {
@@ -1488,8 +1549,7 @@
           '<div class="aaas-stat-value">' + addMonths(1) + '</div></div>' +
       '</div>' +
       '<p class="aaas-note">Deinen Vertrag schicken wir dir per E-Mail, er liegt auch in deinem ' +
-        'Konto. Übernahme, Tausch und Rückgabe steuerst du dort.</p>' +
-      '<div class="aaas-actions"><a class="btn" href="account-rental.html">Zu deinem Konto</a></div>');
+        'Konto. Übernahme, Tausch und Rückgabe steuerst du dort.</p>');
 
     host.innerHTML =
       '<div class="aaas-sx">' +
@@ -1500,6 +1560,15 @@
               ? 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und deinem Vertrag.'
               : 'Du bekommst in Kürze eine E-Mail mit der Bestätigung und der Übersicht deiner Bestellung.') +
           '</p>' +
+          // Rent only: account-rental.html is the rental dashboard, so from a
+          // bought order it would show a contract that does not exist. It sits
+          // here rather than down in the figures panel, where it was three
+          // blocks below the fold and read as part of the payment summary
+          // instead of as the thing to do next.
+          (renting
+            ? '<div class="aaas-actions"><a class="btn" href="account-rental.html">' +
+              'Zu deinem Konto</a></div>'
+            : '') +
         '</div>' +
         '<div class="aaas-sx-row">' +
           panel('aaas-sx-account', '<h2>Erstelle dein kostenloses LUMAS Konto</h2>' +
@@ -1696,8 +1765,6 @@
               '<div class="aaas-grid">' +
                 stat('Monatlich', money(q.monthly)) +
                 stat('Nächste Abbuchung', host.getAttribute('data-next')) +
-                stat('Übernahmepreis heute', money(buyoutAt(q, paid))) +
-                stat('Bereits angerechnet', money(round2(TERMS.credit * q.monthly * paid))) +
               '</div>' +
             '</div></div>' +
 
