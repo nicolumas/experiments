@@ -68,17 +68,13 @@
   }
 
   // The AaaS choice moves from above the artwork to just after the voucher box, right
-  // before the price it changes. Vorher puts it back where the layer left it.
+  // before the price it changes. It stays there in Vorher too, so the comparison
+  // is about the clean-up and not about where AaaS sits.
   function placeAaasPanel() {
     var panel = document.getElementById('aaas-mode');
     var coupon = document.querySelector('aside .coupon-form-container');
-    var items = document.querySelector('aside .cart-items-container');
-    if (!panel || !coupon || !items) return;
-    if (root.getAttribute('data-tidy') === 'on') {
-      if (coupon.nextElementSibling !== panel) coupon.insertAdjacentElement('afterend', panel);
-    } else if (items.previousElementSibling !== panel) {
-      items.insertAdjacentElement('beforebegin', panel);
-    }
+    if (!panel || !coupon) return;
+    if (coupon.nextElementSibling !== panel) coupon.insertAdjacentElement('afterend', panel);
   }
 
   function ensureSwitch() {
@@ -101,7 +97,6 @@
 
   function setMode(mode) {
     root.setAttribute('data-tidy', mode);
-    placeAaasPanel();
     syncSwitch();
   }
 

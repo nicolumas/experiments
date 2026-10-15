@@ -41,12 +41,12 @@ html[data-tidy="on"] .tidy-proof .stars { color: #00b67a; letter-spacing: 1px; f
 html[data-tidy="on"] .tidy-proof span { display: inline !important; width: auto !important; }
 html[data-tidy="on"] .tidy-proof b { color: #1c1a18; font-weight: 600; }
 
-/* 3b. Art as a Service: after the voucher box, in its own ivory box */
-html[data-tidy="on"] #aaas-mode {
+/* 3b. Art as a Service: after the voucher box, in its own ivory box, in Vorher and Nachher alike */
+html[data-tidy] #aaas-mode {
   margin: 16px 0 24px; padding: 20px; background: #f4ede2; border: 0;
 }
-html[data-tidy="on"] #aaas-mode .aaas-label { margin-top: 0; }
-html[data-tidy="on"] aside .coupon-form-container { padding-bottom: 0; margin-bottom: 0; min-height: 0; height: auto; }
+html[data-tidy] #aaas-mode .aaas-label { margin-top: 0; }
+html[data-tidy] aside .coupon-form-container { padding-bottom: 0; margin-bottom: 0; min-height: 0; height: auto; }
 
 /* 5. "Warenkorb teilen": a quiet link, not a second button */
 html[data-tidy="on"] aside shared-cart-share button.trigger {
@@ -96,7 +96,7 @@ html[data-tidy="on"] footer .payment-methods .icons svg { width: 39px; height: 2
   html[data-tidy="on"] .checkout-shipment-estimation > div:has(use[href="#return"]) { order: 1; }
   html[data-tidy="on"] .tidy-mobile-usp[data-usp="proof"] { order: 2; }
   html[data-tidy="on"] .tidy-mobile-usp[data-usp="box"] { order: 3; }
-  html[data-tidy="on"] #aaas-mode { margin: 16px 21px 24px; padding: 16px; }
+  html[data-tidy] #aaas-mode { margin: 16px 21px 24px; padding: 16px; }
   /* Mobile: returns, 330.000 Sammler:innen and the Art security Box only, as a compact 3-up row */
   html[data-tidy="on"] .spc-top-content { overflow: hidden; }
   html[data-tidy="on"] .tidy-usp {
