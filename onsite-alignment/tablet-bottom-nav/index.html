@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><script src="../assets/gate.js"></script>
+<title>Bottom nav on tablet</title>
+<link rel="stylesheet" href="../assets/lumas-fonts.css">
+<style>
+  :root { --ink: #1C1A18; --muted: #5A5752; --line: #E6E1DA; --stage: #F4F2EF; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #FFFFFF; color: var(--ink);
+    font-family: Archivo, "Helvetica Now Display", Helvetica, Arial, sans-serif; }
+  body { display: flex; flex-direction: column; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px;
+    padding: 16px 24px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 0; font-family: UtileDisplay, "Utile Display", Archivo, sans-serif;
+    font-weight: 400; font-size: 26px; line-height: 1.1; }
+  p { margin: 0; font-size: 14px; color: var(--muted); max-width: 60ch; }
+  nav { display: flex; gap: 8px; margin-left: auto; }
+  nav button { height: 40px; padding: 0 16px; border: 1px solid var(--ink); border-radius: 2px;
+    background: #FFFFFF; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+  nav button[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
+  nav button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  main { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+    padding: 24px; background: var(--stage); overflow: hidden; }
+  .device { flex: none; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+    background: #FFFFFF; box-shadow: 0 12px 40px rgb(28 26 24 / 12%); }
+  iframe { display: block; border: 0; transform-origin: 0 0; }
+  footer { padding: 10px 24px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
+  footer a { color: var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Bottom nav on tablet</h1>
+    <p>The mobile bottom nav now runs up to 1024&nbsp;px, the same range as the mobile header. From 1025&nbsp;px the desktop header takes over.</p>
+  </div>
+  <nav aria-label="Device size">
+    <button type="button" data-w="390" data-h="844">Phone 390</button>
+    <button type="button" data-w="768" data-h="1024" aria-pressed="true">Tablet 768</button>
+    <button type="button" data-w="1024" data-h="768">Tablet 1024</button>
+  </nav>
+</header>
+<main><div class="device"><iframe title="lumas.de homepage" src="page.html"></iframe></div></main>
+<footer>Captured from www.lumas.de on 15 October 2026. Tap a tab to open its sheet. On a real tablet, open <a href="page.html">the page on its own</a>.</footer>
+<script>
+  const stage = document.querySelector('main');
+  const device = document.querySelector('.device');
+  const frame = document.querySelector('iframe');
+  const buttons = [...document.querySelectorAll('nav button')];
+  let size = { w: 768, h: 1024 };
+  function fit() {
+    const box = stage.getBoundingClientRect();
+    const scale = Math.min(1, (box.width - 48) / size.w, (box.height - 48) / size.h);
+    frame.style.width = size.w + 'px';
+    frame.style.height = size.h + 'px';
+    frame.style.transform = 'scale(' + scale + ')';
+    device.style.width = Math.round(size.w * scale) + 'px';
+    device.style.height = Math.round(size.h * scale) + 'px';
+  }
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+    size = { w: +b.dataset.w, h: +b.dataset.h };
+    fit();
+  }));
+  addEventListener('resize', fit);
+  fit();
+</script>
+</body>
+</html>

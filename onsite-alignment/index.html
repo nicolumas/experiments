@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1015", kicker: "Latest · today",        weekday: "Thursday",  date: "15 October", year: "2026", short: "15 Oct", upcoming: true },
+      { id: "s1019", kicker: "Latest · today",        weekday: "Monday",    date: "19 October", year: "2026", short: "19 Oct", upcoming: true },
+      { id: "s1015", kicker: "Previous",              weekday: "Thursday",  date: "15 October", year: "2026", short: "15 Oct" },
       { id: "s1014", kicker: "Previous",              weekday: "Wednesday", date: "14 October", year: "2026", short: "14 Oct" },
       { id: "s1012", kicker: "Previous",              weekday: "Monday",    date: "12 October", year: "2026", short: "12 Oct" },
       { id: "s1009", kicker: "Previous",              weekday: "Friday",    date: "9 October", year: "2026", short: "9 Oct" },
@@ -181,6 +182,7 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      { s: "s1019", feature: true, title: "Bottom nav on tablet, up to 1024 px (DE)", href: "tablet-bottom-nav/", desc: "The mobile bottom nav extended from phones to tablets, so it covers every width where the shop shows the mobile header." },
       // ── Monday 12 October ───────────────────────────
       { s: "s1015", feature: true, title: "Checkout, consolidated, without Art as a Service (DE)", href: "checkout-ohne-aaas/", desc: "The consolidated checkout as the live shop has it today, without the Art as a Service option: USPs said once, a quieter summary and footer." },
       { s: "s1015", cluster: "Checkout without Art as a Service", title: "Current checkout, for comparison", href: "checkout-ohne-aaas/?vorher" },
