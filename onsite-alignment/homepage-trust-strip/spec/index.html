@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<script src="../../assets/gate.js"></script>
+<link rel="stylesheet" href="../../assets/lumas-fonts.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&display=swap">
+<title>Homepage Trust Strip</title>
+<style>
+
+/* Layout: one reading column for argument, full-width figure rows for the screens. */
+:root {
+  --bg: #ffffff; --fg: #1c1a18; --muted: #5a5752; --rule: #e2d8cc; --surface: #f7f1e9; --mark: #d4006f;
+  --display: 'UtileDisplay', "Utile Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --text: "Archivo", "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #1c1a18; --fg: #f4ede2; --muted: #c7c3be; --rule: #3a3835; --surface: #292725; --mark: #ff5fae; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #1c1a18; --fg: #f4ede2; --muted: #c7c3be; --rule: #3a3835; --surface: #292725; --mark: #ff5fae; color-scheme: dark }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.6 var(--text); }
+.page { max-width: 1180px; margin: 0 auto; padding: 40px 16px 80px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(34px, 5vw, 48px); line-height: 1.1; }
+h2 { font-size: clamp(26px, 3.4vw, 32px); line-height: 1.2; }
+h3 { font-size: 20px; line-height: 1.3; }
+p { margin: 0; max-width: 68ch; }
+.label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.stack { display: grid; gap: 16px; }
+.lede { font-size: 18px; color: var(--muted); max-width: 64ch; }
+.copyline { font-family: var(--text); font-size: 17px; padding: 14px 16px; background: var(--surface); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; color: var(--muted); }
+section { display: grid; gap: 20px; border-top: 1px solid var(--rule); padding-top: 28px; }
+.switch { display: inline-flex; border: 1px solid var(--fg); width: max-content; }
+.switch button { font: 500 14px/1 var(--text); padding: 10px 14px; border: 0; background: transparent; color: var(--fg); cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.switch button:focus-visible { outline: 2px solid var(--mark); outline-offset: 2px; }
+.screens { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+figcaption { font-size: 13px; color: var(--muted); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.detail img { border: 0; background: #fff; }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); }
+th { font-weight: 500; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+td:first-child { font-weight: 500; white-space: nowrap; }
+code { font-size: 0.9em; background: var(--surface); padding: 1px 5px; }
+.issues { display: grid; gap: 14px; }
+.issue { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.tag { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 0; }
+.tag.block { color: var(--mark); }
+@media (max-width: 760px) {
+  .screens, .pair, .cols { grid-template-columns: minmax(0, 1fr); }
+  .issue { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+
+<main class="page">
+  <header class="stack">
+    <span class="label">PROTO-2026-064 · Homepage A/B variant · lumas.de</span>
+    <h1>Homepage trust strip</h1>
+    <p class="lede">One line of facts directly below the hero, above the claim block. Nothing else on the homepage changes. Shown on the real page: the 9 October capture of lumas.de, structure re-checked against live on 14 October.</p>
+    <div class="copyline">Handsigniert &amp; limitiert · 19 Galerien · 330.000 Sammler:innen · Trustpilot [Score]</div>
+    <div class="meta"><span>Primary metric: revenue per homepage visitor</span><span>Secondary: homepage → product page</span><span>Copy provisional, score is a placeholder</span></div>
+  </header>
+
+  <section aria-labelledby="designs">
+    <h2 id="designs">The variant in context</h2>
+    <div class="switch" role="group" aria-label="Arm">
+      <button type="button" data-arm="control" aria-pressed="false">A · Control</button>
+      <button type="button" data-arm="variant" aria-pressed="true">B · Trust strip</button>
+    </div>
+    <div class="screens">
+      <figure>
+        <img data-swap="desktop-1536" src="shots/desktop-1536-variant.jpg" width="1536" height="864" alt="lumas.de homepage at 1536 by 864 with the trust strip under the hero">
+        <figcaption>Desktop 1536 × 864, the most common laptop size. The ivory band sits flush under the hero; at this height it meets the site-wide sticky bar.</figcaption>
+      </figure>
+      <figure>
+        <img data-swap="mobile-390" src="shots/mobile-390-variant.jpg" width="780" height="1688" alt="lumas.de homepage on a 390 pixel phone with the trust strip on two lines">
+        <figcaption>Phone 390 × 844. Two lines, still in the first screen.</figcaption>
+      </figure>
+    </div>
+    <div class="pair">
+      <figure>
+        <img src="shots/desktop-1920-variant.jpg" width="1920" height="1080" alt="Variant at 1920 by 1080">
+        <figcaption>Desktop 1920 × 1080. The band scales with the site's own rem steps.</figcaption>
+      </figure>
+      <figure>
+        <img src="shots/desktop-1536-variant-nosticky.jpg" width="1536" height="864" alt="Variant at 1536 with the sticky USP bar closed">
+        <figcaption>Same, after a visitor closes the sticky bar (it stays closed for 7 days).</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="detail">
+    <h2 id="detail">The strip, close up</h2>
+    <figure class="detail">
+      <img src="shots/desktop-detail.png" alt="Close-up of the strip: four facts separated by small dots, Trustpilot wordmark and a dashed score placeholder">
+      <figcaption>Utile Display on ivory, hairline dividers between the facts. The Trustpilot wordmark sits on the text baseline, a touch smaller than the type.</figcaption>
+    </figure>
+    <div class="pair">
+      <figure class="detail"><img src="shots/mobile-360-detail.png" alt="Strip at 360 pixels on two lines"><figcaption>360 px: two lines, no divider in front of the second.</figcaption></figure>
+      <figure class="detail"><img src="shots/mobile-320-detail.png" alt="Strip at 320 pixels on two lines"><figcaption>320 px: the type steps down to 15 px rather than breaking onto a third line.</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="why">
+    <h2 id="why">Why it looks like this</h2>
+    <div class="cols">
+      <div class="stack">
+        <h3>A plinth under the hero</h3>
+        <p>The hero is treated like a work on the wall and the strip like its plinth: an ivory band set flush against the image's bottom edge, full width, no border, no shadow. It belongs to the hero rather than floating as a separate module, so it confirms what the hero offers instead of competing with it. The ivory echoes the hero's own button, which stays the strongest element in view.</p>
+      </div>
+      <div class="stack">
+        <h3>Facts in the brand's own voice</h3>
+        <p>The facts are set in Utile Display, the face of the claim below, so the band reads as LUMAS speaking rather than as a shop notice. Each fact is a number or a plain property, in Kompass register: short, concrete, no adjectives. Hairline dividers keep the four facts distinct without decoration, and Trustpilot appears as its own wordmark, recognisable from the green star and never louder than the line.</p>
+      </div>
+      <div class="stack">
+        <h3>Discovery stays first</h3>
+        <p>56% of phone visits to the homepage never scroll past the first tenth of the page, so every pixel above the first artworks costs something. The band uses the hero's existing gap and returns it below, so the page grows by the band alone: 66 px on desktop, 88 px on phones. It offers nothing to click except the Trustpilot proof link.</p>
+      </div>
+      <div class="stack">
+        <h3>What I left out</h3>
+        <p>A five-star row (stars need a real score to fill), review counts, icons per fact, uppercase labels, borders and any motion. Each would turn the plinth into a promotional module and pull attention from the hero.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="spec">
+    <h2 id="spec">Implementation notes</h2>
+    <div class="pair">
+      <figure><img src="shots/desktop-1536-measure.png" alt="Desktop measurements: band flush under the hero, 66 px tall, 30 px to the claim"><figcaption>Desktop: band 66 px, flush under the hero, 30 px to the claim (the hero's original gap).</figcaption></figure>
+      <figure><img src="shots/mobile-390-measure.png" alt="Phone measurements: two-line band flush under the hero, 20 px to the claim"><figcaption>Phone: band 88 px, flush under the hero, 20 px to the claim.</figcaption></figure>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Property</th><th>Phone (&lt; 760 px)</th><th>Tablet and desktop (≥ 760 px)</th></tr></thead>
+        <tbody>
+          <tr><td>Typography</td><td>Utile Display (<code>--font-display</code>) 17/23 px, 400, mixed case; 16 px below 375 px, 15 px below 340 px</td><td>Utile Display 20/26 px (site rem steps: 22 px at 1920)</td></tr>
+          <tr><td>Band</td><td colspan="2">Full width, <code>--primitive-ivory-100</code> #faf6f1, one step lighter than the sticky USP bar so the two never merge. No border, no shadow. Text <code>--color-text-primary</code> (contrast 16:1)</td></tr>
+          <tr><td>Padding</td><td>14 px top and bottom, 4 px between the lines</td><td><code>--sp-5</code> 20 px top and bottom</td></tr>
+          <tr><td>Alignment</td><td>Centred, two lines of two facts, break forced after fact 2 (the site's mobile hero runs to 979 px)</td><td>Centred, one line, from 980 px</td></tr>
+          <tr><td>Position</td><td colspan="2">Flush with the hero image: the band pulls up by the hero's own bottom gap (2rem below 980 px, 3rem above) and returns the same gap below, so the claim keeps its distance from the hero block</td></tr>
+          <tr><td>Dividers</td><td colspan="2">1 px hairlines, <code>--primitive-bone-400</code>, 1em tall, centred in a 32 px (phone) / 48 px (desktop) gap. Drawn in the gap, never in the text, so none can end a line; the one before a wrapped fact is hidden. Facts never break inside</td></tr>
+          <tr><td>Trustpilot</td><td colspan="2">Official wordmark from the shop sprite (<code>#trustpilot-logo</code>), cap height matched to the text. Score bound to <code>TrustpilotRatingReader</code>, never typed. Links to the profile in a new tab with a 44 px tap area</td></tr>
+          <tr><td>Behaviour</td><td colspan="2">Not sticky, no animation, no horizontal scroll at any width from 320 to 1920 px</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="plain">
+      <li><strong>Server-side test.</strong> New <code>ab_homepage_trust_strip_v1</code> in the shop's AbTest module (on/off, stores and split in PIM). Assignment already reaches GA4 and ABlyft. No client-side injection, so no flicker and no layout shift at the fold.</li>
+      <li><strong>Placement.</strong> Hero and claim live in one CMS block, and CMS content renders Twig. A <code>{{ homepageTrustStrip() }}</code> call between them renders the partial for arm B and nothing for A.</li>
+      <li><strong>Copy.</strong> Glossary keys per locale, editable in PIM. The old hard-coded string "Trustpilot: 4,8 Sterne" (<code>pdp.trust-elements.reviews</code>) must not be used.</li>
+      <li><strong>Caching.</strong> Confirm Speed Kit varies the homepage by the test cookie, as for the existing room-view test.</li>
+      <li><strong>Measure.</strong> Primary <code>global_revenue_order-placed_capped-3447</code>, secondary <code>visits pdp</code>, guardrails <code>homepage_click_hero-cta</code>, <code>homepage_scroll_50pct</code>, <code>global_custom_purchase</code>, new <code>homepage_click_trust-strip</code>. Analyse homepage visitors only.</li>
+      <li><strong>Power.</strong> At German homepage volumes an RPV difference has to be very large to show up within weeks. Read homepage → product page as the early signal and RPV as the no-harm check, and run DE, AT and CH together.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="open">
+    <h2 id="open">Decide before launch</h2>
+    <div class="issues">
+      <div class="issue"><span class="tag block">Fact check</span><p><strong>The collector count disagrees across sources.</strong> The brief and the site's sticky bar say 330.000; the brandbook's key figures say 350K+; the warehouse holds 362,434 customer records with an order, trade accounts included. Pick one source, and update the sticky bar in the same release so two numbers never show at once.</p></div>
+      <div class="issue"><span class="tag block">Brand</span><p><strong>"Handsigniert &amp; limitiert" repeats the headline right below it</strong> ("Signierte &amp; limitierte Kunst-Editionen"). The brandbook asks to sharpen the core message, not repeat it. Suggested swap: "Handgefertigt in Deutschland", which the brandbook names as the DACH trust signal, once production confirms it holds for every edition sold on .de. The current claim also has catalogue exceptions (Masters carry estate stamps).</p></div>
+      <div class="issue"><span class="tag">Test scope</span><p><strong>The sticky USP bar repeats two facts on desktops from 1260 px</strong> until a visitor closes it, and it says "Kunden", a blacklisted word. On a 1536 × 864 laptop it now meets the ivory band at the fold. It stays in both arms to keep this a one-variable test (phones and tablets never show it); if the strip wins, retire the sticky bar on the homepage.</p></div>
+      <div class="issue"><span class="tag">Sign-off</span><p><strong>The green Trustpilot star extends the palette.</strong> It needs Creative Director sign-off; the PDP rating row is the precedent.</p></div>
+      <div class="issue"><span class="tag">Exposure</span><p><strong>The LiveChat greeting card covers the bottom of a phone's first screen</strong>, the strip included, until it is dismissed. It does so in both arms, but it dilutes the strip's exposure.</p></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('[data-arm]');
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      var arm = button.getAttribute('data-arm');
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === button)); });
+      document.querySelectorAll('[data-swap]').forEach(function (img) {
+        img.src = 'shots/' + img.getAttribute('data-swap') + '-' + arm + '.jpg';
+        img.alt = img.alt.replace(arm === 'control' ? / with the trust strip.*$/ : /( without the trust strip)?$/, arm === 'control' ? ' without the trust strip (control)' : ' with the trust strip');
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

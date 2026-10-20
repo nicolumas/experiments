@@ -1,0 +1,169 @@
+/*
+ * Homepage trust strip (PROTO-2026-064), variant B.
+ *
+ * An ivory plinth under the hero: full-bleed, flush with the hero image's
+ * bottom edge, facts set in the display face. Only shop tokens from
+ * frontend/themes/white/assets/sass/config/_tokens.scss (1rem = 10px); the
+ * values after the commas are the token values, so the file reads on its own.
+ *
+ * The hero keeps its own bottom spacing in the CMS block (2rem below 980px,
+ * 3rem from 980px). The strip pulls up by exactly that amount and returns it
+ * underneath, so the claim keeps its original distance from the hero block
+ * and the page grows by the strip's height only.
+ *
+ * Ivory step: ivory-100, one lighter than the sticky USP bar (ivory-200), so
+ * the two never read as one surface where they meet at the fold.
+ */
+
+.trust-strip {
+  --trust-strip-hero-gap: 2rem;
+  --trust-strip-font-size: 1.7rem;
+  --trust-strip-line-height: 2.3rem;
+  --trust-strip-gap: var(--sp-8, 3.2rem);
+  --trust-strip-padding-block: 1.4rem;
+  --trust-strip-logo-height: 1.9rem;
+
+  /* full-bleed: cancel .container-fluid's 1rem gutter, as the hero row does */
+  margin: calc(var(--trust-strip-hero-gap) * -1) -1rem var(--trust-strip-hero-gap);
+  padding: var(--trust-strip-padding-block) var(--sp-4, 1.6rem);
+  background: var(--primitive-ivory-100, #faf6f1);
+  font-family: var(--font-display, utile-display, arial, sans-serif);
+  font-size: var(--trust-strip-font-size);
+  line-height: var(--trust-strip-line-height);
+  word-spacing: 0.06em; /* Utile sets "&" tight against its neighbours */
+  color: var(--color-text-primary, #1c1a18);
+}
+
+.trust-strip-facts {
+  /* explicit: inside the negative-margin band, Chrome otherwise resolves the
+     phone line-break item (flex-basis: 100%) against a zero-width list */
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: var(--trust-strip-gap);
+  row-gap: var(--sp-1, 0.4rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trust-strip-fact {
+  position: relative;
+  margin: 0;
+  white-space: nowrap; /* a fact never breaks inside itself */
+  font-variant-numeric: lining-nums;
+}
+
+/* Hairline dividers live in the gap, not in the text, so one can never end a
+   line; the one in front of a wrapped fact is hidden. */
+.trust-strip-fact + .trust-strip-fact::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(var(--trust-strip-gap) / -2);
+  width: 0.1rem;
+  height: 1em;
+  transform: translate(-50%, -50%);
+  background: var(--primitive-bone-400, #c7beb4);
+}
+
+.trust-strip-fact.is-line-start::before {
+  display: none;
+}
+
+/* Trustpilot: the official wordmark from the shop sprite, a touch smaller than
+   the display type so the green star is recognisable without leading the line. */
+.trust-strip-rating {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 44px tap target without changing the line's height */
+.trust-strip-rating::after {
+  content: '';
+  position: absolute;
+  inset: -1.2rem -0.8rem;
+}
+
+/* Set on the text baseline: the wordmark baseline sits at 86.4% of the logo
+   box, so the box drops 13.6% of its height below the line's baseline. */
+.trust-strip-rating-logo {
+  display: inline-block;
+  width: calc(var(--trust-strip-logo-height) * 4.072);
+  height: var(--trust-strip-logo-height);
+  margin-right: var(--sp-2, 0.8rem);
+  vertical-align: calc(var(--trust-strip-logo-height) * -0.136);
+}
+
+.trust-strip-rating:hover .trust-strip-figure,
+.trust-strip-rating:focus-visible .trust-strip-figure {
+  text-decoration: underline;
+  text-decoration-thickness: 0.1rem;
+  text-underline-offset: 0.3rem;
+}
+
+.trust-strip-rating:focus-visible {
+  outline: 0.1rem solid var(--color-border-focus, #1c1a18);
+  outline-offset: 0.4rem;
+}
+
+/* Score placeholder: unmistakably not a rating. Production binds the live
+   value from TrustpilotRatingReader instead. */
+.trust-strip-placeholder {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border: 0.1rem dashed var(--primitive-charcoal-400, #aca8a2);
+  color: var(--color-text-secondary, #5a5752);
+  font-family: var(--font-body, archivo, arial, sans-serif);
+  font-size: 1.3rem; /* brandbook s04: no text under 13px digital */
+  line-height: 1.8rem;
+  vertical-align: 0.1rem;
+}
+
+/* Phones and portrait tablets (the site's mobile hero runs to 979px): two
+   lines of two facts. The pseudo-element is a full-width flex item ordered
+   between fact 2 and fact 3, so the break is deliberate, not wherever the
+   copy happens to run out. */
+@media (max-width: 979px) {
+  .trust-strip-facts::after {
+    content: '';
+    order: 2;
+    flex-basis: 100%;
+  }
+
+  .trust-strip-fact:nth-child(n + 3) {
+    order: 3;
+  }
+}
+
+@media (max-width: 374px) {
+  .trust-strip {
+    --trust-strip-font-size: 1.6rem;
+    --trust-strip-line-height: 2.2rem;
+    --trust-strip-gap: var(--sp-6, 2.4rem);
+    --trust-strip-logo-height: 1.8rem;
+  }
+}
+
+@media (max-width: 339px) {
+  .trust-strip {
+    --trust-strip-font-size: 1.5rem;
+    --trust-strip-gap: var(--sp-5, 2rem);
+    --trust-strip-logo-height: 1.7rem;
+  }
+}
+
+/* Desktop hero (980px and up): one balanced line. */
+@media (min-width: 980px) {
+  .trust-strip {
+    --trust-strip-hero-gap: 3rem;
+    --trust-strip-font-size: 2rem;
+    --trust-strip-line-height: 2.6rem;
+    --trust-strip-gap: var(--sp-12, 4.8rem);
+    --trust-strip-padding-block: var(--sp-5, 2rem);
+    --trust-strip-logo-height: 2.2rem;
+  }
+}

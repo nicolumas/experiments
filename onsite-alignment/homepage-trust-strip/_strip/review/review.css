@@ -1,0 +1,194 @@
+/* Prototype chrome for PROTO-2026-064. Not part of the test. */
+
+.proto-no-sticky .sticky-footer {
+  display: none !important;
+}
+
+/* ---- review bar -------------------------------------------------------- */
+.proto-bar {
+  position: fixed;
+  z-index: 2147483000;
+  right: 16px;
+  top: 128px;
+  max-width: calc(100vw - 32px);
+  font: 13px/1.3 archivo, arial, sans-serif;
+  color: #1c1a18;
+}
+
+.proto-bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #c7c3be;
+  box-shadow: 0 8px 32px rgb(28 26 24 / 12%);
+}
+
+.proto-bar-tag {
+  padding: 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #5a5752;
+}
+
+.proto-bar button {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid #c7c3be;
+  border-radius: 0;
+  background: #fff;
+  color: #1c1a18;
+  font: inherit;
+  cursor: pointer;
+}
+
+.proto-bar button[aria-pressed='true'],
+.proto-bar button[aria-expanded='true'] {
+  background: #1c1a18;
+  border-color: #1c1a18;
+  color: #f4ede2;
+}
+
+.proto-segment {
+  display: flex;
+}
+
+.proto-segment button + button {
+  border-left: 0;
+}
+
+.proto-editor {
+  margin-bottom: 6px;
+  padding: 12px;
+  width: 320px;
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid #c7c3be;
+  box-shadow: 0 8px 32px rgb(28 26 24 / 12%);
+}
+
+.proto-editor[hidden] {
+  display: none;
+}
+
+.proto-editor-note {
+  margin: 0 0 10px;
+  color: #5a5752;
+}
+
+.proto-field {
+  display: block;
+  margin: 0 0 8px;
+}
+
+.proto-field span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a5752;
+}
+
+/* the shop styles `label span::before` as a checkbox; neutralise it here */
+.proto-field span::before {
+  content: none !important;
+  display: none !important;
+}
+
+.proto-field input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #c7c3be;
+  border-radius: 0;
+  font: inherit;
+  font-size: 14px;
+}
+
+.proto-bar .proto-link {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  color: #5a5752;
+}
+
+@media (max-width: 759px) {
+  .proto-bar {
+    top: auto;
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+  }
+
+  .proto-bar-tag {
+    display: none;
+  }
+}
+
+/* ---- measurement overlay (brandbook s16 marks margins in magenta) ------- */
+.proto-measure {
+  position: absolute;
+  inset: 0 auto auto 0;
+  z-index: 2147482000;
+  width: 100%;
+  pointer-events: none;
+  font: 11px/1.2 archivo, arial, sans-serif;
+}
+
+.proto-measure-span {
+  position: absolute;
+  width: 9px;
+  border-top: 1px solid #d4006f;
+  border-bottom: 1px solid #d4006f;
+  background: linear-gradient(#d4006f, #d4006f) center / 1px 100% no-repeat;
+}
+
+.proto-measure-band {
+  position: absolute;
+  background: rgb(212 0 111 / 8%);
+  outline: 1px dashed rgb(212 0 111 / 60%);
+}
+
+.proto-measure-gap {
+  position: absolute;
+  background: rgb(212 0 111 / 18%);
+}
+
+.proto-measure-label {
+  position: absolute;
+  white-space: nowrap;
+  padding: 2px 5px;
+  background: #d4006f;
+  color: #fff;
+}
+
+.proto-measure-label-right {
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+}
+
+.proto-measure-label-above {
+  bottom: calc(100% + 4px);
+  left: 0;
+}
+
+.proto-measure-label-below {
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.proto-measure-note {
+  position: absolute;
+  padding: 3px 6px;
+  background: #fff;
+  border: 1px solid #d4006f;
+  color: #d4006f;
+}
