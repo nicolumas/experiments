@@ -1,0 +1,80 @@
+{
+ "cross-country-skier": {
+  "ar": 0.664
+ },
+ "snowball-thrower": {
+  "ar": 0.7138
+ },
+ "sledging-child": {
+  "ar": 0.6281
+ },
+ "pulling-empty-sled": {
+  "ar": 0.6512
+ },
+ "downhill-skier": {
+  "ar": 0.6685
+ },
+ "snowboarder": {
+  "ar": 0.6816
+ },
+ "snowshoe-walker": {
+  "ar": 0.6656
+ },
+ "catching-snowball": {
+  "ar": 0.6587
+ },
+ "winter-dog-walker": {
+  "ar": 0.6394
+ },
+ "carrying-skis": {
+  "ar": 0.6444
+ },
+ "hot-drink-pause": {
+  "ar": 0.6263
+ },
+ "winter-photographer": {
+  "ar": 0.6217
+ },
+ "carrying-toboggan": {
+  "ar": 0.611
+ },
+ "skier-resting": {
+  "ar": 0.66
+ },
+ "playful-winter-child": {
+  "ar": 0.6868
+ },
+ "winter-group-five": {
+  "ar": 1.559
+ },
+ "work-break": {
+  "ar": 1.2695,
+  "frame": [
+   0.3009,
+   0.0655,
+   0.6877,
+   0.8364
+  ]
+ },
+ "clark-kent-graffiti": {
+  "ar": 1.5653,
+  "frame": [
+   0.2658,
+   0.2263,
+   0.7526,
+   0.5679
+  ]
+ },
+ "italian-wedding": {
+  "ar": 0.676,
+  "frame": [
+   0.3618,
+   0.2335,
+   0.6463,
+   0.3571
+  ]
+ },
+ "suni": {
+  "ar": 1.5067
+ }
+}
