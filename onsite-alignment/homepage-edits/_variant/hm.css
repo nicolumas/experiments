@@ -1,0 +1,525 @@
+/* Editorial masonry homepage variant.
+   Binds to production's V2 tokens (root font-size 10px, so 1rem = 10px).
+
+   Systems, defined once and used everywhere below:
+   - Type: one scale on a ~1.25 ratio from 16px body; each step has one role.
+   - Space: the V2 4px ladder (--sp-*); tight inside a group, wide between groups.
+   - Grid: 2 columns on phones, 3 on tablets, 5 on desktop. On desktop every section
+     puts its title in column 1 and its content in columns 2-5, so every work column
+     lines up under an edit tile above it. */
+
+.hm-page {
+  /* type scale */
+  --hm-fs-display: clamp(3.4rem, 2.4vw + 2.2rem, 5.6rem); /* page claim */
+  --hm-fs-h2: clamp(2.6rem, 1.2vw + 2.1rem, 4rem);      /* section titles */
+  --hm-fs-h3: clamp(2.4rem, 0.6vw + 2rem, 3.2rem);      /* portrait names */
+  --hm-fs-title: clamp(1.8rem, 0.3vw + 1.6rem, 2rem);   /* every name on a tile */
+  --hm-fs-lead: clamp(1.6rem, 0.3vw + 1.5rem, 1.8rem);  /* claim lead */
+  --hm-fs-body: 1.6rem;                                  /* introductions, portrait text */
+  --hm-fs-small: 1.4rem;                                 /* artist, price, meta */
+  --hm-fs-caption: 1.3rem;                               /* type labels, status (brandbook minimum) */
+
+  /* layout */
+  --hm-pad: clamp(1.2rem, 2.6vw, 4rem);
+  --hm-bleed: 1rem;   /* production's container-fluid gutter; colour bands reach past it to the edge */
+  --hm-gap: 1.2rem;
+  --hm-section: var(--sp-10, 4rem);
+  --hm-h: 21rem;      /* target row height of a hang line */
+  --hm-row-gap: var(--sp-6, 2.4rem);
+  --hm-row: 4px;
+  --hm-top: calc(var(--hm-nav-h, 72px) + var(--sp-6, 2.4rem));
+  --hm-ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  color: var(--color-text-primary);
+  background: var(--color-surface-page);
+  font-family: var(--font-body);
+  font-size: var(--hm-fs-body);
+  line-height: 1.5;
+}
+@media (min-width: 600px) { .hm-page { --hm-h: 22rem; --hm-gap: 2rem; --hm-section: var(--sp-16, 6.4rem); } }
+@media (min-width: 980px) { .hm-page { --hm-h: 28rem; --hm-gap: 2.4rem; --hm-row-gap: var(--sp-8, 3.2rem); --hm-section: var(--sp-20, 8rem); } }
+
+.hm-page *,
+.hm-page *::before,
+.hm-page *::after { box-sizing: border-box; }
+.hm-page :where(h1, h2, h3, p, ul, ol, dl, dd) { margin: 0; }
+.hm-page :where(ul, ol) { padding: 0; list-style: none; }
+:where(.hm-page) a { color: inherit; text-decoration: none; }
+.hm-page img { display: block; max-width: 100%; }
+.hm-page [hidden] { display: none !important; }
+.hm-page :focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 3px; }
+.hm-page > section { padding-inline: var(--hm-pad); }
+
+/* ---------- type roles */
+
+.hm-intro__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--hm-fs-display);
+  line-height: 1.04;
+  letter-spacing: 0;
+  text-align: left;
+  text-wrap: balance;
+}
+.hm-edit__title, .hm-aktuell__title, .hm-trust__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--hm-fs-h2);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-align: left;
+  text-wrap: balance;
+}
+.hm-story__name, .hm-info__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.hm-story__name { font-size: var(--hm-fs-h3); }
+.hm-info__title { font-size: var(--hm-fs-title); }
+.hm-art__title, .hm-room__title, .hm-coll__title, .hm-artist__name, .hm-index__name, .hm-news__title,
+.hm-facts dt, .hm-reveal__label {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--hm-fs-title);
+  line-height: 1.2;
+  letter-spacing: 0;
+  word-spacing: 0.06em; /* opens Utile's tight "&" */
+  text-wrap: balance;
+}
+.hm-kicker, .hm-status {
+  display: block;
+  font-family: var(--font-body-bold);
+  font-size: var(--hm-fs-caption);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+.hm-status { font-family: var(--font-body); letter-spacing: 0; }
+
+/* routes end in an arrow that is never underlined; works carry none */
+.hm-index__name::after, .hm-coll__title::after, .hm-artist__name::after {
+  content: "\00a0→";
+  font-family: var(--font-body);
+  font-size: 0.8em;
+}
+
+/* ---------- links and buttons */
+
+.hm-link {
+  display: inline-block;
+  padding-block: var(--sp-2, 0.8rem);
+  font-family: var(--font-body-bold);
+  font-size: var(--hm-fs-small);
+  line-height: 1.4;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.5rem;
+}
+.hm-link::after, .hm-cta::after {
+  content: "→";
+  display: inline-block;
+  margin-left: var(--sp-2, 0.8rem);
+  font-family: var(--font-body);
+  text-decoration: none;
+  transition: transform 200ms var(--hm-ease);
+}
+.hm-link--inverse { color: var(--color-text-inverse); }
+.hm-cta {
+  display: inline-block;
+  margin-top: var(--sp-2, 0.8rem);
+  font-family: var(--font-body-bold);
+  font-size: var(--hm-fs-small);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.5rem;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hm-link:hover::after, a:hover .hm-cta::after { transform: translateX(3px); }
+  .hm-art:hover .hm-art__title, .hm-room:hover .hm-room__title, .hm-coll:hover .hm-coll__title,
+  .hm-artist:hover .hm-artist__name, .hm-index a:hover .hm-index__name, .hm-news:hover .hm-news__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4rem;
+  }
+}
+
+.hm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.8rem;
+  padding: var(--sp-4, 1.6rem) var(--sp-8, 3.2rem);
+  border: 1px solid var(--color-surface-inverse);
+  border-radius: 0;
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse) !important;
+  font-family: var(--font-body-bold);
+  font-size: var(--hm-fs-caption);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 160ms var(--hm-ease), background-color 200ms ease, color 200ms ease;
+}
+.hm-btn:active { transform: scale(0.98); }
+
+.hm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- desktop grid: title in column 1, content in columns 2-5 */
+
+@media (min-width: 980px) {
+  .hm-intro, .hm-edit, .hm-aktuell, .hm-trust {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: var(--hm-gap);
+  }
+  .hm-edit__head, .hm-aktuell__title { grid-column: 1; }
+  .hm-edit__body, .hm-aktuell__list { grid-column: 2 / -1; }
+}
+
+/* ---------- hero (production's own) */
+
+.hm-page > .hm-hero { padding-inline: 0; }
+
+/* ---------- intro: the claim heads the five edit tiles */
+
+.hm-intro { padding-block: var(--sp-8, 3.2rem) var(--hm-section); }
+.hm-intro__lead {
+  margin-top: var(--sp-3, 1.2rem);
+  max-width: 48ch;
+  font-size: var(--hm-fs-lead);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  text-wrap: pretty;
+}
+.hm-index { margin-top: var(--sp-8, 3.2rem); }
+.hm-index ol {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15.2rem, 42%);
+  gap: var(--hm-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--hm-pad);
+  scrollbar-width: none;
+  margin-inline: calc(var(--hm-pad) * -1);
+  padding-inline: var(--hm-pad);
+}
+.hm-index ol::-webkit-scrollbar { display: none; }
+.hm-index li { scroll-snap-align: start; }
+.hm-index a { display: grid; }
+.hm-index__img { display: block; margin-bottom: var(--sp-3, 1.2rem); overflow: hidden; background: var(--color-surface-muted); }
+.hm-index__img img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 600ms var(--hm-ease); }
+.hm-index__meta { margin-top: var(--sp-1, 0.4rem); font-size: var(--hm-fs-small); color: var(--color-text-secondary); }
+.hm-index a:active .hm-index__img img { transform: scale(0.98); }
+@media (hover: hover) and (pointer: fine) { .hm-index a:hover .hm-index__img img { transform: scale(1.03); } }
+@media (min-width: 600px) {
+  .hm-index ol { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: visible; margin-inline: 0; padding-inline: 0; }
+}
+@media (min-width: 980px) {
+  .hm-intro { padding-top: var(--sp-16, 6.4rem); align-items: last baseline; }
+  .hm-intro__title { grid-column: 1 / span 3; max-width: 12em; }
+  .hm-intro__lead { grid-column: 4 / -1; margin: 0; }
+  .hm-index { grid-column: 1 / -1; margin-top: var(--sp-12, 4.8rem); }
+}
+
+/* ---------- edits */
+
+.hm-edit {
+  overflow-anchor: none;
+  padding-block: var(--hm-section);
+  border-top: 1px solid var(--color-border-subtle);
+  scroll-margin-top: var(--hm-top);
+}
+.hm-edit__head { margin-bottom: var(--sp-6, 2.4rem); }
+.hm-edit__dek {
+  margin: var(--sp-3, 1.2rem) 0 var(--sp-2, 0.8rem);
+  max-width: 40ch;
+  font-size: var(--hm-fs-body);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  text-wrap: pretty;
+}
+@media (min-width: 980px) {
+  .hm-edit__head { margin: 0; }
+  .hm-edit__rail { position: sticky; top: var(--hm-top); }
+  .hm-edit__dek { max-width: none; }
+}
+
+/* ---------- the wall: hang-line rows
+   Every work in a row shares its top edge, its height and its caption line, like a hang at eye
+   level. Without JS each row justifies itself (flex-grow by aspect ratio); hm.js then balances
+   the rows so none is left short. Order is strictly left to right, top to bottom. */
+
+.hm-wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--hm-row-gap) var(--hm-gap);
+}
+.hm-wall::after { content: ""; flex: 9999 1 0; } /* keeps the last row from stretching without JS */
+.hm-wall.is-hung::after { display: none; }
+.hm-tile {
+  --r: 1;
+  position: relative;
+  min-width: 0;
+  flex: var(--r) 1 calc(var(--r) * var(--hm-h));
+  max-width: 100%;
+}
+.hm-wall.is-hung > .hm-tile { flex: 0 0 var(--w, auto); }
+.hm-tile--row { --row: 1; flex-basis: 100% !important; }
+.hm-tile__in { position: relative; }
+
+#hm-kuenstler .hm-wall { --hm-h: 11rem; }
+@media (min-width: 600px) { #hm-kuenstler .hm-wall { --hm-h: 17rem; } }
+@media (min-width: 980px) { #hm-kuenstler .hm-wall { --hm-h: 22rem; } }
+
+.hm-tile--room { --r: 1.7778; }
+.hm-tile--story { --row: 1; flex-basis: 100% !important; }
+.hm-tile--collection, .hm-tile--artist { --r: 1; }
+.hm-tile--service { --r: 1; }
+.hm-tile--info { --r: 0.9; }
+@media (min-width: 600px) and (max-width: 979px) { .hm-tile--info { --r: 1.3; } }
+@media (max-width: 599px) {
+  .hm-tile--room { --r: 1; }
+  .hm-tile--service, .hm-tile--info, .hm-tile--collection { --row: 1; flex-basis: 100% !important; }
+}
+
+/* one caption anatomy for every tile: [type label] name / who or what / fact */
+
+/* artwork: bare, whole, true ratio; the label sits below like a wall label */
+.hm-art { display: block; }
+.hm-plate { display: block; position: relative; width: 100%; background: var(--color-surface-muted); }
+.hm-plate img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+/* pale works get a soft lift so they never dissolve into the page; never a mat or border */
+.hm-plate.is-loaded { background: transparent; box-shadow: 0 1px 2px rgb(28 26 24 / 6%), 0 14px 28px -20px rgb(28 26 24 / 35%); }
+.hm-plate.is-loaded img { opacity: 1; }
+.hm-plate.is-error::after {
+  content: "Bild nicht verfügbar";
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-size: var(--hm-fs-caption); color: var(--color-text-secondary);
+}
+.hm-art:active .hm-plate { transform: scale(0.99); transition: transform 120ms var(--hm-ease); }
+.hm-art__label { display: grid; padding: var(--sp-3, 1.2rem) 4.4rem 0 0; font-size: var(--hm-fs-small); line-height: 1.4; }
+.hm-status { margin-bottom: var(--sp-1, 0.4rem); }
+.hm-art__artist { margin-top: var(--sp-1, 0.4rem); color: var(--color-text-secondary); }
+.hm-art__price { margin-top: var(--sp-2, 0.8rem); }
+.hm-art__price strong { font-family: var(--font-body-bold); font-weight: 400; white-space: nowrap; }
+.hm-promo { margin-left: var(--sp-2, 0.8rem); font-size: var(--hm-fs-caption); color: var(--color-campaign); white-space: nowrap; }
+.hm-tile--art .hm-tile__in { container-type: inline-size; }
+.hm-wish { position: absolute !important; right: 0; top: calc(100cqw / var(--r) + var(--sp-2, 0.8rem)); }
+
+/* room: the room may be cropped, the work inside it never is */
+.hm-room { display: block; }
+.hm-room__img { display: block; overflow: hidden; background: var(--color-surface-muted); }
+.hm-room__img img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+@media (min-width: 600px) { .hm-room__img img { aspect-ratio: 16 / 9; } }
+.hm-room__label { display: grid; padding-top: var(--sp-3, 1.2rem); font-size: var(--hm-fs-small); line-height: 1.4; }
+.hm-room .hm-kicker { margin-bottom: var(--sp-1, 0.4rem); }
+.hm-room__artist { margin-top: var(--sp-1, 0.4rem); color: var(--color-text-secondary); }
+.hm-room__meta { margin-top: var(--sp-2, 0.8rem); color: var(--color-text-secondary); }
+
+/* portrait: the one inverse surface, at most one per edit */
+.hm-story { display: grid; background: var(--color-surface-inverse); color: var(--color-text-inverse); }
+.hm-story__media img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.hm-story__text { display: grid; align-content: center; justify-items: start; gap: var(--sp-3, 1.2rem); padding: var(--sp-6, 2.4rem); }
+.hm-story .hm-kicker { color: var(--color-text-inverse); opacity: 0.7; }
+.hm-story p { max-width: 44ch; font-size: var(--hm-fs-body); line-height: 1.6; opacity: 0.85; text-wrap: pretty; }
+.hm-story .hm-link + .hm-link { margin-top: calc(var(--sp-2, 0.8rem) * -1); }
+@media (min-width: 600px) {
+  .hm-story { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .hm-story__text { padding: var(--sp-8, 3.2rem) var(--sp-10, 4rem); }
+}
+
+/* collection: a route into a filtered listing, on the muted surface */
+.hm-coll { display: grid; background: var(--color-surface-muted); }
+.hm-coll__img img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.hm-coll__text { display: grid; align-content: start; padding: var(--sp-4, 1.6rem) var(--sp-4, 1.6rem) var(--sp-5, 2rem); }
+.hm-coll .hm-kicker { margin-bottom: var(--sp-1, 0.4rem); }
+.hm-coll__desc { margin-top: var(--sp-2, 0.8rem); font-size: var(--hm-fs-small); line-height: 1.45; color: var(--color-text-secondary); text-wrap: pretty; }
+@media (max-width: 599px) {
+  .hm-coll:not(.hm-coll--service) { grid-template-columns: 9.6rem minmax(0, 1fr); align-items: center; }
+  .hm-coll:not(.hm-coll--service) .hm-coll__text { padding: var(--sp-3, 1.2rem) var(--sp-4, 1.6rem); }
+  .hm-coll:not(.hm-coll--service) .hm-kicker { display: none; }
+  .hm-coll--service .hm-coll__img img { aspect-ratio: 3 / 2; }
+}
+/* route tiles in one row end on one line, however long their copy */
+@media (min-width: 600px) {
+  .hm-tile--collection, .hm-tile--service { align-self: stretch; }
+  .hm-tile--collection > .hm-tile__in, .hm-tile--service > .hm-tile__in, .hm-coll { height: 100%; }
+  .hm-coll { grid-template-rows: auto 1fr; }
+}
+/* the service route: a gallery photo (people, so it may be cropped) and an outline instead of the surface */
+.hm-coll--service { background: none; }
+.hm-coll--service .hm-coll__text { border: 1px solid var(--color-border-strong); border-top: 0; }
+
+/* artist */
+.hm-artist { display: grid; }
+.hm-artist__img { display: block; margin-bottom: var(--sp-3, 1.2rem); background: var(--color-surface-muted); }
+.hm-artist__img img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+@media (max-width: 599px) { .hm-artist__name { font-size: var(--hm-fs-small); font-family: var(--font-body-bold); word-spacing: 0; } }
+
+/* info: a text tile on the raised surface, never mistaken for a work */
+.hm-info { display: grid; align-content: start; justify-items: start; gap: var(--sp-3, 1.2rem); padding: var(--sp-6, 2.4rem); aspect-ratio: var(--r); background: var(--color-surface-raised); }
+@media (max-width: 599px) { .hm-info { aspect-ratio: auto; } }
+.hm-info p { font-size: var(--hm-fs-small); line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
+
+/* ---------- disclosure: one mechanic, two states */
+
+.hm-disclose { margin-top: var(--hm-row-gap); }
+.hm-reveal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "thumbs icon" "text icon";
+  align-items: center;
+  gap: var(--sp-3, 1.2rem) var(--sp-4, 1.6rem);
+  width: 100%;
+  min-height: 7.2rem;
+  padding: var(--sp-4, 1.6rem);
+  border: 1px solid var(--color-border-default);
+  border-radius: 0;
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background-color 200ms ease, border-color 200ms ease, transform 160ms var(--hm-ease);
+}
+.hm-reveal:active { transform: scale(0.99); }
+@media (hover: hover) and (pointer: fine) {
+  .hm-reveal:hover { background: var(--color-surface-raised); border-color: var(--color-text-primary); }
+}
+.hm-reveal__thumbs { grid-area: thumbs; display: flex; align-items: flex-end; gap: var(--sp-1, 0.4rem); }
+.hm-reveal__thumbs img { width: auto; height: auto; max-height: 4rem; max-width: 7.2rem; }
+.hm-reveal__text { grid-area: text; display: grid; gap: var(--sp-1, 0.4rem); }
+.hm-reveal__meta { font-size: var(--hm-fs-caption); color: var(--color-text-secondary); }
+.hm-reveal__icon { grid-area: icon; position: relative; width: 4.4rem; height: 4.4rem; border: 1px solid var(--color-text-primary); border-radius: 50%; }
+.hm-reveal__icon::before, .hm-reveal__icon::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 1.4rem; height: 1px; background: currentColor;
+  transform: translate(-50%, -50%);
+}
+.hm-reveal__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+@media (min-width: 600px) {
+  .hm-reveal { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "thumbs text icon"; padding: var(--sp-4, 1.6rem) var(--sp-6, 2.4rem); }
+}
+
+.hm-after { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4, 1.6rem) var(--sp-6, 2.4rem); }
+.hm-collapse {
+  min-height: 4.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--hm-fs-small);
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  cursor: pointer;
+}
+
+.hm-more { margin-top: var(--hm-gap); }
+.hm-more.is-entering .hm-tile { opacity: 0; transform: translateY(1.2rem); }
+.hm-more .hm-tile {
+  transition: opacity 360ms var(--hm-ease), transform 360ms var(--hm-ease);
+  transition-delay: calc(var(--hm-i, 0) * 35ms);
+}
+
+/* ---------- Aktuell */
+
+.hm-aktuell { padding-block: var(--hm-section); border-top: 1px solid var(--color-border-subtle); }
+.hm-aktuell__title { margin-bottom: var(--sp-6, 2.4rem); }
+.hm-aktuell__list { display: grid; gap: var(--sp-4, 1.6rem); }
+.hm-news { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: var(--sp-4, 1.6rem); align-items: center; }
+.hm-news__img img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.hm-news__text { display: grid; justify-items: start; }
+.hm-news .hm-cta { margin-top: var(--sp-2, 0.8rem); }
+@media (min-width: 980px) {
+  .hm-aktuell__title { margin: 0; }
+  .hm-aktuell__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--hm-gap); }
+  .hm-news { grid-template-columns: 1fr; gap: var(--sp-3, 1.2rem); align-items: start; }
+  .hm-news__img img { aspect-ratio: 4 / 3; }
+}
+
+/* ---------- trust, reviews, newsletter, end, logos */
+
+.hm-trust { display: grid; gap: var(--sp-8, 3.2rem); padding-block: var(--hm-section); background: var(--color-surface-raised); }
+.hm-trust__title { max-width: 18ch; }
+.hm-trust__copy p { margin-top: var(--sp-3, 1.2rem); max-width: 44ch; color: var(--color-text-secondary); text-wrap: pretty; }
+.hm-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6, 2.4rem) var(--hm-gap); }
+.hm-facts dd { margin-top: var(--sp-2, 0.8rem); font-size: var(--hm-fs-small); line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
+.hm-facts a { color: var(--color-text-primary); text-decoration: underline; text-underline-offset: 0.3rem; white-space: nowrap; }
+@media (min-width: 980px) {
+  .hm-trust__copy { grid-column: 1 / span 2; }
+  .hm-facts { grid-column: 3 / -1; }
+}
+
+.hm-reviews { padding-block: var(--hm-section) var(--sp-6, 2.4rem); }
+.hm-reviews [class*="col-"] { width: 100%; margin-left: 0; float: none; }
+
+/* newsletter: production's form, aligned to the page grid */
+.hm-newsletter { padding-block: var(--hm-section); border-top: 1px solid var(--color-border-subtle); }
+/* On charcoal the shop's form tokens would give a white field with ivory text: let the field take
+   the band, and lift its border to charcoal-500 (5:1 on charcoal-900, past the 3:1 UI minimum). */
+.hm-newsletter.bg-inverse { --color-surface-card: transparent; --color-border-default: var(--primitive-charcoal-500); }
+.hm-newsletter.bg-inverse input[type=email]::placeholder { color: var(--primitive-charcoal-400); }
+.hm-newsletter :is(.row, [class*="col-"]) { width: auto; margin: 0; padding: 0; float: none; }
+.hm-newsletter :is(.text-center, h2, p) { text-align: left !important; }
+.hm-newsletter h2 {
+  font-family: var(--font-display); font-weight: 400; font-size: var(--hm-fs-h2); line-height: 1.1;
+  letter-spacing: 0; text-wrap: balance;
+}
+.hm-newsletter p:not(.privacy) { max-width: 48ch; font-size: var(--hm-fs-body); line-height: 1.5; color: var(--color-text-secondary); }
+.hm-newsletter .newsletter-signup { max-width: 52rem; margin-top: var(--sp-4, 1.6rem); }
+.hm-newsletter h2 { max-width: 14ch; }
+@media (max-width: 979px) { .hm-newsletter > .row > div { display: grid; row-gap: var(--sp-4, 1.6rem); } }
+.hm-newsletter .newsletter-signup :is(form, form > div) { margin-inline: 0 !important; max-width: 48rem; }
+.hm-newsletter .privacy { margin-top: var(--sp-3, 1.2rem); font-size: var(--hm-fs-caption) !important; color: var(--color-text-secondary); }
+@media (min-width: 980px) {
+  .hm-newsletter > .row > div { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--hm-gap); }
+  .hm-newsletter > .row > div > .row:first-of-type { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+  .hm-newsletter > .row > div > .row:not(:first-of-type) { grid-column: 3 / -1; }
+}
+
+/* colour bands run edge to edge; their content stays on the page grid */
+.hm-page > .hm-trust, .hm-page > .hm-press--band, .hm-page > .hm-newsletter {
+  margin-inline: calc(-1 * var(--hm-bleed));
+  padding-inline: calc(var(--hm-pad) + var(--hm-bleed));
+  border-top: 0;
+}
+
+/* press and clients: production's logos and headings, on the grid */
+.hm-press { padding-block: var(--hm-section); border-top: 1px solid var(--color-border-subtle); }
+.hm-press--band { background: var(--color-surface-raised); }
+/* following the ivory trust band, the press strip reads as its last row, under a hairline */
+.hm-trust + .hm-press--band { padding-top: 0; }
+.hm-trust + .hm-press--band > .hm-press__group { padding-top: var(--sp-12, 4.8rem); border-top: 1px solid var(--color-border-default); }
+.hm-press__title {
+  font-family: var(--font-display); font-weight: 400; font-size: var(--hm-fs-title); line-height: 1.2;
+  letter-spacing: 0; text-align: left; text-wrap: balance; margin-bottom: var(--sp-4, 1.6rem);
+}
+.hm-press__logos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-6, 2.4rem) var(--hm-gap); align-items: center; }
+.hm-press__logos li { display: flex; align-items: center; justify-content: flex-start; height: 4.8rem; }
+.hm-press__logos img { max-width: 100%; max-height: 3.2rem; width: auto; height: auto; }
+@media (min-width: 980px) {
+  .hm-press__group { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--hm-gap); align-items: center; }
+  .hm-press__title { grid-column: 1; margin: 0; padding-right: var(--sp-4, 1.6rem); }
+  .hm-press__logos { grid-column: 2 / -1; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+
+/* ---------- motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-page *, .hm-page *::before, .hm-page *::after { transition-duration: 1ms !important; transition-delay: 0ms !important; }
+  .hm-more.is-entering .hm-tile { transform: none; }
+}

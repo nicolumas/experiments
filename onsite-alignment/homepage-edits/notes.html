@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta content="noindex,nofollow" name="robots"/>
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homepage-Test: Editorial Edits</title>
+<style>
+@font-face { font-family: utile-display; font-weight: 400; src: url(cdn_lumas_com/assets/white/fonts/utile/utile-display-regular.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: archivo; font-weight: 400; font-variation-settings: "wght" 400, "wdth" 100; src: url(cdn_lumas_com/assets/white/fonts/archivo.woff2); font-display: swap; }
+@font-face { font-family: archivo-bold; font-weight: 700; font-variation-settings: "wght" 700, "wdth" 100; src: url(cdn_lumas_com/assets/white/fonts/archivo.woff2); font-display: swap; }
+:root { --ink: #1c1a18; --ink-2: #5a5752; --line: #e2d8cc; --raised: #f7f1e9; --pad: clamp(16px, 4vw, 64px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 16px/1.6 archivo, arial, sans-serif; }
+main { padding: 48px var(--pad) 96px; max-width: 1440px; }
+h1, h2, h3 { font-family: utile-display, arial, sans-serif; font-weight: 400; letter-spacing: 0; text-wrap: balance; }
+h1 { font-size: clamp(32px, 3vw + 16px, 52px); line-height: 1.06; margin: 0 0 16px; max-width: 20ch; }
+h2 { font-size: clamp(26px, 1.4vw + 18px, 36px); line-height: 1.12; margin: 72px 0 16px; padding-top: 32px; border-top: 1px solid var(--line); }
+h3 { font-size: 22px; line-height: 1.2; margin: 32px 0 8px; }
+p, li { max-width: 72ch; }
+.lead { font-size: 19px; color: var(--ink-2); max-width: 64ch; }
+a { color: inherit; }
+b, strong, th { font-family: archivo-bold, arial, sans-serif; font-weight: 700; }
+.rec { background: var(--raised); padding: 24px 28px; margin: 32px 0; max-width: 980px; }
+.rec p { margin: 0; font-size: 18px; }
+table { border-collapse: collapse; width: 100%; max-width: 1180px; font-size: 15px; margin: 16px 0; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-size: 13px; color: var(--ink-2); }
+td code, p code, li code { font: 13px ui-monospace, SF Mono, monospace; background: #f4ede2; padding: 1px 4px; }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; margin: 24px 0; }
+.shots.wide { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); }
+figure { margin: 0; }
+figure img { width: 100%; height: auto; display: block; border: 1px solid var(--line); }
+figcaption { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px 32px; max-width: 980px; margin: 24px 0; }
+.nums div { border-top: 2px solid var(--ink); padding-top: 10px; }
+.nums b { display: block; font-size: 15px; }
+.nums span { font-size: 14px; color: var(--ink-2); }
+.flag { font-size: 14px; color: var(--ink-2); }
+ol, ul { padding-left: 20px; }
+@media (max-width: 700px) { table { display: block; overflow-x: auto; } }
+</style>
+</head>
+<body>
+<main>
+<p class="flag"><a href="variant.html">← Zurück zur Variante</a> &nbsp; <a href="control.html">Kontrolle</a></p>
+<h1>Homepage-Test: Editorial Edits statt Karussells</h1>
+<p class="lead">One variant against today's lumas.de homepage. Same works, same prices, same navigation and promotions. What changes is how a visitor meets the assortment: as five curated edits laid out as a gallery wall, each showing a few works first and the rest on request.</p>
+
+<div class="rec"><p><b>Recommendation.</b> Run it as a server-side A/B on DE, mobile and desktop together, for four full weeks. Primary metric: the share of homepage-landing sessions that reach a product page. The variant keeps today's hero carousel, puts a row of the five edits directly under it, and replaces four horizontal rails with one vertical rhythm that a visitor can either skim or open. If it lifts homepage-to-PDP without lowering add-to-cart per session, ship it. If it only lifts scrolling or reveal clicks, it has failed.</p></div>
+
+<h2>Hypothesis</h2>
+<p><b>For</b> visitors who land on the DE homepage (66,792 sessions in the 28 days to 13 Oct; 70% mobile), <b>keeping</b> the hero carousel but <b>replacing</b> the four product rails <b>with</b> five vertically stacked, curated edits, announced by a row of edit tiles under the hero, that show priced works early and reveal more on request <b>will raise</b> the share of sessions that view a product page (baseline 18.9% mobile, 24.3% desktop), <b>because</b> today most visitors never reach a buyable work: 56% of mobile homepage sessions do not pass 10% scroll, and the rails below Bestseller get about a tenth of its clicks.</p>
+<p class="flag">Prior knowledge: the insight ledger does not exist yet (no Confluence tree, no local mirror), so the ledger is silent. Related evidence from memory: the 24 Jul layout rollout (LUMAS-15926) cut homepage-referred PDP views by 21% after shipping against a losing ABlyft result, and the Oct 13 disclosure test showed that collapsing art into text rows was rejected; this variant never hides the art.</p>
+
+<h2>What you see</h2>
+<div class="shots">
+  <figure><img src="_shots/m-control-first.webp" alt=""><figcaption>A, control, first screen on a phone: hero carousel, no work with a price.</figcaption></figure>
+  <figure><img src="_shots/m-variant-first.webp" alt=""><figcaption>B, variant, first screen: the same hero carousel, with the edit tiles starting below it.</figcaption></figure>
+  <figure><img src="_shots/m-variant-index.webp" alt=""><figcaption>Under the hero: the claim heads one tile per edit (swipe on phones), then the first edit.</figcaption></figure>
+  <figure><img src="_shots/m-variant-before-reveal.webp" alt=""><figcaption>The end of an edit: one reveal control with a preview of what comes next and how much of the edit you have seen.</figcaption></figure>
+  <figure><img src="_shots/m-variant-after-reveal.webp" alt=""><figcaption>Expanded: new works appear where the control was. Nothing already seen moves.</figcaption></figure>
+  <figure><img src="_shots/m-variant-continue.webp" alt=""><figcaption>After the reveal, the edit hands over to the full listing, or folds back. Then the next group starts.</figcaption></figure>
+  <figure><img src="_shots/m-variant-wand.webp" alt=""><figcaption>A route group: a room for scale, collections on their own surface, never mistaken for a work.</figcaption></figure>
+</div>
+<div class="shots wide">
+  <figure><img src="_shots/d-variant-first.webp" alt=""><figcaption>Desktop: today's hero, unchanged.</figcaption></figure>
+  <figure><img src="_shots/d-variant-index.webp" alt=""><figcaption>Desktop: the claim heads the five edit tiles; every work column below lines up with a tile.</figcaption></figure>
+  <figure><img src="_shots/d-variant-before-reveal.webp" alt=""><figcaption>Desktop: the edit title becomes a rail that stays pinned while its wall scrolls.</figcaption></figure>
+  <figure><img src="_shots/d-variant-neuheiten.webp" alt=""><figcaption>An artist story opens Neuheiten, the one inverse tile per edit.</figcaption></figure>
+  <figure><img src="_shots/d-variant-after-reveal.webp" alt=""><figcaption>Desktop reveal: a room view of a bestseller, then the next works, below the ones already seen.</figcaption></figure>
+  <figure><img src="_shots/d-control-first.webp" alt=""><figcaption>Desktop control for comparison.</figcaption></figure>
+</div>
+
+<h2>Visual hierarchy</h2>
+<p>The page runs from broad to focused, and every block has one job.</p>
+<table>
+<tr><th>#</th><th>Block</th><th>Job</th><th>Source in today's page</th></tr>
+<tr><td>0</td><td>Hero carousel</td><td>Campaigns, as today</td><td>Production's two hero sub-blocks, unchanged</td></tr>
+<tr><td>1</td><td>Claim (H1 and one line) heading the five edit tiles</td><td>State the proposition, show the page is finite and art-led, offer a jump to any edit</td><td>Room images from the approved pool; H1 kept word for word (SEO); lead is the approved brandbook line</td></tr>
+<tr><td>2</td><td>Bestseller</td><td>The shop window: priced works first, no editorial tile above them</td><td>Bestseller rail, same order</td></tr>
+<tr><td>4</td><td>Aktuell bei LUMAS</td><td>Campaigns, compact</td><td>The three campaign tiles</td></tr>
+<tr><td>5</td><td>Neuheiten</td><td>Fresh work, opened by an artist story (Gerhard Richter)</td><td>Neuheiten rail</td></tr>
+<tr><td>6</td><td>Für deine Wand</td><td>Narrow by format and wall; a room shows real scale; consultation where size decisions happen</td><td>Format tiles, the contact page's real service offer</td></tr>
+<tr><td>7</td><td>Letzte Exemplare</td><td>Decision moment, with an explanation of what "limitiert" means</td><td>Letzte-Exemplare rail</td></tr>
+<tr><td>8</td><td>Top 20 Künstler:innen</td><td>Depth: the people behind the editions</td><td>Top 20 tiles</td></tr>
+<tr><td>9</td><td>Trust, Bekannt aus, reviews</td><td>Reassurance after browsing, not in front of it: one ivory band of story, facts and press, then Trustpilot</td><td>Story block, sticky-footer facts, press logos, Trustpilot</td></tr>
+<tr><td>10</td><td>Clients, newsletter, footer</td><td>Client logos on white; the newsletter closes the page on charcoal and hands over to the footer</td><td>Client logos, newsletter (production form, its own colour tokens)</td></tr>
+</table>
+<h3>Tile roles</h3>
+<p>Every tile announces what happens on click through surface, label and verb. Works carry no label because title, artist and price already say "product".</p>
+<table>
+<tr><th>Tile</th><th>Looks like</th><th>Goes to</th></tr>
+<tr><td>Artwork</td><td>The whole work, bare, at its true ratio; wall label below with status (only when it differs from the edit), title, artist, "ab" price; wishlist heart</td><td>Product page</td></tr>
+<tr><td>Im Raum</td><td>Approved LUMAS room render (the room may be cropped, the work never is); label "Im Raum", size shown, price</td><td>Product page of that work</td></tr>
+<tr><td>Im Porträt</td><td>The one charcoal tile in an edit; artist name in Utile Display, two sentences from the live artist page</td><td>Artist page, plus a named link to one work</td></tr>
+<tr><td>Kollektion</td><td>Muted surface, label "Kollektion", one-line scope</td><td>Filtered listing</td></tr>
+<tr><td>Beratung</td><td>Same anatomy as a collection (gallery photo, title, one line), outlined instead of the muted surface, so it hangs on the same lines</td><td>/kontakt/ (phone, WhatsApp, live chat); galleries stay linked from the trust block</td></tr>
+<tr><td>Gut zu wissen</td><td>Raised text tile</td><td>/unsere-editionen/</td></tr>
+</table>
+
+<h3>Grid and type system</h3>
+<ul>
+<li><b>One grid.</b> On desktop every section puts its title in column 1 of a 5-column grid and its content in columns 2 to 5, so edit tiles, works, campaigns, the newsletter and the press logos all start and end on the same lines. The claim spans columns 1 to 3, its lead columns 4 to 5 on a shared last baseline.</li>
+<li><b>Hang-line rows instead of masonry.</b> Works hang in rows like a gallery hang at eye level: every work in a row shares its top edge, its height and its caption line, and every row fills the content span exactly. Row breaks are chosen like line breaks in justified text, keeping each row close to a target height (28&nbsp;rem desktop, 22 tablet, 21 phone), so there are no ragged column ends and no holes. Ratios stay exact; nothing is cropped. On phones the rows alternate pairs with full-width works.</li>
+<li><b>One scale</b>, about 1.25 per step from 16&nbsp;px: claim 34 to 56&nbsp;px, section titles 26 to 40, portrait names 24 to 32, names on tiles 18 to 20, lead 16 to 18, body 16, meta 14, labels 13. Each step has one role, so the page claim always outranks a section and a section always outranks a tile.</li>
+<li><b>One spacing ladder</b> (V2 4&nbsp;px steps): 4 to 8&nbsp;px inside a caption, 12 to 24 between parts of a tile or header, 24 between columns, 32 between rows of works, 40 / 64 / 80&nbsp;px between sections on phone / tablet / desktop.</li>
+<li><b>Utile Display</b> for everything a visitor reads as a name: page and edit titles, work titles, room, artist, collection and campaign names, the reveal label. Mixed case, tracking 0, <code>word-spacing: .06em</code> to open Utile's tight "&amp;".</li>
+<li><b>Archivo</b> for facts and controls: artist under a work, "ab" price, introductions, links. Nothing below 13&nbsp;px; secondary text in charcoal 700 (7.2:1 on white).</li>
+<li>Tile labels in Utile Display rather than the small versal sans of brandbook s04. This follows the direction already given for the homepage theme tiles and should be confirmed with Brand.</li>
+<li>Routes end in an arrow that is never underlined; works carry no arrow, because the price already says "product".</li>
+<li>One vertical rhythm: 40&nbsp;px between groups on phones, 80&nbsp;px on desktop, a hairline between edits. Pale works get a soft lift shadow so they never dissolve into the white page; no mats or borders.</li>
+</ul>
+
+<h2>The disclosure mechanic</h2>
+<p><b>One mechanic, used the same way in all four work edits: reveal the rest of this edit, once.</b></p>
+<ol>
+<li>An edit opens with 6 works at every width, plus at most one editorial tile.</li>
+<li>Its foot is a single control: three thumbnails of what comes next, "11 weitere Bestseller zeigen" and "4 von 15 dieser Auswahl gezeigt". The count is honest per breakpoint.</li>
+<li>Pressing it appends the rest of the edit directly below what has been seen. Seen tiles never move (measured: identical positions before and after), the viewport does not jump, focus moves to the first new work and a live region announces the count.</li>
+<li>The control then becomes two actions: "Alle Bestseller ansehen" (the existing listing) and "Auswahl einklappen". Folding back keeps the control at the same spot on screen.</li>
+<li>There is no second level and no infinite feed. After one reveal the edit hands over to the full listing.</li>
+<li>Route groups (Für deine Wand) have nothing to reveal; they link out directly. Rule for reviewers: <i>work edits expand, route groups lead on.</i></li>
+</ol>
+<p>Price, artist and title are never behind the reveal, and every tile links straight to its destination. Nothing waits for an animation: the reveal fades new tiles in over 360&nbsp;ms (opacity only under reduced motion), and the page renders fully without JavaScript, minus the masonry packing.</p>
+
+<h2>From inspiration to product</h2>
+<p>The opening promises five edits and lets visitors jump. Each edit is skimmable in one screen, so a visitor who only scrolls still passes priced works from every edit. Interest has three next steps of increasing commitment: open a work (product page), reveal the edit (more of the same, on this page), or open the full listing. Editorial tiles (rooms, portraits) always resolve to a product or artist page, never to a dead end, and the consultation tile offers help without sending anyone away from buying online.</p>
+
+<h2>Measured in the prototype</h2>
+<div class="nums">
+<div><b>1,346 px vs 1,663 px</b><span>First priced work on a 390 × 844 phone (variant vs control), with the hero kept</span></div>
+<div><b>1,384 px vs 1,716 px</b><span>Same on a 1440 × 900 desktop</span></div>
+<div><b>936 / 974 px</b><span>Edit tiles start, phone / desktop, directly after the claim</span></div>
+<div><b>12,536 / 9,845 px vs 7,948 / 7,674 px</b><span>Start of the footer, phone / desktop. The variant body is longer; see risks</span></div>
+</div>
+<p class="flag">No artwork renders off its true ratio (checked for every visible plate), no tiles overlap, no horizontal overflow at 390 or 1440.</p>
+
+<h2>Usability risks</h2>
+<table>
+<tr><th>Risk</th><th>Mitigation in the design</th><th>How we would notice</th></tr>
+<tr><td>The page is about 47% longer on phones (hero kept, rails replaced by edits), so the lower edits may be reached less than today's rails</td><td>The opening index jumps straight to any edit; each edit is useful without a reveal</td><td>Reach per named section, not scroll %</td></tr>
+<tr><td>Varied sizes make prices harder to compare than a uniform row</td><td>Works in a row share one height and one caption line, so title, artist and price read across like a price list</td><td>Product views per session; moderated test task "find a work under € 500"</td></tr>
+<tr><td>Full-width works on phones make the page longer</td><td>Row breaks keep pairs where ratios allow; the edit tiles jump straight to any edit</td><td>Reach per named section on phones</td></tr>
+<tr><td>The reveal reads as "load more" and invites endless scrolling</td><td>Count and "x von y" on the control; one level only; hand-off to the listing</td><td>Reveal rate vs PDP rate after reveal</td></tr>
+<tr><td>The hero keeps the first screen, so priced works start below it on every device</td><td>Edit tiles sit directly under the hero and jump to each edit; Bestseller is the first edit</td><td>Reach of the edit tiles and <code>page_index_click</code>; a later arm could test a shorter hero</td></tr>
+<tr><td>Returning visitors miss the familiar rails</td><td>Same rail names as edit titles and the same listings behind them</td><td>Split results by <code>visitor_type</code></td></tr>
+<tr><td>More images in the first screen hurt LCP</td><td>First four works load eagerly at 550&nbsp;px, everything else lazily; all boxes reserved by aspect ratio</td><td>LCP and CLS guardrails</td></tr>
+<tr><td>Desktop rails pin left while the LiveChat card sits bottom left</td><td>Rails are short (title, two lines, one link) and top-aligned</td><td>Visual check with chat enabled on 1366 × 768</td></tr>
+</table>
+
+<h2>Measurement plan</h2>
+<h3>Metrics</h3>
+<table>
+<tr><th>Role</th><th>Metric</th><th>Definition</th><th>Baseline (DE, 16 Sep to 13 Oct)</th></tr>
+<tr><td><b>Primary</b></td><td>Homepage to PDP</td><td>Share of sessions landing on <code>/</code> with at least one <code>view_item</code></td><td>18.9% mobile, 24.3% desktop, 20.5% all</td></tr>
+<tr><td>Supporting</td><td>Distinct works viewed</td><td>Distinct <code>item_id</code> in <code>view_item</code> per homepage-landing session (needs BigQuery or a session-scoped count)</td><td>to be pulled</td></tr>
+<tr><td>Supporting</td><td>Collection exploration</td><td>Sessions with a <code>PLP</code> event after the homepage, and <code>collection_click</code> / <code>edit_view_all</code></td><td>to be pulled</td></tr>
+<tr><td>Supporting</td><td>Reach of named sections</td><td><code>homepage_section_view</code> per section key, same keys in both arms</td><td>new</td></tr>
+<tr><td>Diagnostic</td><td>Disclosure</td><td><code>edit_expand</code> per section, and PDP clicks from revealed tiles (<code>revealed: true</code>)</td><td>new</td></tr>
+<tr><td>Commercial</td><td>Add to cart, purchase</td><td>Per homepage-landing session</td><td>ATC 1.0% mobile, 2.3% desktop; purchase 0.20% / 0.46%</td></tr>
+<tr><td>Guardrail</td><td>Exits, search, speed, errors</td><td>Homepage exit rate, LCP / CLS / INP on <code>/</code>, <code>js_error</code></td><td>to be pulled</td></tr>
+</table>
+<p><b>Success rule.</b> Ship when homepage-to-PDP improves significantly and add-to-cart per session does not fall. Reveal clicks, section reach and scroll are diagnostics only: they explain a result, they never are the result.</p>
+<p><b>Duration.</b> At about 2,400 homepage-landing sessions a day, a 5% relative lift in homepage-to-PDP (20.5% to 21.5%) needs about 24,000 sessions per arm, so three weeks; run four full weeks for weekly cycles and novelty. Add-to-cart is only powered for about a 19% relative change in four weeks and purchase not at all, which is why they are guardrails here.</p>
+
+<h3>Events</h3>
+<p>The DE GA4 property has no free event-scoped custom-dimension slot (50 of 50), so every new event reuses a registered parameter. All calls are stubbed in <code>_variant/track.js</code> and visible in the prototype's "Events" panel.</p>
+<table>
+<tr><th>Event</th><th>When</th><th>Parameters</th><th>Status</th></tr>
+<tr><td><code>ab_test_assignment</code></td><td>Page load</td><td><code>ab_test_name</code>, <code>ab_test_variant</code>, <code>visitor_type</code></td><td>exists</td></tr>
+<tr><td><code>homepage_section_view</code></td><td>A named section first shows half a screen, once per page view, <b>in both arms</b></td><td><code>section</code> (production's own keys: bestseller, new_arrivals, last_prints, our_sizes, artist_top20, edition_finder, campaign_tiles, our_story, newsletter)</td><td>new</td></tr>
+<tr><td><code>carousel_artwork_click</code></td><td>Work or room tile clicked</td><td><code>section</code>, <code>artwork_properties.artwork_id</code></td><td>exists, same keys as the control's rails</td></tr>
+<tr><td><code>select_item</code></td><td>Same click</td><td><code>item_list_name</code> = <code>home:&lt;section&gt;</code> or <code>home:&lt;section&gt;:revealed</code></td><td>exists, new values</td></tr>
+<tr><td><code>edit_expand</code> / <code>edit_collapse</code></td><td>Reveal / fold</td><td><code>section</code></td><td>new</td></tr>
+<tr><td><code>edit_view_all</code></td><td>"Alle … ansehen"</td><td><code>section</code></td><td>new</td></tr>
+<tr><td><code>page_index_click</code></td><td>Opening index</td><td><code>section</code></td><td>new</td></tr>
+<tr><td><code>collection_click</code>, <code>editorial_click</code>, <code>artist_tile_click</code></td><td>Route, story, room, campaign and artist tiles</td><td><code>section</code> + existing clicked-name parameter</td><td>exist (two pending GTM publish)</td></tr>
+<tr><td><code>edition_finder_*</code></td><td>Control only; the finder is not in the variant for now</td><td>unchanged</td><td>pending GTM publish</td></tr>
+</table>
+<p class="flag">ABlyft goals: the 16-goal library is not available in the repo, so the goal hooks in the markup are marked UNBOUND. Bind <code>ATC</code> as primary-adjacent and PDP click as the primary once the list is shared.</p>
+
+<h2>Building it for real</h2>
+<ul>
+<li>No new data. Each edit is one existing merchandising list (Bestseller, Neuheiten, Letzte Exemplare, Top 20) with three settings: initial count, reveal count, listing URL. Works already used higher on the page are skipped further down.</li>
+<li>Editorial tiles come from the approved room pool (<code>lumas_get_room</code>), the existing homepage tile images and the live artist pages.</li>
+<li>Serve the arm server-side through the AbTest module, as the sibling disclosure test proposes (<code>homepage-main-b</code> block chosen in <code>home.twig</code>), so there is no flicker and the assignment reaches GA4 and the order.</li>
+<li>The prototype's scripts survive production's Vue mount over <code>&lt;main&gt;</code> (it replaces the nodes); a real build should render the edits as a Vue component instead.</li>
+</ul>
+
+<h2>A CMS-only version for comparison (arm C)</h2>
+<p><a href="cms.html">cms.html</a> is the same page built with the cms-page skill: one new block, <code>homepage-main-editorial</code>, that the content team can install without a deployment (<code>../cms/homepage-editorial.twig</code>, install steps in <code>../cms/homepage-editorial-install.md</code>). The homepage already has the split it needs: <code>#test_homepage_a</code> / <code>#test_homepage_b</code> in <code>homepage-main</code>. The preview resolves it the way the CMS would, with the shop's real grid markup from the live listings and today's live blocks.</p>
+<table>
+<tr><th></th><th>B, built in code</th><th>C, CMS only</th></tr>
+<tr><td>Works</td><td>Hang-line rows at true ratio, editorial tiles inside the rows</td><td>The shop's masonry grid (8 works), editorial rows above or below it</td></tr>
+<tr><td>Disclosure</td><td>Reveal in place, count of works seen, focus moves, folds back</td><td>Native <code>&lt;details&gt;</code> with a second curated set; label stays the same when open</td></tr>
+<tr><td>Phone</td><td>Two works per row; footer at 12,536 px</td><td>One work per screen width below 480 px; footer at 23,934 px</td></tr>
+<tr><td>First priced work</td><td>1,346 / 1,384 px</td><td>1,941 / 1,462 px (phone / desktop)</td></tr>
+<tr><td>Measurement</td><td>Section reach, reveal, edit-level <code>item_list_name</code></td><td>Only shipped hooks: <code>editorial_click</code> per <code>data-cta</code>, <code>select_item</code> with the page path</td></tr>
+<tr><td>Upkeep</td><td>Lists come from the existing rails</td><td>Six PIM keywords on hand-picked SKUs, plus helper CSS in <code>homepage-main-custom-css</code></td></tr>
+</table>
+<p>C can test the editorial frame (claim, edit tiles, rooms, trust band) cheaply. It cannot test what B is about, art in true-ratio walls revealed in place, and it cannot report the reveal.</p>
+
+<h2>Sample content and open points</h2>
+<ul>
+<li>All works, prices, statuses and links are today's (13 Oct capture). Prices are the ones the page showed; a price missing on the page is missing here too.</li>
+<li>Copy written for the variant: edit introductions, tile labels, the consultation tile (from the real contact page) and two artist summaries (from the live artist pages). It follows brandbook s14 (du, no em dashes, no blacklisted words) and s04 (mixed case, 13&nbsp;px minimum).</li>
+<li>Production's badge "10% Rabatt" appears on three works. The brandbook blacklists "Rabatt"; it stays here because promotions are identical in both arms, and should be fixed in the shop for both.</li>
+<li>Room images are AI-edited renders from the approved pool. Digital use needs no label under s06.</li>
+<li>The Edition Finder is left out of the variant for now. It is the second-strongest homepage module on mobile (2,146 users clicked its CTA in 28 days), so its absence is part of what this variant measures; if the variant loses, check finder sessions in the control before blaming the edits.</li>
+<li>Not decided: whether "Zuletzt verkauft" (dropped here) is missed; whether "Aktuell" should sit above Bestseller during big campaigns.</li>
+</ul>
+</main>
+</body>
+</html>
