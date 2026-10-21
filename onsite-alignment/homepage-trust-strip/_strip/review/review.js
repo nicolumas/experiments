@@ -18,7 +18,8 @@
     chrome: params.get('chrome') !== '0',
   };
 
-  var DEFAULT_FACTS = ['Handsigniert & limitiert', '19 Galerien', '330.000 Sammler:innen'];
+  var DEFAULT_FACTS = ['19 Galerien weltweit', '330.000 Sammler:innen'];
+  var DEFAULT_SCORE = '4,7';
 
   function copyFromUrl() {
     var facts = DEFAULT_FACTS.map(function (fact, i) {
@@ -26,7 +27,8 @@
       return value === null ? fact : value;
     });
     var score = params.get('score');
-    return { facts: facts, score: score === null || score === '' ? null : score };
+    if (score === null) score = DEFAULT_SCORE;
+    return { facts: facts, score: score === '' ? null : score };
   }
 
   function writeUrl() {
@@ -39,7 +41,7 @@
     (copy.facts || []).forEach(function (fact, i) {
       if (fact !== DEFAULT_FACTS[i]) next.set('f' + (i + 1), fact);
     });
-    if (copy.score) next.set('score', copy.score);
+    if ((copy.score || '') !== DEFAULT_SCORE) next.set('score', copy.score || '');
     history.replaceState(null, '', location.pathname + '?' + next.toString());
   }
 
@@ -232,7 +234,7 @@
       }
       if (button.hasAttribute('data-reset')) {
         window.TRUST_STRIP.facts = DEFAULT_FACTS.slice();
-        window.TRUST_STRIP.score = null;
+        window.TRUST_STRIP.score = DEFAULT_SCORE;
         bar.querySelector('.proto-editor').outerHTML = editorHtml().replace(' hidden', '');
         if (state.arm === 'variant') window.TrustStrip.mount();
         drawMeasures();

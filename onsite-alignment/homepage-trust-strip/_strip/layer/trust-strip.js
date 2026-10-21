@@ -28,9 +28,10 @@
   'use strict';
 
   var DEFAULT_COPY = {
-    facts: ['Handsigniert & limitiert', '19 Galerien', '330.000 Sammler:innen'],
-    // null = no verified score yet; the strip shows a labelled placeholder instead
-    score: null,
+    facts: ['19 Galerien weltweit', '330.000 Sammler:innen'],
+    // live TrustScore from the TrustBox data API (21 Oct 2026: 4.7 from 5,993 reviews);
+    // production binds TrustpilotRatingReader. null shows a labelled placeholder.
+    score: '4,7',
     profileUrl: 'https://de.trustpilot.com/review/lumas.de',
     label: 'Über LUMAS',
   };

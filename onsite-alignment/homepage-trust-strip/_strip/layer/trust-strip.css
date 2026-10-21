@@ -123,18 +123,18 @@
   vertical-align: 0.1rem;
 }
 
-/* Phones and portrait tablets (the site's mobile hero runs to 979px): two
-   lines of two facts. The pseudo-element is a full-width flex item ordered
-   between fact 2 and fact 3, so the break is deliberate, not wherever the
-   copy happens to run out. */
-@media (max-width: 979px) {
+/* Phones: two lines, the facts on the first and the Trustpilot rating on
+   its own below. The pseudo-element is a full-width flex item ordered between
+   them, so the break is deliberate, not wherever the copy happens to run out.
+   Tablets have room for the single line. */
+@media (max-width: 759px) {
   .trust-strip-facts::after {
     content: '';
     order: 2;
     flex-basis: 100%;
   }
 
-  .trust-strip-fact:nth-child(n + 3) {
+  .trust-strip-fact-rating {
     order: 3;
   }
 }
