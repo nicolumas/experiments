@@ -4,7 +4,7 @@
  *   ?v=control|variant   arm (press V to toggle)
  *   &sticky=0            hide the site-wide sticky USP bar (desktop >= 1260 only)
  *   &m=1                 measurement overlay (press M)
- *   &chrome=0            hide this bar (for screenshots)
+ *   &chrome=1            show this bar (hidden by default)
  *   &f1= &f2= &f3= &score=   copy overrides, written by the editor
  */
 (function () {
@@ -15,7 +15,7 @@
     arm: params.get('v') === 'control' ? 'control' : 'variant',
     sticky: params.get('sticky') !== '0',
     measure: params.get('m') === '1',
-    chrome: params.get('chrome') !== '0',
+    chrome: params.get('chrome') === '1',
   };
 
   var DEFAULT_FACTS = ['19 Galerien weltweit', '330.000 Sammler:innen'];
@@ -36,7 +36,7 @@
     next.set('v', state.arm);
     if (!state.sticky) next.set('sticky', '0');
     if (state.measure) next.set('m', '1');
-    if (!state.chrome) next.set('chrome', '0');
+    if (state.chrome) next.set('chrome', '1');
     var copy = window.TRUST_STRIP || {};
     (copy.facts || []).forEach(function (fact, i) {
       if (fact !== DEFAULT_FACTS[i]) next.set('f' + (i + 1), fact);
