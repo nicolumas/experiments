@@ -120,7 +120,15 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 #caption .sub:empty { display: none; }
 #caption .row { display: flex; gap: 10px 16px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
 #caption .row:empty { display: none; }
+/* for demonstrations only: a quiet way straight to the gallery, bottom left; the caption sits above it */
+.demo-skip { position: absolute; left: var(--gutter); bottom: calc(var(--safe-b) + 10px); min-height: 32px; padding: 0 10px;
+  background: rgba(254, 253, 249, .72); color: var(--muted); font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+  transition: color 220ms ease, transform 160ms var(--ease-out); }
+.demo-skip:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .demo-skip:hover { color: var(--charcoal); } }
+#ui.demo-on #caption { bottom: calc(var(--safe-b) + 52px); }
 @media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+  #ui.demo-on #caption { bottom: calc(var(--safe-b) + 58px); }
   #caption { left: var(--gutter); bottom: calc(var(--safe-b) + 24px); width: 420px; transform: none; }
   #caption.out { transform: translateY(14px); }
   #caption .line { font-size: 24px; }
@@ -278,6 +286,8 @@ fieldset.field { border: 0; margin: 0 0 16px; padding: 0; min-width: 0; }
         <button class="tool" id="btnMusic" type="button" aria-pressed="false" hidden></button>
       </div>
     </header>
+
+    <button class="demo-skip" id="btnDemoSkip" type="button" hidden><span data-t="demoSkip"></span> <span aria-hidden="true">→</span></button>
 
     <section id="caption" class="out" aria-live="polite">
       <p class="eyebrow" id="capEyebrow"></p>

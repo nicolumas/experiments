@@ -55,7 +55,7 @@
       nameLabel: 'Für wen suchst du nach Worten?', namePh: 'Name, optional',
       budgetLabel: 'Dein Budget', budget_low: 'Bis € 250', budget_mid: 'Bis € 1.000', budget_high: 'Ohne Limit',
       go: 'Losfahren', allWorks: 'Alle Werke ohne Spiel', musicNote: 'Mit leiser Musik. Du kannst sie oben jederzeit ausschalten.',
-      tGallery: 'Zur Galerie', tBook: 'Werke', tMusic: 'Musik', musicOn: 'Musik an', musicOff: 'Musik aus',
+      tGallery: 'Zur Galerie', demoSkip: 'Zur Galerie springen', tBook: 'Werke', tMusic: 'Musik', musicOn: 'Musik an', musicOff: 'Musik aus',
       howTo: 'Tippen zum Springen. Halten zum Schweben.',
       feel: { gratitude: 'Dankbarkeit', admiration: 'Bewunderung', memory: 'Erinnerung', hope: 'Hoffnung', love: 'Liebe' },
       place: { birch: 'Am Birkenhang, morgens', lake: 'Am See, vormittags', mountain: 'Am Berg, mittags', village: 'Im Dorf, zur blauen Stunde', shore: 'Am Meer, im letzten Licht' },
@@ -78,7 +78,7 @@
       nameLabel: 'Who are you looking for words for?', namePh: 'Name, optional',
       budgetLabel: 'Your budget', budget_low: 'Up to € 250', budget_mid: 'Up to € 1,000', budget_high: 'No limit',
       go: 'Set off', allWorks: 'All works without the game', musicNote: 'With quiet music. You can switch it off at the top at any time.',
-      tGallery: 'To the gallery', tBook: 'Works', tMusic: 'Music', musicOn: 'Music on', musicOff: 'Music off',
+      tGallery: 'To the gallery', demoSkip: 'Skip to the gallery', tBook: 'Works', tMusic: 'Music', musicOn: 'Music on', musicOff: 'Music off',
       howTo: 'Tap to jump. Hold to float.',
       feel: { gratitude: 'Gratitude', admiration: 'Admiration', memory: 'Memory', hope: 'Hope', love: 'Love' },
       place: { birch: 'The birch slope, morning', lake: 'The lake, late morning', mountain: 'The mountain, noon', village: 'The village, blue hour', shore: 'The sea, last light' },
@@ -1235,6 +1235,7 @@
   async function rideToStreet() {
     /* the last slope runs into town: the snow brightens to white and the street is there */
     const wo = $('#whiteout');
+    demoSkip(false);
     sfx('setScene', 'street');
     await anim(wo, [{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-in' });
     S.phase = 'street';
@@ -1643,14 +1644,33 @@
       const A = audio();
       const on = !A.on;
       if (on) A.start?.(); else A.stop?.();
+      S.muted = !on;
       mb.setAttribute('aria-pressed', String(on));
       track('gal_music', { gal_on: on ? 1 : 0 });
     });
     $('#btnGallery').addEventListener('click', skipToGallery);
+    $('#btnDemoSkip').addEventListener('click', skipToGallery);
+  }
+  /* for demonstrations: a quiet way straight to the gallery while the ride is on */
+  function demoSkip(on) {
+    $('#btnDemoSkip').hidden = !on;
+    $('#ui').classList.toggle('demo-on', on);
+  }
+  /* the music starts with the first touch, under the start panel, and plays on from there */
+  function startMusic() {
+    removeEventListener('pointerup', startMusic, true);
+    removeEventListener('keydown', startMusic, true);
+    if (S.muted) return;
+    const A = audio();
+    try { if (A.init && A.init()) A.ctx && A.ctx.resume && A.ctx.resume(); } catch (e) { /* no sound */ }
+    sfx('start');
+    $('#btnMusic').hidden = false;
+    $('#btnMusic').setAttribute('aria-pressed', 'true');
   }
   async function skipToGallery() {
     if (S.skipped || S.phase === 'gallery' || S.phase === 'moment' || S.phase === 'end' || S.phase === 'street') return;
     S.skipped = true;
+    demoSkip(false);
     track('gal_skip', { gal_found: S.found.length });
     hideCaption();
     hideSign();
@@ -1679,9 +1699,10 @@
     const panel = $('#start');
     panel.classList.remove('out');
     if (!RM) [...panel.children].forEach((el, i) => anim(el, [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 620, delay: 200 + i * 70 }));
+    sfx('setScene', 'start');
+    addEventListener('pointerup', startMusic, true);
+    addEventListener('keydown', startMusic, true);
     await new Promise((resolve) => { $('#btnGo').addEventListener('click', resolve, { once: true }); if (AUTO) setTimeout(resolve, 500); });
-    const A = audio();
-    try { if (A.init && A.init()) A.ctx && A.ctx.resume && A.ctx.resume(); } catch (e) { /* no sound */ }
     S.name = $('#giftName').value.trim().slice(0, 24);
     for (const w of WORLDS) {
       w.work = pickWork(w.feeling);
@@ -1689,11 +1710,10 @@
     }
     track('gal_start', { gal_budget: S.budget, gal_named: S.name ? 1 : 0 });
     sfx('setScene', 'birch');
-    sfx('start');
-    $('#btnMusic').hidden = false;
-    $('#btnMusic').setAttribute('aria-pressed', 'true');
+    startMusic();
     panel.classList.add('out');
     setTools();
+    demoSkip(true);
     buildRings();
     S.jumps = 0;
     S.phase = 'ride';

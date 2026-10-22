@@ -170,7 +170,7 @@
     gallery: { energy: 0.62, strings: 0.8, glock: 0.2, sleigh: 0.45, drums: 0.75, ep: 2400, verb: 1.2, gesture: false },
     end: { energy: 0.5, strings: 0.7, glock: 0.15, sleigh: 0.4, drums: 0.7, ep: 2300, verb: 1.2, gesture: false },
   };
-  const PHASE_OFFSET = { listen: -0.18, travel: 0.16, peak: 0.34, after: 0.14, hush: -0.3 };
+  const PHASE_OFFSET = { listen: -0.18, travel: 0.16, peak: 0.34, after: 0.14 };
   const LADDER = 12;
 
   /* ------------------------------------------------------------ small DSP helpers for the drum buffers */
@@ -759,6 +759,7 @@
       }
       let guard = 0;
       while (s.t < now + LOOKAHEAD && guard++ < 16) {
+        if (this.handover != null && s.t >= this.handover - 0.001) { s.hold = true; this.handover = null; return; }
         try { this.scheduleBeat(s.bar, s.beat, s.barT); } catch (err) { if (!this.warned) { this.warned = true; console.error(err); } }
         this.advance();
       }
@@ -1197,8 +1198,10 @@
       if (now - (this.doorT || -9) < 1.5) return;
       this.doorT = now;
       const strikes = [[0, 1], [0.072, 0.82], [0.158, 0.86], [0.262, 0.6], [0.4, 0.5], [0.585, 0.32], [0.81, 0.2], [1.08, 0.12]];
+      const ch = this.chordAt(now + 0.5);
+      const bells = ladderOf(ch.tones, 86, 98).slice(-2);
       strikes.forEach(([dt, a], i) => {
-        const f = mtof(i % 2 ? 93 : 96) * (1 + (Math.random() - 0.5) * 0.004);
+        const f = mtof(bells[i % bells.length]) * (1 + (Math.random() - 0.5) * 0.004);
         for (const [r, amp, tau] of [[1, 1, 0.55], [2.01, 0.38, 0.22], [3.03, 0.16, 0.09]]) {
           const o = c.createOscillator();
           o.frequency.value = f * r;
@@ -1209,15 +1212,14 @@
           o.stop(now + dt + tau * 7);
         }
       });
-      const vo = this.voicing(chord('F:maj9'), null, 57, 76);
-      vo.forEach((m, i) => this.cel(m + 12, now + 0.55 + i * 0.09, 1.4, 0.34, this.cue.cel));
-      vo.forEach((m) => this.ep(m, now + 0.5, 1.8, 0.38, this.cue.ep));
-      this.duck(0.55, 1900);
-      this.setPhase('hush', now + 2.6, 'after');
+      this.voicing(ch, null, 57, 76).forEach((m, i) => this.cel(m + 12, now + 0.55 + i * 0.09, 1.4, 0.3, this.cue.cel));
+      this.duck(0.2, 1500);
       if (this.log) this.log.push({ type: 'cue', cue: 'door', t: now });
     }
 
-    /* finale: the hook, VI7 and a ii-V, then the turn (Db, Eb) and home to F. Returns seconds until the arrival. */
+    /* finale: the hook, VI7 and a ii-V, then the turn (Db, Eb) and home to F. It takes over from the band on the
+       next bar line, in the band's tempo, and the band comes back in under the last chord, so the music never stops.
+       Returns seconds until the arrival. */
     finale() {
       const c = this.ctx;
       const now = c.currentTime;
@@ -1225,11 +1227,14 @@
       const s = this.seq;
       /* already playing: report the time to its arrival instead of starting again */
       if (this.finaleAt && now < this.finaleAt + 5) return Math.max(0, this.finaleAt - now);
-      s.hold = true;
       this.jump = null;
-      this.duckTo(0, now, 0.12);
-      const T0 = now + 0.4;
-      const spb = 60 / 100;
+      let T0 = now + 0.4;
+      if (this.running()) {
+        T0 = s.barT;
+        while (T0 < Math.max(s.t, now + 0.3) - 0.001) T0 += BAR;
+        this.handover = T0;
+      } else s.hold = true;
+      const spb = SPB;
       /* beat -> time with a ritardando into the last chord */
       const stretch = (b) => (b < 8 ? 1 : b < 12 ? 1 + (b - 7) * 0.07 : 1.35);
       const bt = (b) => {
@@ -1280,10 +1285,11 @@
       [1, 3, 5, 7, 9].forEach((b) => this.hit('tap', bt(b), 0.32, C.drums));
       [0, 1, 2].forEach((i) => this.hit('tap', bt(11 + i / 3), 0.2 + i * 0.12, C.drums));
       /* the band comes back softly at the top, in the evening arrangement */
-      this.resumeAt = A + 3.4;
+      this.resumeAt = A + BAR;
       this.setScene('end');
       this.setPhase('after');
-      this.duckTo(1, this.resumeAt - 0.05, 0.9);
+      this.duckTo(0.35, this.resumeAt - 0.02, 0.01);
+      this.duckTo(1, this.resumeAt, 1.6);
       if (this.log) this.log.push({ type: 'cue', cue: 'finale', t: now, arrive: +(A - now).toFixed(3), chords: chords.map(([b, sym]) => [b, chord(sym).name]), mel: mel.map(([b, d, n]) => [b, d, n]) });
       return A - now;
     }
