@@ -1,0 +1,338 @@
+/* PDP gallery tools: grouping options for the image-stage controls (prototype layer). */
+
+html {
+  --gt-line-subtle: #EAE2D8;
+  --gt-line-strong: #C7C3BE;
+  --gt-bone: #F0EBE3;
+  --gt-ink-3: #3A3835;
+  --gt-stage: #F4EDE2;
+  --gt-ink: #1C1A18;
+  --gt-ink-2: #5A5752;
+  --gt-line: #E2D8CC;
+  --gt-card: #FFFFFF;
+  --gt-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+html[data-gt-surface="bone"] { --gt-stage: #F0EBE3; }
+html[data-gt-surface="brandbook"] { --gt-stage: #FEFDF9; }
+
+/* ---- flat stage ---------------------------------------------------------------
+   Only where production paints its wall texture (the artwork slide); room views,
+   detail photos and the AR panel keep their own backgrounds. */
+html.gt-on .pdp-preview-desktop .image-wrapper[style*="background-image"] {
+  background-image: none !important;
+  background-color: var(--gt-stage) !important;
+}
+html.gt-on .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child {
+  background: var(--gt-stage);
+  justify-content: center;
+  padding: 20px 20px 36px;
+}
+/* production's slide is a fixed 350px; the artwork scales to what is left inside the padding,
+   so wider phones never push it into the margins (never cropped: width and height stay auto) */
+html.gt-on .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child picture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+html.gt-on .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+}
+
+/* ---- production controls the layer replaces (kept in the DOM, the layer clicks them) */
+html.gt-on .pdp-preview-desktop .main-presentation > wishlist-button,
+html.gt-on .pdp-preview-desktop .open-fullscreen,
+html.gt-on .pdp-preview-desktop .art-cloud-open,
+html.gt-on .pdp-preview-desktop .preview-actions,
+html.gt-on .preview-mobile .preview-actions { display: none !important; }
+/* phones: B, C and E move the heart onto the image, D leaves it beside the title */
+html[data-gt-v="B"] .artist-holder wishlist-button,
+html[data-gt-v="C"] .artist-holder wishlist-button,
+html[data-gt-v="E"] .artist-holder wishlist-button { display: none !important; }
+
+/* production gives every stage child the artwork's aspect ratio and centres it
+   (.presentation-container .main-presentation > :not(.pdp-thumbnails, button, [mode], .preview-actions)) */
+.presentation-container .main-presentation > .gt-ui {
+  aspect-ratio: auto;
+  max-height: none;
+  max-width: none;
+  align-items: center;
+  justify-content: flex-start;
+}
+.presentation-container .main-presentation > .gt-corner { display: flex; flex-direction: column; align-items: stretch; }
+.presentation-container .main-presentation > .gt-caption-full { justify-content: space-between; }
+/* C: the two explore links centred under the artwork */
+.presentation-container .main-presentation > .gt-caption-center { justify-content: center; }
+
+/* ---- buttons: no boxes, no fills ------------------------------------------------------
+   Icons and labels share one soft charcoal at rest and darken on hover, so the tools
+   recede behind the artwork until they are wanted. */
+.gt-btn {
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font: inherit;
+  color: var(--gt-ink-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: color 200ms ease, transform 160ms var(--gt-ease);
+}
+.gt-btn:active { transform: scale(0.96); }
+.gt-btn:focus-visible { outline: 1px solid var(--gt-ink); outline-offset: 2px; }
+.gt-i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; }
+.gt-vh {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* icon: the PDP Restructure's stage button. White 44px square, hairline border, 4px corners */
+.gt-icon {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 1px solid var(--gt-line-subtle);
+  border-radius: 4px;
+  transition: background-color 200ms ease, transform 120ms var(--gt-ease);
+}
+.gt-icon:active { transform: scale(0.94); }
+@media (hover: hover) and (pointer: fine) {
+  .gt-icon:hover { background: var(--gt-bone); color: var(--gt-ink-2); }
+}
+.gt-link .gt-i { width: 18px; height: 18px; stroke-width: 1.2; }
+/* optical alignment: the label keeps 1px more padding below (for the hover underline) and all-caps
+   text has no descenders, so the icon is centred on the capitals rather than on the line box */
+.gt-link .gt-i { transform: translateY(-1px); }
+/* explore links one step below the brandbook's 13px floor, at the user's request */
+.gt-link .gt-label { font-size: 12px; letter-spacing: 0.1em; }
+/* "AR" and "3D" set as type inside the square, in the icons' grey */
+.gt-mark { font-size: 13px; line-height: 1; font-weight: 500; letter-spacing: 0.08em; padding-left: 0.08em; }
+
+/* link: V2 ghost button, quieter. The underline draws in on hover */
+.gt-link { min-height: 44px; }
+.gt-label {
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 4px 0 5px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 280ms var(--gt-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .gt-btn:hover { color: var(--gt-ink); }
+  .gt-link:hover .gt-label { background-size: 100% 1px; }
+}
+.gt-current { color: var(--gt-ink); }
+.gt-current .gt-label { background-size: 100% 1px; }
+
+/* wishlist: the restructure's heart, filled in charcoal once saved, with a small settle */
+.gt-btn .gt-on, .gt-btn[aria-pressed="true"] .gt-off { display: none; }
+.gt-btn[aria-pressed="true"] { color: var(--gt-ink); }
+.gt-btn[aria-pressed="true"] .gt-i-heart { fill: currentColor; animation: gt-settle 320ms var(--gt-ease); }
+.gt-btn[aria-pressed="true"] .gt-label .gt-on { display: inline; }
+@keyframes gt-settle { from { transform: scale(0.72); opacity: 0.4; } }
+
+/* names for icon-only buttons: ivory on charcoal, corners matching the squares */
+.gt-icon::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translate(-50%, 3px);
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: var(--gt-ink);
+  color: #F4EDE2;
+  font-size: 13px;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 200ms var(--gt-ease);
+  z-index: 3;
+}
+/* corner squares sit top-left, so their names open to the right */
+.gt-corner .gt-icon::after { bottom: auto; right: auto; top: 50%; left: calc(100% + 8px); transform: translate(-4px, -50%); }
+/* caption names drop below the icon, into the band, never over the artwork */
+.gt-caption .gt-icon::after, .gt-title .gt-icon::after { bottom: auto; top: calc(100% - 4px); transform: translate(-50%, -3px); }
+@media (hover: hover) and (pointer: fine) {
+  .gt-icon:hover::after { opacity: 1; transform: translate(-50%, 0); transition-delay: 250ms; }
+  .gt-corner .gt-icon:hover::after { transform: translate(0, -50%); }
+}
+.gt-icon:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.gt-corner .gt-icon:focus-visible::after { transform: translate(0, -50%); }
+.gt-mline .gt-icon::after, .gt-mcorner .gt-icon::after { content: none; }
+
+/* ---- desktop: corner icons ------------------------------------------------------------ */
+.gt-corner { position: absolute; top: 12px; left: 12px; z-index: 2; }
+.gt-corner .gt-group { display: flex; flex-direction: column; gap: 8px; }
+
+/* ---- desktop: caption under the artwork (placed by place() in the layer script) ------- */
+.gt-caption { position: absolute; z-index: 2; display: flex; align-items: center; }
+.gt-caption .gt-group { display: flex; align-items: center; gap: 24px; }
+.gt-caption .gt-views { gap: 8px; }
+/* the band under the artwork is about 50px: 36px squares keep clear of the work (desktop pointers only) */
+@media (pointer: fine) {
+  .gt-caption .gt-icon { width: 36px; height: 36px; }
+  .gt-caption .gt-icon .gt-i { width: 18px; height: 18px; }
+}
+.gt-caption-full { justify-content: space-between; gap: 32px; }
+
+
+/* no band under a room view or detail photo: each group gets a small white ground, as
+   production's own buttons do, instead of a strip across the photo */
+.gt-on-photo .gt-caption .gt-explore { background: rgba(255, 255, 255, 0.9); padding: 0 12px; }
+
+/* E: zoom, explore, then the heart pushed to the artwork's right edge */
+.gt-caption-full > .gt-group:nth-child(2):not(:last-child) { margin-right: auto; }
+
+/* ---- desktop E: AR and 3D as the restructure's view tiles after the thumbnails ----------
+   Height follows production's 58px thumbnails; the label is 13px, the brandbook's floor. */
+html[data-gt-v="E"] .pdp-preview-desktop .pdp-thumbnails { display: flex; justify-content: center; }
+html[data-gt-v="E"] .pdp-preview-desktop .pdp-thumbnails .thumbnail[style*="ar_screen"] { display: none; }
+.gt-tiles { display: flex; margin-left: 8px; }
+.gt-tiles .gt-group { display: flex; gap: 8px; }
+.gt-tile {
+  flex-direction: column;
+  gap: 6px;
+  height: 58px;
+  padding: 0 16px;
+  background: #fff;
+  border: 1px solid var(--gt-line-strong);
+  border-radius: 4px;
+  color: var(--gt-ink-3);
+  transition: background-color 200ms ease, border-color 200ms ease, transform 120ms var(--gt-ease);
+}
+.gt-tile:active { transform: scale(0.97); }
+.gt-tile .gt-i { width: 18px; height: 18px; stroke-width: 1.2; }
+.gt-tile .gt-label { padding: 0; background: none; letter-spacing: 0.08em; }
+@media (hover: hover) and (pointer: fine) {
+  .gt-tile:hover { background: var(--gt-bone); border-color: var(--gt-ink); color: var(--gt-ink-3); }
+}
+.gt-tile.gt-current { background: var(--gt-bone); border-color: var(--gt-ink); }
+
+/* ---- desktop D: the heart beside the share icon ---------------------------------------- */
+.gt-title { position: absolute; z-index: 2; }
+/* beside production's share icon it stays bare, in share's weight: full charcoal */
+.gt-title .gt-icon { background: none; border: 0; color: var(--gt-ink); }
+
+/* ---- phones ------------------------------------------------------------------------------
+   Sized for a 375px screen (343px inside the 16px gutters). */
+/* left, on the page's 16px gutter so the squares line up with the explore links under the image */
+.gt-mcorner { position: absolute; top: 8px; left: 16px; z-index: 2; }
+.gt-mcorner .gt-group { display: flex; gap: 8px; }
+/* versions with corner squares leave room above the artwork so the squares never touch it */
+html[data-gt-v="B"] .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child,
+html[data-gt-v="C"] .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child,
+html[data-gt-v="E"] .preview-mobile .scroll-carousel-wrapper > .slide.artwork-image:first-child { padding-top: 64px; }
+.gt-mline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 16px; padding: 4px 16px 0; margin-bottom: 24px; min-height: 44px; }
+.gt-mline .gt-group { display: flex; align-items: center; gap: 16px; }
+.gt-mline .gt-views { gap: 8px; }
+.gt-mline .gt-link { gap: 6px; }
+.gt-mline .gt-label { letter-spacing: 0.1em; }
+/* C on phones: share closes the line, drawn like the compass and sparkle beside it */
+.gt-bare { width: 44px; height: 44px; }
+.gt-bare .gt-i { width: 18px; height: 18px; stroke-width: 1.2; transform: translateY(-1px); }
+.gt-mline .gt-end { margin-left: auto; margin-right: -13px; }
+html[data-gt-v="C"] .artist-row pdp-share-button[data-viewport="mobile"] { visibility: hidden; }
+
+/* ---- AI Advisor stand-in ------------------------------------------------------------- */
+.gt-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  z-index: 2147483001;
+  max-width: calc(100vw - 32px);
+  padding: 12px 16px;
+  background: var(--gt-ink);
+  color: var(--gt-card);
+  font: 400 14px/1.4 archivo, arial, sans-serif;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms var(--gt-ease);
+}
+.gt-toast-show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---- prototype bar (not part of the design) -------------------------------------------- */
+.gt-bar {
+  --bar-bg: #1c1a18;
+  --bar-text: #f4ede2;
+  --bar-muted: rgba(244, 237, 226, 0.62);
+  --bar-rule: rgba(244, 237, 226, 0.15);
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 2147483000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 8px clamp(12px, 2vw, 24px);
+  min-height: 56px;
+  background: var(--bar-bg);
+  color: var(--bar-text);
+  font: 400 13px/1.4 archivo, arial, sans-serif;
+}
+html.gt-has-bar body { padding-bottom: 64px !important; }
+html.gt-has-bar #chat-widget-container { bottom: 64px !important; }
+.gt-bar-title { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bar-muted); white-space: nowrap; }
+.gt-bar-versions, .gt-bar-surfaces, .gt-bar-lang { display: flex; gap: 4px; }
+.gt-bar button, .gt-bar a {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--bar-rule);
+  border-radius: 0;
+  color: var(--bar-text);
+  font: inherit;
+  min-height: 40px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.gt-bar b { font-weight: 600; }
+.gt-bar i { width: 14px; height: 14px; box-shadow: inset 0 0 0 1px rgba(28, 26, 24, 0.25); }
+.gt-bar button[aria-pressed="true"], .gt-bar a[aria-current="true"] { background: var(--bar-text); color: var(--bar-bg); border-color: var(--bar-text); }
+.gt-bar button:disabled { opacity: 0.35; cursor: default; }
+@media (hover: hover) {
+  .gt-bar button:not([aria-pressed="true"]):not(:disabled):hover, .gt-bar a:not([aria-current="true"]):hover { border-color: var(--bar-muted); }
+}
+.gt-bar button:focus-visible, .gt-bar a:focus-visible { outline: 2px solid var(--bar-text); outline-offset: 2px; }
+.gt-bar-note { margin: 0; color: var(--bar-muted); flex: 1 1 260px; min-width: 0; }
+@media (max-width: 1100px) { .gt-bar-note { display: none; } }
+@media (max-width: 899px) {
+  .gt-bar { gap: 6px; flex-wrap: nowrap; }
+  .gt-bar-title, .gt-bar-versions span, .gt-bar-surfaces span { display: none; }
+  .gt-bar button, .gt-bar a { padding: 0; min-width: 36px; min-height: 44px; justify-content: center; }
+  .gt-bar-surfaces { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gt-btn, .gt-btn::after, .gt-label, .gt-toast { transition-duration: 0ms !important; }
+  .gt-btn:active { transform: none; }
+  .gt-btn[aria-pressed="true"] .gt-i-heart { animation: none; }
+}
