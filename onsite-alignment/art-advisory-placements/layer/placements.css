@@ -1,0 +1,211 @@
+/* Art-advisory placements: the seven proposed entry points to /art-advisory/,
+   layered onto the lumas.de clone. Shop tokens only (1rem = 10px). Every rule
+   is scoped to an .aa- class so production markup is never restyled. */
+
+/* 1 Header icon, between search and WhatsApp ------------------------------ */
+/* same box as the shop's header icons: the svg is 2.2rem square and the shop pads every
+   aside child by .3rem, so the link sizes to its content instead of a fixed width */
+.aa-header-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--color-text-primary);
+}
+.aa-header-link svg { flex: none; width: 2.2rem; height: 2.2rem; }
+body:not(.touch) .aa-header-link[data-tooltip]:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  z-index: 1;
+  display: block;
+  width: max-content;
+  transform: translateX(-50%);
+  padding: .25rem 1rem;
+  background-color: var(--white);
+  border: .1rem solid var(--black);
+  border-radius: .3rem;
+  box-shadow: var(--shadow-md);
+  color: var(--black);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s linear;
+}
+body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
+/* the drawer header spaces its icons wider than the desktop row */
+@media (max-width: 1024px) { .aa-header-link { margin-right: 1rem; } }
+/* below 385px the row has no room left without crowding the logo */
+@media (max-width: 384px) { .aa-header-link { display: none; } }
+
+/* 2 Galleries dropdown: card next to the Service column -------------------- */
+/* first in the DOM so the drawer shows it on top; on desktop it takes the two free columns */
+.aa-menu-card {
+  grid-column: 11 / span 2;
+  grid-row: 1;
+  margin-left: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+.aa-menu-card:hover { background: var(--primitive-bone-100); color: var(--color-text-primary); }
+.aa-faces { display: flex; padding-left: .8rem; }
+.aa-faces img {
+  flex: none;
+  width: 4.4rem;
+  height: 4.4rem;
+  max-width: none;
+  margin-left: -.8rem;
+  border: .2rem solid var(--color-surface-raised);
+  border-radius: 50%;
+  object-fit: cover;
+}
+.aa-menu-card__title {
+  margin-top: .4rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.aa-menu-card__text { font-size: 1.4rem; line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
+.aa-menu-card__cta {
+  margin-top: auto;
+  padding-top: .6rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: .4rem;
+}
+@media (max-width: 1024px) {
+  .aa-menu-card {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.6rem;
+    row-gap: .4rem;
+    margin: .8rem 0 2.4rem;
+    margin-left: 0;
+    padding: 1.6rem;
+  }
+  .aa-menu-card .aa-faces { grid-row: span 3; align-self: start; }
+  .aa-menu-card .aa-faces img { width: 4rem; height: 4rem; }
+  .aa-menu-card .aa-faces img:nth-child(n+3) { display: none; }
+  .aa-menu-card__title { margin-top: 0; font-size: 1.8rem; }
+  .aa-menu-card__cta { margin-top: .4rem; padding-top: 0; }
+}
+
+/* 3 Homepage tile: the image is a scene photo, so a square crop is fine --- */
+.aa-tile img { aspect-ratio: 1; object-fit: cover; }
+
+/* 4 PDP, below the buy box (variant of an A/B test) ----------------------- */
+.aa-pdp {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin: 1.6rem 0;
+  padding: 1.4rem 0;
+  border-top: .1rem solid var(--color-border-default);
+  border-bottom: .1rem solid var(--color-border-default);
+}
+.aa-pdp .aa-faces { flex: none; }
+.aa-pdp .aa-faces img { width: 3.6rem; height: 3.6rem; border-color: var(--white); }
+.aa-pdp p { margin: 0; font-size: 1.4rem; line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
+.aa-pdp a { color: var(--color-text-primary); white-space: nowrap; }
+
+/* 5 Warum LUMAS: the new point's photo is cropped to the page's 820 x 600 */
+.aa-reason img { aspect-ratio: 820 / 600; object-fit: cover; object-position: 50% 0; }
+
+/* 6 Galerien page band ------------------------------------------------------ */
+.aa-galleries-band .aa-band-inner { padding: 3.2rem; }
+.aa-galleries-band img { display: block; width: 100%; height: auto; }
+.aa-galleries-band h2 { margin-top: 0; }
+.aa-galleries-band .aa-faces { display: none; }
+/* below the grid's md breakpoint the portraits stand in for the photo, so the band stays short above the locations list */
+@media (max-width: 979px) {
+  .aa-galleries-band .aa-band-inner { padding: 2rem 1.6rem 2.4rem; }
+  .aa-galleries-band .aa-band-photo { display: none; }
+  .aa-galleries-band .aa-faces { display: flex; margin-bottom: 1.6rem; }
+  .aa-galleries-band .aa-band-text .aa-faces img { width: 4.4rem; height: 4.4rem; border-color: var(--primitive-bone-100); }
+}
+
+/* Review bar (prototype chrome, not part of the proposal) ------------------ */
+.aa-review {
+  position: fixed;
+  left: 1.6rem;
+  bottom: var(--aa-review-bottom, 6.4rem);
+  z-index: 2147483000;
+  width: min(48rem, calc(100vw - 3.2rem));
+  padding: 1rem 1.2rem 1.2rem 1.6rem;
+  background: #1c1a18;
+  color: #f4ede2;
+  border-radius: .8rem;
+  box-shadow: 0 1.8rem 6rem -1.6rem rgb(28 26 24 / 45%);
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  line-height: 1.45;
+}
+.aa-review * { box-sizing: border-box; }
+.aa-review__top { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; padding-right: 3.6rem; }
+.aa-review__label { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgb(244 237 226 / 70%); }
+.aa-review__spots { display: flex; gap: .6rem; }
+.aa-review__spot {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: .1rem solid rgb(244 237 226 / 45%);
+  border-radius: 50%;
+  color: #f4ede2;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 160ms ease-out, color 160ms ease-out, transform 120ms ease-out;
+}
+.aa-review__spot:hover { background: rgb(244 237 226 / 14%); color: #f4ede2; }
+.aa-review__spot:active { transform: scale(.96); }
+.aa-review__spot[aria-current="true"] { background: #f4ede2; color: #1c1a18; border-color: #f4ede2; }
+.aa-review__hide {
+  position: absolute;
+  top: 1rem;
+  right: .8rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(244 237 226 / 70%);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.aa-review__note { margin: .8rem 0 0; color: rgb(244 237 226 / 85%); text-wrap: pretty; }
+.aa-review__note strong { color: #f4ede2; }
+.aa-review.is-collapsed { width: auto; padding: .8rem 1.2rem .8rem 1.6rem; }
+.aa-review.is-collapsed .aa-review__spots,
+.aa-review.is-collapsed .aa-review__note { display: none; }
+.aa-review :focus-visible { outline: .2rem solid #f4ede2; outline-offset: .2rem; }
+@media (max-width: 759px) {
+  .aa-review { left: 50%; transform: translateX(-50%); bottom: calc(var(--aa-review-bottom, 1.2rem) + env(safe-area-inset-bottom)); padding: .8rem 1rem 1rem; font-size: 1.3rem; }
+  .aa-review__top { gap: .8rem; }
+  .aa-review__label { display: none; }
+  .aa-review__spots { gap: .4rem; }
+  .aa-review__spot { width: 3.4rem; height: 3.4rem; }
+  .aa-review__hide { top: .8rem; right: .4rem; }
+  .aa-review__note { margin-top: .6rem; }
+  .aa-review.is-collapsed .aa-review__label { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aa-review__spot, .aa-menu-card { transition: none; }
+}
