@@ -1,4 +1,4 @@
-/* Art-advisory placements: the seven proposed entry points to /art-advisory/,
+/* Art-advisory placements: the six proposed entry points to /art-advisory/,
    added to the captured lumas.de pages at serve time, plus a review bar for the
    stakeholder walk-through. `?spot=N` jumps to placement N. */
 (function () {
@@ -27,19 +27,17 @@
   ];
 
   var SPOTS = [
-    { n: 1, page: '/', title: 'Header icon', target: '.aa-header-link',
-      note: 'Between search and WhatsApp, on every page. Hovering shows a tooltip like the WhatsApp icon’s. On phones it sits left of WhatsApp; below 385 px wide it gives way to the logo, and the Galleries menu card covers those phones.' },
-    { n: 2, page: '/', title: 'Galleries menu, Service', target: '.aa-menu-card, .aa-service-item', open: 'galleries',
-      note: '“Persönliche Beratung” is the first Service entry, and a card with real Art Consultant portraits fills the empty columns on the right. On phones the card sits at the top of the Galleries menu.' },
-    { n: 3, page: '/', title: 'Homepage tile', target: '.aa-tile',
+    { n: 1, page: '/', title: 'Galleries menu', target: '.aa-menu-card', open: 'galleries',
+      note: 'A card with real Art Consultant portraits replaces the Service column (Kontakt, Alle Galerien, Events). On phones it sits at the top of the Galleries menu.' },
+    { n: 2, page: '/', title: 'Homepage tile', target: '.aa-tile',
       note: 'Replaces Art Cloud: about 14 clicks a day, no orders afterwards, and a third of its clicks are dead clicks (GA4 and Clarity, 6 to 20 Oct). Tracked as data-cta “art_advisory”.' },
-    { n: 4, page: PDP_PATH, title: 'PDP, below the buy box', target: '.aa-pdp',
+    { n: 3, page: PDP_PATH, title: 'PDP, below the buy box', target: '.aa-pdp',
       note: 'Test variant: one quiet line in the empty CMS slot below the shipping info, never above or beside the cart button. Primary metric is add-to-cart rate, so the test shows whether it helps or hurts buying.' },
-    { n: 5, page: '/warum-lumas/', title: 'Warum LUMAS, point 09', target: '.aa-reason',
+    { n: 4, page: '/warum-lumas/', title: 'Warum LUMAS, point 09', target: '.aa-reason',
       note: 'New point 09 after WhiteWall. The old points 09 to 12 become 10 to 13, three rows swap sides to keep the zigzag, and the heading becomes “Dreizehn gute Gründe”.' },
-    { n: 6, page: '/galerien/', title: 'Galleries page', target: '.aa-galleries-band',
+    { n: 5, page: '/galerien/', title: 'Galleries page', target: '.aa-galleries-band',
       note: 'Straight under the intro that ends “beraten dich gern”, before the locations list that many internal links land on.' },
-    { n: 7, page: '/', title: 'Footer, Hilfe', target: '.aa-footer-link',
+    { n: 6, page: '/', title: 'Footer, Hilfe', target: '.aa-footer-link',
       note: 'Under Hilfe, after Kontakt.' }
   ];
 
@@ -110,25 +108,7 @@
     });
   }
 
-  // The shop's own calendar glyph (#events) with a check mark, so it reads as "book". Stroke 1.25
-  // (not the sprite's 1.17): its straight edges render lighter than the curved icons beside it.
-  function iconSprite() {
-    if (document.getElementById('aa-consult')) return;
-    document.body.prepend(el('<svg xmlns="http://www.w3.org/2000/svg" style="display:none">' +
-      '<symbol id="aa-consult" viewBox="0 0 20 20"><path d="M6.67 1.67V5M13.33 1.67V5M15.83 3.33H4.17c-.92 0-1.67.75-1.67 1.67v11.67c0 .92.75 1.66 1.67 1.66h11.66c.92 0 1.67-.74 1.67-1.66V5c0-.92-.75-1.67-1.67-1.67M2.5 8.33h15M7.5 13.33l1.67 1.67 3.33-3.33" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25"/></symbol></svg>'));
-  }
-
-  // ---- 1 header icon -----------------------------------------------------------
-  function headerIcon() {
-    // before the icon group that starts with WhatsApp, so the group's own spacing stays intact
-    var wa = document.querySelector('site-header aside whats-app-contact');
-    var group = wa && wa.closest('site-header aside > *');
-    if (!group || document.querySelector('.aa-header-link')) return;
-    group.parentNode.insertBefore(el('<a class="aa-header-link" href="' + LP + '" aria-label="Persönliche Beratung buchen" ' +
-      'data-tooltip="Persönliche Beratung buchen"><svg aria-hidden="true"><use href="#aa-consult"></use></svg></a>'), group);
-  }
-
-  // ---- 2 galleries dropdown ------------------------------------------------------
+  // ---- 1 galleries dropdown ------------------------------------------------------
   function menuCard() {
     var card = el('<a class="aa-menu-card" href="' + LP + '">' + faces(4) +
       '<span class="aa-menu-card__title">Kunstberatung</span>' +
@@ -141,10 +121,9 @@
   function galleriesMenu(root) {
     root.querySelectorAll('.menu.galleries').forEach(function (menu) {
       if (menu.querySelector('.aa-menu-card')) return;
-      var serviceHeading = menu.querySelector('dl.services dt');
-      if (serviceHeading) {
-        serviceHeading.after(el('<dd class="aa-service-item"><a href="' + LP + '"><svg><use href="#aa-consult"></use></svg>Persönliche Beratung</a></dd>'));
-      }
+      // the card takes the Service column's place (Kontakt, Alle Galerien, Events)
+      var services = menu.querySelector('dl.services');
+      if (services) services.remove();
       menu.prepend(menuCard());
     });
   }
@@ -159,7 +138,7 @@
       .observe(header, { childList: true, subtree: true });
   }
 
-  // ---- 3 homepage tile (replaces Art Cloud) -------------------------------------
+  // ---- 2 homepage tile (replaces Art Cloud) -------------------------------------
   function homepageTile() {
     whenPresent('.block-tiles[data-section="campaign_tiles"] a[data-cta="artcloud"]', function (a) {
       var cell = a.parentElement;
@@ -174,7 +153,7 @@
     });
   }
 
-  // ---- 4 PDP, below the buy box ----------------------------------------------------
+  // ---- 3 PDP, below the buy box ----------------------------------------------------
   function pdpLine() {
     whenPresent('.pdp-info-banner', function (slot) {
       if (slot.querySelector('.aa-pdp')) return;
@@ -186,7 +165,7 @@
     });
   }
 
-  // ---- 5 Warum LUMAS, new point 09 ----------------------------------------------------
+  // ---- 4 Warum LUMAS, new point 09 ----------------------------------------------------
   function labelsOnWhyPage() {
     var main = document.querySelector('main') || document;
     return Array.prototype.filter.call(main.querySelectorAll('p'), function (p) {
@@ -241,7 +220,7 @@
     if (heading) heading.textContent = heading.textContent.replace('Zwölf', 'Dreizehn');
   }
 
-  // ---- 6 Galerien page band ---------------------------------------------------------
+  // ---- 5 Galerien page band ---------------------------------------------------------
   function markGalleriesIntro() {
     var lead = Array.prototype.find.call(document.querySelectorAll('main p.lead'), function (p) {
       return /beraten dich gern/.test(p.textContent);
@@ -270,7 +249,7 @@
     row.after(band);
   }
 
-  // ---- 7 footer, Hilfe -----------------------------------------------------------------
+  // ---- 6 footer, Hilfe -----------------------------------------------------------------
   function markFooterHelp() {
     var head = Array.prototype.find.call(document.querySelectorAll('.footer-service .headline'), function (h) {
       return h.textContent.trim() === 'Hilfe';
@@ -342,7 +321,7 @@
     function setNote(spot) {
       note.innerHTML = spot
         ? '<strong>' + spot.n + ' · ' + spot.title + '.</strong> ' + spot.note
-        : 'Seven entry points to /art-advisory/. Pick a number to jump to one.';
+        : 'Six entry points to /art-advisory/. Pick a number to jump to one.';
     }
     setNote(current);
 
@@ -386,8 +365,6 @@
     markWhyRows();
     markGalleriesIntro();
     markFooterHelp();
-    iconSprite();
-    headerIcon();
     galleriesEverywhere();
     if (PATH === '/') homepageTile();
     if (PATH === PDP_PATH) pdpLine();

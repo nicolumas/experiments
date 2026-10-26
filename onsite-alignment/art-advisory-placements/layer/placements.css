@@ -1,52 +1,12 @@
-/* Art-advisory placements: the seven proposed entry points to /art-advisory/,
+/* Art-advisory placements: the six proposed entry points to /art-advisory/,
    layered onto the lumas.de clone. Shop tokens only (1rem = 10px). Every rule
    is scoped to an .aa- class so production markup is never restyled. */
 
-/* 1 Header icon, between search and WhatsApp ------------------------------ */
-/* same box as the shop's header icons: the svg is 2.2rem square and the shop pads every
-   aside child by .3rem, so the link sizes to its content instead of a fixed width */
-.aa-header-link {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  color: var(--color-text-primary);
-}
-.aa-header-link svg { flex: none; width: 2.2rem; height: 2.2rem; }
-body:not(.touch) .aa-header-link[data-tooltip]:after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 3rem;
-  left: 50%;
-  z-index: 1;
-  display: block;
-  width: max-content;
-  transform: translateX(-50%);
-  padding: .25rem 1rem;
-  background-color: var(--white);
-  border: .1rem solid var(--black);
-  border-radius: .3rem;
-  box-shadow: var(--shadow-md);
-  color: var(--black);
-  font-size: 1.3rem;
-  line-height: 1.4;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .3s linear;
-}
-body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
-/* the drawer header spaces its icons wider than the desktop row */
-@media (max-width: 1024px) { .aa-header-link { margin-right: 1rem; } }
-/* below 385px the row has no room left without crowding the logo */
-@media (max-width: 384px) { .aa-header-link { display: none; } }
-
-/* 2 Galleries dropdown: card next to the Service column -------------------- */
-/* first in the DOM so the drawer shows it on top; on desktop it takes the two free columns */
+/* 1 Galleries dropdown: card in place of the Service column ----------------- */
+/* first in the DOM so the drawer shows it on top; on desktop it takes the Service column */
 .aa-menu-card {
-  grid-column: 11 / span 2;
+  grid-column: 9 / span 2;
   grid-row: 1;
-  margin-left: 2.4rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -86,7 +46,10 @@ body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: .4rem;
+  white-space: nowrap;
 }
+/* small desktops: two of the twelve columns are too narrow for the portraits and the link */
+@media (min-width: 1025px) and (max-width: 1259px) { .aa-menu-card { grid-column: 9 / span 3; } }
 @media (max-width: 1024px) {
   .aa-menu-card {
     grid-column: 1 / -1;
@@ -96,7 +59,6 @@ body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
     column-gap: 1.6rem;
     row-gap: .4rem;
     margin: .8rem 0 2.4rem;
-    margin-left: 0;
     padding: 1.6rem;
   }
   .aa-menu-card .aa-faces { grid-row: span 3; align-self: start; }
@@ -106,10 +68,10 @@ body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
   .aa-menu-card__cta { margin-top: .4rem; padding-top: 0; }
 }
 
-/* 3 Homepage tile: the image is a scene photo, so a square crop is fine --- */
+/* 2 Homepage tile: the image is a scene photo, so a square crop is fine --- */
 .aa-tile img { aspect-ratio: 1; object-fit: cover; }
 
-/* 4 PDP, below the buy box (variant of an A/B test) ----------------------- */
+/* 3 PDP, below the buy box (variant of an A/B test) ----------------------- */
 .aa-pdp {
   display: flex;
   align-items: center;
@@ -124,10 +86,10 @@ body:not(.touch) .aa-header-link[data-tooltip]:hover:after { opacity: 1; }
 .aa-pdp p { margin: 0; font-size: 1.4rem; line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
 .aa-pdp a { color: var(--color-text-primary); white-space: nowrap; }
 
-/* 5 Warum LUMAS: the new point's photo is cropped to the page's 820 x 600 */
+/* 4 Warum LUMAS: the new point's photo is cropped to the page's 820 x 600 */
 .aa-reason img { aspect-ratio: 820 / 600; object-fit: cover; object-position: 50% 0; }
 
-/* 6 Galerien page band ------------------------------------------------------ */
+/* 5 Galerien page band ------------------------------------------------------ */
 .aa-galleries-band .aa-band-inner { padding: 3.2rem; }
 .aa-galleries-band img { display: block; width: 100%; height: auto; }
 .aa-galleries-band h2 { margin-top: 0; }
