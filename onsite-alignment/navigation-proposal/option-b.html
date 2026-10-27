@@ -163,38 +163,6 @@ bottom-nav .tile-blank {
   aspect-ratio: 1;
   background: #eae2d8;
 }
-.search-dropdown dl.advisor dt {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.search-dropdown dl.advisor dt svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.search-dropdown dl.advisor dd {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 2rem;
-  background-color: var(--color-surface-subtle);
-}
-.search-dropdown dl.advisor .advisor-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  line-height: 1.2;
-}
-.search-dropdown dl.advisor .advisor-text {
-  margin: 0;
-  color: var(--color-text-secondary);
-  font-size: 1.5rem;
-  line-height: 1.5;
-}
-.search-dropdown dl.advisor .btn {
-  margin-top: auto;
-}
 site-header .menu.discovery dd.featured,
 bottom-nav .action-card.featured {
   background-color: var(--color-surface-subtle);
@@ -380,182 +348,125 @@ site-header.mobile .nav-container .menu.consultation .contact-ways {
 }
 </style>
 <style id="proposal-search-variants">
+.search-dropdown .suggestions {
+  --sv-tile: clamp(8.5rem, calc(9vw - 2.5rem), 12rem);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: clamp(3.2rem, calc(1.9vw + 1.25rem), 4rem);
+}
 .search-dropdown [data-sv] { display: none !important; }
 .search-dropdown[data-search-variant="1"] [data-sv~="1"],
 .search-dropdown[data-search-variant="2"] [data-sv~="2"],
 .search-dropdown[data-search-variant="3"] [data-sv~="3"] { display: grid !important; }
-.search-dropdown .suggestions dl.advisor[data-sv~="1"] { grid-column: span 2; }
 .search-dropdown .suggestions dl.sv-tiles {
-  grid-column: 1 / -1;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-}
-.search-dropdown .suggestions dl.sv-tiles-with-advisor {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-/* variant 3: tiles keep variant 1's size; the free fourth column holds the further searches as a list */
-.search-dropdown[data-search-variant="3"] .suggestions dl.sv-tiles-with-advisor { grid-column: span 3; }
-.search-dropdown[data-search-variant="3"] .suggestions dl.sv-more {
-  grid-column: span 1;
-  align-content: start;
-}
-.search-dropdown[data-search-variant="3"] .suggestions dl.sv-more dd {
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.search-dropdown[data-search-variant="3"] .suggestions dl.sv-more a + a::before { content: none; }
-.search-dropdown .suggestions dl.sv-tiles dt,
-.search-dropdown .suggestions dl.sv-more dt { grid-column: 1 / -1; }
-.search-dropdown .suggestions dl.sv-more,
-.search-dropdown .suggestions dl.sv-advisor-band {
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr);
-}
-.search-dropdown .suggestions dl.sv-tiles,
-.search-dropdown .suggestions dl.sv-more,
-.search-dropdown .suggestions dl.sv-advisor-band {
+  flex: none;
+  grid-template-columns: repeat(auto-fill, var(--sv-tile));
   grid-template-rows: none;
   grid-auto-rows: auto;
+  gap: 1rem;
+  width: calc(8 * var(--sv-tile) + 7rem);
+  margin: 0;
+}
+.search-dropdown .suggestions dl.sv-tiles[data-sv="3"] { width: calc(9 * var(--sv-tile) + 8rem); }
+.search-dropdown .suggestions dl[data-sv] dt { grid-column: 1 / -1; }
+.search-dropdown .suggestions dl.sv-tiles dd a > span:last-child {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.25;
 }
 .search-dropdown .sv-sparkles {
   flex: none;
   width: 1.6rem;
   height: 1.6rem;
 }
-.search-dropdown .suggestions dl.sv-more dd {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.search-dropdown .suggestions dl.sv-advisor {
+  flex: 1 1 20rem;
+  max-width: 34rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   margin: 0;
-  font-size: 1.4rem;
-  line-height: 1.6;
 }
-.search-dropdown .suggestions dl.sv-more a,
-.search-dropdown .suggestions .sv-prompts a {
-  display: inline;
-  width: auto;
-  color: var(--color-text-primary);
-  text-decoration: none;
-  text-underline-offset: 0.3rem;
-}
-.search-dropdown .suggestions dl.sv-more a:hover,
-.search-dropdown .suggestions .sv-prompts a:hover { text-decoration: underline; }
-.search-dropdown .suggestions dl.sv-more a + a::before,
-.search-dropdown .suggestions .sv-prompts a + a::before {
-  content: "·";
-  display: inline-block;
-  margin: 0 0.8rem;
-  color: var(--color-text-tertiary);
-}
-.search-dropdown .suggestions dl.sv-advisor-band dd {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-  align-items: center;
-  gap: 1.2rem 4rem;
-  margin: 0;
-  padding: 2.4rem 3.2rem;
-  background: var(--color-surface-subtle);
-}
-.search-dropdown .sv-band-copy,
-.search-dropdown .sv-band-ask {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-.search-dropdown .suggestions .sv-eyebrow {
+.search-dropdown .suggestions dl.sv-advisor dt {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+.search-dropdown .suggestions dl.sv-advisor dd {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin: 0;
+}
+.search-dropdown .suggestions .sv-advisor-title {
+  display: block;
+  font-family: var(--font-display, "Utile Display", sans-serif);
+  font-size: 2rem;
+  line-height: 1.2;
+  white-space: normal;
+  text-wrap: balance;
+}
+.search-dropdown .suggestions .sv-go {
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.search-dropdown .suggestions a:hover .sv-go { transform: translateX(0.4rem); }
+.search-dropdown .suggestions .sv-advisor-card a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.6rem 2rem;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+.search-dropdown .suggestions .sv-advisor-cta {
+  display: block;
+  margin-top: auto;
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.search-dropdown .sv-band-title {
-  margin: 0;
-  font-family: var(--font-display, "Utile Display", sans-serif);
-  font-size: 2.6rem;
-  line-height: 1.15;
-}
-.search-dropdown .suggestions a.sv-band-input {
+.search-dropdown .suggestions .sv-advisor-field dd { padding-top: 0.4rem; }
+.search-dropdown .suggestions a.sv-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.6rem;
-  padding: 1.4rem 1.6rem;
+  gap: 0.8rem;
+  padding: 1.2rem;
   border: 0.1rem solid var(--color-border-strong);
   border-radius: 4px;
-  background: var(--color-surface-card);
   color: var(--color-text-secondary);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-decoration: none;
   transition: border-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.search-dropdown .suggestions a.sv-band-input:hover { border-color: var(--color-text-primary); }
-.search-dropdown .suggestions a.sv-band-input > span:first-child { display: inline; }
-.search-dropdown .suggestions .sv-advisor-go {
-  display: inline;
-  color: var(--color-text-primary);
-  font-size: 1.8rem;
-  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.search-dropdown .suggestions a:hover .sv-advisor-go { transform: translateX(0.4rem); }
-.search-dropdown .suggestions .sv-prompts {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  font-size: 1.3rem;
-  color: var(--color-text-secondary);
-}
-.search-dropdown .suggestions .sv-prompts > span {
-  display: inline;
-  margin-right: 0.6rem;
-}
-.search-dropdown .suggestions .sv-prompts a { color: var(--color-text-secondary); }
-.search-dropdown .suggestions dl.sv-tiles dd.sv-advisor-tile {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-.search-dropdown .suggestions dd.sv-advisor-tile a {
+.search-dropdown .suggestions a.sv-field:hover { border-color: var(--color-text-primary); }
+.search-dropdown .suggestions a.sv-field .sv-go { color: var(--color-text-primary); }
+.search-dropdown .suggestions .sv-advisor-square {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  height: 100%;
-  padding: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  text-align: center;
+  aspect-ratio: 1;
   background: var(--color-surface-subtle);
   color: var(--color-text-primary);
-  text-decoration: none;
+  transition: background-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.search-dropdown .suggestions dd.sv-advisor-tile a > span {
-  display: flex;
-  max-width: 100%;
-  overflow: visible;
-  white-space: normal;
-  text-overflow: clip;
-  text-wrap: balance;
-}
-.search-dropdown .suggestions .sv-advisor-tile-title {
-  margin-top: 0.4rem;
+.search-dropdown .suggestions .sv-advisor-tile a:hover .sv-advisor-square { background: var(--color-surface-muted); }
+.search-dropdown .suggestions .sv-advisor-square .sv-sparkles { width: 2.2rem; height: 2.2rem; }
+.search-dropdown .suggestions .sv-advisor-tile a > span:last-child { font-weight: 600; }
+.search-dropdown .suggestions .sv-advisor-ask {
+  display: block;
   font-family: var(--font-display, "Utile Display", sans-serif);
-  font-size: 2.6rem;
+  font-size: clamp(1.2rem, calc(0.7vw + 0.5rem), 1.5rem);
   line-height: 1.15;
-}
-.search-dropdown .suggestions .sv-advisor-tile-text {
-  font-size: 1.4rem;
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-}
-.search-dropdown .suggestions .sv-advisor-tile-cta {
-  align-items: baseline;
-  gap: 0.6rem;
-  margin-top: auto;
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-@media (max-width: 1259px) {
-  .search-dropdown .suggestions dl.sv-advisor-band dd { grid-template-columns: minmax(0, 1fr); padding: 2rem 2.4rem; }
+  white-space: normal;
 }
 .sv-toggle {
   position: fixed;
@@ -719,10 +630,7 @@ document.body.addEventListener('click', e => {
 <div class="suggestion-container">
 <div class="close"><button><svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#close"></use></svg></button></div>
 <div class="suggestions">
-<!-- CMS_BLOCK_PLACEHOLDER : "content" -->
-<dl data-sv="1"><dt>Meist gesucht</dt><dd><a href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-220x220.jpg"/></picture><span>Berge</span></a></dd><dd><a href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-220x220.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-220x220.jpg"/></picture><span>Wasser</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/paris-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/paris-220x220.webp" type="image/webp"/><img alt="Paris" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/paris-220x220.jpg"/></picture><span>Paris</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/berlin-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berlin-220x220.webp" type="image/webp"/><img alt="Berlin" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berlin-220x220.jpg"/></picture><span>Berlin</span></a></dd><dd><a href="https://www.lumas.de/marilyn-monroe-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/marilyn-220x220.webp" type="image/webp"/><img alt="Marilyn Monroe" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/marilyn-220x220.jpg"/></picture><span>Marilyn Monroe</span></a></dd></dl>
-<dl class="advisor" data-sv="1"><dt><svg aria-hidden="true"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><p class="advisor-title">Nicht sicher, wonach du suchst?</p><p class="advisor-text">Beschreib deinen Raum, deine Stimmung oder ein Werk, das du magst. Der AI Advisor schlägt passende Editionen vor.</p><a class="btn" href="https://www.lumas.de/art-advisor/">AI Advisor fragen</a></dd></dl><dl class="sv-advisor-band" data-sv="2"><dd><div class="sv-band-copy"><span class="sv-eyebrow"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</span><p class="sv-band-title">Nicht sicher, wonach du suchst?</p></div><div class="sv-band-ask"><a class="sv-band-input" href="https://www.lumas.de/art-advisor/"><span>Beschreib deinen Raum, deine Stimmung oder ein Motiv</span><span aria-hidden="true" class="sv-advisor-go">→</span></a><span class="sv-prompts"><span>z. B.</span><a href="https://www.lumas.de/art-advisor/?q=Meer+in+hellen+Farben">Meer in hellen Farben</a><a href="https://www.lumas.de/art-advisor/?q=Tiere+in+Schwarz-Weiß">Tiere in Schwarz-Weiß</a><a href="https://www.lumas.de/art-advisor/?q=New+York+fürs+Wohnzimmer">New York fürs Wohnzimmer</a></span></div></dd></dl><dl class="sv-tiles" data-sv="2"><dt>Meist gesucht</dt><dd><a href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-220x220.jpg"/></picture><span>Berge</span></a></dd><dd><a href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-220x220.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-220x220.jpg"/></picture><span>Wasser</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/paris-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/paris-220x220.webp" type="image/webp"/><img alt="Paris" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/paris-220x220.jpg"/></picture><span>Paris</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/berlin-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berlin-220x220.webp" type="image/webp"/><img alt="Berlin" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berlin-220x220.jpg"/></picture><span>Berlin</span></a></dd><dd><a href="https://www.lumas.de/marilyn-monroe-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/marilyn-220x220.webp" type="image/webp"/><img alt="Marilyn Monroe" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/marilyn-220x220.jpg"/></picture><span>Marilyn Monroe</span></a></dd></dl><dl class="sv-tiles sv-tiles-with-advisor" data-sv="3"><dt>Meist gesucht</dt><dd class="sv-advisor-tile"><a href="https://www.lumas.de/art-advisor/"><span class="sv-eyebrow"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</span><span class="sv-advisor-tile-title">Nicht sicher, wonach du suchst?</span><span class="sv-advisor-tile-text">Beschreib deinen Raum, deine Stimmung oder ein Werk, das du magst.</span><span class="sv-advisor-tile-cta">Advisor fragen <span aria-hidden="true" class="sv-advisor-go">→</span></span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-220x220.jpg"/></picture><span>Berge</span></a></dd><dd><a href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-220x220.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-220x220.jpg"/></picture><span>Wasser</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/paris-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/paris-220x220.webp" type="image/webp"/><img alt="Paris" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/paris-220x220.jpg"/></picture><span>Paris</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/berlin-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berlin-220x220.webp" type="image/webp"/><img alt="Berlin" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berlin-220x220.jpg"/></picture><span>Berlin</span></a></dd><dd><a href="https://www.lumas.de/marilyn-monroe-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/marilyn-220x220.webp" type="image/webp"/><img alt="Marilyn Monroe" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/marilyn-220x220.jpg"/></picture><span>Marilyn Monroe</span></a></dd></dl><dl class="sv-more" data-sv="2 3"><dt>Weitere Suchen</dt><dd><a href="https://www.lumas.de/search/?q=strand">Strand</a><a href="https://www.lumas.de/search/?q=pool">Pool</a><a href="https://www.lumas.de/search/?q=wald">Wald</a><a href="https://www.lumas.de/search/?q=japan">Japan</a><a href="https://www.lumas.de/search/?q=venedig">Venedig</a><a href="https://www.lumas.de/search/?q=david+bowie">David Bowie</a><a href="https://www.lumas.de/search/?q=richter">Gerhard Richter</a><a href="https://www.lumas.de/search/?q=frida+kahlo">Frida Kahlo</a></dd></dl>
-
+<!-- CMS_BLOCK_PLACEHOLDER : "content" --><dl class="sv-tiles" data-sv="1 2"><dt>Meist gesucht</dt><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-220x220.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-220x220.jpg"/></picture><span>Wasser</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-220x220.jpg"/></picture><span>Berge</span></a></dd><dd><a href="https://www.lumas.de/natur/landschaft/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/landschaft-220x220.webp" type="image/webp"/><img alt="Landschaft" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/landschaft-220x220.jpg"/></picture><span>Landschaft</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd></dl><dl class="sv-tiles" data-sv="3"><dt>Meist gesucht</dt><dd class="sv-advisor-tile"><a href="https://www.lumas.de/art-advisor/"><span class="sv-advisor-square"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg><span class="sv-advisor-ask">Was suchst du?</span></span><span>AI Advisor</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-220x220.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-220x220.jpg"/></picture><span>Wasser</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-220x220.jpg"/></picture><span>Berge</span></a></dd><dd><a href="https://www.lumas.de/natur/landschaft/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/landschaft-220x220.webp" type="image/webp"/><img alt="Landschaft" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/landschaft-220x220.jpg"/></picture><span>Landschaft</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd></dl><dl class="sv-advisor sv-advisor-card" data-sv="1"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><a href="https://www.lumas.de/art-advisor/"><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><span class="sv-advisor-cta">Advisor fragen <span aria-hidden="true" class="sv-go">→</span></span></a></dd></dl><dl class="sv-advisor sv-advisor-field" data-sv="2"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><a class="sv-field" href="https://www.lumas.de/art-advisor/"><span>Raum, Stimmung, Motiv</span><span aria-hidden="true" class="sv-go">→</span></a></dd></dl>
 </div>
 </div>
 <div class="help-bar">
@@ -1120,7 +1028,7 @@ document.body.addEventListener('click', e => {
 <div class="search-default"><nav class="action-cards"><a class="action-card" href="https://www.lumas.de/art-advisor/"><span class="icon"><svg aria-hidden="true"><use href="#nav-sparkles"></use></svg></span><span class="title">Frag den AI Advisor</span><span aria-hidden="true" class="arrow">→</span></a></nav>
 <div class="carousel-section">
 <h3 class="carousel-label">Meist gesucht</h3>
-<div aria-label="Meist gesucht" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-110x110.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-110x110.jpg"/></picture><span>Meer</span></a><a class="carousel-card" href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-110x110.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-110x110.jpg"/></picture><span>New York</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-110x110.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-110x110.jpg"/></picture><span>Berge</span></a><a class="carousel-card" href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-110x110.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-110x110.jpg"/></picture><span>Wasser</span></a><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-110x110.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-110x110.jpg"/></picture><span>Schwarz-Weiß</span></a><a class="carousel-card" href="https://www.lumas.de/collections/staedte/paris-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/paris-110x110.webp" type="image/webp"/><img alt="Paris" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/paris-110x110.jpg"/></picture><span>Paris</span></a><a class="carousel-card" href="https://www.lumas.de/collections/staedte/berlin-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berlin-110x110.webp" type="image/webp"/><img alt="Berlin" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berlin-110x110.jpg"/></picture><span>Berlin</span></a><a class="carousel-card" href="https://www.lumas.de/marilyn-monroe-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/marilyn-110x110.webp" type="image/webp"/><img alt="Marilyn Monroe" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/marilyn-110x110.jpg"/></picture><span>Marilyn Monroe</span></a></div>
+<div aria-label="Meist gesucht" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/new-york-110x110.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/new-york-110x110.jpg"/></picture><span>New York</span></a><a class="carousel-card" href="https://www.lumas.de/natur/wasser/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/wasser-110x110.webp" type="image/webp"/><img alt="Wasser" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/wasser-110x110.jpg"/></picture><span>Wasser</span></a><a class="carousel-card" href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/david-bowie-110x110.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/david-bowie-110x110.jpg"/></picture><span>David Bowie</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=meer"><picture><source media="all" srcset="./media_lumas_de/search-tiles/meer-110x110.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/meer-110x110.jpg"/></picture><span>Meer</span></a><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/schwarz-weiss-110x110.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/schwarz-weiss-110x110.jpg"/></picture><span>Schwarz-Weiß</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=berge"><picture><source media="all" srcset="./media_lumas_de/search-tiles/berge-110x110.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/berge-110x110.jpg"/></picture><span>Berge</span></a><a class="carousel-card" href="https://www.lumas.de/natur/landschaft/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/landschaft-110x110.webp" type="image/webp"/><img alt="Landschaft" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/landschaft-110x110.jpg"/></picture><span>Landschaft</span></a><a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/blumen-110x110.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/blumen-110x110.jpg"/></picture><span>Blumen</span></a></div>
 </div>
 </div>
 </nav-search>
@@ -2256,7 +2164,7 @@ document.body.addEventListener('click', e => {
 <div aria-label="Such-Dropdown Variante" class="sv-toggle" role="group">
 <span>Suche</span>
 <button aria-pressed="true" data-v="1" type="button">Advisor-Karte</button>
-<button aria-pressed="false" data-v="2" type="button">Advisor-Leiste</button>
+<button aria-pressed="false" data-v="2" type="button">Advisor-Feld</button>
 <button aria-pressed="false" data-v="3" type="button">Advisor-Kachel</button>
 </div>
 <script>
