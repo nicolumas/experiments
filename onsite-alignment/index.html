@@ -148,7 +148,8 @@
        row here and give its projects that id.
     --------------------------------------------------------------- */
     const sessions = [
-      { id: "s1022", kicker: "Latest · today",        weekday: "Thursday",  date: "22 October", year: "2026", short: "22 Oct", upcoming: true },
+      { id: "s1027", kicker: "Latest · today",        weekday: "Tuesday",   date: "27 October", year: "2026", short: "27 Oct", upcoming: true },
+      { id: "s1022", kicker: "Previous",              weekday: "Thursday",  date: "22 October", year: "2026", short: "22 Oct" },
       { id: "s1021", kicker: "Previous",              weekday: "Wednesday", date: "21 October", year: "2026", short: "21 Oct" },
       { id: "s1019", kicker: "Previous",              weekday: "Monday",    date: "19 October", year: "2026", short: "19 Oct" },
       { id: "s1015", kicker: "Previous",              weekday: "Thursday",  date: "15 October", year: "2026", short: "15 Oct" },
@@ -184,6 +185,7 @@
     /* Full cards carry `desc`; compact cards carry a `cluster` label.
        `feature: true` gives the lead card of the top session extra size. */
     const projects = [
+      { s: "s1027", feature: true, title: "Navigation: Beratung instead of Inspiration (DE)", href: "nav-beratung/", desc: "Today’s lumas.de with Beratung in the Inspiration slot of the main nav, a plain link to the consultation page without a dropdown." },
       { s: "s1022", feature: true, title: "PDP gallery tools: Cordoama II (DE, EN)", href: "pdp-gallery-tools/", desc: "Zoom, AR, 3D and save as a quiet icon rail top left, Ähnliche Werke and AI Advisor centred under the artwork, on a flat Bone stage." },
       { s: "s1022", cluster: "PDP gallery tools", title: "English page", href: "pdp-gallery-tools/en.html" },
       { s: "s1022", cluster: "PDP gallery tools", title: "All versions to compare (A to E)", href: "pdp-gallery-tools/?compare" },
