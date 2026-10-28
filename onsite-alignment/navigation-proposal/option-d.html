@@ -608,6 +608,87 @@ site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspirati
   width: auto;
   line-height: 2.32;
 }
+.menu.artworks .new-works,
+.menu.artworks.inspiration > dl[data-stories] { display: none; }
+site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] {
+  display: grid;
+  grid-column: 6 / -1 !important;
+  grid-template-columns: 1.602fr 1.206fr 1.206fr 1.206fr;
+  column-gap: 2rem;
+  align-items: start;
+}
+site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] dt { grid-column: 1 / -1; }
+site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspiration > dl[data-stories] dd {
+  line-height: 1.3;
+}
+.menu.artworks.inspiration dl[data-stories] a {
+  display: grid;
+  gap: 0.6rem;
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+.menu.artworks.inspiration dl[data-stories] img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ratio);
+  margin-bottom: 0.6rem;
+  transition: opacity 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.menu.artworks.inspiration dl[data-stories] a:hover img { opacity: 0.88; }
+.menu.artworks.inspiration .story-eyebrow {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.menu.artworks.inspiration .story-title {
+  font-family: var(--font-display, "Utile Display", sans-serif);
+  font-size: 2rem;
+  line-height: 1.2;
+}
+.menu.artworks.inspiration dl[data-stories] a:hover .story-title { text-decoration: underline; text-underline-offset: 0.3rem; }
+@media (max-width: 1279px) {
+  site-header.desktop .nav-container .menu.artworks.inspiration > dl { grid-column: span 3 !important; }
+  site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] {
+    grid-column: 8 / -1 !important;
+    grid-template-columns: 1.602fr 1.206fr 1.206fr;
+  }
+  site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspiration > dl[data-stories] dd:last-child {
+    display: none;
+  }
+}
+site-header.desktop .nav-container .menu.artworks.with-new-works {
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+}
+site-header.desktop .nav-container .menu.artworks.with-new-works > dl { grid-row: 1 / span 2; }
+site-header.desktop .nav-container .menu.artworks.with-new-works > dl.highlights { grid-row: 1; }
+site-header.desktop .nav-container .menu.artworks.with-new-works > .new-works {
+  display: grid;
+  grid-column: 1 / span 5;
+  grid-row: 2;
+  align-content: start;
+  gap: 1rem;
+  padding-top: 2.4rem;
+}
+.menu.artworks .new-works-label {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.menu.artworks .new-works-label::after { content: " →"; }
+.menu.artworks .new-works > div { display: flex; gap: 1rem; align-items: flex-end; overflow: hidden; }
+.menu.artworks .new-works img {
+  display: block;
+  width: auto;
+  height: clamp(6rem, 6vw, 8rem);
+  transition: opacity 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.menu.artworks .new-works a:hover img { opacity: 0.88; }
 </style>
 <style id="proposal-tool-visuals">
 site-header:is(.desktop, .mobile) .nav-container .menu dl dt header,
@@ -1568,7 +1649,7 @@ document.body.addEventListener('click', e => {
 <details>
 <summary><a href="https://www.lumas.de/search/?q=">Kunstwerke</a></summary>
 <div class="menu-container">
-<div class="menu artworks">
+<div class="menu artworks with-new-works">
 <dl class="highlights open">
 <dt><header>Highlights</header></dt>
 <dd>
@@ -1657,7 +1738,7 @@ document.body.addEventListener('click', e => {
 <div data-price-block="from500000-to2000000" data-style-override="cursor:pointer;">ab €5000</div>
 </dd>
 </dl>
-</div>
+<div class="new-works"><a class="new-works-label" href="https://www.lumas.de/neuheiten/">Neu eingetroffen</a><div><a href="https://www.lumas.de/pictures/marta_contreras_simo/nina/" title="Marta Contreras Simó, Nina"><img alt="Marta Contreras Simó, Nina" height="550" loading="lazy" src="https://img.lumas.com/showimg_mcs52_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/daniel_kordan/moonrise_over_greenland/" title="Daniel Kordan, Moonrise over Greenland"><img alt="Daniel Kordan, Moonrise over Greenland" height="440" loading="lazy" src="https://img.lumas.com/showimg_dko21_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/daria_petrilli/the_dance_teacher/" title="Daria Petrilli, The Dance Teacher"><img alt="Daria Petrilli, The Dance Teacher" height="688" loading="lazy" src="https://img.lumas.com/showimg_dpe35_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/javier_soler_esplugues/match_point/" title="Javier Soler Esplugues, Match Point"><img alt="Javier Soler Esplugues, Match Point" height="550" loading="lazy" src="https://img.lumas.com/showimg_jso29_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/kevin_boyle/rain_dance/" title="Kevin Boyle, Rain Dance"><img alt="Kevin Boyle, Rain Dance" height="550" loading="lazy" src="https://img.lumas.com/showimg_kby07_search.jpg" width="550"/></a></div></div></div>
 </div>
 </details>
 <details>
@@ -1888,7 +1969,7 @@ document.body.addEventListener('click', e => {
 <a href="https://www.lumas.de/collections/kuenstler-des-jahres/">Künstler des Jahres 2026</a>
 </dd><dd><a href="https://www.lumas.de/artists-in-focus/">Alle Artists in Focus</a></dd></dl>
 
-</div>
+<dl data-stories=""><dt><header>Aus dem Magazin</header></dt><dd style="--ratio:1.602"><a href="https://www.lumas.de/inspired-art-magazine/"><img alt="Die neue Ausgabe von Inspired auf einem Holztisch" height="512" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x512-14.jpg" width="820"/><span class="story-eyebrow">Magazin</span><span class="story-title">Die neue Ausgabe von Inspired</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/axel-crieger/"><img alt="Salonwand mit schwarz-weißen Fotoeditionen von Axel Crieger" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-03.jpg" width="820"/><span class="story-eyebrow">Artist in Focus</span><span class="story-title">Axel Criegers Grammar of Glamour</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><img alt="Marianna Gefen in ihrem Atelier" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-09.jpg" width="820"/><span class="story-eyebrow">Atelierbesuch</span><span class="story-title">Marianna Gefen</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist/daniel_kordan/"><img alt="Kontaktbogen mit Daniel Kordan bei der Arbeit im Gelände" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-10.jpg" width="820"/><span class="story-eyebrow">Expedition</span><span class="story-title">Unterwegs mit Daniel Kordan</span></a></dd></dl></div>
 </div>
 </details>
 <details>
