@@ -166,13 +166,13 @@ site-header.desktop .menu.discovery a {
   grid-template-rows: auto auto auto 1fr;
   height: 100%;
 }
-site-header.desktop .nav-container details:nth-child(4) .menu.galleries {
+site-header.desktop .nav-container details:is(:nth-child(4), :nth-child(5)) .menu.galleries {
   grid-template-columns: repeat(12, 1fr);
 }
-site-header.desktop .nav-container details:nth-child(4) .menu.galleries dl:nth-child(2) {
+site-header.desktop .nav-container details:is(:nth-child(4), :nth-child(5)) .menu.galleries dl:nth-child(2) {
   grid-column: span 2 !important;
 }
-site-header.desktop .nav-container details:nth-child(4) .menu.galleries dl:nth-child(2) dd {
+site-header.desktop .nav-container details:is(:nth-child(4), :nth-child(5)) .menu.galleries dl:nth-child(2) dd {
   display: block;
   width: auto;
   line-height: 2.3;

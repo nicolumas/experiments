@@ -30,7 +30,7 @@
 <body>
 <header>
   <h1>Navigation lumas.de: aktuell und Vorschlag</h1>
-  <nav class="switch"><a href="./?v=a" data-v="a">Option A: Inspiration</a><a href="./?v=b" data-v="b">Option B: Artfinder</a><a href="./?v=c" data-v="c">Option C: UX-Review</a></nav>
+  <nav class="switch"><a href="./?v=a" data-v="a">Option A: Inspiration</a><a href="./?v=b" data-v="b">Option B: Artfinder</a><a href="./?v=c" data-v="c">Option C: UX-Review</a><a href="./?v=d" data-v="d">Option D: Inspiration zurück</a></nav>
   <nav><a href="current.html" target="_blank">Aktuell, eigenes Fenster</a><a class="proposal-link" href="option-c.html" target="_blank">Vorschlag, eigenes Fenster</a></nav>
 </header>
 <p class="note">Desktop: mit der Maus über die Menüpunkte fahren. Mobil: die Leiste unten antippen, wie live auf lumas.de unter 480 px. Für echtes Touch-Verhalten die Seite im eigenen Fenster mit DevTools-Gerätemodus oder auf dem Telefon öffnen.</p>
@@ -50,13 +50,13 @@
 </section>
 <script>
   const requested = new URLSearchParams(location.search).get('v');
-  const variant = ['a', 'b'].includes(requested) ? requested : 'c';
-  const proposalPage = { a: 'option-a.html', b: 'option-b.html', c: 'option-c.html' }[variant];
+  const variant = ['a', 'b', 'd'].includes(requested) ? requested : 'c';
+  const proposalPage = { a: 'option-a.html', b: 'option-b.html', c: 'option-c.html', d: 'option-d.html' }[variant];
   document.querySelectorAll('iframe.proposal').forEach(frame => (frame.src = proposalPage));
   document.querySelector('.proposal-link').href = proposalPage;
   document.querySelectorAll('figcaption').forEach(caption => {
     if (caption.textContent === 'Vorschlag') {
-      caption.textContent = { a: 'Option A: Inspiration', b: 'Option B: Artfinder', c: 'Option C: UX-Review' }[variant];
+      caption.textContent = { a: 'Option A: Inspiration', b: 'Option B: Artfinder', c: 'Option C: UX-Review', d: 'Option D: Inspiration zurück' }[variant];
     }
   });
   document.querySelector(`.switch [data-v="${variant}"]`).setAttribute('aria-current', 'page');
