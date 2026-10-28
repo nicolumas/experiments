@@ -474,6 +474,45 @@
   var bar;
   function update() { writeState(); apply(); syncBar(); }
 
+  // ---- the shop's own language switchers ------------------------------------------
+  // Header dropdown (desktop), the "Sprache" menu and the DE | EN switch in the burger menu
+  // (phones): when they point at this artwork in the other language, stay inside the
+  // prototype. Both pages are read from the hreflang links production puts in the head.
+  function altPath(hreflang) {
+    var link = q('link[rel="alternate"][hreflang="' + hreflang + '"]');
+    return link ? new URL(link.getAttribute('href'), location.href).pathname : null;
+  }
+  var LANG_PATHS = { de: altPath('de-DE'), en: altPath('en-DE') };
+  function languageOf(href) {
+    var url;
+    try { url = new URL(href, location.href); } catch (e) { return null; }
+    if (url.origin !== location.origin && url.hostname !== 'www.lumas.de') return null;
+    for (var lang in LANG_PATHS) {
+      if (LANG_PATHS[lang] && url.pathname === LANG_PATHS[lang]) return lang;
+    }
+    return null;
+  }
+  function pageFor(lang) {
+    return (window.gtStatic ? window.gtStatic[lang] : LANG_PATHS[lang]) + location.search;
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href]');
+    if (!a || a.closest('.gt-bar') || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var lang = languageOf(a.getAttribute('href'));
+    if (!lang) return;
+    e.preventDefault();
+    location.href = pageFor(lang);
+  }, true);
+  // the desktop dropdown is a <select>: production navigates on change, so this runs first
+  document.addEventListener('change', function (e) {
+    var select = e.target.closest && e.target.closest('select.language-switcher');
+    var option = select && select.options[select.selectedIndex];
+    var lang = option && languageOf(option.getAttribute('data-url') || option.value);
+    if (!lang) return;
+    e.stopImmediatePropagation();
+    location.href = pageFor(lang);
+  }, true);
+
   // ---- boot ----------------------------------------------------------------------
   document.addEventListener('click', function (e) {
     var b = e.target.closest('.gt-btn[data-gt-act]');
