@@ -102,16 +102,16 @@
       svMost: 'Meist gesucht',
       searchPlaceholder: 'Suchen oder fragen',
       svSuggestions: 'Vorschläge',
-      // the eight tiles, in order (Oct 2026 brief): Meer (#1 search, best revenue per session), Schwarz-Weiß
-      // (strongest product revenue, €457k), New York (#2 search), David Bowie (€245k, most orders), Tiere
-      // (€303k, no place in the main nav yet), Wasser (€356k), Blumen (#2 theme by revenue), Berge (#3 search).
-      // Meer and Berge open the search sorted by revenue, which fixes Berge's weak default results.
+      // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
+      // New York, Berge.
+      // Meer, Strand and Berge open the search sorted by revenue, which fixes Berge's weak default results.
       // Crops as in the proposal; Tiere: Waldner, Merle (best seller on /themen/tiere/ after Gotsch and
-      // Colonna, who are already pictured in the Top 20 menu).
-      svTiles: [['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'],
-        ['/collections/staedte/new-york-bilder/', 'New York', 'new-york'], ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'],
-        ['/themen/tiere/', 'Tiere', 'tiere'], ['/natur/wasser/', 'Wasser', 'wasser'],
-        ['/collections/blumenkunst/', 'Blumen', 'blumen'], ['/search/?q=berge&sort=revenue_product_desc', 'Berge', 'berge']],
+      // Colonna, who are already pictured in the Top 20 menu); Strand: wuh93, the top result for "strand" by revenue;
+      // New York: jmr08 (Empire State through a window), top square of the work.
+      svTiles: [['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'], ['/themen/tiere/', 'Tiere', 'tiere'],
+        ['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/blumenkunst/', 'Blumen', 'blumen'],
+        ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'], ['/search/?q=strand&sort=revenue_product_desc', 'Strand', 'strand'],
+        ['/collections/staedte/new-york-bilder/', 'New York', 'new-york'], ['/search/?q=berge&sort=revenue_product_desc', 'Berge', 'berge']],
       navText: 'Beschreib deinen Raum oder Anlass, wir finden gemeinsam dein Werk',
       finderTitle: 'Finde deine Edition',
       finderSub: 'Beschreib deinen Raum, deinen Anlass oder deine Stimmung.',
@@ -152,10 +152,10 @@
       svMost: 'Most wanted',
       searchPlaceholder: 'Search or prompt',
       svSuggestions: 'Suggestions',
-      svTiles: [['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'],
-        ['/en/collections/new-york-pictures/', 'New York', 'new-york'], ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'],
-        ['/en/themes/animals/', 'Animals', 'tiere'], ['/en/search/?q=water', 'Water', 'wasser'],
-        ['/en/search/?q=flowers', 'Flowers', 'blumen'], ['/en/search/?q=mountains&sort=revenue_product_desc', 'Mountains', 'berge']],
+      svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
+        ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
+        ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'], ['/en/search/?q=beach&sort=revenue_product_desc', 'Beach', 'strand'],
+        ['/en/collections/new-york-pictures/', 'New York', 'new-york'], ['/en/search/?q=mountains&sort=revenue_product_desc', 'Mountains', 'berge']],
       navText: 'Describe your room or occasion and we find your work together',
       finderTitle: 'Find your edition',
       finderSub: 'Describe your room, your occasion or your mood.',
