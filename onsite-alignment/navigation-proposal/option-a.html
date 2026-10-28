@@ -496,6 +496,84 @@ site-header.mobile .nav-container .menu.consultation .contact-ways {
   color: var(--color-text-primary);
 }
 .sv-toggle button:focus-visible { outline: 0.1rem solid var(--color-text-primary); outline-offset: 0.1rem; }
+
+/* 4 Kompakt */
+.sv-compact { display: none; }
+html[data-search-variant="4"] .search-dropdown { display: none !important; }
+html[data-search-variant="4"] site-header form[role="search"]:focus-within .sv-compact {
+  position: absolute;
+  top: calc(100% + 0.8rem);
+  left: 0;
+  z-index: 40;
+  display: block;
+  width: max(100%, 36rem);
+  border: 0.1rem solid var(--color-border-subtle);
+  background: var(--color-surface-card);
+  box-shadow: 0 0.8rem 3.2rem rgba(28, 26, 24, 0.08);
+  font-family: Archivo, Arial, sans-serif;
+}
+.sv-compact a { color: var(--color-text-primary); text-decoration: none; }
+.sv-compact .sv-compact-advisor {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 0.8rem;
+  padding: 1.4rem 1.6rem;
+  background: var(--color-surface-raised);
+  transition: background-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sv-compact .sv-compact-advisor:hover { background: var(--color-surface-muted); }
+.sv-compact .sv-compact-advisor .sv-sparkles { width: 2rem; height: 2rem; }
+.sv-compact .sv-compact-advisor > span:nth-child(2) { display: grid; gap: 0.2rem; }
+.sv-compact .sv-compact-eyebrow {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sv-compact .sv-compact-title {
+  font-family: var(--font-display, "Utile Display", sans-serif);
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+.sv-compact .sv-go { transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.sv-compact a:hover .sv-go { transform: translateX(0.4rem); }
+.sv-compact-popular { padding: 0.4rem 0 0.8rem; }
+.sv-compact-popular p,
+html[data-search-variant="4"] .sv-compact .autocomplete-container::before {
+  display: block;
+  margin: 0;
+  padding: 0.8rem 2.4rem 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sv-compact-popular ul { margin: 0; padding: 0; list-style: none; }
+.sv-compact-popular a,
+html[data-search-variant="4"] .sv-compact .search-terms a {
+  display: block;
+  padding: 0.7rem 2.4rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  transition: background-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sv-compact-popular a:hover,
+html[data-search-variant="4"] .sv-compact .search-terms a:hover { background: var(--color-surface-raised); }
+html[data-search-variant="4"] .sv-compact .autocomplete-container {
+  position: static;
+  width: auto;
+  padding: 0.4rem 0 0.8rem;
+  border: 0;
+  box-shadow: none;
+}
+html[data-search-variant="4"] .sv-compact .autocomplete-container::before { content: "Vorschläge"; }
+html[data-search-variant="4"] .sv-compact .search-terms { display: block; margin: 0; padding: 0; }
+html[data-search-variant="4"] .sv-compact .search-terms dd { margin: 0; }
+html[data-search-variant="4"] form[role="search"]:has(input:not(:placeholder-shown)) .sv-compact-popular { display: none; }
 @media (max-width: 479px) { .sv-toggle { display: none; } }
 </style>
 </head>
@@ -619,7 +697,7 @@ document.body.addEventListener('click', e => {
 </button>
 <div class="autocomplete-container" hidden="">
 <div class="search-terms"></div>
-</div>
+</div><div class="sv-compact"><a class="sv-compact-advisor" href="https://www.lumas.de/art-advisor/"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg><span><span class="sv-compact-eyebrow">AI Advisor</span><span class="sv-compact-title">Nicht sicher, wonach du suchst?</span></span><span aria-hidden="true" class="sv-go">→</span></a><div class="sv-compact-popular"><p>Meist gesucht</p><ul><li><a href="https://www.lumas.de/collections/staedte/new-york-bilder/">New York</a></li><li><a href="https://www.lumas.de/natur/wasser/">Wasser</a></li><li><a href="https://www.lumas.de/david-bowie-bilder/">David Bowie</a></li><li><a href="https://www.lumas.de/search/?q=meer">Meer</a></li><li><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/">Schwarz-Weiß</a></li><li><a href="https://www.lumas.de/search/?q=berge">Berge</a></li><li><a href="https://www.lumas.de/natur/landschaft/">Landschaft</a></li><li><a href="https://www.lumas.de/collections/blumenkunst/">Blumen</a></li></ul></div></div>
 </form>
 <script type="application/json">
  {"translations":{"seeAll":"Alle _amount_ Ergebnisse anzeigen","termsHeader":"Top Ergebnisse","product.status.2":"Neu","product.status.4":"Bestseller","product.status.6":"Letzte Exemplare","product.status.8":"Ausverkauft","product.status.12":"Wert steigt bald"}}
@@ -2197,25 +2275,43 @@ document.body.addEventListener('click', e => {
 <button aria-pressed="true" data-v="1" type="button">Advisor-Karte</button>
 <button aria-pressed="false" data-v="2" type="button">Advisor-Feld</button>
 <button aria-pressed="false" data-v="3" type="button">Advisor-Kachel</button>
+<button aria-pressed="false" data-v="4" type="button">Kompakt</button>
 </div>
 <script>
 (() => {
   const dropdown = document.querySelector('.search-dropdown');
   const buttons = [...document.querySelectorAll('.sv-toggle button')];
+  const form = document.querySelector('site-header form[role=search]');
+  const autocomplete = form.querySelector('.autocomplete-container');
+  const compact = form.querySelector('.sv-compact');
   const show = (variant, open) => {
     dropdown.dataset.searchVariant = variant;
+    document.documentElement.dataset.searchVariant = variant;
+    (variant === '4' ? compact : compact.parentNode).insertBefore(autocomplete, variant === '4' ? null : compact);
     buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === variant)));
     try { localStorage.setItem('proposalSearchVariant', variant); } catch (e) {}
     if (open) {
       const input = [...document.querySelectorAll('site-header input[type=search]')].find(i => i.offsetParent);
       if (input) { input.blur(); input.focus(); input.click(); }
-      dropdown.hidden = false;
+      if (variant !== '4') setTimeout(() => { dropdown.hidden = false; }, 50);
     }
   };
   let initial = new URLSearchParams(location.search).get('search');
   try { initial = initial || localStorage.getItem('proposalSearchVariant'); } catch (e) {}
-  if (['1', '2', '3'].includes(initial)) show(initial, false);
-  buttons.forEach(b => b.addEventListener('click', () => show(b.dataset.v, true)));
+  show(['1', '2', '3', '4'].includes(initial) ? initial : '1', false);
+  // Production opens search as a modal (page inert, scroll locked). The toggle must stay usable, and the
+  // compact panel is not a modal, so variant 4 undoes both.
+  const toggle = document.querySelector('.sv-toggle');
+  new MutationObserver(() => {
+    if (toggle.inert) toggle.inert = false;
+    if (document.documentElement.dataset.searchVariant !== '4') return;
+    document.querySelectorAll('[inert]').forEach(element => { element.inert = false; });
+    if (document.documentElement.classList.contains('scroll-locked')) document.documentElement.classList.remove('scroll-locked');
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
+  buttons.forEach(b => {
+    b.addEventListener('mousedown', event => event.preventDefault());
+    b.addEventListener('click', () => show(b.dataset.v, true));
+  });
 })();
 </script>
 </body>
