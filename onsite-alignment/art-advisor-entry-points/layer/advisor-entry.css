@@ -30,11 +30,11 @@
    Slow (4.8 s), with long rests, so it reads as light catching, not as a notification. */
 @keyframes aa-twinkle { 0%, 55%, 100% { transform: scale(1); opacity: 1; } 65% { transform: scale(.15); opacity: .15; } 78% { transform: scale(1.35); opacity: 1; } 88% { transform: scale(1); } }
 @keyframes aa-glint { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.12) rotate(10deg); } 94% { transform: scale(.98) rotate(-2deg); } }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path { transform-box: fill-box; transform-origin: center; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path:nth-child(1) { animation: aa-glint 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path:nth-child(2), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path:nth-child(3) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: .6s; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path:nth-child(4), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path:nth-child(5) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: 2.2s; }
-@media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .aa-fieldbtn) svg path { animation: none !important; } }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path { transform-box: fill-box; transform-origin: center; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(1) { animation: aa-glint 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(2), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(3) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: .6s; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(4), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(5) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: 2.2s; }
+@media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path { animation: none !important; } }
 .aa-mark svg, .aa-row-icon svg, .aa-pill-icon svg { transform-origin: 50% 50%;
   transition: transform .32s var(--aa-ease, cubic-bezier(.2,.8,.2,1)); }
 :is(.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pill, .aa-nav-card):hover :is(.aa-mark, .aa-row-icon, .aa-pill-icon) svg {
@@ -72,70 +72,94 @@ html.aa-window-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .aa-window[open], .aa-window::backdrop { animation: none; } }
 
-/* 3.1 search overlay row ------------------------------------------------------- */
+/* the row (sparkle, text, call to action): the 3.8 listing bar is built from it ---------------- */
 .aa-row { display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; line-height: 1.45; }
 .aa-row--lead { padding: 14px 16px; margin: 0 0 12px; background: var(--aa-bone); }
 .aa-row--lead:hover, .aa-row--lead:focus-visible { background: var(--primitive-bone-300, #e2d8cc); color: var(--aa-ink); }
 .aa-row-icon { flex: 0 0 auto; display: flex; }
 .aa-row-text { flex: 1; min-width: 0; }
 .aa-row-text strong { font-weight: 700; }
-.aa-row-kbd { flex: 0 0 auto; font: 12px/1 archivo, medium-fallback, arial, sans-serif; color: var(--aa-ink-2);
-  border: 1px solid var(--aa-line); padding: 4px 6px; background: rgba(255, 255, 255, .6); }
-.aa-row--quiet { padding: 12px 0 4px; color: var(--aa-ink-2); gap: 8px; }
-.aa-row--quiet .aa-row-icon svg { width: 15px; height: 15px; }
-.aa-row--quiet:hover { color: var(--aa-ink); }
-/* empty field: the start bar sits above "Most wanted", full width */
 .aa-row-cta { flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
   white-space: nowrap; padding-bottom: 2px; border-bottom: 1px solid currentColor; }
 .aa-row--start .aa-row-text strong { margin-right: 4px; }
-/* production's term list is a <dl> of <dd>; the row spans it */
-.autocomplete-container .aa-row--lead { margin: 8px 0 8px; }
 
-/* 3.1 prominent dropdown variants (presenter bar: Search dropdown) ----------------- */
-.aa-ddpanel, .aa-ddfield { --aa-ink: var(--primitive-charcoal-900, #1c1a18); --aa-ink-2: var(--primitive-charcoal-700, #5a5752);
-  --aa-bone: var(--primitive-bone-200, #eae2d8); --aa-ease: cubic-bezier(.2, .8, .2, 1);
-  font-family: archivo, medium-fallback, arial, sans-serif; color: var(--aa-ink); box-sizing: border-box; }
-/* panel: the first thing in the dropdown, Bone, a headline, three starter prompts, one button */
-.aa-ddpanel { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 32px; align-items: center;
-  margin: 0 0 20px; padding: 24px 28px; background: var(--aa-bone); }
-.aa-ddpanel .aa-mark { margin-bottom: 8px; }
-.aa-ddpanel-title { margin: 0; font: 400 26px/1.15 utile-display, utile-display-fallback, arial, sans-serif; letter-spacing: -.01em; }
-.aa-ddpanel-text { margin: 6px 0 0; font-size: 14px; line-height: 1.45; color: var(--aa-ink-2); max-width: 60ch; }
-.aa-ddpanel-prompts { grid-column: 1; display: flex; flex-wrap: wrap; gap: 8px; }
-.aa-ddpanel > .aa-btn { grid-column: 2; grid-row: 1 / span 2; align-self: center; white-space: nowrap; }
-.aa-ddpanel--typed { padding: 18px 24px; margin: 8px 0 12px; }
-.aa-ddpanel--typed .aa-ddpanel-title { font-size: 22px; }
-.aa-ddpanel--typed > .aa-btn { grid-row: 1; }
-/* column: beside "Most wanted" instead of above it */
-@media (min-width: 992px) {
-  .suggestion-container:has(> .aa-ddcol) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 30%); column-gap: 40px; align-items: start; }
-  .suggestion-container:has(> .aa-ddcol) > .close { grid-column: 1 / -1; grid-row: 1; }
-  .suggestion-container:has(> .aa-ddcol) > .suggestions { grid-column: 1; grid-row: 2; }
-  .suggestion-container > .aa-ddcol { grid-column: 2; grid-row: 2; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; margin: 0; padding: 28px; }
-  .aa-ddcol .aa-ddpanel-title { font-size: 28px; }
-  .aa-ddcol .aa-ddpanel-prompts { flex-direction: column; align-items: flex-start; }
+/* 3.1 search dropdown: two forms from the navigation proposal, Option C (Advisor card, Compact; presenter bar: Search).
+   Taken from prototype/lumas-nav-proposal/_scripts/apply_proposal.py (SEARCH_VARIANTS_UI); production tokens. */
+.search-dropdown .suggestions:has(> .sv-tiles) {
+  --sv-tile: clamp(8.5rem, calc(9vw - 2.5rem), 12rem);
+  display: flex; flex-direction: row; align-items: stretch; gap: clamp(3.2rem, calc(1.9vw + 1.25rem), 4rem);
 }
-/* field: the AI button sits in the search field; typed, "Ask the AI Advisor" is the first line */
-form.aa-has-fieldbtn { position: relative; }
-form.aa-has-fieldbtn input { padding-right: 112px !important; }
-.aa-fieldbtn.aa-fieldbtn { position: absolute !important; right: 42px; top: 50%; transform: translateY(-50%); z-index: 2;
-  display: inline-flex !important; align-items: center; gap: 6px; width: auto !important; min-width: 0; height: 26px; margin: 0; padding: 0 9px !important;
-  align-self: center; border: 1px solid rgba(28, 26, 24, .16); border-radius: 0; background: var(--primitive-bone-200, #eae2d8);
-  color: var(--primitive-charcoal-900, #1c1a18); cursor: pointer; font: 700 11px/1 archivo, medium-fallback, arial, sans-serif; letter-spacing: .14em; }
-.aa-fieldbtn span { display: inline !important; position: static !important; width: auto !important; height: auto !important; clip: auto !important; overflow: visible !important; }
-.aa-fieldbtn svg { width: 15px !important; height: 15px !important; flex: 0 0 auto; transition: transform .32s cubic-bezier(.2, .8, .2, 1); }
-.aa-fieldbtn:hover { background: var(--primitive-bone-300, #e2d8cc); }
-.aa-fieldbtn:hover svg { transform: rotate(12deg) scale(1.06); }
-.aa-ddfield.aa-row { padding: 12px 14px; margin: 0 0 8px; background: var(--aa-bone); font-size: 14px; }
-.aa-ddfield.aa-row:hover { background: var(--primitive-bone-300, #e2d8cc); }
-.aa-ddfield--lead { font-weight: 700; }
-.aa-ddfield--prompts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 18px; }
-.aa-ddfield--prompts .aa-mark { margin: 0; }
-@media (max-width: 759px) {
-  .aa-ddpanel { grid-template-columns: 1fr; padding: 20px 16px; }
-  .aa-ddpanel > .aa-btn { grid-column: 1; grid-row: auto; justify-self: start; }
-  .aa-ddpanel-title { font-size: 22px; }
+.search-dropdown .suggestions dl.sv-tiles {
+  display: grid; flex: none; grid-template-columns: repeat(auto-fill, var(--sv-tile)); grid-template-rows: none; grid-auto-rows: auto;
+  gap: 1rem; width: calc(8 * var(--sv-tile) + 7rem); margin: 0;
 }
+.search-dropdown .suggestions dl.sv-tiles dt, .search-dropdown .suggestions dl.sv-advisor dt { grid-column: 1 / -1; }
+.search-dropdown .suggestions dl.sv-tiles dd a > span:last-child { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25; }
+.search-dropdown .sv-sparkles, .sv-compact .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem; }
+.search-dropdown .suggestions dl.sv-advisor {
+  display: grid; flex: 1 1 20rem; max-width: 34rem; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; margin: 0;
+}
+.search-dropdown .suggestions dl.sv-advisor dt { display: flex; align-items: center; gap: .6rem; }
+.search-dropdown .suggestions dl.sv-advisor dd { display: flex; flex-direction: column; gap: 1.2rem; margin: 0; }
+.search-dropdown .suggestions .sv-advisor-title {
+  display: block; font-family: var(--font-display, "Utile Display", sans-serif); font-size: 2rem; line-height: 1.2; white-space: normal; text-wrap: balance;
+}
+.sv-go { display: inline-block; transition: transform 220ms cubic-bezier(.2, .8, .2, 1); }
+.search-dropdown .suggestions a:hover .sv-go, .sv-compact a:hover .sv-go { transform: translateX(.4rem); }
+.search-dropdown .suggestions dl.sv-advisor-card { grid-template-rows: auto auto; align-content: start; }
+/* the card is as tall as the tile pictures beside it: question at the top, call to action at the foot */
+.search-dropdown .suggestions .sv-advisor-card a {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 1.2rem; box-sizing: border-box; height: var(--sv-tile);
+  padding: 1.6rem 2rem; background: var(--color-surface-subtle); color: var(--color-text-primary); text-decoration: none;
+  transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
+}
+.search-dropdown .suggestions .sv-advisor-card a:hover { background: var(--color-surface-muted); }
+.search-dropdown .suggestions .sv-advisor-card .sv-advisor-title { font-size: 1.9rem; }
+.search-dropdown .suggestions .sv-advisor-cta {
+  display: flex; align-items: center; gap: .8rem; font-size: 1.1rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+}
+/* production makes the last span of every dropdown link a block; the arrow stays on the line */
+.search-dropdown .suggestions .sv-advisor-cta .sv-go { display: inline-block; font-size: 1.4rem; letter-spacing: 0; }
+/* below the desktop header the row wraps into four columns and the advisor goes underneath */
+@media (max-width: 1024px) {
+  .search-dropdown .suggestions:has(> .sv-tiles) { flex-direction: column; gap: 2.4rem; }
+  .search-dropdown .suggestions dl.sv-tiles { width: auto; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .search-dropdown .suggestions dl.sv-advisor { max-width: none; flex: none; }
+  .search-dropdown .suggestions .sv-advisor-card a { height: auto; }
+}
+/* compact: no dropdown, a panel under the search field */
+.sv-compact { display: none; }
+html[data-search-variant="compact"] .search-dropdown { display: none !important; }
+html[data-search-variant="compact"] site-header form[role="search"] { position: relative; }
+html[data-search-variant="compact"] site-header form[role="search"]:focus-within .sv-compact {
+  position: absolute; top: calc(100% + .8rem); left: 0; right: 0; z-index: 40; display: block; width: auto;   /* the search bar's own width */
+  border: .1rem solid var(--color-border-subtle); background: var(--color-surface-card); box-shadow: 0 .8rem 3.2rem rgba(28, 26, 24, .08);
+  font-family: archivo, medium-fallback, arial, sans-serif;
+}
+.sv-compact a { color: var(--color-text-primary); text-decoration: none; }
+.sv-compact .sv-compact-advisor {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.2rem; margin: .8rem; padding: 1.4rem 1.6rem;
+  background: var(--color-surface-raised); transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
+}
+.sv-compact .sv-compact-advisor:hover { background: var(--color-surface-muted); }
+.sv-compact .sv-compact-advisor .sv-sparkles { width: 2rem; height: 2rem; }
+.sv-compact .sv-compact-advisor > span:nth-child(2) { display: grid; gap: .2rem; }
+.sv-compact .sv-compact-eyebrow { color: var(--color-text-secondary); font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.sv-compact .sv-compact-title { font-family: var(--font-display, "Utile Display", sans-serif); font-size: 1.8rem; line-height: 1.2; }
+.sv-compact-popular { padding: .4rem 0 .8rem; }
+.sv-compact-popular p, html[data-search-variant="compact"] .sv-compact .autocomplete-container::before {
+  display: block; margin: 0; padding: .8rem 2.4rem .4rem; color: var(--color-text-secondary); font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+html[data-search-variant="compact"] .sv-compact .autocomplete-container::before { content: attr(data-label); }
+.sv-compact-popular ul { margin: 0; padding: 0; list-style: none; }
+.sv-compact-popular a, html[data-search-variant="compact"] .sv-compact .search-terms a {
+  display: block; padding: .7rem 2.4rem; font-size: 1.4rem; line-height: 1.5; transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
+}
+.sv-compact-popular a:hover, html[data-search-variant="compact"] .sv-compact .search-terms a:hover { background: var(--color-surface-raised); }
+html[data-search-variant="compact"] .sv-compact .autocomplete-container { position: static; width: auto; padding: .4rem 0 .8rem; border: 0; box-shadow: none; }
+html[data-search-variant="compact"] .sv-compact .search-terms { display: block; margin: 0; padding: 0; }
+html[data-search-variant="compact"] .sv-compact .search-terms dd { margin: 0; }
+html[data-search-variant="compact"] form[role="search"]:has(input:not(:placeholder-shown)) .sv-compact-popular { display: none; }
 
 /* 3.4 Artfinder menu: production's desktop grid is five fixed columns; with the Art Advisor
    card it needs six, or the last card (Art Cloud) wraps onto a row of its own */
@@ -203,9 +227,6 @@ form.aa-has-fieldbtn input { padding-right: 112px !important; }
 .aa-finder-switch { margin: 0; font-size: 13px; color: var(--aa-ink-2); }
 .aa-finder-switch--classic { padding: 12px 0 8px; text-align: center; font: 13px archivo, medium-fallback, arial, sans-serif; }
 
-/* 3.6 product page ----------------------------------------------------------- */
-  padding: 12px 14px; background: var(--aa-bone); font-size: 14px; }
-
 /* 3.7 return pill after a handoff ---------------------------------------------- */
 .aa-pill { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 9000;
   display: flex; align-items: stretch; background: var(--aa-ink); color: #fff; box-shadow: 0 8px 24px rgba(28, 26, 24, .22);
@@ -253,7 +274,6 @@ form.aa-has-fieldbtn input { padding-right: 112px !important; }
   .aa-finder { padding: 32px 16px 28px; }
   .aa-finder-title { font-size: 26px; }
   .aa-finder-form { flex-direction: column; }
-  .aa-row-kbd { display: none; }
   /* phones: icon + text on the first row, the call to action under the text */
   .aa-row--start { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: start; }
   .aa-row--start .aa-row-cta { grid-column: 2; justify-self: start; }
@@ -289,6 +309,15 @@ html.aa-has-bar { --aa-bar-h: 56px; }
 .aa-panel-toggle[aria-expanded="true"] { border-color: var(--bar-text); }
 @media (hover: hover) { .aa-panel a:not([aria-current]):hover, .aa-panel button:hover { border-color: var(--bar-muted); } }
 .aa-panel a:focus-visible, .aa-panel button:focus-visible, .aa-bar-chip input:focus-visible + span { outline: 2px solid var(--bar-text); outline-offset: 2px; }
+.aa-bar-search { display: flex; align-items: center; gap: 4px; }
+/* room for the walk-through: the bar's own title goes while the Search group is there, buttons a little tighter */
+@media (max-width: 1700px) {
+  .aa-bar-main:has(.aa-bar-search) > .aa-bar-title { display: none; }
+  .aa-bar-main:has(.aa-bar-search) a, .aa-bar-main:has(.aa-bar-search) button { padding: 0 10px; }
+  .aa-bar-main:has(.aa-bar-search) { gap: 12px; }
+}
+.aa-bar-search .aa-bar-title { margin-right: 8px; }
+.aa-panel .aa-bar-search button[aria-pressed="true"] { background: var(--bar-text); color: var(--bar-bg); border-color: var(--bar-text); }
 .aa-bar-lang { display: flex; }
 .aa-bar-lang a + a { border-left: 0; }
 
@@ -325,6 +354,7 @@ html.aa-has-bar #chat-widget-container { bottom: 64px !important; }
 @media (max-width: 1099px) { .aa-panel-body { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 899px) {
   .aa-bar-title, .aa-bar-pages span, .aa-panel-toggle span { display: none; }
+  .aa-bar-search { display: none; }   /* phones: the same choice sits in the Entry points settings */
   html.aa-has-bar { --aa-bar-h: 60px; }
   .aa-bar-main { gap: 6px; }
   .aa-bar-main a, .aa-bar-main button { padding: 0; min-width: 36px; min-height: 44px; justify-content: center; }

@@ -27,7 +27,7 @@
   const PAGE = window.aaStatic?.page ? new URL(window.aaStatic.page, location.origin) : location;
   const STORE = 'aa-entry-points';
   const ENTRIES = [
-    ['overlay', '3.1', 'Search overlay row'],
+    ['overlay', '3.1', 'Search dropdown'],
     ['tile', '3.2', 'Results tile (many hits)'],
     ['banner', '3.3', 'Results banner (question / 0–3 hits)'],
     ['nav', '3.4', 'Artfinder menu card'],
@@ -47,17 +47,17 @@
     set(key, value) { try { sessionStorage.setItem(key, value); } catch (e) {} },
   };
   const on = Object.assign(Object.fromEntries(ENTRIES.map(([id]) => [id, true])), ls.get(STORE, {}));
-  // what the empty search dropdown offers: a bar above the tiles, or a tile among "Most wanted"
-  // how the search dropdown offers it (3.1), from quiet to most visible:
-  //   bar     a row above "Most wanted" (empty field); a row or a link once typing, by query class
-  //   tile    the first "Most wanted" tile (empty field); as bar once typing
-  //   panel   a Bone panel at the top of the dropdown with starter prompts, for every query class
-  //   column  a column of its own beside "Most wanted"; the panel once typing
-  //   field   an AI button inside the search field (visible before the dropdown opens), plus an
-  //           "Ask the AI Advisor" first line for every query class
-  const DD_VARIANT = ls.get('aa-dd-variant', ls.get('aa-empty-variant', 'bar'));
-  const EMPTY_VARIANT = DD_VARIANT === 'tile' ? 'tile' : 'bar';
-  const DD_PROMINENT = ['panel', 'column', 'field'].includes(DD_VARIANT);
+  // how the search dropdown offers it (3.1): the four forms of the navigation proposal, Option C
+  // (onsite-alignment/navigation-proposal/option-c.html). In card, one row of the eight most
+  // searched terms replaces production's three lists ("Most wanted", "Popular pages", "Popular categories"):
+  //   card     a Bone AI Advisor card beside the row
+  //   compact  no dropdown: a panel under the search field with the advisor on top, then the most searched
+  //            terms as text, replaced by production's suggestions as soon as someone types
+  // Once typing, the rows by query class apply in both (class C on top, class B a quiet link).
+  // [value, label in the settings, label on the presenter bar]
+  const DD_VARIANTS = [['card', 'Advisor card', 'Card'], ['compact', 'Compact', 'Compact']];
+  let ddVariant = DD_VARIANTS.some(([v]) => v === ls.get('aa-dd-variant')) ? ls.get('aa-dd-variant') : 'card';
+  let applyDropdown = () => {};   // set by searchDropdown(); switches the form without a reload
   // how the advisor opens: a window over the shop (default) or the full page
   const OPEN_MODE = ls.get('aa-open-mode', 'window');
 
@@ -73,8 +73,6 @@
   const quoted = q => (LOCALE === 'en' ? '“' + esc(q) + '”' : '„' + esc(q) + '“');
   const COPY = {
     de: {
-      rowLead: q => `<strong>Frag den AI Advisor</strong> ${q}. Er stellt dir 2–3 Fragen und schlägt passende Editionen vor.`,
-      rowQuiet: q => `${q} mit dem AI Advisor eingrenzen →`,
       emptyBar: '<strong>Nicht sicher, wo du anfangen sollst?</strong> Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der AI Advisor schlägt passende Editionen vor.',
       emptyCta: 'AI Advisor fragen →',
       bannerTitle: 'Das klingt nach einer Frage für den AI Advisor',
@@ -99,24 +97,32 @@
       wishEmptyTitle: 'Noch nichts gemerkt?',
       wishEmptyText: 'Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der AI\u00a0Advisor schlägt Editionen vor, die\u00a0passen.',
       wishCta: 'Optionen ansehen',
+      svHeading: 'Nicht sicher, wonach du\u00a0suchst?',
+      svCta: 'Advisor fragen',
+      svMost: 'Meist gesucht',
+      searchPlaceholder: 'Suchen oder fragen',
+      svSuggestions: 'Vorschläge',
+      // the eight tiles, in order (Oct 2026 brief): Meer (#1 search, best revenue per session), Schwarz-Weiß
+      // (strongest product revenue, €457k), New York (#2 search), David Bowie (€245k, most orders), Tiere
+      // (€303k, no place in the main nav yet), Wasser (€356k), Blumen (#2 theme by revenue), Berge (#3 search).
+      // Meer and Berge open the search sorted by revenue, which fixes Berge's weak default results.
+      // Crops as in the proposal; Tiere: Waldner, Merle (best seller on /themen/tiere/ after Gotsch and
+      // Colonna, who are already pictured in the Top 20 menu).
+      svTiles: [['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'],
+        ['/collections/staedte/new-york-bilder/', 'New York', 'new-york'], ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'],
+        ['/themen/tiere/', 'Tiere', 'tiere'], ['/natur/wasser/', 'Wasser', 'wasser'],
+        ['/collections/blumenkunst/', 'Blumen', 'blumen'], ['/search/?q=berge&sort=revenue_product_desc', 'Berge', 'berge']],
       navText: 'Beschreib deinen Raum oder Anlass, wir finden gemeinsam dein Werk',
       finderTitle: 'Finde deine Edition',
       finderSub: 'Beschreib deinen Raum, deinen Anlass oder deine Stimmung.',
       finderPlaceholder: 'Ein ruhiges Bild über dem Sofa, eher Naturtöne …',
       finderGo: 'Fragen',
       finderChips: ['Unter € 1.000', 'Landschaft', 'Ruhig', 'Als Geschenk'],
-      ddTitle: 'Beschreib einfach, was du\u00a0suchst',
-      ddText: 'Erzähl dem AI\u00a0Advisor von deinem Raum, einer Stimmung oder einem Anlass. Er stellt dir zwei, drei Fragen und schlägt passende Editionen\u00a0vor.',
-      ddAsk: q => `Frag den AI\u00a0Advisor nach ${q}`,
-      ddPrompts: ['Etwas Ruhiges über dem Sofa', 'Ein Geschenk für jemanden, der die Natur liebt', 'Farbe für einen weißen Flur'],
-      fieldButton: 'KI',
       toClassic: 'Lieber klicken? Zum klassischen Finder',
       toAdvisor: 'Lieber beschreiben? Zum AI Advisor Finder',
       pill: n => `Zurück zur Beratung${n ? ` <span>· ${n} Vorschläge</span>` : ''}`,
     },
     en: {
-      rowLead: q => `<strong>Ask the AI Advisor</strong> ${q}. It asks you 2–3 questions and suggests editions that fit.`,
-      rowQuiet: q => `Narrow down ${q} with the AI Advisor →`,
       emptyBar: '<strong>Not sure where to start?</strong> Describe your room, a mood or an occasion, and the AI Advisor suggests editions that fit.',
       emptyCta: 'Ask the AI Advisor →',
       bannerTitle: 'That sounds like a question for the AI Advisor',
@@ -141,17 +147,21 @@
       wishEmptyTitle: 'Nothing saved yet?',
       wishEmptyText: 'Describe your room, a mood or an occasion, and the AI\u00a0Advisor suggests editions that\u00a0fit.',
       wishCta: 'View options',
+      svHeading: 'Not sure what you are looking\u00a0for?',
+      svCta: 'Ask the advisor',
+      svMost: 'Most wanted',
+      searchPlaceholder: 'Search or prompt',
+      svSuggestions: 'Suggestions',
+      svTiles: [['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'],
+        ['/en/collections/new-york-pictures/', 'New York', 'new-york'], ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'],
+        ['/en/themes/animals/', 'Animals', 'tiere'], ['/en/search/?q=water', 'Water', 'wasser'],
+        ['/en/search/?q=flowers', 'Flowers', 'blumen'], ['/en/search/?q=mountains&sort=revenue_product_desc', 'Mountains', 'berge']],
       navText: 'Describe your room or occasion and we find your work together',
       finderTitle: 'Find your edition',
       finderSub: 'Describe your room, your occasion or your mood.',
       finderPlaceholder: 'A calm picture above the sofa, natural tones …',
       finderGo: 'Ask',
       finderChips: ['Under € 1,000', 'Landscape', 'Calm', 'As a gift'],
-      ddTitle: 'Just describe what you are looking\u00a0for',
-      ddText: 'Tell the AI\u00a0Advisor about your room, a mood or an occasion. It asks two or three questions and suggests editions that\u00a0fit.',
-      ddAsk: q => `Ask the AI\u00a0Advisor about ${q}`,
-      ddPrompts: ['A calm piece above the sofa', 'A gift for someone who loves nature', 'Colour for a white hallway'],
-      fieldButton: 'AI',
       toClassic: 'Prefer clicking? Go to the classic finder',
       toAdvisor: 'Prefer describing? Go to the AI Advisor finder',
       pill: n => `Back to your consultation${n ? ` <span>· ${n} suggestions</span>` : ''}`,
@@ -307,58 +317,69 @@
     renderPanelClass();
   }
 
-  // ---- 3.1 search overlay row ----------------------------------------------------
-  function overlayRow(q, cls, context) {
-    if (DD_PROMINENT) return prominentRow(q, cls);
-    if (cls === 'C') {
-      return el(`<a class="aa-row aa-row--lead" href="${esc(advisorUrl(q, 'overlay'))}" data-aa-placement="overlay">
-        <span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>
-        <span class="aa-row-text">${COPY.rowLead(quoted(q))}</span>
-        <kbd class="aa-row-kbd">Enter ↵</kbd></a>`);
-    }
-    if (cls === 'B') {
-      return el(`<a class="aa-row aa-row--quiet" href="${esc(advisorUrl(q, 'overlay'))}" data-aa-placement="overlay"><span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>${COPY.rowQuiet(quoted(q))}</a>`);
-    }
-    if (cls === 'empty' && EMPTY_VARIANT === 'bar') {
-      return el(`<a class="aa-row aa-row--lead aa-row--start" href="${esc(advisorUrl('', 'overlay-empty'))}" data-aa-placement="overlay-empty">
-        <span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>
-        <span class="aa-row-text">${COPY.emptyBar}</span>
-        <span class="aa-row-cta">${COPY.emptyCta}</span></a>`);
-    }
-    return null;
-  }
-  // panel / column / field variants: offered for every query class, the typed words carried along
-  function prominentRow(q, cls) {
-    const prompts = COPY.ddPrompts.map(p => `<button type="button" class="aa-chip" data-aa-placement="overlay-prompt" data-aa-q="${esc(p)}">${esc(p)}</button>`).join('');
-    if (DD_VARIANT === 'field') {
-      if (cls === 'empty') return el(`<div class="aa-ddfield aa-ddfield--prompts">${mark()}<div class="aa-ddpanel-prompts">${prompts}</div></div>`);
-      return el(`<a class="aa-row aa-ddfield ${cls === 'C' ? 'aa-ddfield--lead' : ''}" href="${esc(advisorUrl(q, 'overlay'))}" data-aa-placement="overlay">
-        <span class="aa-row-icon" aria-hidden="true">${ICON_SPARKLE}</span>
-        <span class="aa-row-text">${COPY.ddAsk(quoted(q))}</span>${cls === 'C' ? '<kbd class="aa-row-kbd">Enter ↵</kbd>' : ''}</a>`);
-    }
-    const typed = cls !== 'empty';
-    return el(`<div class="aa-ddpanel ${DD_VARIANT === 'column' && !typed ? 'aa-ddcol' : ''} ${typed ? 'aa-ddpanel--typed' : ''}">
-      <div class="aa-ddpanel-copy">${mark()}
-        <p class="aa-ddpanel-title">${typed ? COPY.ddAsk(quoted(q)) : COPY.ddTitle}</p>
-        ${typed ? '' : `<p class="aa-ddpanel-text">${COPY.ddText}</p>`}</div>
-      ${typed ? '' : `<div class="aa-ddpanel-prompts">${prompts}</div>`}
-      <a class="aa-btn" href="${esc(advisorUrl(typed ? q : '', typed ? 'overlay-panel' : 'overlay-empty-panel'))}" data-aa-placement="${typed ? 'overlay-panel' : 'overlay-empty-panel'}">${COPY.bannerButton}</a>
+  // ---- 3.1 search dropdown ------------------------------------------------------------
+  // the empty dropdown in the chosen Option C form (see DD_VARIANTS); both forms already carry the
+  // AI Advisor, so nothing more is added while someone types
+  function searchDropdown() {
+    if (!on.overlay) return;
+    // the field says it takes a question as well as a search
+    document.querySelectorAll('search-focus input[type=search], nav-search input[type=search]').forEach(input => { input.placeholder = COPY.searchPlaceholder; });
+    const dropdown = document.querySelector('.search-dropdown');
+    const suggestions = dropdown?.querySelector('.suggestions');
+    if (!suggestions || suggestions.querySelector('.sv-tiles')) return;
+    const sparkle = ICON_SPARKLE.replace('<svg ', '<svg class="sv-sparkles" ');
+    const tile = ([href, label, image]) => `<dd><a href="${href}"><picture>
+      <source srcset="${LAYER}search-tiles/${image}-220x220.webp" type="image/webp">
+      <img alt="${esc(label)}" class="max-w-full" loading="lazy" src="${LAYER}search-tiles/${image}-220x220.jpg"></picture><span>${esc(label)}</span></a></dd>`;
+    const tiles = COPY.svTiles.map(tile).join('');
+    const forms = {
+      card: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>
+        <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd><a href="#" data-aa-placement="overlay-empty-card">
+          <span class="sv-advisor-title">${COPY.svHeading}</span><span class="sv-advisor-cta">${COPY.svCta} <span aria-hidden="true" class="sv-go">→</span></span></a></dd></dl>`,
+      compact: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>`,
+    };
+    // compact: production's typed suggestions move into a panel under the field (and back out for the others)
+    const form = document.querySelector('search-focus form[role=search]');
+    const autocomplete = form?.querySelector('.autocomplete-container');
+    const panel = el(`<div class="sv-compact">
+      <a class="sv-compact-advisor" href="#" data-aa-placement="overlay-empty-compact">${sparkle}
+        <span><span class="sv-compact-eyebrow">AI Advisor</span><span class="sv-compact-title">${COPY.svHeading}</span></span>
+        <span aria-hidden="true" class="sv-go">→</span></a>
+      <div class="sv-compact-popular"><p>${COPY.svMost}</p><ul>${COPY.svTiles.map(([href, label]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}</ul></div>
     </div>`);
-  }
-  // the AI button inside the search field itself (field variant)
-  function searchFieldButton() {
-    if (!on.overlay || DD_VARIANT !== 'field') return;
-    document.querySelectorAll('search-focus form, nav-search form').forEach(form => {
-      if (form.querySelector('.aa-fieldbtn')) return;
-      const input = form.querySelector('input');
-      const button = el(`<button type="button" class="aa-fieldbtn" aria-label="${COPY.sideTab}" title="${COPY.sideTab}">${ICON_SPARKLE}<span>${COPY.fieldButton}</span></button>`);
-      button.addEventListener('click', () => goToAdvisor(input?.value.trim() || '', 'search-field'));
-      form.classList.add('aa-has-fieldbtn');
-      (form.querySelector('button[type=submit]') || form.lastElementChild).before(button);
-    });
+    if (autocomplete) {
+      autocomplete.dataset.label = COPY.svSuggestions;
+      autocomplete.after(panel);
+    }
+    applyDropdown = (variant, open) => {
+      ddVariant = variant;
+      ls.set('aa-dd-variant', variant);
+      suggestions.querySelectorAll(':scope > dl').forEach(dl => dl.remove());
+      suggestions.insertAdjacentHTML('beforeend', forms[variant]);
+      dropdown.dataset.searchVariant = variant;
+      document.documentElement.dataset.searchVariant = variant;
+      if (autocomplete) (variant === 'compact' ? panel.append(autocomplete) : panel.before(autocomplete));
+      document.querySelectorAll('[data-aa-dd]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.aaDd === variant)));
+      document.querySelectorAll('input[name=aa-dd]').forEach(r => { r.checked = r.value === variant; });
+      if (!open) return;
+      // show it straight away, as the proposal's toggle does
+      const input = [...document.querySelectorAll('search-focus input[type=search]')].find(i => i.offsetParent);
+      if (input) { input.blur(); input.focus(); input.click(); }
+      // after production's own close, which follows a blur by 250 ms
+      if (variant !== 'compact') setTimeout(() => { dropdown.hidden = false; }, 320);
+    };
+    applyDropdown(ddVariant, false);
+    // production opens search as a modal (page inert, scroll locked); the compact panel is not one
+    // (only touch what is set: removing an absent class still rewrites the attribute and would
+    // re-trigger this observer forever)
+    new MutationObserver(() => {
+      if (ddVariant !== 'compact') return;
+      document.querySelectorAll('[inert]').forEach(node => { node.inert = false; });
+      if (document.documentElement.classList.contains('scroll-locked')) document.documentElement.classList.remove('scroll-locked');
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
   }
   // production's dropdown closes 250 ms after the field blurs; keep focus while a row is pressed
-  document.addEventListener('pointerdown', e => { if (e.target.closest('.aa-row, .aa-ddpanel, .aa-ddfield, .aa-fieldbtn')) e.preventDefault(); }, true);
+  document.addEventListener('pointerdown', e => { if (e.target.closest('.sv-advisor, .sv-compact')) e.preventDefault(); }, true);
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-aa-placement]');
     if (!a) return;
@@ -368,95 +389,35 @@
     goToAdvisor(a.dataset.aaPlacement.startsWith('overlay-empty') ? '' : (a.dataset.aaQ ?? q), a.dataset.aaPlacement, filters);
   }, true);
 
-  function setupOverlay(input, containers) {
+  // classifies what is typed (presenter readout). Nothing is added to the dropdown while typing, since both
+  // forms already carry the AI Advisor; but Enter on a conversational query (class C) opens the advisor
+  // with it instead of the results page. The published static copy also routes the search itself.
+  function setupOverlay(input) {
     if (!on.overlay || !input) return;
     let timer = null;
-    let state = { q: null, cls: null };
-    const place = () => {
-      document.querySelectorAll('.aa-row, .aa-ddpanel, .aa-ddfield').forEach(n => { if (containers.owns(n)) n.remove(); });
-      const row = state.cls ? overlayRow(state.q, state.cls) : null;
-      if (!row) return;
-      row.dataset.aaQuery = state.q;
-      const target = containers.target(state.cls);
-      if (!target) return;
-      if (row.classList.contains('aa-ddcol')) target.append(row);
-      else if (DD_PROMINENT || state.cls === 'C' || state.cls === 'empty') target.prepend(row);
-      else target.append(row);
-      trackView('overlay', state.cls);
-    };
     const update = async () => {
       const q = input.value.trim();
-      const terms = await suggest(q);
-      const result = classify(q, terms);
-      if (q !== input.value.trim()) return;
-      state = { q, cls: result.cls };
-      setClassReadout(q, result);
-      // run after production has swapped its own dropdown content
-      setTimeout(place, 60);
+      const result = classify(q, await suggest(q));
+      if (q === input.value.trim()) setClassReadout(q, result);
     };
     const schedule = () => { clearTimeout(timer); timer = setTimeout(update, 340); };
     input.addEventListener('input', schedule);
-    input.addEventListener('keyup', schedule);
     input.addEventListener('focus', schedule);
-    // production toggles hidden on its containers; re-place the row when it does
-    new MutationObserver(() => { if (state.cls) requestAnimationFrame(place); })
-      .observe(containers.root, { attributes: true, attributeFilter: ['hidden'], subtree: true, childList: false });
-    // Enter on a class C query follows the row (concept 3.1); otherwise production's own behaviour
     input.form?.addEventListener('submit', e => {
       const q = input.value.trim();
-      const toAdvisor = on.overlay && q && classify(q, suggestCache.get(q) || []).cls === 'C';
+      const toAdvisor = q && classify(q, suggestCache.get(q) || []).cls === 'C';
       if (!toAdvisor && !(window.aaStatic && q)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
-      // the published static copy cannot run production's search; aaStatic routes it
-      if (toAdvisor) goToAdvisor(q, 'overlay-enter');
+      if (toAdvisor) goToAdvisor(q, 'search-enter');
       else aaStatic.go(PREFIX + '/search/?q=' + encodeURIComponent(q));
     }, true);
   }
-  // the tile variant: the Art Advisor as the first "Most wanted" tile, built from production's own
-  // tile markup; the last tile is hidden (not removed) so the grid keeps its eight places
-  function searchTile() {
-    if (!on.overlay || EMPTY_VARIANT !== 'tile') return;
-    document.querySelectorAll('.search-dropdown .suggestions dl:first-of-type, nav-search .search-default dl:first-of-type').forEach(dl => {
-      if (dl.querySelector('.aa-search-tile')) return;
-      const tiles = [...dl.querySelectorAll(':scope > dd')];
-      if (!tiles.length) return;
-      const dd = el(`<dd class="aa-search-tile"><a href="${esc(advisorUrl('', 'overlay-tile'))}" data-aa-placement="overlay-tile" data-aa-q="">
-        <picture><img alt="AI Advisor" class="max-w-full" src="${LAYER}search-tile-art-advisor.svg"></picture>
-        <span>AI Advisor</span></a></dd>`);
-      tiles[tiles.length - 1].classList.add('aa-hidden');
-      tiles[0].before(dd);
-    });
-  }
   function overlayDesktop() {
-    const input = document.querySelector('search-focus input[type=search]');
-    const dropdown = document.querySelector('.search-dropdown');
-    const auto = document.querySelector('search-focus .autocomplete-container');
-    if (!input || !dropdown || !auto) return;
-    setupOverlay(input, {
-      root: document.querySelector('site-header') || document.body,
-      owns: n => dropdown.contains(n) || auto.contains(n),
-      target(cls) {
-        if (cls === 'empty') return dropdown.querySelector('.suggestion-container');
-        if (!auto.hidden) return auto;
-        return cls === 'C' || DD_PROMINENT ? dropdown.querySelector('.suggestion-container') : dropdown.querySelector('.suggestions');
-      },
-    });
+    setupOverlay(document.querySelector('search-focus input[type=search]'));
   }
   function overlayMobile() {
-    const nav = document.querySelector('nav-search');
-    if (!nav) return;
-    const input = nav.querySelector('input');
-    const sugg = nav.querySelector('.search-suggestions');
-    const def = nav.querySelector('.search-default');
-    setupOverlay(input, {
-      root: nav,
-      owns: n => nav.contains(n),
-      target(cls) {
-        if (cls === 'empty') return def;
-        return sugg && !sugg.hidden ? sugg : def;
-      },
-    });
+    setupOverlay(document.querySelector('nav-search input'));
   }
 
   // ---- results page: 3.2 tile and 3.3 banner -----------------------------------------
@@ -985,8 +946,8 @@
           <p class="aa-panel-h">Wish list (3.10, stand-in)</p>
           <div class="aa-bar-chips">${chip(`type="radio" name="aa-wish" value="saved" ${WISHLIST_STATE === 'saved' ? 'checked' : ''}`, '4 saved works')}${chip(`type="radio" name="aa-wish" value="empty" ${WISHLIST_STATE === 'empty' ? 'checked' : ''}`, 'Empty')}</div>
           <p class="aa-panel-h">Search dropdown (3.1)</p>
-          <div class="aa-bar-chips">${[['bar', 'Bar'], ['tile', 'Tile'], ['panel', 'Panel'], ['column', 'Column'], ['field', 'Button in the field']].map(([v, label]) =>
-            chip(`type="radio" name="aa-dd" value="${v}" ${DD_VARIANT === v ? 'checked' : ''}`, label)).join('')}</div>
+          <div class="aa-bar-chips">${DD_VARIANTS.map(([v, label]) =>
+            chip(`type="radio" name="aa-dd" value="${v}" ${ddVariant === v ? 'checked' : ''}`, label)).join('')}</div>
           <p class="aa-panel-h"><a class="aa-bar-link" href="${PAGE.pathname + (PAGE.search ? PAGE.search + '&' : '?')}pristine">This page without the layer →</a></p></section>
         <section><p class="aa-panel-h">Query class</p>
           <p class="aa-panel-class" data-aa-class>Type in the search field or open a search.</p></section>
@@ -997,6 +958,8 @@
         <span class="aa-bar-title">AI Advisor</span>
         <nav class="aa-bar-pages" aria-label="Walk-through">${DEMOS.map(([label, shows, href], i) =>
           `<a href="${href}" title="${esc(label + ': ' + shows)}" ${i === step ? 'aria-current="page"' : ''}><b>${i + 1}</b><span>${esc(label)}</span></a>`).join('')}</nav>
+        ${on.overlay ? `<div class="aa-bar-search" role="group" aria-label="Search dropdown"><span class="aa-bar-title">Search</span>${DD_VARIANTS.map(([v, , short]) =>
+          `<button type="button" data-aa-dd="${v}" aria-pressed="${ddVariant === v}">${short}</button>`).join('')}</div>` : ''}
         <button type="button" class="aa-panel-toggle" aria-expanded="false" aria-controls="aa-panel-body">${ICON_SLIDERS}<span>Entry points</span></button>
         <div class="aa-bar-lang" role="group" aria-label="Shop language">${langs.map(([l, href, current]) => `<a href="${href}" ${current ? 'aria-current="true"' : ''}>${l}</a>`).join('')}</div>
       </div>
@@ -1013,7 +976,11 @@
       location.reload();
     }));
     panel.querySelectorAll('input[name=aa-open]').forEach(r => r.addEventListener('change', () => { ls.set('aa-open-mode', r.value); location.reload(); }));
-    panel.querySelectorAll('input[name=aa-dd]').forEach(r => r.addEventListener('change', () => { ls.set('aa-dd-variant', r.value); location.reload(); }));
+    panel.querySelectorAll('input[name=aa-dd]').forEach(r => r.addEventListener('change', () => applyDropdown(r.value, true)));
+    panel.querySelectorAll('[data-aa-dd]').forEach(b => {
+      b.addEventListener('mousedown', e => e.preventDefault());   // keeps the search field focused
+      b.addEventListener('click', () => applyDropdown(b.dataset.aaDd, true));
+    });
     panel.querySelectorAll('input[name=aa-wish]').forEach(r => r.addEventListener('change', () => { ls.set('aa-wishlist-state', r.value); location.reload(); }));
     panel.querySelector('.aa-panel-clear').addEventListener('click', () => { events.length = 0; ls.set('aa-events', events); renderEventLog(); });
     document.documentElement.classList.add('aa-has-bar');
@@ -1047,8 +1014,7 @@
     buildPanel();
     overlayDesktop();
     overlayMobile();
-    searchTile();
-    searchFieldButton();
+    searchDropdown();
     // search pages always; category pages once their client-rendered grid exists
     if (isSearchPage) watchResults(); else whenPresent('.search-results', watchResults);
     whenPresent('site-header nav > details', navCard);
