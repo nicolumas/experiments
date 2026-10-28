@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 
 <html lang="de">
-<head><meta name="robots" content="noindex,nofollow"><script>if (window === top) document.write('<script src="../assets/gate.js"><\/script>');</script><script>window.abTestMobileNav=true;</script>
+<head><meta name="robots" content="noindex,nofollow"><script>if (window === top) document.write('<script src="../assets/gate.js"><\/script>');</script><script>window.abTestMobileNav=true;</script><script>(() => {
+  const liveFetch = window.fetch.bind(window);
+  let vocabulary;
+  window.fetch = (resource, options) => {
+    const url = String(resource && resource.url || resource);
+    if (!url.includes('/suggest/?term=')) return liveFetch(resource, options);
+    const term = decodeURIComponent(url.split('term=')[1] || '').trim().toLowerCase();
+    vocabulary = vocabulary || liveFetch('./suggest-terms.json').then(r => r.json());
+    return vocabulary.then(({ artists, terms, titles }) => {
+      const startsWord = text => text.split(/[\s-]+/).some(word => word.startsWith(term));
+      const matches = [
+        ...artists.filter(text => text.includes(term)),
+        ...terms.filter(text => text.startsWith(term)),
+        ...titles.filter(startsWord),
+      ];
+      return new Response(JSON.stringify([...new Set(matches)].slice(0, 17)), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    });
+  };
+})();</script>
 <script>window.abTestMobileNav = true;</script><script>window.dataLayer=window.dataLayer||[];window.klaviyo=window.klaviyo||[];</script><meta content="https://www.lumas.de/" name="x-clone-source"/>
 <meta charset="utf-8"/>
 <meta content="DPR, Viewport-Width, Width" http-equiv="Accept-CH"/>
