@@ -134,6 +134,8 @@ site-header .menu.galleries dd.all-galleries a {
   text-decoration: underline; text-decoration-thickness: .1rem; text-underline-offset: .35em;
 }
 site-header .menu.galleries dd.all-galleries a:hover { text-decoration: none; }
+site-header.desktop details.drawer-only,
+site-header.mobile .menu.galleries dd.desktop-only { display: none; }
 /* live has no gap between the last box and the drawer's Kontakt row */
 site-header.mobile .menu.galleries dl.services { margin-bottom: 3.2rem; }
 </style>
@@ -1693,7 +1695,7 @@ site-header.mobile .menu.galleries dl.services { margin-bottom: 3.2rem; }
 </dl>
 <dl class="services">
 <dt><header>LUMAS erleben</header></dt>
-<dd>
+<dd class="desktop-only">
 <a href="https://www.lumas.de/warum-lumas/"><svg><use href="#about"></use></svg>Über uns</a>
 </dd>
 <dd>
@@ -1702,6 +1704,11 @@ site-header.mobile .menu.galleries dl.services { margin-bottom: 3.2rem; }
 </dl>
 </div>
 </div>
+</details>
+<details class="drawer-only">
+<summary>
+<a href="https://www.lumas.de/warum-lumas/">Über uns</a>
+</summary>
 </details>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
