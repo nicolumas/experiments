@@ -105,12 +105,13 @@
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
       // Meer, Strand and Berge open the search sorted by revenue, which fixes Berge's weak default results.
-      // Each picture is the top work by revenue on the page the tile opens (sort=revenue_product_desc, 28 Oct
-      // 2026), skipping the 15 artists in the Top 20 menu and works that don't picture the term. Rank on that page:
-      // Schwarz-Weiß Brodziak, Parcel (8; Richter at 7 went to Meer, where he is 1); Tiere Paul, Quallentanz (3);
-      // Meer Richter, Landschaft mit Wolke (1); Blumen Schrüfer, Frühling in Simulacrum XII (4); David Bowie
-      // Monet, David II (11; Sparx at 3 is a lyric print); Strand Steinhilber, Weststrand Darß (5; Funch at 3 is a
-      // street, Koch at 4 a blurred horizon); New York Lebeck, New York 1967 (1); Berge Ventosa, Hotel Belvedere (3).
+      // Pictures: top work by revenue on the page the tile opens (sort=revenue_product_desc, 28 Oct 2026),
+      // skipping the 15 artists in the Top 20 menu and works that don't picture the term, with four picks by
+      // hand. Rank on that page: Schwarz-Weiß Brodziak, Parcel (8; Richter went to Meer, where he is 1); Tiere
+      // Waldner, Merle (8, picked as calmer than Paul's jellyfish at 3); Meer Richter, Landschaft mit Wolke (1);
+      // Blumen Schrüfer, Frühling in Simulacrum XII (4); David Bowie Monet, David II (11, whole portrait on its own
+      // ground); Strand Guachinarte, Seaside Glass House (2, picked); New York Dratwa, New York Voilage (6, picked);
+      // Berge Ventosa, Hotel Belvedere (3).
       svTiles: [['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'], ['/themen/tiere/', 'Tiere', 'tiere'],
         ['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/blumenkunst/', 'Blumen', 'blumen'],
         ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'], ['/search/?q=strand&sort=revenue_product_desc', 'Strand', 'strand'],
