@@ -608,7 +608,6 @@ site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspirati
   width: auto;
   line-height: 2.32;
 }
-.menu.artworks .new-works,
 .menu.artworks.inspiration > dl[data-stories] { display: none; }
 site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] {
   display: grid;
@@ -659,36 +658,9 @@ site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspirati
     display: none;
   }
 }
-site-header.desktop .nav-container .menu.artworks.with-new-works {
+site-header.desktop .nav-container .menu.artworks.full-width {
   grid-template-columns: repeat(13, minmax(0, 1fr));
 }
-site-header.desktop .nav-container .menu.artworks.with-new-works > dl { grid-row: 1 / span 2; }
-site-header.desktop .nav-container .menu.artworks.with-new-works > dl.highlights { grid-row: 1; }
-site-header.desktop .nav-container .menu.artworks.with-new-works > .new-works {
-  display: grid;
-  grid-column: 1 / span 5;
-  grid-row: 2;
-  align-content: start;
-  gap: 1rem;
-  padding-top: 2.4rem;
-}
-.menu.artworks .new-works-label {
-  color: var(--color-text-secondary);
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.menu.artworks .new-works-label::after { content: " →"; }
-.menu.artworks .new-works > div { display: flex; gap: 1rem; align-items: flex-end; overflow: hidden; }
-.menu.artworks .new-works img {
-  display: block;
-  width: auto;
-  height: clamp(6rem, 6vw, 8rem);
-  transition: opacity 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.menu.artworks .new-works a:hover img { opacity: 0.88; }
 </style>
 <style id="proposal-tool-visuals">
 site-header:is(.desktop, .mobile) .nav-container .menu dl dt header,
@@ -1649,7 +1621,7 @@ document.body.addEventListener('click', e => {
 <details>
 <summary><a href="https://www.lumas.de/search/?q=">Kunstwerke</a></summary>
 <div class="menu-container">
-<div class="menu artworks with-new-works">
+<div class="menu artworks full-width">
 <dl class="highlights open">
 <dt><header>Highlights</header></dt>
 <dd>
@@ -1738,7 +1710,7 @@ document.body.addEventListener('click', e => {
 <div data-price-block="from500000-to2000000" data-style-override="cursor:pointer;">ab €5000</div>
 </dd>
 </dl>
-<div class="new-works"><a class="new-works-label" href="https://www.lumas.de/neuheiten/">Neu eingetroffen</a><div><a href="https://www.lumas.de/pictures/marta_contreras_simo/nina/" title="Marta Contreras Simó, Nina"><img alt="Marta Contreras Simó, Nina" height="550" loading="lazy" src="https://img.lumas.com/showimg_mcs52_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/daniel_kordan/moonrise_over_greenland/" title="Daniel Kordan, Moonrise over Greenland"><img alt="Daniel Kordan, Moonrise over Greenland" height="440" loading="lazy" src="https://img.lumas.com/showimg_dko21_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/daria_petrilli/the_dance_teacher/" title="Daria Petrilli, The Dance Teacher"><img alt="Daria Petrilli, The Dance Teacher" height="688" loading="lazy" src="https://img.lumas.com/showimg_dpe35_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/javier_soler_esplugues/match_point/" title="Javier Soler Esplugues, Match Point"><img alt="Javier Soler Esplugues, Match Point" height="550" loading="lazy" src="https://img.lumas.com/showimg_jso29_search.jpg" width="550"/></a><a href="https://www.lumas.de/pictures/kevin_boyle/rain_dance/" title="Kevin Boyle, Rain Dance"><img alt="Kevin Boyle, Rain Dance" height="550" loading="lazy" src="https://img.lumas.com/showimg_kby07_search.jpg" width="550"/></a></div></div></div>
+</div>
 </div>
 </details>
 <details>
