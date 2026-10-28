@@ -105,9 +105,12 @@
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
       // Meer, Strand and Berge open the search sorted by revenue, which fixes Berge's weak default results.
-      // Crops as in the proposal; Tiere: Waldner, Merle (best seller on /themen/tiere/ after Gotsch and
-      // Colonna, who are already pictured in the Top 20 menu); Strand: wuh93, the top result for "strand" by revenue;
-      // New York: jmr08 (Empire State through a window), top square of the work.
+      // Each picture is the top work by revenue on the page the tile opens (sort=revenue_product_desc, 28 Oct
+      // 2026), skipping the 15 artists in the Top 20 menu and works that don't picture the term. Rank on that page:
+      // Schwarz-Weiß Brodziak, Parcel (8; Richter at 7 went to Meer, where he is 1); Tiere Paul, Quallentanz (3);
+      // Meer Richter, Landschaft mit Wolke (1); Blumen Schrüfer, Frühling in Simulacrum XII (4); David Bowie
+      // Monet, David II (11; Sparx at 3 is a lyric print); Strand Steinhilber, Weststrand Darß (5; Funch at 3 is a
+      // street, Koch at 4 a blurred horizon); New York Lebeck, New York 1967 (1); Berge Ventosa, Hotel Belvedere (3).
       svTiles: [['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'], ['/themen/tiere/', 'Tiere', 'tiere'],
         ['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/blumenkunst/', 'Blumen', 'blumen'],
         ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'], ['/search/?q=strand&sort=revenue_product_desc', 'Strand', 'strand'],
