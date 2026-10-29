@@ -1013,7 +1013,7 @@ document.body.addEventListener('click', e => {
 <div class="tabs">
 <div class="handle"></div>
 <div class="tabs-scroll">
-<div aria-label="Entdecken" class="tab-slide" data-icon="nav-discover" data-label="Entdecken" id="tab-discover" role="tabpanel">
+<div aria-label="Artfinder" class="tab-slide" data-icon="nav-discover" data-label="Artfinder" id="tab-discover" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
@@ -1165,9 +1165,35 @@ document.body.addEventListener('click', e => {
 <h2>Künstler</h2>
 <p>Entdecke über 500 Künstler</p>
 </header>
+<nav class="action-cards">
+<a class="action-card" href="https://www.lumas.de/alle-kuenstler/">
+<picture>
+<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.webp" type="image/webp" width="110"/>
+<img alt="Top 20 LUMAS Künstler" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.jpg" title="Top 20 LUMAS Künstler" width="110"/>
+</picture>
+<span class="title">Top 20 Künstler</span>
+<span aria-hidden="true" class="arrow">→</span>
+</a>
+<a class="action-card" href="https://www.lumas.de/artists-in-focus/">
+<picture>
+<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.webp" type="image/webp" width="110"/>
+<img alt="Artists in Focus – Storys" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.jpg" title="Artists in Focus – Storys" width="110"/>
+</picture>
+<span class="title">Artists in Focus</span>
+<span aria-hidden="true" class="arrow">→</span>
+</a>
+<a class="action-card" href="https://www.lumas.de/artists/masters/">
+<picture>
+<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.webp" type="image/webp" width="110"/>
+<img alt="Weltklasse-Masters" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.jpg" title="Weltklasse-Masters" width="110"/>
+</picture>
+<span class="title">Weltklasse-Masters</span>
+<span aria-hidden="true" class="arrow">→</span>
+</a>
+</nav>
 <div class="carousel-section">
-<h3 class="carousel-label">Top 20</h3>
-<div aria-label="Top 20" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/alle-kuenstler/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.webp" type="image/webp" width="110"/><img alt="Alle Top 20" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.jpg" title="Alle Top 20" width="110"/></picture><span>Alle Top 20</span></a>
+<h3 class="carousel-label">Top 20 &amp; Highlights</h3>
+<div aria-label="Top 20 &amp; Highlights" class="carousel-scroll" role="region" tabindex="0">
 <a class="carousel-card" href="https://www.lumas.de/artist/isabelle_menin/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/ime-110x110.webp" type="image/webp" width="110"/>
@@ -1273,8 +1299,8 @@ document.body.addEventListener('click', e => {
 </picture>
 <span>Massimo Colonna</span>
 </a>
+<a class="carousel-card" href="https://www.lumas.de/artist/gerhard_richter/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/gerhard-richter-110x110.webp" type="image/webp" width="110"/><img alt="Gerhard Richter" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/gerhard-richter-110x110.jpg" title="Gerhard Richter" width="110"/></picture><span>Gerhard Richter</span></a><a class="carousel-card" href="https://www.lumas.de/top-kuenstler/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/artists-to-watch-110x110.webp" type="image/webp" width="110"/><img alt="10 Artists to Watch" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/artists-to-watch-110x110.jpg" title="10 Artists to Watch" width="110"/></picture><span>10 Artists to Watch</span></a><a class="carousel-card" href="https://www.lumas.de/collections/kuenstler-des-jahres/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.webp" type="image/webp" width="110"/><img alt="Künstler des Jahres 2026" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.jpg" title="Künstler des Jahres 2026" width="110"/></picture><span>Künstler des Jahres 2026</span></a></div>
 </div>
-</div><div class="carousel-section"><h3 class="carousel-label">Highlights</h3><div aria-label="Highlights" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/artist/gerhard_richter/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/gerhard-richter-110x110.webp" type="image/webp" width="110"/><img alt="Gerhard Richter" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/gerhard-richter-110x110.jpg" title="Gerhard Richter" width="110"/></picture><span>Gerhard Richter</span></a><a class="carousel-card" href="https://www.lumas.de/top-kuenstler/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/artists-to-watch-110x110.webp" type="image/webp" width="110"/><img alt="10 Artists to Watch" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/artists-to-watch-110x110.jpg" title="10 Artists to Watch" width="110"/></picture><span>10 Artists to Watch</span></a><a class="carousel-card" href="https://www.lumas.de/collections/kuenstler-des-jahres/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.webp" type="image/webp" width="110"/><img alt="Künstler des Jahres 2026" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.jpg" title="Künstler des Jahres 2026" width="110"/></picture><span>Künstler des Jahres 2026</span></a><a class="carousel-card" href="https://www.lumas.de/artists-in-focus/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.webp" type="image/webp" width="110"/><img alt="Artists in Focus" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.jpg" title="Artists in Focus" width="110"/></picture><span>Artists in Focus</span></a><a class="carousel-card" href="https://www.lumas.de/artists/masters/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.webp" type="image/webp" width="110"/><img alt="Weltklasse-Masters" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.jpg" title="Weltklasse-Masters" width="110"/></picture><span>Weltklasse-Masters</span></a></div></div>
 </section>
 </div>
 <div aria-label="Suche" class="tab-slide" data-icon="nav-search" data-label="Suche" id="tab-search" role="tabpanel">
