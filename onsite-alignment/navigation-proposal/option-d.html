@@ -616,7 +616,23 @@ site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories]
   column-gap: 2rem;
   align-items: start;
 }
-site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] dt { grid-column: 1 / -1; }
+site-header.desktop .nav-container .menu.artworks.inspiration > dl[data-stories] dt {
+  grid-column: 1 / -1;
+  position: relative;
+}
+.menu.artworks.inspiration a.story-order {
+  position: absolute;
+  right: 0;
+  top: 0.5rem;
+  color: var(--color-text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.menu.artworks.inspiration a.story-order:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
 site-header.desktop .nav-container details:nth-child(4) .menu.artworks.inspiration > dl[data-stories] dd {
   line-height: 1.3;
 }
@@ -1001,10 +1017,10 @@ document.body.addEventListener('click', e => {
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
-<h2>Entdecken</h2>
-<p>Artfinder und Inspiration</p>
+<h2>Artfinder &amp; Inspiration</h2>
+<p>Kunst finden, Collections und Geschichten</p>
 </header>
-<nav class="action-cards">
+<h3 class="carousel-label">Artfinder</h3><nav class="action-cards">
 <a class="action-card featured" href="https://www.lumas.de/art-advisor/">
 <span class="icon">
 <svg aria-hidden="true"><use href="#nav-sparkles"></use></svg>
@@ -1025,7 +1041,7 @@ document.body.addEventListener('click', e => {
 <span class="title">Art Cloud</span>
 <span aria-hidden="true" class="arrow">→</span>
 </a>
-</nav><div class="carousel-section"><h3 class="carousel-label">Collections</h3><div aria-label="Collections" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/favoriten-unserer-kuratoren/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.webp" type="image/webp" width="110"/><img alt="Favoriten unserer Kuratoren" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.jpg" title="Favoriten unserer Kuratoren" width="110"/></picture><span>Favoriten unserer Kuratoren</span></a><a class="carousel-card" href="https://www.lumas.de/collections/zeitlose-klassiker/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.webp" type="image/webp" width="110"/><img alt="Zeitlose Klassiker" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.jpg" title="Zeitlose Klassiker" width="110"/></picture><span>Zeitlose Klassiker</span></a><a class="carousel-card" href="https://www.lumas.de/collections/botanische-kunstwerke/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/botanik-110x110.webp" type="image/webp" width="110"/><img alt="Botanik" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/botanik-110x110.jpg" title="Botanik" width="110"/></picture><span>Botanik</span></a><a class="carousel-card" href="https://www.lumas.de/collections/erschwingliche-kunst/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.webp" type="image/webp" width="110"/><img alt="Erschwingliche Kunst" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.jpg" title="Erschwingliche Kunst" width="110"/></picture><span>Erschwingliche Kunst</span></a><a class="carousel-card" href="https://www.lumas.de/collections/perfekte-paare/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/perfekte-paare-110x110.webp" type="image/webp" width="110"/><img alt="Perfekte Paare" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/perfekte-paare-110x110.jpg" title="Perfekte Paare" width="110"/></picture><span>Perfekte Paare</span></a><a class="carousel-card" href="https://www.lumas.de/technik/string-art/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.webp" type="image/webp" width="110"/><img alt="String Art" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.jpg" title="String Art" width="110"/></picture><span>String Art</span></a></div></div><div class="carousel-section"><h3 class="carousel-label">Aus dem Magazin</h3><div aria-label="Aus dem Magazin" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/inspired-art-magazine/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-magazin-110x110.webp" type="image/webp" width="110"/><img alt="Inspired" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-magazin-110x110.jpg" title="Inspired" width="110"/></picture><span>Inspired</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/axel-crieger/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-crieger-110x110.webp" type="image/webp" width="110"/><img alt="Axel Crieger" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-crieger-110x110.jpg" title="Axel Crieger" width="110"/></picture><span>Axel Crieger</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-gefen-110x110.webp" type="image/webp" width="110"/><img alt="Marianna Gefen" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-gefen-110x110.jpg" title="Marianna Gefen" width="110"/></picture><span>Marianna Gefen</span></a><a class="carousel-card" href="https://www.lumas.de/artist/daniel_kordan/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-kordan-110x110.webp" type="image/webp" width="110"/><img alt="Daniel Kordan" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-kordan-110x110.jpg" title="Daniel Kordan" width="110"/></picture><span>Daniel Kordan</span></a></div></div>
+</nav><div class="carousel-section"><h3 class="carousel-label">Collections</h3><div aria-label="Collections" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/favoriten-unserer-kuratoren/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.webp" type="image/webp" width="110"/><img alt="Favoriten unserer Kuratoren" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.jpg" title="Favoriten unserer Kuratoren" width="110"/></picture><span>Favoriten unserer Kuratoren</span></a><a class="carousel-card" href="https://www.lumas.de/collections/zeitlose-klassiker/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.webp" type="image/webp" width="110"/><img alt="Zeitlose Klassiker" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.jpg" title="Zeitlose Klassiker" width="110"/></picture><span>Zeitlose Klassiker</span></a><a class="carousel-card" href="https://www.lumas.de/collections/botanische-kunstwerke/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/botanik-110x110.webp" type="image/webp" width="110"/><img alt="Botanik" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/botanik-110x110.jpg" title="Botanik" width="110"/></picture><span>Botanik</span></a><a class="carousel-card" href="https://www.lumas.de/collections/erschwingliche-kunst/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.webp" type="image/webp" width="110"/><img alt="Erschwingliche Kunst" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.jpg" title="Erschwingliche Kunst" width="110"/></picture><span>Erschwingliche Kunst</span></a><a class="carousel-card" href="https://www.lumas.de/collections/perfekte-paare/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/perfekte-paare-110x110.webp" type="image/webp" width="110"/><img alt="Perfekte Paare" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/perfekte-paare-110x110.jpg" title="Perfekte Paare" width="110"/></picture><span>Perfekte Paare</span></a><a class="carousel-card" href="https://www.lumas.de/technik/string-art/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.webp" type="image/webp" width="110"/><img alt="String Art" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.jpg" title="String Art" width="110"/></picture><span>String Art</span></a><a class="carousel-card" href="https://www.lumas.de/collections/lumas-voices/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/lumas-voices-110x110.webp" type="image/webp" width="110"/><img alt="LUMAS Voices" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/lumas-voices-110x110.jpg" title="LUMAS Voices" width="110"/></picture><span>LUMAS Voices</span></a></div></div><div class="carousel-section"><h3 class="carousel-label">Aus dem Magazin</h3><div aria-label="Aus dem Magazin" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/inspired-art-magazine/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-inspired-110x110.webp" type="image/webp" width="110"/><img alt="Inspired" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-inspired-110x110.jpg" title="Inspired" width="110"/></picture><span>Inspired</span></a><a class="carousel-card" href="https://www.lumas.de/magazin/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-magazin-110x110.webp" type="image/webp" width="110"/><img alt="Order LUMAS Art Magazine" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-magazin-110x110.jpg" title="Order LUMAS Art Magazine" width="110"/></picture><span>Order LUMAS Art Magazine</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/axel-crieger/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-crieger-110x110.webp" type="image/webp" width="110"/><img alt="Axel Crieger" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-crieger-110x110.jpg" title="Axel Crieger" width="110"/></picture><span>Axel Crieger</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-gefen-110x110.webp" type="image/webp" width="110"/><img alt="Marianna Gefen" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-gefen-110x110.jpg" title="Marianna Gefen" width="110"/></picture><span>Marianna Gefen</span></a><a class="carousel-card" href="https://www.lumas.de/artist/daniel_kordan/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-kordan-110x110.webp" type="image/webp" width="110"/><img alt="Daniel Kordan" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-kordan-110x110.jpg" title="Daniel Kordan" width="110"/></picture><span>Daniel Kordan</span></a></div></div>
 </section>
 </div>
 <div aria-label="Kunstwerke" class="tab-slide" data-icon="nav-shop" data-label="Kunstwerke" id="tab-shop" role="tabpanel">
@@ -1033,7 +1049,7 @@ document.body.addEventListener('click', e => {
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
 <h2>Kunstwerke</h2>
-<p>Highlights, Kategorie, Thema und Budget</p>
+<p>Highlights, Preis, Kategorie und Thema</p>
 </header><div class="carousel-section"><h3 class="carousel-label">Highlights</h3><div aria-label="Highlights" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/neuheiten/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/new-110x110.webp" type="image/webp" width="110"/>
@@ -1065,7 +1081,7 @@ document.body.addEventListener('click', e => {
 </picture>
 <span>Fast ausverkauft</span>
 </a></div></div>
-<nav class="action-cards">
+<h3 class="carousel-label">Nach Preis</h3><nav class="action-cards">
 <a class="action-card" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from0-to25000">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/start-collection-110x110.webp" type="image/webp" width="110"/>
@@ -1101,8 +1117,8 @@ document.body.addEventListener('click', e => {
 </a>
 </nav>
 <div class="carousel-section">
-<h3 class="carousel-label">Nach Kategorie stöbern</h3>
-<div aria-label="Nach Kategorie stöbern" class="carousel-scroll" role="region" tabindex="0">
+<h3 class="carousel-label">Nach Kategorie</h3>
+<div aria-label="Nach Kategorie" class="carousel-scroll" role="region" tabindex="0">
 <a class="carousel-card" href="https://www.lumas.de/technik/fotografie/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/photography-110x110.webp" type="image/webp" width="110"/>
@@ -1177,8 +1193,8 @@ document.body.addEventListener('click', e => {
 </a>
 </nav><div class="carousel-section"><h3 class="carousel-label">Im Fokus</h3><div aria-label="Im Fokus" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/artist/gerhard_richter/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/gerhard-richter-110x110.webp" type="image/webp" width="110"/><img alt="Gerhard Richter" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/gerhard-richter-110x110.jpg" title="Gerhard Richter" width="110"/></picture><span>Gerhard Richter</span></a><a class="carousel-card" href="https://www.lumas.de/top-kuenstler/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/artists-to-watch-110x110.webp" type="image/webp" width="110"/><img alt="10 Artists to Watch" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/artists-to-watch-110x110.jpg" title="10 Artists to Watch" width="110"/></picture><span>10 Artists to Watch</span></a><a class="carousel-card" href="https://www.lumas.de/collections/kuenstler-des-jahres/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.webp" type="image/webp" width="110"/><img alt="Künstler des Jahres 2026" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.jpg" title="Künstler des Jahres 2026" width="110"/></picture><span>Künstler des Jahres 2026</span></a></div></div>
 <div class="carousel-section">
-<h3 class="carousel-label">Ausgewählte Künstler</h3>
-<div aria-label="Ausgewählte Künstler" class="carousel-scroll" role="region" tabindex="0">
+<h3 class="carousel-label">Top 20</h3>
+<div aria-label="Top 20" class="carousel-scroll" role="region" tabindex="0">
 <a class="carousel-card" href="https://www.lumas.de/artist/isabelle_menin/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/ime-110x110.webp" type="image/webp" width="110"/>
@@ -1875,7 +1891,7 @@ document.body.addEventListener('click', e => {
 
 <dd><a href="https://www.lumas.de/collections/favoriten-unserer-kuratoren/">Favoriten unserer Kuratoren</a></dd><dd><a href="https://www.lumas.de/collections/zeitlose-klassiker/">Zeitlose Klassiker</a></dd><dd><a href="https://www.lumas.de/collections/botanische-kunstwerke/">Botanik</a></dd><dd><a href="https://www.lumas.de/collections/erschwingliche-kunst/">Erschwingliche Kunst</a></dd><dd><a href="https://www.lumas.de/collections/perfekte-paare/">Perfekte Paare</a></dd><dd>
 <a href="https://www.lumas.de/technik/string-art/">String Art</a>
-</dd><dd><a href="https://www.lumas.de/collections/">Alle Collections</a></dd></dl>
+</dd><dd><a href="https://www.lumas.de/collections/lumas-voices/">LUMAS Voices</a></dd><dd><a href="https://www.lumas.de/collections/">Alle Collections</a></dd></dl>
 <dl>
 <dt><header>Künstler</header></dt>
 
@@ -1892,7 +1908,7 @@ document.body.addEventListener('click', e => {
 <a href="https://www.lumas.de/collections/kuenstler-des-jahres/">Künstler des Jahres 2026</a>
 </dd><dd><a href="https://www.lumas.de/artists-in-focus/">Alle Artists in Focus</a></dd></dl>
 
-<dl data-stories=""><dt><header>Aus dem Magazin</header></dt><dd style="--ratio:1.602"><a href="https://www.lumas.de/inspired-art-magazine/"><img alt="Die neue Ausgabe von Inspired auf einem Holztisch" height="512" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x512-14.jpg" width="820"/><span class="story-eyebrow">Magazin</span><span class="story-title">Die neue Ausgabe von Inspired</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/axel-crieger/"><img alt="Salonwand mit schwarz-weißen Fotoeditionen von Axel Crieger" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-03.jpg" width="820"/><span class="story-eyebrow">Artist in Focus</span><span class="story-title">Axel Criegers Grammar of Glamour</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><img alt="Marianna Gefen in ihrem Atelier" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-09.jpg" width="820"/><span class="story-eyebrow">Atelierbesuch</span><span class="story-title">Marianna Gefen</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist/daniel_kordan/"><img alt="Kontaktbogen mit Daniel Kordan bei der Arbeit im Gelände" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-10.jpg" width="820"/><span class="story-eyebrow">Expedition</span><span class="story-title">Unterwegs mit Daniel Kordan</span></a></dd></dl></div>
+<dl data-stories=""><dt><header>Aus dem Magazin</header><a class="story-order" href="https://www.lumas.de/magazin/">Order LUMAS Art Magazine →</a></dt><dd style="--ratio:1.602"><a href="https://www.lumas.de/inspired-art-magazine/"><img alt="Die neue Ausgabe von Inspired auf einem Holztisch" height="512" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x512-14.jpg" width="820"/><span class="story-eyebrow">Magazin</span><span class="story-title">Die neue Ausgabe von Inspired</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/axel-crieger/"><img alt="Salonwand mit schwarz-weißen Fotoeditionen von Axel Crieger" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-03.jpg" width="820"/><span class="story-eyebrow">Artist in Focus</span><span class="story-title">Axel Criegers Grammar of Glamour</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><img alt="Marianna Gefen in ihrem Atelier" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-09.jpg" width="820"/><span class="story-eyebrow">Atelierbesuch</span><span class="story-title">Marianna Gefen</span></a></dd><dd style="--ratio:1.206"><a href="https://www.lumas.de/artist/daniel_kordan/"><img alt="Kontaktbogen mit Daniel Kordan bei der Arbeit im Gelände" height="680" loading="lazy" src="https://media.lumas.de/magazin/2026-10/inspired/lp-kachel-820x680-10.jpg" width="820"/><span class="story-eyebrow">Expedition</span><span class="story-title">Unterwegs mit Daniel Kordan</span></a></dd></dl></div>
 </div>
 </details>
 <details>
