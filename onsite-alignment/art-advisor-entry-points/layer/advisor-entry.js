@@ -98,9 +98,13 @@
       wishEmptyText: 'Beschreib deinen Raum, eine Stimmung oder einen Anlass, und der AI\u00a0Advisor schlägt Editionen vor, die\u00a0passen.',
       wishCta: 'Optionen ansehen',
       svHeading: 'Nicht sicher, wonach du\u00a0suchst?',
+      // each opens the advisor with its words waiting in the field (Oct 30 brief)
+      svChips: ['Etwas Ruhiges f\u00fcrs Schlafzimmer', 'Geschenk f\u00fcr Architektur-Fans', 'Gro\u00dfes Werk \u00fcber dem Sofa'],
       svCta: 'Advisor fragen',
       svMost: 'Meist gesucht',
-      searchPlaceholder: 'Suchen oder fragen',
+      // the short line where the field has no room for the full one (fitPlaceholder)
+      searchPlaceholder: 'K\u00fcnstler, Farbe \u2013 oder beschreib, was du suchst',
+      searchPlaceholderShort: 'K\u00fcnstler, Farbe oder deine Idee',
       svSuggestions: 'Vorschläge',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
@@ -151,10 +155,12 @@
       wishEmptyTitle: 'Nothing saved yet?',
       wishEmptyText: 'Describe your room, a mood or an occasion, and the AI\u00a0Advisor suggests editions that\u00a0fit.',
       wishCta: 'View options',
-      svHeading: 'Not sure what you are looking\u00a0for?',
-      svCta: 'Ask the advisor',
+      svHeading: 'Not sure what you\u2019re looking\u00a0for?',
+      svChips: ['Something calm for the bedroom', 'A gift for an architecture lover', 'A large piece above the sofa'],
+      svCta: 'Ask the Advisor',
       svMost: 'Most wanted',
-      searchPlaceholder: 'Search or prompt',
+      searchPlaceholder: 'Search artists, colours \u2013 or describe what you\u2019re looking for',
+      searchPlaceholderShort: 'Artist, colour, or describe your idea',
       svSuggestions: 'Suggestions',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
@@ -190,10 +196,12 @@
   }
 
   // ---- handoff (concept section 04) -------------------------------------------
-  function advisorUrl(q, placement, filters = [], saved = []) {
+  function advisorUrl(q, placement, filters = [], saved = [], prefill = '') {
     const ret = location.pathname + location.search;
     const params = new URLSearchParams({ lang: LOCALE, return: ret });
     if (q) params.set('q', q);
+    // a suggestion picked in the shop waits in the advisor's field instead of being sent
+    if (prefill) params.set('prefill', prefill);
     // active PLP / search filters travel with the visitor (concept 04: &filters=)
     if (filters.length) params.set('filters', JSON.stringify(filters));
     // works on the wish list travel the same way (3.10)
@@ -201,10 +209,10 @@
     params.set('src', placement);
     return ADVISOR + '?' + params.toString();
   }
-  function goToAdvisor(q, placement, filters = [], saved = []) {
+  function goToAdvisor(q, placement, filters = [], saved = [], prefill = '') {
     track('advisor_offer_click', { placement, filters: filters.length, saved: saved.length });
-    if (OPEN_MODE === 'window') openAdvisorWindow(advisorUrl(q, placement, filters, saved));
-    else location.href = advisorUrl(q, placement, filters, saved);
+    if (OPEN_MODE === 'window') openAdvisorWindow(advisorUrl(q, placement, filters, saved, prefill));
+    else location.href = advisorUrl(q, placement, filters, saved, prefill);
   }
 
   // ---- the advisor as a window over the shop --------------------------------------
@@ -322,12 +330,24 @@
   }
 
   // ---- 3.1 search dropdown ------------------------------------------------------------
+  // the field says it takes a description as well as a search: the full line where it fits, the short
+  // one where it does not (the desktop field stays 280 px, so desktop shows the short one; Oct 30 call)
+  const measure = document.createElement('canvas').getContext('2d');
+  function fitPlaceholder(input) {
+    const style = getComputedStyle(input);
+    const room = input.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    measure.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    input.placeholder = measure.measureText(COPY.searchPlaceholder).width <= room ? COPY.searchPlaceholder : COPY.searchPlaceholderShort;
+  }
+  const placeholderFit = new ResizeObserver(entries => entries.forEach(entry => fitPlaceholder(entry.target)));
+
   // the empty dropdown in the chosen Option C form (see DD_VARIANTS); both forms already carry the
   // AI Advisor, so nothing more is added while someone types
   function searchDropdown() {
     if (!on.overlay) return;
-    // the field says it takes a question as well as a search
-    document.querySelectorAll('search-focus input[type=search], nav-search input[type=search]').forEach(input => { input.placeholder = COPY.searchPlaceholder; });
+    const searchInputs = document.querySelectorAll('search-focus input[type=search], nav-search input[type=search]');
+    searchInputs.forEach(input => placeholderFit.observe(input));
+    document.fonts.ready.then(() => searchInputs.forEach(fitPlaceholder));
     const dropdown = document.querySelector('.search-dropdown');
     const suggestions = dropdown?.querySelector('.suggestions');
     if (!suggestions || suggestions.querySelector('.sv-tiles')) return;
@@ -338,8 +358,10 @@
     const tiles = COPY.svTiles.map(tile).join('');
     const forms = {
       card: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>
-        <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd><a href="#" data-aa-placement="overlay-empty-card">
-          <span class="sv-advisor-title">${COPY.svHeading}</span><span class="sv-advisor-cta">${COPY.svCta} <span aria-hidden="true" class="sv-go">→</span></span></a></dd></dl>`,
+        <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd>
+          <span class="sv-advisor-title">${COPY.svHeading}</span>
+          <ul class="sv-chips">${COPY.svChips.map(chip => `<li><a href="#" data-aa-placement="overlay-empty-chip" data-aa-prefill="${esc(chip)}">${esc(chip)}</a></li>`).join('')}</ul>
+          <a class="sv-advisor-cta" href="#" data-aa-placement="overlay-empty-card"><span>${COPY.svCta}</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl>`,
       compact: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>`,
     };
     // compact: production's typed suggestions move into a panel under the field (and back out for the others)
@@ -390,7 +412,7 @@
     e.preventDefault();
     const q = a.closest('[data-aa-query]')?.dataset.aaQuery ?? currentQuery;
     const filters = JSON.parse(a.closest('[data-aa-filters]')?.dataset.aaFilters || '[]');
-    goToAdvisor(a.dataset.aaPlacement.startsWith('overlay-empty') ? '' : (a.dataset.aaQ ?? q), a.dataset.aaPlacement, filters);
+    goToAdvisor(a.dataset.aaPlacement.startsWith('overlay-empty') ? '' : (a.dataset.aaQ ?? q), a.dataset.aaPlacement, filters, [], a.dataset.aaPrefill);
   }, true);
 
   // classifies what is typed (presenter readout). Nothing is added to the dropdown while typing, since both

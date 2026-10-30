@@ -546,11 +546,13 @@ const T = {
 };
 
 // Handoff from the shop (see prototype/advisor-entry-points): ?q= the visitor's words, sent as the
-// first message; ?lang=de for the German shop; ?return= the shop page to go back to.
+// first message; ?prefill= a suggestion picked in the shop, left in the field to edit or send;
+// ?lang=de for the German shop; ?return= the shop page to go back to.
 const _params = new URLSearchParams(location.search);
 let LANG = _params.get('lang') === 'de' ? 'de' : 'en';
 const RETURN_URL = _params.get('return');
 const HANDOFF_Q = (_params.get('q') || '').trim();
+const HANDOFF_PREFILL = (_params.get('prefill') || '').trim();
 // the shop filters the visitor had applied (labels as the shop shows them), carried into the chat
 const HANDOFF_FILTERS = (()=>{ try { return JSON.parse(_params.get('filters') || '[]').filter(x=>typeof x==='string' && x.trim()); } catch(e){ return []; } })();
 // works saved on the shop's wish list, as "Title, Artist"
@@ -1663,6 +1665,10 @@ if(HANDOFF_Q){
   fetch('/reset', {redirect:'manual'}).catch(()=>{}).finally(()=> sendHandoff(HANDOFF_Q, HANDOFF_FILTERS, HANDOFF_SAVED));
 } else if(EMBEDDED){
   restoreSnapshot();
+}
+if(HANDOFF_PREFILL && !HANDOFF_Q){
+  const input = document.getElementById('input');
+  input.value = HANDOFF_PREFILL; autogrow(input); input.focus();
 }
 _snapshotReady = true;
 // closing the window removes this frame; leaving for a product page unloads it: save either way
