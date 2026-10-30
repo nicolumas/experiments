@@ -108,23 +108,10 @@ html.aa-window-open { overflow: hidden; }
 .sv-go { display: inline-block; transition: transform 220ms cubic-bezier(.2, .8, .2, 1); }
 .search-dropdown .suggestions a:hover .sv-go, .sv-compact a:hover .sv-go { transform: translateX(.4rem); }
 .search-dropdown .suggestions dl.sv-advisor-card { grid-template-rows: auto auto; align-content: start; }
-/* no box: the question, three prompts and a quiet text link sit open beside the pictures, as tall as a tile
-   with its label (a box holding three outlined buttons felt stuck in, hairline rows felt busy, Oct 30) */
+/* no box: the question and one quiet text link sit open beside the pictures (a box holding three outlined
+   buttons felt stuck in; the example rows went, Oct 30: the field above takes the prompt) */
 .search-dropdown .suggestions .sv-advisor-card dd { gap: 1rem; }
 .search-dropdown .suggestions .sv-advisor-card .sv-advisor-title { font-size: 1.8rem; }
-.search-dropdown .suggestions .sv-chips { display: flex; flex-direction: column; align-items: flex-start; margin: 0; padding: 0; list-style: none; }
-/* each prompt is a quiet link: secondary grey, charcoal and underlined on hover and keyboard focus; the one
-   arrow belongs to "Ask the Advisor" (per-prompt arrows and tints still felt busy, Oct 30) */
-.search-dropdown .suggestions .sv-chips a {
-  display: inline-block; padding: .3rem 0; color: var(--color-text-secondary, #5a5752); font-size: 1.4rem; line-height: 1.4;
-  white-space: nowrap; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: .1rem;
-  text-underline-offset: .3rem; cursor: pointer;
-  transition: color 220ms cubic-bezier(.2, .8, .2, 1), text-decoration-color 220ms cubic-bezier(.2, .8, .2, 1);
-}
-.search-dropdown .suggestions .sv-chips a:hover, .search-dropdown .suggestions .sv-chips a:focus-visible {
-  color: var(--color-text-primary); text-decoration-color: currentColor;
-}
-.search-dropdown .suggestions .sv-chips a:focus-visible { outline: .2rem solid var(--color-text-primary); outline-offset: .2rem; }
 .search-dropdown .suggestions .sv-advisor-cta {
   display: inline-flex; align-self: flex-start; align-items: center; gap: .6rem; color: var(--color-text-primary); font-size: 1.3rem;
   text-decoration: none; white-space: nowrap;
@@ -136,7 +123,7 @@ html.aa-window-open { overflow: hidden; }
    production's own suggestion style and place (search-focus .autocomplete-container) */
 .search-dropdown[data-typed] { display: none !important; }
 search-focus form[data-typed] .autocomplete-container { display: none !important; }
-search-focus form[data-typed] input { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+search-focus form:has(> .sv-typed) input { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .sv-compact[data-typed] .sv-compact-advisor { display: none; }
 search-focus form > .sv-typed {
   position: absolute; top: 100%; z-index: 35; box-sizing: border-box; width: 100%; padding-block: 1rem; padding-inline: var(--sp-5, 2rem);
@@ -149,15 +136,20 @@ search-focus form > .sv-typed {
 /* production styles icons in the search form as Bone circles; here the sparkle sits on the text's left edge */
 search-focus .sv-typed .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem; padding: 0; background: none; border-radius: 0; box-shadow: none; }
 .sv-typed .sv-typed-terms { margin: 0; padding: 0; list-style: none; }
-.sv-typed .sv-key {
-  flex: none; margin-left: auto; padding: .1rem .6rem; border: .1rem solid var(--color-text-primary); border-radius: 2px;
-  font-family: inherit; font-size: 1.2rem; line-height: 1.5; white-space: nowrap;
-}
 .sv-typed .sv-ask { color: var(--color-text-secondary, #5a5752); }
 .sv-typed .sv-ask:hover, .sv-typed .sv-ask:focus-visible { color: var(--color-text-primary); }
-.sv-typed .sv-typed-terms + .sv-ask, .sv-typed .sv-enter + .sv-typed-terms { margin-top: .4rem; padding-top: .4rem; border-top: .1rem solid var(--color-border-default, #e5e0d8); }
+.sv-typed .sv-typed-terms + .sv-ask { margin-top: .4rem; padding-top: .4rem; border-top: .1rem solid var(--color-border-default, #e5e0d8); }
 .sv-typed .sv-go { display: inline-block; }
 .sv-compact .sv-typed { padding: .8rem 1.2rem; }
+/* the field grows for a prompt (promptField): a textarea styled as the field, over it */
+.sv-prompt {
+  position: absolute; z-index: 1; box-sizing: border-box; margin: 0; overflow: hidden; resize: none;
+  outline: .1rem solid var(--color-border-focus, #1c1a18); outline-offset: 0;   /* production's focused field */
+  transition: height 200ms cubic-bezier(.2, .8, .2, 1);
+}
+.sv-prompt[hidden] { display: none; }
+search-focus form:has(.sv-prompt:not([hidden])) > button { z-index: 2; }
+@media (prefers-reduced-motion: reduce) { .sv-prompt { transition: none; } }
 /* below the desktop header the row wraps into four columns and the advisor goes underneath */
 @media (max-width: 1024px) {
   .search-dropdown .suggestions:has(> .sv-tiles) { flex-direction: column; gap: 2.4rem; }

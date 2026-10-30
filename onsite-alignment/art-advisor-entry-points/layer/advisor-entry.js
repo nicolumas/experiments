@@ -99,15 +99,12 @@
       wishCta: 'Optionen ansehen',
       svHeading: 'Nicht sicher, wonach du\u00a0suchst?',
       // each opens the advisor with its words waiting in the field (Oct 30 brief)
-      svChips: ['Etwas Ruhiges f\u00fcrs Schlafzimmer', 'Geschenk f\u00fcr Architektur-Fans', 'Gro\u00dfes Werk \u00fcber dem Sofa'],
-      svCta: 'Advisor fragen',
+      svCta: 'Oben prompten oder zum AI Advisor',
       svMost: 'Meist gesucht',
       // the short line where the field has no room for the full one (fitPlaceholder)
-      searchPlaceholder: 'K\u00fcnstler, Thema \u2013 oder beschreib deine Idee',
+      searchPlaceholder: 'K\u00fcnstler, Thema \u2013 oder Prompt',
       searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
-      svEnterTitle: 'AI Advisor fragen',
-      svEnterKey: 'Enter',
       svAskAbout: 'AI Advisor fragen zu',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
@@ -159,14 +156,11 @@
       wishEmptyText: 'Describe your room, a mood or an occasion, and the AI\u00a0Advisor suggests editions that\u00a0fit.',
       wishCta: 'View options',
       svHeading: 'Not sure what you\u2019re looking\u00a0for?',
-      svChips: ['Something calm for the bedroom', 'A gift for an architecture lover', 'A large piece above the sofa'],
-      svCta: 'Ask the Advisor',
+      svCta: 'Prompt above or go to AI Advisor',
       svMost: 'Most wanted',
-      searchPlaceholder: 'Artist, theme \u2013 or describe your idea',
+      searchPlaceholder: 'Artist, theme \u2013 or prompt',
       searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
-      svEnterTitle: 'Ask the AI Advisor',
-      svEnterKey: 'Enter',
       svAskAbout: 'Ask the AI Advisor about',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
@@ -365,7 +359,6 @@
       card: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>
         <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd>
           <span class="sv-advisor-title">${COPY.svHeading}</span>
-          <ul class="sv-chips">${COPY.svChips.map(chip => `<li><a href="#" data-aa-placement="overlay-empty-chip" data-aa-prefill="${esc(chip)}">${esc(chip)}</a></li>`).join('')}</ul>
           <a class="sv-advisor-cta" href="#" data-aa-placement="overlay-empty-card"><span>${COPY.svCta}</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl>`,
       compact: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>`,
     };
@@ -409,10 +402,10 @@
       if (document.documentElement.classList.contains('scroll-locked')) document.documentElement.classList.remove('scroll-locked');
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
   }
-  // what typing does (production adds nothing here): the full-width dropdown closes and a small panel opens
-  // under the field, styled like production's own suggestions. Conversational (class C): the advisor row leads
-  // with the Enter key, since Enter opens it. Anything else: the catalogue's suggestions, then a quiet advisor
-  // row, so a name LUMAS does not carry ("gursky") still has somewhere to go.
+  // what typing does (production adds nothing here): the full-width dropdown closes. Conversational (class C):
+  // no row; the field itself grows to show the whole prompt (promptField), and Enter opens the advisor with it.
+  // Anything else: a small panel under the field, styled like production's suggestions, with the catalogue's
+  // suggestions and a quiet advisor row, so a name LUMAS does not carry ("gursky") still has somewhere to go.
   function renderTyped(q, terms, result) {
     const dropdown = document.querySelector('.search-dropdown');
     const field = document.querySelector('search-focus form[role=search]');   // where production's suggestions sit
@@ -421,17 +414,83 @@
     dropdown?.toggleAttribute('data-typed', !!q);
     field?.toggleAttribute('data-typed', !!q);
     document.querySelector('.sv-compact')?.toggleAttribute('data-typed', !!q);
-    if (!q || !host) return;
+    if (!q || !host || result.cls === 'C') return;
     const sparkle = ICON_SPARKLE.replace('<svg ', '<svg class="sv-sparkles" ');
-    const key = `<kbd class="sv-key">${COPY.svEnterKey} <span aria-hidden="true">\u21b5</span></kbd>`;
     const termList = terms.slice(0, 6).map(t => `<li><a href="${PREFIX}/search/?q=${encodeURIComponent(t)}">${esc(t)}</a></li>`).join('');
     const termsBlock = termList ? `<ul class="sv-typed-terms">${termList}</ul>` : '';
-    const html = result.cls === 'C'
-      ? `<div class="sv-typed">
-          <a class="sv-enter" href="#" data-aa-placement="overlay-typed-enter" data-aa-q="${esc(q)}">${sparkle}<span>${COPY.svEnterTitle}</span>${key}</a>${termsBlock}</div>`
-      : `<div class="sv-typed">${termsBlock}
-          <a class="sv-ask" href="#" data-aa-placement="overlay-typed-ask" data-aa-q="${esc(q)}">${sparkle}<span>${COPY.svAskAbout} \u201c${esc(q)}\u201d</span><span aria-hidden="true" class="sv-go">\u2192</span></a></div>`;
-    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', html);
+    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', `<div class="sv-typed">${termsBlock}
+      <a class="sv-ask" href="#" data-aa-placement="overlay-typed-ask" data-aa-q="${esc(q)}">${sparkle}<span>${COPY.svAskAbout} \u201c${esc(q)}\u201d</span><span aria-hidden="true" class="sv-go">\u2192</span></a></div>`);
+  }
+
+  // the field grows for a prompt: an <input> cannot wrap, so a textarea styled as the field lies over it while
+  // the query is conversational, kept in sync with it (production and the submit handler read the input).
+  // Enter submits, as in the input; the height eases open and closed in 200 ms.
+  const promptFields = new WeakMap();
+  function promptField(input) {
+    if (promptFields.has(input)) return promptFields.get(input);
+    const area = el('<textarea class="sv-prompt" rows="1" spellcheck="false" aria-hidden="true" tabindex="-1" hidden></textarea>');
+    input.after(area);
+    const fit = () => {
+      const before = area.style.height;
+      area.style.transition = 'none';
+      area.style.height = 'auto';
+      const target = Math.max(input.offsetHeight, area.scrollHeight + 2);
+      area.style.height = before;
+      area.offsetHeight;   // apply the old height before easing to the new one
+      area.style.transition = '';
+      area.style.height = target + 'px';
+    };
+    const copyLook = () => {
+      const style = getComputedStyle(input);
+      const line = parseFloat(style.fontSize) * 1.4;
+      const padY = Math.max(0, (input.offsetHeight - line) / 2);
+      Object.assign(area.style, {
+        top: input.offsetTop + 'px', left: input.offsetLeft + 'px', width: input.offsetWidth + 'px',
+        font: style.font, lineHeight: line + 'px', letterSpacing: style.letterSpacing, color: style.color,
+        background: style.backgroundColor, border: style.border, borderRadius: style.borderRadius, boxShadow: style.boxShadow,
+        padding: `${padY}px ${style.paddingRight} ${padY}px ${style.paddingLeft}`, height: input.offsetHeight + 'px',
+      });
+    };
+    let open = false;
+    const api = {
+      expand(on) {
+        if (on === open) return;
+        open = on;
+        if (on) {
+          copyLook();
+          area.value = input.value;
+          area.hidden = false;
+          area.removeAttribute('aria-hidden');
+          area.tabIndex = 0;
+          input.style.visibility = 'hidden';
+          const caret = input.selectionStart ?? area.value.length;
+          area.focus();
+          area.setSelectionRange(caret, caret);
+          fit();
+        } else {
+          const caret = area.selectionStart ?? input.value.length;
+          input.style.visibility = '';
+          area.style.height = input.offsetHeight + 'px';
+          if (document.activeElement === area) { input.focus(); input.setSelectionRange(caret, caret); }
+          setTimeout(() => { if (!open) { area.hidden = true; area.setAttribute('aria-hidden', 'true'); area.tabIndex = -1; } }, 200);
+        }
+      },
+    };
+    area.addEventListener('input', () => {
+      input.value = area.value;
+      fit();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    area.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' || e.shiftKey || e.isComposing) return;
+      e.preventDefault();
+      input.value = area.value;
+      input.form?.requestSubmit();
+    });
+    // production's clear button empties the input: the prompt field goes with it
+    input.form?.querySelector('.clear-search')?.addEventListener('click', () => { area.value = ''; api.expand(false); });
+    promptFields.set(input, api);
+    return api;
   }
 
   // production's dropdown closes 250 ms after the field blurs; keep focus while a row is pressed
@@ -457,6 +516,7 @@
       if (q !== input.value.trim()) return;
       setClassReadout(q, result);
       renderTyped(q, terms, result);
+      promptField(input).expand(result.cls === 'C');
     };
     const schedule = () => { clearTimeout(timer); timer = setTimeout(update, 340); };
     input.addEventListener('input', schedule);
