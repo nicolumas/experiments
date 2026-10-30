@@ -105,7 +105,6 @@
       searchPlaceholder: 'K\u00fcnstler, Thema \u2013 oder Prompt',
       searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
-      svAskAbout: 'AI Advisor fragen zu',
       svEnterTitle: 'AI Advisor fragen',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
@@ -162,7 +161,6 @@
       searchPlaceholder: 'Artist, theme \u2013 or prompt',
       searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
-      svAskAbout: 'Ask the AI Advisor about',
       svEnterTitle: 'Ask the AI Advisor',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
@@ -405,9 +403,10 @@
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
   }
   // what typing does (production adds nothing here): the full-width dropdown closes. Conversational (class C):
-  // no row; the field itself grows to show the whole prompt (promptField), and Enter opens the advisor with it.
-  // Anything else: a small panel under the field, styled like production's suggestions, with the catalogue's
-  // suggestions and a quiet advisor row, so a name LUMAS does not carry ("gursky") still has somewhere to go.
+  // the field itself grows to show the whole prompt (promptField), and Enter opens the advisor with it.
+  // Anything else: the catalogue's suggestions in a small panel under the field, styled like production's;
+  // no advisor row (it competed with the field and turned typos into prompts; Oct 30). A search with few or no
+  // hits ("gursky") meets the advisor on the results page (3.2, 3.3).
   function renderTyped(q, terms, result) {
     const dropdown = document.querySelector('.search-dropdown');
     const field = document.querySelector('search-focus form[role=search]');   // where production's suggestions sit
@@ -416,12 +415,9 @@
     dropdown?.toggleAttribute('data-typed', !!q);
     field?.toggleAttribute('data-typed', !!q);
     document.querySelector('.sv-compact')?.toggleAttribute('data-typed', !!q);
-    if (!q || !host || result.cls === 'C') return;
-    const sparkle = ICON_SPARKLE.replace('<svg ', '<svg class="sv-sparkles" ');
+    if (!q || !host || result.cls === 'C' || !terms.length) return;
     const termList = terms.slice(0, 6).map(t => `<li><a href="${PREFIX}/search/?q=${encodeURIComponent(t)}">${esc(t)}</a></li>`).join('');
-    const termsBlock = termList ? `<ul class="sv-typed-terms">${termList}</ul>` : '';
-    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', `<div class="sv-typed">${termsBlock}
-      <a class="sv-ask" href="#" data-aa-placement="overlay-typed-ask" data-aa-q="${esc(q)}">${sparkle}<span>${COPY.svAskAbout} \u201c${esc(q)}\u201d</span><span aria-hidden="true" class="sv-go">\u2192</span></a></div>`);
+    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', `<div class="sv-typed"><ul class="sv-typed-terms">${termList}</ul></div>`);
   }
 
   // the field grows for a prompt: an <input> cannot wrap, so a textarea styled as the field lies over it while

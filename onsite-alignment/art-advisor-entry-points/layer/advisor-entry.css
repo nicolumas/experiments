@@ -133,13 +133,7 @@ search-focus form > .sv-typed {
 .sv-typed a { display: flex; align-items: center; gap: .8rem; padding: .5rem 0; color: var(--color-text-primary); font-size: 1.5rem; line-height: 1.4; text-decoration: none; cursor: pointer; }
 .sv-typed a:hover > span:first-of-type, .sv-typed .sv-typed-terms a:hover { text-decoration: underline; text-underline-offset: .3rem; }
 .sv-typed a:focus-visible { outline: .2rem solid var(--color-text-primary); outline-offset: .2rem; }
-/* production styles icons in the search form as Bone circles; here the sparkle sits on the text's left edge */
-search-focus .sv-typed .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem; padding: 0; background: none; border-radius: 0; box-shadow: none; }
 .sv-typed .sv-typed-terms { margin: 0; padding: 0; list-style: none; }
-.sv-typed .sv-ask { color: var(--color-text-secondary, #5a5752); }
-.sv-typed .sv-ask:hover, .sv-typed .sv-ask:focus-visible { color: var(--color-text-primary); }
-.sv-typed .sv-typed-terms + .sv-ask { margin-top: .4rem; padding-top: .4rem; border-top: .1rem solid var(--color-border-default, #e5e0d8); }
-.sv-typed .sv-go { display: inline-block; }
 .sv-compact .sv-typed { padding: .8rem 1.2rem; }
 /* the field grows for a prompt (promptField): a textarea styled as the field, over it */
 .sv-prompt {
