@@ -103,8 +103,8 @@
       svCta: 'Advisor fragen',
       svMost: 'Meist gesucht',
       // the short line where the field has no room for the full one (fitPlaceholder)
-      searchPlaceholder: 'K\u00fcnstler, Farbe \u2013 oder beschreib, was du suchst',
-      searchPlaceholderShort: 'K\u00fcnstler, Farbe oder deine Idee',
+      searchPlaceholder: 'K\u00fcnstler, Thema \u2026',
+      searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
@@ -159,8 +159,8 @@
       svChips: ['Something calm for the bedroom', 'A gift for an architecture lover', 'A large piece above the sofa'],
       svCta: 'Ask the Advisor',
       svMost: 'Most wanted',
-      searchPlaceholder: 'Search artists, colours \u2013 or describe what you\u2019re looking for',
-      searchPlaceholderShort: 'Artist, colour, or describe your idea',
+      searchPlaceholder: 'Artist, theme \u2026',
+      searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
