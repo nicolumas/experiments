@@ -47,17 +47,6 @@
     set(key, value) { try { sessionStorage.setItem(key, value); } catch (e) {} },
   };
   const on = Object.assign(Object.fromEntries(ENTRIES.map(([id]) => [id, true])), ls.get(STORE, {}));
-  // how the search dropdown offers it (3.1): the four forms of the navigation proposal, Option C
-  // (onsite-alignment/navigation-proposal/option-c.html). In card, one row of the eight most
-  // searched terms replaces production's three lists ("Most wanted", "Popular pages", "Popular categories"):
-  //   card     a Bone AI Advisor card beside the row
-  //   compact  no dropdown: a panel under the search field with the advisor on top, then the most searched
-  //            terms as text, replaced by production's suggestions as soon as someone types
-  // Once typing, the rows by query class apply in both (class C on top, class B a quiet link).
-  // [value, label in the settings, label on the presenter bar]
-  const DD_VARIANTS = [['card', 'Advisor card', 'Card'], ['compact', 'Compact', 'Compact']];
-  let ddVariant = DD_VARIANTS.some(([v]) => v === ls.get('aa-dd-variant')) ? ls.get('aa-dd-variant') : 'card';
-  let applyDropdown = () => {};   // set by searchDropdown(); switches the form without a reload
   // how the advisor opens: a window over the shop (default) or the full page
   const OPEN_MODE = ls.get('aa-open-mode', 'window');
 
@@ -104,7 +93,6 @@
       // the short line where the field has no room for the full one (fitPlaceholder)
       searchPlaceholder: 'Suchen oder prompten',
       searchPlaceholderShort: 'Suchen oder prompten',
-      svSuggestions: 'Vorschläge',
       svEnterTitle: 'AI Advisor fragen',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
@@ -160,7 +148,6 @@
       svMost: 'Most wanted',
       searchPlaceholder: 'Search or prompt',
       searchPlaceholderShort: 'Search or prompt',
-      svSuggestions: 'Suggestions',
       svEnterTitle: 'Ask the AI Advisor',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
@@ -341,7 +328,9 @@
   }
   const placeholderFit = new ResizeObserver(entries => entries.forEach(entry => fitPlaceholder(entry.target)));
 
-  // the empty dropdown in the chosen Option C form (see DD_VARIANTS); typing replaces it (renderTyped)
+  // the empty dropdown (3.1, from the navigation proposal's Option C, onsite-alignment/navigation-proposal/
+  // option-c.html): one row of the eight most searched terms replaces production's three lists, with the
+  // AI Advisor beside it; typing replaces it (renderTyped)
   function searchDropdown() {
     if (!on.overlay) return;
     const searchInputs = document.querySelectorAll('search-focus input[type=search], nav-search input[type=search]');
@@ -354,53 +343,11 @@
     const tile = ([href, label, image]) => `<dd><a href="${href}"><picture>
       <source srcset="${LAYER}search-tiles/${image}-220x220.webp" type="image/webp">
       <img alt="${esc(label)}" class="max-w-full" loading="lazy" src="${LAYER}search-tiles/${image}-220x220.jpg"></picture><span>${esc(label)}</span></a></dd>`;
-    const tiles = COPY.svTiles.map(tile).join('');
-    const forms = {
-      card: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>
-        <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd>
-          <span class="sv-advisor-title">${COPY.svHeading}</span>
-          <a class="sv-advisor-cta" href="#" data-aa-placement="overlay-empty-card"><span>${COPY.svCta}</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl>`,
-      compact: `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${tiles}</dl>`,
-    };
-    // compact: production's typed suggestions move into a panel under the field (and back out for the others)
-    const form = document.querySelector('search-focus form[role=search]');
-    const autocomplete = form?.querySelector('.autocomplete-container');
-    const panel = el(`<div class="sv-compact">
-      <a class="sv-compact-advisor" href="#" data-aa-placement="overlay-empty-compact">${sparkle}
-        <span><span class="sv-compact-eyebrow">AI Advisor</span><span class="sv-compact-title">${COPY.svHeading}</span></span>
-        <span aria-hidden="true" class="sv-go">→</span></a>
-      <div class="sv-compact-popular"><p>${COPY.svMost}</p><ul>${COPY.svTiles.map(([href, label]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}</ul></div>
-    </div>`);
-    if (autocomplete) {
-      autocomplete.dataset.label = COPY.svSuggestions;
-      autocomplete.after(panel);
-    }
-    applyDropdown = (variant, open) => {
-      ddVariant = variant;
-      ls.set('aa-dd-variant', variant);
-      suggestions.querySelectorAll(':scope > dl').forEach(dl => dl.remove());
-      suggestions.insertAdjacentHTML('beforeend', forms[variant]);
-      dropdown.dataset.searchVariant = variant;
-      document.documentElement.dataset.searchVariant = variant;
-      if (autocomplete) (variant === 'compact' ? panel.append(autocomplete) : panel.before(autocomplete));
-      document.querySelectorAll('[data-aa-dd]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.aaDd === variant)));
-      document.querySelectorAll('input[name=aa-dd]').forEach(r => { r.checked = r.value === variant; });
-      if (!open) return;
-      // show it straight away, as the proposal's toggle does
-      const input = [...document.querySelectorAll('search-focus input[type=search]')].find(i => i.offsetParent);
-      if (input) { input.blur(); input.focus(); input.click(); }
-      // after production's own close, which follows a blur by 250 ms
-      if (variant !== 'compact') setTimeout(() => { dropdown.hidden = false; }, 320);
-    };
-    applyDropdown(ddVariant, false);
-    // production opens search as a modal (page inert, scroll locked); the compact panel is not one
-    // (only touch what is set: removing an absent class still rewrites the attribute and would
-    // re-trigger this observer forever)
-    new MutationObserver(() => {
-      if (ddVariant !== 'compact') return;
-      document.querySelectorAll('[inert]').forEach(node => { node.inert = false; });
-      if (document.documentElement.classList.contains('scroll-locked')) document.documentElement.classList.remove('scroll-locked');
-    }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
+    suggestions.querySelectorAll(':scope > dl').forEach(dl => dl.remove());
+    suggestions.insertAdjacentHTML('beforeend', `<dl class="sv-tiles"><dt>${COPY.svMost}</dt>${COPY.svTiles.map(tile).join('')}</dl>
+      <dl class="sv-advisor sv-advisor-card"><dt>${sparkle}AI Advisor</dt><dd>
+        <span class="sv-advisor-title">${COPY.svHeading}</span>
+        <a class="sv-advisor-cta" href="#" data-aa-placement="overlay-empty-card"><span>${COPY.svCta}</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl>`);
   }
   // what typing does (production adds nothing here): the full-width dropdown closes. Conversational (class C):
   // the field itself grows to show the whole prompt (promptField), and Enter opens the advisor with it.
@@ -410,14 +357,12 @@
   function renderTyped(q, terms, result) {
     const dropdown = document.querySelector('.search-dropdown');
     const field = document.querySelector('search-focus form[role=search]');   // where production's suggestions sit
-    const host = ddVariant === 'compact' ? document.querySelector('.sv-compact') : field;
     document.querySelectorAll('.sv-typed').forEach(node => node.remove());
     dropdown?.toggleAttribute('data-typed', !!q);
     field?.toggleAttribute('data-typed', !!q);
-    document.querySelector('.sv-compact')?.toggleAttribute('data-typed', !!q);
-    if (!q || !host || result.cls === 'C' || !terms.length) return;
+    if (!q || !field || result.cls === 'C' || !terms.length) return;
     const termList = terms.slice(0, 6).map(t => `<li><a href="${PREFIX}/search/?q=${encodeURIComponent(t)}">${esc(t)}</a></li>`).join('');
-    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', `<div class="sv-typed"><ul class="sv-typed-terms">${termList}</ul></div>`);
+    field.insertAdjacentHTML('beforeend', `<div class="sv-typed"><ul class="sv-typed-terms">${termList}</ul></div>`);
   }
 
   // the field grows for a prompt: an <input> cannot wrap, so a textarea styled as the field lies over it while
@@ -499,7 +444,7 @@
   }
 
   // production's dropdown closes 250 ms after the field blurs; keep focus while a row is pressed
-  document.addEventListener('pointerdown', e => { if (e.target.closest('.sv-advisor, .sv-compact, .sv-typed')) e.preventDefault(); }, true);
+  document.addEventListener('pointerdown', e => { if (e.target.closest('.sv-advisor, .sv-typed')) e.preventDefault(); }, true);
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-aa-placement]');
     if (!a) return;
@@ -1025,8 +970,6 @@
       ['Homepage', '3.4 · 3.5 · 3.9', '/en/'],
       ['dratwa', 'search, class A', '/en/search/?q=dratwa'],
       ['blue abstract', 'search, class B · 3.2', '/en/search/?q=blue+abstract'],
-      ['Gift …', 'search, class C · 3.3', '/en/search/?q=gift+for+my+mother%2C+she+loves+nature'],
-      ['0 hits', 'search, rescue · 3.3', '/en/search/?q=what+goes+with+a+beige+wall'],
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
       ['Wish list', '3.10', '/en/wishlist/'],
@@ -1035,8 +978,6 @@
       ['Homepage', '3.4 · 3.5 · 3.9', '/'],
       ['dratwa', 'search, class A', '/search/?q=dratwa'],
       ['blau abstrakt', 'search, class B · 3.2', '/search/?q=blau+abstrakt'],
-      ['Geschenk …', 'search, class C · 3.3', '/search/?q=geschenk+f%C3%BCr+meine+mutter%2C+sie+mag+natur'],
-      ['0 hits', 'search, rescue · 3.3', '/search/?q=was+passt+zu+einer+beigen+wand'],
       ['Category + filters', '3.2 · 3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
       ['Search + filters', '3.2 · 3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
       ['Wish list', '3.10', '/wishlist/'],
@@ -1068,9 +1009,6 @@
           <div class="aa-bar-chips">${chip(`type="radio" name="aa-open" value="window" ${OPEN_MODE === 'window' ? 'checked' : ''}`, 'Window over the shop')}${chip(`type="radio" name="aa-open" value="page" ${OPEN_MODE === 'page' ? 'checked' : ''}`, 'Full page')}</div>
           <p class="aa-panel-h">Wish list (3.10, stand-in)</p>
           <div class="aa-bar-chips">${chip(`type="radio" name="aa-wish" value="saved" ${WISHLIST_STATE === 'saved' ? 'checked' : ''}`, '4 saved works')}${chip(`type="radio" name="aa-wish" value="empty" ${WISHLIST_STATE === 'empty' ? 'checked' : ''}`, 'Empty')}</div>
-          <p class="aa-panel-h">Search dropdown (3.1)</p>
-          <div class="aa-bar-chips">${DD_VARIANTS.map(([v, label]) =>
-            chip(`type="radio" name="aa-dd" value="${v}" ${ddVariant === v ? 'checked' : ''}`, label)).join('')}</div>
           <p class="aa-panel-h"><a class="aa-bar-link" href="${PAGE.pathname + (PAGE.search ? PAGE.search + '&' : '?')}pristine">This page without the layer →</a></p></section>
         <section><p class="aa-panel-h">Query class</p>
           <p class="aa-panel-class" data-aa-class>Type in the search field or open a search.</p></section>
@@ -1081,8 +1019,6 @@
         <span class="aa-bar-title">AI Advisor</span>
         <nav class="aa-bar-pages" aria-label="Walk-through">${DEMOS.map(([label, shows, href], i) =>
           `<a href="${href}" title="${esc(label + ': ' + shows)}" ${i === step ? 'aria-current="page"' : ''}><b>${i + 1}</b><span>${esc(label)}</span></a>`).join('')}</nav>
-        ${on.overlay ? `<div class="aa-bar-search" role="group" aria-label="Search dropdown"><span class="aa-bar-title">Search</span>${DD_VARIANTS.map(([v, , short]) =>
-          `<button type="button" data-aa-dd="${v}" aria-pressed="${ddVariant === v}">${short}</button>`).join('')}</div>` : ''}
         <button type="button" class="aa-panel-toggle" aria-expanded="false" aria-controls="aa-panel-body">${ICON_SLIDERS}<span>Entry points</span></button>
         <div class="aa-bar-lang" role="group" aria-label="Shop language">${langs.map(([l, href, current]) => `<a href="${href}" ${current ? 'aria-current="true"' : ''}>${l}</a>`).join('')}</div>
       </div>
@@ -1099,11 +1035,6 @@
       location.reload();
     }));
     panel.querySelectorAll('input[name=aa-open]').forEach(r => r.addEventListener('change', () => { ls.set('aa-open-mode', r.value); location.reload(); }));
-    panel.querySelectorAll('input[name=aa-dd]').forEach(r => r.addEventListener('change', () => applyDropdown(r.value, true)));
-    panel.querySelectorAll('[data-aa-dd]').forEach(b => {
-      b.addEventListener('mousedown', e => e.preventDefault());   // keeps the search field focused
-      b.addEventListener('click', () => applyDropdown(b.dataset.aaDd, true));
-    });
     panel.querySelectorAll('input[name=aa-wish]').forEach(r => r.addEventListener('change', () => { ls.set('aa-wishlist-state', r.value); location.reload(); }));
     panel.querySelector('.aa-panel-clear').addEventListener('click', () => { events.length = 0; ls.set('aa-events', events); renderEventLog(); });
     document.documentElement.classList.add('aa-has-bar');

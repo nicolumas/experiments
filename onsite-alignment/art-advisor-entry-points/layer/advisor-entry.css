@@ -30,11 +30,11 @@
    Slow (4.8 s), with long rests, so it reads as light catching, not as a notification. */
 @keyframes aa-twinkle { 0%, 55%, 100% { transform: scale(1); opacity: 1; } 65% { transform: scale(.15); opacity: .15; } 78% { transform: scale(1.35); opacity: 1; } 88% { transform: scale(1); } }
 @keyframes aa-glint { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.12) rotate(10deg); } 94% { transform: scale(.98) rotate(-2deg); } }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path { transform-box: fill-box; transform-origin: center; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(1) { animation: aa-glint 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(2), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(3) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: .6s; }
-:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(4), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path:nth-child(5) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: 2.2s; }
-@media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor, .sv-compact) svg path { animation: none !important; } }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path { transform-box: fill-box; transform-origin: center; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path:nth-child(1) { animation: aa-glint 4.8s cubic-bezier(.2, .8, .2, 1) infinite; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path:nth-child(2), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path:nth-child(3) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: .6s; }
+:is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path:nth-child(4), :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path:nth-child(5) { animation: aa-twinkle 4.8s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: 2.2s; }
+@media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path { animation: none !important; } }
 .aa-mark svg, .aa-row-icon svg, .aa-pill-icon svg { transform-origin: 50% 50%;
   transition: transform .32s var(--aa-ease, cubic-bezier(.2,.8,.2,1)); }
 :is(.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pill, .aa-nav-card):hover :is(.aa-mark, .aa-row-icon, .aa-pill-icon) svg {
@@ -96,7 +96,7 @@ html.aa-window-open { overflow: hidden; }
 }
 .search-dropdown .suggestions dl.sv-tiles dt, .search-dropdown .suggestions dl.sv-advisor dt { grid-column: 1 / -1; }
 .search-dropdown .suggestions dl.sv-tiles dd a > span:last-child { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25; }
-.search-dropdown .sv-sparkles, .sv-compact .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem; }
+.search-dropdown .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem; }
 .search-dropdown .suggestions dl.sv-advisor {
   display: grid; flex: 1 1 20rem; max-width: 34rem; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; margin: 0;
 }
@@ -106,7 +106,7 @@ html.aa-window-open { overflow: hidden; }
   display: block; font-family: var(--font-display, "Utile Display", sans-serif); font-size: 2rem; line-height: 1.2; white-space: normal; text-wrap: balance;
 }
 .sv-go { display: inline-block; transition: transform 220ms cubic-bezier(.2, .8, .2, 1); }
-.search-dropdown .suggestions a:hover .sv-go, .sv-compact a:hover .sv-go { transform: translateX(.4rem); }
+.search-dropdown .suggestions a:hover .sv-go { transform: translateX(.4rem); }
 .search-dropdown .suggestions dl.sv-advisor-card { grid-template-rows: auto auto; align-content: start; }
 /* no box: the question and one quiet text link sit open beside the pictures (a box holding three outlined
    buttons felt stuck in; the example rows went, Oct 30: the field above takes the prompt) */
@@ -124,7 +124,6 @@ html.aa-window-open { overflow: hidden; }
 .search-dropdown[data-typed] { display: none !important; }
 search-focus form[data-typed] .autocomplete-container { display: none !important; }
 search-focus form:has(> .sv-typed) input { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-.sv-compact[data-typed] .sv-compact-advisor { display: none; }
 search-focus form > .sv-typed {
   position: absolute; top: 100%; z-index: 35; box-sizing: border-box; width: 100%; padding-block: 1rem; padding-inline: var(--sp-5, 2rem);
   background: #fff; border-top: .05rem solid rgba(0, 0, 0, .3); border-bottom-left-radius: 2rem; border-bottom-right-radius: 2rem;
@@ -134,7 +133,6 @@ search-focus form > .sv-typed {
 .sv-typed a:hover > span:first-of-type, .sv-typed .sv-typed-terms a:hover { text-decoration: underline; text-underline-offset: .3rem; }
 .sv-typed a:focus-visible { outline: .2rem solid var(--color-text-primary); outline-offset: .2rem; }
 .sv-typed .sv-typed-terms { margin: 0; padding: 0; list-style: none; }
-.sv-compact .sv-typed { padding: .8rem 1.2rem; }
 /* the field grows for a prompt (promptField): a textarea styled as the field, over it */
 .sv-prompt {
   position: absolute; z-index: 1; box-sizing: border-box; margin: 0; overflow: hidden; resize: none;
@@ -154,39 +152,6 @@ search-focus form:has(.sv-prompt:not([hidden])) > button { z-index: 2; }
 }
 /* where the short placeholder is still too long for the field, it ends in an ellipsis instead of mid-word */
 :is(search-focus, nav-search) input[type=search] { text-overflow: ellipsis; }
-/* compact: no dropdown, a panel under the search field */
-.sv-compact { display: none; }
-html[data-search-variant="compact"] .search-dropdown { display: none !important; }
-html[data-search-variant="compact"] site-header form[role="search"] { position: relative; }
-html[data-search-variant="compact"] site-header form[role="search"]:focus-within .sv-compact {
-  position: absolute; top: calc(100% + .8rem); left: 0; right: 0; z-index: 40; display: block; width: auto;   /* the search bar's own width */
-  border: .1rem solid var(--color-border-subtle); background: var(--color-surface-card); box-shadow: 0 .8rem 3.2rem rgba(28, 26, 24, .08);
-  font-family: archivo, medium-fallback, arial, sans-serif;
-}
-.sv-compact a { color: var(--color-text-primary); text-decoration: none; }
-.sv-compact .sv-compact-advisor {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.2rem; margin: .8rem; padding: 1.4rem 1.6rem;
-  background: var(--color-surface-raised); transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
-}
-.sv-compact .sv-compact-advisor:hover { background: var(--color-surface-muted); }
-.sv-compact .sv-compact-advisor .sv-sparkles { width: 2rem; height: 2rem; }
-.sv-compact .sv-compact-advisor > span:nth-child(2) { display: grid; gap: .2rem; }
-.sv-compact .sv-compact-eyebrow { color: var(--color-text-secondary); font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.sv-compact .sv-compact-title { font-family: var(--font-display, "Utile Display", sans-serif); font-size: 1.8rem; line-height: 1.2; }
-.sv-compact-popular { padding: .4rem 0 .8rem; }
-.sv-compact-popular p, html[data-search-variant="compact"] .sv-compact .autocomplete-container::before {
-  display: block; margin: 0; padding: .8rem 2.4rem .4rem; color: var(--color-text-secondary); font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-}
-html[data-search-variant="compact"] .sv-compact .autocomplete-container::before { content: attr(data-label); }
-.sv-compact-popular ul { margin: 0; padding: 0; list-style: none; }
-.sv-compact-popular a, html[data-search-variant="compact"] .sv-compact .search-terms a {
-  display: block; padding: .7rem 2.4rem; font-size: 1.4rem; line-height: 1.5; transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
-}
-.sv-compact-popular a:hover, html[data-search-variant="compact"] .sv-compact .search-terms a:hover { background: var(--color-surface-raised); }
-html[data-search-variant="compact"] .sv-compact .autocomplete-container { position: static; width: auto; padding: .4rem 0 .8rem; border: 0; box-shadow: none; }
-html[data-search-variant="compact"] .sv-compact .search-terms { display: block; margin: 0; padding: 0; }
-html[data-search-variant="compact"] .sv-compact .search-terms dd { margin: 0; }
-html[data-search-variant="compact"] form[role="search"]:has(input:not(:placeholder-shown)) .sv-compact-popular { display: none; }
 
 /* 3.4 Artfinder menu: production's desktop grid is five fixed columns; with the Art Advisor
    card it needs six, or the last card (Art Cloud) wraps onto a row of its own */
@@ -336,15 +301,6 @@ html.aa-has-bar { --aa-bar-h: 56px; }
 .aa-panel-toggle[aria-expanded="true"] { border-color: var(--bar-text); }
 @media (hover: hover) { .aa-panel a:not([aria-current]):hover, .aa-panel button:hover { border-color: var(--bar-muted); } }
 .aa-panel a:focus-visible, .aa-panel button:focus-visible, .aa-bar-chip input:focus-visible + span { outline: 2px solid var(--bar-text); outline-offset: 2px; }
-.aa-bar-search { display: flex; align-items: center; gap: 4px; }
-/* room for the walk-through: the bar's own title goes while the Search group is there, buttons a little tighter */
-@media (max-width: 1700px) {
-  .aa-bar-main:has(.aa-bar-search) > .aa-bar-title { display: none; }
-  .aa-bar-main:has(.aa-bar-search) a, .aa-bar-main:has(.aa-bar-search) button { padding: 0 10px; }
-  .aa-bar-main:has(.aa-bar-search) { gap: 12px; }
-}
-.aa-bar-search .aa-bar-title { margin-right: 8px; }
-.aa-panel .aa-bar-search button[aria-pressed="true"] { background: var(--bar-text); color: var(--bar-bg); border-color: var(--bar-text); }
 .aa-bar-lang { display: flex; }
 .aa-bar-lang a + a { border-left: 0; }
 
@@ -381,7 +337,6 @@ html.aa-has-bar #chat-widget-container { bottom: 64px !important; }
 @media (max-width: 1099px) { .aa-panel-body { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 899px) {
   .aa-bar-title, .aa-bar-pages span, .aa-panel-toggle span { display: none; }
-  .aa-bar-search { display: none; }   /* phones: the same choice sits in the Entry points settings */
   html.aa-has-bar { --aa-bar-h: 60px; }
   .aa-bar-main { gap: 6px; }
   .aa-bar-main a, .aa-bar-main button { padding: 0; min-width: 36px; min-height: 44px; justify-content: center; }
