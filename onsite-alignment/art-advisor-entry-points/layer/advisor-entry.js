@@ -116,8 +116,8 @@
       // skipping the 15 artists in the Top 20 menu and works that don't picture the term, with four picks by
       // hand. Rank on that page: Schwarz-Weiß Brodziak, Parcel (8; Richter went to Meer, where he is 1); Tiere
       // Waldner, Merle (8, picked as calmer than Paul's jellyfish at 3); Meer Richter, Landschaft mit Wolke (1);
-      // Blumen Schrüfer, Frühling in Simulacrum XII (4); David Bowie Monet, David II (11, whole portrait on its own
-      // ground); Strand Guachinarte, Seaside Glass House (2, picked); New York Dratwa, New York Voilage (6, picked);
+      // Blumen Schrüfer, Frühling in Simulacrum XII (4); David Bowie Evans, Lazarus I (1, picked
+      // over the Top 20 rule); Strand Guachinarte, Seaside Glass House (2, picked); New York Dratwa, New York Voilage (6, picked);
       // Berge Ventosa, Hotel Belvedere (3).
       svTiles: [['/collections/schwarz-weiss-bilder/', 'Schwarz-Weiß', 'schwarz-weiss'], ['/themen/tiere/', 'Tiere', 'tiere'],
         ['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/blumenkunst/', 'Blumen', 'blumen'],
