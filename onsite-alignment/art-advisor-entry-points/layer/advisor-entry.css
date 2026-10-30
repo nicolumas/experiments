@@ -1,12 +1,9 @@
 /* Art Advisor entry points on the lumas.de clone (see advisor-entry.js).
    Uses production's own type families and colour variables, so the additions read as
    part of the shop. Every selector is prefixed .aa- and nothing restyles production
-   markup, except .aa-hidden, which hides the classic homepage finder while the
-   free-text version (3.5) is shown. */
+   markup. */
 
-.aa-hidden { display: none !important; }
-
-.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pill, .aa-sidetab, .aa-classic-label {
+.aa-row, .aa-banner, .aa-pill, .aa-sidetab, .aa-classic-label {
   --aa-ink: var(--primitive-charcoal-900, #1c1a18);
   --aa-ink-2: var(--primitive-charcoal-700, #5a5752);
   --aa-bone: var(--primitive-bone-200, #eae2d8);
@@ -37,7 +34,7 @@
 @media (prefers-reduced-motion: reduce) { :is(.aa-mark, .aa-row-icon, .aa-pill-icon, .sv-advisor) svg path { animation: none !important; } }
 .aa-mark svg, .aa-row-icon svg, .aa-pill-icon svg { transform-origin: 50% 50%;
   transition: transform .32s var(--aa-ease, cubic-bezier(.2,.8,.2,1)); }
-:is(.aa-row, .aa-banner, .aa-tile, .aa-finder, .aa-pill, .aa-nav-card):hover :is(.aa-mark, .aa-row-icon, .aa-pill-icon) svg {
+:is(.aa-row, .aa-banner, .aa-pill):hover :is(.aa-mark, .aa-row-icon, .aa-pill-icon) svg {
   transform: rotate(18deg); }
 
 /* shared controls ------------------------------------------------------------- */
@@ -153,71 +150,11 @@ search-focus form:has(.sv-prompt:not([hidden])) > button { z-index: 2; }
 /* where the short placeholder is still too long for the field, it ends in an ellipsis instead of mid-word */
 :is(search-focus, nav-search) input[type=search] { text-overflow: ellipsis; }
 
-/* 3.4 Artfinder menu: production's desktop grid is five fixed columns; with the Art Advisor
-   card it needs six, or the last card (Art Cloud) wraps onto a row of its own */
-@media (min-width: 992px) {
-  .menu.discovery dl:has(> .aa-nav-card) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-}
 
-/* 3.8 slim bar at the top of every listing page; it sticks above production's filter toolbar */
-.aa-listbar { margin: 0 0 20px; }
-.aa-has-listbar > .aa-listbar { position: sticky; top: var(--aa-listbar-top, 0px); z-index: 33; }
-.aa-listbar-marker { height: 0; }
-/* phones: production's toolbar sticks at 0, not via --top-offset */
-@media (max-width: 1023px) { .aa-has-listbar .filters-toolbar { top: calc(var(--aa-listbar-top, 0px) + var(--aa-listbar-h, 0px)); } }
-@media (max-width: 759px) {
-  /* stuck on a phone it compacts to the mark and the call to action, so the results keep the screen */
-  .aa-listbar--stuck.aa-row--start { display: flex; align-items: center; padding-top: 10px; padding-bottom: 10px; }
-  .aa-listbar--stuck .aa-row-text { display: none; }
-  .aa-listbar--stuck .aa-row-cta { margin-left: auto; }
-}
-
-/* 3.3 banner on conversational or failing searches ---------------------------- */
-.aa-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px 40px; align-items: center;
-  margin: 0 0 32px; padding: 28px 32px; background: var(--aa-bone); }
-.aa-banner .aa-mark { margin-bottom: 12px; }
-.aa-banner-title { margin: 0 0 6px; font: 400 26px/1.15 utile-display, utile-display-fallback, arial, sans-serif; }
-.aa-banner-text { margin: 0; font-size: 15px; color: var(--aa-ink-2); }
-.aa-banner-form { display: flex; gap: 8px; }
-.aa-banner-input { flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; border: 1px solid var(--primitive-charcoal-300, #c7c3be);
-  border-radius: 4px; background: #fff; color: var(--aa-ink); font: 16px archivo, medium-fallback, arial, sans-serif; }
-.aa-banner-input:focus { outline: none; border-color: var(--aa-ink); box-shadow: 0 0 0 1px var(--aa-ink); }
-/* 3.10 wish list: under the saved works (production's consultation slot), or in the empty state */
 .aa-wish { margin: 8px 0 40px; }
 .aa-wish-action { justify-self: end; }
 .aa-wish--empty { grid-template-columns: 1fr; gap: 20px; margin: 0 0 24px; }
 .aa-classic-label { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--aa-ink-2); }
-
-/* 3.2 tile inside the results grid ------------------------------------------- */
-.aa-tile { position: relative; display: flex; flex-direction: column; gap: 10px; margin: 0 0 24px; padding: 28px 22px 24px;
-  background: var(--aa-bone); }
-.aa-tile .aa-mark { margin: 0; }
-.aa-tile-title { margin: 0; font: 400 22px/1.2 utile-display, utile-display-fallback, arial, sans-serif; }
-.aa-tile-text { margin: 0 0 8px; font-size: 14px; line-height: 1.5; }
-/* the tile can be as narrow as a product column (≈150 px): the button spans it and may wrap */
-.aa-tile .aa-btn { align-self: stretch; width: 100%; white-space: normal; text-align: center; line-height: 1.3;
-  padding: 12px 14px; letter-spacing: .1em; }
-.aa-tile-close { position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border: 0; background: none;
-  font-size: 20px; line-height: 1; color: var(--aa-ink-2); cursor: pointer; }
-.aa-tile-close:hover { color: var(--aa-ink); }
-
-/* 3.5 homepage free-text finder ------------------------------------------------ */
-.aa-finder { padding: 40px 20px 36px; background: var(--aa-bone); text-align: center; }
-.aa-finder .aa-mark { margin-bottom: 14px; }
-.aa-finder-title { margin: 0 0 8px; font: 400 32px/1.15 utile-display, utile-display-fallback, arial, sans-serif; }
-.aa-finder-sub { margin: 0 0 22px; font-size: 15px; color: var(--aa-ink-2); }
-.aa-finder-form { display: flex; gap: 8px; max-width: 640px; margin: 0 auto 16px; }
-.aa-finder-input { flex: 1; min-width: 0; min-height: 48px; padding: 0 16px; border: 1px solid var(--primitive-charcoal-300, #c7c3be);
-  border-radius: 4px; background: #fff; color: var(--aa-ink); font: 16px archivo, medium-fallback, arial, sans-serif; }
-.aa-finder-input:focus { outline: none; border-color: var(--aa-ink); box-shadow: 0 0 0 1px var(--aa-ink); }
-.aa-finder-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 18px; max-width: 640px; }
-.aa-chip { min-height: 40px; padding: 0 16px; border: 1px solid var(--primitive-charcoal-300, #c7c3be); border-radius: 2px;
-  background: transparent; color: var(--aa-ink); font: 13px archivo, medium-fallback, arial, sans-serif; cursor: pointer;
-  transition: background .22s var(--aa-ease); }
-.aa-chip { background: rgba(255, 255, 255, .55); }
-.aa-chip:hover { background: #fff; border-color: var(--aa-ink); }
-.aa-finder-switch { margin: 0; font-size: 13px; color: var(--aa-ink-2); }
-.aa-finder-switch--classic { padding: 12px 0 8px; text-align: center; font: 13px archivo, medium-fallback, arial, sans-serif; }
 
 /* 3.7 return pill after a handoff ---------------------------------------------- */
 .aa-pill { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 9000;
@@ -263,9 +200,6 @@ search-focus form:has(.sv-prompt:not([hidden])) > button { z-index: 2; }
   .aa-banner-form { flex-direction: column; }
   .aa-wish-action { justify-self: stretch; }
   .aa-wish-action .aa-btn { width: 100%; }
-  .aa-finder { padding: 32px 16px 28px; }
-  .aa-finder-title { font-size: 26px; }
-  .aa-finder-form { flex-direction: column; }
   /* phones: icon + text on the first row, the call to action under the text */
   .aa-row--start { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: start; }
   .aa-row--start .aa-row-cta { grid-column: 2; justify-self: start; }

@@ -4,13 +4,14 @@
  * Implements the integration concept "Art Advisor × Suche" (claude.ai artifact
  * ECP4NcN4BwskG7EJqviZb3) on top of verbatim production pages. Nothing here edits
  * production markup in place: every entry point is inserted next to an existing
- * element, and the homepage finder is only hidden, never removed. serve.py adds
+ * element. serve.py adds
  * this file to every page; append ?pristine to any URL to see production alone.
  *
- *   3.1 search overlay row        3.4 Artfinder menu card
- *   3.2 inline tile in results    3.5 homepage free-text finder
- *   3.3 banner on question / 0-3  3.6 product page "similar, but different"
- *       hit results               3.7 back-to-consultation pill after a handoff
+ *   3.1 search field and dropdown   3.8 listing top bar
+ *   3.3 banner on question / 0-3    3.9 side tab
+ *       hit results                 3.10 wish list
+ *   3.7 back-to-consultation pill after a handoff
+ *   (3.2 results tile, 3.4 Artfinder menu card, 3.5 homepage finder and 3.6 product-page link removed on request)
  *
  * Copy follows the page language: German on lumas.de, English under lumas.de/en/.
  *
@@ -28,10 +29,7 @@
   const STORE = 'aa-entry-points';
   const ENTRIES = [
     ['overlay', '3.1', 'Search dropdown'],
-    ['tile', '3.2', 'Results tile (many hits)'],
     ['banner', '3.3', 'Results banner (question / 0–3 hits)'],
-    ['nav', '3.4', 'Artfinder menu card'],
-    ['finder', '3.5', 'Homepage free-text finder'],
     ['pill', '3.7', 'Back-to-consultation pill'],
     ['listbar', '3.8', 'Listing top bar (every listing page)'],
     ['sidetab', '3.9', 'Side tab (every page)'],
@@ -69,10 +67,6 @@
       bannerInput: 'Deine Frage an den AI Advisor',
       bannerButton: 'AI Advisor fragen',
       classicLabel: 'Treffer der klassischen Suche',
-      tileTitle: n => `${n.toLocaleString('de-DE')} Editionen sind viel.`,
-      tileText: q => `Erzähl dem AI Advisor von deinem Raum, und er grenzt ${q} für dich ein.`,
-      tileTitleFiltered: n => `${n.toLocaleString('de-DE')} Editionen passen zu deiner Auswahl.`,
-      tileTextFiltered: 'Erzähl dem AI Advisor von deinem Raum, und er findet darunter dein Werk.',
       listBar: '<strong>Nicht ganz das Richtige dabei?</strong> Der AI Advisor findet mit dir das Werk, das zu deinem Raum passt.',
       listBarFiltered: n => `<strong>${n} Editionen in deiner Auswahl.</strong> Der AI Advisor findet darunter das Werk, das zu deinem Raum passt.`,
       start: 'AI Advisor fragen',
@@ -108,14 +102,7 @@
         ['/search/?q=meer&sort=revenue_product_desc', 'Meer', 'meer'], ['/collections/blumenkunst/', 'Blumen', 'blumen'],
         ['/david-bowie-bilder/', 'David Bowie', 'david-bowie'], ['/search/?q=strand&sort=revenue_product_desc', 'Strand', 'strand'],
         ['/collections/staedte/new-york-bilder/', 'New York', 'new-york'], ['/search/?q=berge&sort=revenue_product_desc', 'Berge', 'berge']],
-      navText: 'Beschreib deinen Raum oder Anlass, wir finden gemeinsam dein Werk',
-      finderTitle: 'Finde deine Edition',
-      finderSub: 'Beschreib deinen Raum, deinen Anlass oder deine Stimmung.',
       finderPlaceholder: 'Ein ruhiges Bild über dem Sofa, eher Naturtöne …',
-      finderGo: 'Fragen',
-      finderChips: ['Unter € 1.000', 'Landschaft', 'Ruhig', 'Als Geschenk'],
-      toClassic: 'Lieber klicken? Zum klassischen Finder',
-      toAdvisor: 'Lieber beschreiben? Zum AI Advisor Finder',
       pill: n => `Zurück zur Beratung${n ? ` <span>· ${n} Vorschläge</span>` : ''}`,
     },
     en: {
@@ -126,10 +113,6 @@
       bannerInput: 'Your question for the AI Advisor',
       bannerButton: 'Ask the AI Advisor',
       classicLabel: 'Results from the classic search',
-      tileTitle: n => `${n.toLocaleString('en-GB')} editions is a lot.`,
-      tileText: q => `Tell the AI Advisor about your room and it will narrow down ${q} for you.`,
-      tileTitleFiltered: n => `${n.toLocaleString('en-GB')} editions match your selection.`,
-      tileTextFiltered: 'Tell the AI Advisor about your room and it will find your work among them.',
       listBar: '<strong>Not quite it?</strong> The AI Advisor helps you find the work that fits your room.',
       listBarFiltered: n => `<strong>${n.toLocaleString('en-GB')} editions in your selection.</strong> The AI Advisor finds the one that fits your room.`,
       start: 'Ask the AI Advisor',
@@ -153,14 +136,7 @@
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
         ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'], ['/en/search/?q=beach&sort=revenue_product_desc', 'Beach', 'strand'],
         ['/en/collections/new-york-pictures/', 'New York', 'new-york'], ['/en/search/?q=mountains&sort=revenue_product_desc', 'Mountains', 'berge']],
-      navText: 'Describe your room or occasion and we find your work together',
-      finderTitle: 'Find your edition',
-      finderSub: 'Describe your room, your occasion or your mood.',
       finderPlaceholder: 'A calm picture above the sofa, natural tones …',
-      finderGo: 'Ask',
-      finderChips: ['Under € 1,000', 'Landscape', 'Calm', 'As a gift'],
-      toClassic: 'Prefer clicking? Go to the classic finder',
-      toAdvisor: 'Prefer describing? Go to the AI Advisor finder',
       pill: n => `Back to your consultation${n ? ` <span>· ${n} suggestions</span>` : ''}`,
     },
   }[LOCALE];
@@ -353,7 +329,7 @@
   // the field itself grows to show the whole prompt (promptField), and Enter opens the advisor with it.
   // Anything else: the catalogue's suggestions in a small panel under the field, styled like production's;
   // no advisor row (it competed with the field and turned typos into prompts; Oct 30). A search with few or no
-  // hits ("gursky") meets the advisor on the results page (3.2, 3.3).
+  // hits ("gursky") meets the advisor on the results page (3.3).
   function renderTyped(q, terms, result) {
     const dropdown = document.querySelector('.search-dropdown');
     const field = document.querySelector('search-focus form[role=search]');   // where production's suggestions sit
@@ -488,7 +464,7 @@
     setupOverlay(document.querySelector('nav-search input'));
   }
 
-  // ---- results page: 3.2 tile and 3.3 banner -----------------------------------------
+  // ---- results page: 3.3 banner and 3.8 bar --------------------------------------------
   const isSearchPage = /(^|\/)search\/?$/.test(PAGE.pathname);
   // the filters a visitor has applied, as production labels them in the toolbar pills
   function activeFilters() {
@@ -514,16 +490,16 @@
     const hits = hitCount();
     const filters = activeFilters();
     // only redraw when something the visitor sees has changed; production adds nodes to the grid all
-    // the time (lazy images, videos), and redrawing on each would make the tile flicker
-    const key = [q, hits, filters.join('|'), on.tile, on.banner, on.listbar].join('§');
-    const current = document.querySelector('.aa-tile, .aa-banner, .aa-listbar');
+    // the time (lazy images, videos), and redrawing on each would make the bar flicker
+    const key = [q, hits, filters.join('|'), on.banner, on.listbar].join('§');
+    const current = document.querySelector('.aa-banner, .aa-listbar');
     if (current && current.isConnected && current.dataset.aaKey === key) return;
-    // same state and nothing placed last time: nothing to do (but a tile production patched away comes back)
+    // same state and nothing placed last time: nothing to do (but a bar production patched away comes back)
     if (!current && lastDecorated === key && !lastPlaced) return;
     lastDecorated = key;
     lastPlaced = false;
     decorating = true;
-    document.querySelectorAll('.aa-banner, .aa-tile, .aa-classic-label, .aa-listbar').forEach(n => n.remove());
+    document.querySelectorAll('.aa-banner, .aa-classic-label, .aa-listbar').forEach(n => n.remove());
     unstickListbar();
     decorating = false;
     if (!q) return;
@@ -531,7 +507,6 @@
     if (filters.length) result.signals.push(filters.length + ' filters');
     setClassReadout(q, result, isSearchPage);
     const filtersAttr = esc(JSON.stringify(filters));
-    const page = parseInt(new URLSearchParams(PAGE.search).get('page') || '1', 10);
 
     if (on.banner && isSearchPage && (result.cls === 'C' || hits <= 3)) {
       const zero = document.querySelector('.no-result-search');
@@ -571,44 +546,19 @@
       const anchor = document.querySelector('.catalog-wrapper');
       if (anchor) { anchor.parentElement.insertBefore(bar, anchor); stickListbar(bar); lastPlaced = true; trackView('listing-bar', result.cls); }
     }
-
-    if (on.tile && result.cls === 'B' && hits >= 12 && page === 1 && ss.get('aa:tile-dismissed') !== '1') {
-      // production lays the grid out in as many columns as fit and leaves the rest empty
-      const cols = [...document.querySelectorAll('.search-results .masonry-col')].filter(c => c.offsetParent && c.querySelector(':scope > product-card'));
-      if (!cols.length) return;
-      const col = cols[Math.floor(cols.length / 2)];
-      const cards = [...col.querySelectorAll(':scope > product-card')];
-      // grid position 4–8: the 5th item in a single phone column, else the middle column's 2nd slot
-      const before = cols.length === 1 ? cards[4] : cards[1];
-      const tile = el(`<div class="aa-tile" data-aa-query="${esc(q)}" data-aa-filters="${filtersAttr}" data-aa-key="${esc(key)}">
-        <button class="aa-tile-close" type="button" aria-label="${COPY.hide}">×</button>
-        ${mark()}
-        <p class="aa-tile-title">${filters.length ? COPY.tileTitleFiltered(hits) : COPY.tileTitle(hits)}</p>
-        <p class="aa-tile-text">${filters.length ? COPY.tileTextFiltered : COPY.tileText(quoted(q))}</p>
-        <a class="aa-btn" href="${esc(advisorUrl(q, 'tile'))}" data-aa-placement="tile">${COPY.start}</a>
-      </div>`);
-      tile.querySelector('.aa-tile-close').addEventListener('click', () => {
-        ss.set('aa:tile-dismissed', '1');
-        track('advisor_offer_dismiss', { placement: 'tile' });
-        tile.remove();
-      });
-      col.insertBefore(tile, before || null);
-      lastPlaced = true;
-      trackView('tile', result.cls);
-    }
   }
   let decorating = false;
-  let lastDecorated = '';   // the state last decorated, also when it needed no tile or banner
-  let lastPlaced = false;   // whether that pass placed a tile or banner
+  let lastDecorated = '';   // the state last decorated, also when it needed no bar or banner
+  let lastPlaced = false;   // whether that pass placed a bar or banner
   function watchResults() {
     let t = null;
     const run = () => { clearTimeout(t); t = setTimeout(decorateResults, 250); };
-    // production renders the grid client-side; a new grid, or our tile being patched away, means redo
+    // production renders the grid client-side; a new grid, or our bar being patched away, means redo
     const root = document.querySelector('.catalog-container') || document.querySelector('#main-content');
     if (root) new MutationObserver(muts => {
       if (decorating) return;
       if (muts.some(m => [...m.addedNodes].some(n => n.nodeType === 1 && !String(n.className || '').startsWith('aa-'))
-                      || [...m.removedNodes].some(n => n.nodeType === 1 && /\baa-(tile|banner|listbar)\b/.test(String(n.className || ''))))) run();
+                      || [...m.removedNodes].some(n => n.nodeType === 1 && /\baa-(banner|listbar)\b/.test(String(n.className || ''))))) run();
     }).observe(root, { childList: true, subtree: true });
     window.addEventListener('search-query-change', run);
     // filtering patches the existing grid in place and rewrites the address: watch both
@@ -617,72 +567,6 @@
       const now = location.search + '|' + hitCount() + '|' + activeFilters().join(',');
       if (now !== sig) { sig = now; run(); }
     }, 600);
-  }
-
-  // ---- 3.4 Artfinder menu card ---------------------------------------------------------
-  function navCard() {
-    if (!on.nav) return;
-    const det = [...document.querySelectorAll('site-header nav > details')].find(d => /artfinder/i.test(d.querySelector('summary')?.textContent || ''));
-    const dl = det?.querySelector('.menu.discovery dl');
-    if (!dl || dl.querySelector('.aa-nav-card')) return;
-    const dd = el(`<dd class="aa-nav-card">
-      <a href="${esc(advisorUrl('', 'nav'))}" data-aa-placement="nav" data-aa-q="">
-        <img alt="AI Advisor" class="max-w-full width-full height-auto mb-1 hidden-sm hidden-xs" height="86" src="${LAYER}nav-art-advisor.svg" title="AI Advisor" width="214" style="aspect-ratio:auto;">
-        <svg class="hidden-lg hidden-md"><use href="#consult"></use></svg>
-        <header>Art&nbsp;Advisor</header>
-        <aside>${COPY.navText}</aside>
-        <button type="button">${COPY.start}</button>
-      </a></dd>`);
-    dl.prepend(dd);
-    det.addEventListener('toggle', () => { if (det.open) trackView('nav', 'n/a'); });
-  }
-
-  // ---- 3.5 homepage free-text finder -----------------------------------------------------
-  function homepageFinder() {
-    if (!on.finder || PAGE.pathname !== PREFIX + '/') return;
-    const finder = document.querySelector('edition-finder');
-    const heading = finder?.previousElementSibling;
-    if (!finder || document.querySelector('.aa-finder')) return;
-    const chips = COPY.finderChips;
-    const block = el(`<section class="aa-finder">
-      ${mark()}
-      <h2 class="aa-finder-title">${COPY.finderTitle}</h2>
-      <p class="aa-finder-sub">${COPY.finderSub}</p>
-      <form class="aa-finder-form">
-        <input class="aa-finder-input" name="q" placeholder="${COPY.finderPlaceholder}" aria-label="${COPY.finderSub}">
-        <button class="aa-btn" type="submit">${COPY.finderGo}</button>
-      </form>
-      <div class="aa-finder-chips">${chips.map(c => `<button type="button" class="aa-chip" data-aa-chip="${esc(c)}">${esc(c)}</button>`).join('')}</div>
-      <p class="aa-finder-switch"><button type="button" class="aa-link" data-aa-switch="classic">${COPY.toClassic}</button></p>
-    </section>`);
-    const back = el(`<p class="aa-finder-switch aa-finder-switch--classic" hidden><button type="button" class="aa-link" data-aa-switch="advisor">${COPY.toAdvisor}</button></p>`);
-    // looked up on every use and wired by delegation: production's homepage app can re-render this
-    // part of the page after the block is in, which keeps the markup but drops element listeners
-    const showClassic = classic => {
-      document.querySelector('.aa-finder').hidden = classic;
-      document.querySelector('edition-finder')?.previousElementSibling?.classList.toggle('aa-hidden', !classic);
-      document.querySelector('edition-finder')?.classList.toggle('aa-hidden', !classic);
-      document.querySelector('.aa-finder-switch--classic').hidden = !classic;
-      ss.set('aa:finder-classic', classic ? '1' : '0');
-    };
-    document.addEventListener('submit', e => {
-      if (!e.target.matches('.aa-finder-form')) return;
-      e.preventDefault();
-      goToAdvisor(e.target.querySelector('input').value.trim(), 'homepage-finder');
-    });
-    document.addEventListener('click', e => {
-      const chip = e.target.closest('.aa-finder [data-aa-chip]');
-      if (chip) return goToAdvisor(chip.dataset.aaChip, 'homepage-finder-chip');
-      const toggle = e.target.closest('[data-aa-switch]');
-      if (!toggle) return;
-      const classic = toggle.dataset.aaSwitch === 'classic';
-      showClassic(classic);
-      track('advisor_finder_switch', { to: classic ? 'classic' : 'advisor' });
-    });
-    (heading || finder).parentElement.insertBefore(block, heading || finder);
-    finder.after(back);
-    showClassic(ss.get('aa:finder-classic') === '1');
-    new IntersectionObserver((entries, obs) => { if (entries.some(x => x.isIntersecting)) { trackView('homepage-finder', 'n/a'); obs.disconnect(); } }).observe(block);
   }
 
   // ---- 3.7 "Zurück zur Beratung" pill -------------------------------------------------
@@ -967,19 +851,19 @@
   // the walk-through: [number label, short label, entry points it shows, shop path]
   const DEMO_SETS = {
     en: [
-      ['Homepage', '3.4 · 3.5 · 3.9', '/en/'],
+      ['Homepage', '3.9', '/en/'],
       ['dratwa', 'search, class A', '/en/search/?q=dratwa'],
-      ['blue abstract', 'search, class B · 3.2', '/en/search/?q=blue+abstract'],
-      ['Category + filters', '3.2 · 3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
-      ['Search + filters', '3.2 · 3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
+      ['blue abstract', 'search, class B · 3.8', '/en/search/?q=blue+abstract'],
+      ['Category + filters', '3.8, filters into the chat', '/en/themes/abstract-graphic/?price=from50000-to100000&colors=blue'],
+      ['Search + filters', '3.8, filters into the chat', '/en/search/?q=blue+abstract&price=from0-to50000&colors=blue'],
       ['Wish list', '3.10', '/en/wishlist/'],
     ],
     de: [
-      ['Homepage', '3.4 · 3.5 · 3.9', '/'],
+      ['Homepage', '3.9', '/'],
       ['dratwa', 'search, class A', '/search/?q=dratwa'],
-      ['blau abstrakt', 'search, class B · 3.2', '/search/?q=blau+abstrakt'],
-      ['Category + filters', '3.2 · 3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
-      ['Search + filters', '3.2 · 3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
+      ['blau abstrakt', 'search, class B · 3.8', '/search/?q=blau+abstrakt'],
+      ['Category + filters', '3.8, filters into the chat', '/themen/abstrakt-graphisch/?price=from50000-to100000&colors=blue'],
+      ['Search + filters', '3.8, filters into the chat', '/search/?q=blau+abstrakt&price=from0-to50000&colors=blue'],
       ['Wish list', '3.10', '/wishlist/'],
     ],
   };
@@ -1071,8 +955,6 @@
     searchDropdown();
     // search pages always; category pages once their client-rendered grid exists
     if (isSearchPage) watchResults(); else whenPresent('.search-results', watchResults);
-    whenPresent('site-header nav > details', navCard);
-    whenPresent('edition-finder', homepageFinder);
     seedWishlist();
     wishlistPage();
     returnPill();
