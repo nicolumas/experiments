@@ -598,42 +598,13 @@ html[data-search-variant="4"] form[role="search"]:has(input:not(:placeholder-sho
 </style>
 <style id="proposal-advisor-card-d">
 .search-dropdown .suggestions dl.sv-tiles { align-content: start; }
+.search-dropdown .suggestions dl.sv-advisor-card { grid-template-rows: auto auto; align-content: start; }
 .search-dropdown .suggestions .sv-advisor-card dd { gap: 1rem; }
 .search-dropdown .suggestions .sv-advisor-card .sv-advisor-title { font-size: 1.8rem; }
 .search-dropdown .suggestions .sv-advisor-card a {
   height: auto;
   padding: 0;
   background: none;
-}
-.search-dropdown .suggestions .sv-chips {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.search-dropdown .suggestions .sv-advisor-card .sv-chips a {
-  display: inline-block;
-  padding: 0.3rem 0;
-  color: var(--color-text-secondary);
-  font-size: 1.4rem;
-  line-height: 1.4;
-  white-space: nowrap;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 0.1rem;
-  text-underline-offset: 0.3rem;
-  transition: color 220ms cubic-bezier(0.2, 0.8, 0.2, 1), text-decoration-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.search-dropdown .suggestions .sv-advisor-card .sv-chips a:hover,
-.search-dropdown .suggestions .sv-advisor-card .sv-chips a:focus-visible {
-  color: var(--color-text-primary);
-  text-decoration-color: currentColor;
-}
-.search-dropdown .suggestions .sv-chips a:focus-visible {
-  outline: 0.2rem solid var(--color-text-primary);
-  outline-offset: 0.2rem;
 }
 .search-dropdown .suggestions .sv-advisor-card .sv-advisor-cta {
   display: inline-flex;
@@ -1027,7 +998,7 @@ document.body.addEventListener('click', e => {
 <symbol fill="none" id="close" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></symbol>
 </svg>
 <form action="/search/" method="get" role="search">
-<input aria-label="Produktsuche" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" placeholder="Künstler, Thema …" spellcheck="false" type="search" value=""/>
+<input aria-label="Produktsuche" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" placeholder="Suchen oder prompten" spellcheck="false" type="search" value=""/>
 <button aria-label="Suche löschen" class="clear-search" type="button"><svg><use href="#close"></use></svg></button>
 <button aria-label="Suchen" type="submit"><svg><use href="#search"></use></svg>
 </button>
@@ -1044,7 +1015,7 @@ document.body.addEventListener('click', e => {
 <div class="suggestion-container">
 <div class="close"><button><svg style="max-width: var(--icon-max-size); max-height: var(--icon-max-size)"><use href="#close"></use></svg></button></div>
 <div class="suggestions">
-<!-- CMS_BLOCK_PLACEHOLDER : "content" --><dl class="sv-tiles" data-sv="1 2"><dt>Meist gesucht</dt><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/themen/tiere/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-tiere-220x220.webp" type="image/webp"/><img alt="Tiere" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-tiere-220x220.jpg"/></picture><span>Tiere</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=strand&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-strand-220x220.webp" type="image/webp"/><img alt="Strand" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-strand-220x220.jpg"/></picture><span>Strand</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-berge-220x220.jpg"/></picture><span>Berge</span></a></dd></dl><dl class="sv-tiles" data-sv="3"><dt>Meist gesucht</dt><dd class="sv-advisor-tile"><a href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span class="sv-advisor-square"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg><span class="sv-advisor-ask">Was suchst du?</span></span><span>AI Advisor</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/themen/tiere/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-tiere-220x220.webp" type="image/webp"/><img alt="Tiere" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-tiere-220x220.jpg"/></picture><span>Tiere</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=strand&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-strand-220x220.webp" type="image/webp"/><img alt="Strand" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-strand-220x220.jpg"/></picture><span>Strand</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-berge-220x220.jpg"/></picture><span>Berge</span></a></dd></dl><dl class="sv-advisor sv-advisor-card" data-sv="1"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><ul class="sv-chips"><li><a href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F&amp;prefill=Etwas+Ruhiges+f%C3%BCrs+Schlafzimmer">Etwas Ruhiges fürs Schlafzimmer</a></li><li><a href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F&amp;prefill=Geschenk+f%C3%BCr+Architektur-Fans">Geschenk für Architektur-Fans</a></li><li><a href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F&amp;prefill=Gro%C3%9Fes+Werk+%C3%BCber+dem+Sofa">Großes Werk über dem Sofa</a></li></ul><a class="sv-advisor-cta" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span>Advisor fragen</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl><dl class="sv-advisor sv-advisor-field" data-sv="2"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><a class="sv-field" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span>Raum, Stimmung, Motiv</span><span aria-hidden="true" class="sv-go">→</span></a></dd></dl>
+<!-- CMS_BLOCK_PLACEHOLDER : "content" --><dl class="sv-tiles" data-sv="1 2"><dt>Meist gesucht</dt><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/themen/tiere/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-tiere-220x220.webp" type="image/webp"/><img alt="Tiere" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-tiere-220x220.jpg"/></picture><span>Tiere</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=strand&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-strand-220x220.webp" type="image/webp"/><img alt="Strand" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-strand-220x220.jpg"/></picture><span>Strand</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-berge-220x220.jpg"/></picture><span>Berge</span></a></dd></dl><dl class="sv-tiles" data-sv="3"><dt>Meist gesucht</dt><dd class="sv-advisor-tile"><a href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span class="sv-advisor-square"><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg><span class="sv-advisor-ask">Was suchst du?</span></span><span>AI Advisor</span></a></dd><dd><a href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-schwarz-weiss-220x220.jpg"/></picture><span>Schwarz-Weiß</span></a></dd><dd><a href="https://www.lumas.de/themen/tiere/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-tiere-220x220.webp" type="image/webp"/><img alt="Tiere" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-tiere-220x220.jpg"/></picture><span>Tiere</span></a></dd><dd><a href="https://www.lumas.de/search/?q=meer&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-meer-220x220.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-meer-220x220.jpg"/></picture><span>Meer</span></a></dd><dd><a href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-blumen-220x220.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-blumen-220x220.jpg"/></picture><span>Blumen</span></a></dd><dd><a href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-david-bowie-220x220.jpg"/></picture><span>David Bowie</span></a></dd><dd><a href="https://www.lumas.de/search/?q=strand&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-strand-220x220.webp" type="image/webp"/><img alt="Strand" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-strand-220x220.jpg"/></picture><span>Strand</span></a></dd><dd><a href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-new-york-220x220.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-new-york-220x220.jpg"/></picture><span>New York</span></a></dd><dd><a href="https://www.lumas.de/search/?q=berge&sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-berge-220x220.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-berge-220x220.jpg"/></picture><span>Berge</span></a></dd></dl><dl class="sv-advisor sv-advisor-card" data-sv="1"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><a class="sv-advisor-cta" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span>Oben prompten oder zum AI Advisor</span> <span aria-hidden="true" class="sv-go">→</span></a></dd></dl><dl class="sv-advisor sv-advisor-field" data-sv="2"><dt><svg aria-hidden="true" class="sv-sparkles"><use href="#nav-sparkles"></use></svg>AI Advisor</dt><dd><span class="sv-advisor-title">Nicht sicher, wonach du suchst?</span><a class="sv-field" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span>Raum, Stimmung, Motiv</span><span aria-hidden="true" class="sv-go">→</span></a></dd></dl>
 </div>
 </div>
 <div class="help-bar">
@@ -1379,7 +1350,7 @@ document.body.addEventListener('click', e => {
 <button aria-label="Suchen" type="submit">
 <svg aria-hidden="true" height="20" width="20"><use href="#nav-search"></use></svg>
 </button>
-<input aria-autocomplete="list" aria-controls="search-suggestion-list" aria-expanded="false" aria-label="Suche" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" placeholder="Künstler, Thema …" role="combobox" spellcheck="false" type="search"/>
+<input aria-autocomplete="list" aria-controls="search-suggestion-list" aria-expanded="false" aria-label="Suche" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" placeholder="Suchen oder prompten" role="combobox" spellcheck="false" type="search"/>
 </form>
 <div class="search-suggestions" hidden="">
 <h3 class="carousel-label">Meistgesucht</h3>
@@ -2551,25 +2522,168 @@ document.body.addEventListener('click', e => {
  </div>
 </div>
 </noscript>
-<style id="proposal-search-placeholder">
-:is(search-focus, nav-search) input[type=search] { text-overflow: ellipsis; }
+<style id="proposal-search-prompt">
+.sv-prompt {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  margin: 0;
+  overflow: hidden;
+  resize: none;
+  outline: 0.1rem solid var(--color-border-focus, #1c1a18);
+  outline-offset: 0;
+  transition: height 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sv-prompt[hidden] { display: none; }
+form:has(> .sv-prompt:not([hidden])) > button { z-index: 2; }
+form[data-prompt] .autocomplete-container { display: none !important; }
+.sv-submit-sparkle { animation: sv-icon-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes sv-icon-in { from { opacity: 0; transform: scale(0.7) rotate(-20deg); } }
+@media (prefers-reduced-motion: reduce) { .sv-prompt, .sv-submit-sparkle { transition: none; animation: none; } }
 </style>
-<script id="proposal-search-placeholder">
+<script id="proposal-search-prompt">
 (() => {
-  const FULL = 'Künstler, Thema – oder beschreib deine Idee';
-  const SHORT = 'Künstler, Thema …';
   const SEARCH_INPUTS = 'search-focus input[type=search], nav-search input[type=search]';
-  const measure = document.createElement('canvas').getContext('2d');
-  const fit = input => {
-    const style = getComputedStyle(input);
-    const room = input.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-    measure.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-    input.placeholder = measure.measureText(FULL).width <= room ? FULL : SHORT;
+  const PLACEHOLDER = 'Suchen oder prompten';
+  const ASK_LABEL = 'AI Advisor fragen';
+  const SPARKLE = '<svg aria-hidden="true" class="sv-submit-sparkle"><use href="#nav-sparkles"></use></svg>';
+  // German and English signal words: lumas.de serves both
+  const LEX = {
+    question: /^(was|welche[smnr]?|wie|wo|wer|warum|womit|gibt es|what|which|how|where|who|why|is there|are there|do you|can you)\b|\?$/,
+    wanting: /\b(such[et]?|suche etwas|brauche?|möchte|hätte gern|finde|empfiehl\w*|passt|passend\w*|looking for|need|want|would like|recommend\w*|suggest\w*|goes with|go with|match\w*|fits?)\b/,
+    context: /\b(schlafzimmer|wohnzimmer|küche|kueche|flur|diele|büro|buero|kinderzimmer|esszimmer|bad|praxis|wand|sofa|couch|bett|raum|zimmer|geschenk\w*|mutter|vater|mama|papa|freund\w*|partner\w*|hochzeit|geburtstag|weihnacht\w*|jubiläum|gemütlich\w*|ruhig\w*|entspann\w*|fröhlich\w*|stimmung|elegant\w*|modern\w*|hell\w*|dunkl\w*|warm\w*|kühl\w*|bedroom|living room|lounge|kitchen|hallway|hall|office|study|nursery|kids room|dining room|bathroom|wall|bed|room|gift|present|mother|mum|mom|father|dad|friend|wife|husband|wedding|birthday|christmas|anniversary|cosy|cozy|calm|relaxing|peaceful|cheerful|mood|bright|dark|cool)\b/,
+    relational: /\b(für|fuer|passt zu|ähnlich wie|aehnlich wie|über dem|über das|über der|zu meine[mnr]?|zu einer?|for|similar to|like this|above the|over the|next to|with my|for my)\b/,
   };
-  const fitOnResize = new ResizeObserver(entries => entries.forEach(entry => fit(entry.target)));
-  document.querySelectorAll(SEARCH_INPUTS).forEach(input => fitOnResize.observe(input));
-  document.addEventListener('focusin', e => { if (e.target.matches?.(SEARCH_INPUTS)) fitOnResize.observe(e.target); });
-  document.fonts.ready.then(() => document.querySelectorAll(SEARCH_INPUTS).forEach(fit));
+  const suggestCache = new Map();
+  async function suggest(q) {
+    if (q.length < 3) return [];
+    if (suggestCache.has(q)) return suggestCache.get(q);
+    let terms = [];
+    try {
+      const response = await fetch('/suggest/?term=' + encodeURIComponent(q), { headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+      terms = await response.json();
+    } catch (e) {}
+    suggestCache.set(q, terms);
+    return terms;
+  }
+  // a prompt reads like a sentence or names a room, person, occasion or mood, unless it is a short catalogue name
+  function isPrompt(q, terms) {
+    const text = q.toLowerCase().trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    if (!words.length) return false;
+    const entity = terms.some(term => { const s = term.toLowerCase(); return s === text || (s.includes(text) && words.length <= 3); });
+    const conversational = words.length >= 4 || Object.values(LEX).some(pattern => pattern.test(text));
+    return conversational && !(entity && words.length <= 2);
+  }
+  // the card's link carries the Advisor's address (_publish.py points it at the published Advisor)
+  function advisorUrl(q) {
+    const base = document.querySelector('.sv-advisor-cta')?.getAttribute('href') || '/art-advisor/';
+    return base + (base.includes('?') ? '&' : '?') + 'q=' + encodeURIComponent(q);
+  }
+
+  const promptFields = new WeakMap();
+  function promptField(input) {
+    if (promptFields.has(input)) return promptFields.get(input);
+    const area = document.createElement('textarea');
+    Object.assign(area, { className: 'sv-prompt', rows: 1, spellcheck: false, tabIndex: -1, hidden: true });
+    area.setAttribute('aria-hidden', 'true');
+    input.after(area);
+    const submit = input.form?.querySelector('button[type=submit]');
+    const searchIcon = submit?.innerHTML;
+    const searchLabel = submit?.getAttribute('aria-label');
+    const fit = () => {
+      const before = area.style.height;
+      area.style.transition = 'none';
+      area.style.height = 'auto';
+      const target = Math.max(input.offsetHeight, area.scrollHeight + 2);
+      area.style.height = before;
+      area.offsetHeight;   // apply the old height before easing to the new one
+      area.style.transition = '';
+      area.style.height = target + 'px';
+    };
+    const copyLook = () => {
+      const style = getComputedStyle(input);
+      const line = parseFloat(style.fontSize) * 1.4;
+      const padY = Math.max(0, (input.offsetHeight - line) / 2);
+      Object.assign(area.style, {
+        top: input.offsetTop + 'px', left: input.offsetLeft + 'px', width: input.offsetWidth + 'px',
+        font: style.font, lineHeight: line + 'px', letterSpacing: style.letterSpacing, color: style.color,
+        background: style.backgroundColor, border: style.border, borderRadius: style.borderRadius, boxShadow: style.boxShadow,
+        padding: `${padY}px ${style.paddingRight} ${padY}px ${style.paddingLeft}`, height: input.offsetHeight + 'px',
+      });
+    };
+    let open = false;
+    const api = {
+      expand(on) {
+        if (on === open) return;
+        open = on;
+        input.form?.toggleAttribute('data-prompt', on);
+        if (on) {
+          copyLook();
+          area.value = input.value;
+          area.hidden = false;
+          area.removeAttribute('aria-hidden');
+          area.tabIndex = 0;
+          input.style.visibility = 'hidden';
+          const caret = input.selectionStart ?? area.value.length;
+          area.focus();
+          area.setSelectionRange(caret, caret);
+          fit();
+          if (submit) { submit.innerHTML = SPARKLE; submit.setAttribute('aria-label', ASK_LABEL); }
+        } else {
+          const caret = area.selectionStart ?? input.value.length;
+          input.style.visibility = '';
+          if (submit) { submit.innerHTML = searchIcon; submit.setAttribute('aria-label', searchLabel); }
+          area.style.height = input.offsetHeight + 'px';
+          if (document.activeElement === area) { input.focus(); input.setSelectionRange(caret, caret); }
+          setTimeout(() => { if (!open) { area.hidden = true; area.setAttribute('aria-hidden', 'true'); area.tabIndex = -1; } }, 200);
+        }
+      },
+    };
+    area.addEventListener('input', () => {
+      input.value = area.value;
+      fit();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    area.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' || e.shiftKey || e.isComposing) return;
+      e.preventDefault();
+      input.value = area.value;
+      input.form?.requestSubmit();
+    });
+    // production's clear button empties the input: the prompt field goes with it
+    input.form?.querySelector('.clear-search')?.addEventListener('click', () => { area.value = ''; api.expand(false); });
+    promptFields.set(input, api);
+    return api;
+  }
+
+  const wired = new WeakSet();
+  function wire(input) {
+    if (wired.has(input)) return;
+    wired.add(input);
+    // production sets the field's placeholder at runtime; the entry points' line stays
+    input.placeholder = PLACEHOLDER;
+    new MutationObserver(() => { if (input.placeholder !== PLACEHOLDER) input.placeholder = PLACEHOLDER; })
+      .observe(input, { attributes: true, attributeFilter: ['placeholder'] });
+    let timer = null;
+    const update = async () => {
+      const q = input.value.trim();
+      const terms = await suggest(q);
+      if (q !== input.value.trim()) return;
+      promptField(input).expand(isPrompt(q, terms));
+    };
+    input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(update, 340); });
+    input.form?.addEventListener('submit', e => {
+      const q = input.value.trim();
+      if (!q || !isPrompt(q, suggestCache.get(q) || [])) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      location.href = advisorUrl(q);
+    }, true);
+  }
+  document.querySelectorAll(SEARCH_INPUTS).forEach(wire);
+  // the bottom nav builds its field from a template when the search tab opens
+  document.addEventListener('focusin', e => { if (e.target.matches?.(SEARCH_INPUTS)) wire(e.target); });
 })();
 </script>
 <script id="proposal-tool-visuals-script">
