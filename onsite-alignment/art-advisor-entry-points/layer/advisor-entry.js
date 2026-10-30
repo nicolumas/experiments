@@ -102,7 +102,7 @@
       svCta: 'Oben prompten oder zum AI Advisor',
       svMost: 'Meist gesucht',
       // the short line where the field has no room for the full one (fitPlaceholder)
-      searchPlaceholder: 'K\u00fcnstler, Thema \u2013 oder Prompt',
+      searchPlaceholder: 'Suche nach K\u00fcnstler, Thema \u2013 oder Prompt',
       searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
       svEnterTitle: 'AI Advisor fragen',
@@ -158,7 +158,7 @@
       svHeading: 'Not sure what you\u2019re looking\u00a0for?',
       svCta: 'Prompt above or go to AI Advisor',
       svMost: 'Most wanted',
-      searchPlaceholder: 'Artist, theme \u2013 or prompt',
+      searchPlaceholder: 'Search for an artist, theme \u2013 or prompt',
       searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
       svEnterTitle: 'Ask the AI Advisor',
