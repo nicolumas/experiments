@@ -106,6 +106,10 @@
       searchPlaceholder: 'K\u00fcnstler, Thema \u2013 oder beschreib deine Idee',
       searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
+      svEnterTitle: 'AI Advisor fragen',
+      svEnterKey: 'Enter',
+      svSearchFor: 'Suchen nach',
+      svAskAbout: 'AI Advisor fragen zu',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
       // Meer, Strand and Berge open the search sorted by revenue, which fixes Berge's weak default results.
@@ -162,6 +166,10 @@
       searchPlaceholder: 'Artist, theme \u2013 or describe your idea',
       searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
+      svEnterTitle: 'Ask the AI Advisor',
+      svEnterKey: 'Enter',
+      svSearchFor: 'Search for',
+      svAskAbout: 'Ask the AI Advisor about',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
         ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'], ['/en/search/?q=beach&sort=revenue_product_desc', 'Beach', 'strand'],
@@ -341,8 +349,7 @@
   }
   const placeholderFit = new ResizeObserver(entries => entries.forEach(entry => fitPlaceholder(entry.target)));
 
-  // the empty dropdown in the chosen Option C form (see DD_VARIANTS); both forms already carry the
-  // AI Advisor, so nothing more is added while someone types
+  // the empty dropdown in the chosen Option C form (see DD_VARIANTS); typing replaces it (renderTyped)
   function searchDropdown() {
     if (!on.overlay) return;
     const searchInputs = document.querySelectorAll('search-focus input[type=search], nav-search input[type=search]');
@@ -404,8 +411,35 @@
       if (document.documentElement.classList.contains('scroll-locked')) document.documentElement.classList.remove('scroll-locked');
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['inert', 'class'], subtree: true });
   }
+  // what typing does to the dropdown (production adds nothing here): the pictures and the advisor block give way
+  // to one of two states. Conversational (class C): the advisor leads, with the query and the Enter key, since
+  // Enter opens it. Anything else: "Search for" (Enter) and the catalogue's suggestions, with the advisor as a
+  // quieter last row, so a name LUMAS does not carry ("gursky") still has somewhere to go.
+  function renderTyped(q, terms, result) {
+    const dropdown = document.querySelector('.search-dropdown');
+    const host = ddVariant === 'compact' ? document.querySelector('.sv-compact') : dropdown?.querySelector('.suggestions');
+    document.querySelectorAll('.sv-typed').forEach(node => node.remove());
+    dropdown?.toggleAttribute('data-typed', !!q);
+    document.querySelector('.sv-compact')?.toggleAttribute('data-typed', !!q);
+    if (!q || !host) return;
+    const sparkle = ICON_SPARKLE.replace('<svg ', '<svg class="sv-sparkles" ');
+    const quoted = `\u201c${esc(q)}\u201d`;
+    const key = `<kbd class="sv-key">${COPY.svEnterKey} <span aria-hidden="true">\u21b5</span></kbd>`;
+    const searchRow = `<a class="sv-typed-search" href="${PREFIX}/search/?q=${encodeURIComponent(q)}"><span>${COPY.svSearchFor} ${quoted}</span>${result.cls === 'C' ? '' : key}</a>`;
+    const termList = terms.slice(0, 6).map(t => `<li><a href="${PREFIX}/search/?q=${encodeURIComponent(t)}">${esc(t)}</a></li>`).join('');
+    const terms_ = termList ? `<p class="sv-typed-label">${COPY.svSuggestions}</p><ul class="sv-typed-terms">${termList}</ul>` : '';
+    const html = result.cls === 'C'
+      ? `<div class="sv-typed sv-typed--advisor">
+          <a class="sv-enter" href="#" data-aa-placement="overlay-typed-enter" data-aa-q="${esc(q)}">${sparkle}
+            <span class="sv-enter-text"><span class="sv-enter-title">${COPY.svEnterTitle}</span><span class="sv-enter-q">${quoted}</span></span>${key}</a>
+          ${searchRow}${terms_}</div>`
+      : `<div class="sv-typed">${searchRow}${terms_}
+          <a class="sv-ask" href="#" data-aa-placement="overlay-typed-ask" data-aa-q="${esc(q)}">${sparkle}<span>${COPY.svAskAbout} ${quoted}</span><span aria-hidden="true" class="sv-go">\u2192</span></a></div>`;
+    host.insertAdjacentHTML(ddVariant === 'compact' ? 'afterbegin' : 'beforeend', html);
+  }
+
   // production's dropdown closes 250 ms after the field blurs; keep focus while a row is pressed
-  document.addEventListener('pointerdown', e => { if (e.target.closest('.sv-advisor, .sv-compact')) e.preventDefault(); }, true);
+  document.addEventListener('pointerdown', e => { if (e.target.closest('.sv-advisor, .sv-compact, .sv-typed')) e.preventDefault(); }, true);
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-aa-placement]');
     if (!a) return;
@@ -415,16 +449,18 @@
     goToAdvisor(a.dataset.aaPlacement.startsWith('overlay-empty') ? '' : (a.dataset.aaQ ?? q), a.dataset.aaPlacement, filters, [], a.dataset.aaPrefill);
   }, true);
 
-  // classifies what is typed (presenter readout). Nothing is added to the dropdown while typing, since both
-  // forms already carry the AI Advisor; but Enter on a conversational query (class C) opens the advisor
-  // with it instead of the results page. The published static copy also routes the search itself.
+  // classifies what is typed (presenter readout) and redraws the dropdown for it (renderTyped); Enter on a
+  // conversational query (class C) opens the advisor with it instead of the results page. The published static copy also routes the search itself.
   function setupOverlay(input) {
     if (!on.overlay || !input) return;
     let timer = null;
     const update = async () => {
       const q = input.value.trim();
-      const result = classify(q, await suggest(q));
-      if (q === input.value.trim()) setClassReadout(q, result);
+      const terms = await suggest(q);
+      const result = classify(q, terms);
+      if (q !== input.value.trim()) return;
+      setClassReadout(q, result);
+      renderTyped(q, terms, result);
     };
     const schedule = () => { clearTimeout(timer); timer = setTimeout(update, 340); };
     input.addEventListener('input', schedule);

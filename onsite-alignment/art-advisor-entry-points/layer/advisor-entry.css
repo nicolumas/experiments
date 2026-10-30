@@ -132,6 +132,44 @@ html.aa-window-open { overflow: hidden; }
 .search-dropdown .suggestions .sv-advisor-cta > span:first-child { text-decoration: underline; text-decoration-thickness: .1rem; text-underline-offset: .3rem; }
 /* production makes the last span of every dropdown link a block; the arrow stays on the line */
 .search-dropdown .suggestions .sv-advisor-cta .sv-go { display: inline-block; font-size: 1.4rem; letter-spacing: 0; }
+/* typed state (renderTyped): the pictures and the advisor block give way to the query */
+.search-dropdown[data-typed] .suggestions > dl { display: none; }
+.sv-compact[data-typed] .sv-compact-advisor { display: none; }
+.sv-typed { display: flex; flex-direction: column; align-items: stretch; gap: .4rem; width: 100%; max-width: 56rem; }
+.sv-typed a { color: var(--color-text-primary); text-decoration: none; cursor: pointer; }
+.sv-typed .sv-sparkles { flex: none; width: 1.8rem; height: 1.8rem; }
+.sv-typed .sv-key {
+  flex: none; margin-left: auto; padding: .2rem .7rem; border: .1rem solid var(--color-border-strong, #b4afa8); border-radius: 2px;
+  color: var(--color-text-secondary, #5a5752); font-family: inherit; font-size: 1.2rem; line-height: 1.5; white-space: nowrap;
+}
+/* conversational: the advisor leads, on Bone, with the query under it */
+.sv-typed .sv-enter {
+  display: flex; align-items: center; gap: 1.2rem; padding: 1.4rem 1.6rem; background: var(--primitive-bone-200, #eae2d8);
+  transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
+}
+.sv-typed .sv-enter:hover, .sv-typed .sv-enter:focus-visible { background: var(--primitive-bone-300, #ddd3c6); }
+.sv-typed .sv-enter-text { display: grid; gap: .2rem; min-width: 0; }
+.sv-typed .sv-enter-title { font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-text-secondary, #5a5752); }
+.sv-typed .sv-enter-q {
+  font-family: var(--font-display, "Utile Display", sans-serif); font-size: 1.8rem; line-height: 1.25; white-space: normal;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sv-typed .sv-enter .sv-key { border-color: var(--color-text-primary); color: var(--color-text-primary); }
+/* keyword: search first, the catalogue's suggestions, the advisor as a quiet last row */
+.sv-typed .sv-typed-search { display: flex; align-items: center; gap: 1.2rem; padding: .8rem 0; font-size: 1.5rem; }
+.sv-typed .sv-typed-search:hover > span:first-child, .sv-typed .sv-typed-terms a:hover { text-decoration: underline; text-underline-offset: .3rem; }
+.sv-typed .sv-typed-label { margin: .8rem 0 .2rem; color: var(--color-text-secondary, #5a5752); font-size: 1.1rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.sv-typed .sv-typed-terms { margin: 0; padding: 0; list-style: none; }
+.sv-typed .sv-typed-terms a { display: block; padding: .4rem 0; font-size: 1.4rem; }
+.sv-typed .sv-ask {
+  display: flex; align-items: center; gap: .8rem; margin-top: .8rem; padding-top: 1.2rem; border-top: .1rem solid var(--color-border-default, #e5e0d8);
+  color: var(--color-text-secondary, #5a5752); font-size: 1.4rem;
+}
+.sv-typed .sv-ask:hover, .sv-typed .sv-ask:focus-visible { color: var(--color-text-primary); }
+.sv-typed .sv-ask:hover > span:nth-of-type(1) { text-decoration: underline; text-underline-offset: .3rem; }
+.sv-typed .sv-ask .sv-go { display: inline-block; }
+.sv-typed a:focus-visible { outline: .2rem solid var(--color-text-primary); outline-offset: .2rem; }
+.sv-compact .sv-typed { padding: .8rem 1.2rem; }
 /* below the desktop header the row wraps into four columns and the advisor goes underneath */
 @media (max-width: 1024px) {
   .search-dropdown .suggestions:has(> .sv-tiles) { flex-direction: column; gap: 2.4rem; }
