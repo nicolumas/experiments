@@ -115,14 +115,17 @@ html.aa-window-open { overflow: hidden; }
 .search-dropdown .suggestions .sv-chips { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-top: .1rem solid var(--color-border-default); }
 .search-dropdown .suggestions .sv-chips li { border-bottom: .1rem solid var(--color-border-default); }
 .search-dropdown .suggestions .sv-chips a {
-  display: flex; justify-content: space-between; align-items: center; gap: 1.2rem; padding: .7rem 0;
-  color: var(--color-text-primary); font-size: 1.4rem; line-height: 1.4; white-space: nowrap; text-decoration: none;
+  display: flex; justify-content: space-between; align-items: center; gap: 1.2rem; margin: 0 -.8rem; padding: .7rem .8rem;
+  color: var(--color-text-primary); font-size: 1.4rem; line-height: 1.4; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 220ms cubic-bezier(.2, .8, .2, 1);
 }
+/* each row is a link: the arrow always shows, the row tints Ivory and the arrow nudges on hover and keyboard focus */
 .search-dropdown .suggestions .sv-chips a::after {
-  content: '\2192'; flex: none; opacity: 0; transform: translateX(-.4rem);
-  transition: opacity 220ms cubic-bezier(.2, .8, .2, 1), transform 220ms cubic-bezier(.2, .8, .2, 1);
+  content: '\2192'; flex: none; transition: transform 220ms cubic-bezier(.2, .8, .2, 1);
 }
-.search-dropdown .suggestions .sv-chips a:hover::after, .search-dropdown .suggestions .sv-chips a:focus-visible::after { opacity: 1; transform: none; }
+.search-dropdown .suggestions .sv-chips a:hover, .search-dropdown .suggestions .sv-chips a:focus-visible { background-color: var(--color-surface-raised, #f7f1e9); }
+.search-dropdown .suggestions .sv-chips a:hover::after, .search-dropdown .suggestions .sv-chips a:focus-visible::after { transform: translateX(.4rem); }
+.search-dropdown .suggestions .sv-chips a:focus-visible { outline: .2rem solid var(--color-text-primary); outline-offset: -.2rem; }
 .search-dropdown .suggestions .sv-advisor-cta {
   display: inline-flex; align-self: flex-start; align-items: center; gap: .6rem; color: var(--color-text-primary); font-size: 1.3rem;
   text-decoration: none; white-space: nowrap;
