@@ -106,6 +106,7 @@
       searchPlaceholderShort: 'K\u00fcnstler, Thema \u2026',
       svSuggestions: 'Vorschläge',
       svAskAbout: 'AI Advisor fragen zu',
+      svEnterTitle: 'AI Advisor fragen',
       // the eight tiles, in order (Oct 28 brief): Schwarz-Weiß, Tiere, Meer, Blumen, David Bowie, Strand,
       // New York, Berge.
       // Meer, Strand and Berge open the search sorted by revenue, which fixes Berge's weak default results.
@@ -162,6 +163,7 @@
       searchPlaceholderShort: 'Artist, theme \u2026',
       svSuggestions: 'Suggestions',
       svAskAbout: 'Ask the AI Advisor about',
+      svEnterTitle: 'Ask the AI Advisor',
       svTiles: [['/en/search/?q=black+and+white', 'Black and white', 'schwarz-weiss'], ['/en/themes/animals/', 'Animals', 'tiere'],
         ['/en/search/?q=sea&sort=revenue_product_desc', 'Sea', 'meer'], ['/en/search/?q=flowers', 'Flowers', 'blumen'],
         ['/en/search/?q=david+bowie', 'David Bowie', 'david-bowie'], ['/en/search/?q=beach&sort=revenue_product_desc', 'Beach', 'strand'],
@@ -424,12 +426,17 @@
 
   // the field grows for a prompt: an <input> cannot wrap, so a textarea styled as the field lies over it while
   // the query is conversational, kept in sync with it (production and the submit handler read the input).
-  // Enter submits, as in the input; the height eases open and closed in 200 ms.
+  // Enter submits, as in the input; the height eases open and closed in 200 ms, and the search button's
+  // magnifier turns into the sparkle, since it now asks the advisor.
   const promptFields = new WeakMap();
   function promptField(input) {
     if (promptFields.has(input)) return promptFields.get(input);
     const area = el('<textarea class="sv-prompt" rows="1" spellcheck="false" aria-hidden="true" tabindex="-1" hidden></textarea>');
     input.after(area);
+    const submit = input.form?.querySelector('button[type=submit]');
+    const searchIcon = submit?.innerHTML;
+    const searchLabel = submit?.getAttribute('aria-label');
+    const sparkleIcon = ICON_SPARKLE.replace('<svg ', '<svg class="sv-submit-sparkle" ');
     const fit = () => {
       const before = area.style.height;
       area.style.transition = 'none';
@@ -467,9 +474,11 @@
           area.focus();
           area.setSelectionRange(caret, caret);
           fit();
+          if (submit) { submit.innerHTML = sparkleIcon; submit.setAttribute('aria-label', COPY.svEnterTitle); }
         } else {
           const caret = area.selectionStart ?? input.value.length;
           input.style.visibility = '';
+          if (submit) { submit.innerHTML = searchIcon; submit.setAttribute('aria-label', searchLabel); }
           area.style.height = input.offsetHeight + 'px';
           if (document.activeElement === area) { input.focus(); input.setSelectionRange(caret, caret); }
           setTimeout(() => { if (!open) { area.hidden = true; area.setAttribute('aria-hidden', 'true'); area.tabIndex = -1; } }, 200);

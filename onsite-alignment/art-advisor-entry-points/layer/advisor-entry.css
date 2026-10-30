@@ -149,7 +149,9 @@ search-focus .sv-typed .sv-sparkles { flex: none; width: 1.6rem; height: 1.6rem;
 }
 .sv-prompt[hidden] { display: none; }
 search-focus form:has(.sv-prompt:not([hidden])) > button { z-index: 2; }
-@media (prefers-reduced-motion: reduce) { .sv-prompt { transition: none; } }
+.sv-submit-sparkle { animation: sv-icon-in 200ms cubic-bezier(.2, .8, .2, 1); }
+@keyframes sv-icon-in { from { opacity: 0; transform: scale(.7) rotate(-20deg); } }
+@media (prefers-reduced-motion: reduce) { .sv-prompt, .sv-submit-sparkle { transition: none; animation: none; } }
 /* below the desktop header the row wraps into four columns and the advisor goes underneath */
 @media (max-width: 1024px) {
   .search-dropdown .suggestions:has(> .sv-tiles) { flex-direction: column; gap: 2.4rem; }
