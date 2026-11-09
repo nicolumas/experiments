@@ -206,8 +206,8 @@ bottom-nav .mni-source::before {
 }
 bottom-nav .mni-source img { display: block; height: 100%; width: auto; }
 bottom-nav .mni-similar-arrow { color: var(--color-text-secondary); font-size: 1.4rem; }
-bottom-nav .mni-results { display: flex; flex-direction: column; justify-content: center; gap: 0.6rem; height: 80%; }
-bottom-nav .mni-results img { display: block; height: calc(50% - 0.3rem); width: auto; }
+bottom-nav .mni-results { height: 72%; padding: 0.5rem 0; }
+bottom-nav .mni-results img { display: block; height: 100%; width: auto; }
 
 bottom-nav .mni-room { aspect-ratio: 1.6; }
 bottom-nav .mni-room-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -215,44 +215,31 @@ bottom-nav .mni-room-art {
   position: absolute;
   left: 50.3%;
   top: 41%;
-  width: 17%;
+  width: 25.6%;
   transform: translate(-50%, -50%);
   box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.25);
 }
 
-/* Shop: four short criteria rows */
-bottom-nav .mni-criteria { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 1.6rem 0 0.8rem; }
-bottom-nav .mni-row-head { display: flex; align-items: baseline; justify-content: space-between; }
-bottom-nav .mni-all {
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  font-size: 1.4rem;
-  text-decoration: underline;
-  text-underline-offset: 0.3rem;
-}
-bottom-nav .mni-row-themes .carousel-scroll { padding-bottom: 0; }
-bottom-nav .mni-row-themes .carousel-card { width: 8.8rem; }
-bottom-nav .mni-chips {
-  display: flex;
-  gap: 0.8rem;
-  margin: 0 calc(var(--bottom-nav-padding) * -1);
-  padding: 0 var(--bottom-nav-padding);
-  overflow-x: auto;
-  scroll-padding-inline: var(--bottom-nav-padding);
-  scrollbar-width: none;
-}
-bottom-nav .mni-chips::-webkit-scrollbar { display: none; }
+/* Kunstwerke: three groups, everything on one screen, no sideways scrolling */
+bottom-nav .mni-criteria { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.4rem; padding: 1.6rem 0 0.8rem; }
+bottom-nav .mni-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+bottom-nav .mni-tiles .carousel-card { width: auto; }
+bottom-nav .mni-tiles .carousel-card img { height: auto; }
+bottom-nav .mni-chip-grid { display: grid; gap: 0.8rem; }
+bottom-nav .mni-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+bottom-nav .mni-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 bottom-nav .mni-chip {
-  display: inline-flex;
-  flex-shrink: 0;
+  display: flex;
   align-items: center;
-  height: 4rem;
-  padding: 0 1.4rem;
+  justify-content: center;
+  height: 4.4rem;
+  padding: 0 0.8rem;
   border-radius: var(--radius-sm, 0.4rem);
   background-color: var(--color-surface-muted);
   color: var(--color-text-primary);
   font-family: var(--font-body);
   font-size: 1.4rem;
+  text-align: center;
   white-space: nowrap;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
@@ -715,7 +702,7 @@ bottom-nav .mni-chip:active { background-color: var(--color-surface-subtle); }
 <header>
 <h2>Entdecken</h2>
 <p>Drei Wege zu Kunst, die zu dir passt</p>
-</header><nav aria-label="Entdecken" class="mni-tools"><a class="mni-tool mni-tool-featured" href="https://www.lumas.de/artfinder/"><span aria-hidden="true" class="mni-visual mni-finder"><span class="mni-sliders"><span class="mni-slider"><span>Subtil</span><i><b></b></i><span>Intensiv</span></span><span class="mni-slider"><span>Natur</span><i><b></b></i><span>Urban</span></span><span class="mni-slider"><span>Abstrakt</span><i><b></b></i><span>Figurativ</span></span></span><span class="mni-match"><img alt="" src="./media_lumas_de/nav-iterations/abr08.webp"/><img alt="" src="./media_lumas_de/nav-iterations/are105.webp"/><img alt="" src="./media_lumas_de/nav-iterations/asp03.webp"/><img alt="" src="./media_lumas_de/nav-iterations/apl01.webp"/></span></span><span class="mni-tool-title">Art Finder <span aria-hidden="true">→</span></span><span class="mni-tool-text">Regler nach deinem Geschmack stellen, passende Werke sehen.</span></a><div class="mni-tool-pair"><a class="mni-tool" href="https://www.lumas.de/similarity-search/"><span aria-hidden="true" class="mni-visual mni-similar"><span class="mni-source"><img alt="" src="./media_lumas_de/nav-iterations/are105.webp"/></span><span class="mni-similar-arrow">→</span><span class="mni-results"><img alt="" src="./media_lumas_de/nav-iterations/are24.webp"/><img alt="" src="./media_lumas_de/nav-iterations/are51.webp"/></span></span><span class="mni-tool-title">Ähnliche Werke <span aria-hidden="true">→</span></span><span class="mni-tool-text">Werk hochladen, Ähnliches finden.</span></a><a class="mni-tool" href="https://www.lumas.de/room-upload/"><span aria-hidden="true" class="mni-visual mni-room"><img alt="" class="mni-room-photo" src="./media_lumas_de/nav-iterations/room-760.jpg"/><img alt="" class="mni-room-art" src="./media_lumas_de/nav-iterations/apl01.webp"/></span><span class="mni-tool-title">In deinem Raum <span aria-hidden="true">→</span></span><span class="mni-tool-text">Raumfoto hochladen, Kunst darin sehen.</span></a></div></nav>
+</header><nav aria-label="Entdecken" class="mni-tools"><a class="mni-tool mni-tool-featured" href="https://www.lumas.de/artfinder/"><span aria-hidden="true" class="mni-visual mni-finder"><span class="mni-sliders"><span class="mni-slider"><span>Subtil</span><i><b></b></i><span>Intensiv</span></span><span class="mni-slider"><span>Natur</span><i><b></b></i><span>Urban</span></span><span class="mni-slider"><span>Abstrakt</span><i><b></b></i><span>Figurativ</span></span></span><span class="mni-match"><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp"/></span></span><span class="mni-tool-title">Art Finder <span aria-hidden="true">→</span></span><span class="mni-tool-text">Regler nach deinem Geschmack stellen, passende Werke sehen.</span></a><div class="mni-tool-pair"><a class="mni-tool" href="https://www.lumas.de/similarity-search/"><span aria-hidden="true" class="mni-visual mni-similar"><span class="mni-source"><img alt="" src="./media_lumas_de/nav-iterations/mcn55.webp"/></span><span class="mni-similar-arrow">→</span><span class="mni-results"><img alt="" src="./media_lumas_de/nav-iterations/tmr01.webp"/></span></span><span class="mni-tool-title">Ähnliche Werke <span aria-hidden="true">→</span></span><span class="mni-tool-text">Werk hochladen, Ähnliches finden.</span></a><a class="mni-tool" href="https://www.lumas.de/room-upload/"><span aria-hidden="true" class="mni-visual mni-room"><img alt="" class="mni-room-photo" src="./media_lumas_de/nav-iterations/room-760.jpg"/><img alt="" class="mni-room-art" src="./media_lumas_de/nav-iterations/mgi46.webp"/></span><span class="mni-tool-title">In deinem Raum <span aria-hidden="true">→</span></span><span class="mni-tool-text">Raumfoto hochladen, Kunst darin sehen.</span></a></div></nav>
 
 
 </section>
@@ -725,8 +712,8 @@ bottom-nav .mni-chip:active { background-color: var(--color-surface-subtle); }
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
 <h2>Kunstwerke</h2>
-<p>Nach Thema, Kategorie, Preis oder Format</p>
-</header><div class="mni-criteria"><div class="mni-row mni-row-themes"><div class="mni-row-head"><h3 class="carousel-label">Thema</h3><a class="mni-all" href="https://www.lumas.de/themen/">Alle Themen</a></div><div aria-label="Thema" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/natur/landschaft/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.jpg" width="110"/></picture><span>Landschaft</span></a><a class="carousel-card" href="https://www.lumas.de/themen/abstrakt-graphisch/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.jpg" width="110"/></picture><span>Abstrakt</span></a><a class="carousel-card" href="https://www.lumas.de/themen/architektur/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/city-110x110.jpg" width="110"/></picture><span>Architektur</span></a><a class="carousel-card" href="https://www.lumas.de/natur/wasser/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.jpg" width="110"/></picture><span>Wasser</span></a><a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.jpg" width="110"/></picture><span>Blumen</span></a><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.jpg" width="110"/></picture><span>Schwarz &amp; Weiß</span></a><a class="carousel-card" href="https://www.lumas.de/themen/menschen/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.jpg" width="110"/></picture><span>Menschen</span></a><a class="carousel-card" href="https://www.lumas.de/themen/tiere/"><picture><img alt="" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/tiere-110x110.jpg" width="110"/></picture><span>Tiere</span></a></div></div><div class="mni-row"><div class="mni-row-head"><h3 class="carousel-label">Kategorie</h3></div><div aria-label="Kategorie" class="mni-chips" role="region" tabindex="0"><a class="mni-chip" href="https://www.lumas.de/technik/fotografie/">Fotografie</a><a class="mni-chip" href="https://www.lumas.de/objekte/">Skulpturen &amp; Objekte</a><a class="mni-chip" href="https://www.lumas.de/technik/malerei/">Malerei</a><a class="mni-chip" href="https://www.lumas.de/malerei-illustration/">Illustration</a><a class="mni-chip" href="https://www.lumas.de/multi-phase/">Multi-Phase</a><a class="mni-chip" href="https://www.lumas.de/digitale-kunst/">Digitale Kunst</a><a class="mni-chip" href="https://www.lumas.de/petites/">Petites</a><a class="mni-chip" href="https://www.lumas.de/darlings/">Darlings</a><a class="mni-chip" href="https://www.lumas.de/lightbox/">Leuchtkästen</a><a class="mni-chip" href="https://www.lumas.de/technik/string-art/">String Art</a></div></div><div class="mni-row"><div class="mni-row-head"><h3 class="carousel-label">Preis</h3></div><div aria-label="Preis" class="mni-chips" role="region" tabindex="0"><a class="mni-chip" href="https://www.lumas.de/preis/bis-250/">bis € 250</a><a class="mni-chip" href="https://www.lumas.de/preis/bis-500/">bis € 500</a><a class="mni-chip" href="https://www.lumas.de/preis/bis-1000/">bis € 1.000</a><a class="mni-chip" href="https://www.lumas.de/preis/bis-2000/">bis € 2.000</a><a class="mni-chip" href="https://www.lumas.de/preis/bis-5000/">bis € 5.000</a><a class="mni-chip" href="https://www.lumas.de/preis/ab-5000/">ab € 5.000</a></div></div><div class="mni-row"><div class="mni-row-head"><h3 class="carousel-label">Format</h3><a class="mni-all" href="https://www.lumas.de/formate/">Alle Formate</a></div><div aria-label="Format" class="mni-chips" role="region" tabindex="0"><a class="mni-chip" href="https://www.lumas.de/search/?width=from0-to550&amp;height=from0-to600&amp;sort=revenue_product_desc&amp;price=from0-to50000">Klein</a><a class="mni-chip" href="https://www.lumas.de/search/?width=from550-to1400&amp;height=from600-to1430">Medium</a><a class="mni-chip" href="https://www.lumas.de/search/?width=from740-to2000">Groß</a><a class="mni-chip" href="https://www.lumas.de/search/?width=from2000-to5500">Museumsformat</a><a class="mni-chip" href="https://www.lumas.de/format/hoch/">Hochformat</a><a class="mni-chip" href="https://www.lumas.de/format/quer/">Querformat</a><a class="mni-chip" href="https://www.lumas.de/format/quadrat/">Quadrat</a><a class="mni-chip" href="https://www.lumas.de/format/panorama/">Panorama</a><a class="mni-chip" href="https://www.lumas.de/format/rund/">Rund</a></div></div></div>
+<p>Highlights, Preise und Kategorien</p>
+</header><div class="mni-criteria"><div class="mni-row"><h3 class="carousel-label">Highlights</h3><nav aria-label="Highlights" class="mni-tiles"><a class="carousel-card" href="https://www.lumas.de/highlights/bestseller/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/bestseller-110x110.jpg" width="110"/></picture><span>Bestseller</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/last-prints/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/last-prints-110x110.jpg" width="110"/></picture><span>Letzte Exemplare</span></a><a class="carousel-card" href="https://www.lumas.de/neuheiten/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/new-110x110.jpg" width="110"/></picture><span>Neuheiten</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/bestprice/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/rising-in-value-110x110.jpg" width="110"/></picture><span>Wert steigt</span></a></nav></div><div class="mni-row"><h3 class="carousel-label">Preis</h3><nav aria-label="Preis" class="mni-chip-grid mni-cols-3"><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from0-to25000">bis € 250</a><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from25000-to100000">€ 250–1.000</a><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from100000-to2000000">ab € 1.000</a></nav></div><div class="mni-row"><h3 class="carousel-label">Kategorie</h3><nav aria-label="Kategorie" class="mni-chip-grid mni-cols-2"><a class="mni-chip" href="https://www.lumas.de/technik/fotografie/">Fotografie</a><a class="mni-chip" href="https://www.lumas.de/petites/">Petites</a><a class="mni-chip" href="https://www.lumas.de/objekte/">Skulpturen &amp; Objekte</a><a class="mni-chip" href="https://www.lumas.de/technik/malerei/">Malerei</a></nav></div></div>
 
 
 </section>
@@ -11391,7 +11378,7 @@ AI Advisor</span>
 <script id="mni-iterations-js">
 (() => {
   // Art Finder preview: the sliders move and the matching work appears, while it is on screen
-  const tastes = [[20, 25, 75], [55, 10, 90], [85, 60, 10], [90, 85, 85]];
+  const tastes = [[40, 60, 85], [55, 10, 90], [90, 20, 25], [15, 40, 75]];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('bottom-nav .mni-finder').forEach(visual => {
     const thumbs = [...visual.querySelectorAll('.mni-slider b')];
