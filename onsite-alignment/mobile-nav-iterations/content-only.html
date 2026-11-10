@@ -11311,7 +11311,18 @@ AI Advisor</span>
 <script id="review-deep-link">
 (() => {
   const panel = (location.hash.match(/mn=(\w+)/) || [])[1];
-  if (panel) customElements.whenDefined('bottom-nav').then(() => setTimeout(() => {
+  // the shared copy sits behind a passphrase gate (html.oa-locked); a modal sheet opened before
+  // it is unlocked makes the gate inert, so the passphrase field could not be tapped
+  const unlocked = new Promise(resolve => {
+    const root = document.documentElement;
+    if (!root.classList.contains('oa-locked')) return resolve();
+    new MutationObserver((_, observer) => {
+      if (root.classList.contains('oa-locked')) return;
+      observer.disconnect();
+      resolve();
+    }).observe(root, { attributes: true, attributeFilter: ['class'] });
+  });
+  if (panel) Promise.all([customElements.whenDefined('bottom-nav'), unlocked]).then(() => setTimeout(() => {
     document.querySelector(`bottom-nav a[href="#tab-${panel}"]`)?.click();
     setTimeout(() => document.activeElement?.blur(), 100);
   }, 400));
