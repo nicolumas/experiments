@@ -194,20 +194,14 @@ bottom-nav .mni-match img {
 }
 bottom-nav .mni-match img.in { opacity: 1; }
 
-bottom-nav .mni-similar { aspect-ratio: 1.6; justify-content: center; gap: 0.8rem; padding: 1.2rem; }
-bottom-nav .mni-source { position: relative; height: 72%; padding: 0.5rem; }
-bottom-nav .mni-source::before {
-  content: '';
+bottom-nav .mni-cloud { aspect-ratio: 1.6; background-color: var(--color-surface-inverse); }
+bottom-nav .mni-cloud img {
   position: absolute;
-  inset: 0;
-  border: 0.15rem solid var(--color-text-primary);
-  -webkit-mask: conic-gradient(at 1rem 1rem, #0000 75%, #000 0) 0 0 / calc(100% - 1rem) calc(100% - 1rem);
-  mask: conic-gradient(at 1rem 1rem, #0000 75%, #000 0) 0 0 / calc(100% - 1rem) calc(100% - 1rem);
+  width: auto;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.5);
+  animation: mni-drift 7s var(--ease) infinite alternate;
 }
-bottom-nav .mni-source img { display: block; height: 100%; width: auto; }
-bottom-nav .mni-similar-arrow { color: var(--color-text-secondary); font-size: 1.4rem; }
-bottom-nav .mni-results { height: 72%; padding: 0.5rem 0; }
-bottom-nav .mni-results img { display: block; height: 100%; width: auto; }
+@keyframes mni-drift { to { translate: 0.3rem -0.4rem; } }
 
 bottom-nav .mni-room { aspect-ratio: 1.6; }
 bottom-nav .mni-room-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -248,6 +242,7 @@ bottom-nav .mni-chip:active { background-color: var(--color-surface-subtle); }
 
 @media (prefers-reduced-motion: reduce) {
   bottom-nav .mni-slider b, bottom-nav .mni-match img { transition: none; }
+  bottom-nav .mni-cloud img { animation: none; }
 }
 </style>
 
@@ -702,7 +697,7 @@ bottom-nav .mni-chip:active { background-color: var(--color-surface-subtle); }
 <header>
 <h2>Entdecken</h2>
 <p>Drei Wege zu Kunst, die zu dir passt</p>
-</header><nav aria-label="Entdecken" class="mni-tools"><a class="mni-tool mni-tool-featured" href="https://www.lumas.de/artfinder/"><span aria-hidden="true" class="mni-visual mni-finder"><span class="mni-sliders"><span class="mni-slider"><span>Subtil</span><i><b></b></i><span>Intensiv</span></span><span class="mni-slider"><span>Natur</span><i><b></b></i><span>Urban</span></span><span class="mni-slider"><span>Abstrakt</span><i><b></b></i><span>Figurativ</span></span></span><span class="mni-match"><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp"/></span></span><span class="mni-tool-title">Art Finder <span aria-hidden="true">→</span></span><span class="mni-tool-text">Regler nach deinem Geschmack stellen, passende Werke sehen.</span></a><div class="mni-tool-pair"><a class="mni-tool" href="https://www.lumas.de/similarity-search/"><span aria-hidden="true" class="mni-visual mni-similar"><span class="mni-source"><img alt="" src="./media_lumas_de/nav-iterations/mcn55.webp"/></span><span class="mni-similar-arrow">→</span><span class="mni-results"><img alt="" src="./media_lumas_de/nav-iterations/tmr01.webp"/></span></span><span class="mni-tool-title">Ähnliche Werke <span aria-hidden="true">→</span></span><span class="mni-tool-text">Werk hochladen, Ähnliches finden.</span></a><a class="mni-tool" href="https://www.lumas.de/room-upload/"><span aria-hidden="true" class="mni-visual mni-room"><img alt="" class="mni-room-photo" src="./media_lumas_de/nav-iterations/room-760.jpg"/><img alt="" class="mni-room-art" src="./media_lumas_de/nav-iterations/mgi46.webp"/></span><span class="mni-tool-title">In deinem Raum <span aria-hidden="true">→</span></span><span class="mni-tool-text">Raumfoto hochladen, Kunst darin sehen.</span></a></div></nav>
+</header><nav aria-label="Entdecken" class="mni-tools"><a class="mni-tool mni-tool-featured" href="https://www.lumas.de/artfinder/"><span aria-hidden="true" class="mni-visual mni-finder"><span class="mni-sliders"><span class="mni-slider"><span>Subtil</span><i><b></b></i><span>Intensiv</span></span><span class="mni-slider"><span>Natur</span><i><b></b></i><span>Urban</span></span><span class="mni-slider"><span>Abstrakt</span><i><b></b></i><span>Figurativ</span></span></span><span class="mni-match"><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp"/></span></span><span class="mni-tool-title">Art Finder <span aria-hidden="true">→</span></span><span class="mni-tool-text">Regler nach deinem Geschmack stellen, passende Werke sehen.</span></a><div class="mni-tool-pair"><a class="mni-tool" data-art-cloud-trigger="" href="#art-cloud"><span aria-hidden="true" class="mni-visual mni-cloud"><img alt="" src="./media_lumas_de/nav-iterations/mcn55.webp" style="left:6%;top:10%;height:36%;animation-delay:0s"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp" style="left:34%;top:6%;height:18%;animation-delay:-2s"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp" style="left:70%;top:12%;height:22%;animation-delay:-4s"/><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp" style="left:38%;top:38%;height:30%;animation-delay:-1s"/><img alt="" src="./media_lumas_de/nav-iterations/tmr01.webp" style="left:10%;top:58%;height:32%;animation-delay:-3s"/><img alt="" src="./media_lumas_de/nav-iterations/mgi46.webp" style="left:74%;top:50%;height:24%;animation-delay:-5s"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp" style="left:58%;top:68%;height:26%;animation-delay:-2.5s"/></span><span class="mni-tool-title">Art Cloud <span aria-hidden="true">→</span></span><span class="mni-tool-text">Durch alle Werke ziehen, Ähnliches finden.</span></a><a class="mni-tool" href="https://www.lumas.de/room-upload/"><span aria-hidden="true" class="mni-visual mni-room"><img alt="" class="mni-room-photo" src="./media_lumas_de/nav-iterations/room-760.jpg"/><img alt="" class="mni-room-art" src="./media_lumas_de/nav-iterations/mgi46.webp"/></span><span class="mni-tool-title">In deinem Raum <span aria-hidden="true">→</span></span><span class="mni-tool-text">Raumfoto hochladen, Kunst darin sehen.</span></a></div></nav>
 
 
 </section>
@@ -11118,7 +11113,7 @@ window.addEventListener('load', videoListeners);
 </div>
 </div>
 </div>
-<art-cloud data-css-path="./cdn_lumas_de/assets/white/art-cloud.css" data-initial-endpoint="/art-cloud/initial/" data-products-endpoint="/art-cloud/products/" data-similar-endpoint="/art-cloud/similar" data-text-search-endpoint="/art-cloud/text-search/" data-translations='{"introTitle":"\u00c4hnliche Kunstwerke entdecken","introText":"Bewege die Maus und verliere dich in der Entdeckung der Kunst.","introTextTablet":"Ziehen zum Entdecken \u00b7 zwei Finger zum Zoomen","introEnter":"Start","hintTouch":"Tippe ein Werk an, um mehr zu sehen","searchPlaceholder":"Kunstwerke suchen...","searchLabel":"Kunstwerke suchen","loading":"Wird geladen...","closeDetail":"Detailbereich schlie\u00dfen","viewArtwork":"Kunstwerk ansehen","viewSimilar":"Mehr in diesem Stil ansehen","exitLabel":"Art Cloud verlassen","canvasLabel":"Interaktive Kunstgalerie","artworkCount":"%count% Kunstwerke geladen","searchResults":"%count% Ergebnisse gefunden","similarResults":"%count% \u00e4hnliche Kunstwerke gefunden","noResults":"Keine Ergebnisse gefunden","searchError":"Etwas ist schiefgelaufen. Bitte versuche es erneut.","similarError":"Keine Ergebnisse gefunden","centerLabel":"Zur\u00fcck zur \u00dcbersicht","zoomIn":"Vergr\u00f6\u00dfern","zoomOut":"Verkleinern","backLabel":"Zur\u00fcck zur vorherigen Auswahl"}' hidden=""></art-cloud>
+<art-cloud data-css-path="./cdn_lumas_de/assets/white/art-cloud.css" data-initial-endpoint="/art-cloud/initial/" data-products-endpoint="./art-cloud-products.json" data-similar-endpoint="/art-cloud/similar" data-text-search-endpoint="/art-cloud/text-search/" data-translations='{"introTitle":"\u00c4hnliche Kunstwerke entdecken","introText":"Bewege die Maus und verliere dich in der Entdeckung der Kunst.","introTextTablet":"Ziehen zum Entdecken \u00b7 zwei Finger zum Zoomen","introEnter":"Start","hintTouch":"Tippe ein Werk an, um mehr zu sehen","searchPlaceholder":"Kunstwerke suchen...","searchLabel":"Kunstwerke suchen","loading":"Wird geladen...","closeDetail":"Detailbereich schlie\u00dfen","viewArtwork":"Kunstwerk ansehen","viewSimilar":"Mehr in diesem Stil ansehen","exitLabel":"Art Cloud verlassen","canvasLabel":"Interaktive Kunstgalerie","artworkCount":"%count% Kunstwerke geladen","searchResults":"%count% Ergebnisse gefunden","similarResults":"%count% \u00e4hnliche Kunstwerke gefunden","noResults":"Keine Ergebnisse gefunden","searchError":"Etwas ist schiefgelaufen. Bitte versuche es erneut.","similarError":"Keine Ergebnisse gefunden","centerLabel":"Zur\u00fcck zur \u00dcbersicht","zoomIn":"Vergr\u00f6\u00dfern","zoomOut":"Verkleinern","backLabel":"Zur\u00fcck zur vorherigen Auswahl"}' hidden=""></art-cloud>
 <script defer="" src="./cdn_lumas_de/assets/white/art-cloud.js"></script>
 <script>
  document.addEventListener('click', e => {
@@ -11395,6 +11390,11 @@ AI Advisor</span>
       clearInterval(timer);
       if (entry.isIntersecting) timer = setInterval(() => { step = (step + 1) % tastes.length; show(); }, 2200);
     }).observe(visual);
+  });
+
+  // the sheet is a modal dialog (top layer), so close it before production's handler opens Art Cloud
+  document.querySelectorAll('bottom-nav [data-art-cloud-trigger]').forEach(trigger => {
+    trigger.addEventListener('click', () => trigger.closest('dialog')?.close());
   });
 
   // review deep link: #mn=discover|shop|artists|search|info opens that panel
