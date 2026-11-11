@@ -149,19 +149,6 @@
 <link href="https://ch.lumas.com/fr/" hreflang="fr-ch" rel="alternate"/>
 <link href="https://ch.lumas.com/" hreflang="de-ch" rel="alternate"/>
 <link href="https://hu.lumas.com/" hreflang="en-hu" rel="alternate"/>
-<style id="dev-fix-search-field">
-bottom-nav #tab-search header { border-bottom: 0; }
-bottom-nav #tab-search .carousel-label { border-bottom: 0; padding-bottom: 0; }
-bottom-nav .search-field input {
-  border: 0;
-  border-radius: var(--radius-sm, 0.4rem);
-  background-color: var(--color-surface-muted);
-  color: var(--color-text-primary);
-}
-bottom-nav .search-field input::placeholder { color: var(--color-text-secondary); }
-bottom-nav .search-field input:focus-visible { outline: 0.1rem solid var(--color-text-primary); outline-offset: 0; }
-bottom-nav .search-field button svg { color: var(--color-text-primary); }
-</style>
 </head>
 <body class="lumas-theme header-banner has-bottom-nav homepage">
 <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
@@ -548,35 +535,25 @@ bottom-nav .search-field button svg { color: var(--color-text-primary); }
 <section><!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
 <h2>Entdecken</h2>
-<p>Drei Wege zu Kunst, die zu dir passt</p>
+<p>Zwei Wege zu Kunst, die zu dir passt</p>
 </header>
 <div class="pt-2">
-<a class="no-underline color-primary" href="https://www.lumas.de/artfinder/">
+<a class="no-underline color-primary" href="https://www.lumas.de/room-upload/">
 <picture>
-<source media="all" srcset="./media_lumas_de/site-navigation/mobil/discover/tool-artfinder-1050x480.webp" type="image/webp"/>
-<img alt="Drei Regler und das passende Werk WINDA von Marta Contreras Simó" class="width-full" loading="lazy" property="schema:image" src="./media_lumas_de/site-navigation/mobil/discover/tool-artfinder-1050x480.jpg"/>
-</picture>
-<p class="like-h4 text-lg mt-1 mb-0">Art Finder →</p>
-<p class="color-secondary mb-0">Regler nach deinem Geschmack stellen, passende Werke sehen.</p>
-</a>
-<div class="flex mt-3">
-<a class="flex-1 mr-1 no-underline color-primary" data-art-cloud-trigger="" href="#">
-<picture>
-<source media="all" srcset="./media_lumas_de/site-navigation/mobil/discover/tool-artcloud-507x318.webp" type="image/webp"/>
-<img alt="Bestseller als Wolke auf dunklem Grund" class="width-full" loading="lazy" property="schema:image" src="./media_lumas_de/site-navigation/mobil/discover/tool-artcloud-507x318.jpg"/>
-</picture>
-<p class="like-h4 text-lg mt-1 mb-0">Art Cloud →</p>
-<p class="color-secondary mb-0">Durch alle Werke ziehen, Ähnliches finden.</p>
-</a>
-<a class="flex-1 ml-1 no-underline color-primary" href="https://www.lumas.de/room-upload/">
-<picture>
-<source media="all" srcset="./media_lumas_de/site-navigation/mobil/discover/tool-room-507x318.webp" type="image/webp"/>
-<img alt="Gun von Manu Grinspan an der Wand eines Wohnraums" class="width-full" loading="lazy" property="schema:image" src="./media_lumas_de/site-navigation/mobil/discover/tool-room-507x318.jpg"/>
+<source media="all" srcset="./media_lumas_de/site-navigation/mobil/discover/tool-room-1014x636.webp" type="image/webp"/>
+<img alt="Gun von Manu Grinspan an der Wand eines Wohnraums" class="width-full" loading="lazy" property="schema:image" src="./media_lumas_de/site-navigation/mobil/discover/tool-room-1014x636.jpg"/>
 </picture>
 <p class="like-h4 text-lg mt-1 mb-0">In deinem Raum →</p>
 <p class="color-secondary mb-0">Foto hochladen, Kunst an der Wand sehen.</p>
 </a>
-</div>
+<a class="no-underline color-primary" href="https://www.lumas.de/artfinder/">
+<picture>
+<source media="all" srcset="./media_lumas_de/site-navigation/mobil/discover/tool-artfinder-1050x480.webp" type="image/webp"/>
+<img alt="Drei Regler und das passende Werk WINDA von Marta Contreras Simó" class="width-full mt-3" loading="lazy" property="schema:image" src="./media_lumas_de/site-navigation/mobil/discover/tool-artfinder-1050x480.jpg"/>
+</picture>
+<p class="like-h4 text-lg mt-1 mb-0">Art Finder →</p>
+<p class="color-secondary mb-0">Regler nach deinem Geschmack stellen, passende Werke sehen.</p>
+</a>
 </div>
 </section>
 </div>
@@ -772,10 +749,11 @@ bottom-nav .search-field button svg { color: var(--color-text-primary); }
 <div aria-label="Suche" class="tab-slide" data-label="Suche" id="tab-search" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
-<header>
-<h2>Suche</h2>
-<p>Kunst, Künstler &amp; Collections finden</p>
-</header>
+<div class="pt-1 pb-2 text-left">
+<h2 class="like-h4 text-left mb-0">Suche</h2>
+<p class="text-base color-secondary mb-0">Kunst, Künstler &amp; Collections finden</p>
+</div>
+
 <nav-search>
 <form action="/search/" class="search-field" method="get" role="search">
 <button aria-label="Suchen" type="submit">
@@ -789,82 +767,83 @@ bottom-nav .search-field button svg { color: var(--color-text-primary); }
 </div>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <div class="search-default">
-<div class="carousel-section">
-<h3 class="carousel-label">Meist gesucht</h3>
+<div class="carousel-section mt-3">
+<h3 class="font-bold text-sm uppercase color-secondary mb-2">Meist gesucht</h3>
 <div aria-label="Meist gesucht" class="carousel-scroll" role="region" tabindex="0">
 <a class="carousel-card" href="https://www.lumas.de/collections/staedte/new-york-bilder/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/nyc-110x110.webp" type="image/webp" width="110"/>
-<img alt="New York" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/nyc-110x110.jpg" title="New York" width="110"/>
+<img alt="New York" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/nyc-110x110.jpg" title="New York" width="110"/>
 </picture>
 <span>New York</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/david-bowie-bilder/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/bowie-110x110.webp" type="image/webp" width="110"/>
-<img alt="David Bowie" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/bowie-110x110.jpg" title="David Bowie" width="110"/>
+<img alt="David Bowie" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/bowie-110x110.jpg" title="David Bowie" width="110"/>
 </picture>
 <span>David Bowie</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/natur/wasser/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.webp" type="image/webp" width="110"/>
-<img alt="Wasser" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.jpg" title="Wasser" width="110"/>
+<img alt="Wasser" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.jpg" title="Wasser" width="110"/>
 </picture>
 <span>Wasser</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/themen/abstrakt-graphisch/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.webp" type="image/webp" width="110"/>
-<img alt="Abstrakt" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.jpg" title="Abstrakt" width="110"/>
+<img alt="Abstrakt" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.jpg" title="Abstrakt" width="110"/>
 </picture>
 <span>Abstrakt</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.webp" type="image/webp" width="110"/>
-<img alt="Schwarz &amp; Weiß" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.jpg" title="Schwarz &amp; Weiß" width="110"/>
+<img alt="Schwarz &amp; Weiß" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.jpg" title="Schwarz &amp; Weiß" width="110"/>
 </picture>
 <span>Schwarz &amp; Weiß</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/natur/landschaft/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.webp" type="image/webp" width="110"/>
-<img alt="Landschaft" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.jpg" title="Landschaft" width="110"/>
+<img alt="Landschaft" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.jpg" title="Landschaft" width="110"/>
 </picture>
 <span>Landschaft</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/themen/menschen/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.webp" type="image/webp" width="110"/>
-<img alt="Menschen" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.jpg" title="Menschen" width="110"/>
+<img alt="Menschen" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.jpg" title="Menschen" width="110"/>
 </picture>
 <span>Menschen</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.webp" type="image/webp" width="110"/>
-<img alt="Blumen" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.jpg" title="Blumen" width="110"/>
+<img alt="Blumen" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.jpg" title="Blumen" width="110"/>
 </picture>
 <span>Blumen</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/ki-kunst/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/digital-110x110.webp" type="image/webp" width="110"/>
-<img alt="KI Kunst" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/digital-110x110.jpg" title="KI Kunst" width="110"/>
+<img alt="KI Kunst" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/digital-110x110.jpg" title="KI Kunst" width="110"/>
 </picture>
 <span>KI Kunst</span>
 </a>
 <a class="carousel-card" href="https://www.lumas.de/collections/urbane-kunst/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/city-110x110.webp" type="image/webp" width="110"/>
-<img alt="Städte" class="max-w-full width-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/city-110x110.jpg" title="Städte" width="110"/>
+<img alt="Städte" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/search/city-110x110.jpg" title="Städte" width="110"/>
 </picture>
 <span>Städte</span>
 </a>
 </div>
 </div>
 </div>
+
 </nav-search>
 </section>
 </div>
@@ -11281,11 +11260,6 @@ AI Advisor</span>
 </noscript>
 
 
-<script id="dev-fix-art-cloud">
-document.addEventListener('click', event => {
-  event.target.closest('bottom-nav [data-art-cloud-trigger]')?.closest('dialog')?.close();
-}, true);
-</script>
 <script id="review-deep-link">
 (() => {
   const panel = (location.hash.match(/mn=(\w+)/) || [])[1];
