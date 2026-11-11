@@ -883,7 +883,164 @@ site-header .menu.discovery .tool-cloud.is-playing img {
   }
 }
 </style>
-</head>
+<link href="./cdn_lumas_de/assets/white/mobile-v1/bottom-nav.css" media="(max-width: 1024px)" rel="stylesheet"/><style id="mni-iterations">
+/* fewer lines: the sheet header and the section labels lose their dividers */
+bottom-nav .tab-slide header { border-bottom: 0; padding-bottom: 0.8rem; }
+bottom-nav .carousel-label {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin: 0 0 1.2rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+}
+bottom-nav .carousel-card { border: 0; border-radius: 0; }
+bottom-nav .carousel-card img { border-radius: var(--bottom-nav-radius); }
+bottom-nav .carousel-card span { padding: 0.8rem 0.2rem 0; }
+
+/* search: the desktop header's filled field, so it reads as a field before it is tapped */
+bottom-nav nav-search { padding-top: 0.8rem; }
+bottom-nav .search-field input {
+  height: 5.2rem;
+  border: 0;
+  border-radius: var(--radius-sm, 0.4rem);
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+bottom-nav .search-field input::placeholder { color: var(--color-text-secondary); }
+bottom-nav .search-field input:focus-visible { outline: 0.1rem solid var(--color-text-primary); outline-offset: 0; }
+bottom-nav .search-field button svg { color: var(--color-text-primary); }
+bottom-nav .search-default { padding-top: 2.4rem; }
+
+/* Entdecken: the three tools, each with a preview of what it does */
+bottom-nav .mni-tools {
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.4rem;
+  padding: 1.6rem 0 0.8rem;
+}
+bottom-nav .mni-tool {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+bottom-nav .mni-tool-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+bottom-nav .mni-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-width: 0;
+  margin-bottom: 0.8rem;
+  border-radius: var(--bottom-nav-radius);
+  background-color: var(--color-surface-muted);
+}
+bottom-nav .mni-tool-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+}
+bottom-nav .mni-tool-text {
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  line-height: 2rem;
+  text-wrap: pretty;
+}
+bottom-nav .mni-tool-pair .mni-tool-text { font-size: 1.3rem; line-height: 1.8rem; }
+
+bottom-nav .mni-finder { aspect-ratio: 2.2; gap: 1.6rem; padding: 1.6rem; }
+bottom-nav .mni-sliders { display: grid; flex: 1 1 58%; gap: 1.4rem; }
+bottom-nav .mni-slider {
+  display: grid;
+  grid-template-columns: 5.8rem 1fr 5.8rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+bottom-nav .mni-slider > span:last-child { text-align: right; }
+bottom-nav .mni-slider i { position: relative; height: 0.2rem; background-color: var(--color-border-default); }
+bottom-nav .mni-slider b {
+  position: absolute;
+  top: 50%;
+  left: var(--p, 50%);
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background-color: var(--color-text-primary);
+  transform: translate(-50%, -50%);
+  transition: left 520ms var(--ease);
+}
+bottom-nav .mni-match { position: relative; flex: 1 1 42%; align-self: stretch; }
+bottom-nav .mni-match img {
+  position: absolute;
+  inset: 0;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 520ms var(--ease);
+}
+bottom-nav .mni-match img.in { opacity: 1; }
+
+bottom-nav .mni-cloud { aspect-ratio: 1.6; background-color: var(--color-surface-inverse); }
+bottom-nav .mni-cloud img {
+  position: absolute;
+  width: auto;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.5);
+  animation: mni-drift 7s var(--ease) infinite alternate;
+}
+@keyframes mni-drift { to { translate: 0.3rem -0.4rem; } }
+
+bottom-nav .mni-room { aspect-ratio: 1.6; }
+bottom-nav .mni-room-photo { width: 100%; height: 100%; object-fit: cover; }
+bottom-nav .mni-room-art {
+  position: absolute;
+  left: 50.3%;
+  top: 41%;
+  width: 25.6%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.25);
+}
+
+/* Kunstwerke: three groups, everything on one screen, no sideways scrolling */
+bottom-nav .mni-criteria { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.4rem; padding: 1.6rem 0 0.8rem; }
+bottom-nav .mni-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+bottom-nav .mni-tiles .carousel-card { width: auto; }
+bottom-nav .mni-tiles .carousel-card img { height: auto; }
+bottom-nav .mni-chip-grid { display: grid; gap: 0.8rem; }
+bottom-nav .mni-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+bottom-nav .mni-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+bottom-nav .mni-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.4rem;
+  padding: 0 0.8rem;
+  border-radius: var(--radius-sm, 0.4rem);
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+bottom-nav .mni-chip:active { background-color: var(--color-surface-subtle); }
+
+@media (prefers-reduced-motion: reduce) {
+  bottom-nav .mni-slider b, bottom-nav .mni-match img { transition: none; }
+  bottom-nav .mni-cloud img { animation: none; }
+}
+</style></head>
 <body class="lumas-theme header-banner homepage">
 <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 <div aria-atomic="true" aria-live="polite" class="flash-announcer" data-flash-announcer="polite" role="status"></div>
@@ -1036,169 +1193,80 @@ document.body.addEventListener('click', e => {
  document.querySelector('site-header').classList.add(!matchMedia('(min-width: 480px)').matches ? 'mobile' : 'desktop');
  document.querySelector('site-header [name="q"]').placeholder = window.innerWidth < 981 ? `Suche` : `Suche`;
 </script>
-<template id="bottom-nav-template">
-<bottom-nav aria-label="Hauptnavigation" hidden="" role="navigation">
+<svg aria-hidden="true" hidden="" role="presentation" style="display: none" xmlns="http://www.w3.org/2000/svg">
+<symbol fill="none" id="nav-discover" viewbox="0 0 24 24"><path d="M9.934 15.495a2 2 0 0 0-1.437-1.437l-6.133-1.581a.5.5 0 0 1 0-.962l6.133-1.583a2 2 0 0 0 1.437-1.435l1.581-6.133a.5.5 0 0 1 .963 0l1.58 6.133a2 2 0 0 0 1.437 1.436l6.132 1.58a.5.5 0 0 1 0 .965l-6.132 1.58a2 2 0 0 0-1.437 1.437l-1.581 6.132a.5.5 0 0 1-.963 0zM19.993 2.999v3.999M21.992 4.998h-3.998M3.999 16.994v2M4.999 17.994h-2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
+<symbol fill="none" id="nav-shop" viewbox="0 0 24 24"><path d="M5.998 2 2.999 5.997v13.995a2 2 0 0 0 2 2h13.994a2 2 0 0 0 2-2V5.998l-3-3.999zM2.999 5.998h17.994" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path><path d="M15.994 9.996a3.999 3.999 0 0 1-7.997 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
+<symbol fill="none" id="nav-artist" viewbox="0 0 24 24"><path d="M18.993 20.993v-2a4 4 0 0 0-3.998-3.998H8.997a4 4 0 0 0-3.999 3.998v2M11.996 10.996a3.999 3.999 0 1 0 0-7.997 3.999 3.999 0 0 0 0 7.997" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
+<symbol fill="none" id="nav-search" viewbox="0 0 24 24"><path d="M10.996 18.993a7.997 7.997 0 1 0 0-15.994 7.997 7.997 0 0 0 0 15.994M20.993 20.993l-4.299-4.299" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
+<symbol fill="none" id="nav-info" viewbox="0 0 24 24"><path d="M11.996 21.992c5.52 0 9.997-4.475 9.997-9.996s-4.476-9.997-9.997-9.997C6.476 2 2 6.475 2 11.996c0 5.52 4.475 9.996 9.996 9.996M11.996 15.994v-3.998M11.996 7.997h.01" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
+<symbol fill="none" id="nav-palette" viewbox="0 0 24 24"><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2v-.5c0-.5-.2-1-.5-1.4-.3-.3-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 21 9.5 10 10 0 0 0 12 2z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><circle cx="7.5" cy="11.5" fill="currentColor" r="1.5"></circle><circle cx="10.5" cy="7.5" fill="currentColor" r="1.5"></circle><circle cx="14.5" cy="7.5" fill="currentColor" r="1.5"></circle></symbol>
+<symbol fill="none" id="nav-sparkles" viewbox="0 0 24 24"><path d="m12 3-1.9 5.7a2 2 0 0 1-1.3 1.3L3 12l5.7 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.7a2 2 0 0 1 1.3-1.3L21 12l-5.7-1.9a2 2 0 0 1-1.3-1.3z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M5 3v4M3 5h4M19 17v4M17 19h4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+<symbol fill="none" id="nav-camera" viewbox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><circle cx="12" cy="13" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle></symbol>
+<symbol fill="none" id="nav-phone" viewbox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+<symbol fill="none" id="nav-email" viewbox="0 0 24 24"><rect height="16" rx="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" width="20" x="2" y="4"></rect><path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+<symbol fill="none" id="nav-whatsapp" viewbox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+<symbol fill="none" id="nav-livechat" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+<symbol fill="none" id="nav-globe" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
+</svg>
+<bottom-nav aria-label="Hauptnavigation" role="navigation">
+<script>
+ document.currentScript.parentElement.hidden = matchMedia('(min-width: 1025px)').matches;
+ document.currentScript.remove();
+ </script>
 <dialog>
+<div class="scroll-marker-group" role="tablist">
+<a aria-controls="tab-discover" aria-selected="false" class="scroll-marker" href="#tab-discover" role="tab" tabindex="0">
+<svg aria-hidden="true" height="24" width="24"><use href="#nav-discover"></use></svg>
+<span>Entdecken</span>
+</a>
+<a aria-controls="tab-shop" aria-selected="false" class="scroll-marker" href="#tab-shop" role="tab" tabindex="0">
+<svg aria-hidden="true" height="24" width="24"><use href="#nav-shop"></use></svg>
+<span>Kunstwerke</span>
+</a>
+<a aria-controls="tab-artists" aria-selected="false" class="scroll-marker" href="#tab-artists" role="tab" tabindex="0">
+<svg aria-hidden="true" height="24" width="24"><use href="#nav-artist"></use></svg>
+<span>Künstler</span>
+</a>
+<a aria-controls="tab-search" aria-selected="false" class="scroll-marker" href="#tab-search" role="tab" tabindex="0">
+<svg aria-hidden="true" height="24" width="24"><use href="#nav-search"></use></svg>
+<span>Suche</span>
+</a>
+<a aria-controls="tab-info" aria-selected="false" class="scroll-marker" href="#tab-info" role="tab" tabindex="0">
+<svg aria-hidden="true" height="24" width="24"><use href="#nav-info"></use></svg>
+<span>Info</span>
+</a>
+</div>
 <div class="tabs">
 <div class="handle"></div>
 <div class="tabs-scroll">
-<div aria-label="Artfinder" class="tab-slide" data-icon="nav-discover" data-label="Artfinder" id="tab-discover" role="tabpanel">
+<div aria-label="Entdecken" class="tab-slide" data-label="Entdecken" id="tab-discover" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
-<h2>Artfinder &amp; Inspiration</h2>
-<p>Kunst finden, Collections und Geschichten</p>
-</header>
-<nav class="action-cards">
-<a class="action-card featured" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F">
-<span class="icon">
-<svg aria-hidden="true"><use href="#nav-sparkles"></use></svg>
-</span>
-<span class="title">AI Advisor</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a><a class="action-card" href="https://www.lumas.de/artfinder/">
-<span class="icon">
-<svg aria-hidden="true"><use href="#nav-palette"></use></svg>
-</span>
-<span class="title">Art Finder</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
-<a class="action-card" data-art-cloud-trigger="">
-<span class="icon">
-<svg aria-hidden="true"><use href="#nav-globe"></use></svg>
-</span>
-<span class="title">Art Cloud</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
-</nav><div class="carousel-section"><h3 class="carousel-label">Inspiration</h3><div aria-label="Inspiration" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/favoriten-unserer-kuratoren/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.webp" type="image/webp" width="110"/><img alt="Favoriten unserer Kuratoren" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/curator-fave-110x110.jpg" title="Favoriten unserer Kuratoren" width="110"/></picture><span>Favoriten unserer Kuratoren</span></a><a class="carousel-card" href="https://www.lumas.de/collections/zeitlose-klassiker/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.webp" type="image/webp" width="110"/><img alt="Zeitlose Klassiker" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/zeitlose-klassiker-110x110.jpg" title="Zeitlose Klassiker" width="110"/></picture><span>Zeitlose Klassiker</span></a><a class="carousel-card" href="https://www.lumas.de/collections/botanische-kunstwerke/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/botanik-110x110.webp" type="image/webp" width="110"/><img alt="Botanik" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/botanik-110x110.jpg" title="Botanik" width="110"/></picture><span>Botanik</span></a><a class="carousel-card" href="https://www.lumas.de/collections/erschwingliche-kunst/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.webp" type="image/webp" width="110"/><img alt="Erschwingliche Kunst" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/erschwingliche-kunst-110x110.jpg" title="Erschwingliche Kunst" width="110"/></picture><span>Erschwingliche Kunst</span></a><a class="carousel-card" href="https://www.lumas.de/inspired-art-magazine/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-inspired-110x110.webp" type="image/webp" width="110"/><img alt="Inspired" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-inspired-110x110.jpg" title="Inspired" width="110"/></picture><span>Inspired</span></a><a class="carousel-card" href="https://www.lumas.de/collections/perfekte-paare/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/perfekte-paare-110x110.webp" type="image/webp" width="110"/><img alt="Perfekte Paare" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/perfekte-paare-110x110.jpg" title="Perfekte Paare" width="110"/></picture><span>Perfekte Paare</span></a><a class="carousel-card" href="https://www.lumas.de/technik/string-art/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.webp" type="image/webp" width="110"/><img alt="String Art" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/shop/string-art-110x110.jpg" title="String Art" width="110"/></picture><span>String Art</span></a><a class="carousel-card" href="https://www.lumas.de/magazin/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-magazin-110x110.webp" type="image/webp" width="110"/><img alt="Order LUMAS Art Magazine" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-magazin-110x110.jpg" title="Order LUMAS Art Magazine" width="110"/></picture><span>Order LUMAS Art Magazine</span></a><a class="carousel-card" href="https://www.lumas.de/collections/lumas-voices/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/lumas-voices-110x110.webp" type="image/webp" width="110"/><img alt="LUMAS Voices" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/lumas-voices-110x110.jpg" title="LUMAS Voices" width="110"/></picture><span>LUMAS Voices</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/axel-crieger/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-crieger-110x110.webp" type="image/webp" width="110"/><img alt="Axel Crieger" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-crieger-110x110.jpg" title="Axel Crieger" width="110"/></picture><span>Axel Crieger</span></a><a class="carousel-card" href="https://www.lumas.de/artist-in-focus/marianna-gefen/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-gefen-110x110.webp" type="image/webp" width="110"/><img alt="Marianna Gefen" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-gefen-110x110.jpg" title="Marianna Gefen" width="110"/></picture><span>Marianna Gefen</span></a><a class="carousel-card" href="https://www.lumas.de/artist/daniel_kordan/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/story-kordan-110x110.webp" type="image/webp" width="110"/><img alt="Daniel Kordan" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/story-kordan-110x110.jpg" title="Daniel Kordan" width="110"/></picture><span>Daniel Kordan</span></a></div></div>
+<h2>Entdecken</h2>
+<p>Kunst, die zu dir passt</p>
+</header><nav class="action-cards"><a class="action-card" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span class="icon"><svg aria-hidden="true"><use href="#nav-sparkles"></use></svg></span><span class="title">AI Advisor</span><span aria-hidden="true" class="arrow">→</span></a></nav><nav aria-label="Entdecken" class="mni-tools"><a class="mni-tool mni-tool-featured" href="https://www.lumas.de/artfinder/"><span aria-hidden="true" class="mni-visual mni-finder"><span class="mni-sliders"><span class="mni-slider"><span>Subtil</span><i><b></b></i><span>Intensiv</span></span><span class="mni-slider"><span>Natur</span><i><b></b></i><span>Urban</span></span><span class="mni-slider"><span>Abstrakt</span><i><b></b></i><span>Figurativ</span></span></span><span class="mni-match"><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp"/></span></span><span class="mni-tool-title">Art Finder</span><span class="mni-tool-text">Nach deiner Stimmung.</span></a><div class="mni-tool-pair"><a class="mni-tool" data-art-cloud-trigger="" href="#art-cloud"><span aria-hidden="true" class="mni-visual mni-cloud"><img alt="" src="./media_lumas_de/nav-iterations/mcn55.webp" style="left:6%;top:10%;height:36%;animation-delay:0s"/><img alt="" src="./media_lumas_de/nav-iterations/ime97.webp" style="left:34%;top:6%;height:18%;animation-delay:-2s"/><img alt="" src="./media_lumas_de/nav-iterations/cgo155.webp" style="left:70%;top:12%;height:22%;animation-delay:-4s"/><img alt="" src="./media_lumas_de/nav-iterations/mcs41.webp" style="left:38%;top:38%;height:30%;animation-delay:-1s"/><img alt="" src="./media_lumas_de/nav-iterations/tmr01.webp" style="left:10%;top:58%;height:32%;animation-delay:-3s"/><img alt="" src="./media_lumas_de/nav-iterations/mgi46.webp" style="left:74%;top:50%;height:24%;animation-delay:-5s"/><img alt="" src="./media_lumas_de/nav-iterations/cdu01.webp" style="left:58%;top:68%;height:26%;animation-delay:-2.5s"/></span><span class="mni-tool-title">Art Cloud</span><span class="mni-tool-text">Alle Werke, frei erkunden.</span></a><a class="mni-tool" href="https://www.lumas.de/room-upload/"><span aria-hidden="true" class="mni-visual mni-room"><img alt="" class="mni-room-photo" src="./media_lumas_de/nav-iterations/room-760.jpg"/><img alt="" class="mni-room-art" src="./media_lumas_de/nav-iterations/mgi46.webp"/></span><span class="mni-tool-title">In deinem Raum</span><span class="mni-tool-text">An deiner Wand.</span></a></div></nav>
+
+
 </section>
 </div>
-<div aria-label="Kunstwerke" class="tab-slide" data-icon="nav-shop" data-label="Kunstwerke" id="tab-shop" role="tabpanel">
+<div aria-label="Kunstwerke" class="tab-slide" data-label="Kunstwerke" id="tab-shop" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
 <h2>Kunstwerke</h2>
-<p>Highlights, Kategorie, Thema und Preis</p>
-</header><div class="carousel-section"><h3 class="carousel-label">Highlights</h3><div aria-label="Highlights" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/neuheiten/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/new-110x110.webp" type="image/webp" width="110"/>
-<img alt="Neuheiten" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/discover/new-110x110.jpg" title="Neuheiten" width="110"/>
-</picture>
-<span>Neuheiten</span>
-</a><a class="carousel-card" href="https://www.lumas.de/geschenke/gutscheine/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/gutscheine-110x110.webp" type="image/webp" width="110"/><img alt="Gutscheine" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/gutscheine-110x110.jpg" title="Gutscheine" width="110"/></picture><span>Gutscheine</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/bestprice/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/rising-in-value-110x110.webp" type="image/webp" width="110"/>
-<img alt="Wert steigt" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/discover/rising-in-value-110x110.jpg" title="Wert steigt" width="110"/>
-</picture>
-<span>Wert steigt</span>
-</a><a class="carousel-card" href="https://www.lumas.de/masters/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.webp" type="image/webp" width="110"/><img alt="Master Editions" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/artists/masters-110x110.jpg" title="Master Editions" width="110"/></picture><span>Master Editions</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/bestseller/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/bestseller-110x110.webp" type="image/webp" width="110"/>
-<img alt="Bestseller" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/discover/bestseller-110x110.jpg" title="Bestseller" width="110"/>
-</picture>
-<span>Bestseller</span>
-</a><a class="carousel-card" href="https://www.lumas.de/archive-sale/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/sale-110x110.webp" type="image/webp" width="110"/>
-<img alt="Archive Sale" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/discover/sale-110x110.jpg" title="Sale" width="110"/>
-</picture>
-<span>Archive Sale</span>
-</a><a class="carousel-card" href="https://www.lumas.de/highlights/last-prints/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/last-prints-110x110.webp" type="image/webp" width="110"/>
-<img alt="Fast ausverkauft" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/discover/last-prints-110x110.jpg" title="Letzte Exemplare" width="110"/>
-</picture>
-<span>Fast ausverkauft</span>
-</a></div></div>
-<div class="carousel-section">
-<h3 class="carousel-label">Nach Kategorie &amp; Thema</h3>
-<div aria-label="Nach Kategorie &amp; Thema" class="carousel-scroll" role="region" tabindex="0">
-<a class="carousel-card" href="https://www.lumas.de/technik/fotografie/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/photography-110x110.webp" type="image/webp" width="110"/>
-<img alt="Fotografie" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/photography-110x110.jpg" title="Fotografie" width="110"/>
-</picture>
-<span>Fotografie</span>
-</a><a class="carousel-card" href="https://www.lumas.de/malerei-illustration/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/illustration-110x110.webp" type="image/webp" width="110"/>
-<img alt="Illustration" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/illustration-110x110.jpg" title="Illustration" width="110"/>
-</picture>
-<span>Malerei &amp; Illustration</span>
-</a><a class="carousel-card" href="https://www.lumas.de/digitale-kunst/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/digital-110x110.webp" type="image/webp" width="110"/>
-<img alt="Digitale Kunst" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/digital-110x110.jpg" title="Digitale Kunst" width="110"/>
-</picture>
-<span>Digitale Kunst</span>
-</a><a class="carousel-card" href="https://www.lumas.de/multi-phase/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/multiphase-110x110.webp" type="image/webp" width="110"/>
-<img alt="Multi-Phase" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/multiphase-110x110.jpg" title="Multi-Phase" width="110"/>
-</picture>
-<span>Multi-Phase</span>
-</a><a class="carousel-card" href="https://www.lumas.de/lightbox/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/lightboxes-110x110.webp" type="image/webp" width="110"/>
-<img alt="Leuchtkästen" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/lightboxes-110x110.jpg" title="Leuchtkästen" width="110"/>
-</picture>
-<span>Leuchtkästen</span>
-</a><a class="carousel-card" href="https://www.lumas.de/objekte/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/objects-110x110.webp" type="image/webp" width="110"/>
-<img alt="Skulpturen &amp; Objekte" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/objects-110x110.jpg" title="Skulpturen &amp; Objekte" width="110"/>
-</picture>
-<span>Skulpturen &amp; Objekte</span>
-</a><a class="carousel-card" href="https://www.lumas.de/format/klein/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/petites-110x110.webp" type="image/webp" width="110"/>
-<img alt="Petites &amp; Darlings" class="max-w-full height-auto" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/petites-110x110.jpg" title="Petites &amp; Darlings" width="110"/>
-</picture>
-<span>Petites &amp; Darlings</span>
-</a><a class="carousel-card" href="https://www.lumas.de/themen/menschen/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.webp" type="image/webp" width="110"/><img alt="Menschen" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/menschen-110x110.jpg" title="Menschen" width="110"/></picture><span>Menschen</span></a><a class="carousel-card" href="https://www.lumas.de/themen/architektur/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/city-110x110.webp" type="image/webp" width="110"/><img alt="Architektur &amp; Städte" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/city-110x110.jpg" title="Architektur &amp; Städte" width="110"/></picture><span>Architektur &amp; Städte</span></a><a class="carousel-card" href="https://www.lumas.de/natur/wasser/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.webp" type="image/webp" width="110"/><img alt="Wasser" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/wasser-110x110.jpg" title="Wasser" width="110"/></picture><span>Wasser</span></a><a class="carousel-card" href="https://www.lumas.de/natur/landschaft/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.webp" type="image/webp" width="110"/><img alt="Natur &amp; Landschaft" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/landschaften-110x110.jpg" title="Natur &amp; Landschaft" width="110"/></picture><span>Natur &amp; Landschaft</span></a><a class="carousel-card" href="https://www.lumas.de/themen/abstrakt-graphisch/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.webp" type="image/webp" width="110"/><img alt="Abstrakt" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/abstrakt-110x110.jpg" title="Abstrakt" width="110"/></picture><span>Abstrakt</span></a><a class="carousel-card" href="https://www.lumas.de/themen/tiere/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/tiere-110x110.webp" type="image/webp" width="110"/><img alt="Tiere" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/tiere-110x110.jpg" title="Tiere" width="110"/></picture><span>Tiere</span></a><a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.webp" type="image/webp" width="110"/><img alt="Florale Welten" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/blumen-110x110.jpg" title="Florale Welten" width="110"/></picture><span>Florale Welten</span></a><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.webp" type="image/webp" width="110"/><img alt="Schwarz &amp; Weiß" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/search/schwarz-weiss-110x110.jpg" title="Schwarz &amp; Weiß" width="110"/></picture><span>Schwarz &amp; Weiß</span></a></div>
-</div><nav class="action-cards">
-<a class="action-card" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from0-to25000">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/start-collection-110x110.webp" type="image/webp" width="110"/>
-<img alt="Starte deine Sammlung" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/start-collection-110x110.jpg" title="Starte deine Sammlung" width="110"/>
-</picture>
-<span class="text">
-<span class="title">Der Einstieg in die Kunstwelt</span>
-<span class="subtitle">bis €250</span>
-</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
-<a class="action-card" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from25000-to100000">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/buildgallery-110x110.webp" type="image/webp" width="110"/>
-<img alt="Bau deine Galerie auf" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/buildgallery-110x110.jpg" title="Bau deine Galerie auf" width="110"/>
-</picture>
-<span class="text">
-<span class="title">Für wachsende Sammlungen</span>
-<span class="subtitle">€250 – €1000</span>
-</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
-<a class="action-card" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from100000-to2000000">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/shop/investment-110x110.webp" type="image/webp" width="110"/>
-<img alt="Investitionsstücke" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/shop/investment-110x110.jpg" title="Investitionsstücke" width="110"/>
-</picture>
-<span class="text">
-<span class="title">Für anspruchsvolle Sammler</span>
-<span class="subtitle">ab €1000</span>
-</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
-</nav>
+<p>Highlights, Preise, Kategorien und Themen</p>
+</header><div class="mni-criteria"><div class="mni-row"><h3 class="carousel-label">Highlights</h3><nav aria-label="Highlights" class="mni-tiles"><a class="carousel-card" href="https://www.lumas.de/highlights/bestseller/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/bestseller-110x110.jpg" width="110"/></picture><span>Bestseller</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/last-prints/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/last-prints-110x110.jpg" width="110"/></picture><span>Letzte Exemplare</span></a><a class="carousel-card" href="https://www.lumas.de/neuheiten/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/new-110x110.jpg" width="110"/></picture><span>Neuheiten</span></a><a class="carousel-card" href="https://www.lumas.de/highlights/bestprice/"><picture><img alt="" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/rising-in-value-110x110.jpg" width="110"/></picture><span>Wert steigt</span></a></nav></div><div class="mni-row"><h3 class="carousel-label">Preis</h3><nav aria-label="Preis" class="mni-chip-grid mni-cols-3"><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from0-to25000">bis € 250</a><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from25000-to100000">€ 250–1.000</a><a class="mni-chip" href="https://www.lumas.de/search/?sort=revenue_product_desc&amp;price=from100000-to2000000">ab € 1.000</a></nav></div><div class="mni-row"><h3 class="carousel-label">Kategorie</h3><nav aria-label="Kategorie" class="mni-chip-grid mni-cols-2"><a class="mni-chip" href="https://www.lumas.de/technik/fotografie/">Fotografie</a><a class="mni-chip" href="https://www.lumas.de/malerei-illustration/">Malerei &amp; Illustrationen</a><a class="mni-chip" href="https://www.lumas.de/multi-phase/">Multi-Phase</a><a class="mni-chip" href="https://www.lumas.de/digitale-kunst/">Digitale Kunst</a></nav></div><div class="mni-row"><h3 class="carousel-label">Thema</h3><nav aria-label="Thema" class="mni-chip-grid mni-cols-2"><a class="mni-chip" href="https://www.lumas.de/themen/architektur/">Architektur &amp; Städte</a><a class="mni-chip" href="https://www.lumas.de/natur/wasser/">Wasser</a><a class="mni-chip" href="https://www.lumas.de/collections/blumenkunst/">Florale Welten</a><a class="mni-chip" href="https://www.lumas.de/natur/landschaft/">Natur &amp; Landschaft</a></nav></div></div>
+
+
 </section>
 </div>
-<div aria-label="Künstler" class="tab-slide" data-icon="nav-artist" data-label="Künstler" id="tab-artists" role="tabpanel">
+<div aria-label="Künstler" class="tab-slide" data-label="Künstler" id="tab-artists" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
 <h2>Künstler</h2>
-<p>Entdecke über 500 Künstler</p>
+<p>Entdecke über 500 talentierte Künstler</p>
 </header>
 <nav class="action-cards">
 <a class="action-card" href="https://www.lumas.de/alle-kuenstler/">
@@ -1206,7 +1274,7 @@ document.body.addEventListener('click', e => {
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.webp" type="image/webp" width="110"/>
 <img alt="Top 20 LUMAS Künstler" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/artists/top20-110x110.jpg" title="Top 20 LUMAS Künstler" width="110"/>
 </picture>
-<span class="title">Top 20 Künstler</span>
+<span class="title">Top 20 LUMAS Künstler</span>
 <span aria-hidden="true" class="arrow">→</span>
 </a>
 <a class="action-card" href="https://www.lumas.de/artists-in-focus/">
@@ -1214,7 +1282,7 @@ document.body.addEventListener('click', e => {
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.webp" type="image/webp" width="110"/>
 <img alt="Artists in Focus – Storys" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/artists/artist-focus-110x110.jpg" title="Artists in Focus – Storys" width="110"/>
 </picture>
-<span class="title">Artists in Focus</span>
+<span class="title">Artists in Focus – Storys</span>
 <span aria-hidden="true" class="arrow">→</span>
 </a>
 <a class="action-card" href="https://www.lumas.de/artists/masters/">
@@ -1227,8 +1295,8 @@ document.body.addEventListener('click', e => {
 </a>
 </nav>
 <div class="carousel-section">
-<h3 class="carousel-label">Top 20 &amp; Highlights</h3>
-<div aria-label="Top 20 &amp; Highlights" class="carousel-scroll" role="region" tabindex="0">
+<h3 class="carousel-label">Ausgewählte Künstler</h3>
+<div aria-label="Ausgewählte Künstler" class="carousel-scroll" role="region" tabindex="0">
 <a class="carousel-card" href="https://www.lumas.de/artist/isabelle_menin/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/artists/ime-110x110.webp" type="image/webp" width="110"/>
@@ -1334,11 +1402,11 @@ document.body.addEventListener('click', e => {
 </picture>
 <span>Massimo Colonna</span>
 </a>
-<a class="carousel-card" href="https://www.lumas.de/artist/gerhard_richter/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/gerhard-richter-110x110.webp" type="image/webp" width="110"/><img alt="Gerhard Richter" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/gerhard-richter-110x110.jpg" title="Gerhard Richter" width="110"/></picture><span>Gerhard Richter</span></a><a class="carousel-card" href="https://www.lumas.de/top-kuenstler/"><picture><source height="110" media="all" srcset="./media_lumas_de/nav-mobile/artists-to-watch-110x110.webp" type="image/webp" width="110"/><img alt="10 Artists to Watch" class="max-w-full height-auto" height="110" loading="lazy" src="./media_lumas_de/nav-mobile/artists-to-watch-110x110.jpg" title="10 Artists to Watch" width="110"/></picture><span>10 Artists to Watch</span></a><a class="carousel-card" href="https://www.lumas.de/collections/kuenstler-des-jahres/"><picture><source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.webp" type="image/webp" width="110"/><img alt="Künstler des Jahres 2026" class="max-w-full height-auto" height="110" loading="lazy" src="https://media.lumas.de/site-navigation/mobil/discover/top-artists-110x110.jpg" title="Künstler des Jahres 2026" width="110"/></picture><span>Künstler des Jahres 2026</span></a></div>
+</div>
 </div>
 </section>
 </div>
-<div aria-label="Suche" class="tab-slide" data-icon="nav-search" data-label="Suche" id="tab-search" role="tabpanel">
+<div aria-label="Suche" class="tab-slide" data-label="Suche" id="tab-search" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
@@ -1360,36 +1428,37 @@ document.body.addEventListener('click', e => {
 <div class="search-default"><nav class="action-cards"><a class="action-card" href="../art-advisor-entry-points/art-advisor/?lang=de&amp;return=..%2F..%2Fnavigation-proposal%2F"><span class="icon"><svg aria-hidden="true"><use href="#nav-sparkles"></use></svg></span><span class="title">Frag den AI Advisor</span><span aria-hidden="true" class="arrow">→</span></a></nav>
 <div class="carousel-section">
 <h3 class="carousel-label">Meist gesucht</h3>
-<div aria-label="Meist gesucht" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-schwarz-weiss-110x110.webp" type="image/webp"/><img alt="Schwarz-Weiß" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-schwarz-weiss-110x110.jpg"/></picture><span>Schwarz-Weiß</span></a><a class="carousel-card" href="https://www.lumas.de/themen/tiere/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-tiere-110x110.webp" type="image/webp"/><img alt="Tiere" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-tiere-110x110.jpg"/></picture><span>Tiere</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=meer&amp;sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-meer-110x110.webp" type="image/webp"/><img alt="Meer" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-meer-110x110.jpg"/></picture><span>Meer</span></a><a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-blumen-110x110.webp" type="image/webp"/><img alt="Blumen" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-blumen-110x110.jpg"/></picture><span>Blumen</span></a><a class="carousel-card" href="https://www.lumas.de/david-bowie-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-david-bowie-110x110.webp" type="image/webp"/><img alt="David Bowie" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-david-bowie-110x110.jpg"/></picture><span>David Bowie</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=strand&amp;sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-strand-110x110.webp" type="image/webp"/><img alt="Strand" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-strand-110x110.jpg"/></picture><span>Strand</span></a><a class="carousel-card" href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-new-york-110x110.webp" type="image/webp"/><img alt="New York" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-new-york-110x110.jpg"/></picture><span>New York</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=berge&amp;sort=revenue_product_desc"><picture><source media="all" srcset="./media_lumas_de/search-tiles/aep-berge-110x110.webp" type="image/webp"/><img alt="Berge" class="max-w-full" loading="lazy" src="./media_lumas_de/search-tiles/aep-berge-110x110.jpg"/></picture><span>Berge</span></a></div>
+<div aria-label="Meist gesucht" class="carousel-scroll" role="region" tabindex="0"><a class="carousel-card" href="https://www.lumas.de/collections/schwarz-weiss-bilder/"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-schwarz-weiss-220x220.webp" type="image/webp"/><img alt="Schwarz-Weiß" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-schwarz-weiss-220x220.jpg" width="110"/></picture><span>Schwarz-Weiß</span></a><a class="carousel-card" href="https://www.lumas.de/themen/tiere/"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-tiere-220x220.webp" type="image/webp"/><img alt="Tiere" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-tiere-220x220.jpg" width="110"/></picture><span>Tiere</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=meer&amp;sort=revenue_product_desc"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-meer-220x220.webp" type="image/webp"/><img alt="Meer" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-meer-220x220.jpg" width="110"/></picture><span>Meer</span></a><a class="carousel-card" href="https://www.lumas.de/collections/blumenkunst/"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-blumen-220x220.webp" type="image/webp"/><img alt="Blumen" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-blumen-220x220.jpg" width="110"/></picture><span>Blumen</span></a><a class="carousel-card" href="https://www.lumas.de/david-bowie-bilder/"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-david-bowie-220x220.webp" type="image/webp"/><img alt="David Bowie" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-david-bowie-220x220.jpg" width="110"/></picture><span>David Bowie</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=strand&amp;sort=revenue_product_desc"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-strand-220x220.webp" type="image/webp"/><img alt="Strand" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-strand-220x220.jpg" width="110"/></picture><span>Strand</span></a><a class="carousel-card" href="https://www.lumas.de/collections/staedte/new-york-bilder/"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-new-york-220x220.webp" type="image/webp"/><img alt="New York" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-new-york-220x220.jpg" width="110"/></picture><span>New York</span></a><a class="carousel-card" href="https://www.lumas.de/search/?q=berge&amp;sort=revenue_product_desc"><picture><source srcset="./media_lumas_de/nav-iterations/search/aep-berge-220x220.webp" type="image/webp"/><img alt="Berge" height="110" loading="lazy" src="./media_lumas_de/nav-iterations/search/aep-berge-220x220.jpg" width="110"/></picture><span>Berge</span></a></div>
 </div>
 </div>
 </nav-search>
 </section>
 </div>
-<div aria-label="Beratung" class="tab-slide" data-icon="nav-phone" data-label="Beratung" id="tab-info" role="tabpanel">
+<div aria-label="Info" class="tab-slide" data-label="Info" id="tab-info" role="tabpanel">
 <section>
 <!-- CMS_BLOCK_PLACEHOLDER : "content" -->
 <header>
-<h2>Kunstberatung</h2>
-<p>Persönlich, per Nachricht und in der Galerie</p>
+<h2>Besuche uns</h2>
+<p>Nimm Kontakt auf &amp; erkunde Galerien</p>
 </header>
 <nav class="action-cards">
-<a class="action-card" href="https://www.lumas.de/art-advisory/">
-<picture>
-<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/info/beratung-110x110.webp" type="image/webp" width="110"/>
-<img alt="Kunstberatung" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/info/beratung-110x110.jpg" title="Kunstberatung" width="110"/>
-</picture>
-<span class="title">Kunstberatung</span>
-<span aria-hidden="true" class="arrow">→</span>
-</a>
 <a class="action-card" href="https://www.lumas.de/warum-lumas/">
 <picture>
 <source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/info/ueber-lumas-110x110.webp" type="image/webp" width="110"/>
 <img alt="Über LUMAS" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/info/ueber-lumas-110x110.jpg" title="Über LUMAS" width="110"/>
 </picture>
-<span class="title">Über uns</span>
+<span class="title">Über LUMAS</span>
 <span aria-hidden="true" class="arrow">→</span>
-</a></nav>
+</a>
+<a class="action-card" href="https://www.lumas.de/art-advisory/">
+<picture>
+<source height="110" media="all" srcset="https://media.lumas.de/site-navigation/mobil/info/beratung-110x110.webp" type="image/webp" width="110"/>
+<img alt="Kostenlose Beratung" class="img max-w-full" height="110" loading="lazy" property="schema:image" src="https://media.lumas.de/site-navigation/mobil/info/beratung-110x110.jpg" title="Kostenlose Beratung" width="110"/>
+</picture>
+<span class="title">Kostenlose Beratung</span>
+<span aria-hidden="true" class="arrow">→</span>
+</a>
+</nav>
 <div class="contact-tiles" role="list">
 <a class="contact-tile" href="tel:+493030306969" role="listitem">
 <span class="icon">
@@ -1556,8 +1625,8 @@ document.body.addEventListener('click', e => {
 </div>
 <lang-switch aria-label="Sprache" role="group">
 <svg aria-hidden="true"><use href="#nav-globe"></use></svg>
-<a aria-current="true" data-active="" href="https://www.lumas.de/">DE</a>
-<span aria-hidden="true" class="lang-sep">|</span> <a href="https://www.lumas.de/en/">EN</a>
+<a aria-current="true" data-active="" data-language="de" href="https://www.lumas.de/">DE</a>
+<span aria-hidden="true" class="lang-sep">|</span> <a data-language="en" href="https://www.lumas.de/en/">EN</a>
 </lang-switch>
 </section>
 </div>
@@ -1565,22 +1634,6 @@ document.body.addEventListener('click', e => {
 </div>
 </dialog>
 </bottom-nav>
-<svg aria-hidden="true" hidden="" role="presentation" style="display: none" xmlns="http://www.w3.org/2000/svg">
-<symbol fill="none" id="nav-discover" viewbox="0 0 24 24"><path d="M9.934 15.495a2 2 0 0 0-1.437-1.437l-6.133-1.581a.5.5 0 0 1 0-.962l6.133-1.583a2 2 0 0 0 1.437-1.435l1.581-6.133a.5.5 0 0 1 .963 0l1.58 6.133a2 2 0 0 0 1.437 1.436l6.132 1.58a.5.5 0 0 1 0 .965l-6.132 1.58a2 2 0 0 0-1.437 1.437l-1.581 6.132a.5.5 0 0 1-.963 0zM19.993 2.999v3.999M21.992 4.998h-3.998M3.999 16.994v2M4.999 17.994h-2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
-<symbol fill="none" id="nav-shop" viewbox="0 0 24 24"><path d="M5.998 2 2.999 5.997v13.995a2 2 0 0 0 2 2h13.994a2 2 0 0 0 2-2V5.998l-3-3.999zM2.999 5.998h17.994" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path><path d="M15.994 9.996a3.999 3.999 0 0 1-7.997 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
-<symbol fill="none" id="nav-artist" viewbox="0 0 24 24"><path d="M18.993 20.993v-2a4 4 0 0 0-3.998-3.998H8.997a4 4 0 0 0-3.999 3.998v2M11.996 10.996a3.999 3.999 0 1 0 0-7.997 3.999 3.999 0 0 0 0 7.997" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
-<symbol fill="none" id="nav-search" viewbox="0 0 24 24"><path d="M10.996 18.993a7.997 7.997 0 1 0 0-15.994 7.997 7.997 0 0 0 0 15.994M20.993 20.993l-4.299-4.299" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
-<symbol fill="none" id="nav-info" viewbox="0 0 24 24"><path d="M11.996 21.992c5.52 0 9.997-4.475 9.997-9.996s-4.476-9.997-9.997-9.997C6.476 2 2 6.475 2 11.996c0 5.52 4.475 9.996 9.996 9.996M11.996 15.994v-3.998M11.996 7.997h.01" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.999"></path></symbol>
-<symbol fill="none" id="nav-palette" viewbox="0 0 24 24"><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2v-.5c0-.5-.2-1-.5-1.4-.3-.3-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 21 9.5 10 10 0 0 0 12 2z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><circle cx="7.5" cy="11.5" fill="currentColor" r="1.5"></circle><circle cx="10.5" cy="7.5" fill="currentColor" r="1.5"></circle><circle cx="14.5" cy="7.5" fill="currentColor" r="1.5"></circle></symbol>
-<symbol fill="none" id="nav-sparkles" viewbox="0 0 24 24"><path d="m12 3-1.9 5.7a2 2 0 0 1-1.3 1.3L3 12l5.7 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.7a2 2 0 0 1 1.3-1.3L21 12l-5.7-1.9a2 2 0 0 1-1.3-1.3z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M5 3v4M3 5h4M19 17v4M17 19h4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-<symbol fill="none" id="nav-camera" viewbox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><circle cx="12" cy="13" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle></symbol>
-<symbol fill="none" id="nav-phone" viewbox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-<symbol fill="none" id="nav-email" viewbox="0 0 24 24"><rect height="16" rx="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" width="20" x="2" y="4"></rect><path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-<symbol fill="none" id="nav-whatsapp" viewbox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-<symbol fill="none" id="nav-livechat" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-<symbol fill="none" id="nav-globe" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></symbol>
-</svg>
-</template>
 <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
 <symbol fill="none" id="new-releases" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M9.94 15.5a2 2 0 0 0-1.44-1.44l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0l1.58 6.13a2 2 0 0 0 1.44 1.44l6.13 1.58a.5.5 0 0 1 0 .96l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0zM20 3v4M22 5h-4M4 17v2M5 18H3"></path></symbol>
 <symbol fill="none" id="trending" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></symbol>
@@ -2494,16 +2547,7 @@ document.body.addEventListener('click', e => {
 <script defer="" onerror="toggleJsLoadError()" src="./cdn_lumas_de/assets/white/header/site-header.js"></script>
 <script defer="" onerror="toggleJsLoadError()" src="./cdn_lumas_de/assets/white/main.js"></script>
 <script>
- if ((window.abTestMobileNav ?? false) || new URL(location).searchParams.has('abTestMobileNav')) {
- document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="./cdn_lumas_de/assets/white/bottom-nav.css">`);
- const bottomNavTemplate = document.querySelector('template#bottom-nav-template');
- bottomNavTemplate?.replaceWith(bottomNavTemplate.content.cloneNode(true));
- const bottomNav = document.querySelector('bottom-nav');
- if (bottomNav && !matchMedia('(min-width: 480px)').matches) {
- bottomNav.removeAttribute('hidden');
- }
- (async () => await import('./cdn_lumas_de/assets/white/bottom-nav.js'))();
- }
+ (async () => await import('./cdn_lumas_de/assets/white/mobile-v1/bottom-nav.js'))();
  if ((window.abTestSocialProofBar ?? false) || new URL(location).searchParams.has('abTestSocialProofBar') || new URL(location).searchParams.has('abTestSocialProofBarQA')) {
  document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="./cdn_lumas_de/assets/white/social-proof-bar.css">`);
  (async () => await import('./cdn_lumas_de/assets/white/social-proof-bar.js'))();
@@ -2760,5 +2804,50 @@ form[data-prompt] .autocomplete-container { display: none !important; }
   }, true);
 })();
 </script>
-</body>
+<script id="mni-iterations-js">
+(() => {
+  // Art Finder preview: the sliders move and the matching work appears, while it is on screen
+  const tastes = [[40, 60, 85], [55, 10, 90], [90, 20, 25], [15, 40, 75]];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('bottom-nav .mni-finder').forEach(visual => {
+    const thumbs = [...visual.querySelectorAll('.mni-slider b')];
+    const works = [...visual.querySelectorAll('.mni-match img')];
+    let step = 0;
+    let timer = null;
+    const show = () => {
+      tastes[step].forEach((position, index) => thumbs[index].style.setProperty('--p', position + '%'));
+      works.forEach((image, index) => image.classList.toggle('in', index === step));
+    };
+    show();
+    if (reduceMotion) return;
+    new IntersectionObserver(([entry]) => {
+      clearInterval(timer);
+      if (entry.isIntersecting) timer = setInterval(() => { step = (step + 1) % tastes.length; show(); }, 2200);
+    }).observe(visual);
+  });
+
+  // the sheet is a modal dialog (top layer), so close it before production's handler opens Art Cloud
+  document.querySelectorAll('bottom-nav [data-art-cloud-trigger]').forEach(trigger => {
+    trigger.addEventListener('click', () => trigger.closest('dialog')?.close());
+  });
+
+  // review deep link: #mn=discover|shop|artists|search|info opens that panel
+  const panel = (location.hash.match(/mn=(\w+)/) || [])[1];
+  // the shared copy sits behind a passphrase gate (html.oa-locked); a modal sheet opened before
+  // it is unlocked makes the gate inert, so the passphrase field could not be tapped
+  const unlocked = new Promise(resolve => {
+    const root = document.documentElement;
+    if (!root.classList.contains('oa-locked')) return resolve();
+    new MutationObserver((_, observer) => {
+      if (root.classList.contains('oa-locked')) return;
+      observer.disconnect();
+      resolve();
+    }).observe(root, { attributes: true, attributeFilter: ['class'] });
+  });
+  if (panel) Promise.all([customElements.whenDefined('bottom-nav'), unlocked]).then(() => setTimeout(() => {
+    document.querySelector(`bottom-nav a[href="#tab-${panel}"]`)?.click();
+    setTimeout(() => document.activeElement?.blur(), 100);
+  }, 400));
+})();
+</script></body>
 </html>
