@@ -92,9 +92,14 @@
 
   /* today's work, wrapped: kraft paper at the work's own proportions, a red ribbon and bow, a tag with the day */
   const ratio = (e) => e.r || (e.work && e.work.r) || 0.75;
-  const wrapping = (e) => [h('span', { class: 'paper paper-l' }), h('span', { class: 'paper paper-r' }),
-    h('span', { class: 'ribbon ribbon-h' }), h('span', { class: 'ribbon ribbon-v' }), h('span', { class: 'bow' }),
-    h('span', { class: 'tag' }, h('span', { class: 'n' }, String(e.day)))];
+  const BOW = '<svg viewBox="0 0 240 150" aria-hidden="true" focusable="false"><defs><linearGradient id="bowSatin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a1353b"/><stop offset=".5" stop-color="#7a1f25"/><stop offset="1" stop-color="#5a141a"/></linearGradient><linearGradient id="bowTail" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a141a"/><stop offset=".5" stop-color="#8f2a30"/><stop offset="1" stop-color="#5a141a"/></linearGradient></defs><path d="M112 66 C104 92 92 118 80 146 L93 139 L99 150 C109 122 116 96 121 70 Z" fill="url(#bowTail)"/><path d="M128 66 C136 92 148 118 160 146 L147 139 L141 150 C131 122 124 96 119 70 Z" fill="url(#bowTail)"/><path d="M116 60 C92 20 30 8 21 40 C15 67 58 83 116 67 Z" fill="url(#bowSatin)"/><path d="M124 60 C148 20 210 8 219 40 C225 67 182 83 124 67 Z" fill="url(#bowSatin)"/><path d="M113 62 C92 37 52 28 40 44 C55 41 87 47 113 65 Z" fill="#3f0d12" opacity=".4"/><path d="M127 62 C148 37 188 28 200 44 C185 41 153 47 127 65 Z" fill="#3f0d12" opacity=".4"/><path d="M44 24 C62 16 86 22 104 40" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="4" stroke-linecap="round"/><path d="M196 24 C178 16 154 22 136 40" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="4" stroke-linecap="round"/><rect x="105" y="49" width="30" height="28" rx="9" fill="#86242a"/><rect x="110" y="53" width="8" height="20" rx="4" fill="#fff" opacity=".14"/></svg>';
+  const wrapping = (e) => {
+    const bow = h('span', { class: 'bow' });
+    bow.innerHTML = BOW;
+    return [h('span', { class: 'paper paper-l' }), h('span', { class: 'paper paper-r' }),
+      h('span', { class: 'ribbon ribbon-h' }), h('span', { class: 'ribbon ribbon-v' }), bow,
+      h('span', { class: 'tag' }, h('span', { class: 'n' }, String(e.day)))];
+  };
   /* pull the ribbon down (or tap): the parcel opens */
   function pullable(btn, open) {
     let y0 = null;
@@ -147,8 +152,9 @@
     const stage = h('div', { class: `cal-stage${big ? '' : ' no-door'}` },
       big,
       h('div', { class: 'cal-label' },
-        h('p', { class: 'eyebrow' }, D.t('calEyebrow', { date })),
+        h('p', { class: 'eyebrow' }, date),
         h('p', { class: 'cal-title' }, title(today, state, now)),
+        state === 'open' ? h('p', { class: 'cal-hint' }, D.t('calHint')) : null,
         h('p', { class: 'cal-links' },
           h('button', { class: 'link cal-all', type: 'button', onclick: openSheet }, D.t('allDoors')),
           direct ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null)));
