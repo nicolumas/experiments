@@ -1221,11 +1221,11 @@
      (the phases keep their old names, 'street' and 'gallery') */
 
   const anchors = {
-    street: { door: { w: [0.625, 0.447, 0.708, 0.718], t: [0.677, 0.491, 0.859, 0.7] } },
+    street: { door: { w: [0.625, 0.447, 0.7, 0.726], t: [0.672, 0.476, 0.853, 0.7] } },
     gallery: {
-      wall: { w: [0.2, 0.11, 0.75, 0.43], t: [0.1, 0.13, 0.9, 0.43] },
+      wall: { w: [0.2, 0.1, 0.74, 0.47], t: [0.12, 0.13, 0.88, 0.44] },
       /* the sofa: today's work hangs over it on the calendar (left, top of the back, right, feet) */
-      sofa: { w: [0.213, 0.456, 0.745, 0.8], t: [0.09, 0.452, 0.92, 0.636] },
+      sofa: { w: [0.217, 0.509, 0.728, 0.799], t: [0.109, 0.465, 0.888, 0.634] },
     },
   };
   function plateBox(ar) {
