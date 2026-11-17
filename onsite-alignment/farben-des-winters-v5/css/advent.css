@@ -18,35 +18,24 @@
 #calendar[hidden] { display: none; }
 #calendar .cal-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-/* the stage on the living-room wall: today's door, large, and a small label under it (beside it on wide screens) */
-#calendar .cal-stage { position: absolute; left: 0; top: 64px; width: 100%; --wall-h: 60vh; --door-h: min(calc(var(--wall-h) * .6), 46vh, 300px);
-  display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 8px var(--gutter) 0; }
-/* the words sit on the wall: date, one line, a hint, two quiet links (centred under the parcel on a phone, beside it
-   and left-aligned on a wide screen) */
-#calendar .cal-label { position: relative; z-index: 0; max-width: 340px; text-align: center; animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) 160ms both; }
-/* a soft light behind the words, no edge: they stay legible on any part of the wall */
-#calendar .cal-label::before { content: ""; position: absolute; inset: -28px -40px; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side, rgba(254, 253, 249, .8), rgba(254, 253, 249, .55) 55%, rgba(254, 253, 249, 0)); }
+/* the room: today's work hangs over the sofa at a normal height, the words sit underneath on a soft ivory floor;
+   positions come from the sofa in the painting (calendar.js layout()) */
+#calendar .cal-stage { position: absolute; inset: 0; pointer-events: none; }
+#calendar .cal-stage > * { pointer-events: auto; }
+#calendar .cal-ground { position: absolute; left: 0; right: 0; bottom: 0; pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(254, 253, 249, 0), rgba(254, 253, 249, .92) 40px, var(--ivory) 72px); }
+#calendar .cal-label { position: absolute; text-align: center; animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) 160ms both; }
 #calendar .cal-label .eyebrow { font-size: 13px; letter-spacing: .1em; color: #3f3c38; }
-#calendar .cal-stage.no-door .cal-label { margin-top: calc(var(--wall-h) * .18); }
 @keyframes cal-panel-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-#calendar .cal-title { margin: 6px 0 0; font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1.1; color: var(--charcoal); text-wrap: balance; }
-#calendar .cal-hint { margin: 10px 0 0; font-size: 15px; line-height: 1.5; color: #3f3c38; }
-#calendar .cal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 20px; margin: 16px 0 0; }
+#calendar .cal-title { margin: 4px 0 0; font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.1; color: var(--charcoal); text-wrap: balance; }
+#calendar .cal-hint { margin: 8px 0 0; font-size: 15px; line-height: 1.45; color: #3f3c38; }
+#calendar .cal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 20px; margin: 12px 0 0; }
 #calendar .cal-links .link { font-size: 14px; }
-@media (min-aspect-ratio: 1/1) {
-  #calendar .cal-stage { --door-h: min(calc(var(--wall-h) * .86), 62vh, 360px); flex-direction: row; justify-content: center; gap: 36px; padding-top: 0;
-    height: var(--wall-h); }
-  #calendar .cal-stage.no-door .cal-label { margin-top: 0; }
-  #calendar .cal-label { max-width: 400px; text-align: left; }
-  #calendar .cal-title { font-size: 44px; }
-  #calendar .cal-links { justify-content: flex-start; }
-}
+@media (min-aspect-ratio: 1/1) { #calendar .cal-title { font-size: 32px; } }
 
 /* today's door: today's work, wrapped in kraft paper with a red ribbon and bow and a tag with the day. Pull the ribbon
    (or tap): ribbon and bow go, the light comes up, and only then does the paper part */
-#calendar .today-door { position: relative; flex: none; width: min(calc(var(--door-h) * var(--r, .75)), calc(100vw - 2 * var(--gutter)), 560px);
-  aspect-ratio: var(--r, .75); padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
+#calendar .today-door { position: absolute; left: 0; top: 0; padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
   container-type: inline-size; touch-action: none; -webkit-tap-highlight-color: transparent;
   animation: cal-big-in 620ms cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes cal-big-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }

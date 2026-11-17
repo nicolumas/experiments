@@ -1221,8 +1221,12 @@
      (the phases keep their old names, 'street' and 'gallery') */
 
   const anchors = {
-    street: { door: { w: [0.627, 0.424, 0.71, 0.696], t: [0.678, 0.451, 0.811, 0.603] } },
-    gallery: { wall: { w: [0.1, 0.05, 0.75, 0.55], t: [0.08, 0.05, 0.9, 0.52] } },
+    street: { door: { w: [0.625, 0.447, 0.708, 0.718], t: [0.677, 0.491, 0.859, 0.7] } },
+    gallery: {
+      wall: { w: [0.2, 0.11, 0.75, 0.43], t: [0.1, 0.13, 0.9, 0.43] },
+      /* the sofa: today's work hangs over it on the calendar (left, top of the back, right, feet) */
+      sofa: { w: [0.213, 0.456, 0.745, 0.8], t: [0.09, 0.452, 0.92, 0.636] },
+    },
   };
   function plateBox(ar) {
     let pw;
@@ -1703,7 +1707,7 @@
       opened: openedNow,
       busy: () => ['ride', 'door', 'toStreet', 'street'].includes(S.phase),
       plate: () => `assets/scenes/home-in-${o()}.webp`,
-      wallRect: () => rectOn(plateBox(portrait ? 752 / 1344 : 1344 / 752), 'wall', 'gallery'),
+      room: () => ({ sofa: rectOn(plateBox(portrait ? 752 / 1344 : 1344 / 752), 'sofa', 'gallery') }),
       onRide: rideToday, onCard: showCard, onDirect: openDirect, onMissed: openMissed,
     });
     G.offer.init({ t, track, lang: () => LANG, now: nowMs, sched: SCHED, config: window.GAL_ADVENT.config, fmtNum, size, onCalendar: showCalendar });

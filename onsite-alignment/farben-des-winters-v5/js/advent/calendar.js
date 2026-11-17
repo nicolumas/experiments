@@ -23,7 +23,7 @@
     return e;
   };
 
-  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), wallRect(), onRide(entry, door), onCard(entry, from),
+  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), room() -> { sofa }, onRide(entry, door), onCard(entry, from),
      onDirect(entry), onMissed(entry), demo, search } */
   let reopenSheet = false;
   function init(deps) {
@@ -31,6 +31,7 @@
     el = document.getElementById('calendar');
     document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'hidden' && el && !el.hidden) show(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el && !el.hidden) closeSheet(); });
+    addEventListener('resize', layout);
   }
 
   function title(today, state, now) {
@@ -149,21 +150,16 @@
     const date = new Intl.DateTimeFormat(D.lang() === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'Europe/Berlin' }).format(now);
     const big = bigDoor(today, state, now);
     const direct = state === 'open' && today.type !== 'finale' && !D.busy();
-    const stage = h('div', { class: `cal-stage${big ? '' : ' no-door'}` },
-      big,
-      h('div', { class: 'cal-label' },
+    const label = h('div', { class: 'cal-label' },
         h('p', { class: 'eyebrow' }, date),
         h('p', { class: 'cal-title' }, title(today, state, now)),
         state === 'open' ? h('p', { class: 'cal-hint' }, D.t('calHint')) : null,
         h('p', { class: 'cal-links' },
           h('button', { class: 'link cal-all', type: 'button', onclick: openSheet }, D.t('allDoors')),
-          direct ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null)));
-    /* the stage sits on the living-room wall */
-    const w = D.wallRect ? D.wallRect() : null;
-    if (w) {
-      const top = Math.max(w.y, 64);
-      stage.style.cssText = `left:${Math.max(w.x, 0)}px;top:${top}px;width:${Math.min(w.x + w.w, innerWidth) - Math.max(w.x, 0)}px;--wall-h:${w.y + w.h - top}px`;
-    }
+          direct ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null));
+    const ground = h('div', { class: 'cal-ground' });
+    const stage = h('div', { class: 'cal-stage' }, ground, big, label);
+    cur = { big, label, ground };
     const sheet = h('div', { class: 'cal-sheet', hidden: true, role: 'dialog', 'aria-modal': 'true', 'aria-label': D.t('allDoorsTitle') });
     const picker = D.demo && new URLSearchParams(D.search).has('demo') ? demoBar(now) : null;
     /* the room lives: warm light breathes round today's door */
@@ -171,6 +167,7 @@
     el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), stage, sheet, picker);
     if (big) big.prepend(glow);
     el.hidden = false;
+    layout();
     if (reopenSheet) { reopenSheet = false; openSheet(); }
     D.track('gal_calendar', { gal_today: state === 'open' || state === 'opened' ? today.day : null, gal_opened: opened.size });
   }
@@ -191,6 +188,29 @@
       h('span', { class: 'cal-demo-day' }, date),
       day < 24 ? h('a', { class: 'cal-demo-next', href: go(day + 1), 'aria-label': D.t('demoNext') }, '→') : h('span', { class: 'cal-demo-next', 'aria-hidden': 'true' }, '→'),
       h('button', { class: 'cal-demo-reset', type: 'button', onclick: reset }, D.t('demoReset')));
+  }
+
+  /* where things go in the room: today's work centred over the sofa, its lower edge a hand's width above the back
+     (at most 62% of the sofa's width, never into the top bar); the words underneath the sofa on the ivory floor */
+  let cur = null;
+  let room = null;
+  function layout() {
+    if (!cur || !el || el.hidden) return;
+    const { sofa } = D.room();
+    room = { sofa };
+    const cx = sofa.x + sofa.w / 2;
+    if (cur.big) {
+      const r = parseFloat(cur.big.style.getPropertyValue('--r')) || 0.75;
+      const gap = Math.max(12, Math.min(30, sofa.h * 0.18));
+      const maxW = Math.min(sofa.w * 0.62, innerWidth - 32, 560);
+      const maxH = Math.max(90, sofa.y - gap - 76);
+      const w = Math.min(maxW, maxH * r);
+      const hh = w / r;
+      Object.assign(cur.big.style, { left: `${cx - w / 2}px`, top: `${sofa.y - gap - hh}px`, width: `${w}px`, height: `${hh}px` });
+    }
+    const lw = Math.min(400, innerWidth - 32);
+    Object.assign(cur.label.style, { left: `${Math.max(16, Math.min(innerWidth - 16 - lw, cx - lw / 2))}px`, top: `${sofa.y + sofa.h + 12}px`, width: `${lw}px` });
+    cur.ground.style.top = `${sofa.y + sofa.h - 28}px`;
   }
 
   /* all 24 doors, behind a link */
@@ -246,5 +266,5 @@
     a.finished.catch(() => {}).then(() => { portal.getAnimations().forEach((x) => x.cancel()); portal.classList.remove('on'); });
   }
 
-  G.calendar = { init, show, hide, throughDoor, clearPortal, visible: () => !!el && !el.hidden };
+  G.calendar = { init, show, hide, throughDoor, clearPortal, visible: () => !!el && !el.hidden, room: () => room };
 })(window);
