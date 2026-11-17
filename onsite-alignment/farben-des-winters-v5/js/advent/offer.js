@@ -46,6 +46,8 @@
     const lang = D.lang();
     const now = D.now();
     const live = A.offerLive(entry, now);
+    /* config.discount false (for now): the work at its normal price, without "today only", struck price or code */
+    const deal = live && config.discount !== false;
     const w = entry.work;
     const pdp = w ? config.pdpBase + w.path : null;
     const click = (type) => () => D.track('gal_offer_click', { gal_day: entry.day, gal_type: type });
@@ -57,13 +59,13 @@
         : entry.date === config.orderDeadline ? t('lastDelivery')
           : entry.note === 'artWeekend' ? t('artWeekend', { date: dayOf(config.artWeekend, lang) }) : null;
       parts.push(
-        h('p', { class: 'eyebrow' }, live ? t('offerEyebrow', { n: entry.day, pct: entry.offerPct }) : t('door', { n: entry.day })),
+        h('p', { class: 'eyebrow' }, deal ? t('offerEyebrow', { n: entry.day, pct: entry.offerPct }) : t('door', { n: entry.day })),
         h('h2', { class: 'display', id: 'offerTitle' }, w.title),
         h('p', { class: 'by' }, by),
         note ? h('p', { class: 'offer-note' }, note) : null,
-        live ? h('p', { class: 'price' }, `${t('from')} ${A.fmtPrice(A.offerPrice(w.ab, entry.offerPct), lang)} `, h('s', {}, A.fmtPrice(w.ab, lang)))
+        deal ? h('p', { class: 'price' }, `${t('from')} ${A.fmtPrice(A.offerPrice(w.ab, entry.offerPct), lang)} `, h('s', {}, A.fmtPrice(w.ab, lang)))
           : h('p', { class: 'price' }, `${t('from')} ${A.fmtPrice(w.ab, lang)}`),
-        live ? code(entry) : null,
+        deal ? code(entry) : null,
         live ? h('a', { class: 'btn offer-cta', href: pdp, onclick: click('work') }, t('secure'))
           : h('a', { class: 'link offer-cta', href: pdp, onclick: click('work_ended') }, t('toWork')));
     } else if (entry.type === 'drop') {

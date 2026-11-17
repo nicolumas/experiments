@@ -34,27 +34,49 @@
   #calendar .cal-title { font-size: 30px; }
 }
 
-/* today's door: a tall charcoal door with a brass line and knob; warm light behind it; its leaf swings open */
-#calendar .today-door { position: relative; flex: none; height: var(--door-h); aspect-ratio: 3 / 4; display: grid; place-items: center;
-  padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e); perspective: 900px; color: var(--ivory);
+/* today's door: today's work, wrapped in kraft paper with a red ribbon and bow and a tag with the day. Pull the ribbon
+   (or tap): ribbon and bow go, the light comes up, and only then does the paper part */
+#calendar .today-door { position: relative; flex: none; width: min(calc(var(--door-h) * var(--r, .75)), calc(100vw - 2 * var(--gutter)), 560px);
+  aspect-ratio: var(--r, .75); padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
+  container-type: inline-size; touch-action: none; -webkit-tap-highlight-color: transparent;
   animation: cal-big-in 620ms cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes cal-big-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
-#calendar button.today-door { cursor: pointer; transition: transform 160ms var(--ease-out); }
-#calendar button.today-door:active { transform: scale(.98); }
-#calendar .today-door .leaf { position: absolute; inset: 0; display: grid; place-items: center; background: var(--charcoal);
-  box-shadow: inset 0 0 0 10px var(--charcoal), inset 0 0 0 11px #c9a25a, 0 14px 24px -14px rgba(60, 40, 20, .6);
-  transform-origin: 0 50%; transition: transform 620ms cubic-bezier(.2, .8, .2, 1); }
-#calendar .today-door .n { font-family: var(--font-display); font-weight: 300; font-size: calc(var(--door-h) * .34); line-height: 1; color: var(--ivory); }
-#calendar .today-door .knob { position: absolute; right: 12%; top: 54%; width: 9px; height: 9px; border-radius: 50%; background: #c9a25a; pointer-events: none;
-  transition: opacity 200ms; }
-#calendar .today-door.opening .knob { opacity: 0; }
-#calendar .today-door.opening .leaf { transform: rotateY(-108deg); }
-#calendar .today-door .spark { bottom: 86%; }
-#calendar .today-door.is-opened { background: none; }
-#calendar .today-door.is-opened img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
-#calendar .today-door.is-locked { background: none; }
-#calendar .today-door.is-locked .n { color: rgba(90, 87, 82, .7); }
-#calendar .today-door.is-locked::before { content: ""; position: absolute; inset: 0; background: var(--bone); box-shadow: inset 0 0 0 10px var(--bone), inset 0 0 0 11px rgba(29, 29, 29, .16); z-index: -1; }
+#calendar button.today-door { cursor: grab; transition: transform 160ms var(--ease-out); }
+#calendar button.today-door:active { transform: scale(.99); }
+#calendar .today-door .paper { position: absolute; top: 0; bottom: 0; width: 50.5%; background-color: #dcc39a;
+  background-image: linear-gradient(115deg, rgba(255, 255, 255, .14) 0 38%, rgba(0, 0, 0, 0) 38% 100%), linear-gradient(0deg, rgba(120, 84, 40, .1), rgba(120, 84, 40, 0) 30%);
+  transition: transform 560ms cubic-bezier(.55, 0, .45, 1) 520ms, opacity 360ms ease-in 720ms; }
+#calendar .today-door .paper-l { left: 0; box-shadow: 0 16px 22px -16px rgba(80, 56, 24, .55); }
+#calendar .today-door .paper-r { right: 0; box-shadow: 0 16px 22px -16px rgba(80, 56, 24, .55), inset 1px 0 0 rgba(120, 84, 40, .18); }
+#calendar .today-door .ribbon { position: absolute; background: var(--red); pointer-events: none; }
+#calendar .today-door .ribbon-v { left: 50%; top: 0; bottom: 0; width: 7cqw; margin-left: -3.5cqw; transform: translateY(var(--pull, 0px));
+  transition: transform 320ms cubic-bezier(.5, 0, .75, 0), opacity 220ms ease-in 120ms; }
+#calendar .today-door .ribbon-h { left: 0; right: 0; top: 40%; height: 7cqw; margin-top: -3.5cqw; transform-origin: 50% 50%; transition: transform 300ms ease-in 60ms; }
+#calendar .today-door .bow { position: absolute; left: 50%; top: 40%; width: 34cqw; height: 16cqw; margin: -12cqw 0 0 -17cqw; pointer-events: none;
+  transform: translateY(var(--pull, 0px)); transition: transform 320ms cubic-bezier(.5, 0, .75, 0), opacity 200ms ease-in 80ms; }
+#calendar .today-door .bow::before, #calendar .today-door .bow::after { content: ""; position: absolute; top: 0; width: 15cqw; height: 12cqw;
+  border: 3.2cqw solid var(--red); border-radius: 50%; }
+#calendar .today-door .bow::before { left: 0; transform: rotate(-14deg); }
+#calendar .today-door .bow::after { right: 0; transform: rotate(14deg); }
+#calendar .today-door .tag { position: absolute; left: 58%; top: 52%; width: 26cqw; aspect-ratio: 4 / 5; display: grid; place-items: center;
+  background: var(--ivory); box-shadow: 0 6px 10px -6px rgba(60, 40, 20, .5); transform: rotate(7deg); pointer-events: none; transition: opacity 200ms ease-in; }
+#calendar .today-door .tag::before { content: ""; position: absolute; top: 9%; left: 50%; width: 7%; aspect-ratio: 1; margin-left: -3.5%; border-radius: 50%; background: #dcc39a; }
+#calendar .today-door .tag .n { font-family: var(--font-display); font-weight: 300; font-size: 15cqw; line-height: 1; color: var(--charcoal); margin-top: 8%; }
+#calendar .today-door .bow { background: radial-gradient(5cqw 4cqw at 50% 72%, var(--red) 98%, transparent 100%); }
+/* a gentle tug now and then says: pull me */
+#calendar button.today-door:not(.pulling):not(.opening) .ribbon-v, #calendar button.today-door:not(.pulling):not(.opening) .bow { animation: cal-tug 3.2s cubic-bezier(.2, .8, .2, 1) 1.4s infinite; }
+@keyframes cal-tug { 0%, 78%, 100% { translate: 0 0; } 86% { translate: 0 6px; } 92% { translate: 0 -1px; } }
+#calendar .today-door.pulling .ribbon-v, #calendar .today-door.pulling .bow { transition: none; }
+#calendar .today-door.opening .ribbon-v, #calendar .today-door.opening .bow { transform: translateY(calc(var(--pull, 0px) + 60cqw)); opacity: 0; }
+#calendar .today-door.opening .ribbon-h { transform: scaleX(0); }
+#calendar .today-door.opening .tag { opacity: 0; }
+#calendar .today-door.opening .paper-l { transform: translateX(-62%) rotate(-5deg); opacity: 0; }
+#calendar .today-door.opening .paper-r { transform: translateX(62%) rotate(5deg); opacity: 0; }
+#calendar .today-door .spark { bottom: 96%; }
+#calendar .today-door.is-opened:not(.is-wrapped) { width: auto; height: var(--door-h); aspect-ratio: auto; display: grid; place-items: center; background: none; cursor: pointer; }
+#calendar .today-door.is-opened img { display: block; max-width: min(100%, calc(100vw - 2 * var(--gutter))); max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
+#calendar .today-door.is-locked { background: none; opacity: .82; }
+#calendar .today-door.is-locked .paper { transition: none; }
 
 /* all doors: a sheet over the room */
 #calendar .cal-sheet { position: absolute; inset: 0; z-index: 2; display: flex; align-items: flex-end; justify-content: center; background: rgba(29, 29, 29, .32); }
@@ -110,6 +132,7 @@
   #calendar .door, #calendar .cal-grid .door.is-open, #calendar .cal-label, #calendar .cal-sheet-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
   #calendar .door .spark { display: none; }
   #calendar .door .leaf { transition: none; }
+  #calendar .today-door .ribbon-v, #calendar .today-door .bow { animation: none; }
 }
 /* ------------------------------------------------------------ the offer card */
 

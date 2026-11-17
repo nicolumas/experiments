@@ -16,13 +16,13 @@
   const COPY = {
     de: {
       open: 'Öffnen',
-      snow: 'Wisch den Schnee herunter.', frost: 'Wisch das Eis weg.', paper: 'Reiß das Papier auf.',
+      snow: 'Wisch oder tipp den Schnee weg.', frost: 'Wisch das Eis weg.', paper: 'Reiß das Papier auf.',
       lanterns: 'Zünde die drei Laternen an.', ribbon: 'Zieh an der Schleife.',
       candle: 'Halte die Kerze, bis sie brennt.',
     },
     en: {
       open: 'Open',
-      snow: 'Brush the snow off.', frost: 'Wipe the frost away.', paper: 'Tear the paper open.',
+      snow: 'Swipe or tap the snow away.', frost: 'Wipe the frost away.', paper: 'Tear the paper open.',
       lanterns: 'Light the three lanterns.', ribbon: 'Pull the ribbon.',
       candle: 'Hold the candle until it burns.',
     },

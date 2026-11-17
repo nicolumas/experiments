@@ -6,6 +6,7 @@
   const ADVENT = {
     "config": {
       "content": "pitch",
+      "discount": false,
       "orderDeadline": "2026-12-17",
       "artWeekend": "2026-12-04",
       "pdpBase": "https://www.lumas.de",

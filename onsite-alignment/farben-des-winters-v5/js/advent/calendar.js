@@ -90,15 +90,44 @@
     return h('div', { class: cls, 'data-day': e.day, 'data-state': state, 'aria-label': label, 'aria-disabled': 'true', role: 'img' }, h('span', { class: 'n' }, String(e.day)));
   }
 
-  /* today's door, large, on the living-room wall: closed and glowing, or showing its work once opened */
+  /* today's work, wrapped: kraft paper at the work's own proportions, a red ribbon and bow, a tag with the day */
+  const ratio = (e) => e.r || (e.work && e.work.r) || 0.75;
+  const wrapping = (e) => [h('span', { class: 'paper paper-l' }), h('span', { class: 'paper paper-r' }),
+    h('span', { class: 'ribbon ribbon-h' }), h('span', { class: 'ribbon ribbon-v' }), h('span', { class: 'bow' }),
+    h('span', { class: 'tag' }, h('span', { class: 'n' }, String(e.day)))];
+  /* pull the ribbon down (or tap): the parcel opens */
+  function pullable(btn, open) {
+    let y0 = null;
+    let id = null;
+    btn.addEventListener('pointerdown', (e) => {
+      y0 = e.clientY;
+      id = e.pointerId;
+      try { btn.setPointerCapture(id); } catch (err) { /* synthetic pointer */ }
+      btn.classList.add('pulling');
+    });
+    btn.addEventListener('pointermove', (e) => {
+      if (e.pointerId !== id || y0 === null) return;
+      const d = Math.max(0, e.clientY - y0);
+      btn.style.setProperty('--pull', `${Math.min(d, 80)}px`);
+      if (d > 40) { y0 = null; btn.classList.remove('pulling'); open(); }
+    });
+    const end = (e) => { if (e.pointerId !== id) return; y0 = null; btn.classList.remove('pulling'); };
+    btn.addEventListener('pointerup', end);
+    btn.addEventListener('pointercancel', end);
+    btn.addEventListener('click', open);
+  }
+
+  /* today's door, large, on the living-room wall: today's work, wrapped, or the work itself once opened */
   function bigDoor(today, state, now) {
     const lockedOn = today ? null : laterToday(now) || (now < G.advent.opensAtMs(D.sched[0]) ? D.sched[0] : null);
-    if (lockedOn) return h('div', { class: 'door today-door is-locked', 'data-day': lockedOn.day, 'data-state': 'locked', role: 'img', 'aria-label': D.t('door', { n: lockedOn.day }) }, h('span', { class: 'n' }, String(lockedOn.day)));
+    if (lockedOn) return h('div', { class: 'door today-door is-wrapped is-locked', style: `--r:${ratio(lockedOn)}`, 'data-day': lockedOn.day, 'data-state': 'locked', role: 'img', 'aria-label': D.t('door', { n: lockedOn.day }) }, wrapping(lockedOn));
     if (!today) return null;
     const label = D.t('door', { n: today.day });
     if (state === 'open' || today.type === 'finale') {
-      const btn = h('button', { class: `door today-door is-${state === 'open' ? 'open' : 'opened'}${today.type === 'finale' ? ' is-24' : ''}`, type: 'button', 'data-day': today.day, 'data-state': state, 'aria-label': label }, leaf(today, true), h('i', { class: 'knob' }));
-      btn.addEventListener('click', () => D.onRide(today, btn));
+      const btn = h('button', { class: `door today-door is-wrapped is-${state === 'open' ? 'open' : 'opened'}${today.type === 'finale' ? ' is-24' : ''}`, type: 'button', style: `--r:${ratio(today)}`, 'data-day': today.day, 'data-state': state, 'aria-label': label },
+        wrapping(today), [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })));
+      let opening = false;
+      pullable(btn, () => { if (!opening) { opening = true; D.onRide(today, btn); setTimeout(() => { opening = false; }, 1500); } });
       return btn;
     }
     const src = workSrc(today);
@@ -187,6 +216,8 @@
     const portal = document.getElementById('portal');
     if (RM() || !portal) return Promise.resolve();
     const speed = G.SPEED || 1;
+    /* a wrapped work: the light comes up before the paper parts, so what is under the paper is never seen */
+    const wrapped = btn.classList.contains('is-wrapped');
     btn.classList.add('opening');
     const r = btn.getBoundingClientRect();
     const size = Math.hypot(innerWidth, innerHeight) * 2.2;
@@ -198,7 +229,7 @@
       { transform: `scale(${(r.width * 0.6) / size})`, opacity: 0 },
       { transform: `scale(${(r.width * 1.4) / size})`, opacity: 1, offset: 0.35 },
       { transform: 'scale(1)', opacity: 1 },
-    ], { duration: 1100 / speed, delay: 260 / speed, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' });
+    ], { duration: (wrapped ? 900 : 1100) / speed, delay: (wrapped ? 120 : 260) / speed, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' });
     return a.finished.catch(() => {});
   }
   /* after the ride has started behind it, the light clears */
