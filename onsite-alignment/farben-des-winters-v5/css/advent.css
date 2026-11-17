@@ -1,0 +1,210 @@
+/* Adventskalender: the door coverings, the calendar and the offer card.
+   Coverings sit on the work only until it is revealed; the work itself is never framed, boxed or darkened. */
+
+/* ------------------------------------------------------------ the calendar */
+
+/* inside #ui, under the top bar (z 11); the ride's caption, the end panel and the skip step aside while it is open */
+#calendar { position: absolute; inset: 0; z-index: 9; overflow: hidden; background: #b7c2d8; }
+#calendar .cal-snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+/* the shop window's light, on the street plate (never on art): a slow candle-like breath */
+#calendar .cal-glow { position: absolute; pointer-events: none; mix-blend-mode: screen;
+  background: radial-gradient(60% 70% at 50% 60%, rgba(255, 214, 140, .55), rgba(255, 196, 110, 0) 70%);
+  animation: cal-window 3.6s ease-in-out infinite alternate; }
+@keyframes cal-window { 0% { opacity: .55; } 40% { opacity: .8; } 55% { opacity: .62; } 100% { opacity: .9; } }
+/* the light that pours out of today's door */
+#portal { position: absolute; z-index: 10; pointer-events: none; border-radius: 50%; transform-origin: 50% 50%; display: none;
+  background: radial-gradient(closest-side, #fffaf0 0%, #ffe9c4 38%, #ffd79a 62%, rgba(255, 215, 154, 0) 100%); }
+#portal.on { display: block; }
+#ui.cal-open #caption, #ui.cal-open #end, #ui.cal-open #btnToDoor { visibility: hidden; }
+#calendar[hidden] { display: none; }
+#calendar .cal-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#calendar .cal-panel { position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(var(--safe-b) + 16px); background: var(--ivory); padding: 16px 16px 14px;
+  animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes cal-panel-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+#calendar .cal-title { margin: 4px 0 12px; font-family: var(--font-display); font-size: 24px; line-height: 1.2; text-wrap: balance; }
+#calendar .cal-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+#calendar .door { position: relative; min-width: 0; aspect-ratio: 1; display: grid; overflow: hidden; place-items: center; padding: 3px; border: 0; background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .16); color: var(--muted); font: 500 13px/1 var(--font-text);
+  animation: cal-door-in 420ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 16ms + 120ms); }
+@keyframes cal-door-in { from { opacity: 0; transform: translateY(6px) scale(.94); } to { opacity: 1; transform: none; } }
+#calendar button.door { cursor: pointer; transition: transform 160ms var(--ease-out); }
+#calendar button.door:active { transform: scale(.96); }
+/* today's door: warm light behind a charcoal leaf that swings open when tapped; sparks rise from it */
+#calendar .door.is-open { overflow: visible; padding: 0; perspective: 300px; color: var(--ivory);
+  background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
+  box-shadow: 0 0 0 2px #f2c46b; animation: cal-door-in 420ms cubic-bezier(.2, .8, .2, 1) both, cal-glow 2.4s ease-in-out 700ms infinite alternate;
+  animation-delay: calc(var(--i, 0) * 16ms + 120ms), 700ms; }
+#calendar .door.is-open .leaf { position: absolute; inset: 0; display: grid; place-items: center; background: var(--charcoal);
+  transform-origin: 0 50%; transition: transform 520ms cubic-bezier(.2, .8, .2, 1); }
+#calendar .door.is-open.opening .leaf { transform: rotateY(-112deg); }
+#calendar .door .spark { position: absolute; left: calc(18% + var(--s) * 21%); bottom: 70%; width: 3px; height: 3px; border-radius: 50%;
+  background: #ffe2a8; box-shadow: 0 0 6px 2px rgba(255, 210, 130, .8); opacity: 0; pointer-events: none;
+  animation: cal-spark 2.6s ease-out infinite; animation-delay: calc(var(--s) * 650ms + 900ms); }
+@keyframes cal-spark { 0% { opacity: 0; transform: translateY(0) scale(.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-34px) scale(1); } }
+#calendar .door.is-opened { box-shadow: none; }
+#calendar .door.is-opened img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; }
+#calendar .door.is-missed { color: rgba(90, 87, 82, .55); box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .08); }
+#calendar .door.is-sunday .n, #calendar .door.is-24 .n { font-weight: 700; color: var(--charcoal); }
+#calendar .door.is-open .n { color: var(--ivory); }
+#calendar .cal-direct { margin-top: 12px; }
+#calendar .cal-demo { position: absolute; left: var(--gutter); right: var(--gutter); top: calc(var(--safe-t) + 66px); display: flex; flex-wrap: wrap; gap: 4px; }
+#calendar .cal-demo a { min-width: 28px; padding: 5px 0; text-align: center; background: rgba(254, 253, 249, .72); color: var(--muted); font-size: 13px; text-decoration: none; }
+@keyframes cal-glow { from { box-shadow: 0 0 0 2px #f2c46b; } to { box-shadow: 0 0 0 2px #f2c46b, 0 0 14px 2px rgba(242, 196, 107, .7); } }
+@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+  #calendar .cal-panel { right: auto; width: 560px; bottom: 28px; padding: 22px 24px 20px; }
+  #calendar .cal-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  #calendar .cal-title { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #calendar .door, #calendar .door.is-open, #calendar .cal-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
+  #calendar .door .spark { display: none; }
+}
+
+/* ------------------------------------------------------------ the offer card */
+
+#offer { position: absolute; inset: 0; z-index: 17; overflow-y: auto; overscroll-behavior: contain; pointer-events: none; }
+#offer:not(.show) { display: none; }
+#offer .offer-space { height: 8dvh; }
+#offer .offer-space.tall { height: 52dvh; min-height: 280px; }
+#offer .offer-body { pointer-events: auto; background: var(--ivory); padding: 24px var(--gutter) calc(32px + var(--safe-b)); animation: offer-in 520ms cubic-bezier(.2, .8, .2, 1); }
+#offer .offer-art { display: block; max-width: 100%; max-height: 42dvh; width: auto; height: auto; margin: 0 0 18px; }
+#offer h2 { font-size: 32px; margin: 6px 0 4px; }
+#offer .by { margin: 0; font-size: 16px; }
+#offer .meta { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+#offer .offer-note { margin: 12px 0 0; font-size: 15px; }
+#offer .price { margin: 14px 0 0; font-family: var(--font-display); font-size: 26px; font-variant-numeric: tabular-nums; }
+#offer .price s { position: relative; margin-left: 6px; font-size: 16px; color: var(--muted); text-decoration: none; }
+/* the old price is struck through as you watch */
+#offer .price s::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: 0 50%; animation: offer-strike 420ms cubic-bezier(.2, .8, .2, 1) 950ms forwards; }
+@keyframes offer-strike { to { transform: scaleX(1); } }
+#offer .offer-body > * { animation: offer-line 520ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 70ms + 160ms); }
+@keyframes offer-line { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+#offer .offer-code { margin: 10px 0 0; font-size: 15px; }
+#offer .offer-code b { letter-spacing: .08em; }
+#offer .offer-cta { margin-top: 18px; }
+#offer .btn.offer-cta { display: inline-flex; }
+#offer .offer-foot { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line); }
+#offer .offer-foot p { margin: 0 0 8px; font-size: 15px; }
+#offer .offer-links { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+@keyframes offer-in { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+  #offer .offer-body { width: 520px; margin-left: var(--gutter); padding: 32px 36px 36px; }
+  #offer .offer-space { height: 10dvh; }
+  #offer .offer-space.tall { height: 58dvh; }
+  #offer h2 { font-size: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #offer .offer-body, #offer .offer-body > * { animation: none; }
+  #offer .price s::after { animation: none; transform: none; }
+}
+/* the work flying home into its door */
+.fly-home { position: absolute; z-index: 10; pointer-events: none; transform-origin: 0 0; }
+.fly-home img { display: block; width: 100%; height: 100%; }
+#calendar .door.home { animation: cal-home 900ms cubic-bezier(.2, .8, .2, 1); }
+@keyframes cal-home { 0% { box-shadow: 0 0 0 0 rgba(242, 196, 107, .8); } 100% { box-shadow: 0 0 0 10px rgba(242, 196, 107, 0); } }
+
+/* ------------------------------------------------------------ the door host: follows the work over the ride */
+
+#doorhost { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+#doorhost .d-host { position: absolute; left: 0; top: 0; }
+#doorhost:not(.active) * { pointer-events: none !important; }
+#doorhost.active .d-host { pointer-events: auto; touch-action: none; }
+#capDoor:empty { display: none; }
+#capDoor .g-hint { margin-top: 4px; }
+
+/* ------------------------------------------------------------ the gestures */
+
+.g-cover { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.g-frost canvas { display: block; width: 100%; height: 100%; }
+
+/* snow: soft drifts with a lumpy lower edge */
+.g-snow { left: -3%; width: 106%;
+  background:
+    radial-gradient(60% 40% at 20% 100%, #f7fafd 60%, transparent 61%),
+    radial-gradient(50% 36% at 62% 104%, #f4f8fc 60%, transparent 61%),
+    radial-gradient(40% 30% at 92% 100%, #f7fafd 60%, transparent 61%),
+    linear-gradient(180deg, #fdfefe 0%, #eef3f9 82%, transparent 100%);
+  filter: drop-shadow(0 3px 2px rgba(110, 130, 170, .25)); }
+
+/* wrapping paper, torn down the middle */
+.g-paper { width: 50%;
+  background: repeating-linear-gradient(135deg, #B5312F 0 9px, #a92c2a 9px 18px);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
+.g-paper { width: 54%; }
+.g-paper-l { left: 0; transform-origin: 0% 100%;
+  clip-path: polygon(0 0, 100% 0, 94% 6%, 99% 13%, 93% 21%, 98% 30%, 93% 38%, 99% 47%, 94% 55%, 98% 63%, 93% 72%, 99% 80%, 94% 89%, 98% 100%, 0 100%); }
+.g-paper-r { left: 46%; transform-origin: 100% 100%;
+  clip-path: polygon(6% 0, 100% 0, 100% 100%, 2% 100%, 6% 89%, 1% 80%, 7% 72%, 2% 63%, 6% 55%, 1% 47%, 7% 38%, 2% 30%, 7% 21%, 1% 13%, 6% 6%); }
+.g-paper-l::after, .g-paper-r::before { content: ""; position: absolute; top: 0; bottom: 0; width: 6px; }
+.g-paper-l::after { right: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .18)); }
+.g-paper-r::before { left: 0; background: linear-gradient(270deg, transparent, rgba(255, 255, 255, .18)); }
+
+/* the veil the lanterns lift */
+.g-veil { background: linear-gradient(180deg, #f6f3ee 0%, #ece6dc 100%);
+  box-shadow: inset 0 -18px 30px -18px rgba(0, 0, 0, .18); }
+.g-veil::before { content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .035) 0 2px, transparent 2px 22px); }
+.g-lantern { position: absolute; width: 26px; height: 34px; margin: 0; padding: 0; border: 0; border-radius: 6px 6px 9px 9px;
+  transform: translate(-50%, 0); background: #e9e1d2; cursor: pointer; pointer-events: auto;
+  box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .25); transition: background 220ms ease, box-shadow 320ms ease; }
+.g-lantern::before { content: ""; position: absolute; left: 50%; top: -9px; width: 1px; height: 9px; background: rgba(29, 29, 29, .5); }
+.g-lantern.lit { background: #f3b24a; box-shadow: 0 0 18px 6px rgba(243, 178, 74, .6), inset 0 0 0 1px rgba(160, 96, 20, .4); animation: g-lantern 1.8s ease-in-out infinite alternate; }
+@keyframes g-lantern { from { box-shadow: 0 0 14px 4px rgba(243, 178, 74, .5), inset 0 0 0 1px rgba(160, 96, 20, .4); } to { box-shadow: 0 0 24px 9px rgba(243, 178, 74, .75), inset 0 0 0 1px rgba(160, 96, 20, .4); } }
+.g-lantern:focus-visible { outline: 2px solid #1D1D1D; outline-offset: 3px; }
+
+/* wrapping tied with a ribbon; the bow is the handle */
+.g-wrap { background: linear-gradient(180deg, #efe6d6, #e3d7c2); overflow: hidden; }
+.g-band { position: absolute; left: 50%; top: 0; bottom: 0; width: 12px; margin-left: -6px; background: #B5312F; transform-origin: 50% 0; }
+.g-bow { position: absolute; left: 50%; top: 6%; width: 64px; height: 44px; transform: translate(-50%, 0); cursor: grab; touch-action: none; pointer-events: auto; }
+.g-bow::before, .g-bow::after { content: ""; position: absolute; top: 6px; width: 28px; height: 22px; border: 6px solid #B5312F; border-radius: 50%; }
+.g-bow::before { left: 0; }
+.g-bow::after { right: 0; }
+
+/* shutters in front of the gallery window */
+.g-shutter { width: 50%; pointer-events: auto; cursor: pointer;
+  background: repeating-linear-gradient(180deg, #4b5b6c 0 10px, #3e4c5b 10px 12px);
+  box-shadow: inset 0 0 0 2px #33404d; transition: transform 520ms cubic-bezier(.2, .8, .2, 1); }
+.g-shutter-l { left: 0; transform-origin: 0 50%; }
+.g-shutter-r { left: 50%; transform-origin: 100% 50%; }
+.g-shutter-l.open { transform: perspective(700px) rotateY(105deg); }
+.g-shutter-r.open { transform: perspective(700px) rotateY(-105deg); }
+.g-shutter:focus-visible { outline: 2px solid #FEFDF9; outline-offset: -4px; }
+
+/* the dark the candle lights */
+.g-dark { --r: 0; background: #1f2533;
+  -webkit-mask-image: radial-gradient(circle at 50% 88%, transparent calc(var(--r) * 1%), #000 calc(var(--r) * 1% + 18%));
+  mask-image: radial-gradient(circle at 50% 88%, transparent calc(var(--r) * 1%), #000 calc(var(--r) * 1% + 18%)); }
+.g-candle { --k: 0; position: absolute; left: 50%; bottom: 6%; width: 22px; height: 64px; transform: translateX(-50%);
+  background: #fbfdff; box-shadow: inset 0 0 0 1px #d8dde4; cursor: pointer; touch-action: none; pointer-events: auto; }
+.g-flame { position: absolute; left: 50%; top: -22px; width: 14px; height: 20px; margin-left: -7px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #f6b84a;
+  opacity: calc(.15 + var(--k) * .85); transform: scale(calc(.4 + var(--k) * .6));
+  box-shadow: 0 0 calc(4px + var(--k) * 26px) calc(var(--k) * 10px) rgba(246, 184, 74, .55); }
+.g-candle.lit .g-flame { animation: g-flicker 1.4s ease-in-out infinite alternate; }
+@keyframes g-flicker { from { transform: scale(1) rotate(-2deg); } to { transform: scale(.94) rotate(2deg); } }
+
+/* particles: powder off the snow, glints in the frost, sparks from the lanterns (they never cover the work for long) */
+.g-fx { position: absolute; pointer-events: none; border-radius: 50%; }
+.g-puff { width: 6px; height: 6px; background: #fff; box-shadow: 0 0 4px 1px rgba(255, 255, 255, .9); }
+.g-glint { width: 10px; height: 10px; border-radius: 0; background: radial-gradient(closest-side, #fff, rgba(255, 255, 255, 0));
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+.g-spark { width: 4px; height: 4px; background: #ffe2a8; box-shadow: 0 0 6px 2px rgba(255, 196, 110, .85); }
+/* warm light round the gallery window as the shutters open: behind the work, so only its edges glow */
+.g-spill { position: absolute; inset: -30%; z-index: -1; pointer-events: none; opacity: 0;
+  background: radial-gradient(closest-side, rgba(255, 220, 160, .95), rgba(255, 200, 120, .45) 60%, rgba(255, 200, 120, 0));
+  transition: opacity 520ms cubic-bezier(.2, .8, .2, 1); }
+.g-spill.on { opacity: 1; }
+
+/* the hint and the fallback */
+.g-hint { margin: 0; font-family: var(--font-display, "Utile Display", Georgia, serif); font-size: 21px; line-height: 1.25; }
+.g-open { margin-top: 10px; min-height: 40px; padding: 0 16px; border: 0; background: #1D1D1D; color: #FEFDF9;
+  font-size: 13px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  transition: transform 160ms cubic-bezier(.2, .8, .2, 1); }
+.g-open:active { transform: scale(.97); }
+.g-open[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .g-shutter, .g-lantern { transition: none; }
+  .g-candle.lit .g-flame { animation: none; }
+}
