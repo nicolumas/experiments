@@ -155,26 +155,14 @@
     return form;
   }
 
-  /* tomorrow's door (as seen from today): the sign-up, the reminder file, back to the calendar */
+  /* tomorrow's door (as seen from today): the sign-up; the way back to the calendar is in the top bar */
   function foot(now, lang) {
     const A = G.advent;
-    const { t, config } = D;
+    const { t } = D;
     const today = A.todayEntry(D.sched, now);
     const next = today ? A.nextEntry(D.sched, today) : null;
-    const remind = next ? h('button', { class: 'link offer-remind', type: 'button', onclick: () => {
-      const blob = new Blob([A.icsFor(next, lang, config.pageUrl)], { type: 'text/calendar' });
-      const a = h('a', { href: URL.createObjectURL(blob), download: `lumas-tuer-${next.day}.ics` });
-      document.body.append(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-      D.track('gal_reminder', { gal_day: next.day });
-    } }, t('remind')) : null;
-    const form = next ? notifyForm(next, lang) : null;
-    return h('div', { class: 'offer-foot' },
-      form || (next ? h('p', {}, t('tomorrow', { n: next.day })) : null),
-      h('div', { class: 'offer-links' },
-        remind,
-        h('button', { class: 'link offer-calendar', type: 'button', onclick: () => D.onCalendar() }, t('tCalendar'))));
+    if (!next) return null;
+    return h('div', { class: 'offer-foot' }, notifyForm(next, lang) || h('p', {}, t('tomorrow', { n: next.day })));
   }
 
   /* top: where the card starts, just under the revealed work, so the card never covers it */

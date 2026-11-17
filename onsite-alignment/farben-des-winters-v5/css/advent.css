@@ -73,8 +73,9 @@
 #calendar .today-door.opening .paper-l { transform: translateX(-62%) rotate(-5deg); opacity: 0; }
 #calendar .today-door.opening .paper-r { transform: translateX(62%) rotate(5deg); opacity: 0; }
 #calendar .today-door .spark { bottom: 96%; }
-#calendar .today-door.is-opened:not(.is-wrapped) { width: auto; height: var(--door-h); aspect-ratio: auto; display: grid; place-items: center; background: none; cursor: pointer; }
-#calendar .today-door.is-opened img { display: block; max-width: min(100%, calc(100vw - 2 * var(--gutter))); max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
+/* opened: the work itself hangs where the parcel was, at the same size */
+#calendar .today-door.is-opened:not(.is-wrapped) { background: none; cursor: pointer; }
+#calendar .today-door.is-opened img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
 #calendar .today-door.is-locked { background: none; opacity: .82; }
 #calendar .today-door.is-locked .paper { transition: none; }
 
@@ -136,7 +137,9 @@
 }
 /* ------------------------------------------------------------ the offer card */
 
-#offer { position: absolute; inset: 0; z-index: 17; overflow-y: auto; overscroll-behavior: contain; pointer-events: none; }
+#offer { position: absolute; inset: 0; z-index: 17; overflow-y: auto; overscroll-behavior: contain; }
+/* only the card takes taps; the space above it lets them through to the work and the top bar */
+#ui #offer, #offer .offer-space { pointer-events: none; }
 #offer:not(.show) { display: none; }
 #offer .offer-space { height: 8dvh; }
 #offer .offer-space.tall { height: 52dvh; min-height: 280px; }

@@ -131,7 +131,7 @@
       return btn;
     }
     const src = workSrc(today);
-    return h('button', { class: 'door today-door is-opened', type: 'button', 'data-day': today.day, 'data-state': state, 'aria-label': `${label}${today.work ? `, ${today.work.title}` : ''}`, onclick: () => D.onCard(today, 'calendar') },
+    return h('button', { class: 'door today-door is-opened', type: 'button', style: `--r:${ratio(today)}`, 'data-day': today.day, 'data-state': state, 'aria-label': `${label}${today.work ? `, ${today.work.title}` : ''}`, onclick: () => D.onCard(today, 'calendar') },
       src ? h('img', { src, alt: '', draggable: 'false' }) : h('span', { class: 'n' }, String(today.day)));
   }
 

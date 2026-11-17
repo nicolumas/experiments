@@ -1,47 +1,70 @@
-/* Brush off the snow, made for a finger: the snow under it gives at once and throws powder; brush far enough over a
-   clump (or flick) and it slides off the way you brushed; a tap knocks off the clump under the finger. One swipe
-   down through the work clears it all; three taps do too. */
+/* Brush off the snow, made for a finger. The clump you touch is yours: it follows the finger 1:1 and flies off the
+   way you throw it (a flick is enough; a slow short drag settles back). A quick swipe brushes off every other clump it
+   crosses, the way it was going. A tap knocks off the clump under the finger. The touch area reaches a little past the
+   work, so a swipe may start just outside it. One swipe down through the work clears it all; three taps do too. */
 (function () {
   'use strict';
   const { register, util } = window.GAL.gestures;
   const { cover, away, pointer, deferred, burst } = util;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const buzz = (ms) => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* no haptics here */ } };
+  const PAD = 28;          /* the touch area reaches this far past the work */
+  const FLICK = 0.35;      /* px/ms: let go faster than this (and past NUDGE) and the clump flies */
+  const BRUSH = 0.5;       /* px/ms: cross another clump faster than this and it is brushed off */
+  const NUDGE = 24;        /* px: anything shorter is a nudge and settles back */
 
   register('snow', (o) => {
     const { w, h } = o.rect;
     const bands = [0, 1, 2].map((i) => cover(o.host, 'g-snow', `top:${(i * 100) / 3 - (i ? 3 : 0)}%;height:${100 / 3 + (i ? 3 : 0) + (i < 2 ? 3 : 0)}%`));
     const opened = deferred();
-    /* brush this far over a clump and it goes */
-    const KNOCK = Math.max(28, Math.min(w, h) * 0.12);
     let off = null;
+    let pad = null;
     let drag = null;
     const live = () => bands.filter((b) => b.isConnected && !b.dataset.falling);
     const bandAt = (y) => live().find((b) => y >= b.offsetTop && y < b.offsetTop + b.offsetHeight) || null;
+    /* where a touch starts: the clump under it, or the nearest one when it starts just outside the work */
+    const grabAt = (y) => bandAt(clamp(y, 0, h - 1)) || live().sort((a, b) => Math.abs(a.offsetTop + a.offsetHeight / 2 - y) - Math.abs(b.offsetTop + b.offsetHeight / 2 - y))[0] || null;
     const powder = (x, y, n, dir = 0) => burst(o.host, 'g-puff', n, { x, y }, () => [dir * (20 + Math.random() * 30) + (Math.random() - 0.5) * 36, -8 - Math.random() * 30, 0.5 + Math.random() * 0.5]);
+    const done = () => { if (!live().length) opened.resolve(); };
 
-    /* the snow under the finger gives a little; let go and it settles back */
-    const give = (b, dx, dy) => { b.style.transition = 'none'; b.style.transform = `translate(${clamp(dx * 0.3, -16, 16)}px, ${clamp(dy * 0.3, -6, 12)}px)`; };
+    /* the clump goes: along (ux, uy), from wherever it is now */
+    const send = (b, ux, uy) => {
+      const side = Math.abs(ux) > Math.abs(uy) * 0.8 ? (ux > 0 ? 'right' : 'left') : uy < 0 ? 'up' : 'down';
+      b.dataset.falling = side;
+      const m = new DOMMatrix(getComputedStyle(b).transform);
+      const far = Math.max(w, h) * 1.4;
+      away(b, [
+        { transform: `translate(${m.m41}px, ${m.m42}px) rotate(${Math.atan2(m.m12, m.m11)}rad)`, opacity: 1 },
+        { transform: `translate(${m.m41 + ux * far}px, ${m.m42 + uy * far + h * 0.2}px) rotate(${(ux >= 0 ? 1 : -1) * 16}deg)`, opacity: 0 },
+      ], 380);
+      const y = b.offsetTop + b.offsetHeight * 0.6;
+      const dir = Math.sign(ux);
+      burst(o.host, 'g-puff', 14, (i) => ({ x: ((i + 0.5) / 14) * w, y }), () => [(dir || Math.random() - 0.5) * (30 + Math.random() * 60), -10 - Math.random() * 50, 0.8 + Math.random() * 0.8]);
+      buzz(12);
+      done();
+    };
+    const unit = (x, y) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
+    /* the held clump: 1:1 with the finger, a little tilt, resisting being lifted */
+    const hold = (b, dx, dy) => {
+      b.style.transition = 'none';
+      b.style.zIndex = '2';
+      b.style.transform = `translate(${dx}px, ${dy > 0 ? dy : dy * 0.3}px) rotate(${clamp(dx * 0.05, -9, 9)}deg)`;
+    };
     const settle = (b) => {
       if (!b || b.dataset.falling) return;
-      b.style.transition = 'transform 260ms cubic-bezier(.2, .8, .2, 1)';
+      b.style.transition = 'transform 280ms cubic-bezier(.2, .8, .2, 1)';
       b.style.transform = '';
+      b.style.zIndex = '';
     };
-    /* a clump goes the way the hand went: to the side for a sideways brush, down for a tap or a downward swipe */
-    const knock = (b, dx, dy) => {
-      const side = Math.abs(dx) > Math.abs(dy) * 0.8 ? (dx > 0 ? 'right' : 'left') : 'down';
-      const sx = side === 'right' ? 1 : side === 'left' ? -1 : 0;
-      b.dataset.falling = side;
-      const from = getComputedStyle(b).transform;
-      away(b, [
-        { transform: from === 'none' ? 'translate(0px, 0px)' : from, opacity: 1 },
-        { transform: `translate(${sx ? sx * w * 1.1 : clamp(dx, -40, 40)}px, ${sx ? h * 0.3 : h * 1.3}px) rotate(${sx ? sx * 12 : dx >= 0 ? 6 : -6}deg)`, opacity: 0 },
-      ], 440);
-      const y = b.offsetTop + b.offsetHeight * 0.6;
-      burst(o.host, 'g-puff', 14, (i) => ({ x: ((i + 0.5) / 14) * w, y }), () => [(sx || Math.random() - 0.5) * (30 + Math.random() * 60), -10 - Math.random() * 50, 0.8 + Math.random() * 0.8]);
-      buzz(12);
-      if (!live().length) opened.resolve();
+    /* the finger's speed over the last 100 ms (px/ms); very close samples count as 16 ms apart */
+    const speed = () => {
+      const s = drag.samples;
+      const a = s[0];
+      const z = s[s.length - 1];
+      const dt = Math.max(16, z.t - a.t);
+      return { vx: (z.x - a.x) / dt, vy: (z.y - a.y) / dt };
     };
+
     const fall = (el, k) => away(el, [
       { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
       { transform: `translateY(18px) rotate(${k % 2 ? -3 : 3}deg)`, opacity: 1, offset: 0.25 },
@@ -50,35 +73,54 @@
 
     return {
       activate() {
-        off = pointer(o.host, {
-          down: (p) => {
-            drag = { x0: p.x, y0: p.y, x: p.x, y: p.y, b: bandAt(p.y), bx: p.x, by: p.y, path: 0 };
-            if (drag.b) powder(p.x, p.y, 3);
+        pad = document.createElement('div');
+        pad.className = 'g-pad';
+        pad.style.cssText = `position:absolute;left:${-PAD}px;top:${-PAD}px;right:${-PAD}px;bottom:${-PAD}px;touch-action:none;`;
+        o.host.append(pad);
+        off = pointer(pad, {
+          down: (q) => {
+            const x = q.x - PAD;
+            const y = q.y - PAD;
+            const now = performance.now();
+            drag = { x0: x, y0: y, x, y, t0: now, held: grabAt(y), samples: [{ x, y, t: now }] };
+            if (drag.held) powder(clamp(x, 0, w), clamp(y, 0, h), 3);
           },
-          move: (p) => {
+          move: (q) => {
             if (!drag) return;
-            const b = bandAt(p.y);
-            if (b !== drag.b) { settle(drag.b); drag.b = b; drag.bx = drag.x; drag.by = drag.y; drag.path = 0; }
-            const step = Math.hypot(p.x - drag.x, p.y - drag.y);
-            const dir = Math.sign(p.x - drag.x);
-            drag.path += step;
-            drag.x = p.x;
-            drag.y = p.y;
-            if (!b) return;
-            give(b, p.x - drag.bx, p.y - drag.by);
-            if (step > 2 && Math.random() < 0.6) powder(p.x, p.y, 2, dir);
-            if (drag.path > KNOCK) { knock(b, p.x - drag.bx, p.y - drag.by); drag.b = null; drag.path = 0; }
+            const x = q.x - PAD;
+            const y = q.y - PAD;
+            const now = performance.now();
+            const step = { dx: x - drag.x, dy: y - drag.y, dt: Math.max(16, now - drag.samples[drag.samples.length - 1].t) };
+            drag.samples.push({ x, y, t: now });
+            while (drag.samples.length > 2 && now - drag.samples[0].t > 100) drag.samples.shift();
+            drag.x = x;
+            drag.y = y;
+            if (drag.held && !drag.held.dataset.falling) hold(drag.held, x - drag.x0, y - drag.y0);
+            /* brushing past the other clumps at speed knocks them off the way the hand is going */
+            const other = bandAt(y);
+            if (other && other !== drag.held && x > -4 && x < w + 4 && Math.hypot(step.dx, step.dy) / step.dt > BRUSH) send(other, ...unit(step.dx, step.dy));
+            if (Math.hypot(step.dx, step.dy) > 2 && x > 0 && x < w && y > 0 && y < h && Math.random() < 0.5) powder(x, y, 2, Math.sign(step.dx));
           },
-          up: (p) => {
+          up: (q) => {
             if (!drag) return;
-            if (Math.hypot(p.x - drag.x0, p.y - drag.y0) < 10) { const b = bandAt(p.y); if (b) knock(b, 0, 1); } else settle(drag.b);
+            const x = q.x - PAD;
+            const y = q.y - PAD;
+            const b = drag.held;
+            const dist = Math.hypot(x - drag.x0, y - drag.y0);
+            const { vx, vy } = speed();
+            const v = Math.hypot(vx, vy);
+            if (b && !b.dataset.falling) {
+              if (dist < 10 && performance.now() - drag.t0 < 350) send(b, 0, 1);
+              else if ((v > FLICK && dist > NUDGE) || Math.abs(x - drag.x0) > w * 0.35 || y - drag.y0 > h * 0.35) send(b, ...unit(v > FLICK ? vx : x - drag.x0, v > FLICK ? vy : y - drag.y0));
+              else settle(b);
+            }
             drag = null;
           },
         });
         return opened.promise;
       },
       finish: () => Promise.all(live().map((b, k) => fall(b, k))).then(() => new Promise((r) => setTimeout(r, 560 / (window.GAL.SPEED || 1)))),
-      destroy() { if (off) off(); bands.forEach((b) => b.remove()); },
+      destroy() { if (off) off(); if (pad) pad.remove(); bands.forEach((b) => b.remove()); },
     };
   });
 })();
