@@ -1221,8 +1221,8 @@
      (the phases keep their old names, 'street' and 'gallery') */
 
   const anchors = {
-    street: { door: { w: [0.67, 0.3, 0.78, 0.72], t: [0.69, 0.39, 0.87, 0.6] } },
-    gallery: { wall: { w: [0.13, 0.06, 0.7, 0.52], t: [0.08, 0.05, 0.9, 0.48] } },
+    street: { door: { w: [0.627, 0.424, 0.71, 0.696], t: [0.678, 0.451, 0.811, 0.603] } },
+    gallery: { wall: { w: [0.1, 0.05, 0.75, 0.55], t: [0.08, 0.05, 0.9, 0.52] } },
   };
   function plateBox(ar) {
     let pw;
