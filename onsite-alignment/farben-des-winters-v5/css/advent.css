@@ -141,6 +141,10 @@
 /* only the card takes taps; the space above it lets them through to the work and the top bar */
 #ui #offer, #offer .offer-space { pointer-events: none; }
 #offer:not(.show) { display: none; }
+/* the card runs to the bottom edge, like a sheet */
+#offer.show { display: flex; flex-direction: column; }
+#offer .offer-space { flex: none; }
+#offer .offer-body { flex: 1 0 auto; }
 #offer .offer-space { height: 8dvh; }
 #offer .offer-space.tall { height: 52dvh; min-height: 280px; }
 #offer .offer-body { pointer-events: auto; background: var(--ivory); padding: 24px var(--gutter) calc(32px + var(--safe-b)); animation: offer-in 520ms cubic-bezier(.2, .8, .2, 1); }
