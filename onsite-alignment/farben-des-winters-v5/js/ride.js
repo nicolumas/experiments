@@ -56,7 +56,7 @@
       door: 'Tür {n}', toDoor: 'Direkt zur Tür', tCalendar: 'Kalender',
       calEyebrow: 'Kunstvolle Weihnachten · {date}', calToday: 'Tür {n} wartet auf dich.', calBefore: 'Tür 1 öffnet am 1. Dezember.',
       calOpensAt: 'Tür {n} öffnet heute um {time} Uhr.', byEdition: '{artist}. Edition von {n}.',
-      calOpened: 'Tür {n} ist offen. Morgen öffnet Tür {m}.', allDoors: 'Alle Türen ansehen', allDoorsTitle: 'Alle Türen', close: 'Schließen', calAfter: 'Der Adventskalender ist vorbei.', direct: 'Heutiges Angebot direkt ansehen',
+      calOpened: 'Tür {n} ist offen. Morgen öffnet Tür {m}.', allDoors: 'Alle Türen ansehen', allDoorsTitle: 'Alle Türen', close: 'Schließen', demoPrev: 'Einen Tag zurück', demoNext: 'Einen Tag weiter', demoReset: 'Neu starten', calAfter: 'Der Adventskalender ist vorbei.', direct: 'Heutiges Angebot direkt ansehen',
       offerEyebrow: 'Tür {n} · Nur heute {pct}% off', offerEnded: 'Dieses Angebot ist vorbei.', signedLower: 'handsigniert',
       lastDelivery: 'Letzter Tag für die Lieferung bis Weihnachten', artWeekend: 'Passend zum Art Weekend am {date}',
       code: 'Code', copyCode: 'Code kopieren', copied: 'Kopiert', codeLater: 'Der Code folgt.',
@@ -86,7 +86,7 @@
       door: 'Door {n}', toDoor: 'Straight to the door', tCalendar: 'Calendar',
       calEyebrow: 'Artful Christmas · {date}', calToday: 'Door {n} is waiting for you.', calBefore: 'Door 1 opens on 1 December.',
       calOpensAt: 'Door {n} opens today at {time}.', byEdition: '{artist}. Edition of {n}.',
-      calOpened: 'Door {n} is open. Tomorrow, door {m} opens.', allDoors: 'See all doors', allDoorsTitle: 'All doors', close: 'Close', calAfter: 'The advent calendar has ended.', direct: "See today's offer directly",
+      calOpened: 'Door {n} is open. Tomorrow, door {m} opens.', allDoors: 'See all doors', allDoorsTitle: 'All doors', close: 'Close', demoPrev: 'One day back', demoNext: 'One day on', demoReset: 'Start again', calAfter: 'The advent calendar has ended.', direct: "See today's offer directly",
       offerEyebrow: 'Door {n} · Today only {pct}% off', offerEnded: 'This offer has ended.', signedLower: 'hand-signed',
       lastDelivery: 'Last day for delivery by Christmas', artWeekend: 'For the Art Weekend on {date}',
       code: 'Code', copyCode: 'Copy code', copied: 'Copied', codeLater: 'The code follows.',
@@ -1221,8 +1221,8 @@
      (the phases keep their old names, 'street' and 'gallery') */
 
   const anchors = {
-    street: { door: { w: [0.679, 0.266, 0.81, 0.8], t: [0.71, 0.405, 0.87, 0.673] } },
-    gallery: { wall: { w: [0.13, 0.09, 0.82, 0.52], t: [0.14, 0.07, 0.92, 0.52] } },
+    street: { door: { w: [0.647, 0.28, 0.78, 0.74], t: [0.67, 0.4, 0.86, 0.635] } },
+    gallery: { wall: { w: [0.13, 0.09, 0.84, 0.51], t: [0.12, 0.06, 0.9, 0.53] } },
   };
   function plateBox(ar) {
     let pw;

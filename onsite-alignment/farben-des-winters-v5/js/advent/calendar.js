@@ -130,11 +130,7 @@
       stage.style.cssText = `left:${Math.max(w.x, 0)}px;top:${top}px;width:${Math.min(w.x + w.w, innerWidth) - Math.max(w.x, 0)}px;--wall-h:${w.y + w.h - top}px`;
     }
     const sheet = h('div', { class: 'cal-sheet', hidden: true, role: 'dialog', 'aria-modal': 'true', 'aria-label': D.t('allDoorsTitle') });
-    let picker = null;
-    if (D.demo && new URLSearchParams(D.search).has('demo')) {
-      const lang = D.lang() === 'de' ? '&lang=de' : '';
-      picker = h('nav', { class: 'cal-demo', 'aria-label': 'Demo' }, D.sched.map((e) => h('a', { href: `?day=${e.day}&demo${lang}` }, String(e.day))));
-    }
+    const picker = D.demo && new URLSearchParams(D.search).has('demo') ? demoBar(now) : null;
     /* the room lives: warm light breathes round today's door */
     const glow = h('div', { class: 'cal-glow' });
     el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), stage, sheet, picker);
@@ -142,6 +138,24 @@
     el.hidden = false;
     if (reopenSheet) { reopenSheet = false; openSheet(); }
     D.track('gal_calendar', { gal_today: state === 'open' || state === 'opened' ? today.day : null, gal_opened: opened.size });
+  }
+
+  /* the demo's day switcher (demo builds only): a day back, a day on, and starting again with nothing opened */
+  function demoBar(now) {
+    const lang = D.lang() === 'de' ? '&lang=de' : '';
+    const day = Math.min(24, Math.max(1, +G.advent.berlinIso(now).slice(8, 10) || 1));
+    const go = (n) => `?day=${n}&demo${lang}`;
+    const date = new Intl.DateTimeFormat(D.lang() === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'Europe/Berlin' }).format(now);
+    const reset = () => {
+      try { localStorage.removeItem('lumasAdvent.demo.v1'); localStorage.removeItem('lumasAdvent.demo.notify'); } catch (e) { /* nothing stored */ }
+      location.href = go(1);
+    };
+    return h('nav', { class: 'cal-demo', 'aria-label': 'Demo' },
+      h('span', { class: 'cal-demo-tag' }, 'Demo'),
+      day > 1 ? h('a', { class: 'cal-demo-prev', href: go(day - 1), 'aria-label': D.t('demoPrev') }, '←') : h('span', { class: 'cal-demo-prev', 'aria-hidden': 'true' }, '←'),
+      h('span', { class: 'cal-demo-day' }, date),
+      day < 24 ? h('a', { class: 'cal-demo-next', href: go(day + 1), 'aria-label': D.t('demoNext') }, '→') : h('span', { class: 'cal-demo-next', 'aria-hidden': 'true' }, '→'),
+      h('button', { class: 'cal-demo-reset', type: 'button', onclick: reset }, D.t('demoReset')));
   }
 
   /* all 24 doors, behind a link */
