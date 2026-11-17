@@ -5,13 +5,13 @@
   'use strict';
 
   const TZ = '+01:00';
-  const GESTURES = ['snow', 'frost', 'paper', 'lanterns', 'ribbon', 'shutters', 'candle'];
+  const GESTURES = ['snow', 'frost', 'paper', 'lanterns', 'ribbon', 'candle'];
   const WORLDS = ['birch', 'lake', 'mountain', 'village', 'shore'];
   const TYPES = ['work', 'giftcard', 'drop', 'finale'];
   const SUNDAYS = [6, 13, 20];
   const pad = (n) => String(n).padStart(2, '0');
-  /* the world a day actually rides: street days and the 24th ride the village into town */
-  const rideWorld = (e) => (e.gesture === 'shutters' || e.type === 'finale' ? 'village' : e.world);
+  /* the world a day actually rides: the 24th rides the village home */
+  const rideWorld = (e) => (e.type === 'finale' ? 'village' : e.world);
 
   const berlinFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit' });
   const berlinIso = (ms) => berlinFmt.format(new Date(ms));
@@ -53,7 +53,7 @@
       if (e.day !== day) errs.push(`${at}: day is ${e.day}`);
       if (e.date !== `2026-12-${pad(day)}`) errs.push(`${at}: date is ${e.date}`);
       if (!TYPES.includes(e.type)) errs.push(`${at}: unknown type ${e.type}`);
-      if (!GESTURES.includes(e.gesture)) errs.push(`${at}: unknown gesture ${e.gesture}`);
+      if (e.type !== 'finale' && !GESTURES.includes(e.gesture)) errs.push(`${at}: unknown gesture ${e.gesture}`);
       if (!WORLDS.includes(e.world)) errs.push(`${at}: unknown world ${e.world}`);
       if (i > 0 && e.gesture === sched[i - 1].gesture) errs.push(`${at}: same gesture as day ${day - 1}`);
       if (i > 0 && rideWorld(e) === rideWorld(sched[i - 1])) errs.push(`${at}: same world as day ${day - 1}`);

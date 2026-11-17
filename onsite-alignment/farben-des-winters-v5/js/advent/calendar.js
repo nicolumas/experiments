@@ -1,5 +1,6 @@
-/* The calendar: the evening street with 24 doors. Opened doors show their work bare; today's door glows and starts
-   the ride; missed and future doors stay closed. It re-reads the time whenever the tab comes back, so a page left
+/* The calendar: the living room in the evening with today's door, large, on the wall; all 24 doors open behind a
+   link. Opened doors show their work bare; today's door glows and starts the ride; missed doors stay closed until
+   tapped; upcoming doors are greyed. It re-reads the time whenever the tab comes back, so a page left
    open over midnight shows the new day. GAL.calendar.init(deps) once, then show() / hide(). */
 (function (root) {
   'use strict';
@@ -8,7 +9,6 @@
   const SUNDAYS = [6, 13, 20];
   let D = null;
   let el = null;
-  let snow = null;
   const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const h = (tag, attrs = {}, ...kids) => {
@@ -23,18 +23,21 @@
     return e;
   };
 
-  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), windowRect(), onRide(entry, door), onCard(entry, from), onDirect(entry), demo, search } */
+  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), wallRect(), onRide(entry, door), onCard(entry, from),
+     onDirect(entry), onMissed(entry), demo, search } */
+  let reopenSheet = false;
   function init(deps) {
     D = deps;
     el = document.getElementById('calendar');
     document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'hidden' && el && !el.hidden) show(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el && !el.hidden) closeSheet(); });
   }
 
   function title(today, state, now) {
     const A = G.advent;
     if (!today) {
       /* today's door may open later in the day (the drop opens at 05:00) */
-      const later = D.sched.find((e) => e.date === A.berlinIso(now));
+      const later = laterToday(now);
       if (later) {
         const [hh, mm] = (later.opensAt || '00:00').split(':');
         return D.t('calOpensAt', { n: later.day, time: D.lang() === 'de' ? (mm === '00' ? String(+hh) : `${+hh}:${mm}`) : `${hh}:${mm}` });
@@ -45,31 +48,62 @@
     const next = A.nextEntry(D.sched, today);
     return next ? D.t('calOpened', { n: today.day, m: next.day }) : D.t('calAfter');
   }
+  const laterToday = (now) => D.sched.find((e) => e.date === G.advent.berlinIso(now) && now < G.advent.opensAtMs(e));
+  const workSrc = (e) => (e.work ? `assets/art/${e.work.code}.webp` : e.image);
 
+  /* the closed leaf of a door that can be opened, with its number; today's also gives off a few sparks */
+  const leaf = (e, sparks) => [h('span', { class: 'leaf' }, h('span', { class: 'n' }, String(e.day))),
+    ...(sparks ? [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })) : [])];
+
+  /* one door of the overview: opened shows its work; today and an open drop glow; missed stays closed but opens on a
+     tap; upcoming is greyed */
   function door(e, state, today) {
     const label = D.t('door', { n: e.day });
     const cls = `door is-${state}${SUNDAYS.includes(e.day) ? ' is-sunday' : ''}${e.day === 24 ? ' is-24' : ''}`;
-    /* the 24th is the gallery, never a card: on the day, its door always leads back into it */
+    const isToday = today && today.day === e.day;
+    /* the 24th is the living room, never a card: on the day, its door always leads back into it */
     if (e.type === 'finale') {
-      const live = today && today.day === e.day && (state === 'open' || state === 'opened');
-      return live ? h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': label, onclick: () => D.onRide(e) }, h('span', { class: 'n' }, String(e.day)))
+      const live = isToday && (state === 'open' || state === 'opened');
+      return live ? h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': label, onclick: () => { closeSheet(); D.onRide(e); } }, h('span', { class: 'n' }, String(e.day)))
         : h('div', { class: cls, 'data-day': e.day, 'data-state': state, 'aria-label': label, role: 'img' }, h('span', { class: 'n' }, String(e.day)));
     }
     if (state === 'opened') {
-      const src = e.work ? `assets/art/${e.work.code}.webp` : e.image;
+      const src = workSrc(e);
       const inner = src ? h('img', { src, alt: '', loading: 'lazy', draggable: 'false' }) : h('span', { class: 'n' }, String(e.day));
-      return h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': `${label}${e.work ? `, ${e.work.title}` : ''}`, onclick: () => D.onCard(e, 'calendar') }, inner);
+      return h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': `${label}${e.work ? `, ${e.work.title}` : ''}`, onclick: () => { reopenSheet = true; D.onCard(e, 'calendar'); } }, inner);
     }
-    /* today's door rides; a door still open from an earlier day (the drop on 22.12.) opens its card */
     if (state === 'open') {
-      const isToday = today && today.day === e.day;
-      const btn = h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': label },
-        h('span', { class: 'leaf' }, h('span', { class: 'n' }, String(e.day))),
-        [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })));
-      btn.addEventListener('click', () => (isToday ? D.onRide(e, btn) : D.onDirect(e)));
+      const btn = h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': label }, leaf(e, isToday));
+      btn.addEventListener('click', () => (isToday ? D.onRide(e, btn) : (reopenSheet = true, D.onDirect(e))));
       return btn;
     }
-    return h('div', { class: cls, 'data-day': e.day, 'data-state': state, 'aria-label': label, role: 'img' }, h('span', { class: 'n' }, String(e.day)));
+    if (state === 'missed') {
+      const btn = h('button', { class: cls, type: 'button', 'data-day': e.day, 'data-state': state, 'aria-label': label }, leaf(e, false));
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('opening')) return;
+        btn.classList.add('opening');
+        reopenSheet = true;
+        setTimeout(() => D.onMissed(e), RM() ? 0 : 420 / (G.SPEED || 1));
+      });
+      return btn;
+    }
+    return h('div', { class: cls, 'data-day': e.day, 'data-state': state, 'aria-label': label, 'aria-disabled': 'true', role: 'img' }, h('span', { class: 'n' }, String(e.day)));
+  }
+
+  /* today's door, large, on the living-room wall: closed and glowing, or showing its work once opened */
+  function bigDoor(today, state, now) {
+    const lockedOn = today ? null : laterToday(now) || (now < G.advent.opensAtMs(D.sched[0]) ? D.sched[0] : null);
+    if (lockedOn) return h('div', { class: 'door today-door is-locked', 'data-day': lockedOn.day, 'data-state': 'locked', role: 'img', 'aria-label': D.t('door', { n: lockedOn.day }) }, h('span', { class: 'n' }, String(lockedOn.day)));
+    if (!today) return null;
+    const label = D.t('door', { n: today.day });
+    if (state === 'open' || today.type === 'finale') {
+      const btn = h('button', { class: `door today-door is-${state === 'open' ? 'open' : 'opened'}${today.type === 'finale' ? ' is-24' : ''}`, type: 'button', 'data-day': today.day, 'data-state': state, 'aria-label': label }, leaf(today, true), h('i', { class: 'knob' }));
+      btn.addEventListener('click', () => D.onRide(today, btn));
+      return btn;
+    }
+    const src = workSrc(today);
+    return h('button', { class: 'door today-door is-opened', type: 'button', 'data-day': today.day, 'data-state': state, 'aria-label': `${label}${today.work ? `, ${today.work.title}` : ''}`, onclick: () => D.onCard(today, 'calendar') },
+      src ? h('img', { src, alt: '', draggable: 'false' }) : h('span', { class: 'n' }, String(today.day)));
   }
 
   function show() {
@@ -79,58 +113,60 @@
     const today = A.todayEntry(D.sched, now);
     const state = today ? A.doorState(today, now, opened) : null;
     const date = new Intl.DateTimeFormat(D.lang() === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'Europe/Berlin' }).format(now);
-    const panel = h('div', { class: 'cal-panel' },
-      h('p', { class: 'eyebrow' }, D.t('calEyebrow', { date })),
-      h('p', { class: 'cal-title' }, title(today, state, now)),
-      h('div', { class: 'cal-grid' }, D.sched.map((e, i) => { const d = door(e, A.doorState(e, now, opened), today); d.style.setProperty('--i', i); return d; })),
-      state === 'open' && today.type !== 'finale' && !D.busy() ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null);
+    const big = bigDoor(today, state, now);
+    const direct = state === 'open' && today.type !== 'finale' && !D.busy();
+    const stage = h('div', { class: `cal-stage${big ? '' : ' no-door'}` },
+      big,
+      h('div', { class: 'cal-label' },
+        h('p', { class: 'eyebrow' }, D.t('calEyebrow', { date })),
+        h('p', { class: 'cal-title' }, title(today, state, now)),
+        h('p', { class: 'cal-links' },
+          h('button', { class: 'link cal-all', type: 'button', onclick: openSheet }, D.t('allDoors')),
+          direct ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null)));
+    /* the stage sits on the living-room wall */
+    const w = D.wallRect ? D.wallRect() : null;
+    if (w) {
+      const top = Math.max(w.y, 64);
+      stage.style.cssText = `left:${Math.max(w.x, 0)}px;top:${top}px;width:${Math.min(w.x + w.w, innerWidth) - Math.max(w.x, 0)}px;--wall-h:${w.y + w.h - top}px`;
+    }
+    const sheet = h('div', { class: 'cal-sheet', hidden: true, role: 'dialog', 'aria-modal': 'true', 'aria-label': D.t('allDoorsTitle') });
     let picker = null;
     if (D.demo && new URLSearchParams(D.search).has('demo')) {
-      const lang = D.lang() === 'en' ? '&lang=en' : '';
+      const lang = D.lang() === 'de' ? '&lang=de' : '';
       picker = h('nav', { class: 'cal-demo', 'aria-label': 'Demo' }, D.sched.map((e) => h('a', { href: `?day=${e.day}&demo${lang}` }, String(e.day))));
     }
-    /* the street lives: the shop window glows, snow falls */
-    const w = D.windowRect ? D.windowRect() : null;
-    const glow = w ? h('div', { class: 'cal-glow', style: `left:${w.x}px;top:${w.y}px;width:${w.w}px;height:${w.h}px` }) : null;
-    const cv = RM() ? null : h('canvas', { class: 'cal-snow', 'aria-hidden': 'true' });
-    el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), glow, cv, panel, picker);
+    /* the room lives: warm light breathes round today's door */
+    const glow = h('div', { class: 'cal-glow' });
+    el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), stage, sheet, picker);
+    if (big) big.prepend(glow);
     el.hidden = false;
-    startSnow(cv);
+    if (reopenSheet) { reopenSheet = false; openSheet(); }
     D.track('gal_calendar', { gal_today: state === 'open' || state === 'opened' ? today.day : null, gal_opened: opened.size });
   }
-  function hide() { if (el) el.hidden = true; stopSnow(); }
 
-  /* light snow over the street, only while the calendar is up */
-  function startSnow(cv) {
-    stopSnow();
-    if (!cv) return;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const W = innerWidth;
-    const H = innerHeight;
-    cv.width = Math.round(W * dpr);
-    cv.height = Math.round(H * dpr);
-    const g = cv.getContext('2d');
-    const flakes = Array.from({ length: Math.round((W * H) / 9000) }, () => ({ x: Math.random() * W, y: Math.random() * H, r: 0.8 + Math.random() * 2.2, v: 18 + Math.random() * 34, ph: Math.random() * 6.28 }));
-    let last = performance.now();
-    const draw = (t) => {
-      const dt = Math.min(0.05, (t - last) / 1000);
-      last = t;
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      g.clearRect(0, 0, W, H);
-      g.fillStyle = 'rgba(255,255,255,0.85)';
-      for (const f of flakes) {
-        f.y += f.v * dt;
-        f.x += Math.sin(t / 1400 + f.ph) * 0.3;
-        if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
-        g.beginPath();
-        g.arc(f.x, f.y, f.r, 0, 6.2832);
-        g.fill();
-      }
-      snow = requestAnimationFrame(draw);
-    };
-    draw(last);
+  /* all 24 doors, behind a link */
+  function openSheet() {
+    const sheet = el && el.querySelector('.cal-sheet');
+    if (!sheet) return;
+    const A = G.advent;
+    const now = D.now();
+    const opened = D.opened();
+    const today = A.todayEntry(D.sched, now);
+    sheet.replaceChildren(h('div', { class: 'cal-sheet-panel' },
+      h('div', { class: 'cal-sheet-head' },
+        h('p', { class: 'cal-sheet-title' }, D.t('allDoorsTitle')),
+        h('button', { class: 'link cal-sheet-close', type: 'button', onclick: closeSheet }, D.t('close'))),
+      h('div', { class: 'cal-grid' }, D.sched.map((e, i) => { const d = door(e, A.doorState(e, now, opened), today); d.style.setProperty('--i', i); return d; }))));
+    sheet.hidden = false;
+    D.track('gal_calendar_all', { gal_opened: opened.size });
+    const close = sheet.querySelector('.cal-sheet-close');
+    if (close) close.focus({ preventScroll: true });
   }
-  function stopSnow() { if (snow) cancelAnimationFrame(snow); snow = null; }
+  function closeSheet() {
+    const sheet = el && el.querySelector('.cal-sheet');
+    if (sheet) sheet.hidden = true;
+  }
+  function hide() { if (el) el.hidden = true; }
 
   /* through the door: the leaf swings open, warm light pours out and fills the screen; resolves when it has */
   function throughDoor(btn) {

@@ -11,7 +11,9 @@
       "pdpBase": "https://www.lumas.de",
       "pageUrl": "https://www.lumas.de/lp/adventskalender/",
       "giftcardUrl": "https://www.lumas.de/geschenke/gutscheine/",
-      "newsletterUrl": "https://www.lumas.de/"
+      "newsletterUrl": "https://www.lumas.de/",
+      "privacyUrl": { "de": "https://www.lumas.de/datenschutz/", "en": "https://www.lumas.com/privacy-policy/" },
+      "notify": { "companyId": "", "listId": "" }
     },
     "days": [
       {
@@ -194,7 +196,7 @@
         "date": "2026-12-07",
         "type": "work",
         "world": "village",
-        "gesture": "shutters",
+        "gesture": "lanterns",
         "opensAt": "00:00",
         "work": {
           "code": "ime97",
@@ -455,7 +457,7 @@
         "date": "2026-12-16",
         "type": "work",
         "world": "village",
-        "gesture": "shutters",
+        "gesture": "lanterns",
         "opensAt": "00:00",
         "work": {
           "code": "mcs35",
@@ -615,7 +617,6 @@
         "date": "2026-12-24",
         "type": "finale",
         "world": "village",
-        "gesture": "shutters",
         "opensAt": "00:00"
       }
     ]

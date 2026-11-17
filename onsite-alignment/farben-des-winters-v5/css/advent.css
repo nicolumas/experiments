@@ -5,10 +5,9 @@
 
 /* inside #ui, under the top bar (z 11); the ride's caption, the end panel and the skip step aside while it is open */
 #calendar { position: absolute; inset: 0; z-index: 9; overflow: hidden; background: #b7c2d8; }
-#calendar .cal-snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-/* the shop window's light, on the street plate (never on art): a slow candle-like breath */
-#calendar .cal-glow { position: absolute; pointer-events: none; mix-blend-mode: screen;
-  background: radial-gradient(60% 70% at 50% 60%, rgba(255, 214, 140, .55), rgba(255, 196, 110, 0) 70%);
+/* warm light round today's door on the wall (never on art): a slow candle-like breath */
+#calendar .cal-glow { position: absolute; inset: -38% -48%; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 214, 140, .62), rgba(255, 196, 110, 0));
   animation: cal-window 3.6s ease-in-out infinite alternate; }
 @keyframes cal-window { 0% { opacity: .55; } 40% { opacity: .8; } 55% { opacity: .62; } 100% { opacity: .9; } }
 /* the light that pours out of today's door */
@@ -18,48 +17,92 @@
 #ui.cal-open #caption, #ui.cal-open #end, #ui.cal-open #btnToDoor { visibility: hidden; }
 #calendar[hidden] { display: none; }
 #calendar .cal-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-#calendar .cal-panel { position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(var(--safe-b) + 16px); background: var(--ivory); padding: 16px 16px 14px;
-  animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) both; }
-@keyframes cal-panel-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-#calendar .cal-title { margin: 4px 0 12px; font-family: var(--font-display); font-size: 24px; line-height: 1.2; text-wrap: balance; }
+
+/* the stage on the living-room wall: today's door, large, and a small label under it (beside it on wide screens) */
+#calendar .cal-stage { position: absolute; left: 0; top: 64px; width: 100%; --wall-h: 60vh; --door-h: min(calc(var(--wall-h) * .6), 46vh, 300px);
+  display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 8px var(--gutter) 0; }
+#calendar .cal-label { position: relative; max-width: 340px; padding: 14px 18px 12px; background: var(--ivory);
+  animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) 160ms both; }
+#calendar .cal-stage.no-door .cal-label { margin-top: calc(var(--wall-h) * .18); }
+@keyframes cal-panel-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+#calendar .cal-title { margin: 4px 0 8px; font-family: var(--font-display); font-size: 24px; line-height: 1.2; text-wrap: balance; }
+#calendar .cal-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; }
+@media (min-aspect-ratio: 1/1) {
+  #calendar .cal-stage { --door-h: min(calc(var(--wall-h) * .86), 62vh, 360px); flex-direction: row; justify-content: center; gap: 36px; padding-top: 0;
+    height: var(--wall-h); }
+  #calendar .cal-stage.no-door .cal-label { margin-top: 0; }
+  #calendar .cal-title { font-size: 30px; }
+}
+
+/* today's door: a tall charcoal door with a brass line and knob; warm light behind it; its leaf swings open */
+#calendar .today-door { position: relative; flex: none; height: var(--door-h); aspect-ratio: 3 / 4; display: grid; place-items: center;
+  padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e); perspective: 900px; color: var(--ivory);
+  animation: cal-big-in 620ms cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes cal-big-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+#calendar button.today-door { cursor: pointer; transition: transform 160ms var(--ease-out); }
+#calendar button.today-door:active { transform: scale(.98); }
+#calendar .today-door .leaf { position: absolute; inset: 0; display: grid; place-items: center; background: var(--charcoal);
+  box-shadow: inset 0 0 0 10px var(--charcoal), inset 0 0 0 11px #c9a25a, 0 14px 24px -14px rgba(60, 40, 20, .6);
+  transform-origin: 0 50%; transition: transform 620ms cubic-bezier(.2, .8, .2, 1); }
+#calendar .today-door .n { font-family: var(--font-display); font-weight: 300; font-size: calc(var(--door-h) * .34); line-height: 1; color: var(--ivory); }
+#calendar .today-door .knob { position: absolute; right: 12%; top: 54%; width: 9px; height: 9px; border-radius: 50%; background: #c9a25a; pointer-events: none;
+  transition: opacity 200ms; }
+#calendar .today-door.opening .knob { opacity: 0; }
+#calendar .today-door.opening .leaf { transform: rotateY(-108deg); }
+#calendar .today-door .spark { bottom: 86%; }
+#calendar .today-door.is-opened { background: none; }
+#calendar .today-door.is-opened img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
+#calendar .today-door.is-locked { background: none; }
+#calendar .today-door.is-locked .n { color: rgba(90, 87, 82, .7); }
+#calendar .today-door.is-locked::before { content: ""; position: absolute; inset: 0; background: var(--bone); box-shadow: inset 0 0 0 10px var(--bone), inset 0 0 0 11px rgba(29, 29, 29, .16); z-index: -1; }
+
+/* all doors: a sheet over the room */
+#calendar .cal-sheet { position: absolute; inset: 0; z-index: 2; display: flex; align-items: flex-end; justify-content: center; background: rgba(29, 29, 29, .32); }
+#calendar .cal-sheet[hidden] { display: none; }
+#calendar .cal-sheet-panel { width: 100%; max-height: calc(100% - 72px); overflow-y: auto; background: var(--ivory); padding: 18px var(--gutter) calc(var(--safe-b) + 20px);
+  animation: cal-panel-in 420ms cubic-bezier(.2, .8, .2, 1) both; }
+#calendar .cal-sheet-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+#calendar .cal-sheet-title { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.2; }
+@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+  #calendar .cal-sheet { align-items: center; }
+  #calendar .cal-sheet-panel { width: 620px; padding: 24px 28px 26px; }
+}
 #calendar .cal-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
-#calendar .door { position: relative; min-width: 0; aspect-ratio: 1; display: grid; overflow: hidden; place-items: center; padding: 3px; border: 0; background: transparent;
+@media (min-width: 900px) and (min-aspect-ratio: 9/10) { #calendar .cal-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+#calendar .cal-grid .door { position: relative; min-width: 0; aspect-ratio: 1; display: grid; overflow: hidden; place-items: center; padding: 3px; border: 0; background: transparent;
   box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .16); color: var(--muted); font: 500 13px/1 var(--font-text);
   animation: cal-door-in 420ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 16ms + 120ms); }
-@keyframes cal-door-in { from { opacity: 0; transform: translateY(6px) scale(.94); } to { opacity: 1; transform: none; } }
-#calendar button.door { cursor: pointer; transition: transform 160ms var(--ease-out); }
-#calendar button.door:active { transform: scale(.96); }
-/* today's door: warm light behind a charcoal leaf that swings open when tapped; sparks rise from it */
-#calendar .door.is-open { overflow: visible; padding: 0; perspective: 300px; color: var(--ivory);
-  background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
+@keyframes cal-door-in { from { opacity: 0; transform: translateY(6px) scale(.94); } to { opacity: var(--o, 1); transform: none; } }
+#calendar .cal-grid button.door { cursor: pointer; transition: transform 160ms var(--ease-out); }
+#calendar .cal-grid button.door:active { transform: scale(.96); }
+/* today's door (and the drop still open on 22.12.): warm light behind a charcoal leaf; a missed door: a bone leaf;
+   both swing open when tapped */
+#calendar .cal-grid .door.is-open, #calendar .cal-grid .door.is-missed { overflow: visible; padding: 0; perspective: 300px; }
+#calendar .cal-grid .door.is-open { color: var(--ivory); background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
   box-shadow: 0 0 0 2px #f2c46b; animation: cal-door-in 420ms cubic-bezier(.2, .8, .2, 1) both, cal-glow 2.4s ease-in-out 700ms infinite alternate;
   animation-delay: calc(var(--i, 0) * 16ms + 120ms), 700ms; }
-#calendar .door.is-open .leaf { position: absolute; inset: 0; display: grid; place-items: center; background: var(--charcoal);
+#calendar .cal-grid .door.is-missed { background: radial-gradient(closest-side, #fffaf0, #f3e6cf); }
+#calendar .cal-grid .door .leaf { position: absolute; inset: 0; display: grid; place-items: center; background: var(--charcoal);
   transform-origin: 0 50%; transition: transform 520ms cubic-bezier(.2, .8, .2, 1); }
-#calendar .door.is-open.opening .leaf { transform: rotateY(-112deg); }
+#calendar .cal-grid .door.is-missed .leaf { background: var(--bone); box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .16); }
+#calendar .cal-grid .door.opening .leaf { transform: rotateY(-112deg); }
 #calendar .door .spark { position: absolute; left: calc(18% + var(--s) * 21%); bottom: 70%; width: 3px; height: 3px; border-radius: 50%;
   background: #ffe2a8; box-shadow: 0 0 6px 2px rgba(255, 210, 130, .8); opacity: 0; pointer-events: none;
   animation: cal-spark 2.6s ease-out infinite; animation-delay: calc(var(--s) * 650ms + 900ms); }
 @keyframes cal-spark { 0% { opacity: 0; transform: translateY(0) scale(.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-34px) scale(1); } }
-#calendar .door.is-opened { box-shadow: none; }
-#calendar .door.is-opened img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; }
-#calendar .door.is-missed { color: rgba(90, 87, 82, .55); box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .08); }
-#calendar .door.is-sunday .n, #calendar .door.is-24 .n { font-weight: 700; color: var(--charcoal); }
-#calendar .door.is-open .n { color: var(--ivory); }
-#calendar .cal-direct { margin-top: 12px; }
-#calendar .cal-demo { position: absolute; left: var(--gutter); right: var(--gutter); top: calc(var(--safe-t) + 66px); display: flex; flex-wrap: wrap; gap: 4px; }
+#calendar .cal-grid .door.is-opened { box-shadow: none; }
+#calendar .cal-grid .door.is-opened img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; }
+#calendar .cal-grid .door.is-locked { --o: .4; opacity: .4; }
+#calendar .cal-grid .door.is-sunday .n, #calendar .cal-grid .door.is-24 .n { font-weight: 700; color: var(--charcoal); }
+#calendar .cal-grid .door.is-open .n { color: var(--ivory); }
+#calendar .cal-demo { position: absolute; z-index: 3; left: var(--gutter); right: var(--gutter); bottom: calc(var(--safe-b) + 10px); display: flex; flex-wrap: wrap; gap: 4px; }
 #calendar .cal-demo a { min-width: 28px; padding: 5px 0; text-align: center; background: rgba(254, 253, 249, .72); color: var(--muted); font-size: 13px; text-decoration: none; }
 @keyframes cal-glow { from { box-shadow: 0 0 0 2px #f2c46b; } to { box-shadow: 0 0 0 2px #f2c46b, 0 0 14px 2px rgba(242, 196, 107, .7); } }
-@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
-  #calendar .cal-panel { right: auto; width: 560px; bottom: 28px; padding: 22px 24px 20px; }
-  #calendar .cal-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  #calendar .cal-title { font-size: 30px; }
-}
 @media (prefers-reduced-motion: reduce) {
-  #calendar .door, #calendar .door.is-open, #calendar .cal-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
+  #calendar .door, #calendar .cal-grid .door.is-open, #calendar .cal-label, #calendar .cal-sheet-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
   #calendar .door .spark { display: none; }
+  #calendar .door .leaf { transition: none; }
 }
-
 /* ------------------------------------------------------------ the offer card */
 
 #offer { position: absolute; inset: 0; z-index: 17; overflow-y: auto; overscroll-behavior: contain; pointer-events: none; }
@@ -87,6 +130,20 @@
 #offer .offer-foot { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line); }
 #offer .offer-foot p { margin: 0 0 8px; font-size: 15px; }
 #offer .offer-links { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+/* the sign-up for tomorrow's door */
+#offer .offer-notify { margin: 0 0 16px; }
+#offer .offer-notify label { display: block; margin: 0 0 8px; font-family: var(--font-display); font-size: 20px; line-height: 1.25; }
+#offer .offer-notify .row { display: flex; gap: 8px; }
+#offer .offer-notify input { flex: 1; min-width: 0; height: 46px; padding: 0 12px; border: 1px solid rgba(29, 29, 29, .3); border-radius: 4px;
+  background: #fff; color: var(--charcoal); font: 400 16px var(--font-text); }
+#offer .offer-notify input:focus-visible { outline: 2px solid var(--charcoal); outline-offset: 1px; }
+#offer .offer-notify input[aria-invalid="true"] { border-color: var(--red); }
+#offer .offer-notify .btn { flex: none; height: 46px; }
+#offer .offer-notify .msg { margin: 6px 0 0; font-size: 14px; color: var(--red); }
+#offer .offer-notify .msg:empty { display: none; }
+#offer .offer-notify .fine { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+#offer .offer-notify .fine .link { font-size: 13px; color: var(--muted); }
+#offer .offer-notified { margin: 0 0 16px; font-family: var(--font-display); font-size: 20px; line-height: 1.25; }
 @keyframes offer-in { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (min-width: 900px) and (min-aspect-ratio: 9/10) {
   #offer .offer-body { width: 520px; margin-left: var(--gutter); padding: 32px 36px 36px; }
@@ -99,7 +156,7 @@
   #offer .price s::after { animation: none; transform: none; }
 }
 /* the work flying home into its door */
-.fly-home { position: absolute; z-index: 10; pointer-events: none; transform-origin: 0 0; }
+#ui .fly-home { position: absolute; z-index: 10; pointer-events: none; transform-origin: 0 0; }
 .fly-home img { display: block; width: 100%; height: 100%; }
 #calendar .door.home { animation: cal-home 900ms cubic-bezier(.2, .8, .2, 1); }
 @keyframes cal-home { 0% { box-shadow: 0 0 0 0 rgba(242, 196, 107, .8); } 100% { box-shadow: 0 0 0 10px rgba(242, 196, 107, 0); } }
@@ -161,16 +218,6 @@
 .g-bow::before { left: 0; }
 .g-bow::after { right: 0; }
 
-/* shutters in front of the gallery window */
-.g-shutter { width: 50%; pointer-events: auto; cursor: pointer;
-  background: repeating-linear-gradient(180deg, #4b5b6c 0 10px, #3e4c5b 10px 12px);
-  box-shadow: inset 0 0 0 2px #33404d; transition: transform 520ms cubic-bezier(.2, .8, .2, 1); }
-.g-shutter-l { left: 0; transform-origin: 0 50%; }
-.g-shutter-r { left: 50%; transform-origin: 100% 50%; }
-.g-shutter-l.open { transform: perspective(700px) rotateY(105deg); }
-.g-shutter-r.open { transform: perspective(700px) rotateY(-105deg); }
-.g-shutter:focus-visible { outline: 2px solid #FEFDF9; outline-offset: -4px; }
-
 /* the dark the candle lights */
 .g-dark { --r: 0; background: #1f2533;
   -webkit-mask-image: radial-gradient(circle at 50% 88%, transparent calc(var(--r) * 1%), #000 calc(var(--r) * 1% + 18%));
@@ -190,11 +237,6 @@
 .g-glint { width: 10px; height: 10px; border-radius: 0; background: radial-gradient(closest-side, #fff, rgba(255, 255, 255, 0));
   clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
 .g-spark { width: 4px; height: 4px; background: #ffe2a8; box-shadow: 0 0 6px 2px rgba(255, 196, 110, .85); }
-/* warm light round the gallery window as the shutters open: behind the work, so only its edges glow */
-.g-spill { position: absolute; inset: -30%; z-index: -1; pointer-events: none; opacity: 0;
-  background: radial-gradient(closest-side, rgba(255, 220, 160, .95), rgba(255, 200, 120, .45) 60%, rgba(255, 200, 120, 0));
-  transition: opacity 520ms cubic-bezier(.2, .8, .2, 1); }
-.g-spill.on { opacity: 1; }
 
 /* the hint and the fallback */
 .g-hint { margin: 0; font-family: var(--font-display, "Utile Display", Georgia, serif); font-size: 21px; line-height: 1.25; }
@@ -205,6 +247,6 @@
 .g-open[hidden] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .g-shutter, .g-lantern { transition: none; }
+  .g-lantern { transition: none; }
   .g-candle.lit .g-flame { animation: none; }
 }

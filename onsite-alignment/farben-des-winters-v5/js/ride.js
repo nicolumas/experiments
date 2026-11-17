@@ -10,7 +10,7 @@
 
   const G = (window.GAL = window.GAL || {});
   const q = new URLSearchParams(location.search);
-  let LANG = (G.LANG = q.get('lang') === 'en' ? 'en' : 'de');
+  let LANG = (G.LANG = q.get('lang') === 'de' ? 'de' : 'en');
   const RM = (G.RM = matchMedia('(prefers-reduced-motion: reduce)').matches);
   const SPEED = (G.SPEED = q.has('fast') ? 3 : 1);
   const AUTO = q.has('auto');
@@ -56,20 +56,22 @@
       door: 'Tür {n}', toDoor: 'Direkt zur Tür', tCalendar: 'Kalender',
       calEyebrow: 'Kunstvolle Weihnachten · {date}', calToday: 'Tür {n} wartet auf dich.', calBefore: 'Tür 1 öffnet am 1. Dezember.',
       calOpensAt: 'Tür {n} öffnet heute um {time} Uhr.', byEdition: '{artist}. Edition von {n}.',
-      calOpened: 'Tür {n} ist offen. Morgen öffnet Tür {m}.', calAfter: 'Der Adventskalender ist vorbei.', direct: 'Heutiges Angebot direkt ansehen',
+      calOpened: 'Tür {n} ist offen. Morgen öffnet Tür {m}.', allDoors: 'Alle Türen ansehen', allDoorsTitle: 'Alle Türen', close: 'Schließen', calAfter: 'Der Adventskalender ist vorbei.', direct: 'Heutiges Angebot direkt ansehen',
       offerEyebrow: 'Tür {n} · Nur heute {pct}% off', offerEnded: 'Dieses Angebot ist vorbei.', signedLower: 'handsigniert',
       lastDelivery: 'Letzter Tag für die Lieferung bis Weihnachten', artWeekend: 'Passend zum Art Weekend am {date}',
       code: 'Code', copyCode: 'Code kopieren', copied: 'Kopiert', codeLater: 'Der Code folgt.',
       dropEyebrow: 'Tür {n} · Art Drop', dropUntil: 'Nur bis {date}, {time} Uhr', dropEnded: 'Dieser Art Drop ist vorbei.',
       giftEyebrow: 'Tür {n} · Gutschein', giftTitle: 'Ein Gutschein für die Kunst', giftLine: 'Per E-Mail, sofort da, für jedes Werk bei LUMAS.', giftCta: 'Gutschein verschenken',
-      tomorrow: 'Morgen öffnet Tür {n}.', remind: 'Erinner mich', newsletter: 'Zum Newsletter', tMusic: 'Musik', musicOn: 'Musik an', musicOff: 'Musik aus',
+      tomorrow: 'Morgen öffnet Tür {n}.', remind: 'Erinner mich', newsletter: 'Zum Newsletter',
+      notifyLabel: 'Schick mir eine E-Mail, wenn Tür {n} öffnet.', notifyPlaceholder: 'Deine E-Mail-Adresse', notifyCta: 'Benachrichtigen',
+      notifyFine: 'Du kannst dich jederzeit abmelden.', privacy: 'Datenschutz', notifyInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+      notifyDone: 'Danke. Wir schreiben dir, wenn Tür {n} öffnet.', notifyFail: 'Das hat nicht geklappt. Bitte versuch es noch einmal.', tMusic: 'Musik', musicOn: 'Musik an', musicOff: 'Musik aus',
       howTo: 'Tippen zum Springen. Halten zum Schweben.',
       feel: { gratitude: 'Dankbarkeit', admiration: 'Bewunderung', memory: 'Erinnerung', hope: 'Hoffnung', love: 'Liebe' },
       place: { birch: 'Am Birkenhang, morgens', lake: 'Am See, vormittags', mountain: 'Am Berg, mittags', village: 'Im Dorf, zur blauen Stunde', shore: 'Am Meer, im letzten Licht' },
       ded: { birch: 'Für alles, was nie selbstverständlich war.', lake: 'Für einen Moment, der geblieben ist.', mountain: 'Für jemanden, zu dem du aufschaust.', village: 'Für alles, was noch kommt.', shore: 'Für das, was zwei Menschen verbindet.' },
-            handsigned: 'Handsigniert', edition: 'Edition von {n}', from: 'ab', smallest: 'kleinste Größe', toWork: 'Zum Werk',       streetEyebrow: 'Am Abend', streetLine: 'In der Galerie brennt noch Licht.', streetSub: 'Deine fünf Werke warten drinnen.', enter: 'Eintreten',
-      window: ['Kunstvolle', 'Weihnachten'],
-      galleryEyebrow: 'In der Galerie', galleryLine: 'Welches Werk sagt es?', gallerySub: 'Tipp auf ein Werk.',
+            handsigned: 'Handsigniert', edition: 'Edition von {n}', from: 'ab', smallest: 'kleinste Größe', toWork: 'Zum Werk',       streetEyebrow: 'Am Abend', streetLine: 'Zu Hause brennt Licht.', streetSub: 'Deine fünf Werke warten drinnen.', enter: 'Eintreten',
+      galleryEyebrow: 'Zu Hause', galleryLine: 'Welches Werk sagt es?', gallerySub: 'Tipp auf ein Werk.',
       choose: 'Dieses Werk sagt es', back: 'Zurück',
       found: { birch: 'Gefunden am Birkenhang, im ersten Licht des Tages.', lake: 'Gefunden am See, als das Eis in der Sonne lag.', mountain: 'Gefunden oben am Berg, in der Mittagssonne.', village: 'Gefunden im Dorf, als die Lichter angingen.', shore: 'Gefunden am Meer, im letzten Licht.' },
       signedBy: 'Handsigniert von {artist}. Edition von {n}.', tapMore: 'Tippen zum Weiterlesen',
@@ -84,20 +86,22 @@
       door: 'Door {n}', toDoor: 'Straight to the door', tCalendar: 'Calendar',
       calEyebrow: 'Artful Christmas · {date}', calToday: 'Door {n} is waiting for you.', calBefore: 'Door 1 opens on 1 December.',
       calOpensAt: 'Door {n} opens today at {time}.', byEdition: '{artist}. Edition of {n}.',
-      calOpened: 'Door {n} is open. Tomorrow, door {m} opens.', calAfter: 'The advent calendar has ended.', direct: "See today's offer directly",
+      calOpened: 'Door {n} is open. Tomorrow, door {m} opens.', allDoors: 'See all doors', allDoorsTitle: 'All doors', close: 'Close', calAfter: 'The advent calendar has ended.', direct: "See today's offer directly",
       offerEyebrow: 'Door {n} · Today only {pct}% off', offerEnded: 'This offer has ended.', signedLower: 'hand-signed',
       lastDelivery: 'Last day for delivery by Christmas', artWeekend: 'For the Art Weekend on {date}',
       code: 'Code', copyCode: 'Copy code', copied: 'Copied', codeLater: 'The code follows.',
       dropEyebrow: 'Door {n} · Art Drop', dropUntil: 'Only until {date}, {time}', dropEnded: 'This art drop has ended.',
       giftEyebrow: 'Door {n} · Gift card', giftTitle: 'A gift card for art', giftLine: 'By email, instantly, for any work at LUMAS.', giftCta: 'Give a gift card',
-      tomorrow: 'Tomorrow, door {n} opens.', remind: 'Remind me', newsletter: 'Newsletter', tMusic: 'Music', musicOn: 'Music on', musicOff: 'Music off',
+      tomorrow: 'Tomorrow, door {n} opens.', remind: 'Remind me', newsletter: 'Newsletter',
+      notifyLabel: 'Email me when door {n} opens.', notifyPlaceholder: 'Your email address', notifyCta: 'Notify me',
+      notifyFine: 'You can unsubscribe at any time.', privacy: 'Privacy policy', notifyInvalid: 'Please enter a valid email address.',
+      notifyDone: "Thank you. We'll email you when door {n} opens.", notifyFail: 'That did not work. Please try again.', tMusic: 'Music', musicOn: 'Music on', musicOff: 'Music off',
       howTo: 'Tap to jump. Hold to float.',
       feel: { gratitude: 'Gratitude', admiration: 'Admiration', memory: 'Memory', hope: 'Hope', love: 'Love' },
       place: { birch: 'The birch slope, morning', lake: 'The lake, late morning', mountain: 'The mountain, noon', village: 'The village, blue hour', shore: 'The sea, last light' },
       ded: { birch: 'For everything that was never a given.', lake: 'For a moment that stayed.', mountain: 'For someone you look up to.', village: 'For everything still to come.', shore: 'For what connects two people.' },
-            handsigned: 'Hand-signed', edition: 'Edition of {n}', from: 'from', smallest: 'smallest size', toWork: 'View the work',       streetEyebrow: 'In the evening', streetLine: 'The gallery still has its lights on.', streetSub: 'Your five works are waiting inside.', enter: 'Step inside',
-      window: ['Artful', 'Christmas'],
-      galleryEyebrow: 'In the gallery', galleryLine: 'Which work says it?', gallerySub: 'Tap a work.',
+            handsigned: 'Hand-signed', edition: 'Edition of {n}', from: 'from', smallest: 'smallest size', toWork: 'View the work',       streetEyebrow: 'In the evening', streetLine: 'The lights are on at home.', streetSub: 'Your five works are waiting inside.', enter: 'Step inside',
+      galleryEyebrow: 'At home', galleryLine: 'Which work says it?', gallerySub: 'Tap a work.',
       choose: 'This work says it', back: 'Back',
       found: { birch: 'Found on the birch slope, in the first light of the day.', lake: 'Found by the lake, while the ice lay in the sun.', mountain: 'Found high on the mountain, in the midday sun.', village: 'Found in the village, as the lights came on.', shore: 'Found by the sea, in the last light.' },
       signedBy: 'Hand-signed by {artist}. Edition of {n}.', tapMore: 'Tap to read on',
@@ -163,15 +167,15 @@
       life: [{ id: 'winter-dog-walker', depth: 'back', at: 0.15, vx: 30 }, { id: 'snowshoe-walker', depth: 'mid', at: 0.5, vx: -24 }, { id: 'playful-winter-child', depth: 'mid', at: 0.8, vx: 0 }] },
   ];
   const worldById = (id) => ALL_WORLDS.find((w) => w.id === id);
-  /* the day: today's door (or the demo day); its course is one world. Street days (shutters, the 24th) ride the
-     village and run on into the street; every other day stops at a door at the viewpoint. */
+  /* the day: today's door (or the demo day); its course is one world. The 24th rides the village and runs on home;
+     every other day stops at a door at the viewpoint. */
   const AD = G.advent;
   const SCHED = window.GAL_ADVENT.days;
   const SIM_NOW = AD.simulatedNow(location.search, SCHED, !!(G.BUILD && G.BUILD.demo));
   const SIMULATED = SIM_NOW !== null;
   const NOW = SIMULATED ? SIM_NOW : Date.now();
   const DAY = AD.todayEntry(SCHED, NOW) || SCHED[0];
-  const STREET_DAY = DAY.gesture === 'shutters' || DAY.type === 'finale';
+  const STREET_DAY = DAY.type === 'finale';
   function courseFor(e) {
     const w = worldById(STREET_DAY ? 'village' : e.world);
     w.door = !STREET_DAY;
@@ -1125,16 +1129,6 @@
     const b = canvasBox(WORLDS[0]);
     return b.h * stopZoom() * 0.5 + vh * (portrait ? 0.24 : 0.3);
   }
-  /* a street day: the work hangs in the gallery window behind two shutters */
-  async function openStreetDoor({ skipped }) {
-    const w = WORLDS[0];
-    track('gal_door_open', { gal_day: DAY.day, gal_world: 'street', gal_gesture: DAY.gesture, gal_path: skipped ? 'skip' : 'ride' });
-    caption(() => ({ eyebrow: `${t('door', { n: DAY.day })} · ${t('streetEyebrow')}` }), { instant: true });
-    const how = await S.streetDoor.start({ skipped, rm: RM, ui: $('#capDoor'), boost: clamp((w.fleckGot || 0) / Math.max(1, w.fleckTotal || 1), 0, 1) });
-    const hw = S.street.hung[0].getBoundingClientRect();
-    S.streetDoor = null;
-    doorOpened(how, 'village', hw.bottom);
-  }
   /* "Direkt zur Tür": the sled is set down in front of the work (or the street, on a street day) */
   function showToDoor(on) {
     $('#btnToDoor').hidden = !on;
@@ -1144,7 +1138,7 @@
     if (S.phase !== 'ride') return;
     const w = WORLDS[0];
     track('gal_ride_skip', { gal_day: DAY.day });
-    if (!w.door) { w.done = true; showToDoor(false); S.phase = 'toStreet'; rideToStreet({ skipped: true }); return; }
+    if (!w.door) { w.done = true; showToDoor(false); S.phase = 'toStreet'; rideToStreet(); return; }
     const b = canvasBox(w);
     sled.x = b.x - 70;
     sled.y = groundY(sled.x);
@@ -1223,16 +1217,12 @@
     capT = setTimeout(apply, RM ? 0 : 260);
   }
   const hideCaption = () => { clearTimeout(capT); capSpec = null; cap.classList.add('out'); };
-  /* ------------------------------------------------------------ the street and the gallery */
+  /* ------------------------------------------------------------ home: the house in the evening and the living room
+     (the phases keep their old names, 'street' and 'gallery') */
 
   const anchors = {
-    street: {
-      glass: { w: [0.222, 0.335, 0.633, 0.735], t: [0.112, 0.392, 0.664, 0.69] },
-      wall: { w: [0.33, 0.37, 0.628, 0.69], t: [0.3, 0.41, 0.66, 0.665] },
-      transom: { w: [0.222, 0.245, 0.633, 0.32], t: [0.112, 0.348, 0.664, 0.388] },
-      door: { w: [0.652, 0.335, 0.755, 0.81], t: [0.67, 0.39, 0.85, 0.735] },
-    },
-    gallery: { wall: { w: [0.09, 0.2, 0.9, 0.7], t: [0.06, 0.13, 0.94, 0.7] } },
+    street: { door: { w: [0.679, 0.266, 0.81, 0.8], t: [0.71, 0.405, 0.87, 0.673] } },
+    gallery: { wall: { w: [0.13, 0.09, 0.82, 0.52], t: [0.14, 0.07, 0.92, 0.52] } },
   };
   function plateBox(ar) {
     let pw;
@@ -1272,47 +1262,26 @@
     });
     return out;
   }
-  /* the 24th hangs the five opened works with the best revenue rank; a street day hangs today's work, covered */
+  /* the 24th hangs the five opened works with the best revenue rank */
   const wallEntries = () => AD.wallPicks(SCHED, [...openedNow()], 5, nowMs());
-  const windowWorks = () => (DAY.type === 'finale' ? wallEntries().map((e) => e.work) : [WORLDS[0].work]);
   const artSrc = (w) => (w.code ? `assets/art/${w.code}.webp` : w.img);
 
+  /* the house in the evening: the window lit, the green door with its wreath; the sled stops at the door */
   function buildStreet() {
     const el = $('#street');
     const box = plateBox(portrait ? 752 / 1344 : 1344 / 752);
-    const glass = rectOn(box, 'glass', 'street');
-    const wall = rectOn(box, 'wall', 'street');
-    const transom = rectOn(box, 'transom', 'street');
     const door = rectOn(box, 'door', 'street');
-    const decalH = glass.h * 0.3;
-    const fs = Math.max(13, glass.w * (portrait ? 0.068 : 0.044));
-    const lineTop = glass.h - decalH - fs * 2.5;
-    const wallTop = wall.y - glass.y + wall.h * 0.05;
-    const wallIn = { x: wall.x - glass.x + wall.w * 0.04, y: wallTop, w: wall.w * 0.92, h: lineTop - 10 - wallTop };
-    const shop = h('div', { class: 'shop', style: `left:${glass.x}px;top:${glass.y}px;width:${glass.w}px;height:${glass.h}px` });
-    const hung = hangLayout(windowWorks(), wallIn, { maxHK: 0.75, gapK: 0.1 }).map((it) => {
-      const el2 = h('div', { class: 'hung', style: `left:${it.x - it.w / 2}px;top:${it.y - it.h / 2}px;width:${it.w}px;height:${it.h}px` }, h('img', { src: artSrc(it.work), alt: '' }));
-      shop.append(el2);
-      return el2;
-    });
-    const decal = h('div', { class: 'decal', style: `height:${decalH}px` });
-    decal.innerHTML = '<svg viewBox="0 0 1000 300" preserveAspectRatio="none"><path d="M0 120 C 160 70 300 60 420 105 C 540 150 640 160 760 120 C 860 88 940 80 1000 92 L1000 300 L0 300 Z" fill="#FBFBF9"/><path d="M0 200 C 220 170 420 210 600 196 C 760 184 880 170 1000 182 L1000 300 L0 300 Z" fill="#E7ECF4"/><path d="M40 64 L53 108 L27 108 Z M905 46 L917 86 L893 86 Z M940 48 L954 92 L926 92 Z M500 109 L509 140 L491 140 Z" fill="#2E4A52"/></svg>';
-    shop.append(decal);
-    const logoH = Math.max(10, transom.h * 0.42);
     const sledW = Math.min(vw * 0.2, door.h * 0.42);
     const sledH = sledW / kitAr('sledging-child');
     const doorBtn = h('button', { class: 'door call', type: 'button', 'aria-label': t('enter'), style: `left:${door.x}px;top:${door.y}px;width:${door.w}px;height:${door.h}px` });
     const sledder = h('div', { class: 'sledder', style: `width:${sledW}px;height:${sledH}px` }, h('img', { src: 'assets/people/kit/sledging-child.webp', alt: '' }));
     el.replaceChildren(
-      h('img', { class: 'plate', src: 'assets/scenes/street-' + o() + '.webp', alt: '', style: `left:${box.x0}px;top:${box.y0}px;width:${box.pw}px;height:${box.ph}px` }),
-      h('div', { class: 'layer' }, shop,
-        h('img', { class: 'shop-logo', src: 'assets/lumas-logo.svg', alt: '', style: `height:${logoH}px;left:${transom.x + transom.w / 2 - logoH * 2.67}px;top:${transom.y + (transom.h - logoH) / 2}px;width:${logoH * 5.33}px` }),
-        h('p', { class: 'shop-line', style: `font-size:${fs}px;left:${glass.x}px;width:${glass.w}px;top:${glass.y + lineTop}px` }, COPY.window[0], h('br'), COPY.window[1]),
-        doorBtn, sledder));
-    return { door, doorBtn, sledder, sledW, sledH, hung, groundY: door.y + door.h + vh * 0.025 };
+      h('img', { class: 'plate', src: 'assets/scenes/home-out-' + o() + '.webp', alt: '', style: `left:${box.x0}px;top:${box.y0}px;width:${box.pw}px;height:${box.ph}px` }),
+      h('div', { class: 'layer' }, doorBtn, sledder));
+    return { door, doorBtn, sledder, sledW, sledH, groundY: door.y + door.h + vh * 0.025 };
   }
-  async function rideToStreet({ skipped = false } = {}) {
-    /* the last slope runs into town: the snow brightens to white and the street is there */
+  async function rideToStreet() {
+    /* the last slope runs home: the snow brightens to white and the house is there */
     const wo = $('#whiteout');
     showToDoor(false);
     sfx('setScene', 'street');
@@ -1320,10 +1289,6 @@
     S.phase = 'street';
     const st = buildStreet();
     S.street = st;
-    if (DAY.type !== 'finale') {
-      const hw = st.hung[0];
-      S.streetDoor = G.gestures.prepare('shutters', { host: hw, rect: { w: hw.offsetWidth, h: hw.offsetHeight }, palette: WORLDS[0].pal || [], boost: 0, lang: LANG });
-    }
     $('#street').hidden = false;
     $('#rings').hidden = true;
     const from = -st.sledW;
@@ -1332,7 +1297,6 @@
     anim(wo, [{ opacity: 1 }, { opacity: 0 }], { duration: 900, easing: 'ease-out' });
     track('gal_street');
     await anim(st.sledder, [{ transform: `translate3d(${from}px, ${st.groundY - st.sledH}px, 0)` }, { transform: `translate3d(${to}px, ${st.groundY - st.sledH}px, 0) rotate(-2deg)`, offset: 0.92 }, { transform: `translate3d(${to}px, ${st.groundY - st.sledH}px, 0)` }], { duration: 2600, easing: 'cubic-bezier(.2,.7,.25,1)' });
-    if (DAY.type !== 'finale') { await openStreetDoor({ skipped }); return; }
     await new Promise((resolve) => {
       S.enterGo = resolve;
       caption(() => ({ eyebrow: t('streetEyebrow'), line: t('streetLine'), sub: t('streetSub'), row: [h('button', { class: 'btn', type: 'button', onclick: () => S.enterGo && S.enterGo() }, t('enter'))] }));
@@ -1345,7 +1309,7 @@
     await enterGallery(st.door);
   }
   async function enterGallery(door) {
-    /* warm light from the door fills the screen; when it clears, you stand in the gallery */
+    /* warm light from the door fills the screen; when it clears, you stand in the living room */
     const flash = $('#flash');
     if (door) { flash.style.setProperty('--fx', `${((door.x + door.w / 2) / vw) * 100}%`); flash.style.setProperty('--fy', `${((door.y + door.h * 0.5) / vh) * 100}%`); }
     await anim(flash, [{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-in' });
@@ -1365,7 +1329,7 @@
     const box = plateBox(portrait ? 752 / 1344 : 1344 / 752);
     const wall = rectOn(box, 'wall', 'gallery');
     const layer = h('div', { class: 'layer' });
-    el.replaceChildren(h('img', { class: 'plate', src: 'assets/scenes/gallery-' + o() + '.webp', alt: '', style: `left:${box.x0}px;top:${box.y0}px;width:${box.pw}px;height:${box.ph}px` }), layer);
+    el.replaceChildren(h('img', { class: 'plate', src: 'assets/scenes/home-in-' + o() + '.webp', alt: '', style: `left:${box.x0}px;top:${box.y0}px;width:${box.pw}px;height:${box.ph}px` }), layer);
     const entries = wallEntries();
     const laid = hangLayout(entries.map((e) => e.work), wall, { maxHK: portrait ? 0.36 : 0.6, gapK: portrait ? 0.14 : 0.08, fill: 0.88 });
     S.items = laid.map((it, i) => {
@@ -1661,7 +1625,7 @@
     if (G.calendar.visible()) G.calendar.show();
     G.offer.refresh();
     if (S.phase === 'end' && S.chosen && $('#end').classList.contains('show')) showEnd(S.chosen);
-    try { const u = new URL(location.href); if (l === 'en') u.searchParams.set('lang', 'en'); else u.searchParams.delete('lang'); history.replaceState(null, '', u); } catch (e) { /* ignore */ }
+    try { const u = new URL(location.href); if (l === 'de') u.searchParams.set('lang', 'de'); else u.searchParams.delete('lang'); history.replaceState(null, '', u); } catch (e) { /* ignore */ }
     track('gal_lang', { gal_to: l });
   }
   function fillStatic() {
@@ -1692,7 +1656,7 @@
     $('#btnMusic').setAttribute('aria-pressed', 'true');
   }
   function layoutScenes() {
-    if (S.phase === 'street' && S.street && !S.streetDoor) { const st = buildStreet(); S.street = st; if (S.enterGo) st.doorBtn.addEventListener('click', () => S.enterGo && S.enterGo(), { once: true }); st.sledder.style.transform = `translate3d(${st.door.x + st.door.w * 0.5 - st.sledW * 0.9}px, ${st.groundY - st.sledH}px, 0)`; }
+    if (S.phase === 'street' && S.street) { const st = buildStreet(); S.street = st; if (S.enterGo) st.doorBtn.addEventListener('click', () => S.enterGo && S.enterGo(), { once: true }); st.sledder.style.transform = `translate3d(${st.door.x + st.door.w * 0.5 - st.sledW * 0.9}px, ${st.groundY - st.sledH}px, 0)`; }
     if (M.el) { placeMoment(); return; }
     if ((S.phase === 'gallery' || S.phase === 'end') && $('#gallery').hidden === false) { const f = S.focus; buildGallery(); for (const it of S.items) it.pool.style.opacity = '1'; if (f) { const it = S.items.find((x) => x.work === f.work); if (it) focusItem(it); } }
   }
@@ -1738,9 +1702,9 @@
       now: nowMs,
       opened: openedNow,
       busy: () => ['ride', 'door', 'toStreet', 'street'].includes(S.phase),
-      plate: () => `assets/scenes/street-${o()}.webp`,
-      windowRect: () => rectOn(plateBox(portrait ? 752 / 1344 : 1344 / 752), 'glass', 'street'),
-      onRide: rideToday, onCard: showCard, onDirect: openDirect,
+      plate: () => `assets/scenes/home-in-${o()}.webp`,
+      wallRect: () => rectOn(plateBox(portrait ? 752 / 1344 : 1344 / 752), 'wall', 'gallery'),
+      onRide: rideToday, onCard: showCard, onDirect: openDirect, onMissed: openMissed,
     });
     G.offer.init({ t, track, lang: () => LANG, now: nowMs, sched: SCHED, config: window.GAL_ADVENT.config, fmtNum, size, onCalendar: showCalendar });
     $('#btnCalendar').addEventListener('click', showCalendar);
@@ -1768,7 +1732,6 @@
     const card = document.querySelector('#offer.show .offer-art');
     if (card && card.naturalWidth) return { day: f.day, src: card.getAttribute('src'), ...rectOf(card) };
     if (f.day !== DAY.day || S.phase !== 'revealed' || !WORLDS[0].work) return null;
-    if (STREET_DAY && S.street) return { day: f.day, src: artSrc(WORLDS[0].work), ...rectOf(S.street.hung[0]) };
     return { day: f.day, src: artSrc(WORLDS[0].work), ...artScreenRect() };
   }
   function flyHome(from) {
@@ -1817,6 +1780,13 @@
     S.flyHome = { day: entry.day };
     track('gal_door_open', { gal_day: entry.day, gal_world: entry.world, gal_gesture: entry.gesture, gal_path: 'direct' });
     showCard(entry, 'direct');
+  }
+  /* a missed door, opened later from the overview: it counts as opened and shows its card (its offer has ended) */
+  function openMissed(entry) {
+    markOpened(entry.day);
+    S.flyHome = { day: entry.day };
+    track('gal_door_open', { gal_day: entry.day, gal_world: entry.world, gal_gesture: entry.gesture, gal_path: 'missed' });
+    showCard(entry, 'calendar');
   }
   /* ?auto: rides by itself, hopping over every crest where flecks wait */
   function autoplay() {

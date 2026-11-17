@@ -99,7 +99,61 @@
     return h('p', { class: 'offer-code' }, `${t('code')} `, h('b', {}, entry.voucher), ' ', btn);
   }
 
-  /* tomorrow's door (as seen from today), the reminder, the newsletter, back to the calendar */
+  /* the sign-up for tomorrow's door: in the demo build nothing is sent; the live build sends the address to the
+     Klaviyo list in config.notify and shows no form until that list is set */
+  const NOTIFIED = () => ((G.BUILD && G.BUILD.demo) ? 'lumasAdvent.demo.notify' : 'lumasAdvent.notify');
+  const notified = () => { try { return localStorage.getItem(NOTIFIED()) === '1'; } catch (e) { return false; } };
+  const markNotified = () => { try { localStorage.setItem(NOTIFIED(), '1'); } catch (e) { /* the thank-you still shows */ } };
+  async function subscribe(email, n, lang) {
+    const res = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${encodeURIComponent(n.companyId)}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/vnd.api+json', revision: '2024-10-15' },
+      body: JSON.stringify({ data: { type: 'subscription', attributes: { custom_source: 'Advent calendar', profile: { data: { type: 'profile', attributes: { email, properties: { advent_lang: lang } } } } }, relationships: { list: { data: { type: 'list', id: n.listId } } } } }),
+    });
+    if (!res.ok) throw new Error(`klaviyo ${res.status}`);
+  }
+  function notifyForm(next, lang) {
+    const { t, config } = D;
+    const demo = !!(G.BUILD && G.BUILD.demo);
+    const n = config.notify || {};
+    if (!demo && !(n.companyId && n.listId)) return null;
+    const done = () => h('p', { class: 'offer-notified' }, t('notifyDone', { n: next.day }));
+    if (notified()) return done();
+    const input = h('input', { type: 'email', id: 'notifyEmail', name: 'email', autocomplete: 'email', inputmode: 'email', placeholder: t('notifyPlaceholder'), required: true });
+    const btn = h('button', { class: 'btn', type: 'submit' }, t('notifyCta'));
+    const msg = h('p', { class: 'msg', role: 'status', 'aria-live': 'polite' });
+    const privacy = (config.privacyUrl || {})[lang];
+    const form = h('form', { class: 'offer-notify', novalidate: true },
+      h('label', { for: 'notifyEmail' }, t('notifyLabel', { n: next.day })),
+      h('div', { class: 'row' }, input, btn),
+      msg,
+      h('p', { class: 'fine' }, t('notifyFine'), privacy ? [' ', h('a', { class: 'link', href: privacy }, t('privacy'))] : null));
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        msg.textContent = t('notifyInvalid');
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      msg.textContent = '';
+      btn.disabled = true;
+      try {
+        if (!demo) await subscribe(email, n, lang);
+        markNotified();
+        D.track('gal_notify', { gal_day: next.day });
+        form.replaceWith(done());
+      } catch (err) {
+        btn.disabled = false;
+        msg.textContent = t('notifyFail');
+      }
+    });
+    return form;
+  }
+
+  /* tomorrow's door (as seen from today): the sign-up, the reminder file, back to the calendar */
   function foot(now, lang) {
     const A = G.advent;
     const { t, config } = D;
@@ -113,11 +167,11 @@
       setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
       D.track('gal_reminder', { gal_day: next.day });
     } }, t('remind')) : null;
+    const form = next ? notifyForm(next, lang) : null;
     return h('div', { class: 'offer-foot' },
-      next ? h('p', {}, t('tomorrow', { n: next.day })) : null,
+      form || (next ? h('p', {}, t('tomorrow', { n: next.day })) : null),
       h('div', { class: 'offer-links' },
         remind,
-        h('a', { class: 'link offer-news', href: config.newsletterUrl, onclick: () => D.track('gal_newsletter') }, t('newsletter')),
         h('button', { class: 'link offer-calendar', type: 'button', onclick: () => D.onCalendar() }, t('tCalendar'))));
   }
 

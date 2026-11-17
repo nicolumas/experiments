@@ -1,6 +1,6 @@
 /* The door gestures: a registry, the runner, and the small helpers they share.
 
-   A gesture covers the work in its own way (frost, snow, paper, a veil, ribbon, shutters, the dark), and the visitor
+   A gesture covers the work in its own way (frost, snow, paper, a veil, ribbon, the dark), and the visitor
    uncovers it. GAL.gestures.prepare(name, opts) draws the covering at once (it rides in with the work);
    .start({ skipped, rm, ui, boost }) takes input, shows the hint and the "Öffnen" fallback, and resolves exactly once:
    'gesture' (opened by hand), 'fallback' (the button) or 'auto' (reduced motion). Nothing it drew stays on the work
@@ -17,13 +17,13 @@
     de: {
       open: 'Öffnen',
       snow: 'Wisch den Schnee herunter.', frost: 'Wisch das Eis weg.', paper: 'Reiß das Papier auf.',
-      lanterns: 'Zünde die drei Laternen an.', ribbon: 'Zieh an der Schleife.', shutters: 'Öffne die Fensterläden.',
+      lanterns: 'Zünde die drei Laternen an.', ribbon: 'Zieh an der Schleife.',
       candle: 'Halte die Kerze, bis sie brennt.',
     },
     en: {
       open: 'Open',
       snow: 'Brush the snow off.', frost: 'Wipe the frost away.', paper: 'Tear the paper open.',
-      lanterns: 'Light the three lanterns.', ribbon: 'Pull the ribbon.', shutters: 'Open the shutters.',
+      lanterns: 'Light the three lanterns.', ribbon: 'Pull the ribbon.',
       candle: 'Hold the candle until it burns.',
     },
   };
