@@ -145,6 +145,11 @@ a:focus-visible, button:focus-visible { outline: 1px solid var(--ink); outline-o
 .demo .device { box-shadow: 0 0 0 4px var(--page), 0 0 0 5px var(--line); }
 .sheet.live { transition: transform 320ms var(--easing), height 220ms var(--easing); }
 .sheet.live.away { transform: translateY(calc(100% + 60px)); }
+.bar.live { transition: transform 320ms var(--easing), height 220ms var(--easing); }
+.bar.live.away { transform: translateY(calc(100% + 20px)); }
+.dscreen { transition: opacity 220ms ease; }
+.dscreen.fade { opacity: 0; }
+.demo-desk .ddevice { box-shadow: 0 0 0 4px var(--page), 0 0 0 5px var(--line); }
 .replay { margin-left: 4px; min-height: 36px; padding: 0 12px; border: 1px solid var(--ink); border-radius: 0; background: var(--page); font: 700 12px/1 var(--text); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); cursor: pointer; }
 .replay:hover { background: var(--ink); color: var(--ivory); }
 .try { display: grid; gap: clamp(28px, 4vw, 56px); align-items: start; }
@@ -180,7 +185,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
   .anatomy { padding: 28px 48px 28px 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sheet.live, .screen, .steps i { transition: none; }
+  .sheet.live, .bar.live, .screen, .dscreen, .steps i { transition: none; }
 }
 </style>
 </head>
@@ -272,10 +277,10 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     </div>
     <div class="try">
       
-    <figure class="frame demo">
-      <div class="url" id="demo-url">lumas.de</div>
-      <div class="device"><div class="screen bg-de-mobile" id="demo-screen">
-        <section class="sheet live" id="demo-sheet"><div class="steps" id="demo-progress" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></div><div class="sheet-inner" id="demo-inner">
+    <figure class="frame demo" data-demo>
+      <div class="url" data-demo-url>lumas.de</div>
+      <div class="device"><div class="screen bg-de-mobile" data-demo-screen data-bg="mobile">
+        <section class="sheet live" data-demo-layer><div class="steps" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></div><div class="sheet-inner" data-demo-inner>
       <div class="copy">
         <p class="eyebrow-s" data-mark="3">Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
         <h3 class="title-s" data-mark="4">Wechsel zu deiner lokalen Seite</h3>
@@ -286,9 +291,8 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-t" data-mark="7" data-go="stay">Hier bleiben</button>
       </div></div></section>
       </div></div>
-      <figcaption><span id="demo-status">Tap a button in the sheet.</span> <button type="button" class="replay" id="demo-replay">Replay</button></figcaption>
-    </figure>
-    <template id="t-geo">
+      <figcaption><span data-demo-status>Tap a button in the sheet.</span> <button type="button" class="replay" data-demo-replay>Replay</button></figcaption>
+      <template data-t="geo">
       <div class="copy">
         <p class="eyebrow-s" data-mark="3">Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
         <h3 class="title-s" data-mark="4">Wechsel zu deiner lokalen Seite</h3>
@@ -298,7 +302,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-p" data-mark="6" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
         <button type="button" class="btn-t" data-mark="7" data-go="stay">Hier bleiben</button>
       </div></template>
-    <template id="t-consent-de">
+      <template data-t="consent-de">
       <div class="copy">
         
         <h3 class="title-s">Willkommen bei LUMAS</h3>
@@ -308,7 +312,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-p" data-go="done"><span>OK und weiter</span></button>
         <button type="button" class="btn-t arrow" data-go="settings">Einstellungen ändern</button>
       </div></template>
-    <template id="t-consent-fr">
+      <template data-t="consent-fr">
       <div class="copy">
         <p class="eyebrow-s cue"><span class="flag fr" aria-hidden="true"></span><span>LUMAS France</span><svg class="tick" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.4 4.8 9 10 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></p>
         <h3 class="title-s">Bienvenue chez LUMAS</h3>
@@ -318,7 +322,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-p" data-go="done"><span>OK et continuer</span></button>
         <button type="button" class="btn-t arrow" data-go="settings">Modifier les paramètres</button>
       </div></template>
-    <template id="t-settings">
+      <template data-t="settings">
       <div class="copy">
         <div class="dr-head"><h3 class="title-s">Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
         <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
@@ -328,6 +332,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-s" data-go="done">Auswahl speichern</button>
         <button type="button" class="btn-p" data-go="done"><span>OK und weiter</span></button>
       </div></template>
+    </figure>
       <dl class="try-notes">
         <div><dt>Hier bleiben</dt><dd>The sheet keeps its place, eases its height to the cookie step in 220 ms and the second dash fills. Focus moves to the new title if it was inside the sheet.</dd></div>
         <div><dt>Ja, ich möchte wechseln.</dt><dd>The sheet slides away and the browser goes to fr.lumas.com with <code>?from=de</code>. There the sheet slides up on step 2 and the second dash fills. The script then drops <code>from</code> from the address.</dd></div>
@@ -397,9 +402,61 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     <div class="head">
       <p class="eyebrow">Desktop · 1440 × 900 · from 980 px wide</p>
       <h2>A thin bar along the bottom</h2>
-      <p>One row across the full width: text on the left, actions on the right, small buttons so the bar stays about 75 px tall and the art keeps the screen. The settings open the bar upward into a drawer with the four categories side by side. While open it sits over the trust footer, the Trustpilot badge and the advisor pill.</p>
+      <p>Click through the bar below. One row across the full width: text on the left, actions on the right, small buttons so the bar stays about 75 px tall and the art keeps the screen. The settings open the bar upward into a drawer with the four categories side by side. While open it sits over the trust footer, the Trustpilot badge and the advisor pill.</p>
     </div>
-    <p class="swipe">Four states, side by side: scroll sideways for step 2, arrival and settings.</p>
+    <div class="dgrid demo-row">
+    <figure class="frame dframe demo demo-desk" data-demo>
+      <div class="url" data-demo-url>lumas.de · Desktop · try it</div>
+      <div class="ddevice"><div class="dscreen bg-de-desktop" data-demo-screen data-bg="desktop">
+        <section class="bar live" data-demo-layer><div class="bar-in" data-demo-inner>
+      <div class="bar-text">
+        <p class="eyebrow-s"><span class="steps inline" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></span>Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
+        <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
+      </div>
+      <div class="bar-actions">
+        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
+        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
+      </div></div></section>
+      </div></div>
+      <figcaption><span data-demo-status>Click a button in the bar.</span> <button type="button" class="replay" data-demo-replay>Replay</button></figcaption>
+      <template data-t="geo">
+      <div class="bar-text">
+        <p class="eyebrow-s"><span class="steps inline" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></span>Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
+        <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
+      </div>
+      <div class="bar-actions">
+        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
+        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
+      </div></template>
+      <template data-t="consent-de">
+      <div class="bar-text">
+        
+        <p class="bar-line"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="title-s">Willkommen bei LUMAS</span><span class="body-s">Diese Webseite benutzt Cookies. <a>Datenschutzerklärung</a></span></p>
+      </div>
+      <div class="bar-actions">
+        <button type="button" class="btn-t arrow" data-go="settings">Einstellungen ändern</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
+      </div></template>
+      <template data-t="consent-fr">
+      <div class="bar-text">
+        <p class="eyebrow-s cue"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="flag fr" aria-hidden="true"></span><span>LUMAS France</span><svg class="tick" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.4 4.8 9 10 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></p>
+        <p class="bar-line"><span class="title-s">Bienvenue chez LUMAS</span><span class="body-s">Ce site utilise des cookies. <a>Politique de confidentialité</a></span></p>
+      </div>
+      <div class="bar-actions">
+        <button type="button" class="btn-t arrow" data-go="settings">Modifier les paramètres</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK et continuer</span></button>
+      </div></template>
+      <template data-t="settings">
+      <div class="dr-head"><h3 class="title-s"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span>Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
+      <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
+      <ul class="cats cols"><li><span class="cb locked" aria-hidden="true"></span><div><b>Notwendig</b><p>Damit der Shop funktioniert: Warenkorb, Anmeldung und deine Cookie-Auswahl.</p></div></li><li><span class="cb on" aria-hidden="true"></span><div><b>Präferenzen</b><p>Merkt sich Einstellungen wie Sprache und zuletzt angesehene Werke.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Statistiken</b><p>Hilft uns zu verstehen, wie der Shop genutzt wird.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Marketing</b><p>Zeigt dir passende Werbung auf anderen Seiten und misst ihren Erfolg.</p></div></li></ul>
+      <div class="dr-actions row">
+        <button type="button" class="btn-s sm" data-go="done">Auswahl speichern</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
+      </div></template>
+    </figure>
+    </div>
+    <p class="swipe">The four states, side by side: scroll sideways for step 2, arrival and settings.</p>
     <div class="dgrid">
     <figure class="frame dframe">
       <div class="url">lumas.de · step 1</div>
@@ -409,8 +466,8 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
       </div>
       <div class="bar-actions">
-        <button type="button" class="btn-t">Hier bleiben</button>
-        <button type="button" class="btn-p sm"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
+        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
+        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
       </div></div></section></div></div>
       <figcaption><b>Country step.</b> One thin bar: dashes and eyebrow on the first line, title and text on the second, actions right.</figcaption>
     </figure>
@@ -422,8 +479,8 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <p class="bar-line"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="title-s">Willkommen bei LUMAS</span><span class="body-s">Diese Webseite benutzt Cookies. <a>Datenschutzerklärung</a></span></p>
       </div>
       <div class="bar-actions">
-        <button type="button" class="btn-t arrow">Einstellungen ändern</button>
-        <button type="button" class="btn-p sm"><span>OK und weiter</span></button>
+        <button type="button" class="btn-t arrow" data-go="settings">Einstellungen ändern</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
       </div></div></section></div></div>
       <figcaption><b>Cookie step, in place.</b> The bar keeps its place; the second dash fills.</figcaption>
     </figure>
@@ -435,20 +492,20 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <p class="bar-line"><span class="title-s">Bienvenue chez LUMAS</span><span class="body-s">Ce site utilise des cookies. <a>Politique de confidentialité</a></span></p>
       </div>
       <div class="bar-actions">
-        <button type="button" class="btn-t arrow">Modifier les paramètres</button>
-        <button type="button" class="btn-p sm"><span>OK et continuer</span></button>
+        <button type="button" class="btn-t arrow" data-go="settings">Modifier les paramètres</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK et continuer</span></button>
       </div></div></section></div></div>
       <figcaption><b>Arrival.</b> Opens on step 2 with the site line.</figcaption>
     </figure>
     <figure class="frame dframe">
       <div class="url">lumas.de · settings</div>
       <div class="ddevice"><div class="dscreen bg-de-desktop"><section class="bar drawer"><div class="bar-in">
-      <div class="dr-head"><h3 class="title-s"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span>Cookie-Einstellungen</h3><span class="x" aria-hidden="true"></span></div>
+      <div class="dr-head"><h3 class="title-s"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span>Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
       <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
       <ul class="cats cols"><li><span class="cb locked" aria-hidden="true"></span><div><b>Notwendig</b><p>Damit der Shop funktioniert: Warenkorb, Anmeldung und deine Cookie-Auswahl.</p></div></li><li><span class="cb on" aria-hidden="true"></span><div><b>Präferenzen</b><p>Merkt sich Einstellungen wie Sprache und zuletzt angesehene Werke.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Statistiken</b><p>Hilft uns zu verstehen, wie der Shop genutzt wird.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Marketing</b><p>Zeigt dir passende Werbung auf anderen Seiten und misst ihren Erfolg.</p></div></li></ul>
       <div class="dr-actions row">
-        <button type="button" class="btn-s sm">Auswahl speichern</button>
-        <button type="button" class="btn-p sm"><span>OK und weiter</span></button>
+        <button type="button" class="btn-s sm" data-go="done">Auswahl speichern</button>
+        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
       </div></div></section></div></div>
       <figcaption><b>Settings, as a drawer.</b> The bar grows upward; the four categories sit side by side.</figcaption>
     </figure>
@@ -516,86 +573,93 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
 
 <script>
 (() => {
-  const $ = id => document.getElementById(id);
-  const screen = $('demo-screen');
-  const sheet = $('demo-sheet');
-  const inner = $('demo-inner');
-  const bar = $('demo-progress');
-  const url = $('demo-url');
-  const status = $('demo-status');
-  if (!sheet) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wait = ms => new Promise(resolve => setTimeout(resolve, reduce ? 0 : ms));
-  let site = 'de';
 
-  const swapStep = (templateId, drawer = false) => {
-    const from = sheet.offsetHeight;
-    sheet.style.height = '';
-    sheet.classList.toggle('drawer', drawer);
-    inner.innerHTML = $(templateId).innerHTML;
-    if (reduce) return;
-    const to = sheet.offsetHeight;
-    sheet.style.height = from + 'px';
-    void sheet.offsetHeight;
-    sheet.style.height = to + 'px';
-    inner.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
-    sheet.addEventListener('transitionend', event => {
-      if (event.propertyName === 'height' && !drawer) sheet.style.height = '';
-    }, { once: true });
-  };
-  const hide = async () => { sheet.classList.add('away'); await wait(320); };
-  const show = () => sheet.classList.remove('away');
+  document.querySelectorAll('[data-demo]').forEach(demo => {
+    const q = sel => demo.querySelector(sel);
+    const screen = q('[data-demo-screen]');
+    const layer = q('[data-demo-layer]');
+    const inner = q('[data-demo-inner]');
+    const url = q('[data-demo-url]');
+    const status = q('[data-demo-status]');
+    const kind = screen.dataset.bg;
+    const startUrl = url.textContent;
+    const startStatus = status.textContent;
+    const template = name => q(`template[data-t="${name}"]`).innerHTML;
+    const dashes = () => layer.querySelector('.steps');
+    let site = 'de';
 
-  const reset = async () => {
-    await hide();
-    site = 'de';
-    sheet.style.height = '';
-    sheet.classList.remove('drawer');
-    screen.classList.remove('bg-fr-mobile');
-    screen.classList.add('bg-de-mobile');
-    url.textContent = 'lumas.de';
-    inner.innerHTML = $('t-geo').innerHTML;
-    bar.dataset.step = '1';
-    status.textContent = 'Tap a button in the sheet.';
-    await wait(120);
-    show();
-  };
+    const setBg = code => {
+      screen.classList.remove(`bg-de-${kind}`, `bg-fr-${kind}`);
+      screen.classList.add(`bg-${code}-${kind}`);
+    };
+    const swap = (name, drawer = false) => {
+      const from = layer.offsetHeight;
+      layer.style.height = '';
+      layer.classList.toggle('drawer', drawer);
+      inner.innerHTML = template(name);
+      if (reduce) return;
+      const to = layer.offsetHeight;
+      layer.style.height = from + 'px';
+      void layer.offsetHeight;
+      layer.style.height = to + 'px';
+      inner.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+      layer.addEventListener('transitionend', event => {
+        if (event.propertyName === 'height' && !drawer) layer.style.height = '';
+      }, { once: true });
+    };
+    const hide = async () => { layer.classList.add('away'); await wait(320); layer.style.height = ''; };
+    const show = () => layer.classList.remove('away');
 
-  screen.addEventListener('click', async event => {
-    const action = event.target.closest('[data-go]')?.dataset.go;
-    if (action === 'stay') {
-      swapStep('t-consent-de');
-      bar.dataset.step = '2';
-      status.textContent = 'Same sheet, now on the cookie step.';
-    } else if (action === 'switch') {
+    screen.addEventListener('click', async event => {
+      const action = event.target.closest('[data-go]')?.dataset.go;
+      if (action === 'stay') {
+        swap('consent-de');
+        dashes().dataset.step = '2';
+        status.textContent = 'Same layer, now on the cookie step.';
+      } else if (action === 'switch') {
+        await hide();
+        screen.classList.add('fade');
+        await wait(240);
+        site = 'fr';
+        setBg('fr');
+        url.textContent = url.textContent.replace('lumas.de', 'fr.lumas.com');
+        layer.classList.remove('drawer');
+        inner.innerHTML = template('consent-fr');
+        dashes().dataset.step = '1';
+        screen.classList.remove('fade');
+        await wait(260);
+        show();
+        await wait(200);
+        dashes().dataset.step = '2';
+        status.textContent = 'Arrived on fr.lumas.com: the layer opens on step 2.';
+      } else if (action === 'settings') {
+        swap('settings', true);
+        status.textContent = 'The layer grew into the settings drawer.';
+      } else if (action === 'close-settings') {
+        swap(site === 'fr' ? 'consent-fr' : 'consent-de');
+        status.textContent = 'Back to the cookie step.';
+      } else if (action === 'done') {
+        await hide();
+        status.textContent = 'Done. Each question asked once.';
+      }
+    });
+
+    q('[data-demo-replay]').addEventListener('click', async () => {
       await hide();
-      screen.classList.add('fade');
-      await wait(240);
-      site = 'fr';
-      screen.classList.remove('bg-de-mobile');
-      screen.classList.add('bg-fr-mobile');
-      url.textContent = 'fr.lumas.com';
-      inner.innerHTML = $('t-consent-fr').innerHTML;
-      screen.classList.remove('fade');
-      await wait(260);
+      site = 'de';
+      layer.classList.remove('drawer');
+      setBg('de');
+      url.textContent = startUrl;
+      inner.innerHTML = template('geo');
+      const d = dashes();
+      if (d) d.dataset.step = '1';
+      status.textContent = startStatus;
+      await wait(120);
       show();
-      await wait(200);
-      bar.dataset.step = '2';
-      status.textContent = 'Arrived on fr.lumas.com: the sheet opens on step 2.';
-    } else if (action === 'settings') {
-      swapStep('t-settings', true);
-      status.textContent = 'The sheet grew into the settings drawer.';
-    } else if (action === 'close-settings') {
-      swapStep(site === 'fr' ? 't-consent-fr' : 't-consent-de');
-      status.textContent = 'Back to the cookie step.';
-    } else if (action === 'done') {
-      await hide();
-      sheet.style.height = '';
-      status.textContent = 'Done. Each question asked once.';
-    }
+    });
   });
-
-  $('demo-replay').addEventListener('click', reset);
 })();
 </script>
 
