@@ -122,6 +122,9 @@
 #calendar .cal-demo { position: absolute; z-index: 3; left: 50%; bottom: calc(var(--safe-b) + 12px); transform: translateX(-50%);
   display: flex; align-items: center; gap: 2px; padding: 4px 6px; background: rgba(254, 253, 249, .92); box-shadow: 0 0 0 1px var(--line);
   font-size: 14px; color: var(--charcoal); white-space: nowrap; }
+@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+  #calendar .cal-demo { left: auto; right: var(--gutter); bottom: calc(var(--safe-b) + var(--gutter)); transform: none; }
+}
 #calendar .cal-demo-tag { padding: 0 8px 0 4px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 #calendar .cal-demo-prev, #calendar .cal-demo-next { display: grid; place-items: center; width: 40px; height: 40px; color: var(--charcoal); text-decoration: none; font-size: 18px; }
 #calendar span.cal-demo-prev, #calendar span.cal-demo-next { color: rgba(90, 87, 82, .35); }
