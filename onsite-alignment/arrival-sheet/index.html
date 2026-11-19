@@ -145,6 +145,8 @@ a:focus-visible, button:focus-visible { outline: 1px solid var(--ink); outline-o
 .demo .device { box-shadow: 0 0 0 4px var(--page), 0 0 0 5px var(--line); }
 .sheet.live { transition: transform 320ms var(--easing), height 220ms var(--easing); }
 .sheet.live.away { transform: translateY(calc(100% + 60px)); }
+.backdrop-soft { position: absolute; inset: 0; z-index: 1; background: color-mix(in srgb, var(--ink) 24%, transparent); opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
+.screen.dim .backdrop-soft { opacity: 1; pointer-events: auto; cursor: pointer; }
 .bar.live { transition: transform 320ms var(--easing), height 220ms var(--easing); }
 .bar.live.away { transform: translateY(calc(100% + 20px)); }
 .dscreen { transition: opacity 220ms ease; }
@@ -185,7 +187,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
   .anatomy { padding: 28px 48px 28px 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sheet.live, .bar.live, .screen, .dscreen, .steps i { transition: none; }
+  .sheet.live, .bar.live, .screen, .dscreen, .steps i, .backdrop-soft { transition: none; }
 }
 </style>
 </head>
@@ -225,7 +227,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     <div class="strip">
     <figure class="frame">
       <div class="url">lumas.de</div>
-      <div class="device"><div class="screen bg-de-mobile"><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></div>
+      <div class="device"><div class="screen bg-de-mobile"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></div>
       <div class="copy">
         <p class="eyebrow-s" data-mark="3">Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
         <h3 class="title-s" data-mark="4">Wechsel zu deiner lokalen Seite</h3>
@@ -239,7 +241,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     </figure>
     <figure class="frame">
       <div class="url">lumas.de · “Hier bleiben”</div>
-      <div class="device"><div class="screen bg-de-mobile"><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
+      <div class="device"><div class="screen bg-de-mobile"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
       <div class="copy">
         
         <h3 class="title-s">Willkommen bei LUMAS</h3>
@@ -253,7 +255,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     </figure>
     <figure class="frame">
       <div class="url">fr.lumas.com · “Ja, ich möchte wechseln.”</div>
-      <div class="device"><div class="screen bg-fr-mobile"><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
+      <div class="device"><div class="screen bg-fr-mobile"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet " aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
       <div class="copy">
         <p class="eyebrow-s cue"><span class="flag fr" aria-hidden="true"></span><span>LUMAS France</span><svg class="tick" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.4 4.8 9 10 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></p>
         <h3 class="title-s">Bienvenue chez LUMAS</h3>
@@ -280,6 +282,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     <figure class="frame demo" data-demo>
       <div class="url" data-demo-url>lumas.de</div>
       <div class="device"><div class="screen bg-de-mobile" data-demo-screen data-bg="mobile">
+        <div class="backdrop-soft" data-go="close-settings" aria-hidden="true"></div>
         <section class="sheet live" data-demo-layer><div class="steps" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></div><div class="sheet-inner" data-demo-inner>
       <div class="copy">
         <p class="eyebrow-s" data-mark="3">Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
@@ -336,7 +339,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
       <dl class="try-notes">
         <div><dt>Hier bleiben</dt><dd>The sheet keeps its place, eases its height to the cookie step in 220 ms and the second dash fills. Focus moves to the new title if it was inside the sheet.</dd></div>
         <div><dt>Ja, ich möchte wechseln.</dt><dd>The sheet slides away and the browser goes to fr.lumas.com with <code>?from=de</code>. There the sheet slides up on step 2 and the second dash fills. The script then drops <code>from</code> from the address.</dd></div>
-        <div><dt>Einstellungen ändern</dt><dd>The same sheet grows upward into the settings drawer. The categories scroll inside, the two buttons stay pinned at the bottom. The cross takes it back to the cookie step.</dd></div>
+        <div><dt>Einstellungen ändern</dt><dd>The same sheet grows upward into the settings drawer and a light backdrop fades in over the page. The categories scroll inside, the two buttons stay pinned at the bottom. The cross, or a tap on the backdrop, takes it back to the cookie step.</dd></div>
         <div><dt>OK und weiter / Auswahl speichern</dt><dd>Saves through the existing <code>saveConsent()</code> and slides the layer away in 220 ms.</dd></div>
       </dl>
     </div>
@@ -348,12 +351,12 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     <div class="head">
       <p class="eyebrow">Phone · settings, and visitors with one question</p>
       <h2>The settings are the sheet, opened further</h2>
-      <p>No modal, no darkened page. The footer link “Cookie-Einstellungen” opens the same drawer later on; there the cross simply closes it. Visitors with only one question see no dashes.</p>
+      <p>No modal: the sheet itself grows, and a light backdrop settles over the page so the choices stand out; tapping it works like the cross. The footer link “Cookie-Einstellungen” opens the same drawer later on; there the cross simply closes it. Visitors with only one question see no dashes.</p>
     </div>
     <div class="strip">
     <figure class="frame">
       <div class="url">lumas.de · “Einstellungen ändern”</div>
-      <div class="device"><div class="screen bg-de-mobile"><section class="sheet drawer" aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
+      <div class="device"><div class="screen bg-de-mobile dim"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet drawer" aria-label="Arrival sheet"><div class="steps" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></div>
       <div class="copy">
         <div class="dr-head"><h3 class="title-s">Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
         <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
@@ -363,11 +366,11 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <button type="button" class="btn-s" data-go="done">Auswahl speichern</button>
         <button type="button" class="btn-p" data-go="done"><span>OK und weiter</span></button>
       </div></section></div></div>
-      <figcaption><b>Settings, as a drawer.</b> The same sheet grows upward. The list scrolls inside on short screens; the buttons stay pinned at the bottom.</figcaption>
+      <figcaption><b>Settings, as a drawer.</b> The same sheet grows upward. A light backdrop settles over the page; tapping it works like the cross. The list scrolls inside on short screens and the buttons stay pinned.</figcaption>
     </figure>
     <figure class="frame">
       <div class="url">lumas.de · visitor in Germany</div>
-      <div class="device"><div class="screen bg-de-mobile"><section class="sheet " aria-label="Arrival sheet">
+      <div class="device"><div class="screen bg-de-mobile"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet " aria-label="Arrival sheet">
       <div class="copy">
         
         <h3 class="title-s">Willkommen bei LUMAS</h3>
@@ -381,7 +384,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     </figure>
     <figure class="frame">
       <div class="url">www.lumas.com · visitor in Germany</div>
-      <div class="device"><div class="screen bg-com-mobile"><section class="sheet " aria-label="Arrival sheet">
+      <div class="device"><div class="screen bg-com-mobile"><div class="backdrop-soft" aria-hidden="true"></div><section class="sheet " aria-label="Arrival sheet">
       <div class="copy">
         <p class="eyebrow-s" data-mark="3">Seems like you're not in your local shop</p>
         <h3 class="title-s" data-mark="4">Switch to your local site</h3>
@@ -429,7 +432,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
             <tr><td>7</td><td>Text action</td><td><code>--font-body-bold</code> 1.2rem, caps, <code>0.14em</code> (matches the button), underline offset <code>0.5rem</code>, <code>min-block-size: 4rem</code>. “Einstellungen ändern” adds <code>shorthands.icon(arrow-right)</code>. Wraps under the button when the row is full.</td></tr>
             <tr><td></td><td>Desktop</td><td>Out of scope for now. From <code>tablet-landscape</code> (980 px) the sheet stays dormant and the LM-14080 cookie bar and today's country pop-up run as they do now.</td></tr>
             <!--<td>From <code>tablet-landscape</code> (980 px): full width at <code>inset-block-end: 0</code>, same surface and hairline, padding <code>1.4rem --sp-10</code>. Grid: text <code>1fr</code>, actions <code>auto</code>, column gap <code>--sp-10</code>, actions gap <code>--sp-6</code>. Line 1: dashes and eyebrow; line 2: title (2.2rem) and body side by side, gap <code>--sp-4</code>. About 7.5rem tall.</td></tr>-->
-            <tr><td></td><td>Settings drawer</td><td>The same layer, expanded; height eases with <code>--motion-fast</code>. Up to <code>calc(100dvh - var(--bottom-nav-height) - 4.8rem)</code>, list scrolls, buttons pinned and stacked (<code>btn-secondary</code> then primary, full width). Checkboxes 2rem, border <code>--color-border-focus</code>, checked <code>--color-surface-inverse</code>, “Notwendig” on <code>--color-surface-muted</code>. Cross: back to the cookie step, or closes when the answer already exists. <kbd>Esc</kbd> does the same. No backdrop.</td></tr>
+            <tr><td></td><td>Settings drawer</td><td>The same layer, expanded; height eases with <code>--motion-fast</code>. Up to <code>calc(100dvh - var(--bottom-nav-height) - 4.8rem)</code>, list scrolls, buttons pinned and stacked (<code>btn-secondary</code> then primary, full width). Checkboxes 2rem, border <code>--color-border-focus</code>, checked <code>--color-surface-inverse</code>, “Notwendig” on <code>--color-surface-muted</code>. Cross: back to the cookie step, or closes when the answer already exists; <kbd>Esc</kbd> and a tap on the backdrop do the same. Backdrop only while the drawer is open: <code>color-mix(in srgb, var(--color-surface-inverse) 24%, transparent)</code> over the whole page, below the sheet, fading with <code>--motion-fast</code>.</td></tr>
             <tr><td></td><td>Motion</td><td>Enter: slide up, <code>--motion-default</code> (320 ms) <code>--motion-easing</code>. Step change and drawer: height + content fade, <code>--motion-fast</code> (220 ms). Leave: slide down, <code>--motion-fast</code>. None with <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td></td><td>Focus</td><td><code>shorthands.focus-outline</code> on every control. On step change or drawer open, focus moves to the new title (<code>tabindex="-1"</code>) only if it was inside the layer.</td></tr>
           </tbody>
@@ -449,7 +452,7 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
       <li><b>Eyebrow at 12 px regular, tracked 0.08em.</b> Matches the 12 px button labels so all caps text shares one size, and the lighter weight keeps it under the title. s04 asks for 13 px minimum while listing 11 px labels in its own scale; 13 px is a one-value change if brand wants it.</li>
       <li><b>Buttons keep the shop's mixins.</b> <code>btn-base</code> is 12 px at 0.14em, outside s04. Changing it is a shop-wide decision, so the layer uses it as is and the text action matches it.</li>
       <li><b>White ground, Archivo text.</b> s03 names Ivory as the page colour and s04 names Helvetica Now; the shop's V2 tokens use white and Archivo, and the layer follows the shop.</li>
-      <li><b>No shadows, no backdrop.</b> A hairline and the white surface separate the layer from the page, and nothing darkens the art.</li>
+      <li><b>No shadows; a backdrop only for the drawer.</b> A hairline and the white surface separate the sheet from the page. The country and cookie steps never darken the art; the light 24% backdrop appears only while the visitor is in the settings.</li>
       <li><b>Wording verbatim.</b> Including the full stop in “Ja, ich möchte wechseln.” and “Shop” in the eyebrow (Brandbook prefers “Galerie”). Both are content, left for the copy owners.</li>
       <li><b>French text is a placeholder.</b> The fr.lumas.com layer will show the glossary's French strings for the LM-14080 keys; the arrival line reuses <code>country.france</code>.</li>
     </ul>
@@ -521,18 +524,22 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         dashes().dataset.step = '2';
         status.textContent = 'Arrived on fr.lumas.com: the layer opens on step 2.';
       } else if (action === 'settings') {
+        screen.classList.add('dim');
         swap('settings', true);
         status.textContent = 'The layer grew into the settings drawer.';
       } else if (action === 'close-settings') {
+        screen.classList.remove('dim');
         swap(site === 'fr' ? 'consent-fr' : 'consent-de');
         status.textContent = 'Back to the cookie step.';
       } else if (action === 'done') {
+        screen.classList.remove('dim');
         await hide();
         status.textContent = 'Done. Each question asked once.';
       }
     });
 
     q('[data-demo-replay]').addEventListener('click', async () => {
+      screen.classList.remove('dim');
       await hide();
       site = 'de';
       layer.classList.remove('drawer');
