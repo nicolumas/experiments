@@ -197,9 +197,10 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
     <div class="head">
       <p class="eyebrow">Concept 1 · Final design, round 2 · 17 Nov 2026</p>
       <h1>Arrival sheet</h1>
-      <p class="lede">The country question and the cookie question as one V2 layer: a sheet on phones, a thin bar on desktop, and the cookie settings as the same layer expanded into a drawer. Drawn at real size over the live homepages, with the shop's own tokens. The wording is unchanged.</p>
+      <p class="lede">The country question and the cookie question as one V2 sheet on phones, with the cookie settings as the same sheet expanded into a drawer. Phones only for now: from 980 px wide, desktop keeps the LM-14080 cookie bar and today's country pop-up. Drawn at real size over the live homepages, with the shop's own tokens. The wording is unchanged.</p>
       <ul class="status">
         <li><b>Builds on</b> LM-14080 (new ticket on top)</li>
+        <li><b>Scope</b> phones, below 980 px</li>
         <li><b>Release</b> everyone, no A/B test</li>
         <li><b>Status</b> waiting for approval</li>
       </ul>
@@ -207,7 +208,6 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
         <li><a href="#flow">Flow</a></li>
         <li><a href="#try">Try it</a></li>
         <li><a href="#cases">Settings and other cases</a></li>
-        <li><a href="#desktop">Desktop</a></li>
         <li><a href="#spec">Spec</a></li>
         <li><a href="#brand">Brand notes</a></li>
       </ul>
@@ -397,121 +397,6 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
   </div>
 </section>
 
-<section class="wrap" id="desktop">
-  <div class="inner">
-    <div class="head">
-      <p class="eyebrow">Desktop · 1440 × 900 · from 980 px wide</p>
-      <h2>A thin bar along the bottom</h2>
-      <p>Click through the bar below. One row across the full width: text on the left, actions on the right, small buttons so the bar stays about 75 px tall and the art keeps the screen. The settings open the bar upward into a drawer with the four categories side by side. While open it sits over the trust footer, the Trustpilot badge and the advisor pill.</p>
-    </div>
-    <div class="dgrid demo-row">
-    <figure class="frame dframe demo demo-desk" data-demo>
-      <div class="url" data-demo-url>lumas.de · Desktop · try it</div>
-      <div class="ddevice"><div class="dscreen bg-de-desktop" data-demo-screen data-bg="desktop">
-        <section class="bar live" data-demo-layer><div class="bar-in" data-demo-inner>
-      <div class="bar-text">
-        <p class="eyebrow-s"><span class="steps inline" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></span>Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
-        <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
-        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
-      </div></div></section>
-      </div></div>
-      <figcaption><span data-demo-status>Click a button in the bar.</span> <button type="button" class="replay" data-demo-replay>Replay</button></figcaption>
-      <template data-t="geo">
-      <div class="bar-text">
-        <p class="eyebrow-s"><span class="steps inline" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></span>Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
-        <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
-        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
-      </div></template>
-      <template data-t="consent-de">
-      <div class="bar-text">
-        
-        <p class="bar-line"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="title-s">Willkommen bei LUMAS</span><span class="body-s">Diese Webseite benutzt Cookies. <a>Datenschutzerklärung</a></span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t arrow" data-go="settings">Einstellungen ändern</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
-      </div></template>
-      <template data-t="consent-fr">
-      <div class="bar-text">
-        <p class="eyebrow-s cue"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="flag fr" aria-hidden="true"></span><span>LUMAS France</span><svg class="tick" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.4 4.8 9 10 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></p>
-        <p class="bar-line"><span class="title-s">Bienvenue chez LUMAS</span><span class="body-s">Ce site utilise des cookies. <a>Politique de confidentialité</a></span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t arrow" data-go="settings">Modifier les paramètres</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK et continuer</span></button>
-      </div></template>
-      <template data-t="settings">
-      <div class="dr-head"><h3 class="title-s"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span>Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
-      <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
-      <ul class="cats cols"><li><span class="cb locked" aria-hidden="true"></span><div><b>Notwendig</b><p>Damit der Shop funktioniert: Warenkorb, Anmeldung und deine Cookie-Auswahl.</p></div></li><li><span class="cb on" aria-hidden="true"></span><div><b>Präferenzen</b><p>Merkt sich Einstellungen wie Sprache und zuletzt angesehene Werke.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Statistiken</b><p>Hilft uns zu verstehen, wie der Shop genutzt wird.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Marketing</b><p>Zeigt dir passende Werbung auf anderen Seiten und misst ihren Erfolg.</p></div></li></ul>
-      <div class="dr-actions row">
-        <button type="button" class="btn-s sm" data-go="done">Auswahl speichern</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
-      </div></template>
-    </figure>
-    </div>
-    <p class="swipe">The four states, side by side: scroll sideways for step 2, arrival and settings.</p>
-    <div class="dgrid">
-    <figure class="frame dframe">
-      <div class="url">lumas.de · step 1</div>
-      <div class="ddevice"><div class="dscreen bg-de-desktop"><section class="bar "><div class="bar-in">
-      <div class="bar-text">
-        <p class="eyebrow-s"><span class="steps inline" data-step="1" data-mark="2" aria-hidden="true"><i></i><i></i></span>Sieht aus, als wärst du nicht in deinem lokalen Shop</p>
-        <p class="bar-line"><span class="title-s">Wechsel zu deiner lokalen Seite</span><span class="body-s">So erhältst du passende Preise, Sprache und Lieferoptionen.</span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t" data-go="stay">Hier bleiben</button>
-        <button type="button" class="btn-p sm" data-go="switch"><span class="flag fr" aria-hidden="true"></span><span>Ja, ich möchte wechseln.</span></button>
-      </div></div></section></div></div>
-      <figcaption><b>Country step.</b> One thin bar: dashes and eyebrow on the first line, title and text on the second, actions right.</figcaption>
-    </figure>
-    <figure class="frame dframe">
-      <div class="url">lumas.de · step 2</div>
-      <div class="ddevice"><div class="dscreen bg-de-desktop"><section class="bar "><div class="bar-in">
-      <div class="bar-text">
-        
-        <p class="bar-line"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="title-s">Willkommen bei LUMAS</span><span class="body-s">Diese Webseite benutzt Cookies. <a>Datenschutzerklärung</a></span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t arrow" data-go="settings">Einstellungen ändern</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
-      </div></div></section></div></div>
-      <figcaption><b>Cookie step, in place.</b> The bar keeps its place; the second dash fills.</figcaption>
-    </figure>
-    <figure class="frame dframe">
-      <div class="url">fr.lumas.com · arrival</div>
-      <div class="ddevice"><div class="dscreen bg-fr-desktop"><section class="bar "><div class="bar-in">
-      <div class="bar-text">
-        <p class="eyebrow-s cue"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span><span class="flag fr" aria-hidden="true"></span><span>LUMAS France</span><svg class="tick" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.4 4.8 9 10 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></p>
-        <p class="bar-line"><span class="title-s">Bienvenue chez LUMAS</span><span class="body-s">Ce site utilise des cookies. <a>Politique de confidentialité</a></span></p>
-      </div>
-      <div class="bar-actions">
-        <button type="button" class="btn-t arrow" data-go="settings">Modifier les paramètres</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK et continuer</span></button>
-      </div></div></section></div></div>
-      <figcaption><b>Arrival.</b> Opens on step 2 with the site line.</figcaption>
-    </figure>
-    <figure class="frame dframe">
-      <div class="url">lumas.de · settings</div>
-      <div class="ddevice"><div class="dscreen bg-de-desktop"><section class="bar drawer"><div class="bar-in">
-      <div class="dr-head"><h3 class="title-s"><span class="steps inline" data-step="2" data-mark="2" aria-hidden="true"><i></i><i></i></span>Cookie-Einstellungen</h3><button type="button" class="x" aria-label="Zurück" data-go="close-settings"></button></div>
-      <p class="body-s">Wähle aus, welche Kategorien du erlaubst. Notwendige Cookies sind immer aktiv.</p>
-      <ul class="cats cols"><li><span class="cb locked" aria-hidden="true"></span><div><b>Notwendig</b><p>Damit der Shop funktioniert: Warenkorb, Anmeldung und deine Cookie-Auswahl.</p></div></li><li><span class="cb on" aria-hidden="true"></span><div><b>Präferenzen</b><p>Merkt sich Einstellungen wie Sprache und zuletzt angesehene Werke.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Statistiken</b><p>Hilft uns zu verstehen, wie der Shop genutzt wird.</p></div></li><li><span class="cb " aria-hidden="true"></span><div><b>Marketing</b><p>Zeigt dir passende Werbung auf anderen Seiten und misst ihren Erfolg.</p></div></li></ul>
-      <div class="dr-actions row">
-        <button type="button" class="btn-s sm" data-go="done">Auswahl speichern</button>
-        <button type="button" class="btn-p sm" data-go="done"><span>OK und weiter</span></button>
-      </div></div></section></div></div>
-      <figcaption><b>Settings, as a drawer.</b> The bar grows upward; the four categories sit side by side.</figcaption>
-    </figure>
-    </div>
-  </div>
-</section>
 
 <section class="wrap band" id="spec">
   <div class="inner">
@@ -536,14 +421,15 @@ code { font: 500 .88em/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var
           <thead><tr><th>#</th><th>Part</th><th>Values</th></tr></thead>
           <tbody>
             <tr><td>1</td><td>Sheet, phone</td><td><code>--color-surface-page</code>, top hairline <code>0.1rem --color-border-default</code>, no shadow. Padding <code>--sp-4 --sp-5 --sp-2</code> (the text action's tap height is the bottom space). Three groups with gap <code>--sp-3</code>: dashes, text, actions; inside the text group gap <code>--sp-2</code>; actions add <code>--sp-1</code> on top. Fixed at <code>inset-block-end: var(--bottom-nav-height, 0)</code>. z-index <code>cookie-notification</code>.</td></tr>
-            <tr><td>2</td><td>Step dashes</td><td>Two dashes <code>2rem × 0.2rem</code>, gap <code>--sp-1</code>. Done or current <code>--color-text-primary</code>, next <code>--color-border-default</code>; colour transition <code>--motion-default</code>. Only when both steps are in play; on arrival the second fills as the sheet slides in. Own row on phones; inline before the first text line in the desktop bar and drawer.</td></tr>
+            <tr><td>2</td><td>Step dashes</td><td>Two dashes <code>2rem × 0.2rem</code>, gap <code>--sp-1</code>. Done or current <code>--color-text-primary</code>, next <code>--color-border-default</code>; colour transition <code>--motion-default</code>. Only when both steps are in play; on arrival the second fills as the sheet slides in. Own row at the top of the sheet.</td></tr>
             <tr><td>3</td><td>Eyebrow</td><td><code>--font-body</code> (regular) 1.2rem / 1.4, caps, <code>0.08em</code>, <code>--color-text-secondary</code>: quieter than the title and the bold button labels, <code>text-wrap: balance</code> (no single word on the last line). Arrival variant in <code>--color-text-primary</code> and bold, with flag and check icon.</td></tr>
-            <tr><td>4</td><td>Title</td><td><code>--font-display</code> 2.4rem / 1.2 on phones, 2.2rem in the desktop bar and drawer heads. Sentence case, <code>--color-text-primary</code>.</td></tr>
+            <tr><td>4</td><td>Title</td><td><code>--font-display</code> 2.4rem / 1.2; 2.2rem in the drawer head. Sentence case, <code>--color-text-primary</code>.</td></tr>
             <tr><td>5</td><td>Body</td><td><code>--font-body</code> 1.4rem / 1.45, <code>--color-text-secondary</code>. Link <code>--color-text-link</code>, underlined.</td></tr>
-            <tr><td>6</td><td>Primary button</td><td><code>btn-base</code> with <code>min-inline-size: 30rem</code>, so every step's primary button has the width of the country button (“Ja, ich möchte wechseln.”) and the sheet keeps its shape between steps; a longer label (e.g. English) grows past it. On phones <code>min-block-size: 4.4rem</code>, <code>padding-block: 0</code>, <code>padding-inline: --sp-6</code> so it is one tap target tall and no taller. Desktop bar and drawer use <code>btn-size-sm</code>. Flag <code>1.8 × 1.2rem</code>, gap <code>--sp-2</code>.</td></tr>
-            <tr><td>7</td><td>Text action</td><td><code>--font-body-bold</code> 1.2rem, caps, <code>0.14em</code> (matches the button), underline offset <code>0.5rem</code>, <code>min-block-size: 4rem</code> on phones, <code>3.4rem</code> in the desktop bar. “Einstellungen ändern” adds <code>shorthands.icon(arrow-right)</code>. On phones it wraps under the button; in the desktop bar it sits left of the button.</td></tr>
-            <tr><td></td><td>Bar, desktop</td><td>From <code>tablet-landscape</code> (980 px): full width at <code>inset-block-end: 0</code>, same surface and hairline, padding <code>1.4rem --sp-10</code>. Grid: text <code>1fr</code>, actions <code>auto</code>, column gap <code>--sp-10</code>, actions gap <code>--sp-6</code>. Line 1: dashes and eyebrow; line 2: title (2.2rem) and body side by side, gap <code>--sp-4</code>. About 7.5rem tall.</td></tr>
-            <tr><td></td><td>Settings drawer</td><td>The same layer, expanded; height eases with <code>--motion-fast</code>. Phone: up to <code>calc(100dvh - var(--bottom-nav-height) - 4.8rem)</code>, list scrolls, buttons pinned and stacked (<code>btn-secondary</code> then primary, full width). Desktop: padding <code>--sp-6 --sp-10 --sp-5</code>, dashes inline before the title, categories in four columns, buttons right. Checkboxes 2rem, border <code>--color-border-focus</code>, checked <code>--color-surface-inverse</code>, “Notwendig” on <code>--color-surface-muted</code>. Cross: back to the cookie step, or closes when the answer already exists. <kbd>Esc</kbd> does the same. No backdrop.</td></tr>
+            <tr><td>6</td><td>Primary button</td><td><code>btn-base</code> with <code>min-inline-size: 30rem</code>, so every step's primary button has the width of the country button (“Ja, ich möchte wechseln.”) and the sheet keeps its shape between steps; a longer label (e.g. English) grows past it. <code>min-block-size: 4.4rem</code>, <code>padding-block: 0</code>, <code>padding-inline: --sp-6</code> so it is one tap target tall and no taller. Flag <code>1.8 × 1.2rem</code>, gap <code>--sp-2</code>.</td></tr>
+            <tr><td>7</td><td>Text action</td><td><code>--font-body-bold</code> 1.2rem, caps, <code>0.14em</code> (matches the button), underline offset <code>0.5rem</code>, <code>min-block-size: 4rem</code>. “Einstellungen ändern” adds <code>shorthands.icon(arrow-right)</code>. Wraps under the button when the row is full.</td></tr>
+            <tr><td></td><td>Desktop</td><td>Out of scope for now. From <code>tablet-landscape</code> (980 px) the sheet stays dormant and the LM-14080 cookie bar and today's country pop-up run as they do now.</td></tr>
+            <!--<td>From <code>tablet-landscape</code> (980 px): full width at <code>inset-block-end: 0</code>, same surface and hairline, padding <code>1.4rem --sp-10</code>. Grid: text <code>1fr</code>, actions <code>auto</code>, column gap <code>--sp-10</code>, actions gap <code>--sp-6</code>. Line 1: dashes and eyebrow; line 2: title (2.2rem) and body side by side, gap <code>--sp-4</code>. About 7.5rem tall.</td></tr>-->
+            <tr><td></td><td>Settings drawer</td><td>The same layer, expanded; height eases with <code>--motion-fast</code>. Up to <code>calc(100dvh - var(--bottom-nav-height) - 4.8rem)</code>, list scrolls, buttons pinned and stacked (<code>btn-secondary</code> then primary, full width). Checkboxes 2rem, border <code>--color-border-focus</code>, checked <code>--color-surface-inverse</code>, “Notwendig” on <code>--color-surface-muted</code>. Cross: back to the cookie step, or closes when the answer already exists. <kbd>Esc</kbd> does the same. No backdrop.</td></tr>
             <tr><td></td><td>Motion</td><td>Enter: slide up, <code>--motion-default</code> (320 ms) <code>--motion-easing</code>. Step change and drawer: height + content fade, <code>--motion-fast</code> (220 ms). Leave: slide down, <code>--motion-fast</code>. None with <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td></td><td>Focus</td><td><code>shorthands.focus-outline</code> on every control. On step change or drawer open, focus moves to the new title (<code>tabindex="-1"</code>) only if it was inside the layer.</td></tr>
           </tbody>
