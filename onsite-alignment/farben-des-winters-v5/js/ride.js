@@ -171,6 +171,12 @@
      every other day stops at a door at the viewpoint. */
   const AD = G.advent;
   const SCHED = window.GAL_ADVENT.days;
+  /* the pitch build before Advent: the plain link has no door to open yet, so it starts on door 1 with the day switcher
+     (like demo/), and can be played now; the live build is never redirected */
+  if (G.BUILD && G.BUILD.demo && !/[?&](day|now)=/.test(location.search) && Date.now() < AD.opensAtMs(SCHED[0])) {
+    const lang = new URLSearchParams(location.search).get('lang');
+    location.replace(`?day=1&demo${lang ? `&lang=${lang}` : ''}`);
+  }
   const SIM_NOW = AD.simulatedNow(location.search, SCHED, !!(G.BUILD && G.BUILD.demo));
   const SIMULATED = SIM_NOW !== null;
   const NOW = SIMULATED ? SIM_NOW : Date.now();
