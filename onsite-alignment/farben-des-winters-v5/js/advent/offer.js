@@ -104,8 +104,8 @@
   /* the sign-up for tomorrow's door goes straight from the page to Klaviyo with the public site key
      (config.notify.companyId; no private key ever reaches the browser). Without a list it creates or updates the profile
      with the advent properties (client profiles endpoint, no consent record); once config.notify.listId is set it
-     subscribes the address to that list instead, with marketing consent. With no site key the live build shows no form
-     and the demo only says thank you. */
+     subscribes the address to that list instead, with marketing consent. The live build shows the form only once that
+     list is set; the demo shows it always and, with no site key, only says thank you. */
   const NOTIFIED = () => ((G.BUILD && G.BUILD.demo) ? 'lumasAdvent.demo.notify' : 'lumasAdvent.notify');
   const notified = () => { try { return localStorage.getItem(NOTIFIED()) === '1'; } catch (e) { return false; } };
   const markNotified = () => { try { localStorage.setItem(NOTIFIED(), '1'); } catch (e) { /* the thank-you still shows */ } };
@@ -126,7 +126,8 @@
     const { t, config } = D;
     const demo = !!(G.BUILD && G.BUILD.demo);
     const n = config.notify || {};
-    if (!demo && !n.companyId) return null;
+    /* the live build asks for addresses only once there is a list to subscribe them to, with consent */
+    if (!demo && !(n.companyId && n.listId)) return null;
     const done = () => h('p', { class: 'offer-notified' }, t('notifyDone', { n: next.day }));
     if (notified()) return done();
     const input = h('input', { type: 'email', id: 'notifyEmail', name: 'email', autocomplete: 'email', inputmode: 'email', placeholder: t('notifyPlaceholder'), required: true });
