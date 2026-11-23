@@ -1224,8 +1224,13 @@
     street: { door: { w: [0.625, 0.447, 0.7, 0.726], t: [0.672, 0.476, 0.853, 0.7] } },
     gallery: {
       wall: { w: [0.2, 0.1, 0.74, 0.47], t: [0.12, 0.13, 0.88, 0.44] },
-      /* the sofa: today's work hangs over it on the calendar (left, top of the back, right, feet) */
-      sofa: { w: [0.217, 0.509, 0.728, 0.799], t: [0.109, 0.465, 0.888, 0.634] },
+    },
+    /* the calendar: the parcel in the snow (numbers from _build/opening/make_opening.py): where the painted parcel
+       stood, where an opened work stands (between the couple and the skier, its foot on the snow line), the words */
+    snow: {
+      parcel: { w: [0.3533, 0.2744, 0.6548, 0.6256], t: [0.2658, 0.2285, 0.7473, 0.404] },
+      stand: { w: [0.3295, 0, 0.5873, 0.6244], t: [0.2277, 0, 0.6394, 0.4034] },
+      words: { w: [0.2203, 0.7634, 0.7797, 0.9268], t: [0.0534, 0.4729, 0.9466, 0.5545] },
     },
   };
   function plateBox(ar) {
@@ -1706,8 +1711,12 @@
       now: nowMs,
       opened: openedNow,
       busy: () => ['ride', 'door', 'toStreet', 'street'].includes(S.phase),
-      plate: () => `assets/scenes/home-in-${o()}.webp`,
-      room: () => ({ sofa: rectOn(plateBox(portrait ? 752 / 1344 : 1344 / 752), 'sofa', 'gallery') }),
+      plate: () => `assets/scenes/snow-${o()}.webp`,
+      room: () => {
+        const box = plateBox(portrait ? 752 / 1344 : 1344 / 752);
+        const stand = rectOn(box, 'stand', 'snow');
+        return { parcel: rectOn(box, 'parcel', 'snow'), stand: { x: stand.x, w: stand.w, ground: stand.y + stand.h }, words: rectOn(box, 'words', 'snow') };
+      },
       onRide: rideToday, onCard: showCard, onDirect: openDirect, onMissed: openMissed,
     });
     G.offer.init({ t, track, lang: () => LANG, now: nowMs, sched: SCHED, config: window.GAL_ADVENT.config, fmtNum, size, onCalendar: showCalendar });

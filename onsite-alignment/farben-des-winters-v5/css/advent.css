@@ -4,8 +4,8 @@
 /* ------------------------------------------------------------ the calendar */
 
 /* inside #ui, under the top bar (z 11); the ride's caption, the end panel and the skip step aside while it is open */
-#calendar { position: absolute; inset: 0; z-index: 9; overflow: hidden; background: #b7c2d8; }
-/* warm light round today's door on the wall (never on art): a slow candle-like breath */
+#calendar { position: absolute; inset: 0; z-index: 9; overflow: hidden; background: #f8f1e8; }
+/* warm light round today's door (never on art): a slow candle-like breath */
 #calendar .cal-glow { position: absolute; inset: -38% -48%; z-index: -1; pointer-events: none;
   background: radial-gradient(closest-side, rgba(255, 214, 140, .62), rgba(255, 196, 110, 0));
   animation: cal-window 3.6s ease-in-out infinite alternate; }
@@ -18,12 +18,9 @@
 #calendar[hidden] { display: none; }
 #calendar .cal-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-/* the room: today's work hangs over the sofa at a normal height, the words sit underneath on a soft ivory floor;
-   positions come from the sofa in the painting (calendar.js layout()) */
+/* the snow: positions come from the painting (calendar.js layout()) */
 #calendar .cal-stage { position: absolute; inset: 0; pointer-events: none; }
 #calendar .cal-stage > * { pointer-events: auto; }
-#calendar .cal-ground { position: absolute; left: 0; right: 0; bottom: 0; pointer-events: none !important;
-  background: linear-gradient(180deg, rgba(254, 253, 249, 0), rgba(254, 253, 249, .92) 40px, var(--ivory) 72px); }
 #calendar .cal-label { position: absolute; text-align: center; animation: cal-panel-in 520ms cubic-bezier(.2, .8, .2, 1) 160ms both; }
 #calendar .cal-label .eyebrow { font-size: 13px; letter-spacing: .1em; color: #3f3c38; }
 @keyframes cal-panel-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -33,50 +30,33 @@
 #calendar .cal-links .link { font-size: 14px; }
 @media (min-aspect-ratio: 1/1) { #calendar .cal-title { font-size: 32px; } }
 
-/* today's door: today's work, wrapped in kraft paper with a red ribbon and bow and a tag with the day. Pull the ribbon
-   (or tap): ribbon and bow go, the light comes up, and only then does the paper part */
-#calendar .today-door { position: absolute; left: 0; top: 0; padding: 0; border: 0; background: radial-gradient(closest-side, #fffaf0, #ffd79a 70%, #f2b45e);
+/* today's door: the parcel from the painting, in its pieces (_build/opening/make_opening.py), exactly where the painting
+   had it. Pull the bow (or tap): ribbon and bow go, the light comes up, and only then does the paper part at the ribbon */
+#calendar .today-door { --split: .6719; position: absolute; left: 0; top: 0; padding: 0; border: 0; background: none;
   container-type: inline-size; touch-action: none; -webkit-tap-highlight-color: transparent;
   animation: cal-big-in 620ms cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes cal-big-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
 #calendar button.today-door { cursor: grab; transition: transform 160ms var(--ease-out); }
 #calendar button.today-door:active { transform: scale(.99); }
-#calendar .today-door .paper { position: absolute; top: 0; bottom: 0; width: 50.5%; background-color: #efe5d4;
-  background-image: radial-gradient(rgba(122, 31, 37, .2) .9px, transparent 1.3px), radial-gradient(rgba(122, 31, 37, .2) .9px, transparent 1.3px),
-    linear-gradient(160deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 45%), linear-gradient(0deg, rgba(110, 80, 40, .12), rgba(110, 80, 40, 0) 35%);
-  background-size: 14px 14px, 14px 14px, 100% 100%, 100% 100%; background-position: 0 0, 7px 7px, 0 0, 0 0;
+#calendar .today-door .paper { position: absolute; top: 0; bottom: 0; background: url(../assets/opening/parcel-paper.webp) no-repeat;
   transition: transform 560ms cubic-bezier(.55, 0, .45, 1) 520ms, opacity 360ms ease-in 720ms; }
-#calendar .today-door .paper-l { left: 0; box-shadow: 0 16px 22px -16px rgba(80, 56, 24, .55); }
-#calendar .today-door .paper-r { right: 0; box-shadow: 0 16px 22px -16px rgba(80, 56, 24, .55), inset 1px 0 0 rgba(120, 84, 40, .18); }
-#calendar .today-door .ribbon { position: absolute; background-color: #7a1f25; pointer-events: none; }
-#calendar .today-door .ribbon-v { background-image: linear-gradient(90deg, #5a141a, #8f2a30 30%, #a5393f 50%, #8f2a30 70%, #5a141a); }
-#calendar .today-door .ribbon-h { background-image: linear-gradient(180deg, #5a141a, #8f2a30 30%, #a5393f 50%, #8f2a30 70%, #5a141a); }
-#calendar .today-door .ribbon-v { left: 50%; top: 0; bottom: 0; width: 7cqw; margin-left: -3.5cqw; transform: translateY(var(--pull, 0px));
-  transition: transform 320ms cubic-bezier(.5, 0, .75, 0), opacity 220ms ease-in 120ms; }
-#calendar .today-door .ribbon-h { left: 0; right: 0; top: 40%; height: 7cqw; margin-top: -3.5cqw; transform-origin: 50% 50%; transition: transform 300ms ease-in 60ms; }
-#calendar .today-door .bow { position: absolute; left: 50%; top: 40%; width: 54cqw; aspect-ratio: 240 / 150; margin: -14.2cqw 0 0 -27cqw; pointer-events: none;
-  filter: drop-shadow(0 3px 3px rgba(60, 20, 20, .35)); transform: translateY(var(--pull, 0px));
-  transition: transform 320ms cubic-bezier(.5, 0, .75, 0), opacity 200ms ease-in 80ms; }
-#calendar .today-door .bow svg { display: block; width: 100%; height: 100%; }
-#calendar .today-door .tag { position: absolute; left: 60%; top: 56%; width: 23cqw; aspect-ratio: 3 / 4; display: grid; place-items: center;
-  background: var(--ivory); box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .08), 0 8px 12px -8px rgba(60, 40, 20, .5); transform: rotate(6deg); transform-origin: 50% 0;
-  pointer-events: none; transition: opacity 200ms ease-in; }
-#calendar .today-door .tag::before { content: ""; position: absolute; top: 8%; left: 50%; width: 9%; aspect-ratio: 1; margin-left: -4.5%; border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(29, 29, 29, .25); }
-#calendar .today-door .tag::after { content: ""; position: absolute; left: 50%; bottom: 100%; width: 1px; height: 16cqw; margin-left: -.5px;
-  background: rgba(29, 29, 29, .45); transform: rotate(-24deg); transform-origin: 50% 100%; }
-#calendar .today-door .tag .n { font-family: var(--font-display); font-weight: 400; font-size: 12cqw; line-height: 1; color: var(--charcoal); margin-top: 12%; }
-#calendar .today-door.pulling .ribbon-v, #calendar .today-door.pulling .bow { transition: none; }
-#calendar .today-door.opening .ribbon-v, #calendar .today-door.opening .bow { transform: translateY(calc(var(--pull, 0px) + 60cqw)); opacity: 0; }
+#calendar .today-door .paper-l { left: 0; width: calc(var(--split) * 100%); background-size: calc(100% / var(--split)) 100%; background-position: 0 0; }
+#calendar .today-door .paper-r { right: 0; width: calc((1 - var(--split)) * 100%); background-size: calc(100% / (1 - var(--split))) 100%; background-position: 100% 0; }
+#calendar .today-door .ribbon-h, #calendar .today-door .bow { position: absolute; inset: 0; pointer-events: none; background: no-repeat center / 100% 100%; }
+#calendar .today-door .ribbon-h { background-image: url(../assets/opening/parcel-ribbon-h.webp); transform-origin: 50% 50%; transition: transform 300ms ease-in 60ms; }
+/* the ribbon slides down through the parcel's lower edge, never over the skier in front of it */
+#calendar .today-door .bow { background-image: url(../assets/opening/parcel-bow.webp); transform: translateY(var(--pull, 0px)); clip-path: inset(0 0 var(--pull, 0px) 0);
+  transition: transform 320ms cubic-bezier(.5, 0, .75, 0), clip-path 320ms cubic-bezier(.5, 0, .75, 0), opacity 200ms ease-in 80ms; }
+#calendar .today-door.pulling .bow { transition: none; }
+#calendar .today-door.opening .bow { transform: translateY(calc(var(--pull, 0px) + 60cqw)); clip-path: inset(0 0 calc(var(--pull, 0px) + 60cqw) 0); opacity: 0; }
 #calendar .today-door.opening .ribbon-h { transform: scaleX(0); }
-#calendar .today-door.opening .tag { opacity: 0; }
 #calendar .today-door.opening .paper-l { transform: translateX(-62%) rotate(-5deg); opacity: 0; }
 #calendar .today-door.opening .paper-r { transform: translateX(62%) rotate(5deg); opacity: 0; }
 #calendar .today-door .spark { bottom: 96%; }
-/* opened: the work itself hangs where the parcel was, at the same size */
-#calendar .today-door.is-opened:not(.is-wrapped) { background: none; cursor: pointer; }
+/* opened: the work itself stands in the snow */
+#calendar .today-door.is-opened:not(.is-wrapped) { cursor: pointer; }
 #calendar .today-door.is-opened img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
-#calendar .today-door.is-locked { background: none; opacity: .82; }
+#calendar .today-door.is-locked { opacity: .82; }
 #calendar .today-door.is-locked .paper { transition: none; }
 
 /* all doors: a sheet over the room */
@@ -122,7 +102,8 @@
 #calendar .cal-demo { position: absolute; z-index: 3; left: 50%; bottom: calc(var(--safe-b) + 12px); transform: translateX(-50%);
   display: flex; align-items: center; gap: 2px; padding: 4px 6px; background: rgba(254, 253, 249, .92); box-shadow: 0 0 0 1px var(--line);
   font-size: 14px; color: var(--charcoal); white-space: nowrap; }
-@media (min-width: 900px) and (min-aspect-ratio: 9/10) {
+/* bottom right only where it clears the words in the snow; narrower screens keep it centred under them */
+@media (min-width: 1200px) and (min-aspect-ratio: 9/10) {
   #calendar .cal-demo { left: auto; right: var(--gutter); bottom: calc(var(--safe-b) + var(--gutter)); transform: none; }
 }
 #calendar .cal-demo-tag { padding: 0 8px 0 4px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
@@ -136,7 +117,6 @@
   #calendar .door, #calendar .cal-grid .door.is-open, #calendar .cal-label, #calendar .cal-sheet-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
   #calendar .door .spark { display: none; }
   #calendar .door .leaf { transition: none; }
-  #calendar .today-door .ribbon-v, #calendar .today-door .bow { animation: none; }
 }
 /* ------------------------------------------------------------ the offer card */
 

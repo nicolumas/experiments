@@ -1,4 +1,4 @@
-/* The calendar: the living room in the evening with today's door, large, on the wall; all 24 doors open behind a
+/* The calendar: today's door is the parcel standing in the snow, people round it; all 24 doors open behind a
    link. Opened doors show their work bare; today's door glows and starts the ride; missed doors stay closed until
    tapped; upcoming doors are greyed. It re-reads the time whenever the tab comes back, so a page left
    open over midnight shows the new day. GAL.calendar.init(deps) once, then show() / hide(). */
@@ -23,7 +23,7 @@
     return e;
   };
 
-  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), room() -> { sofa }, onRide(entry, door), onCard(entry, from),
+  /* deps: { sched, t, track, lang(), now(), opened(), busy(), plate(), room() -> { parcel, stand, words }, onRide(entry, door), onCard(entry, from),
      onDirect(entry), onMissed(entry), demo, search } */
   let reopenSheet = false;
   function init(deps) {
@@ -91,16 +91,10 @@
     return h('div', { class: cls, 'data-day': e.day, 'data-state': state, 'aria-label': label, 'aria-disabled': 'true', role: 'img' }, h('span', { class: 'n' }, String(e.day)));
   }
 
-  /* today's work, wrapped: kraft paper at the work's own proportions, a red ribbon and bow, a tag with the day */
   const ratio = (e) => e.r || (e.work && e.work.r) || 0.75;
-  const BOW = '<svg viewBox="0 0 240 150" aria-hidden="true" focusable="false"><defs><linearGradient id="bowSatin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a1353b"/><stop offset=".5" stop-color="#7a1f25"/><stop offset="1" stop-color="#5a141a"/></linearGradient><linearGradient id="bowTail" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a141a"/><stop offset=".5" stop-color="#8f2a30"/><stop offset="1" stop-color="#5a141a"/></linearGradient></defs><path d="M112 66 C104 92 92 118 80 146 L93 139 L99 150 C109 122 116 96 121 70 Z" fill="url(#bowTail)"/><path d="M128 66 C136 92 148 118 160 146 L147 139 L141 150 C131 122 124 96 119 70 Z" fill="url(#bowTail)"/><path d="M116 60 C92 20 30 8 21 40 C15 67 58 83 116 67 Z" fill="url(#bowSatin)"/><path d="M124 60 C148 20 210 8 219 40 C225 67 182 83 124 67 Z" fill="url(#bowSatin)"/><path d="M113 62 C92 37 52 28 40 44 C55 41 87 47 113 65 Z" fill="#3f0d12" opacity=".4"/><path d="M127 62 C148 37 188 28 200 44 C185 41 153 47 127 65 Z" fill="#3f0d12" opacity=".4"/><path d="M44 24 C62 16 86 22 104 40" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="4" stroke-linecap="round"/><path d="M196 24 C178 16 154 22 136 40" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="4" stroke-linecap="round"/><rect x="105" y="49" width="30" height="28" rx="9" fill="#86242a"/><rect x="110" y="53" width="8" height="20" rx="4" fill="#fff" opacity=".14"/></svg>';
-  const wrapping = (e) => {
-    const bow = h('span', { class: 'bow' });
-    bow.innerHTML = BOW;
-    return [h('span', { class: 'paper paper-l' }), h('span', { class: 'paper paper-r' }),
-      h('span', { class: 'ribbon ribbon-h' }), h('span', { class: 'ribbon ribbon-v' }), bow,
-      h('span', { class: 'tag' }, h('span', { class: 'n' }, String(e.day)))];
-  };
+  /* today's door, wrapped: the parcel from the painting, in its pieces (_build/opening/make_opening.py): the paper in two
+     halves split at the ribbon, the ribbon across, and the bow with the ribbon down, which is what you pull */
+  const wrapping = () => [h('span', { class: 'paper paper-l' }), h('span', { class: 'paper paper-r' }), h('span', { class: 'ribbon-h' }), h('span', { class: 'bow' })];
   /* pull the ribbon down (or tap): the parcel opens */
   function pullable(btn, open) {
     let y0 = null;
@@ -123,15 +117,15 @@
     btn.addEventListener('click', open);
   }
 
-  /* today's door, large, on the living-room wall: today's work, wrapped, or the work itself once opened */
+  /* today's door, large, in the snow: the parcel, or the work itself standing there once opened */
   function bigDoor(today, state, now) {
     const lockedOn = today ? null : laterToday(now) || (now < G.advent.opensAtMs(D.sched[0]) ? D.sched[0] : null);
-    if (lockedOn) return h('div', { class: 'door today-door is-wrapped is-locked', style: `--r:${ratio(lockedOn)}`, 'data-day': lockedOn.day, 'data-state': 'locked', role: 'img', 'aria-label': D.t('door', { n: lockedOn.day }) }, wrapping(lockedOn));
+    if (lockedOn) return h('div', { class: 'door today-door is-wrapped is-locked', style: `--r:${ratio(lockedOn)}`, 'data-day': lockedOn.day, 'data-state': 'locked', role: 'img', 'aria-label': D.t('door', { n: lockedOn.day }) }, wrapping());
     if (!today) return null;
     const label = D.t('door', { n: today.day });
     if (state === 'open' || today.type === 'finale') {
       const btn = h('button', { class: `door today-door is-wrapped is-${state === 'open' ? 'open' : 'opened'}${today.type === 'finale' ? ' is-24' : ''}`, type: 'button', style: `--r:${ratio(today)}`, 'data-day': today.day, 'data-state': state, 'aria-label': label },
-        wrapping(today), [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })));
+        wrapping(), [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })));
       let opening = false;
       pullable(btn, () => { if (!opening) { opening = true; D.onRide(today, btn); setTimeout(() => { opening = false; }, 1500); } });
       return btn;
@@ -157,12 +151,11 @@
         h('p', { class: 'cal-links' },
           h('button', { class: 'link cal-all', type: 'button', onclick: openSheet }, D.t('allDoors')),
           direct ? h('button', { class: 'link cal-direct', type: 'button', onclick: () => D.onDirect(today) }, D.t('direct')) : null));
-    const ground = h('div', { class: 'cal-ground' });
-    const stage = h('div', { class: 'cal-stage' }, ground, big, label);
-    cur = { big, label, ground };
+    const stage = h('div', { class: 'cal-stage' }, big, label);
+    cur = { big, label };
     const sheet = h('div', { class: 'cal-sheet', hidden: true, role: 'dialog', 'aria-modal': 'true', 'aria-label': D.t('allDoorsTitle') });
     const picker = D.demo && new URLSearchParams(D.search).has('demo') ? demoBar(now) : null;
-    /* the room lives: warm light breathes round today's door */
+    /* the scene lives: warm light breathes round today's door */
     const glow = h('div', { class: 'cal-glow' });
     el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), stage, sheet, picker);
     if (big) big.prepend(glow);
@@ -190,27 +183,26 @@
       h('button', { class: 'cal-demo-reset', type: 'button', onclick: reset }, D.t('demoReset')));
   }
 
-  /* where things go in the room: today's work centred over the sofa, its lower edge a hand's width above the back
-     (at most 62% of the sofa's width, never into the top bar); the words underneath the sofa on the ivory floor */
+  /* where things go in the snow: the parcel exactly where the painting had it; an opened work stands on the snow line
+     between the couple and the skier (never in front of anyone, never into the top bar); the words on the empty snow
+     under the figures */
   let cur = null;
   let room = null;
   function layout() {
     if (!cur || !el || el.hidden) return;
-    const { sofa } = D.room();
-    room = { sofa };
-    const cx = sofa.x + sofa.w / 2;
-    if (cur.big) {
+    room = D.room();
+    const { parcel, stand, words } = room;
+    if (cur.big && cur.big.classList.contains('is-wrapped')) {
+      Object.assign(cur.big.style, { left: `${parcel.x}px`, top: `${parcel.y}px`, width: `${parcel.w}px`, height: `${parcel.h}px` });
+    } else if (cur.big) {
       const r = parseFloat(cur.big.style.getPropertyValue('--r')) || 0.75;
-      const gap = Math.max(12, Math.min(30, sofa.h * 0.18));
-      const maxW = Math.min(sofa.w * 0.62, innerWidth - 32, 560);
-      const maxH = Math.max(90, sofa.y - gap - 76);
-      const w = Math.min(maxW, maxH * r);
+      const w = Math.min(stand.w, Math.max(90, stand.ground - 84) * r, 560);
       const hh = w / r;
-      Object.assign(cur.big.style, { left: `${cx - w / 2}px`, top: `${sofa.y - gap - hh}px`, width: `${w}px`, height: `${hh}px` });
+      Object.assign(cur.big.style, { left: `${stand.x + (stand.w - w) / 2}px`, top: `${stand.ground - hh}px`, width: `${w}px`, height: `${hh}px` });
     }
     const lw = Math.min(400, innerWidth - 32);
-    Object.assign(cur.label.style, { left: `${Math.max(16, Math.min(innerWidth - 16 - lw, cx - lw / 2))}px`, top: `${sofa.y + sofa.h + 12}px`, width: `${lw}px` });
-    cur.ground.style.top = `${sofa.y + sofa.h - 28}px`;
+    const cx = words.x + words.w / 2;
+    Object.assign(cur.label.style, { left: `${Math.max(16, Math.min(innerWidth - 16 - lw, cx - lw / 2))}px`, top: `${words.y}px`, width: `${lw}px` });
   }
 
   /* all 24 doors, behind a link */
