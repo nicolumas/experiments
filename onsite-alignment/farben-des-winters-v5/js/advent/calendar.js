@@ -125,7 +125,7 @@
     const label = D.t('door', { n: today.day });
     if (state === 'open' || today.type === 'finale') {
       const btn = h('button', { class: `door today-door is-wrapped is-${state === 'open' ? 'open' : 'opened'}${today.type === 'finale' ? ' is-24' : ''}`, type: 'button', style: `--r:${ratio(today)}`, 'data-day': today.day, 'data-state': state, 'aria-label': label },
-        wrapping(), [0, 1, 2, 3].map((i) => h('i', { class: 'spark', style: `--s:${i}` })));
+        wrapping());
       let opening = false;
       pullable(btn, () => { if (!opening) { opening = true; D.onRide(today, btn); setTimeout(() => { opening = false; }, 1500); } });
       return btn;
@@ -155,10 +155,7 @@
     cur = { big, label };
     const sheet = h('div', { class: 'cal-sheet', hidden: true, role: 'dialog', 'aria-modal': 'true', 'aria-label': D.t('allDoorsTitle') });
     const picker = D.demo && new URLSearchParams(D.search).has('demo') ? demoBar(now) : null;
-    /* the scene lives: warm light breathes round today's door */
-    const glow = h('div', { class: 'cal-glow' });
     el.replaceChildren(h('img', { class: 'cal-plate', src: D.plate(), alt: '' }), stage, sheet, picker);
-    if (big) big.prepend(glow);
     el.hidden = false;
     layout();
     if (reopenSheet) { reopenSheet = false; openSheet(); }

@@ -5,11 +5,6 @@
 
 /* inside #ui, under the top bar (z 11); the ride's caption, the end panel and the skip step aside while it is open */
 #calendar { position: absolute; inset: 0; z-index: 9; overflow: hidden; background: #f8f1e8; }
-/* warm light round today's door (never on art): a slow candle-like breath */
-#calendar .cal-glow { position: absolute; inset: -38% -48%; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side, rgba(255, 214, 140, .62), rgba(255, 196, 110, 0));
-  animation: cal-window 3.6s ease-in-out infinite alternate; }
-@keyframes cal-window { 0% { opacity: .55; } 40% { opacity: .8; } 55% { opacity: .62; } 100% { opacity: .9; } }
 /* the light that pours out of today's door */
 #portal { position: absolute; z-index: 10; pointer-events: none; border-radius: 50%; transform-origin: 50% 50%; display: none;
   background: radial-gradient(closest-side, #fffaf0 0%, #ffe9c4 38%, #ffd79a 62%, rgba(255, 215, 154, 0) 100%); }
@@ -52,7 +47,6 @@
 #calendar .today-door.opening .ribbon-h { transform: scaleX(0); }
 #calendar .today-door.opening .paper-l { transform: translateX(-62%) rotate(-5deg); opacity: 0; }
 #calendar .today-door.opening .paper-r { transform: translateX(62%) rotate(5deg); opacity: 0; }
-#calendar .today-door .spark { bottom: 96%; }
 /* opened: the work itself stands in the snow */
 #calendar .today-door.is-opened:not(.is-wrapped) { cursor: pointer; }
 #calendar .today-door.is-opened img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(80, 60, 30, .35)); }
@@ -114,7 +108,7 @@
   color: var(--charcoal); font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 @keyframes cal-glow { from { box-shadow: 0 0 0 2px #f2c46b; } to { box-shadow: 0 0 0 2px #f2c46b, 0 0 14px 2px rgba(242, 196, 107, .7); } }
 @media (prefers-reduced-motion: reduce) {
-  #calendar .door, #calendar .cal-grid .door.is-open, #calendar .cal-label, #calendar .cal-sheet-panel, #calendar .cal-glow, #calendar .door .spark { animation: none; }
+  #calendar .door, #calendar .cal-grid .door.is-open, #calendar .cal-label, #calendar .cal-sheet-panel, #calendar .door .spark { animation: none; }
   #calendar .door .spark { display: none; }
   #calendar .door .leaf { transition: none; }
 }
