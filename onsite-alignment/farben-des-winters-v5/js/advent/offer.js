@@ -101,24 +101,32 @@
     return h('p', { class: 'offer-code' }, `${t('code')} `, h('b', {}, entry.voucher), ' ', btn);
   }
 
-  /* the sign-up for tomorrow's door: in the demo build nothing is sent; the live build sends the address to the
-     Klaviyo list in config.notify and shows no form until that list is set */
+  /* the sign-up for tomorrow's door goes straight from the page to Klaviyo with the public site key
+     (config.notify.companyId; no private key ever reaches the browser). Without a list it creates or updates the profile
+     with the advent properties (client profiles endpoint, no consent record); once config.notify.listId is set it
+     subscribes the address to that list instead, with marketing consent. With no site key the live build shows no form
+     and the demo only says thank you. */
   const NOTIFIED = () => ((G.BUILD && G.BUILD.demo) ? 'lumasAdvent.demo.notify' : 'lumasAdvent.notify');
   const notified = () => { try { return localStorage.getItem(NOTIFIED()) === '1'; } catch (e) { return false; } };
   const markNotified = () => { try { localStorage.setItem(NOTIFIED(), '1'); } catch (e) { /* the thank-you still shows */ } };
-  async function subscribe(email, n, lang) {
-    const res = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${encodeURIComponent(n.companyId)}`, {
+  const KLAVIYO_REVISION = '2026-10-15';
+  async function sendSignup(email, n, props) {
+    const profile = { type: 'profile', attributes: { email, properties: props } };
+    const [path, data] = n.listId
+      ? ['subscriptions', { type: 'subscription', attributes: { custom_source: 'Advent calendar', profile: { data: { ...profile, attributes: { ...profile.attributes, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } }, relationships: { list: { data: { type: 'list', id: n.listId } } } }]
+      : ['profiles', profile];
+    const res = await fetch(`https://a.klaviyo.com/client/${path}?company_id=${encodeURIComponent(n.companyId)}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/vnd.api+json', revision: '2024-10-15' },
-      body: JSON.stringify({ data: { type: 'subscription', attributes: { custom_source: 'Advent calendar', profile: { data: { type: 'profile', attributes: { email, properties: { advent_lang: lang } } } } }, relationships: { list: { data: { type: 'list', id: n.listId } } } } }),
+      headers: { 'content-type': 'application/vnd.api+json', accept: 'application/vnd.api+json', revision: KLAVIYO_REVISION },
+      body: JSON.stringify({ data }),
     });
     if (!res.ok) throw new Error(`klaviyo ${res.status}`);
   }
-  function notifyForm(next, lang) {
+  function notifyForm(next, lang, today) {
     const { t, config } = D;
     const demo = !!(G.BUILD && G.BUILD.demo);
     const n = config.notify || {};
-    if (!demo && !(n.companyId && n.listId)) return null;
+    if (!demo && !n.companyId) return null;
     const done = () => h('p', { class: 'offer-notified' }, t('notifyDone', { n: next.day }));
     if (notified()) return done();
     const input = h('input', { type: 'email', id: 'notifyEmail', name: 'email', autocomplete: 'email', inputmode: 'email', placeholder: t('notifyPlaceholder'), required: true });
@@ -132,7 +140,7 @@
       h('p', { class: 'fine' }, t('notifyFine'), privacy ? [' ', h('a', { class: 'link', href: privacy }, t('privacy'))] : null));
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = input.value.trim();
+      const email = input.value.trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
         msg.textContent = t('notifyInvalid');
         input.setAttribute('aria-invalid', 'true');
@@ -143,7 +151,12 @@
       msg.textContent = '';
       btn.disabled = true;
       try {
-        if (!demo) await subscribe(email, n, lang);
+        if (n.companyId) {
+          await sendSignup(email, n, {
+            advent_2026_notify: true, advent_2026_next_door: next.day, advent_2026_signup_door: today ? today.day : null,
+            advent_lang: lang, advent_source: demo ? 'pitch demo' : 'advent calendar',
+          });
+        }
         markNotified();
         D.track('gal_notify', { gal_day: next.day });
         form.replaceWith(done());
@@ -162,7 +175,7 @@
     const today = A.todayEntry(D.sched, now);
     const next = today ? A.nextEntry(D.sched, today) : null;
     if (!next) return null;
-    return h('div', { class: 'offer-foot' }, notifyForm(next, lang) || h('p', {}, t('tomorrow', { n: next.day })));
+    return h('div', { class: 'offer-foot' }, notifyForm(next, lang, today) || h('p', {}, t('tomorrow', { n: next.day })));
   }
 
   /* top: where the card starts, just under the revealed work, so the card never covers it */

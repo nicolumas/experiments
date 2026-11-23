@@ -14,7 +14,7 @@
       "giftcardUrl": "https://www.lumas.de/geschenke/gutscheine/",
       "newsletterUrl": "https://www.lumas.de/",
       "privacyUrl": { "de": "https://www.lumas.de/datenschutz/", "en": "https://www.lumas.com/privacy-policy/" },
-      "notify": { "companyId": "", "listId": "" }
+      "notify": { "companyId": "S4rPDR", "listId": "" }
     },
     "days": [
       {
