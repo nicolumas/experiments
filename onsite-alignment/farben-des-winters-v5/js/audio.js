@@ -1406,14 +1406,15 @@
       else { g.cancelScheduledValues(now); g.setValueAtTime(g.value, now); }
       g.linearRampToValueAtTime(to, now + sec);
     },
-    start() {
+    /* fromBar: carry on from that bar of the song (after the page has reloaded), instead of starting at the intro */
+    start(fromBar = null) {
       if (!this.init()) return;
       const first = !this.eng.seq.started;
       this.on = true;
       const go = () => {
         if (!this.on) return;
-        this.fade(1, first ? 2.4 : 1.2);
-        if (!this.eng.seq.running && !this.eng.seq.hold) this.eng.startMusic(this.ctx.currentTime + 0.15, first ? 0 : null);
+        this.fade(1, first && fromBar == null ? 2.4 : 1.2);
+        if (!this.eng.seq.running && !this.eng.seq.hold) this.eng.startMusic(this.ctx.currentTime + 0.15, first ? (fromBar ?? 0) : null);
         if (!this.timer) this.timer = setInterval(() => { if (this.on) this.eng.tick(); }, 40);
         this.eng.tick();
         if (first) this.prewarm();
@@ -1483,6 +1484,7 @@
     door() { if (this.live()) this.eng.door(); },
     finale() { return this.live() ? Math.round(this.eng.finale() * 1000) : 0; },
     duck(amount = 0.5, ms = 1200) { if (this.live()) this.eng.duck(amount, ms); },
+    bar() { return this.eng ? this.eng.seq.bar : null; },
     state() {
       if (!this.eng) return null;
       const e = this.eng;

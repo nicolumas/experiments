@@ -1660,13 +1660,22 @@
     });
   }
   /* the music starts with the first touch and plays on from there */
+  /* the music plays the whole visit: the demo's day switcher, "Start again" and a door from another day all reload the
+     page, so the band's place is kept for this tab and the new page carries on from it (at once where the browser
+     allows it; otherwise with the first touch, still without starting the song again) */
+  const MUSIC_KEY = 'lumasAdvent.music';
+  const keptMusic = (() => { try { return JSON.parse(sessionStorage.getItem(MUSIC_KEY) || 'null'); } catch (e) { return null; } })();
+  addEventListener('pagehide', () => {
+    const A = audio();
+    try { sessionStorage.setItem(MUSIC_KEY, JSON.stringify({ on: !!A.on, muted: !!S.muted, bar: A.bar ? A.bar() : null })); } catch (e) { /* storage blocked */ }
+  });
+  const START_EVENTS = ['pointerup', 'touchend', 'click', 'keydown'];
   function startMusic() {
-    removeEventListener('pointerup', startMusic, true);
-    removeEventListener('keydown', startMusic, true);
+    for (const ev of START_EVENTS) removeEventListener(ev, startMusic, true);
     if (S.muted) return;
     const A = audio();
     try { if (A.init && A.init()) A.ctx && A.ctx.resume && A.ctx.resume(); } catch (e) { /* no sound */ }
-    sfx('start');
+    sfx('start', keptMusic && keptMusic.on ? keptMusic.bar : null);
     $('#btnMusic').hidden = false;
     $('#btnMusic').setAttribute('aria-pressed', 'true');
   }
@@ -1710,8 +1719,16 @@
     cam.y = sled.y - (vh / cam.z) * (portrait ? 0.32 : 0.6);
     requestAnimationFrame(frame);
     sfx('setScene', 'start');
-    addEventListener('pointerup', startMusic, true);
-    addEventListener('keydown', startMusic, true);
+    for (const ev of START_EVENTS) addEventListener(ev, startMusic, true);
+    if (keptMusic && keptMusic.muted) S.muted = true;
+    else if (keptMusic && keptMusic.on) {
+      /* carry on from where the band was; the first touch still unlocks the sound where the browser asks for one */
+      const A = audio();
+      try { if (A.init && A.init()) A.ctx.resume().catch(() => {}); } catch (e) { /* no sound */ }
+      sfx('start', keptMusic.bar);
+      $('#btnMusic').hidden = false;
+      $('#btnMusic').setAttribute('aria-pressed', 'true');
+    }
     G.calendar.init({
       sched: SCHED, t, track, lang: () => LANG, demo: !!(G.BUILD && G.BUILD.demo), search: location.search,
       now: nowMs,
