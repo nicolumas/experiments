@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Buyer Ideas</title>
+<link rel="stylesheet" href="cdn_lumas_de/assets/white/inline.e04527ea4ec0e063e3f4d5cdacb013525c820500.css">
+<style>
+  :root { --ink: #1c1a18; --muted: #6b665f; --ivory: #f7f1e9; --bone: #e4dccf; --display: lumas-utile-display, utile-display-fallback, arial, sans-serif; --body: archivo, arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font: 400 16px/1.55 var(--body); }
+  .wrap { padding: 48px clamp(20px, 5vw, 96px) 80px; display: grid; gap: 72px; }
+  header { display: grid; gap: 12px; max-width: 70ch; }
+  .eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font: 400 48px/1.05 var(--display); margin: 0; text-align: left; }
+  h2 { font: 400 32px/1.1 var(--display); margin: 0; text-align: left; }
+  p { margin: 0; max-width: 62ch; }
+  .lede { font-size: 18px; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .idea { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: start; padding-top: 40px; border-top: 1px solid var(--bone); }
+  .idea .copy { display: grid; gap: 14px; align-content: start; }
+  .evidence { background: var(--ivory); padding: 14px 16px; font-size: 14px; max-width: 62ch; }
+  .evidence b { font-weight: 600; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .links a { display: inline-flex; align-items: center; min-height: 44px; font: 600 13px/1.2 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .phone { width: 300px; height: 650px; border: 10px solid #1c1a18; border-radius: 36px; overflow: hidden; position: relative; background: #fff; flex: none; }
+  .phone iframe { width: 390px; height: 844px; border: 0; transform: scale(.7180); transform-origin: 0 0; }
+  .measure { font-size: 13px; color: var(--muted); }
+  .measure code { font-size: 12px; background: #f3f1ee; padding: 1px 5px; }
+  .receipt { width: 260px; background: #fff; border: 1px solid var(--bone); padding: 20px; font: 400 12px/1.6 ui-monospace, Menlo, monospace; box-shadow: 0 12px 32px -14px rgba(28, 26, 24, .3); transform: rotate(-1.5deg); }
+  .receipt hr { border: 0; border-top: 1px dashed #aaa; margin: 10px 0; }
+  .receipt a { color: var(--ink); }
+  .stack { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; }
+  .tools a { color: var(--muted); }
+  @media (max-width: 900px) { .idea { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Prototyp · lumas.de live · 24. November 2026</p>
+    <h1>Five buyer ideas, on the live shop</h1>
+    <p class="lede">Each idea comes from the buyer journey deep dive (How Buyers Buy) and sits on today's lumas.de pages, with production's own fonts, buttons, prices and product cards. The purchase stays one tap away in every idea; none of them sends anyone to a gallery.</p>
+    <p class="muted">Pages are captured from the live shop on first visit; nothing reaches the real shop (the cart is simulated). Add <code>?bi=none</code> to any page in this copy to see production without the ideas.</p>
+    <div class="tools"><a href="home.html?bi-seed=reset">Reset demo history</a><a href="home.html?bi-seed=fresh">Fill demo history</a><a href="home.html?bi-seed=cart">Put a work in the cart</a></div>
+  </header>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 1 · Homepage, returning visitors</p>
+      <h2>Pick up where you left off</h2>
+      <p>The homepage opens on the work the visitor configured last time: framed render, size and finish, today's price and one tap to the cart. The other works they looked at follow in production's carousel. Configure any work on a product page and come back to the homepage to see your own.</p>
+      <p class="evidence"><b>Why:</b> 35% of net online revenue comes from buyers who had decided before the buying visit (16–22 Nov, lumas.de).</p>
+      <div class="links"><a href="home.html?bi=return&bi-seed=1" target="_blank">Open on desktop</a><a href="pictures-isabelle-menin-from-a-dream-04.html" target="_blank">Configure a work first</a></div>
+      <p class="measure">Measures: <code>bi_return_view</code>, <code>bi_return_click</code>, <code>bi_add_to_cart</code> (source return), <code>bi_return_dismiss</code>. Primary: net revenue per returning visitor.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 1 on a phone" src="home.html?bi=return&bi-seed=1"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 2 · Product page</p>
+      <h2>Send it to my phone</h2>
+      <p>Under the buy button on desktop: "Auf dem Handy weiter ansehen" opens a QR code. Scanned, the product page opens on the phone with the same size and finish already set, and says so above the buy button. On the phone the same link reads "Am Computer weiter ansehen" and copies the link.</p>
+      <p class="evidence"><b>Why:</b> 47% of buyers GA4 counts as first visits are existing customers on another device or browser.</p>
+      <div class="links"><a href="pictures-isabelle-menin-from-a-dream-04.html?bi=handoff" target="_blank">Open on desktop</a><a href="pictures-isabelle-menin-from-a-dream-04.html?bi=handoff&bi-handoff=IME110.1044.2641412" target="_blank">What the phone opens</a></div>
+      <p class="measure">Measures: <code>bi_handoff_open</code>, <code>bi_handoff_arrive</code>, then purchases carrying <code>bi-handoff</code>.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 2 on a phone" src="pictures-isabelle-menin-from-a-dream-04.html?bi=handoff&bi-handoff=IME110.1044.2641412"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 3 · Gallery receipt to the website</p>
+      <h2>Your edition, online</h2>
+      <p>The gallery receipt and the order email carry a link to the artist's page, opened as "Deine Edition": the work the collector took home, when and where, and four works by the same artist chosen to hang beside it (one per other format, at a similar price level), as production's product cards. The rest of the artist page follows as it is.</p>
+      <div class="stack">
+        <div class="receipt">LUMAS GALERIE FRANKFURT<br>14.11.2026<hr>Isabelle Menin<br>From a Dream 04<br>100 × 100 cm ......... 1.590,00<hr>Deine Edition online:<br><a href="artist-isabelle-menin.html?bi=edition&bi-sku=IME110&bi-g=Frankfurt&bi-d=2026-11-14" target="_blank">lumas.de/deine-edition</a></div>
+      </div>
+      <p class="evidence"><b>Why:</b> customers who buy online and in a gallery order more often (3.1 vs 2.5 orders in three years); only 2,401 people have done both.</p>
+      <div class="links"><a href="artist-isabelle-menin.html?bi=edition&bi-sku=IME110&bi-g=Frankfurt&bi-d=2026-11-14" target="_blank">Open on desktop</a></div>
+      <p class="measure">Measures: <code>bi_edition_view</code>, <code>bi_edition_click</code>; primary: first online orders by gallery customers.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 3 on a phone" src="artist-isabelle-menin.html?bi=edition&bi-sku=IME110&bi-g=Frankfurt&bi-d=2026-11-14"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 5 · Homepage on phones</p>
+      <h2>Artworks first on mobile</h2>
+      <p>On phones the homepage opens on four bestsellers with their prices, taken from production's own bestseller carousel; the campaign hero and the rest of the page follow unchanged. Desktop is untouched.</p>
+      <p class="evidence"><b>Why:</b> 53% of mobile visits reach a product page, against 68% on desktop. Up to €19k net a week at stake.</p>
+      <div class="links"><a href="home.html?bi=entry" target="_blank">Open (narrow the window)</a></div>
+      <p class="measure">Measures: <code>bi_entry_view</code>, <code>bi_entry_click</code> (position); primary: share of mobile visits reaching a product page, then net revenue per visit.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 5 on a phone" src="home.html?bi=entry"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 6 · Every page after the first add to cart</p>
+      <h2>Cart stays in sight</h2>
+      <p>After the first add to cart, a compact bar keeps the work, its size and price and "Zur Kasse" in view while the visitor keeps looking. It slides away while scrolling down and comes back on the way up; on phones it sits above the bottom navigation, on desktop bottom right.</p>
+      <p class="evidence"><b>Why:</b> between the first add to cart and the purchase, 34% of buyers looked at another artwork and 15% added a second work (16–22 Nov, lumas.de).</p>
+      <div class="links"><a href="highlights-bestseller.html?bi=cartbar&bi-seed=cart" target="_blank">Open on desktop</a></div>
+      <p class="measure">Measures: <code>bi_cartbar_view</code>, <code>bi_cartbar_click</code>; primary: cart-to-purchase rate and multi-work orders on mobile.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 6 on a phone" src="highlights-bestseller.html?bi=cartbar&bi-seed=cart"></iframe></div>
+  </section>
+</div>
+</body>
+</html>
