@@ -1720,7 +1720,12 @@
     requestAnimationFrame(frame);
     sfx('setScene', 'start');
     for (const ev of START_EVENTS) addEventListener(ev, startMusic, true);
-    if (keptMusic && keptMusic.muted) S.muted = true;
+    if (keptMusic && keptMusic.muted) {
+      /* switched off on an earlier page: it stays off, but the speaker stays there to switch it back on */
+      S.muted = true;
+      $('#btnMusic').hidden = false;
+      $('#btnMusic').setAttribute('aria-pressed', 'false');
+    }
     else if (keptMusic && keptMusic.on) {
       /* carry on from where the band was; the first touch still unlocks the sound where the browser asks for one */
       const A = audio();
