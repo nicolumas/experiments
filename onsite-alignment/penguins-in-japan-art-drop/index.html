@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penguins in Japan · Robert Jahns · LUMAS Art Drop</title>
+<meta name="description" content="Penguins in Japan von Robert Jahns. Fotografischer Abzug unter Acrylglas, 80 × 60 cm, handsigniert, limitiert auf 400 Exemplare. LUMAS Art Drop, 21. und 22. Dezember 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700&display=swap" rel="stylesheet">
+<!-- Utile Display, served as woff2 so it renders on devices without the font
+     installed locally. These are the licensed TypeNetwork files (name table
+     checked with fontTools: no "Trial" string in either face). -->
+<link href="lumas-fonts.css" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — LUMAS V2
+   ============================================================ */
+:root{
+  --bg:#FFFFFF;
+  --surface-page:#FAF6F1;
+  --surface-raised:#F7F1E9;
+  --surface-sunken:#F4EDE2;
+  --surface-inverse:#1C1A18;
+
+  --text-primary:#1C1A18;
+  --text-secondary:#5A5752;
+  --text-tertiary:#908C87;
+  --text-disabled:#C7C3BE;
+  --text-inverse:#F4EDE2;
+
+  --border-default:#E2D8CC;
+  --border-subtle:#EAE2D8;
+  --border-strong:#C7C3BE;
+  --border-focus:#1C1A18;
+
+  --shadow-frame:0 18px 60px -16px rgba(28,26,24,.28);
+
+  /* Built-in CSS easings are too weak to read as intentional. */
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+
+  --font-display:'UtileDisplay','Utile Display','Archivo',Georgia,serif;
+  --font-text:'Helvetica Now Display','Archivo',Helvetica,Arial,sans-serif;
+
+  --gutter:24px;
+  --maxw:1440px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:var(--font-text);
+  font-weight:400;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   Display Light (300) is used at 40px and above only — .t-display-xl.
+   Utile Display has no italic and no bold: only 300 and 400 are licensed, so
+   nothing on the page may ask the display family for 500/600/700.
+   ============================================================ */
+.t-display-xl{font-family:var(--font-display);font-weight:300;font-size:clamp(64px,5vw,88px);line-height:1.0;letter-spacing:0;margin:0}
+.t-h1{font-family:var(--font-display);font-weight:400;font-size:clamp(42px,4vw,62px);line-height:1.04;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h2{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,3vw,46px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h3{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,2.5vw,34px);line-height:1.12;letter-spacing:0;margin:0;text-wrap:balance}
+.t-h4{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,2vw,26px);line-height:1.25;letter-spacing:0;margin:0;text-wrap:balance}
+.t-body-l{font-weight:400;font-size:20px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body{font-weight:400;font-size:16px;line-height:1.6;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-body-s{font-weight:400;font-size:13px;line-height:1.65;letter-spacing:0;margin:0;text-wrap:pretty}
+.t-caption{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.03em;margin:0}
+.t-eyebrow{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.t-ui{font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;margin:0}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none !important}
+
+.skip-link{
+  position:absolute;left:8px;top:-64px;z-index:100;
+  background:var(--surface-inverse);color:var(--text-inverse);
+  padding:12px 16px;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+}
+.skip-link:focus{top:8px}
+
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--border-focus);outline-offset:2px;
+}
+.on-inverse a:focus-visible,.on-inverse button:focus-visible,.on-inverse input:focus-visible{
+  outline-color:var(--text-inverse);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-text);font-weight:700;font-size:13px;line-height:1.5;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  padding:16px 28px;min-height:48px;border-radius:0;border:1px solid transparent;
+  cursor:pointer;text-align:center;
+  transition:background-color 120ms linear,border-color 120ms linear,color 120ms linear,
+             transform 160ms var(--ease-out);
+}
+.btn--primary{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.btn--secondary{background:transparent;color:var(--text-primary);border-color:var(--text-primary)}
+/* Touch devices fire :hover on tap, which sticks. Gate it. */
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:#3A3835;border-color:#3A3835}
+  .btn--secondary:hover{background:var(--surface-inverse);color:var(--text-inverse)}
+}
+/* On inverse surfaces the primary button was charcoal-on-charcoal: the label
+   read but the button itself was invisible. Invert it. */
+.on-inverse .btn--primary{background:var(--text-inverse);color:var(--surface-inverse);border-color:var(--text-inverse)}
+@media (hover:hover) and (pointer:fine){
+  .on-inverse .btn--primary:hover{background:#FFFFFF;border-color:#FFFFFF}
+}
+.on-inverse .btn--secondary{color:var(--text-inverse);border-color:var(--text-inverse)}
+
+/* the interface should feel like it heard the press */
+.btn:active:not([aria-disabled="true"]){transform:scale(.97)}
+.btn[aria-disabled="true"],.btn:disabled{
+  background:var(--surface-sunken);color:var(--text-tertiary);border-color:var(--border-strong);
+  cursor:not-allowed;pointer-events:none;
+}
+.btn--full{width:100%}
+
+.textlink{color:var(--text-primary);text-decoration:underline;text-underline-offset:3px}
+.on-inverse .textlink{color:var(--text-inverse)}
+
+/* ============================================================
+   IMAGE + FALLBACK BLOCK
+   ============================================================ */
+.media{position:relative;width:100%;background:var(--surface-sunken);overflow:hidden}
+/* absolute, because height:100% resolves to auto when the parent's height is
+   auto — a squarish image would otherwise stretch past the aspect-ratio */
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* artworks are never cropped: the whole work, at its true ratio, letterboxed */
+.media--contain img{object-fit:contain}
+.fallback{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  width:100%;background:var(--surface-sunken);border:1px solid var(--border-default);
+  padding:16px;color:var(--text-secondary);
+  font-weight:700;font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;
+}
+.framed{box-shadow:var(--shadow-frame)}
+/* shadow/frame is charcoal at 28%: on an inverse surface it renders as nothing.
+   A hairline gives the work a defined edge without shifting layout. */
+.on-inverse .framed{box-shadow:0 0 0 1px #3A3835}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar{
+  min-height:44px;background:var(--surface-inverse);color:var(--text-inverse);
+  display:flex;align-items:center;justify-content:center;padding:8px var(--gutter);
+}
+.topbar__inner{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.chip{
+  display:inline-block;border:1px solid #5A5752;border-radius:2px;padding:5px 9px;
+  font-weight:500;font-size:11px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-inverse);
+}
+
+/* COUNTDOWN */
+.cd{display:inline-flex;align-items:baseline;gap:12px}
+.cd__seg{display:inline-flex;align-items:baseline;gap:4px}
+.cd__num{font-weight:700;font-size:13px;letter-spacing:.06em}
+/* One size for the unit label in every countdown, and it is the same 11px/500
+   as every other small uppercase label on the page — the type audit counts
+   family/size/weight, and a 13px variant here bought nothing. */
+.cd__unit{font-size:11px;font-weight:500;line-height:1.5;letter-spacing:.1em;color:var(--text-tertiary)}
+
+/* ============================================================
+   NAV — LUMAS site chrome
+   All six routes verified against www.lumas.de (HTTP 200, 2026-08-26).
+   Logo is the supplied LUMAS-Logo-Black.svg, inlined with fill=currentColor.
+   ============================================================ */
+.nav{background:#FFFFFF;border-bottom:1px solid var(--border-default);position:relative;z-index:40}
+.nav__inner{display:flex;align-items:center;gap:16px;height:72px}
+
+.nav__logo{display:flex;align-items:center;color:var(--text-primary);flex:0 0 auto}
+.nav__logomark{width:132px;height:auto;display:block}
+
+.nav__burger{display:flex;align-items:center;justify-content:center;width:40px;height:40px;
+  margin-left:-8px;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto}
+.nav__burger svg{width:24px;height:24px}
+
+.nav__links{display:none;align-items:center;gap:28px;flex:0 0 auto}
+.nav__link{font-weight:500;font-size:15px;line-height:1;letter-spacing:0;color:var(--text-primary);
+  text-decoration:none;white-space:nowrap}
+@media (hover:hover) and (pointer:fine){.nav__link:hover{text-decoration:underline;text-underline-offset:4px}}
+
+.nav__search{display:none;position:relative;flex:1 1 200px;min-width:0;max-width:520px;margin-left:auto}
+.nav__searchinput{width:100%;height:40px;border:0;border-radius:4px;background:var(--surface-sunken);
+  padding:0 44px 0 16px;font-family:var(--font-text);font-size:15px;color:var(--text-primary)}
+.nav__searchinput::placeholder{color:var(--text-secondary)}
+.nav__searchinput:focus{outline:2px solid var(--border-focus);outline-offset:2px}
+.nav__searchbtn{position:absolute;right:4px;top:4px;width:32px;height:32px;display:flex;align-items:center;
+  justify-content:center;background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary)}
+.nav__searchbtn svg{width:20px;height:20px}
+
+.nav__icons{display:flex;align-items:center;gap:18px;margin-left:auto;flex:0 0 auto}
+.nav__icon{display:flex;align-items:center;color:var(--text-primary);text-decoration:none}
+.nav__icon svg{width:24px;height:24px;display:block}
+.nav__lang{gap:2px;font-weight:500;font-size:15px}
+.nav__lang svg{width:16px;height:16px}
+.nav__icon--desktop{display:none}
+
+/* mobile search sits on its own row, as on the live site */
+.nav__search--mobile{display:block;position:relative;max-width:none;margin:0;padding:0 var(--gutter) 16px}
+.nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) + 4px);top:4px}
+
+.nav__drawer{display:flex;flex-direction:column;border-top:1px solid var(--border-subtle);
+  padding:8px var(--gutter) 16px}
+.nav__drawerlink{font-weight:500;font-size:16px;color:var(--text-primary);text-decoration:none;padding:14px 0}
+.nav__drawerlink + .nav__drawerlink{border-top:1px solid var(--border-subtle)}
+
+@media (min-width:1024px){
+  .nav__inner{height:80px;gap:20px}
+  .nav__burger,.nav__search--mobile,.nav__drawer{display:none !important}
+  .nav__links{display:flex;gap:18px}
+  .nav__link{font-size:14px}
+  .nav__search{display:block}
+  .nav__icons{margin-left:0;gap:14px}
+  .nav__icon--desktop{display:flex}
+  .nav__logomark{width:112px}
+}
+@media (min-width:1440px){
+  .nav__inner{gap:32px}
+  .nav__links{gap:28px}
+  .nav__link{font-size:15px}
+  .nav__icons{gap:20px}
+  .nav__logomark{width:132px}
+}
+@media (max-width:1023px){
+  .nav__icon--hide-mobile{display:none}
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.on-inverse{background:var(--surface-inverse);color:var(--text-inverse)}
+/* Bone ground — the inverse of on-inverse, since --surface-sunken and
+   --text-inverse are the same #F4EDE2. Supporting copy has to step DOWN to
+   --text-secondary here: tertiary (#908C87) clears AA on charcoal at 5.19:1
+   but only manages 2.91:1 on bone. */
+.on-bone{background:var(--surface-sunken);color:var(--text-primary)}
+.on-bone .voice__lead,
+.on-bone .voice__eyebrow,
+.on-bone .inspiration__eyebrow,
+.on-bone .inspiration__citeby,
+.on-bone .inspiration__body{color:var(--text-secondary)}
+.on-bone .inspiration__quote{color:var(--text-primary)}
+
+.section{padding-block:96px}
+/* the only pure white sections separate the trust row from the bone quotes */
+.section--white{background:#FFFFFF}
+.sec-head{display:flex;flex-direction:column;margin-bottom:40px;max-width:720px}
+.sec-head__eyebrow{color:var(--text-secondary);margin-bottom:8px}
+.sec-head__stand{color:var(--text-secondary);max-width:520px;margin-top:16px}
+.rule{height:1px;background:var(--border-subtle);border:0;margin:8px 0}
+
+/* SPEC LIST */
+.specs{margin:0}
+.specs__row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding-block:12px}
+.specs__row + .specs__row{border-top:1px solid var(--border-subtle)}
+.specs dt{color:var(--text-secondary);flex:0 0 auto}
+.specs dd{margin:0;text-align:right;color:var(--text-primary)}
+
+/* ============================================================
+   ACTION BLOCKS
+   ============================================================ */
+.action{display:flex;flex-direction:column;gap:12px}
+.nl__field{display:flex;flex-direction:column;gap:8px}
+.nl__label{color:var(--text-secondary);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+/* secondary is 2.41:1 on the inverse close section; tertiary is 5.19:1 */
+.on-inverse .nl__label{color:var(--text-tertiary)}
+.input{
+  width:100%;height:48px;padding:0 16px;border-radius:4px;border:1px solid var(--border-strong);
+  background:#FFFFFF;color:var(--text-primary);font-family:var(--font-text);font-size:16px;
+  transition:border-color 120ms linear;
+}
+.input::placeholder{color:var(--text-secondary)}
+.input:focus{border:2px solid var(--border-focus);outline:none;padding:0 15px}
+.input[aria-invalid="true"]{border:2px solid var(--border-focus);padding:0 15px}
+.nl__error{color:var(--text-primary)}
+.nl__consent{color:var(--text-secondary)}
+.nl__consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.nl__success{display:flex;flex-direction:column;gap:8px;transition:opacity 160ms linear}
+.fade-out{opacity:0}
+.action__micro{color:var(--text-secondary)}
+.action__price{font-weight:400;font-size:20px;line-height:1.6;margin:0}
+/* the price carries a label, because a bare number beside a countdown reads
+   as a temporary number; this one is not, only the window is */
+.action__pricelabel{color:var(--text-tertiary);margin:0 0 -4px}
+
+/* One outlined block. The border lives on the wrapper, not the input, so the
+   pair still reads as a single unit when the button has to wrap — which the
+   German label ("JETZT FÜR EARLY ACCESS ANMELDEN") forces at this width. */
+.nl__row{display:flex;gap:0;flex-direction:row;flex-wrap:wrap;align-items:stretch;
+  border:1px solid var(--border-strong);border-radius:4px;overflow:hidden}
+.nl__field{gap:0;flex:1 1 190px;min-width:0}
+/* guard: the shell must only ever contain the field and the button. A label or
+   error placed inside it renders on top of the input. */
+.nl__row > .nl__label,.nl__row .nl__error{display:none}
+.nl__row .input{height:56px;border:0;border-radius:0;width:100%}
+.nl__row .input:focus{outline:2px solid var(--text-inverse);outline-offset:-2px;padding:0 16px}
+/* .btn--full sets width:100%, which makes the flex base size the whole row and
+   forces a wrap. Inside the joined block the width comes from flex instead. */
+.nl__row .btn{flex:1 1 auto;width:auto;border-radius:0;min-height:56px;white-space:nowrap;padding-inline:20px}
+/* On a narrow phone the long German label cannot stay on one line without
+   forcing a horizontal scrollbar. Let it wrap; the joined block is stacked at
+   this width anyway, so a two-line button reads fine. */
+@media (max-width:480px){.nl__row .btn{white-space:normal}}
+.nl__error{padding-top:8px}
+
+/* spec list inverts on charcoal: secondary would be 2.41:1 here */
+.on-inverse .specs dt{color:var(--text-tertiary)}
+.on-inverse .specs dd{color:var(--text-inverse)}
+.on-inverse .specs__row + .specs__row{border-top-color:#3A3835}
+.on-inverse .nl__consent{color:var(--text-tertiary)}
+.on-inverse .nl__consent a{color:var(--text-tertiary)}
+.on-inverse .action__micro{color:var(--text-tertiary)}
+.on-inverse .nl__error{color:var(--text-inverse)}
+.on-inverse .t-h4{color:var(--text-inverse)}
+
+/* ============================================================
+   1 · PROOF — full-bleed room, the first screen is evidence
+   ============================================================
+   The type sits directly on the photograph over a bottom-up scrim.
+   Tuned by measurement, not taste: check-hero-scrim.py samples the actual
+   image pixels behind each line, composites the scrim alpha at that height and
+   reports the resulting ratio, so these numbers are the LIGHTEST ramp that
+   still clears AA on this exact photograph. Re-run it if the hero is swapped.
+   The brand book (Performance Marketing) asks for no darkening layer over an
+   artwork, so above 1024px the ramp is masked to die out horizontally before
+   it reaches the sculpture: the work itself carries no scrim at all. Below
+   that the lockup runs full width and the mask cannot help; the measured alpha
+   that lands on the work is reported rather than hidden.
+   ============================================================ */
+.proof{position:relative;height:92vh;min-height:520px;overflow:hidden;background:var(--surface-sunken)}
+/* The vertical placement of the cover crop is NOT a taste value: it is derived
+   from the sculpture's own bounding box by setHeroCrop() below, so the whole
+   work stays in frame at every viewport shape. A fixed percentage cannot do
+   this — 100% put the darkest floor behind the type but sliced the top off the
+   sculpture on a wide, short window. The 30% here is the static fallback if JS
+   never runs; it keeps the work in frame up to about 2560px wide. */
+.proof__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:50% var(--hero-pos-y, 30%)}
+/* Solved numerically, not chosen. Given the lockup geometry and the actual
+   pixels behind each line, this is the lightest-looking ramp (lowest peak
+   alpha) that clears AA with 12% to spare while keeping the darkening on any
+   artwork at or under 14%. A shorter, stronger ramp also clears but reads much
+   heavier. The portrait and landscape crops need different ramps because they
+   are different photographs of the same room. */
+.proof::after{content:"";position:absolute;left:0;right:0;bottom:0;height:36%;
+  background:linear-gradient(to top,rgba(20,19,17,.50) 0%,rgba(20,19,17,.44) 70%,rgba(20,19,17,0) 100%);
+  pointer-events:none;z-index:0}
+.proof__wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:56px}
+.proof__lockup{color:var(--text-inverse);width:fit-content;max-width:min(100%,42ch)}
+/* Three lines, one lockup: ART DROP / artist / the offer. The label and the
+   third line are the campaign message, not caption furniture, so they run at
+   full strength. Matched size and tracking so they bracket the name as a pair.
+   A fourth line would push the ramp higher and was kept out deliberately: the
+   "price rises afterwards" half of the message lives in the banner above,
+   which is charcoal and needs no scrim at all. */
+/* 700 at >=19px, and that is legibility rather than style: WCAG counts
+   18.66px at weight 700 as large text, so these lines are held to 3:1 instead
+   of 4.5:1. At the old 16px/400 they needed 4.5:1, and the second delivery's
+   hero puts a sunlit window exactly behind them — clearing 4.5:1 there
+   measures at ~80% scrim, which is the opaque plate this design deliberately
+   does not use. Same reason .proof__dates is 700. */
+.proof__eyebrow{color:var(--text-inverse);margin:0 0 18px;font-weight:700;
+  font-size:clamp(19px,1.9vw,24px);letter-spacing:.14em}
+/* Regular, not Light: at Light the name goes delicate against the photograph
+   and the whole lockup reads as a whisper. */
+.proof__title{margin:0;font-weight:400;font-size:clamp(40px,5vw,72px);
+  line-height:1.02;letter-spacing:-0.01em;text-wrap:balance}
+/* Two short lines rather than one long one. Not a style preference: as a single
+   line the offer ran to 44.6% of the container width at 1024px, which is past
+   where the scrim mask has to start fading to stay off the sculpture (it starts
+   at 47.4%). The mask then cut the ramp behind the type to 43% of its value and
+   no ramp could clear AA. Split, the widest line reaches ~34%. */
+.proof__dates{color:var(--text-inverse);margin:18px 0 0;
+  font-family:var(--font-text);font-weight:700;
+  font-size:clamp(19px,1.9vw,24px);letter-spacing:.14em}
+.proof__when{margin-top:4px;color:var(--text-inverse);opacity:.86}
+
+/* ============================================================
+   2 · THE WORK — the sculpture isolated, every essential beside it
+   ============================================================ */
+.work-block{padding-block:96px}
+.work-block__grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center}
+/* grid items default to min-width:auto, so one nowrap button label was able to
+   widen the whole track past the viewport and give the page a scrollbar */
+.work-block__grid > *{min-width:0}
+/* The ratio matches CROP_WORK in prepare-assets.py exactly, so contain never
+   letterboxes: the asset IS this shape. Transparent so that if a differently
+   proportioned asset is dropped in, the letterbox is charcoal, not bone. */
+/* The artwork's own ratio, so `contain` never letterboxes it. 1600x1200 is the
+   largest published rendition, so 720px CSS is a true 2x at the widest the box
+   ever gets. */
+.work-block__art{width:100%;max-width:720px;aspect-ratio:4/3;margin-inline:auto;background:transparent}
+.work-block__panel{display:flex;flex-direction:column;gap:24px;max-width:560px}
+
+/* countdown is the loudest thing in the panel after the work itself */
+.work-block__urgency{display:flex;flex-direction:column;gap:10px}
+.work-block__cdlabel{color:var(--text-tertiary);font-size:11px;letter-spacing:.1em}
+.work-block__urgency .cd{gap:20px}
+.work-block__urgency .cd__num{font-family:var(--font-display);
+  font-size:clamp(30px,2.8vw,40px);font-weight:400;letter-spacing:0;
+  min-width:1.12em;text-align:center}
+.work-block__urgency .cd__unit{letter-spacing:.06em}
+
+.work-block__intro{color:var(--text-inverse);font-size:clamp(17px,1.5vw,20px);
+  line-height:1.5;max-width:46ch;text-wrap:balance}
+
+/* ONE detail treatment shared by every label/value pair on the panel */
+.work-block__panel .specs__row{padding-block:16px;gap:24px}
+.work-block__panel .specs dt{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary)}
+.work-block__panel .specs dd{font-size:16px;line-height:1.6;color:var(--text-inverse)}
+.work-block__panel .nl__label{font-size:11px;letter-spacing:.1em;color:var(--text-tertiary);margin-bottom:8px}
+.work-block__panel .action__price{color:var(--text-inverse)}
+
+/* ============================================================
+   3 · OWN IT — craft cards
+   ============================================================ */
+.fcards{display:grid;grid-template-columns:1fr;gap:32px}
+.fcard{background:#FFFFFF;border:1px solid var(--border-default);border-radius:0;display:flex;flex-direction:column}
+.fcard__media{aspect-ratio:3/2}
+.fcard__body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.fcard__desc{color:var(--text-secondary)}
+/* the footer pins to the bottom, so every card's CTA lands on the same line */
+.fcard__foot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:16px}
+
+/* ============================================================
+   6 · VOICE — artist, on bone
+   ============================================================ */
+.voice__grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
+.voice__fig{margin:0;display:flex;flex-direction:column;gap:16px}
+.voice__quote{margin:0;text-wrap:balance}
+.voice__by{color:var(--text-secondary);margin:0}
+
+/* Awards and exhibitions, two columns. A dl per column so the year stays tied
+   to its entry for a screen reader; the year column is fixed so the two lists
+   align to the same rhythm. */
+.cv{display:grid;grid-template-columns:1fr;gap:32px;margin-top:8px}
+.cv__head{color:var(--text-secondary);margin:0 0 12px}
+.cv__list{margin:0}
+.cv__row{display:flex;gap:16px;padding-block:7px;font-size:13px;line-height:1.65}
+.cv__row + .cv__row{border-top:1px solid var(--border-default)}
+.cv__row dt{flex:0 0 3.6em;color:var(--text-secondary)}
+/* The second column carries labels rather than years, so it needs more room. */
+.cv__col--facts .cv__row dt{flex:0 0 5.4em}
+.cv__row dd{margin:0;color:var(--text-primary)}
+
+/* stacked, the 4:3 crop of the master reads better and keeps the page short */
+.voice__portrait{aspect-ratio:4/3}
+/* two columns from 1024: the portrait matches the text column instead of
+   stopping a third of the way down it — see the <picture> in the markup */
+.voice__text{display:flex;flex-direction:column;gap:28px}
+.voice__eyebrow{margin:0}
+.voice__lead{max-width:56ch;font-size:20px;line-height:1.6}
+
+/* ============================================================
+   7 · ROOMS — carousel
+   ============================================================ */
+.carousel{position:relative}
+.carousel__track{
+  display:flex;gap:32px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:none;padding-bottom:4px;
+}
+.carousel__track::-webkit-scrollbar{display:none}
+.carousel__track:focus-visible{outline:2px solid var(--border-focus);outline-offset:4px}
+/* flex, never grid: under scroll-snap-type:mandatory a grid track silently
+   refuses to scroll — scrollLeft reverts to 0 with no error */
+.carousel__slide{flex:0 0 100%;scroll-snap-align:start;margin:0;min-width:0}
+
+.carousel__bar{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:24px}
+.carousel__count{color:var(--text-secondary)}
+.carousel__nav{display:flex;gap:8px}
+.carousel__btn{
+  width:48px;height:48px;border:1px solid var(--border-strong);border-radius:0;
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background-color 120ms linear,border-color 120ms linear,transform 160ms var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .carousel__btn:hover:not(:disabled){background:var(--surface-inverse);border-color:var(--surface-inverse)}
+  .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-inverse)}
+}
+.carousel__btn:active:not(:disabled){transform:scale(.94)}
+.carousel__btn:disabled{border-color:var(--border-subtle);cursor:not-allowed}
+.carousel__btn:disabled .carousel__arrow{border-color:var(--text-disabled)}
+/* 1px chevron drawn in CSS — no icon font, no SVG */
+.carousel__arrow{width:8px;height:8px;border-right:1px solid var(--text-primary);border-bottom:1px solid var(--text-primary);
+  transition:border-color 120ms linear}
+.carousel__arrow--prev{transform:rotate(135deg);margin-left:3px}
+.carousel__arrow--next{transform:rotate(-45deg);margin-right:3px}
+
+/* one room at a time, full width, circular controls on the image */
+.carousel--rooms .carousel__slide{flex-basis:100%}
+.carousel--rooms .room__media{aspect-ratio:3/2}
+.carousel--works .carousel__track{padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+.carousel--rooms .carousel__nav,
+.carousel--works .carousel__nav{
+  position:absolute;top:0;left:0;right:0;height:var(--nav-h,0);gap:0;
+  display:flex;align-items:center;justify-content:space-between;
+  pointer-events:none;z-index:2;
+}
+.carousel--rooms .carousel__nav{padding-inline:20px}
+.carousel--works .carousel__nav{padding-inline:16px}
+.carousel--rooms .carousel__btn,
+.carousel--works .carousel__btn{
+  pointer-events:auto;width:52px;height:52px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.94);color:var(--text-primary);
+}
+.carousel--rooms .carousel__btn:disabled,
+.carousel--works .carousel__btn:disabled{opacity:.35;background:rgba(255,255,255,.94)}
+.carousel--rooms .carousel__btn:disabled .carousel__arrow,
+.carousel--works .carousel__btn:disabled .carousel__arrow{border-color:var(--text-primary)}
+@media (hover:hover) and (pointer:fine){
+  .carousel--rooms .carousel__btn:hover:not(:disabled),
+  .carousel--works .carousel__btn:hover:not(:disabled){background:#FFFFFF;border:0}
+  .carousel--rooms .carousel__btn:hover:not(:disabled) .carousel__arrow,
+  .carousel--works .carousel__btn:hover:not(:disabled) .carousel__arrow{border-color:var(--text-primary)}
+}
+.carousel--rooms .carousel__count,
+.carousel--works .carousel__count{display:none}
+.carousel--rooms .carousel__bar,
+.carousel--works .carousel__bar{margin-top:0}
+.rooms__cta{align-self:flex-start;margin-top:32px;min-width:280px}
+.room__media{aspect-ratio:3/2}
+
+/* CONTINUE — centred header, controls on the images */
+[data-sec="continue"] .sec-head{max-width:760px;margin-inline:auto;text-align:center;align-items:center}
+[data-sec="continue"] .sec-head__stand{max-width:680px;margin-inline:auto}
+.carousel--works .work{text-align:left;align-items:stretch}
+.work{display:flex;flex-direction:column;text-decoration:none;color:var(--text-primary)}
+.work__imglink{display:block}
+/* No ground behind the art, and every work the same height.
+   The box is as wide as the WIDEST work in the rail is at full height, so the
+   artwork fills the box height and only its width varies: measured pixel ratios
+   are 1.000 (the two objects), 1.264 (Ocean) and 1.441-1.445 (the interiors),
+   so 1.445 is the box ratio and nothing is ever cropped or letterboxed.
+   Adding a work wider than 1.445 would break the equal heights — max-width
+   caps it and its height would come out short. Silver Poplars (1.822) was
+   swapped out of the rail for exactly that reason. */
+/* Equal height, no ground, nothing cropped: the box ratio is the WIDEST work
+   in the rail at full height (1.338, measured from the real renditions), so
+   every work fills the height and only its width varies. */
+.work__media{aspect-ratio:1.338;margin-bottom:8px;background:transparent}
+.work__media img{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  height:100%;width:auto;max-width:100%;object-fit:contain}
+.work__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.work__title{color:var(--text-primary);text-decoration:none}
+.work__fav{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--text-primary);flex:0 0 auto;
+  transition:transform 160ms var(--ease-out)}
+.work__fav svg{width:22px;height:22px;display:block}
+.work__fav:active{transform:scale(.9)}
+@media (hover:hover) and (pointer:fine){.work__title:hover{text-decoration:underline;text-underline-offset:3px}}
+
+/* ============================================================
+   6 · INSPIRATION — the editorial idea, on bone
+   ============================================================ */
+.inspiration__inner{max-width:1120px;margin-inline:auto;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:32px}
+.inspiration__eyebrow{margin:0}
+.inspiration__quote{margin:0;text-wrap:balance;max-width:none}
+.inspiration__body{max-width:70ch}
+/* The pivot quote sits between the two body paragraphs rather than beside the
+   display line: two display sizes stacked competed with each other. t-h4, so it
+   adds no new size to the type audit.
+   The quote and the paragraph that unpacks it are ONE unit: the parent's 32px
+   gap separates that unit from the material paragraph above, and inside it the
+   rhythm is tighter, so the quote reads as the opening of this thought rather
+   than as a third unrelated block.
+   No hanging indent for the „ mark. Measured in Utile Display at this size the
+   German marks advance 0.405em and 0.391em, so a centred line is already
+   balanced to within 0.2px; hanging the opening mark would push the sentence
+   visibly off the centre axis the display line above sits on. */
+.inspiration__voice{display:flex;flex-direction:column;align-items:center;gap:20px}
+.inspiration__fig{margin:0;display:flex;flex-direction:column;gap:8px}
+.inspiration__cite{margin:0;text-wrap:balance}
+.inspiration__citeby{margin:0}
+
+/* ============================================================
+   7 · TRUST
+   ============================================================ */
+.trust{display:grid;grid-template-columns:1fr;gap:40px;text-align:center}
+.trust__head{margin:0}
+/* Only the galleries stat is a link. Underlined on rest rather than hover-only,
+   so it is discoverable without a pointer. */
+.trust__link{color:inherit;text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px;text-decoration-color:var(--border-strong)}
+@media (hover:hover) and (pointer:fine){.trust__link:hover{text-decoration-color:var(--text-primary)}}
+.trust__note{color:var(--text-secondary);margin-top:8px}
+
+/* ============================================================
+   8 · CLOSE
+   ============================================================ */
+.close{padding-block:80px}
+.close__inner{max-width:560px;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center}
+.close__body{color:var(--text-tertiary)}
+.close .input{background:#FFFFFF}
+.close .nl__consent{color:var(--text-tertiary)}
+.close .nl__consent a{color:var(--text-tertiary)}
+.close .action{width:100%;text-align:left}
+.close .nl__label,.close .nl__error{text-align:left}
+.close .nl__error{color:var(--text-inverse)}
+.close__head{margin:0}
+.close__cd{margin-block:8px}
+/* Display-scale numerals go in Utile. Its default figures are PROPORTIONAL —
+   "1" is 366 units against 528 for "6", measured from the shipped woff2 — so a
+   live countdown would reflow on every tick. The font ships a tnum feature with
+   real .tnum glyphs, but neither font-variant-numeric:tabular-nums nor
+   font-feature-settings:'tnum' applies it in the browser. So the width is
+   reserved in layout instead. Every segment is zero-padded by pad(). Widest
+   raw digit pair is 6+6 = 1.056em, so 1.12em binds on all 100 combinations. */
+.close__cd .cd__num{font-family:var(--font-display);
+  font-size:clamp(40px,5.5vw,72px);font-weight:400;letter-spacing:0;
+  min-width:1.12em;text-align:center}
+.close__cd .cd__unit{letter-spacing:.06em}
+.close__cd.cd{gap:24px}
+
+/* SCARCITY — hidden until a real stock feed is wired in */
+.scarcity{width:100%;max-width:360px;display:flex;flex-direction:column;gap:8px}
+.scarcity__label{color:var(--text-inverse)}
+.scarcity__track{height:2px;width:100%;background:#5A5752}
+.scarcity__fill{display:block;height:2px;background:var(--text-inverse);width:0}
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+.dev{position:fixed;left:8px;bottom:8px;z-index:80;display:none;gap:4px;flex-wrap:wrap;max-width:200px}
+.dev.is-on{display:flex}
+.dev button{background:#FFFFFF;border:1px solid var(--border-strong);border-radius:0;
+  padding:4px 8px;font-size:11px;line-height:1.5;letter-spacing:.03em;cursor:pointer}
+.dev button[aria-pressed="true"]{background:var(--surface-inverse);color:var(--text-inverse);border-color:var(--surface-inverse)}
+.dev__meta{width:100%;margin:0;font-size:10px;line-height:1.4;color:var(--text-secondary);
+  background:#FFFFFF;border:1px solid var(--border-strong);padding:4px 8px}
+/* review-only: jump between the reveal and buy variations without ?dev=1 */
+.phase-switch{position:fixed;right:16px;bottom:16px;z-index:70;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 20px;
+  background:var(--surface-inverse);color:var(--text-inverse);text-decoration:none;
+  font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ============================================================
+   BREAKPOINTS
+   ============================================================ */
+@media (min-width:768px){
+  :root{--gutter:40px}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 64px) / 3)}
+  .trust{grid-template-columns:repeat(3,1fr)}
+}
+
+@media (min-width:1024px){
+  :root{--gutter:48px}
+  .section{padding-block:120px}
+  .close{padding-block:120px}
+  .sec-head{margin-bottom:56px}
+  .fcards{grid-template-columns:repeat(3,1fr)}
+  .voice__grid{grid-template-columns:5fr 7fr;gap:64px}
+  .voice__portrait{aspect-ratio:2/3}
+  .cv{grid-template-columns:1fr 1fr;gap:48px}
+  .work-block{padding-block:120px}
+  .work-block__grid{grid-template-columns:1.18fr 1fr;gap:56px}
+  .work-block__art{margin-inline:0;max-width:none}
+  .work-block__panel{max-width:none}
+  .proof__wrap{padding-bottom:64px}
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 96px) / 4)}
+}
+
+/* Works carousel widens with the viewport: 3 across on tablet, 4 on laptop,
+   5 on wide desktop. This block MUST stay below @media(min-width:1024px) —
+   equal specificity, so above 1440 whichever comes last in the file wins. */
+@media (min-width:1440px){
+  .carousel--works .carousel__slide{flex-basis:calc((100% - 128px) / 5)}
+}
+
+/* ============================================================
+   PHASE RULES
+   Section order is plain source order — nothing is reordered in CSS, so the
+   reading order, the tab order and the visual order cannot drift apart.
+   ============================================================ */
+[data-phase="ENDED"] .cd{display:none}
+
+/* ============================================================
+   SCROLL REVEAL
+   Content is visible by default. The hidden state is only applied once JS has
+   confirmed it can also remove it (.js), and a failsafe clears everything if
+   the observer never fires — hidden tabs and headless renderers pause
+   transitions, and a section that ships blank is worse than one that never
+   animated.
+   ============================================================ */
+.js .reveal{
+  opacity:0;transform:translateY(16px);
+  transition:opacity 560ms var(--ease-out),transform 560ms var(--ease-out);
+  transition-delay:var(--reveal-delay,0ms);
+}
+.js .reveal.is-in{opacity:1;transform:none}
+
+/* ============================================================
+   PHONE HERO
+   ============================================================
+   Portrait asset, full-width lockup, hero takes only the height the header
+   leaves. The scrim here is shorter and unmasked: a full-width lockup leaves no
+   room for a horizontal fade, so the ramp is kept below the sculpture's base
+   instead. The portrait asset is used ONLY below 768px — in a 768x735 hero a
+   3:4 crop is cropped vertically, which pushes the work's base to 77% of the
+   container, 3% above the type, and then no ramp can reach the type without
+   darkening the work. Above 767 the landscape asset and its mask do the job. */
+@media (max-width:767px){
+  .proof{height:calc(100vh - var(--above-proof, 0px));
+         height:calc(100svh - var(--above-proof, 0px));
+         min-height:320px}
+  /* 40px, not 24px: it keeps the lockup off the very edge of a phone screen. */
+  .proof__wrap{padding-bottom:40px;align-items:flex-end}
+  /* The review-only phase switch is fixed bottom-right, which on a phone lands
+     straight on the dates line of a bottom-left lockup. Raising the lockup is
+     not an option: it would lift the eyebrow off the scrim band, which is the
+     binding contrast constraint. So the switch moves to the top of the hero
+     instead, just under the header, where the lockup never reaches. Deleted
+     with the rest of the review chrome before launch. */
+  .phase-switch{top:calc(var(--above-proof, 180px) + 12px);bottom:auto}
+  .proof__lockup{max-width:none;width:100%}
+  /* 31% is the measured ceiling on a phone: past it the band starts darkening
+     the sculpture's base, and 44% put 49% of scrim across the work. So the
+     band cannot grow — instead the ramp holds its strength to 84% of the band
+     rather than 70%, because the eyebrow sits near the top of it and was
+     taking only 38% of the ramp. check-hero-scrim.py prints the ceiling. */
+  .proof::after{height:31%;
+    background:linear-gradient(to top,rgba(20,19,17,.64) 0%,rgba(20,19,17,.60) 90%,rgba(20,19,17,0) 100%)}
+}
+
+/* From 768 up the hero is the landscape asset, so the scrim can fade out
+   horizontally before the sculpture and the work carries almost no darkening.
+   The hero height comes from here too: 92vh put the hero bottom below the fold
+   and clipped the last lockup line on any window shorter than ~1010px, so it
+   takes the space the header leaves minus a 40px sliver, which also lets the
+   next section peek and read as scrollable. */
+@media (min-width:768px){
+  .proof{height:calc(100vh - var(--above-proof, 0px) - 40px);
+         height:calc(100svh - var(--above-proof, 0px) - 40px);
+         min-height:440px}
+  .proof__wrap{padding-bottom:56px}
+  .proof::after{height:56%;
+                background:linear-gradient(to top,rgba(20,19,17,.58) 0%,rgba(20,19,17,.52) 70%,rgba(20,19,17,0) 100%);
+                -webkit-mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%);
+                mask-image:linear-gradient(to right,#000 0%,#000 40%,rgba(0,0,0,0) 50%)}
+}
+
+/* ============================================================
+   MOBILE PASS
+   ============================================================ */
+@media (max-width:767px){
+  /* --- touch targets: nothing interactive under 44px --------------------- */
+  .nav__icon{min-width:44px;min-height:44px;justify-content:center}
+  /* The top row is burger + logo + four 44px icons. At 132px the logo pushed
+     that past 390px and the whole page gained a horizontal scrollbar. The
+     icons keep their 44px targets; the logo gives up the width instead. */
+  .nav__logomark{width:clamp(84px,26vw,120px)}
+  .nav__inner{gap:8px}
+  .nav__icons{gap:0;margin-right:-12px;min-width:0}
+  .nav__burger{width:44px;height:44px;margin-left:-10px}
+  .nav__logo{min-height:44px;align-items:center}
+  .nav__searchinput{height:48px}
+  .nav__searchbtn{width:44px;height:44px;right:0;top:2px}
+  .nav__search--mobile .nav__searchbtn{right:calc(var(--gutter) - 6px)}
+  .work__fav{width:44px;height:44px;margin-right:-11px}
+  .work__row{min-height:44px}
+  .work__title{padding-block:9px}
+  .carousel__btn{width:44px;height:44px}
+  .textlink{display:inline-block;padding-block:6px}
+
+  /* --- rooms: 3:2 on a 342px track is only 228px tall ------------------- */
+  [data-sec="rooms"] > .wrap{padding-inline:0}
+  [data-sec="rooms"] .sec-head{padding-inline:var(--gutter)}
+  .carousel--rooms .room__media{aspect-ratio:4/3}
+  .carousel--rooms .carousel__nav{padding-inline:12px}
+  .carousel--rooms .carousel__btn{width:44px;height:44px}
+  .carousel--works .carousel__nav{padding-inline:10px}
+
+  /* --- long display strings need to come down at this width -------------- */
+  .inspiration__quote{font-size:26px;line-height:1.2}
+  .inspiration__inner{gap:24px}
+  .voice__lead,.inspiration__body,.sec-head__stand{font-size:17px}
+  .action__price{font-size:17px}
+
+  /* --- hero ---------------------------------------------------------------
+     Height and plate width come from the max-width:1023px block above. svh
+     (not vh) there because vh on iOS Safari measures the viewport with the
+     toolbar retracted, which would put the text back under the fold on load;
+     the vh line is the fallback. The min-height must stay BELOW that calc on
+     the shortest portrait phone (568 - 181 = 387px): 320px does, 440px did
+     not. Only the lockup's internal rhythm tightens at this width. */
+  .proof__wrap{padding-bottom:28px}
+  .proof__eyebrow{margin-bottom:12px}
+  .proof__dates{margin-top:12px}
+  .proof__when{margin-top:2px}
+
+  /* --- countdown: four segments will not fit a phone at desktop sizes ----
+     40px numerals + 24px gaps needed 451px of a 390px screen. Sized to fit
+     320px with room spare. */
+  .close__cd .cd__num,
+  .work-block__urgency .cd__num{font-size:30px}
+  .close__cd .cd__unit,
+  .work-block__urgency .cd__unit{font-size:11px;letter-spacing:.04em}
+  .close__cd.cd,
+  .work-block__urgency .cd{gap:10px}
+  .cd__seg{gap:3px}
+
+  /* --- vertical rhythm: 96px between every section is a lot on a phone --- */
+  .section{padding-block:64px}
+  .work-block{padding-block:64px}
+  .close{padding-block:64px}
+  .trust{gap:32px}
+}
+
+/* Small phones (iPhone SE and the 320px floor). Four 44px icons plus a burger
+   plus the logo cannot also afford a 24px gutter on each side of the nav row,
+   so that row alone tightens up. Touch targets stay 44px. */
+@media (max-width:400px){
+  .nav__inner{padding-inline:12px}
+  /* the optical inset must not exceed the padding, or the row lands outside
+     the viewport and the whole page gets a horizontal scrollbar */
+  .nav__icons{margin-right:-12px}
+  .nav__burger{margin-left:-12px}
+  .nav__searchbtn,.nav__search--mobile .nav__searchbtn{right:calc(12px - 6px)}
+  .nav__search--mobile{padding-inline:12px}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .btn:active:not([aria-disabled="true"]),
+  .carousel__btn:active:not(:disabled){transform:none}
+  .nl__success{transition:none}
+  .carousel__track{scroll-behavior:auto}
+  *{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!-- ============================ TOPBAR ============================ -->
+<div class="topbar">
+  <div class="topbar__inner">
+    <span class="chip" data-phases="EARLY_ACCESS">EARLY ACCESS</span>
+    <span class="t-ui" id="topbar-label">ART DROP · 21. UND 22. DEZEMBER · 400 EXEMPLARE, HANDSIGNIERT</span>
+    <span class="sr-only">Art Drop am 21. und 22. Dezember 2026, bis 23:59 Uhr</span>
+  </div>
+</div>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav">
+  <div class="wrap nav__inner">
+
+    <button class="nav__burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="nav-drawer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 6h20M2 12h20M2 18h20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></button>
+
+    <a class="nav__logo" href="https://www.lumas.de/" target="_self" aria-label="LUMAS, zur Startseite"><svg class="nav__logomark" viewBox="0 0 160 30" role="img" aria-label="LUMAS" focusable="false"><path fill="currentColor" d="M8.1.9v20.5h12.1v6.8H.4V.9h7.7zM34.9 28.9c-3.6 0-6.6-1-8.8-2.9a10.2 10.2 0 0 1-3.5-8.2V.9h7.7v17c0 1.4.4 2.5 1.2 3.3.8.8 1.9 1.2 3.4 1.2s2.6-.4 3.4-1.2c.8-.8 1.2-1.9 1.2-3.3V.9h7.7v16.9c0 3.6-1.1 6.4-3.3 8.3a13.6 13.6 0 0 1-9 2.8zM68.1 11.3 70.7.9h11.8v27.4h-7.3v-7.8l.2-12.8-1.6 6.1-4 14.5h-6.2l-4-14.5L58 7.7c.2 3.5.2 7.8.2 12.8v7.8h-7.3V.9h11.8l2.6 10.4 1.4 5.9c.2-1.3.7-3.2 1.4-5.9zM114.1 28.3h-8.2l-1.2-3.6H94l-1.2 3.6H85L94.7.9h9.2l10.2 27.4zM98 12.1l-2 6.3h6.7l-2-6.3-1.3-4.3-1.4 4.3zM126.1 28.9c-3.9 0-6.9-.9-9.1-2.6a8.6 8.6 0 0 1-3.2-7h7.4c0 1.4.4 2.4 1.3 3 .8.5 2.1.8 3.9.8 2.6 0 3.8-.8 3.8-2.5 0-.8-.3-1.3-.9-1.7-.6-.4-1.7-.7-3.4-1l-2.2-.3c-6.3-1-9.5-4-9.5-8.8 0-2.6 1-4.6 2.9-6.2 1.9-1.5 4.7-2.3 8.3-2.3 3.6 0 6.5.8 8.5 2.3 2 1.5 3.1 3.8 3.2 6.8H130c-.1-1.1-.4-1.9-1.1-2.4-.7-.5-1.8-.8-3.2-.8-2.3 0-3.5.8-3.5 2.3 0 .8.3 1.3.9 1.7.6.4 1.6.7 3.1 1l2.3.4c3.4.6 5.9 1.5 7.4 2.9 1.6 1.3 2.3 3.2 2.3 5.7 0 2.9-1.1 5.1-3.2 6.6a16.3 16.3 0 0 1-8.9 2.1zM140.7 6.6V.7H159v11.9h-6.4v-6h-11.9z"/></svg></a>
+
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a class="nav__link" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+      <a class="nav__link" href="https://www.lumas.de/highlights/bestseller/" target="_self">Bestseller</a>
+      <a class="nav__link" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+      <a class="nav__link" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+      <a class="nav__link" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+      <a class="nav__link" href="https://www.lumas.de/ueber-lumas/" target="_self">Über uns</a>
+    </nav>
+
+    <form class="nav__search" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+      <label class="sr-only" for="nav-q">Suche</label>
+      <input class="nav__searchinput" id="nav-q" name="q" type="search" placeholder="Suche" autocomplete="off">
+      <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+    </form>
+
+    <div class="nav__icons">
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.4 8.1c.3-.6.6-.6.9-.6h.6c.2 0 .5 0 .7.5l.8 1.9c.1.3 0 .5-.1.7l-.5.6c-.2.2-.3.4-.1.7.5.9 1.4 1.8 2.4 2.3.3.2.5.1.7-.1l.5-.6c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5v.7c0 .4-.3.9-.8 1.1-.4.2-1 .3-1.6.1-1.3-.4-2.7-1.2-3.9-2.4-1.2-1.2-2-2.6-2.4-3.9-.2-.6-.1-1.2 0-1.6z" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__icon--desktop" href="https://www.lumas.de/" target="_self" aria-label="Telefon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 3h3l1.5 4-2 1.4a13 13 0 0 0 6.6 6.6L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17.5 17.5 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/wishlist/" target="_self" aria-label="Wunschliste"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.3 3.9 12.2a4.9 4.9 0 0 1 0-6.9 4.9 4.9 0 0 1 6.9 0l1.2 1.2 1.2-1.2a4.9 4.9 0 0 1 6.9 0 4.9 4.9 0 0 1 0 6.9z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/login/" target="_self" aria-label="Konto"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.8" r="4.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3.6 21a8.4 8.4 0 0 1 16.8 0" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg></a>
+      <a class="nav__icon" href="https://www.lumas.de/" target="_self" aria-label="Warenkorb"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 4h2.2l2.4 10.6h10l2.4-7.6H6.2" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9" cy="19.3" r="1.6" fill="currentColor"/><circle cx="16.6" cy="19.3" r="1.6" fill="currentColor"/></svg></a>
+      <a class="nav__icon nav__lang nav__icon--desktop" href="https://www.lumas.com/" target="_self" aria-label="Sprache: Deutsch"><span>DE</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+
+  <form class="nav__search nav__search--mobile" role="search" action="https://www.lumas.de/search/" method="get" target="_self">
+    <label class="sr-only" for="nav-q-m">Suche</label>
+    <input class="nav__searchinput" id="nav-q-m" name="q" type="search" placeholder="Suche" autocomplete="off">
+    <button class="nav__searchbtn" type="submit" aria-label="Suchen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m15.6 15.6 4.4 4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+  </form>
+
+  <div class="nav__drawer" id="nav-drawer" hidden>
+    <a class="nav__drawerlink" href="https://www.lumas.de/search/" target="_self">Kunstwerke</a>
+    <a class="nav__drawerlink" href="https://www.lumas.de/highlights/bestseller/" target="_self">Bestseller</a>
+    <a class="nav__drawerlink" href="https://www.lumas.de/artfinder/" target="_self">Artfinder</a>
+    <a class="nav__drawerlink" href="https://www.lumas.de/inspired-art-magazine/" target="_self">Inspiration</a>
+    <a class="nav__drawerlink" href="https://www.lumas.de/galerien/" target="_self">Galerien</a>
+    <a class="nav__drawerlink" href="https://www.lumas.de/ueber-lumas/" target="_self">Über uns</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ 1 · PROOF ============================
+     Opens on the work already hanging in a room. No object-on-white, no specs:
+     the first screen is evidence.
+
+     BOTH hero assets are PLACEHOLDERS (prepare-assets.py). The real rooms are
+     supplied separately. When they land: drop them in at these exact pixel
+     sizes, measure HERO_ART off the delivered landscape file, then re-run
+     `node audit.js && python3 check-hero-scrim.py` -- the scrim is tuned to
+     specific pixels and nothing about this hero is verified until it is. -->
+<section class="proof" data-sec="proof">
+  <!-- A 16:9 room shot in a portrait viewport crops to a slice of wall, so the
+       phone gets its own 3:4 framing of the same room. -->
+  <picture>
+    <source media="(max-width:767px)" srcset="hero-room-portrait.jpg" width="1152" height="1536">
+    <img class="proof__img" src="hero-room.jpg" width="1920" height="1080"
+         fetchpriority="high" decoding="async" data-standin="hero-room.jpg hero-room-portrait.jpg"
+         alt="Penguins in Japan von Robert Jahns, rahmenlos unter Acrylglas, an der Wand eines Wohnraums."
+         data-fallback="HERO · RAUM MIT WERK · 16:9">
+  </picture>
+  <div class="wrap proof__wrap">
+    <div class="proof__lockup">
+      <p class="t-eyebrow proof__eyebrow">ART DROP</p>
+      <h1 class="t-display-xl proof__title">Robert Jahns</h1>
+      <p class="proof__dates" data-phases="ANNOUNCE EARLY_ACCESS PUBLIC">NUR ZWEI TAGE</p>
+      <p class="proof__dates proof__when" data-phases="ANNOUNCE EARLY_ACCESS PUBLIC">21.–22. DEZEMBER</p>
+      <p class="proof__dates" data-phases="ENDED">DER DROP IST VORBEI</p>
+      <p class="proof__dates proof__when" data-phases="ENDED">NICHT MEHR ERHÄLTLICH</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 2 · THE WORK ============================
+     The work itself on charcoal, with every essential beside it: urgency, the
+     piece, the price, the CTA. Everything needed to decide.
+
+     The image is the real artwork at its full published rendition, shown
+     complete and uncropped at its true 4:3 ratio. -->
+<section class="work-block on-inverse" data-sec="work">
+  <div class="wrap work-block__grid">
+
+    <div class="work-block__art media media--contain framed">
+      <img src="work-penguins.jpg" width="1600" height="1200" decoding="async"
+           alt="Penguins in Japan von Robert Jahns: eine Pinguinfamilie zieht durch ein verschneites japanisches Dorf, dahinter der Fuji vor zartrosa Abendhimmel, warmes Licht in den Fenstern."
+           data-fallback="WERK · PENGUINS IN JAPAN">
+    </div>
+
+    <div class="work-block__panel" data-reveal-group>
+
+      <p><span class="chip">Limitierte Edition</span></p>
+
+      <div class="work-block__urgency">
+        <p class="t-ui work-block__cdlabel" id="work-cd-label">EARLY ACCESS IN</p>
+        <span class="cd" id="cd-work" aria-live="off"></span>
+      </div>
+
+      <p class="t-body work-block__intro">Mit Penguins in Japan lässt Robert Jahns Wirklichkeit und Fantasie verschmelzen. Vor der Kulisse des Fuji zieht eine Pinguinfamilie durch ein verschneites japanisches Dorf. Warmes Fensterlicht, zartrosa Abendhimmel und Spuren im Schnee lassen die surreale Szene verblüffend natürlich wirken.</p>
+
+      <dl class="specs">
+        <div class="specs__row"><dt class="t-ui">WERK</dt><dd class="t-body-s">Penguins in Japan, 2026</dd></div>
+        <div class="specs__row"><dt class="t-ui">EDITION</dt><dd class="t-body-s">Handsigniert, limitiert auf 400 Exemplare</dd></div>
+        <div class="specs__row"><dt class="t-ui">FORMAT</dt><dd class="t-body-s">80 × 60 cm</dd></div>
+        <div class="specs__row"><dt class="t-ui">AUSFÜHRUNG</dt><dd class="t-body-s">Fotografischer Abzug unter glänzendem Acrylglas, rahmenlos</dd></div>
+        <div class="specs__row"><dt class="t-ui">SIGNATUR</dt><dd class="t-body-s">Mit Echtheitszertifikat, handsigniert und nummeriert</dd></div>
+        <div class="specs__row"><dt class="t-ui">VERFÜGBAR</dt><dd class="t-body-s">21. und 22. Dezember 2026</dd></div>
+      </dl>
+
+      <!-- buy (EARLY_ACCESS / PUBLIC) -->
+      <div class="action" data-phases="EARLY_ACCESS PUBLIC">
+        <p class="t-ui action__pricelabel">Preis</p>
+        <p class="action__price">€ 299</p>
+        <a class="btn btn--primary btn--full" href="#" target="_self"
+           data-buy="work" data-ablyft-goal="drop_click_buy">WERK SICHERN</a>
+        <p class="t-body-s action__micro">Nur am 21. und 22. Dezember, bis 23:59 Uhr. Danach ist die Edition nicht mehr erhältlich.</p>
+      </div>
+
+      <!-- ENDED — this drop closes for good. The work is gone at any price, so
+           there is no CTA to the PDP here: it would land on an article that can
+           no longer be ordered. The onward route is the rail at the foot of the
+           page. -->
+      <div class="action" data-phases="ENDED">
+        <p class="t-h4">Der Art Drop ist vorbei</p>
+        <p class="t-body work-block__intro">Penguins in Japan war auf 400 Exemplare limitiert und nur am 21. und 22. Dezember erhältlich.</p>
+        <a class="btn btn--primary btn--full" href="#more-works" target="_self"
+           data-ablyft-goal="drop_click_work">WEITERE WERKE VON ROBERT JAHNS</a>
+      </div>
+
+      <!-- newsletter (ANNOUNCE / ENDED) -->
+      <div class="action" data-phases="ANNOUNCE ENDED" id="hero-nl">
+        <form class="action" novalidate data-nl="hero">
+          <label class="nl__label sr-only" for="email-hero">E-Mail-Adresse</label>
+          <div class="nl__row">
+            <div class="nl__field">
+              <input class="input" type="email" id="email-hero" name="email"
+                     autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-hero">
+            </div>
+            <button class="btn btn--primary btn--full" type="submit" data-phases="ANNOUNCE"
+                    data-ablyft-goal="drop_submit_newsletter">FÜR EARLY ACCESS ANMELDEN</button>
+            <button class="btn btn--primary btn--full" type="submit" data-phases="ENDED"
+                    data-ablyft-goal="drop_submit_newsletter">ZUM NEWSLETTER ANMELDEN</button>
+          </div>
+          <p class="t-body-s nl__error" id="err-hero" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+          <p class="t-caption nl__consent" data-phases="ANNOUNCE">Wir melden uns einmal, am 21. Dezember um 08:00 Uhr, bevor die Edition öffentlich verfügbar ist. LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+          <p class="t-caption nl__consent" data-phases="ENDED">LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+        </form>
+        <div class="nl__success" data-nl-success hidden>
+          <p class="t-h4">Du bist dabei.</p>
+          <p class="t-body work-block__intro" data-phases="ANNOUNCE">Deine Einladung zum Early Access erreicht dich am 21. Dezember um 08:00 Uhr.</p>
+          <p class="t-body work-block__intro" data-phases="ENDED">Wir melden uns, sobald der nächste Art Drop startet.</p>
+          <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/artist/robert_jahns/" target="_self">Mehr von Robert Jahns ansehen →</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3 · ASSURE ============================
+     Straight after the buy box, not in the footer: the three things a
+     collector wants settled before a four-figure decision. -->
+<section class="section section--white" data-sec="assure" style="padding-block:72px">
+  <div class="wrap">
+    <div class="trust" data-reveal-group>
+      <div>
+        <p class="t-h4 trust__head">Streng limitiert</p>
+        <p class="t-body-s trust__note">400 Exemplare, handsigniert und nummeriert</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">Versichert versandt</p>
+        <p class="t-body-s trust__note">sicher verpackt für den Transport</p>
+      </div>
+      <div>
+        <p class="t-h4 trust__head">60 Tage Rückgaberecht</p>
+        <p class="t-body-s trust__note">ohne Angabe von Gründen</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4 · INSPIRATION ============================
+     The editorial idea in LUMAS's own voice, pivoting on one real quote.
+     "Meine Kunst finde ich in meinen Gedanken und meiner Leidenschaft" is
+     verbatim from the interview on lumas.de/artist/robert_jahns/. The
+     description of the motif is the supplied product copy; the sentences about
+     his method ("die Idee zuerst im Kopf", "jede Farbe aendert die Stimmung")
+     paraphrase his own answers in that same interview and claim nothing about
+     this particular work that he did not say about his work in general. -->
+<section class="section on-bone inspiration" data-sec="inspiration">
+  <div class="wrap inspiration__inner">
+    <h2 class="t-eyebrow inspiration__eyebrow">Über das Werk</h2>
+
+    <p class="t-h3 inspiration__quote">Ein Dorf im Schnee, der Fuji dahinter, und eine Pinguinfamilie, die dort niemand erwartet.</p>
+
+    <p class="t-body-l inspiration__body">Robert Jahns baut seine Bilder am Rechner, aus Aufnahmen, die so nie zusammengehört haben. Warmes Fensterlicht, zartrosa Abendhimmel, Spuren im Schnee: jedes Detail stimmt, nur die Bewohner nicht. Genau an dieser Stelle setzt seine Arbeit an. Man sieht eine Winterszene, die es geben könnte, und merkt erst im zweiten Blick, dass sie es nicht gibt.</p>
+
+    <div class="inspiration__voice">
+      <figure class="inspiration__fig">
+        <blockquote class="t-h4 inspiration__cite">„Meine Kunst finde ich in meinen Gedanken und meiner Leidenschaft.“</blockquote>
+        <figcaption class="t-eyebrow inspiration__citeby">Robert Jahns</figcaption>
+      </figure>
+      <p class="t-body-l inspiration__body">Die Idee steht bei ihm vor dem Bild. Er visualisiert die Szene zuerst im Kopf und baut sie dann Ebene für Ebene auf, und die Farbe trägt dabei die Stimmung: hier ein Abendhimmel, der ein verschneites Dorf eher warm als kalt erscheinen lässt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5 · OWN IT ============================
+     There is exactly ONE execution in this drop. The feed sets no_print and
+     no_individual_frame on RJA63, so there is no finish to choose and no frame
+     to pick: it ships as a photographic print laminated under glossy acrylic,
+     frameless, 80 x 60 cm. The three cards therefore describe that one
+     execution rather than offering a choice, which belongs on the PDP anyway.
+
+     The certificate IS claimed here, unlike the Pillow build: this variant
+     carries edition_signature = signatur, which is hand-signed WITH a
+     certificate. All three images are PLACEHOLDERS. -->
+<section class="section" data-sec="own">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Eine Ausführung, von Hand gefertigt.</h2>
+      <p class="t-body-l sec-head__stand">Für diesen Art Drop gibt es genau eine Ausführung, und sie ist entschieden, bevor du sie siehst: 80 × 60 cm, kaschiert unter glänzendem Acrylglas, rahmenlos.</p>
+    </div>
+
+    <div class="fcards" data-reveal-group>
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="detail-acrylic.jpg" width="1200" height="800" loading="lazy" decoding="async" data-standin="detail-acrylic.jpg"
+               alt="Nahaufnahme der Kante des glänzenden Acrylglases, unter das der fotografische Abzug kaschiert ist."
+               data-fallback="DETAIL · ACRYLGLASKANTE · 3:2">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Glänzendes Acrylglas</h3>
+          <p class="t-body-s fcard__desc">Der fotografische Abzug wird unter glänzendes Acrylglas kaschiert. Die Oberfläche gibt dem Motiv Tiefe und Leuchtkraft, besonders in den Schneeflächen und im Abendhimmel.</p>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="detail-edge.jpg" width="1200" height="800" loading="lazy" decoding="async" data-standin="detail-edge.jpg"
+               alt="Seitenansicht der rahmenlosen Edition an der Wand, die Kante steht frei."
+               data-fallback="DETAIL · RAHMENLOSE KANTE · 3:2">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Rahmenlos, handgefertigt</h3>
+          <p class="t-body-s fcard__desc">Die Edition kommt ohne Rahmen an die Wand. Nichts steht zwischen dem Bild und dem Raum, und das Format bleibt, wie der Künstler es angelegt hat: 80 × 60 cm.</p>
+        </div>
+      </article>
+
+      <article class="fcard">
+        <div class="fcard__media media">
+          <img src="detail-signature.jpg" width="1200" height="800" loading="lazy" decoding="async" data-standin="detail-signature.jpg"
+               alt="Die Handsignatur von Robert Jahns und die Editionsnummer auf der Rückseite der Edition."
+               data-fallback="DETAIL · SIGNATUR UND NUMMER · 3:2">
+        </div>
+        <div class="fcard__body">
+          <h3 class="t-h4">Handsigniert und nummeriert</h3>
+          <p class="t-body-s fcard__desc">Jedes der 400 Exemplare ist vom Künstler handsigniert und trägt seine Editionsnummer. Das Echtheitszertifikat liegt bei.</p>
+          <div class="fcard__foot">
+            <!-- EARLY_ACCESS and PUBLIC only. The article is published on
+                 21.12. at 03:00 and deactivated on 23.12. at 00:00, so in
+                 ANNOUNCE and in ENDED this would point at a page that is not
+                 there. -->
+            <a class="btn btn--secondary btn--full" href="https://www.lumas.de/pictures/robert_jahns/penguins_in_japan/"
+               target="_self" data-phases="EARLY_ACCESS PUBLIC"
+               data-ablyft-goal="drop_click_details">MEHR DETAILS</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 6 · VOICE ============================
+     Condensed from lumas.de/artist/robert_jahns/, not newly written. The quote
+     is verbatim from the interview on that page. The portrait is a PLACEHOLDER
+     in both crops. The awards column is the Vita on that page; it carries no
+     exhibitions and no collections, so the second column holds facts rather
+     than an invented exhibition list. -->
+<section class="section on-bone" data-sec="voice">
+  <div class="wrap voice__grid">
+    <div class="voice__portrait media">
+      <!-- Two crops of one master. Stacked, the 4:3 landscape reads better and
+           keeps the page short; from 1024 the layout is two columns and a 4:3
+           portrait left ~380px of empty bone beside the text, so the 2:3 crop
+           runs the full height of that column. -->
+      <picture>
+        <source media="(min-width:1024px)" srcset="artist-portrait-tall.jpg" width="1100" height="1650">
+        <img src="artist-portrait.jpg" width="1600" height="1200" loading="lazy" decoding="async" data-standin="artist-portrait.jpg artist-portrait-tall.jpg"
+             alt="Porträt von Robert Jahns."
+             data-fallback="PORTRÄT · ROBERT JAHNS · 4:3">
+      </picture>
+    </div>
+
+    <div class="voice__text reveal">
+      <p class="t-eyebrow voice__eyebrow">Der Künstler</p>
+      <h2 class="t-h2">Er baut Welten, die es nicht gibt, und lässt sie echt aussehen.</h2>
+      <figure class="voice__fig">
+        <blockquote class="t-h3 voice__quote">„In meinen Werken stecken viele Emotionen und in jeder neuen Kreation steckt ein Stück meiner Seele.“</blockquote>
+        <figcaption class="t-eyebrow voice__by">Robert Jahns</figcaption>
+      </figure>
+
+      <p class="t-body voice__lead">Robert Jahns lebt und arbeitet in Hamburg. Mit 15 entdeckte er Fotografie und Bildbearbeitung, daraus wurde ein Stil, den er seit vielen Jahren beibehält: farbstarke Fotomontagen, die Mensch, Natur und Bewegung zusammenführen. Bekannt wurde er mit Serien wie NYC Balloons und Dreams, in denen Städte Szenen zeigen, die dort niemand erwartet.</p>
+
+      <div class="cv">
+        <div class="cv__col">
+          <h3 class="t-eyebrow cv__head">Auszeichnungen</h3>
+          <dl class="cv__list">
+            <div class="cv__row"><dt>2020</dt><dd>Influencer of the Year, Fotografie, German Influencer Awards</dd></div>
+            <div class="cv__row"><dt>2016</dt><dd>Platz 1 weltweit, Kategorie Kunst, Top 100 Photographers on the Web</dd></div>
+            <div class="cv__row"><dt>2016</dt><dd>Platz 1 Deutschland, Top 100 Photographers on the Web</dd></div>
+          </dl>
+        </div>
+        <div class="cv__col cv__col--facts">
+          <h3 class="t-eyebrow cv__head">Im Überblick</h3>
+          <dl class="cv__list">
+            <div class="cv__row"><dt>Arbeitet</dt><dd>in Hamburg</dd></div>
+            <div class="cv__row"><dt>Technik</dt><dd>Digitale Fotomontage</dd></div>
+            <div class="cv__row"><dt>Serien</dt><dd>NYC Balloons, Dreams</dd></div>
+            <div class="cv__row"><dt>Finalist</dt><dd>Instagrammer of the Year, Shorty Awards</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 7 · ROOMS ============================ -->
+<section class="section" data-sec="rooms">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Rahmenlos an der Wand, 80 × 60 cm.</h2>
+      <p class="t-body-l sec-head__stand">Der zartrosa Abendhimmel bringt Wärme in kühle Räume, die Schneeflächen halten das Bild ruhig. Fünf Hängungen, damit du siehst, wie sich das Licht darin verändert.</p>
+      <a class="btn btn--primary rooms__cta" href="#" target="_self"
+         data-phases="EARLY_ACCESS PUBLIC" data-buy="rooms" data-ablyft-goal="drop_click_buy">WERK SICHERN</a>
+    </div>
+
+    <!-- ROOMS CAROUSEL
+         To add a room shot: copy one <figure class="carousel__slide"> block and
+         drop the new file into this folder. Nothing else needs changing — the
+         controls, counter and keyboard handling read the slide count at runtime. -->
+    <div class="carousel carousel--rooms" data-carousel="rooms">
+      <div class="carousel__track" tabindex="0" role="group" aria-label="Penguins in Japan im Raum, Bildergalerie">
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-01.jpg" width="1800" height="1200" loading="lazy" decoding="async" data-standin="room-01.jpg"
+                 alt="Penguins in Japan von Robert Jahns, rahmenlos an der Wand eines Wohnraums."
+                 data-fallback="RAUM 1 · 3:2">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-02.jpg" width="1800" height="1200" loading="lazy" decoding="async" data-standin="room-02.jpg"
+                 alt="Penguins in Japan von Robert Jahns, rahmenlos an der Wand eines Wohnraums."
+                 data-fallback="RAUM 2 · 3:2">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-03.jpg" width="1800" height="1200" loading="lazy" decoding="async" data-standin="room-03.jpg"
+                 alt="Penguins in Japan von Robert Jahns, rahmenlos an der Wand eines Wohnraums."
+                 data-fallback="RAUM 3 · 3:2">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-04.jpg" width="1800" height="1200" loading="lazy" decoding="async" data-standin="room-04.jpg"
+                 alt="Penguins in Japan von Robert Jahns, rahmenlos an der Wand eines Wohnraums."
+                 data-fallback="RAUM 4 · 3:2">
+          </div>
+        </figure>
+
+        <figure class="carousel__slide">
+          <div class="room__media media framed">
+            <img src="room-05.jpg" width="1800" height="1200" loading="lazy" decoding="async" data-standin="room-05.jpg"
+                 alt="Penguins in Japan von Robert Jahns, rahmenlos an der Wand eines Wohnraums."
+                 data-fallback="RAUM 5 · 3:2">
+          </div>
+        </figure>
+
+      </div>
+
+      <div class="carousel__bar">
+        <p class="t-caption carousel__count" aria-hidden="true"></p>
+        <div class="carousel__nav">
+          <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorheriges Bild">
+            <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+          </button>
+          <button class="carousel__btn" type="button" data-dir="1" aria-label="Nächstes Bild">
+            <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 8 · ACT ============================
+     The gallery section the Pillow build carried is deliberately NOT here. The
+     work does sell offline (is_pos = true, Gallery channel, and Vienna has
+     ordered five), but this page has a 48-hour window: a "come and see it in a
+     gallery" CTA inserts a multi-day step into a two-day sale and competes with
+     the only action that can complete inside it. Brandbook s14 makes the same
+     call for paid assets ("kein Verweis auf einen Galeriebesuch"). Put it back
+     if the business wants the offline channel supported here, and put it AFTER
+     this block if so. -->
+<section class="on-inverse close" id="close" data-sec="close">
+  <div class="wrap close__inner">
+
+    <!-- ANNOUNCE -->
+    <div class="close__inner" data-phases="ANNOUNCE" style="padding:0">
+      <h2 class="t-h2">Zwei Tage. 400 Exemplare.</h2>
+      <p class="t-body close__body">Melde dich an und erhalte am 21. Dezember um 08:00 Uhr Zugang,<br>bevor die Edition öffentlich verfügbar ist.</p>
+    </div>
+
+    <!-- EARLY_ACCESS / PUBLIC -->
+    <div class="close__inner" data-phases="EARLY_ACCESS PUBLIC" style="padding:0">
+      <h2 class="t-h3 close__head">Zwei Tage. 400 Exemplare.</h2>
+
+      <!-- SCARCITY — driven by SOLD_COUNT. The whole block stays hidden until a
+           real stock figure is wired in; it must never show an invented number. -->
+      <div class="scarcity" id="scarcity" hidden>
+        <p class="t-body-s scarcity__label"><span id="scarcity-count"></span> von <span>400</span> verkauft</p>
+        <div class="scarcity__track"><span class="scarcity__fill" id="scarcity-fill"></span></div>
+      </div>
+
+      <span class="cd close__cd" id="cd-close" aria-live="off"></span>
+      <p class="t-body close__body">€ 299, nur am 21. und 22. Dezember bis 23:59 Uhr. Danach ist Penguins in Japan nicht mehr erhältlich.</p>
+      <a class="btn btn--primary" href="#" target="_self" data-buy="close"
+         data-ablyft-goal="drop_click_buy" style="min-width:280px">WERK SICHERN</a>
+    </div>
+
+    <!-- ENDED -->
+    <div class="close__inner" data-phases="ENDED" style="padding:0">
+      <h2 class="t-h2">Der Art Drop ist vorbei.</h2>
+      <p class="t-body close__body">Penguins in Japan war auf 400 Exemplare limitiert. Melde dich an, um den nächsten Art Drop nicht zu verpassen.</p>
+      <a class="btn btn--secondary" href="#more-works" target="_self"
+         data-ablyft-goal="drop_click_work" style="min-width:280px">WEITERE WERKE VON ROBERT JAHNS</a>
+    </div>
+
+    <!-- newsletter (ANNOUNCE / ENDED) -->
+    <div class="action" data-phases="ANNOUNCE ENDED" style="width:100%">
+      <form class="action" novalidate data-nl="close">
+        <label class="nl__label sr-only" for="email-close">E-Mail-Adresse</label>
+        <div class="nl__row">
+          <div class="nl__field">
+            <input class="input" type="email" id="email-close" name="email"
+                   autocomplete="email" placeholder="E-Mail-Adresse" aria-describedby="err-close">
+          </div>
+          <button class="btn btn--primary btn--full" type="submit"
+                  data-ablyft-goal="drop_submit_newsletter" data-close-cta>JETZT ANMELDEN</button>
+        </div>
+        <p class="t-body-s nl__error" id="err-close" hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+        <p class="t-caption nl__consent">LUMAS schützt deine Daten (<a href="https://www.lumas.de/datenschutz/" target="_self">Datenschutzerklärung</a>).</p>
+      </form>
+
+      <div class="nl__success" data-nl-success hidden>
+        <p class="t-h4">Du bist dabei.</p>
+        <p class="t-body close__body">Wir melden uns, sobald es losgeht.</p>
+        <p class="t-body-s"><a class="textlink" href="https://www.lumas.de/artist/robert_jahns/" target="_self">Mehr von Robert Jahns ansehen →</a></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ 9 · CONTINUE ============================
+     Live from the lumas.de catalogue feed: nine works by Robert Jahns, all of
+     them is_online = true and status normal on 2026-11-26. Image codes are the
+     feed's image_filename, which happens to equal the lowercase SKU for this
+     artist but is NOT guaranteed to.
+
+     All nine are LANDSCAPE, measured from the real renditions (1.278 to 1.338),
+     so the common box ratio is 1.338 and every work fills the box height with
+     nothing cropped. Paris Balloons III (0.750) and Brooklyn Bridge Tulips
+     (0.750) are portrait and would leave a third of the box empty, so they are
+     out. The RJA4xx (Petites) and RJA9xx (Darlings) SKUs repeat motifs that are
+     already here and are also out.
+
+     Prices are omitted on purpose: the feed price is per variant and would need
+     confirming. -->
+<section class="section" id="more-works" data-sec="continue">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="t-h2">Weitere Werke von Robert Jahns</h2>
+    </div>
+  </div>
+
+  <div class="carousel carousel--works" data-carousel="works">
+    <div class="carousel__track" tabindex="0" role="group" aria-label="Weitere Werke von Robert Jahns">
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/central_park_penguins/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA19" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja19_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Central Park Penguins von Robert Jahns: Pinguine im verschneiten Central Park vor der Skyline von Manhattan."
+               data-fallback="WERK · CENTRAL PARK PENGUINS"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/central_park_penguins/" target="_self"
+             data-work="RJA19" data-ablyft-goal="drop_click_work">Central Park Penguins</a>
+          <button class="work__fav" type="button" aria-label="Central Park Penguins zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/san_francisco_emperor_penguins/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA51" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja51_full.jpg"
+               loading="lazy" decoding="async"
+               alt="San Francisco Emperor Penguins von Robert Jahns: Kaiserpinguine vor der Golden Gate Bridge."
+               data-fallback="WERK · SAN FRANCISCO EMPEROR PENGUINS"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/san_francisco_emperor_penguins/" target="_self"
+             data-work="RJA51" data-ablyft-goal="drop_click_work">San Francisco Emperor Penguins</a>
+          <button class="work__fav" type="button" aria-label="San Francisco Emperor Penguins zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/cape_town_penguins/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA54" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja54_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Cape Town Penguins von Robert Jahns: Pinguine an der Küste von Kapstadt vor dem Tafelberg."
+               data-fallback="WERK · CAPE TOWN PENGUINS"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/cape_town_penguins/" target="_self"
+             data-work="RJA54" data-ablyft-goal="drop_click_work">Cape Town Penguins</a>
+          <button class="work__fav" type="button" aria-label="Cape Town Penguins zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/neuschwanstein/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA33" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja33_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Neuschwanstein von Robert Jahns: das Schloss in winterlicher Landschaft."
+               data-fallback="WERK · NEUSCHWANSTEIN"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/neuschwanstein/" target="_self"
+             data-work="RJA33" data-ablyft-goal="drop_click_work">Neuschwanstein</a>
+          <button class="work__fav" type="button" aria-label="Neuschwanstein zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/whale_in_venice/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA07" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja07_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Whale in Venice von Robert Jahns: ein Wal taucht in einem Kanal von Venedig auf."
+               data-fallback="WERK · WHALE IN VENICE"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/whale_in_venice/" target="_self"
+             data-work="RJA07" data-ablyft-goal="drop_click_work">Whale in Venice</a>
+          <button class="work__fav" type="button" aria-label="Whale in Venice zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/angkor_wat/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA23" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja23_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Angkor Wat von Robert Jahns: die Tempelanlage, gespiegelt im Wasser."
+               data-fallback="WERK · ANGKOR WAT"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/angkor_wat/" target="_self"
+             data-work="RJA23" data-ablyft-goal="drop_click_work">Angkor Wat</a>
+          <button class="work__fav" type="button" aria-label="Angkor Wat zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/colorful_zebras/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA29" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja29_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Colorful Zebras von Robert Jahns: Zebras mit farbigen Streifen in einer weiten Landschaft."
+               data-fallback="WERK · COLORFUL ZEBRAS"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/colorful_zebras/" target="_self"
+             data-work="RJA29" data-ablyft-goal="drop_click_work">Colorful Zebras</a>
+          <button class="work__fav" type="button" aria-label="Colorful Zebras zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/london_balloons_ii/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA43" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja43_full.jpg"
+               loading="lazy" decoding="async"
+               alt="London Balloons II von Robert Jahns: bunte Ballons über den Dächern von London."
+               data-fallback="WERK · LONDON BALLOONS II"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/london_balloons_ii/" target="_self"
+             data-work="RJA43" data-ablyft-goal="drop_click_work">London Balloons II</a>
+          <button class="work__fav" type="button" aria-label="London Balloons II zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+      <article class="carousel__slide work">
+        <a class="work__imglink" href="https://www.lumas.de/pictures/robert_jahns/london_bridge_balloons/" target="_self" tabindex="-1" aria-hidden="true"
+           data-work="RJA45" data-ablyft-goal="drop_click_work">
+          <div class="work__media media media--contain"><img src="https://img.lumas.com/showimg_rja45_full.jpg"
+               loading="lazy" decoding="async"
+               alt="Tower Bridge Balloons von Robert Jahns: Ballons über der Tower Bridge."
+               data-fallback="WERK · TOWER BRIDGE BALLOONS"></div>
+        </a>
+        <div class="work__row">
+          <a class="work__title t-body" href="https://www.lumas.de/pictures/robert_jahns/london_bridge_balloons/" target="_self"
+             data-work="RJA45" data-ablyft-goal="drop_click_work">Tower Bridge Balloons</a>
+          <button class="work__fav" type="button" aria-label="Tower Bridge Balloons zur Wunschliste hinzufügen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="carousel__bar">
+      <p class="t-caption carousel__count" aria-hidden="true"></p>
+      <div class="carousel__nav">
+        <button class="carousel__btn" type="button" data-dir="-1" aria-label="Vorherige Werke">
+          <span class="carousel__arrow carousel__arrow--prev" aria-hidden="true"></span>
+        </button>
+        <button class="carousel__btn" type="button" data-dir="1" aria-label="Weitere Werke">
+          <span class="carousel__arrow carousel__arrow--next" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ DEV SWITCHER ============================ -->
+<div class="dev" id="dev" aria-label="Phase (dev)"></div>
+
+<script>
+/* ============================================================
+   PHASE
+   ============================================================ */
+let PHASE = 'ANNOUNCE';   // 'ANNOUNCE' | 'EARLY_ACCESS' | 'PUBLIC' | 'ENDED'
+
+/* ?phase=PUBLIC overrides the constant, so every phase has a shareable URL. */
+(() => {
+  const q = new URLSearchParams(location.search).get('phase');
+  if (q && ['ANNOUNCE','EARLY_ACCESS','PUBLIC','ENDED'].includes(q.toUpperCase())) PHASE = q.toUpperCase();
+})();
+
+/* Europe/Berlin is on CET (+01:00) in December, so these offsets and the
+   brief's "CET" agree for once.
+
+   There is no REVEAL in this drop ("Reveal: X" in the brief). The first phase
+   is ANNOUNCE: the page is live from 20.12. 17:00 with the work shown and the
+   dates stated, but nothing is buyable and the PDP does not exist yet, so the
+   only action offered is the Early Access signup. */
+const SCHEDULE = {
+  announce:    '2026-12-20T17:00:00+01:00',
+  earlyAccess: '2026-12-21T08:00:00+01:00',
+  publicSale:  '2026-12-21T12:00:00+01:00',
+  saleEnd:     '2026-12-22T23:59:00+01:00'
+};
+
+const PDP_URL = 'https://www.lumas.de/pictures/robert_jahns/penguins_in_japan/';
+
+/* Brandbook s14 (Oct 2026): currency sign first, separated by a space. */
+const PRICE = '€ 299';
+const EDITION_SIZE = 400;
+
+/* Live sold count. MUST be wired to a real stock feed before launch.
+   Leave null and the scarcity block stays hidden — never show a made-up number.
+   Set to an integer (0-400) to display "<n> von 400 verkauft".
+
+   NOTE the feed already carries copies_available_sap = 148, reservedItemCount
+   = 342 and soldCounter90days = 336 on an unreleased article. Those are
+   pre-production and reservation counters, not online sales, and they do not
+   reconcile with each other (342 + 148 > 400). None of them may drive this
+   bar. */
+const SOLD_COUNT = null;
+
+/* Dev-only simulated clock. Production always reads the real system time; the
+   dev switcher sets this so previewing a phase also previews a plausible moment
+   INSIDE that phase. Without it, previewing PUBLIC in August counts down to a
+   sale end weeks out and reads as a bug when the logic is correct. */
+let SIMULATED_NOW = null;
+const now = () => SIMULATED_NOW !== null ? SIMULATED_NOW : Date.now();
+
+const PHASE_PREVIEW_AT = {
+  ANNOUNCE:     '2026-12-20T19:00:00+01:00',  // 2h after the page goes live
+  EARLY_ACCESS: '2026-12-21T09:00:00+01:00',  // 1h into early access
+  PUBLIC:       '2026-12-21T15:00:00+01:00',  // 3h into the public sale
+  ENDED:        '2026-12-23T10:00:00+01:00'   // the morning after it closed
+};
+
+/* ============================================================
+   TRACKING
+   ============================================================ */
+function track(event, params) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, phase: PHASE, ...params });
+  console.log('[GA4]', event, { phase: PHASE, ...params });
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const pad = n => String(n).padStart(2, '0');
+
+/* Countdown label in the work block. */
+const CD_LABEL = {
+  ANNOUNCE:     'EARLY ACCESS IN',
+  EARLY_ACCESS: 'DER DROP ENDET IN',
+  PUBLIC:       'DER DROP ENDET IN',
+  ENDED:        'DER DROP IST VORBEI'
+};
+
+/* Banner label. There is no countdown in the banner, so these stand alone
+   rather than trailing off into a number. */
+/* The banner is the loudest slot on the page and it is charcoal, so it needs no
+   scrim and can carry the whole mechanic: two days, then the edition is gone.
+   Unlike the Pillow drop this is NOT a price window -- after 22.12. the work is
+   not available at any price, so no line here may suggest it returns. */
+const BANNER_LABEL = {
+  ANNOUNCE:     'ART DROP · 21. UND 22. DEZEMBER · 400 EXEMPLARE, HANDSIGNIERT',
+  EARLY_ACCESS: 'EARLY ACCESS · DER DROP ENDET AM 22. DEZEMBER UM 23:59 UHR',
+  PUBLIC:       'NUR AM 21. UND 22. DEZEMBER · DANACH IST DIE EDITION NICHT MEHR ERHÄLTLICH',
+  ENDED:        'DER ART DROP IST VORBEI · PENGUINS IN JAPAN IST NICHT MEHR ERHÄLTLICH'
+};
+
+const COUNTDOWN_TARGET = {
+  ANNOUNCE:     SCHEDULE.earlyAccess,
+  EARLY_ACCESS: SCHEDULE.saleEnd,
+  PUBLIC:       SCHEDULE.saleEnd,
+  ENDED:        null
+};
+
+/* ============================================================
+   IMAGE FALLBACK BLOCKS
+   ============================================================ */
+$$('img[data-fallback]').forEach(img => {
+  img.addEventListener('error', () => {
+    const box = document.createElement('div');
+    box.className = 'fallback';
+    box.textContent = img.dataset.fallback;
+    const w = img.getAttribute('width'), h = img.getAttribute('height');
+    const host = img.parentElement;
+    const cs = getComputedStyle(host).aspectRatio;
+    box.style.aspectRatio = (cs && cs !== 'auto') ? cs : (w && h ? w + '/' + h : '4/3');
+    box.style.height = '100%';
+    host.classList.remove('framed');
+    img.replaceWith(box);
+  }, { once: true });
+});
+
+/* ============================================================
+   PHASE VISIBILITY
+   ============================================================ */
+function applyPhaseVisibility() {
+  document.documentElement.dataset.phase = PHASE;
+  $$('[data-phases]').forEach(el => {
+    el.hidden = !el.dataset.phases.split(/\s+/).includes(PHASE);
+  });
+
+  $('#topbar-label').textContent = BANNER_LABEL[PHASE];
+  const wl = $('#work-cd-label');
+  if (wl) wl.textContent = CD_LABEL[PHASE];
+}
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+function renderCountdown(el, ms) {
+  if (ms <= 0) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+
+  const total = Math.floor(ms / 1000);
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+
+  const segs = [];
+  if (ms >= 3600000) segs.push([pad(d), 'TAGE']);   // day segment drops under 1 hour
+  segs.push([pad(h), 'STD'], [pad(m), 'MIN'], [pad(s), 'SEK']);
+
+  el.innerHTML = segs.map(([n, u]) =>
+    '<span class="cd__seg"><span class="cd__num">' + n + '</span><span class="cd__unit">' + u + '</span></span>'
+  ).join('');
+}
+
+let cdTimer = null;
+function startCountdown() {
+  if (cdTimer) clearInterval(cdTimer);
+  const targets = ['#cd-work', '#cd-close'].map(s => $(s)).filter(Boolean);
+  const iso = COUNTDOWN_TARGET[PHASE];
+
+  if (!iso) {
+    targets.forEach(el => { el.hidden = true; el.innerHTML = ''; });
+    return;
+  }
+  const deadline = new Date(iso).getTime();
+
+  const tick = () => {
+    const ms = Math.max(0, deadline - now());
+    targets.forEach(el => renderCountdown(el, ms));
+    if (ms <= 0) {
+      // never negative: hide the countdown, keep the phase's label in place
+      clearInterval(cdTimer);
+      cdTimer = null;
+      $('#topbar-label').textContent = BANNER_LABEL[PHASE === 'ANNOUNCE' ? 'EARLY_ACCESS' : 'ENDED'];
+    }
+  };
+  tick();
+  cdTimer = setInterval(tick, 1000);
+}
+
+/* ============================================================
+   SCARCITY
+   ============================================================ */
+function renderScarcity() {
+  const box = $('#scarcity');
+  if (!box) return;
+  const live = Number.isInteger(SOLD_COUNT) && SOLD_COUNT >= 0 && SOLD_COUNT <= EDITION_SIZE;
+  box.hidden = !live;
+  if (!live) return;
+  $('#scarcity-count').textContent = SOLD_COUNT;
+  $('#scarcity-fill').style.width = ((SOLD_COUNT / EDITION_SIZE) * 100).toFixed(1) + '%';
+}
+
+/* ============================================================
+   BUY LINKS
+   One SKU, one price, no variants: every CTA points at the plain product URL.
+   ============================================================ */
+function syncBuyLinks() {
+  $$('a[data-buy]').forEach(a => { a.href = PDP_URL; });
+}
+
+$$('a[data-buy]').forEach(a => {
+  a.addEventListener('click', () => {
+    track('drop_click_buy', { location: a.dataset.buy, sku: 'RJA63', price: PRICE });
+  });
+});
+
+$$('a[data-work]').forEach(a => {
+  a.addEventListener('click', () => track('drop_click_work', { sku: a.dataset.work }));
+});
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+$$('form[data-nl]').forEach(form => {
+  const location = form.dataset.nl;
+  const input = $('input[type="email"]', form);
+  const err   = $('.nl__error', form);
+  const block = form.parentElement;
+  const success = $('[data-nl-success]', block);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();                       // validation on submit only, never on blur
+    const valid = EMAIL_RE.test(input.value.trim());
+    if (!valid) {
+      err.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+      return;
+    }
+    err.hidden = true;
+    input.removeAttribute('aria-invalid');
+    track('drop_submit_newsletter', { location });
+
+    form.classList.add('fade-out');
+    form.style.transition = 'opacity 160ms linear';
+    setTimeout(() => {
+      form.hidden = true;
+      success.hidden = false;
+      success.style.opacity = '0';
+      requestAnimationFrame(() => { success.style.opacity = '1'; });
+    }, 160);
+  });
+});
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+(function initReveal() {
+  const groups = $$('[data-reveal-group]');
+  groups.forEach(g => {
+    $$(':scope > *', g).forEach((child, i) => {
+      child.classList.add('reveal');
+      child.style.setProperty('--reveal-delay', (i * 60) + 'ms');
+    });
+  });
+
+  const items = $$('.reveal');
+  if (!items.length) return;
+
+  const revealAll = () => items.forEach(el => el.classList.add('is-in'));
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) { revealAll(); return; }
+
+  document.documentElement.classList.add('js');
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+  items.forEach(el => io.observe(el));
+
+  // failsafe: never let a section stay invisible
+  setTimeout(revealAll, 1600);
+})();
+
+/* ============================================================
+   NAV DRAWER
+   ============================================================ */
+(function initNavDrawer(){
+  const btn = $('.nav__burger');
+  const drawer = $('#nav-drawer');
+  if (!btn || !drawer) return;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    drawer.hidden = open;
+  });
+})();
+
+/* ============================================================
+   MORE-WORKS VIEW EVENT
+   ============================================================ */
+let worksFired = false;
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !worksFired) { worksFired = true; track('drop_view_works', {}); }
+  });
+}, { threshold: 0.5 }).observe($('#more-works'));
+
+/* ============================================================
+   CAROUSELS
+   ============================================================ */
+$$('[data-carousel]').forEach(root => {
+  const track_ = $('.carousel__track', root);
+  const count  = $('.carousel__count', root);
+  const btns   = $$('.carousel__btn', root);
+  const slides = $$('.carousel__slide', track_);
+
+  const gap = () => parseFloat(getComputedStyle(track_).columnGap) || 0;
+  const perView = () => {
+    const first = slides[0];
+    if (!first) return 1;
+    const w = first.getBoundingClientRect().width, g = gap();
+    return Math.max(1, Math.round((track_.clientWidth + g) / (w + g)));
+  };
+  const index = () => {
+    const first = slides[0];
+    if (!first) return 0;
+    const step = first.getBoundingClientRect().width + gap();
+    return Math.round(track_.scrollLeft / step);
+  };
+
+  function sync() {
+    // publish the media height so the overlay controls can centre on the image
+    const firstMedia = slides[0] && slides[0].querySelector('.room__media, .work__media');
+    if (firstMedia) root.style.setProperty('--nav-h', firstMedia.getBoundingClientRect().height + 'px');
+
+    const n = slides.length, pv = perView(), i = index();
+    count.textContent = pv >= n ? '' : (i + 1) + ' / ' + Math.max(1, n - pv + 1);
+    btns[0].disabled = track_.scrollLeft <= 1;
+    btns[1].disabled = track_.scrollLeft >= track_.scrollWidth - track_.clientWidth - 1;
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    const first = slides[0];
+    if (!first) return;
+    track_.scrollBy({ left: (first.getBoundingClientRect().width + gap()) * Number(b.dataset.dir) });
+    // don't wait on the scroll event — the smooth scroll settles a few frames later
+    sync();
+    setTimeout(sync, 240);
+    setTimeout(sync, 600);
+  }));
+
+  // arrow keys when the track itself has focus
+  track_.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    btns[e.key === 'ArrowRight' ? 1 : 0].click();
+  });
+
+  track_.addEventListener('scroll', () => {
+    clearTimeout(track_._t);
+    track_._t = setTimeout(sync, 80);
+  });
+  new ResizeObserver(sync).observe(track_);
+  // the track keeps its width across breakpoints, so observe the slide too
+  if (slides[0]) new ResizeObserver(sync).observe(slides[0]);
+  window.addEventListener('resize', sync);
+  sync();
+});
+
+/* ============================================================
+   HERO CROP — the whole sculpture must stay in frame
+   ============================================================
+   The hero is a full-bleed object-fit:cover crop, so on a wide, short window it
+   discards a large slice of the image vertically. Which slice is a real
+   decision: anchoring to the bottom (100%) put the darkest floor behind the
+   type and cut the top off the sculpture. So the position is computed from the
+   work's bounding box instead — the largest value that still keeps the box
+   inside the visible band, which is the most floor available without ever
+   cropping the work. Both hero crops share these fractions because the portrait
+   asset is a horizontal crop of the same master.
+   ============================================================ */
+/* null until a real hero room arrives. The fractions below must be MEASURED off
+   the delivered photograph (top and bottom edge of the framed work as a
+   fraction of the image height); inventing them for a placeholder panel would
+   produce a crop number that reads as verified and is not. While this is null
+   the hero keeps the CSS default object-position and check-hero-scrim.py
+   refuses to run. */
+const HERO_ART = null;   // e.g. { top: 0.18, bottom: 0.62 }
+const HERO_INSET = 0.02;                          // a sliver of air kept around it
+
+(() => {
+  const proof = document.querySelector('.proof');
+  const img = document.querySelector('.proof__img');
+  if (!proof || !img) return;
+
+  const setHeroCrop = () => {
+    if (!HERO_ART) return;
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    const cw = proof.clientWidth, ch = proof.clientHeight;
+    const scale = Math.max(cw / nw, ch / nh);
+    const visible = Math.min(nh, ch / scale);   // source pixels visible vertically
+    const cropped = nh - visible;               // source pixels discarded
+    let py = 1;
+    if (cropped > 0.5) {
+      const top = (HERO_ART.top - HERO_INSET) * nh;
+      const bottom = (HERO_ART.bottom + HERO_INSET) * nh;
+      const upper = Math.min(1, Math.max(0, top / cropped));
+      const lower = Math.min(1, Math.max(0, (bottom - visible) / cropped));
+      // upper is the most floor we can show without clipping the work's top
+      py = upper >= lower ? upper
+        // too wide and short for the work to fit at all: centre it, which at
+        // least crops top and bottom equally instead of beheading it
+        : Math.min(1, Math.max(0, ((top + bottom) / 2 - visible / 2) / cropped));
+    }
+    document.documentElement.style.setProperty('--hero-pos-y', (py * 100).toFixed(2) + '%');
+  };
+
+  setHeroCrop();
+  img.addEventListener('load', setHeroCrop);   // the <picture> source swap
+  window.addEventListener('resize', setHeroCrop);
+  window.addEventListener('orientationchange', setHeroCrop);
+  if (window.ResizeObserver) new ResizeObserver(setHeroCrop).observe(proof);
+})();
+
+/* ============================================================
+   HERO FIT — the lockup must be above the fold on landing
+   ============================================================
+   The header stack (banner + nav row + search row) is ~181px on a phone, and a
+   92vh hero on top of that puts the dates below the fold: you land on a
+   photograph with no message. Publish the header height so the hero takes only
+   the space actually left. Measured rather than hard-coded, because the banner
+   is phase-dependent and the search row wraps at some widths. */
+(() => {
+  const proof = document.querySelector('.proof');
+  if (!proof) return;
+  const setFit = () => {
+    // offsetTop, not getBoundingClientRect().top, so a mid-page resize is not
+    // measured against the current scroll position
+    document.documentElement.style.setProperty('--above-proof', proof.offsetTop + 'px');
+  };
+  setFit();
+  window.addEventListener('resize', setFit);
+  window.addEventListener('orientationchange', setFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setFit);
+  // the banner shows and hides with the phase, which moves .proof down or up
+  const header = proof.previousElementSibling;
+  if (header && window.ResizeObserver) new ResizeObserver(setFit).observe(header);
+})();
+
+/* ============================================================
+   DEV SWITCHER
+   ============================================================ */
+const devEl = $('#dev');
+if (new URLSearchParams(location.search).has('dev')) {
+  devEl.classList.add('is-on');
+  ['ANNOUNCE','EARLY_ACCESS','PUBLIC','ENDED'].forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = p;
+    b.addEventListener('click', () => {
+      PHASE = p;
+      SIMULATED_NOW = new Date(PHASE_PREVIEW_AT[p]).getTime();
+      render();
+    });
+    devEl.appendChild(b);
+  });
+
+  const meta = document.createElement('p');
+  meta.className = 'dev__meta';
+  devEl.appendChild(meta);
+
+  window.__devMeta = () => {
+    const d = new Date(now());
+    const stamp = SIMULATED_NOW === null ? 'echte Zeit' :
+      d.toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    const open = document.querySelectorAll('.fallback').length;
+    const notes = (document.body.innerText.match(/⚠︎/g) || []).length;
+    const stock = Number.isInteger(SOLD_COUNT) ? 'Stock ok' : 'kein Stock-Feed';
+    meta.textContent = 'now: ' + stamp + ' · ' + open + ' Bild-Platzhalter · ' + notes + ' offene Texte · ' + stock;
+  };
+}
+function syncDevMeta() { if (window.__devMeta) window.__devMeta(); }
+function syncDev() {
+  $$('#dev button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === PHASE)));
+}
+
+/* ============================================================
+   PHASE SWITCH (review aid)
+   A visible link between the reveal page and the buy variation. Delete this
+   block and the .phase-switch rule before launch.
+   ============================================================ */
+(function phaseSwitch(){
+  const a = document.createElement('a');
+  a.className = 'phase-switch';
+  const toBuy = PHASE !== 'PUBLIC';
+  a.href = '?phase=' + (toBuy ? 'PUBLIC' : 'ANNOUNCE');
+  a.textContent = toBuy ? 'Kaufphase ansehen' : 'Ankündigung ansehen';
+  document.body.appendChild(a);
+})();
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  applyPhaseVisibility();
+  syncBuyLinks();
+  startCountdown();
+  renderScarcity();
+  syncDev();
+  syncDevMeta();
+}
+
+render();
+track('drop_view_page', { sku: 'RJA63' });
+</script>
+</body>
+</html>

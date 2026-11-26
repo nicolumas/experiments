@@ -1,0 +1,33 @@
+/* Utile Display — Sibylle Hagmann / Kontour Type, v1.302
+   Licensed by TypeNetwork: Light ID 373473, Regular ID 373474.
+
+   Replaces the base64-embedded TRIAL faces that were here before — their name
+   table read "Utile Display Trial" and "meant for use in pitches and mockups".
+   These are the purchased files (see eula-order-100934-Kontour.pdf).
+
+   Served as real files rather than data URIs: woff2 is ~30KB on the wire
+   against ~40KB base64-inflated, and the browser can cache them. Paths are
+   relative to THIS file, so the four font files must sit beside it.
+
+   Light (300) is used by .t-display-xl only; Regular (400) by h1-h4 and the
+   hero artist line. The licence covers no italic and the page uses none — if
+   italic ever appears the browser will synthesise a slanted Regular, so add a
+   real face rather than letting that ship. */
+
+@font-face {
+  font-family: 'UtileDisplay';
+  src: url('UtileDisplay-Light.woff2') format('woff2'),
+       url('UtileDisplay-Light.woff')  format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UtileDisplay';
+  src: url('UtileDisplay-Regular.woff2') format('woff2'),
+       url('UtileDisplay-Regular.woff')  format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
