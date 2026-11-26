@@ -25,7 +25,7 @@
     discovery: 'Neue Edition zum Startpreis. Der Preis steigt in Stufen, je mehr Exemplare verkauft sind.',
     popular: 'Der Preis dieser Edition steigt in Stufen, je mehr Exemplare verkauft sind.',
     high: 'Der Preis dieser Edition steigt in Stufen, je mehr Exemplare verkauft sind.',
-    last: 'Die letzten Exemplare dieser Edition.',
+    last: 'Diese Edition ist in ihrer letzten Preisstufe.',   // stage last = status LAST_PRINTS, the top price tier
   };
 
   function stageOf(di) {

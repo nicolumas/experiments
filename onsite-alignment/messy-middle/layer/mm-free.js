@@ -86,17 +86,17 @@
     dialog?.remove();
     const opts = s.framed.map((f, i) => {
       const col = (f.colors || []).find(c => String(c.idColor) === String(f.colorId)) || (f.colors || [])[0] || {};
-      return `<div class="gift-item mm-free-item">
+      return `<div class="mm-free-item">
         <img src="${B.esc(B.asset(col.cornerImage || ''))}" alt="" class="mm-free-corner">
-        <div class="details"><div class="title">${B.esc(f.header)}</div><div class="artist">${B.esc(f.colorLabel || col.label || '')}</div>
-        <div class="description">Im Wert von ${B.euro(f.priceRaw - s.base.priceRaw)}. Du zahlst ${B.euro(s.base.priceRaw)}.</div>
+        <div class="mm-free-details"><div class="mm-free-title">${B.esc(f.header)}</div><div class="mm-free-sub">${B.esc(f.colorLabel || col.label || '')}</div>
+        <div class="mm-free-desc">Im Wert von ${B.euro(f.priceRaw - s.base.priceRaw)}. Du zahlst ${B.euro(s.base.priceRaw)}.</div>
         <button type="button" class="mm-works-atc" data-mm-frame="${i}">Mit diesem Rahmen</button></div></div>`;
     }).join('');
-    dialog = B.el(`<dialog class="gift-with-purchase mm-free-dialog" aria-label="Dein Rahmen zur Black Week">
-      <div class="gift-item-header"><form method="dialog"><button class="icon-close" aria-label="Schließen"></button></form>
+    dialog = B.el(`<dialog class="mm-free-dialog" aria-label="Dein Rahmen zur Black Week">
+      <div class="mm-free-head"><form method="dialog"><button class="mm-free-x" aria-label="Schließen"></button></form>
         <h4>Dein Rahmen zur Black Week</h4><p>Wähle einen Rahmen, er ist im Preis enthalten.</p></div>
-      <div class="gift-item-container">${opts}</div>
-      <div class="gift-item-footer"><button type="button" class="mm-free-skip">Ohne Rahmen in den Warenkorb</button></div>
+      <div class="mm-free-options">${opts}</div>
+      <div class="mm-free-foot"><button type="button" class="mm-free-skip">Ohne Rahmen in den Warenkorb</button></div>
     </dialog>`);
     document.body.appendChild(dialog);
     dialog.showModal();

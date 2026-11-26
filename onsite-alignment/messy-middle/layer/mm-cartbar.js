@@ -35,7 +35,7 @@
     const c = cart[0];
     const more = cart.length - 1;
     const here = otherWorkHere(c);
-    const html = `<aside class="mm-cartbar" aria-label="Warenkorb">
+    const html = `<aside class="mm-cartbar${here ? ' has-compare' : ''}" aria-label="Warenkorb">
       <a class="mm-cartbar-work" href="${B.esc(B.restoreUrl(c))}"><img src="${B.esc(B.asset(c.thumb || c.image))}" alt="">
         <span class="mm-cartbar-text"><span class="mm-cartbar-title">${B.esc(c.title)}${more ? ` <span class="mm-cartbar-more">+${more}</span>` : ''}</span>
         <span class="mm-cartbar-meta">${B.esc(B.sizeText(c))} · ${B.euro(c.price)}</span></span></a>

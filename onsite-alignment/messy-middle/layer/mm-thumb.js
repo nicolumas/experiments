@@ -19,29 +19,29 @@
 
   // Words visitors type → production's existing filter values (filter-key colors / dimension, width ranges, /format/ pages).
   const COLORS = [
-    [/schwarz[\s-]*wei(ß|ss)|s\/w\b|schwarzwei(ß|ss)/, 'blackwhite', 'Schwarz-Weiß', 'linear-gradient(135deg,#1c1a18 50%,#fff 50%)'],
-    [/\bgr(ü|ue)n\w*/, 'green', 'Grün', '#5d7a4f'],
-    [/\bhellblau\b|\bhimmelblau\b/, 'sky', 'Himmelblau', '#9cc3df'],
-    [/\bblau\w*/, 'blue', 'Blau', '#2f5a8c'],
-    [/\brot\b|\brote\b/, 'red', 'Rot', '#b0322a'],
-    [/\bgelb\w*/, 'yellow', 'Gelb', '#e3c04a'],
-    [/\borange\b/, 'orange', 'Orange', '#e07b39'],
-    [/\blila\b|\bviolett\b/, 'purple', 'Lila', '#7a4f8c'],
-    [/\bbraun\w*/, 'brown', 'Braun', '#7a5536'],
-    [/\bbunt\w*|\bfarbenfroh\w*/, 'colorful', 'Bunt', 'conic-gradient(#b0322a,#e3c04a,#5d7a4f,#2f5a8c,#7a4f8c,#b0322a)'],
-    [/\bwei(ß|ss)\b/, 'white', 'Weiß', '#fff'],
-    [/\bschwarz\w*/, 'black', 'Schwarz', '#1c1a18'],
+    [/schwarz[\s-]*wei(ß|ss)|s\/w(?![a-zäöüß])|schwarzwei(ß|ss)/, 'blackwhite', 'Schwarz-Weiß', 'linear-gradient(135deg,#1c1a18 50%,#fff 50%)'],
+    [/(?<![a-zäöüß])gr(ü|ue)n[a-zäöüß]*/, 'green', 'Grün', '#5d7a4f'],
+    [/(?<![a-zäöüß])hellblau(?![a-zäöüß])|(?<![a-zäöüß])himmelblau(?![a-zäöüß])/, 'sky', 'Himmelblau', '#9cc3df'],
+    [/(?<![a-zäöüß])blau[a-zäöüß]*/, 'blue', 'Blau', '#2f5a8c'],
+    [/(?<![a-zäöüß])rot(?![a-zäöüß])|(?<![a-zäöüß])rote(?![a-zäöüß])/, 'red', 'Rot', '#b0322a'],
+    [/(?<![a-zäöüß])gelb[a-zäöüß]*/, 'yellow', 'Gelb', '#e3c04a'],
+    [/(?<![a-zäöüß])orange(?![a-zäöüß])/, 'orange', 'Orange', '#e07b39'],
+    [/(?<![a-zäöüß])lila(?![a-zäöüß])|(?<![a-zäöüß])violett(?![a-zäöüß])/, 'purple', 'Lila', '#7a4f8c'],
+    [/(?<![a-zäöüß])braun[a-zäöüß]*/, 'brown', 'Braun', '#7a5536'],
+    [/(?<![a-zäöüß])bunt[a-zäöüß]*|(?<![a-zäöüß])farbenfroh[a-zäöüß]*/, 'colorful', 'Bunt', 'conic-gradient(#b0322a,#e3c04a,#5d7a4f,#2f5a8c,#7a4f8c,#b0322a)'],
+    [/(?<![a-zäöüß])wei(ß|ss)(?![a-zäöüß])/, 'white', 'Weiß', '#fff'],
+    [/(?<![a-zäöüß])schwarz[a-zäöüß]*/, 'black', 'Schwarz', '#1c1a18'],
   ];
   const FORMATS = [
-    [/\bquer\w*/, 'across', 'Querformat'],
-    [/\bhoch(format)?\b/, 'upright', 'Hochformat'],
-    [/\bquadrat\w*/, 'square', 'Quadrat'],
-    [/\brund\w*/, 'round', 'Rund'],
-    [/\bpanorama\w*/, 'panorama', 'Panorama'],
+    [/(?<![a-zäöüß])quer[a-zäöüß]*/, 'across', 'Querformat'],
+    [/(?<![a-zäöüß])hoch(format)?(?![a-zäöüß])/, 'upright', 'Hochformat'],
+    [/(?<![a-zäöüß])quadrat[a-zäöüß]*/, 'square', 'Quadrat'],
+    [/(?<![a-zäöüß])rund[a-zäöüß]*/, 'round', 'Rund'],
+    [/(?<![a-zäöüß])panorama[a-zäöüß]*/, 'panorama', 'Panorama'],
   ];
   const SIZES = [
-    [/\bxxl\b|\briesig\w*|\bgro(ß|ss)e?\b|\bgro(ß|ss)formatig\w*/, 'width=from2000-to5500', 'Ab 200 cm Breite'],
-    [/\bklein\w*|\bkleinformat\w*/, 'width=from0-to550&height=from0-to600', 'Bis 55 cm Breite'],
+    [/(?<![a-zäöüß])xxl(?![a-zäöüß])|(?<![a-zäöüß])riesig[a-zäöüß]*|(?<![a-zäöüß])gro(ß|ss)e?(?![a-zäöüß])|(?<![a-zäöüß])gro(ß|ss)formatig[a-zäöüß]*/, 'width=from2000-to5500', 'Ab 200 cm Breite'],
+    [/(?<![a-zäöüß])klein[a-zäöüß]*|(?<![a-zäöüß])kleinformat[a-zäöüß]*/, 'width=from0-to550&height=from0-to600', 'Bis 55 cm Breite'],
   ];
   const SHAPE = { across: 'Querformat', upright: 'Hochformat', square: 'Quadrat', panorama: 'Panorama', round: 'Rund', object: 'Objekt' };
 
@@ -51,7 +51,7 @@
     for (const [re, value, label, swatch] of COLORS) if (re.test(q)) { found.push({ kind: 'Farbwelt', param: 'colors=' + value, label, swatch }); q = q.replace(re, ' '); break; }
     for (const [re, value, label] of FORMATS) if (re.test(q)) { found.push({ kind: 'Format', param: 'dimension=' + value, label, icon: 'icon-format-' + value }); q = q.replace(re, ' '); break; }
     for (const [re, param, label] of SIZES) if (re.test(q)) { found.push({ kind: 'Größe', param, label }); q = q.replace(re, ' '); break; }
-    const rest = q.replace(/\b(bilder?|kunst|fotos?|fotografie|wandbilder?|in|mit|und)\b/g, ' ').replace(/\s+/g, ' ').trim();
+    const rest = q.replace(/(?<![a-zäöüß])(bilder?|kunst|fotos?|fotografie|wandbilder?|in|mit|und)(?![a-zäöüß])/g, ' ').replace(/\s+/g, ' ').trim();
     return { found, rest };
   }
 
@@ -67,8 +67,16 @@
     return '<span class="mm-thumb-swatch is-size" aria-hidden="true">↔</span>';
   }
 
+  // Desktop: the header dropdown (.suggestion-container .suggestions, a grid of <dl> columns).
+  // Phones: the bottom navigation's search panel (nav-search .search-suggestions, a list of text links).
+  function boxFor(input) {
+    const nav = input.closest('nav-search');
+    if (nav) return nav.querySelector('.search-suggestions');
+    return input.closest('form')?.parentElement?.querySelector('.suggestion-container .suggestions') || document.querySelector('.suggestion-container .suggestions');
+  }
+
   function update(input) {
-    const box = input.closest('form')?.parentElement?.querySelector('.suggestion-container .suggestions') || document.querySelector('.suggestion-container .suggestions');
+    const box = boxFor(input);
     if (!box) return;
     box.querySelector('.mm-thumb')?.remove();
     const p = parse(input.value || '');
@@ -92,7 +100,7 @@
       input.addEventListener('input', run);
       input.addEventListener('focus', run);
       // production re-renders the suggestions while typing; put ours back on top
-      const box = document.querySelector('.suggestion-container .suggestions');
+      const box = boxFor(input);
       if (box) new MutationObserver(() => { if (input.value && !box.querySelector('.mm-thumb')) run(); }).observe(box, { childList: true });
     });
   }

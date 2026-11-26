@@ -42,7 +42,7 @@
     if (cards.length < 3 || !anchor || !cards[0].querySelector('img')) return false;   // wait for production's cards
     const section = B.el(`<section class="mm-proof" aria-label="Diesen Monat besonders gefragt">
       <div class="mm-proof-head"><p class="mm-eyebrow">Diesen Monat besonders gefragt</p>
-      <p class="mm-proof-sub">Die Werke von ${B.esc(document.querySelector('h1')?.textContent.trim() || '')}, die Sammler in den letzten 30 Tagen am häufigsten gewählt haben.</p></div>
+      <p class="mm-proof-sub">Ausgewählt nach den Verkäufen der letzten 30 Tage, online und in unseren Galerien.</p></div>
       <div class="search-results mm-proof-grid"></div>
       <a class="mm-textlink mm-proof-all" href="#mm-all-works">Alle Werke ansehen</a>
     </section>`);

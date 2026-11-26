@@ -22,6 +22,7 @@
     del(k) { try { sessionStorage.removeItem(k); } catch (e) { /* ignore */ } },
   };
 
+  if (qs.has('mm-mode') && !qs.has('mm')) session.del('mm-only');   // stepping into a mode always shows the ideas
   let active = (qs.get('mm') || session.get('mm-only') || '').split(',').filter(Boolean);
   if (qs.has('mm')) {
     if (qs.get('mm') === 'all') { active = []; session.del('mm-only'); } else session.set('mm-only', qs.get('mm'));
