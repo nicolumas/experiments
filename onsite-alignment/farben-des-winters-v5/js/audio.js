@@ -1392,10 +1392,10 @@
       this.eng = new Engine(c);
       this.eng.setScene(this.scene);
       document.addEventListener('visibilitychange', () => this.visibility());
-      /* iOS can interrupt the context (a call, the lock screen): resume on the next touch */
+      /* iOS can interrupt the context (a call, the lock screen, back from another tab): resume on the next tap. iPhone
+         Safari resumes only inside an event that counts as a user activation, which pointerdown is not */
       const wake = () => { if (this.on && c.state !== 'running') { c.resume().then(() => this.realign()).catch(() => {}); } };
-      window.addEventListener('pointerdown', wake, { passive: true });
-      window.addEventListener('keydown', wake);
+      for (const type of ['pointerup', 'touchend', 'click', 'keydown']) window.addEventListener(type, wake, { passive: true });
       return true;
     },
     get master() { return this.eng ? this.eng.master : null; },

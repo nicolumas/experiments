@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +8,7 @@
 <!-- The demo for phones: opens the calendar on door 1 with the day switcher (demo builds only; the live build ignores ?day and ?demo). -->
 <script>
   var q = new URLSearchParams(location.search);
-  location.replace('../?day=' + (q.get('day') || '1') + '&demo' + (q.get('lang') === 'de' ? '&lang=de' : ''));
+  location.replace('../?day=' + (q.get('day') || '1') + '&demo' + (q.get('lang') === 'en' ? '&lang=en' : ''));
 </script>
 </head>
 <body><noscript><a href="../?day=1&amp;demo">Open the demo</a></noscript></body>

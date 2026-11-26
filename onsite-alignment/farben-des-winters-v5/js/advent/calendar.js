@@ -164,7 +164,7 @@
 
   /* the demo's day switcher (demo builds only): a day back, a day on, and starting again with nothing opened */
   function demoBar(now) {
-    const lang = D.lang() === 'de' ? '&lang=de' : '';
+    const lang = D.lang() === 'en' ? '&lang=en' : '';
     const day = Math.min(24, Math.max(1, +G.advent.berlinIso(now).slice(8, 10) || 1));
     const go = (n) => `?day=${n}&demo${lang}`;
     const date = new Intl.DateTimeFormat(D.lang() === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'Europe/Berlin' }).format(now);

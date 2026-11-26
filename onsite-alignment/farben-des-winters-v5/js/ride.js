@@ -10,7 +10,7 @@
 
   const G = (window.GAL = window.GAL || {});
   const q = new URLSearchParams(location.search);
-  let LANG = (G.LANG = q.get('lang') === 'de' ? 'de' : 'en');
+  let LANG = (G.LANG = q.get('lang') === 'en' ? 'en' : 'de');
   const RM = (G.RM = matchMedia('(prefers-reduced-motion: reduce)').matches);
   const SPEED = (G.SPEED = q.has('fast') ? 3 : 1);
   const AUTO = q.has('auto');
@@ -1640,7 +1640,7 @@
     if (G.calendar.visible()) G.calendar.show();
     G.offer.refresh();
     if (S.phase === 'end' && S.chosen && $('#end').classList.contains('show')) showEnd(S.chosen);
-    try { const u = new URL(location.href); if (l === 'de') u.searchParams.set('lang', 'de'); else u.searchParams.delete('lang'); history.replaceState(null, '', u); } catch (e) { /* ignore */ }
+    try { const u = new URL(location.href); if (l === 'en') u.searchParams.set('lang', 'en'); else u.searchParams.delete('lang'); history.replaceState(null, '', u); } catch (e) { /* ignore */ }
     track('gal_lang', { gal_to: l });
   }
   function fillStatic() {
