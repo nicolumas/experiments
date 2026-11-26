@@ -122,8 +122,7 @@ T = {
     'Handsigniert, limitiert auf 400 Exemplare': 'Hand-signed, limited to 400 pieces',
     'Fotografischer Abzug unter glänzendem Acrylglas, rahmenlos':
         'Photographic print under glossy acrylic glass, frameless',
-    'Mit Echtheitszertifikat, handsigniert und nummeriert':
-        'With a certificate of authenticity, hand-signed and numbered',
+    'Handsigniert, mit Echtheitszertifikat': 'Hand-signed, with a certificate of authenticity',
     'WERK SICHERN': 'SECURE THE WORK',
     'WEITERE WERKE VON ROBERT JAHNS': 'MORE WORKS BY ROBERT JAHNS',
 
@@ -158,9 +157,9 @@ T = {
     'Rahmenlos, handgefertigt': 'Frameless, handmade',
     'Die Edition kommt ohne Rahmen an die Wand. Nichts steht zwischen dem Bild und dem Raum, und das Format bleibt, wie der Künstler es angelegt hat: 80 × 60 cm.':
         'The edition goes on the wall without a frame. Nothing stands between the image and the room, and the format stays as the artist set it: 80 × 60 cm.',
-    'Handsigniert und nummeriert': 'Hand-signed and numbered',
-    'Jedes der 400 Exemplare ist vom Künstler handsigniert und trägt seine Editionsnummer. Das Echtheitszertifikat liegt bei.':
-        'Each of the 400 pieces is hand-signed by the artist and carries its edition number. The certificate of authenticity is included.',
+    'Handsigniert, mit Zertifikat': 'Hand-signed, with a certificate',
+    'Jedes der 400 Exemplare ist vom Künstler handsigniert, und das Echtheitszertifikat liegt bei.':
+        'Each of the 400 pieces is hand-signed by the artist, and the certificate of authenticity is included.',
     'MEHR DETAILS': 'MORE DETAILS',
 
     # --- voice -----------------------------------------------------------
@@ -204,7 +203,7 @@ T = {
 
     # --- assure (the trust row under the buy box) -------------------------
     'Streng limitiert': 'Strictly limited',
-    '400 Exemplare, handsigniert und nummeriert': '400 pieces, hand-signed and numbered',
+    '400 Exemplare, handsigniert': '400 pieces, hand-signed',
     'Versichert versandt': 'Shipped insured',
     'sicher verpackt für den Transport': 'securely packed for transport',
     '60 Tage Rückgaberecht': '60-day right of return',
@@ -224,20 +223,20 @@ T = {
         'Central Park Penguins by Robert Jahns: penguins in a snow-covered Central Park against the Manhattan skyline.',
     'San Francisco Emperor Penguins von Robert Jahns: Kaiserpinguine vor der Golden Gate Bridge.':
         'San Francisco Emperor Penguins by Robert Jahns: emperor penguins in front of the Golden Gate Bridge.',
-    'Cape Town Penguins von Robert Jahns: Pinguine an der Küste von Kapstadt vor dem Tafelberg.':
-        'Cape Town Penguins by Robert Jahns: penguins on the coast at Cape Town below Table Mountain.',
-    'Neuschwanstein von Robert Jahns: das Schloss in winterlicher Landschaft.':
-        'Neuschwanstein by Robert Jahns: the castle in a winter landscape.',
-    'Whale in Venice von Robert Jahns: ein Wal taucht in einem Kanal von Venedig auf.':
-        'Whale in Venice by Robert Jahns: a whale surfacing in a Venetian canal.',
-    'Angkor Wat von Robert Jahns: die Tempelanlage, gespiegelt im Wasser.':
-        'Angkor Wat by Robert Jahns: the temple complex mirrored in the water.',
-    'Colorful Zebras von Robert Jahns: Zebras mit farbigen Streifen in einer weiten Landschaft.':
-        'Colorful Zebras by Robert Jahns: zebras with coloured stripes in a wide landscape.',
-    'London Balloons II von Robert Jahns: bunte Ballons über den Dächern von London.':
-        'London Balloons II by Robert Jahns: coloured balloons above the rooftops of London.',
-    'Tower Bridge Balloons von Robert Jahns: Ballons über der Tower Bridge.':
-        'Tower Bridge Balloons by Robert Jahns: balloons above Tower Bridge.',
+    'Cape Town Penguins von Robert Jahns: Pinguine am Strand von Kapstadt, dahinter eine Bergkette im Abendlicht.':
+        'Cape Town Penguins by Robert Jahns: penguins on a beach at Cape Town, a mountain range behind them in the evening light.',
+    'Neuschwanstein von Robert Jahns: das Schloss im Schneenebel, verschneite Zweige rahmen den Blick, eine Treppe mit Laternen führt hinab.':
+        'Neuschwanstein by Robert Jahns: the castle in snow fog, snow-covered branches framing the view, a stair with lanterns leading down.',
+    'Whale in Venice von Robert Jahns: ein Wal taucht im Canal Grande auf, dahinter die beleuchteten Palazzi und eine Kuppel in der Abenddämmerung.':
+        'Whale in Venice by Robert Jahns: a whale surfacing in the Grand Canal, the lit palazzi and a dome behind it at dusk.',
+    'Angkor Wat von Robert Jahns: die Tempelanlage bei Sonnenaufgang, gespiegelt im Wasser, im Vordergrund ein sitzender Mönch.':
+        'Angkor Wat by Robert Jahns: the temple complex at sunrise, mirrored in the water, a seated monk in the foreground.',
+    'Colorful Zebras von Robert Jahns: Zebras laufen durch Nebel, dahinter ein Gebirge in Regenbogenfarben.':
+        'Colorful Zebras by Robert Jahns: zebras running through mist, a rainbow-coloured mountain range behind them.',
+    'London Balloons II von Robert Jahns: bunte Ballons über dem Palace of Westminster und Big Ben, auf der Brücke ein roter Bus.':
+        'London Balloons II by Robert Jahns: coloured balloons above the Palace of Westminster and Big Ben, a red bus on the bridge.',
+    'Tower Bridge Balloons von Robert Jahns: bunte Ballons über der Tower Bridge, rechts The Shard.':
+        'Tower Bridge Balloons by Robert Jahns: coloured balloons above Tower Bridge, The Shard to the right.',
 
     # --- rooms carousel ---------------------------------------------------
     'aria-label="Vorheriges Bild"': 'aria-label="Previous image"',
@@ -256,8 +255,8 @@ T = {
         'Close-up of the edge of the glossy acrylic glass the photographic print is laminated under.',
     'Seitenansicht der rahmenlosen Edition an der Wand, die Kante steht frei.':
         'Side view of the frameless edition on the wall, the edge standing clear.',
-    'Die Handsignatur von Robert Jahns und die Editionsnummer auf der Rückseite der Edition.':
-        'The hand signature of Robert Jahns and the edition number on the back of the edition.',
+    'Die Handsignatur von Robert Jahns auf der Edition.':
+        'The hand signature of Robert Jahns on the edition.',
     'Porträt von Robert Jahns.': 'Portrait of Robert Jahns.',
 
     # --- fallback labels (and the placeholder panels they name) -----------
@@ -271,7 +270,7 @@ T = {
     'RAUM 5 · 3:2': 'ROOM 5 · 3:2',
     'DETAIL · ACRYLGLASKANTE · 3:2': 'DETAIL · ACRYLIC EDGE · 3:2',
     'DETAIL · RAHMENLOSE KANTE · 3:2': 'DETAIL · FRAMELESS EDGE · 3:2',
-    'DETAIL · SIGNATUR UND NUMMER · 3:2': 'DETAIL · SIGNATURE AND NUMBER · 3:2',
+    'DETAIL · SIGNATUR · 3:2': 'DETAIL · SIGNATURE · 3:2',
     'PORTRÄT · ROBERT JAHNS · 4:3': 'PORTRAIT · ROBERT JAHNS · 4:3',
 
     # --- script strings --------------------------------------------------
@@ -282,7 +281,8 @@ T = {
     "segs.push([pad(h), 'STD'], [pad(m), 'MIN'], [pad(s), 'SEK']);":
         "segs.push([pad(h), 'HRS'], [pad(m), 'MIN'], [pad(s), 'SEC']);",
     "'de-DE'": "'en-GB'",
-    "' Bild-Platzhalter · '": "' image placeholders · '",
+    "' fehlende Bilder · '": "' missing images · '",
+    "' Platzhalter · '": "' placeholders · '",
     "' offene Texte · '": "' open copy items · '",
     "'echte Zeit'": "'real time'",
     "'kein Stock-Feed'": "'no stock feed'",

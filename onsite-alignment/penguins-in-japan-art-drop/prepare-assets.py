@@ -54,7 +54,7 @@ PLACEHOLDERS = [
     ('room-04.jpg',             1800, 1200, 'RAUM 4 · 3:2'),
     ('room-05.jpg',             1800, 1200, 'RAUM 5 · 3:2'),
     ('detail-acrylic.jpg',      1200,  800, 'DETAIL · ACRYLGLASKANTE · 3:2'),
-    ('detail-signature.jpg',    1200,  800, 'DETAIL · SIGNATUR UND NUMMER · 3:2'),
+    ('detail-signature.jpg',    1200,  800, 'DETAIL · SIGNATUR · 3:2'),
     ('detail-edge.jpg',         1200,  800, 'DETAIL · RAHMENLOSE KANTE · 3:2'),
     ('artist-portrait.jpg',     1600, 1200, 'PORTRÄT · ROBERT JAHNS · 4:3'),
     ('artist-portrait-tall.jpg', 1100, 1650, 'PORTRÄT · ROBERT JAHNS · 2:3'),

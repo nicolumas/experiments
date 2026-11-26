@@ -72,7 +72,8 @@ const ok=(c,m)=>console.log((c?'  PASS  ':'  FAIL  ')+m);
  // still the right expectation here; audit.js is what asserts the stand-in set.
  // sheet. It counted 1 while the artist portrait was still a placeholder block;
  // asserting 0 is what keeps a future missing asset from shipping quietly.
- ok(/0 Bild-Platzhalter/.test(meta),'readiness meter reports no image placeholders: '+meta);
+ ok(/0 fehlende Bilder/.test(meta),'readiness meter reports no FAILED images: '+meta);
+ ok(/· 12 Platzhalter/.test(meta),'readiness meter counts all 12 stand-ins: '+meta);
 
  // --- one h1, source order = tab order --------------------------------
  const h1s=await p.$$eval('h1',e=>e.length);
