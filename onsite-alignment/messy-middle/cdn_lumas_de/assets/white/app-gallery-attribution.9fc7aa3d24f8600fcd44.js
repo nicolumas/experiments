@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkyves_zed=self.webpackChunkyves_zed||[]).push([[8117],{10853:function(e,n,t){t.r(n);var i=t(69332),o=t(26686);(0,i.O)(()=>(0,o.iz)())},39644:function(e,n,t){t.r(n);var i=t(69332),o=t(26686);const s=()=>{(0,i.R)()||(0,o.VJ)()};window.addEventListener("CookiebotOnDecline",s),window.addEventListener("CookiebotOnAccept",s)}}]);

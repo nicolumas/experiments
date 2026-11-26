@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<script src="../assets/gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Messy Middle Prototypes</title>
+<link rel="stylesheet" href="cdn_lumas_de/assets/white/inline.e04527ea4ec0e063e3f4d5cdacb013525c820500.css">
+<style>
+  :root { --ink: #1c1a18; --muted: #6b665f; --ivory: #f7f1e9; --bone: #e4dccf; --display: lumas-utile-display, utile-display-fallback, arial, sans-serif; --body: archivo, arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font: 400 16px/1.55 var(--body); }
+  .wrap { padding: 48px clamp(20px, 5vw, 96px) 80px; display: grid; gap: 64px; }
+  header { display: grid; gap: 12px; max-width: 72ch; }
+  .eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font: 400 48px/1.05 var(--display); margin: 0; text-align: left; }
+  h2 { font: 400 32px/1.1 var(--display); margin: 0; text-align: left; }
+  p { margin: 0; max-width: 64ch; }
+  .lede { font-size: 18px; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .modes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 1100px; }
+  .mode { display: grid; gap: 6px; padding: 16px; background: var(--ivory); color: var(--ink); text-decoration: none; border-radius: 4px; transition: background .22s; }
+  .mode:hover { background: var(--bone); }
+  .mode b { font: 400 22px/1.2 var(--display); }
+  .mode span { font-size: 13px; color: var(--muted); }
+  .idea { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: start; padding-top: 40px; border-top: 1px solid var(--bone); }
+  .idea .copy { display: grid; gap: 14px; align-content: start; }
+  .evidence { background: var(--ivory); padding: 14px 16px; font-size: 14px; max-width: 64ch; }
+  .evidence b { font-weight: 600; }
+  .links { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+  .links a { display: inline-flex; align-items: center; min-height: 44px; font: 600 13px/1.2 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .phone { width: 300px; height: 650px; border: 10px solid #1c1a18; border-radius: 36px; overflow: hidden; position: relative; background: #fff; flex: none; }
+  .phone iframe { width: 390px; height: 844px; border: 0; transform: scale(.7180); transform-origin: 0 0; }
+  .measure { font-size: 13px; color: var(--muted); }
+  .measure code { font-size: 12px; background: #f3f1ee; padding: 1px 5px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; }
+  .tools a { color: var(--muted); }
+  @media (max-width: 900px) { .idea { grid-template-columns: 1fr; } h1 { font-size: 36px; } .modes { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Prototyp · lumas.de live · 26. November 2026</p>
+    <h1>Seven ideas for the messy middle, on the live shop</h1>
+    <p class="lede">Each idea comes from Google's Decoding Decisions paper and our own buyer paths (712 orders, 1 to 24 Nov), and sits on today's lumas.de pages with production's fonts, buttons, prices and product cards. The site reads which mode a visitor is in and shows each idea only where it fits.</p>
+    <p class="muted">Pages are captured from the live shop on first visit; nothing reaches the real shop (the cart is simulated). Add <code>?mm=none</code> to any page in this copy to see production without the ideas, <code>?mm=all</code> to bring them back.</p>
+    <div class="tools"><a href="home.html?mm-mode=exploring">Start fresh</a><a href="home.html?mm=none">Production, no ideas</a><a href="home.html?mm=all">All ideas back on</a></div>
+  </header>
+
+  <section class="copy" style="display:grid;gap:16px">
+    <p class="eyebrow">Idea 3 · A site that reads the mode</p>
+    <h2>Step into a visitor's shoes</h2>
+    <p>Each link puts you into one mode with matching history, then the site's own signals take over: works seen in an earlier visit make a returning visitor, an add to cart makes an evaluator, a cart or checkout landing a decided one.</p>
+    <div class="modes">
+      <a class="mode" href="artist-isabelle-menin.html?mm-mode=exploring" target="_blank"><b>Exploring</b><span>First visit from an ad. Lands on an artist page: what collectors choose comes first; no scarcity claims.</span></a>
+      <a class="mode" href="home.html?mm-mode=returning" target="_blank"><b>Coming back</b><span>Viewed five works on earlier days. Homepage, header and listings lead back to them.</span></a>
+      <a class="mode" href="pictures-isabelle-menin-from-a-dream-04.html?mm-mode=evaluating" target="_blank"><b>Evaluating</b><span>Legendary is in the cart. On another work: the cart bar, side by side at true size.</span></a>
+      <a class="mode" href="pictures-luc-dratwa-legendary.html?mm-mode=decided" target="_blank"><b>Decided</b><span>Knows what to buy. Nothing extra on the way: no welcome, no strip, no bar.</span></a>
+    </div>
+    <p class="measure">Every <code>mm_*</code> event carries <code>mm_mode</code>, so GA4 could report revenue per visitor within each mode, against a holdout that sees today's site.</p>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 1 · Coming back · homepage, header, listings</p>
+      <h2>Your works, everywhere</h2>
+      <p>A returning visitor's homepage opens on the work they configured in an earlier visit: their size, frame and today's price, one tap to the cart. On desktop a header icon next to the wish list counts their recent works and opens them in a panel; on listings a slim strip above the grid does the same on every device. A work opened from any of these arrives in the size and frame they chose.</p>
+      <p class="evidence"><b>Why:</b> 51% of tracked revenue comes from buyers who came back for a work they had already seen. Returning visitors who land on the homepage re-find their works only 22% of the time, on listings 15%.</p>
+      <div class="links"><a href="home.html?mm-mode=returning" target="_blank">Homepage</a><a href="highlights-bestseller.html?mm-mode=returning" target="_blank">Listing with strip</a></div>
+      <p class="measure">Measures: <code>mm_return_view</code>, <code>mm_works_open</code>, <code>mm_works_click</code>, <code>mm_works_restore</code>; primary: re-find rate, then revenue per returning visitor. In production the shop's own last-seen cookie (1 year, 20 works) feeds this.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 1 on a phone" src="home.html?mm-mode=returning"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 2 · Evaluating · every page after the first add to cart</p>
+      <h2>Cart stays in sight</h2>
+      <p>After the first add to cart, a compact bar keeps the work, its size and price and "Zur Kasse" in view. On another work's product page it offers "Vergleichen": both works side by side, drawn at their true relative size, with "Beide nehmen" or checkout.</p>
+      <p class="evidence"><b>Why:</b> 34% of buyers view another work between first add to cart and paying; 15% add a second. Returning buyers who land straight in the cart place the highest-value orders (€1,023 average).</p>
+      <div class="links"><a href="pictures-isabelle-menin-from-a-dream-04.html?mm-mode=evaluating" target="_blank">Product page with the bar</a></div>
+      <p class="measure">Measures: <code>mm_cartbar_view</code>, <code>mm_cartbar_click</code>, <code>mm_compare_open</code>; primary: checkout starts from non-cart pages and second-work orders. Built to follow production's cart layer, never to repeat it.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 2 on a phone" src="pictures-isabelle-menin-from-a-dream-04.html?mm-mode=evaluating"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 4 · Exploring · search and listings</p>
+      <h2>Art's rules of thumb</h2>
+      <p>Type a colour, format or size into search ("schwarz weiß new york", "panorama meer", "xxl") and the dropdown first offers the shop's own filter, keeping the rest of the query. Listing cards gain one quiet line: the work's shape and how many sizes it comes in.</p>
+      <p class="evidence"><b>Why:</b> site search, 90 days: schwarz-weiß about 400 sessions, panorama, Quer- and Hochformat, XXL and klein; "signiert" only 13. The filters (colors, dimension, width) already exist. Rooms (Küche, Bad) need room pages first.</p>
+      <div class="links"><a href="highlights-bestseller.html?mm-mode=exploring" target="_blank">Try the search here</a></div>
+      <p class="measure">Measures: <code>mm_thumb_view</code>, <code>mm_thumb_click</code>; primary: search exits and clicks from search to an artwork page.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 4 on a phone" src="highlights-bestseller.html?mm-mode=exploring"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 5 · Exploring · artist pages</p>
+      <h2>Proof where explorers land</h2>
+      <p>The artist page opens on the four works collectors chose most in the last 30 days, as production's own product cards, above the biography. Isabelle Menin: Midnight 01, From a Dream 04, Only In Your Heart 03, Dew (DWH, 26 Oct to 24 Nov, by revenue across all sizes and channels). Production's live Social Proof Bar already carries viewers on the product page.</p>
+      <p class="evidence"><b>Why:</b> Paid Social sends about 30,000 visits to artist pages at €0.08 per visit, against €0.67 on artwork-page landings. A rolling 30-day top 25 sold about 10× more per work than "Letzte Exemplare" in 17 of 17 campaign windows.</p>
+      <div class="links"><a href="artist-isabelle-menin.html?mm-mode=exploring" target="_blank">Artist page</a><a href="artist-isabelle-menin.html?mm=none" target="_blank">Today's artist page</a></div>
+      <p class="measure">Measures: <code>mm_proof_view</code>, <code>mm_proof_click</code>; primary: artwork-page clicks and add to cart per artist-page visit from Paid Social.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 5 on a phone" src="artist-isabelle-menin.html?mm-mode=exploring"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 6 · Evaluating · product pages</p>
+      <h2>Scarcity only when true</h2>
+      <p>The demand indicator keeps its price ladder but says only what always holds: the edition's price rises in steps as it sells. No sell-out claim, no copy count, no "!". Visitors still exploring do not see it at all. Luc Dratwa's Legendary carries today's strongest claim ("Hohe Nachfrage – Bestseller bald ausverkauft!").</p>
+      <p class="evidence"><b>Why:</b> the indicator is live at 100% and was never tested; 501 sizes say "bald ausverkauft" with a median of 15 years left to sell out. The paper found scarcity the weakest of six biases, and off-putting to explorers.</p>
+      <div class="links"><a href="pictures-luc-dratwa-legendary.html?mm-scar=a&mm-mode=returning" target="_blank">A · today</a><a href="pictures-luc-dratwa-legendary.html?mm-scar=b&mm-mode=returning" target="_blank">B · the true fact</a><a href="pictures-luc-dratwa-legendary.html?mm-scar=c&mm-mode=returning" target="_blank">C · none</a><a href="pictures-luc-dratwa-legendary.html?mm-scar=b&mm-mode=exploring" target="_blank">B for an explorer</a></div>
+      <p class="measure">Measures: <code>mm_demand_view</code> with arm; primary: revenue per product-page visitor. About 7 weeks for ±20% at current DE traffic.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 6 on a phone" src="pictures-luc-dratwa-legendary.html?mm-scar=b&mm-mode=returning"></iframe></div>
+  </section>
+
+  <section class="idea">
+    <div class="copy">
+      <p class="eyebrow">Idea 7 · Evaluating · campaign</p>
+      <h2>Free instead of % off</h2>
+      <p>During Black Week, arm B gives the frame instead of 20%: the visitor pays the unframed price for a framed work. Adding an unframed acrylic to the cart first offers the frames, in the gift dialog style the cart already uses. Every number is production's: Rive Gauche 75 × 100 cm is € 999 unframed, € 1,299 in the Basel frame, so the frame is worth € 300 against today's € 200 advantage.</p>
+      <p class="evidence"><b>Why:</b> the power of free was a top-2 bias in 18 of 31 categories. Art Week rules carried 68% of 2026 online growth and discount depth rose from 14.9% to 16.7%. Equal cost per order needs finance: a frame's cost is not its retail value.</p>
+      <div class="links"><a href="pictures-axel-crieger-rive-gauche.html?mm-free=a" target="_blank">A · 20% today</a><a href="pictures-axel-crieger-rive-gauche.html?mm-free=b&mm-mode=exploring" target="_blank">B · frame included</a></div>
+      <p class="measure">Measures: <code>mm_free_view</code>, <code>mm_free_offer</code>, <code>mm_free_choose_frame</code>, <code>mm_free_skip</code>; primary: revenue per visitor and margin per order.</p>
+    </div>
+    <div class="phone"><iframe loading="lazy" title="Idea 7 on a phone" src="pictures-axel-crieger-rive-gauche.html?mm-free=b&mm-mode=exploring"></iframe></div>
+  </section>
+
+  <p class="muted">Goals: only ATC is a bound ABlyft goal; the others are named as GA4 events and marked [UNBOUND] in each module. Next gate before tickets: a red-team pass per idea. Data: Lumas MCP beta (GA4 BigQuery, DWH), may be incomplete.</p>
+</div>
+</body>
+</html>
