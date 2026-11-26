@@ -11,15 +11,19 @@
  */
 (function () {
   const qs = new URLSearchParams(location.search);
+  // The overview shows many previews at once; each iframe gets ?mm-ns=<name> so its demo history and cart stay its
+  // own. The name lives in window.name, which survives navigation inside that frame.
+  if (qs.get('mm-ns')) window.name = 'mmns:' + qs.get('mm-ns');
+  const NS = /^mmns:/.test(window.name) ? '@' + window.name.slice(5) : '';
   const store = {
-    get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } },
-    del(k) { try { localStorage.removeItem(k); } catch (e) { /* ignore */ } },
+    get(k, d) { try { return JSON.parse(localStorage.getItem(k + NS)) ?? d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k + NS, JSON.stringify(v)); } catch (e) { /* private mode */ } },
+    del(k) { try { localStorage.removeItem(k + NS); } catch (e) { /* ignore */ } },
   };
   const session = {
-    get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* ignore */ } },
-    del(k) { try { sessionStorage.removeItem(k); } catch (e) { /* ignore */ } },
+    get(k) { try { return sessionStorage.getItem(k + NS); } catch (e) { return null; } },
+    set(k, v) { try { sessionStorage.setItem(k + NS, v); } catch (e) { /* ignore */ } },
+    del(k) { try { sessionStorage.removeItem(k + NS); } catch (e) { /* ignore */ } },
   };
 
   if (qs.has('mm-mode') && !qs.has('mm')) session.del('mm-only');   // stepping into a mode always shows the ideas
@@ -168,4 +172,44 @@
     }, true);
   }
   ready(watchPdp);
+
+  // Overview previews only (start.html): ?mm-focus=<css selector> scrolls the change into view (inside this frame
+  // only, never the overview around it) and, with ?mm-mark, outlines it; ?mm-open=search:<words> types into the
+  // shop's search, the way a visitor would. Works with ?mm=none too, so "today" and "with the idea" show the same spot.
+  function preview() {
+    const focus = qs.get('mm-focus');
+    const open = qs.get('mm-open') || '';
+    if (open.startsWith('search:')) {
+      const words = open.slice(7);
+      const navBtn = mobile() && [...document.querySelectorAll('bottom-nav button, bottom-nav a')].find(b => /^\s*Suche\s*$/.test(b.textContent));
+      if (navBtn) navBtn.click();
+      setTimeout(() => {
+        const input = [...document.querySelectorAll('input[name="q"]')].find(i => i.offsetParent) || document.querySelector('input[name="q"]');
+        if (!input) return;
+        input.focus({ preventScroll: true });
+        input.value = words;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: words.slice(-1) }));
+      }, navBtn ? 500 : 0);
+    }
+    if (focus) {
+      if (qs.has('mm-mark')) {
+        const st = document.createElement('style');
+        st.textContent = '[data-mm-mark]{outline:2px dashed #c2410c!important;outline-offset:6px!important}';
+        document.head.appendChild(st);
+      }
+      const go = () => {
+        const target = [...document.querySelectorAll(focus)].find(n => n.offsetParent || n.getClientRects().length);
+        if (!target) return;
+        if (qs.has('mm-mark')) {
+          target.setAttribute('data-mm-mark', '');
+          if (target.getBoundingClientRect().width > innerWidth - 24) target.style.setProperty('outline-offset', '-4px', 'important');   // full-width: draw inside, or the edge clips it
+        }
+        const header = document.querySelector('site-header')?.getBoundingClientRect().height || 60;
+        window.scrollTo(0, Math.max(0, scrollY + target.getBoundingClientRect().top - header - 24));
+      };
+      [1800, 3200, 4600].forEach(t => setTimeout(go, t));
+    }
+  }
+  if (qs.has('mm-focus') || qs.has('mm-open')) ready(() => setTimeout(preview, 600));
 })();

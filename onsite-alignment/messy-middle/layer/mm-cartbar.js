@@ -37,15 +37,18 @@
     const here = otherWorkHere(c);
     const html = `<aside class="mm-cartbar${here ? ' has-compare' : ''}" aria-label="Warenkorb">
       <a class="mm-cartbar-work" href="${B.esc(B.restoreUrl(c))}"><img src="${B.esc(B.asset(c.thumb || c.image))}" alt="">
-        <span class="mm-cartbar-text"><span class="mm-cartbar-title">${B.esc(c.title)}${more ? ` <span class="mm-cartbar-more">+${more}</span>` : ''}</span>
-        <span class="mm-cartbar-meta">${B.esc(B.sizeText(c))} · ${B.euro(c.price)}</span></span></a>
-      ${here ? `<button type="button" class="mm-cartbar-compare">Vergleichen</button>` : ''}
-      <a class="btn btn-primary mm-cartbar-go" href="#checkout">Zur Kasse</a>
+        <span class="mm-cartbar-text"><span class="mm-cartbar-label">Im Warenkorb${more ? ` · ${cart.length} Werke` : ''}${here ? ` · <button type="button" class="mm-cartbar-compare mm-cartbar-compare-inline">Vergleichen</button>` : ''}</span>
+        <span class="mm-cartbar-line"><span class="mm-cartbar-title">${B.esc(c.title)}</span><span class="mm-cartbar-price">${B.euro(c.price)}</span></span></span></a>
+      <span class="mm-cartbar-actions">
+        ${here ? `<button type="button" class="mm-cartbar-compare">Vergleichen</button>` : ''}
+        <a class="mm-cartbar-go" href="#checkout">Zur Kasse</a>
+      </span>
     </aside>`;
     if (bar) bar.remove();
     bar = B.el(html);
     document.body.appendChild(bar);
-    bar.style.setProperty('--mm-bottom', bottomOffset() + 'px');
+    const dock = () => bar && bar.style.setProperty('--mm-bottom', bottomOffset() + 'px');
+    dock(); setTimeout(dock, 600); setTimeout(dock, 1600);   // the bottom navigation mounts after the page
     requestAnimationFrame(() => bar.classList.add('is-on'));
     if (fresh) { bar.classList.add('is-fresh'); setTimeout(() => bar && bar.classList.remove('is-fresh'), 1600); }
     bar.querySelector('.mm-cartbar-go').addEventListener('click', e => {
@@ -54,9 +57,9 @@
       B.toast('Prototyp: hier geht es direkt zur Kasse.');
     });
     bar.querySelector('.mm-cartbar-work').addEventListener('click', () => B.track('cartbar_click', { mm_target: 'work' }));
-    const cmp = bar.querySelector('.mm-cartbar-compare');
-    if (cmp) cmp.addEventListener('click', () => openCompare(c, here));
+    bar.querySelectorAll('.mm-cartbar-compare').forEach(cmp => cmp.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openCompare(c, here); }));
     B.track('cartbar_view', { mm_items: cart.length, mm_fresh: !!fresh, mm_compare: !!here });
+    if (here && !fresh && new URLSearchParams(location.search).get('mm-open') === 'compare') setTimeout(() => openCompare(c, here), 700);
   }
 
   // Side by side, drawn at true relative size (outer cm), so "which is bigger on my wall" needs no maths.
@@ -94,6 +97,7 @@
     const y = scrollY;
     if (Math.abs(y - lastY) < 8) return;
     bar.classList.toggle('is-away', y > lastY && y > 160);
+    bar.style.setProperty('--mm-bottom', bottomOffset() + 'px');
     lastY = y;
   }, { passive: true });
   addEventListener('resize', () => bar && bar.style.setProperty('--mm-bottom', bottomOffset() + 'px'));
@@ -103,5 +107,8 @@
     render(true);
   }, 400));
 
-  B.ready(() => setTimeout(() => render(false), 900));
+  // wait for the bottom navigation (phones) so the bar docks on it from the first frame, and on a product page for
+  // its configuration, so the bar knows whether to offer "Vergleichen"
+  const settled = () => (!B.mobile() || bottomOffset() > 0) && (!document.querySelector('.pdp-container') || B.currentConfig());
+  B.ready(() => { let n = 0; const t = setInterval(() => { if (settled() || ++n > 30) { clearInterval(t); render(false); } }, 150); });
 })();

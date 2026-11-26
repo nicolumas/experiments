@@ -94,19 +94,6 @@
 }
 
 /* ---- Idea 2: cart bar and side-by-side ---- */
-.mm-cartbar { position: fixed; z-index: 10000; left: 12px; right: 12px; bottom: calc(var(--mm-bottom, 0px) + 12px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 10px; padding: 8px; background: #fff; border: 1px solid var(--mm-ink); border-radius: 6px; box-shadow: 0 10px 30px -10px rgba(28, 26, 24, .35); transform: translateY(calc(100% + 40px)); transition: transform .45s var(--mm-ease); }
-.mm-cartbar.is-on { transform: none; }
-.mm-cartbar.is-on.is-away { transform: translateY(calc(100% + 40px)); }
-.mm-cartbar.is-fresh { animation: mm-nudge 1.2s var(--mm-ease); }
-.mm-cartbar-work { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; color: var(--mm-ink); text-decoration: none; }
-.mm-cartbar-work img { width: 44px; height: 44px; object-fit: contain; background: var(--mm-ivory); flex: none; }
-.mm-cartbar-text { display: grid; min-width: 0; }
-.mm-cartbar-title { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mm-cartbar-more { font-weight: 500; color: var(--mm-muted); }
-.mm-cartbar-meta { font-size: 12px; color: var(--mm-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mm-cartbar-compare { flex: none; min-height: 44px; padding: 0 12px; background: #fff; border: 1px solid var(--mm-ink); border-radius: 2px; font: 600 12px/1 var(--mm-body); letter-spacing: .06em; text-transform: uppercase; color: var(--mm-ink); cursor: pointer; }
-.mm-cartbar-compare:hover { background: var(--mm-ivory); }
-.mm-cartbar-go.btn { flex: none; width: auto; min-width: 0; padding-left: 18px; padding-right: 18px; }
 @keyframes mm-nudge { 0% { box-shadow: 0 0 0 0 rgba(28, 26, 24, .45); } 100% { box-shadow: 0 0 0 14px rgba(28, 26, 24, 0); } }
 .mm-compare { position: absolute; right: 24px; bottom: 96px; width: 520px; background: #fff; border: 1px solid var(--mm-line); border-radius: 4px; box-shadow: 0 24px 60px -24px rgba(28, 26, 24, .35); padding: 20px; opacity: 0; transform: translateY(8px); transition: opacity .22s, transform .32s var(--mm-ease); }
 .mm-compare-layer.is-on .mm-compare { opacity: 1; transform: none; }
@@ -121,11 +108,7 @@
 .mm-compare-fig strong { font: 400 16px/1.25 var(--mm-display); }
 .mm-compare-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 .mm-compare-actions .btn { width: auto; }
-@media (min-width: 768px) {
-  .mm-cartbar { left: auto; right: 24px; bottom: 24px; width: 460px; }
-}
 @media (max-width: 767px) {
-  .mm-cartbar-compare { padding: 0 10px; }
   .mm-compare { left: 0; right: 0; bottom: 0; width: auto; border-radius: 12px 12px 0 0; padding: 16px; max-height: 64vh; overflow: auto; }
   .mm-compare-actions { flex-wrap: nowrap; }
   .mm-compare-actions .btn { flex: 1 1 0; min-width: 0; padding-left: 8px; padding-right: 8px; }
@@ -198,12 +181,55 @@ social-proof-bar.mm-hide-count { visibility: hidden; }
 }
 /* phones: the header has no room for a fourth icon next to the logo; the way back sits on the homepage and listings */
 site-header.mobile .mm-works-entry { display: none !important; }
-@media (max-width: 767px) {
-  /* with "Vergleichen" there is no room for the title on a phone; the thumbnail says which work, the sheet says the rest */
-  .mm-cartbar.has-compare .mm-cartbar-text { display: none; }
-  .mm-cartbar.has-compare .mm-cartbar-work { flex: none; }
-  .mm-cartbar.has-compare .mm-cartbar-compare { flex: 1; }
-}
 .search-suggestions > .mm-thumb { margin: 0 0 14px; }
 .search-suggestions > .mm-thumb dt { margin: 0 0 6px; font: 600 12px/1.2 var(--mm-body); letter-spacing: .1em; text-transform: uppercase; color: var(--mm-muted); }
 .search-suggestions > .mm-thumb dd { margin: 0; }
+
+
+/* ---- Idea 2: cart bar, v2 (26 Nov): part of the page, not a floating card ----
+   Production's own vocabulary: the sunken bone of the PDP info banner (#f4ede2), 10px uppercase Archivo labels,
+   Utile titles, archivo-bold prices, hairlines in #eae2d8, square corners. Phones: docked flush on top of the
+   bottom navigation; desktop: a quiet card bottom right. */
+.mm-cartbar { position: fixed; z-index: 29; left: 0; right: 0; bottom: var(--mm-bottom, 0px); display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 16px; background: #f4ede2; border-top: 1px solid #eae2d8; color: #1c1a18; transform: translateY(100%); transition: transform .45s var(--mm-ease); }
+.mm-cartbar.is-on { transform: none; }
+.mm-cartbar.is-on.is-away { transform: translateY(100%); }
+.mm-cartbar.is-fresh .mm-cartbar-work img { animation: mm-settle .9s var(--mm-ease); }
+@keyframes mm-settle { 0% { transform: translateY(-6px) scale(1.08); } 100% { transform: none; } }
+.mm-cartbar-work { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; color: inherit; text-decoration: none; }
+.mm-cartbar-work img { width: 40px; height: 40px; padding: 3px; box-sizing: border-box; object-fit: contain; background: #fff; border: 1px solid #eae2d8; flex: none; }
+.mm-cartbar-text { display: grid; gap: 2px; min-width: 0; }
+.mm-cartbar-label { font: 400 10px/1.2 archivo, medium-fallback, arial, sans-serif; letter-spacing: 1px; text-transform: uppercase; color: #5a5752; }
+.mm-cartbar-line { display: flex; align-items: baseline; gap: 8px; min-width: 0; white-space: nowrap; }
+.mm-cartbar-title { font: 400 16px/1.2 lumas-utile-display, utile-display-fallback, arial, sans-serif; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.mm-cartbar-price { font: 400 14px/1.2 archivo-bold, semibold-fallback, arial, sans-serif; flex: none; }
+.mm-cartbar-more { font: 400 12px/1.2 archivo, medium-fallback, arial, sans-serif; color: #5a5752; flex: none; }
+.mm-cartbar-actions { display: flex; align-items: center; gap: 4px 18px; flex: none; }
+.mm-cartbar-compare, .mm-cartbar-go { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; font: 400 12px/1 archivo-bold, semibold-fallback, arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; color: #1c1a18; text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; cursor: pointer; }
+.mm-cartbar-compare { color: #5a5752; }
+.mm-cartbar-go::after { content: "\2192"; margin-left: 6px; text-decoration: none; display: inline-block; transition: transform .22s var(--mm-ease); }
+.mm-cartbar-go:hover::after { transform: translateX(3px); }
+.mm-cartbar-compare:hover, .mm-cartbar-go:hover { color: #1c1a18; text-decoration-thickness: 2px; }
+@media (min-width: 768px) {
+  .mm-cartbar { left: auto; right: 24px; bottom: 24px; width: 440px; padding: 12px 16px; border: 1px solid #eae2d8; box-shadow: 0 18px 40px -22px rgba(28, 26, 24, .35); transform: translateY(calc(100% + 40px)); opacity: 0; transition: transform .45s var(--mm-ease), opacity .3s; }
+  .mm-cartbar.is-on { opacity: 1; }
+  .mm-cartbar.is-on.is-away { transform: translateY(calc(100% + 40px)); opacity: 0; }
+  .mm-cartbar-work img { width: 48px; height: 48px; }
+  .mm-cartbar-go { min-height: 40px; padding: 0 18px; background: #1c1a18; color: #fff; text-decoration: none; letter-spacing: 2px; }
+  .mm-cartbar-go:hover { color: #fff; background: #3a3734; }
+}
+@media (max-width: 767px) {
+  /* "Vergleichen" moves into the label line so the work keeps its name */
+  .mm-cartbar.has-compare .mm-cartbar-compare { min-height: 32px; }
+}
+@media (prefers-reduced-motion: reduce) { .mm-cartbar, .mm-cartbar-work img { transition: none; animation: none; } }
+.mm-cartbar-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mm-cartbar-compare-inline { display: none; }
+@media (max-width: 767px) {
+  .mm-cartbar-actions .mm-cartbar-compare { display: none; }
+  .mm-cartbar-compare-inline { display: inline; min-height: 0; font-size: 10px; letter-spacing: 1px; text-underline-offset: 3px; color: #1c1a18; }
+}
+@media (max-width: 767px) {
+  .mm-cartbar.has-compare .mm-cartbar-label { overflow: visible; letter-spacing: .5px; }
+  .mm-cartbar.has-compare .mm-cartbar-compare-inline { letter-spacing: .5px; }
+  .mm-cartbar.has-compare .mm-cartbar-go { letter-spacing: 1px; }
+}

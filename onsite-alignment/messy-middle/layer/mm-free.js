@@ -130,5 +130,9 @@
       B.store.set('mm-cart', list);
     });   // window capture runs before the core's document capture
     B.track('free_view', { mm_variant: 'b' });
+    if (qs.get('mm-open') === 'frames') setTimeout(() => {
+      const s = cardsForSize(); const btn = document.querySelector('.pdp-container .add-to-cart button');
+      if (s && s.base && s.framed.length && btn) openDialog(s, btn);
+    }, 1500);
   });
 })();

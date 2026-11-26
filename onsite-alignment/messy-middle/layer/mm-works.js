@@ -119,10 +119,11 @@
 
   function init() {
     header();
-    setTimeout(strip, 900);
+    [900, 2000, 3500].forEach(t => setTimeout(strip, t));   // listings can render late; strip() adds itself once
     // production's Vue mount can re-render the header; put the entry back if it goes
     setTimeout(() => { if (!document.querySelector('.mm-works-entry')) header(); }, 1500);
     document.addEventListener('mm-recent-change', header);
+    if (new URLSearchParams(location.search).get('mm-open') === 'works') setTimeout(() => openPanel('preview'), 1500);
   }
   B.ready(init);
 })();
