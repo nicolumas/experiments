@@ -130,7 +130,7 @@
   const fromPrice = (n) => `${t('from')} € ${fmtNum(n)}`;
   const cm = (mm) => { const v = Math.round(mm) / 10; const s = Number.isInteger(v) ? String(v) : v.toFixed(1); return LANG === 'de' ? s.replace('.', ',') : s; };
   const size = (w) => `${cm(w.w)} × ${cm(w.h)} cm`;
-  const pdp = (w) => DATA.config.pdpBase + w.path;
+  const pdp = (w) => G.advent.localUrl(DATA.config.pdpBase, w.path, LANG);
 
   window.dataLayer = window.dataLayer || [];
   const track = (event, payload = {}) => window.dataLayer.push({ event, gal_lang: LANG, gal_v: 'advent', ...payload });
@@ -1613,7 +1613,7 @@
       h('div', {}, h('p', { class: 'eyebrow' }, t('door', { n: e.day })),
         h('p', { class: 'ti' }, e.work ? e.work.title : t('giftTitle')),
         h('p', { class: 'meta' }, ended(e) ? `${e.work.artist} · ${t('dropEnded')}` : e.work ? `${e.work.artist} · ${fromPrice(e.work.ab)}` : t('giftLine')),
-        ended(e) ? null : e.work ? workLink(e.work, 'end_doors', { sameTab: true }) : h('a', { class: 'link', href: e.url }, t('giftCta'))))));
+        ended(e) ? null : e.work ? workLink(e.work, 'end_doors', { sameTab: true }) : h('a', { class: 'link', href: G.advent.forLang(window.GAL_ADVENT.config.giftcardUrl, LANG) }, t('giftCta'))))));
   }
 
   /* ------------------------------------------------------------ start */

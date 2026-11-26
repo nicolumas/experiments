@@ -65,7 +65,7 @@
       }
       if (e.type === 'work' && !(e.offerPct > 0)) errs.push(`${at}: work needs offerPct`);
       if (e.type === 'drop' && !e.endsAt) errs.push(`${at}: drop needs endsAt`);
-      if (e.type === 'giftcard') for (const k of ['image', 'r', 'url']) if (e[k] == null) errs.push(`${at}: giftcard needs ${k}`);
+      if (e.type === 'giftcard') for (const k of ['image', 'r']) if (e[k] == null) errs.push(`${at}: giftcard needs ${k}`);
     });
     if (sched[23] && sched[23].type !== 'finale') errs.push('day 24: must be the finale');
     return errs;
@@ -121,9 +121,15 @@
     return null;
   }
 
+  /* lumas.de serves English under /en/ with the same path for a work; other pages have their own English path, so
+     they come as { de, en } */
+  const localUrl = (base, path, lang) => `${base}${lang === 'en' ? '/en' : ''}${path}`;
+  const forLang = (v, lang) => (v && typeof v === 'object' ? v[lang] || v.de : v);
+
   const api = {
     berlinIso, opensAtMs, endsAtMs, doorState, offerLive, todayEntry, nextEntry, offerPrice, fmtPrice,
     validateSchedule, wallPicks, icsFor, progressKey, loadOpened, saveOpened, simulatedNow, rideWorld, GESTURES, WORLDS,
+    localUrl, forLang,
   };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else (root.GAL = root.GAL || {}).advent = api;

@@ -49,7 +49,7 @@
     /* config.discount false (for now): the work at its normal price, without "today only", struck price or code */
     const deal = live && config.discount !== false;
     const w = entry.work;
-    const pdp = w ? config.pdpBase + w.path : null;
+    const pdp = w ? A.localUrl(config.pdpBase, w.path, lang) : null;
     const click = (type) => () => D.track('gal_offer_click', { gal_day: entry.day, gal_type: type });
     const by = w ? `${w.artist}${w.signed ? ` · ${t('signedLower')}` : ''}` : null;
     const parts = [from === 'door' ? null : art(entry)];
@@ -83,7 +83,7 @@
         h('p', { class: 'eyebrow' }, t('giftEyebrow', { n: entry.day })),
         h('h2', { class: 'display', id: 'offerTitle' }, t('giftTitle')),
         h('p', { class: 'by' }, t('giftLine')),
-        h('a', { class: 'btn offer-cta', href: entry.url, onclick: click('giftcard') }, t('giftCta')));
+        h('a', { class: 'btn offer-cta', href: A.forLang(config.giftcardUrl, lang), onclick: click('giftcard') }, t('giftCta')));
     }
     parts.push(foot(now, lang));
     return parts;
