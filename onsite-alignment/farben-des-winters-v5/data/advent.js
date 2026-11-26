@@ -1,20 +1,31 @@
 /* Die Farben des Winters: Adventskalender, the 24 doors (DESIGN.md sections 8 and 9).
-   Dates, door types and opening times are data, because none is confirmed yet (16.11.2026): change them here.
-   content: 'pitch' = works from the existing hand-signed pool with placeholder revenue ranks; Task 10 replaces them
-   with works ranked by revenue before go-live. voucher '' = the code follows. */
+   Dates, door types and opening times are data, because none is confirmed yet: change them here.
+   Works: the 18 best sellers on lumas.de by revenue (online, 27.10. to 25.11.2026), each orderable online in two sizes
+   or more, written by _build/lineup_apply.py. ab = the shop's from-price: recheck with _build/check_schedule.py --online.
+   voucher '' = the code follows. */
 (function (root) {
   const ADVENT = {
     "config": {
-      "content": "pitch",
+      "content": "bestsellers",
       "discount": false,
       "orderDeadline": "2026-12-17",
       "artWeekend": "2026-12-04",
       "pdpBase": "https://www.lumas.de",
       "pageUrl": "https://www.lumas.de/lp/adventskalender/",
-      "giftcardUrl": { "de": "https://www.lumas.de/geschenke/gutscheine/", "en": "https://www.lumas.de/en/gifts/gift-voucher/" },
+      "giftcardUrl": {
+        "de": "https://www.lumas.de/geschenke/gutscheine/",
+        "en": "https://www.lumas.de/en/gifts/gift-voucher/"
+      },
       "newsletterUrl": "https://www.lumas.de/",
-      "privacyUrl": { "de": "https://www.lumas.de/datenschutz/", "en": "https://www.lumas.de/en/privacy-policy/" },
-      "notify": { "companyId": "S4rPDR", "listId": "" }
+      "privacyUrl": {
+        "de": "https://www.lumas.de/datenschutz/",
+        "en": "https://www.lumas.de/en/privacy-policy/"
+      },
+      "notify": {
+        "companyId": "S4rPDR",
+        "listId": ""
+      },
+      "lineup": "lumas.de online revenue, 27.10. to 25.11.2026"
     },
     "days": [
       {
@@ -25,22 +36,22 @@
         "gesture": "snow",
         "opensAt": "00:00",
         "work": {
-          "code": "wuh93",
-          "sku": "WUH95",
-          "artist": "Wolfgang Uhlig",
-          "title": "Cordoama II",
-          "path": "/pictures/wolfgang_uhlig/cordoama_ii/",
-          "ab": 1490,
-          "w": 1200,
-          "h": 900,
-          "ed": 150,
-          "year": 2021,
-          "r": 1.3333,
+          "code": "mcs41",
+          "sku": "MCS43",
+          "artist": "Marta Contreras Simó",
+          "title": "WINDA",
+          "path": "/pictures/marta_contreras_simo/winda/",
+          "ab": 499,
+          "w": 400,
+          "h": 400,
+          "ed": 100,
+          "year": 2023,
+          "r": 1.0,
           "signed": true,
-          "revenueRank": 8,
+          "revenueRank": 1,
           "story": {
-            "de": "Der Frankfurter Fotograf Wolfgang Uhlig widmet sich immer wieder dem Meer. In seiner Serie Ocean liegt der Horizont stets in der Bildmitte, kein Schiff und kein Ufer stören den Blick.",
-            "en": "Frankfurt photographer Wolfgang Uhlig returns to the sea again and again. In his Ocean series the horizon always sits at the centre, with no ship and no shore to break the view."
+            "de": "Marta Contreras Simó aus Barcelona spezialisierte sich als Fotografin auf Street Style und Architektur, Menschen wagte sie nie zu fotografieren. Mit künstlicher Intelligenz erschafft sie heute Frauen mit prächtigen Hüten.",
+            "en": "Marta Contreras Simó, from Barcelona, specialised in street style and architecture photography but never dared to photograph people. Today she uses artificial intelligence to create women in magnificent hats."
           }
         },
         "offerPct": 20,
@@ -54,22 +65,22 @@
         "gesture": "frost",
         "opensAt": "00:00",
         "work": {
-          "code": "tmr01",
-          "sku": "TMR03",
-          "artist": "Tomislav Marcijuš",
-          "title": "BAROQUE POOLS I",
-          "path": "/pictures/tomislav_marcijus/baroque_pools_i/",
-          "ab": 299,
-          "w": 330,
-          "h": 400,
+          "code": "csf10",
+          "sku": "CSF12",
+          "artist": "Carla Sá Fernandes",
+          "title": "Oneness #30",
+          "path": "/pictures/carla_sa_fernandes/oneness_30/",
+          "ab": 449,
+          "w": 450,
+          "h": 600,
           "ed": 100,
-          "year": 2024,
-          "r": 0.825,
+          "year": 2026,
+          "r": 0.75,
           "signed": true,
-          "revenueRank": 18,
+          "revenueRank": 7,
           "story": {
-            "de": "Tomislav Marcijuš ist kroatischer Künstler und preisgekrönter Hochzeitsfotograf. In Baroque Pools verdichtet er jahrelange Aufnahmen von Badehäusern, Kirchen und Villen in Italien zu Räumen, die es nie gab.",
-            "en": "Tomislav Marcijuš is a Croatian artist and award-winning wedding photographer. In Baroque Pools he distils years of photographing bathhouses, churches and villas in Italy into rooms that never existed."
+            "de": "Die Portugiesin Carla Sá Fernandes studierte zunächst Chemieingenieurwesen, bevor sie zur Kunst fand. In Fotografie, Malerei und digitaler Kunst macht sie das Unvorhersehbare zum Prinzip und tariert Farbe und Licht immer wieder neu aus.",
+            "en": "Portuguese artist Carla Sá Fernandes studied chemical engineering before she found her way to art. In photography, painting and digital art she makes the unpredictable her principle, balancing colour and light anew each time."
           }
         },
         "offerPct": 20,
@@ -83,22 +94,22 @@
         "gesture": "paper",
         "opensAt": "00:00",
         "work": {
-          "code": "cmu22",
-          "sku": "CMU23",
-          "artist": "Carol Muthiga-Oyekunle",
-          "title": "Aset",
-          "path": "/pictures/carol_muthiga_oyekunle/aset/",
-          "ab": 1190,
-          "w": 800,
-          "h": 800,
+          "code": "ime109",
+          "sku": "IME112",
+          "artist": "Isabelle Menin",
+          "title": "From a Dream 04",
+          "path": "/pictures/isabelle_menin/from_a_dream_04/",
+          "ab": 449,
+          "w": 500,
+          "h": 500,
           "ed": 150,
-          "year": 2022,
-          "r": 1,
+          "year": 2021,
+          "r": 1.0,
           "signed": true,
-          "revenueRank": 6,
+          "revenueRank": 8,
           "story": {
-            "de": "Die kenianisch-amerikanische Künstlerin Carol Muthiga-Oyekunle lebt in Paris und gründete 2001 in New York ihre eigene Accessoire-Marke. In ihren Collagen ist Haar Accessoire und Kleidung Rüstung.",
-            "en": "Kenyan-American artist Carol Muthiga-Oyekunle lives in Paris and founded her own accessories label in New York in 2001. In her collages, hair is the accessory and clothing the armour."
+            "de": "Isabelle Menin lebt in Brüssel und fotografiert jede Blüte einzeln, jede Anemone, jede Orchidee. Ihre geschichteten Collagen sind so detailreich, dass Computer nicht selten abzustürzen drohen.",
+            "en": "Isabelle Menin lives in Brussels and photographs every flower on its own, each anemone, each orchid. Her layered collages hold so much detail that computers often threaten to crash."
           }
         },
         "offerPct": 20,
@@ -113,22 +124,22 @@
         "opensAt": "00:00",
         "note": "artWeekend",
         "work": {
-          "code": "wpa215",
-          "sku": "WPA217",
-          "artist": "Werner Pawlok",
-          "title": "Ca' d'Oro VII",
-          "path": "/pictures/werner_pawlok/ca_doro_vii/",
-          "ab": 1190,
-          "w": 980,
-          "h": 500,
-          "ed": 150,
-          "year": 2021,
-          "r": 1.9499,
+          "code": "mgi43",
+          "sku": "MGI45",
+          "artist": "Manu Grinspan",
+          "title": "Catwoman",
+          "path": "/pictures/manu_grinspan/catwoman/",
+          "ab": 449,
+          "w": 400,
+          "h": 400,
+          "ed": 100,
+          "year": 2026,
+          "r": 1.0,
           "signed": true,
-          "revenueRank": 7,
+          "revenueRank": 2,
           "story": {
-            "de": "Werner Pawlok griff mit sechzehn zur Kamera, um 1969 sein Idol Jimi Hendrix auf der Bühne zu fotografieren. In Venedig erhielt der gebürtige Stuttgarter Zugang zu privaten Palazzi.",
-            "en": "Werner Pawlok picked up a camera at sixteen to photograph his idol Jimi Hendrix on stage in 1969. In Venice, the Stuttgart-born photographer was given access to private palazzi."
+            "de": "Jedes Werk von Manu Grinspan beginnt mit einer präzisen Bleistiftskizze, denn seine Wurzeln liegen im fotorealistischen Zeichnen. Erst dann bezieht er künstliche Intelligenz ein, und aus Kontrolle und Zufall entstehen Werke wie Standbilder aus einem unbekannten Film.",
+            "en": "Every work by Manu Grinspan begins with a precise pencil sketch, since his roots lie in photorealistic drawing. Only then does he bring in artificial intelligence, and from control and chance come works like stills from an unknown film."
           }
         },
         "offerPct": 20,
@@ -142,22 +153,22 @@
         "gesture": "ribbon",
         "opensAt": "00:00",
         "work": {
-          "code": "ylm22",
-          "sku": "YLM25",
-          "artist": "Ysabel Lemay",
-          "title": "Everbloom",
-          "path": "/pictures/ysabel_lemay-3/everbloom/",
-          "ab": 449,
-          "w": 400,
-          "h": 400,
+          "code": "nha02",
+          "sku": "NHA04",
+          "artist": "Niki Hare",
+          "title": "The Right Place",
+          "path": "/pictures/niki_hare/the_right_place/",
+          "ab": 499,
+          "w": 550,
+          "h": 600,
           "ed": 150,
-          "year": 2024,
-          "r": 1,
+          "year": 2022,
+          "r": 0.9171,
           "signed": true,
-          "revenueRank": 17,
+          "revenueRank": 9,
           "story": {
-            "de": "Ysabel Lemay, geboren in Quebec, lebt in Texas. Für ihre Hypercollagen fügt sie hunderte Fotografien von ihren Expeditionen digital zusammen, Vogel für Vogel, Blüte für Blüte.",
-            "en": "Ysabel Lemay, born in Quebec, lives in Texas. For her hypercollages she digitally assembles hundreds of photographs from her expeditions, bird by bird, blossom by blossom."
+            "de": "Niki Hare lebt in Tewkesbury in England und arbeitete ihr Leben lang mit Pferden, bevor sie zu malen begann. Ihre Wortmalereien schreibt sie ungefiltert, so wie die Gedanken kommen, in Farbverläufen, in denen die Buchstaben zu schweben scheinen.",
+            "en": "Niki Hare lives in Tewkesbury, England, and worked with horses all her life before she began to paint. She writes her word paintings unfiltered, just as the thoughts come, in colour gradients where the letters seem to float."
           }
         },
         "offerPct": 20,
@@ -169,64 +180,6 @@
         "type": "work",
         "world": "lake",
         "gesture": "candle",
-        "opensAt": "00:00",
-        "work": {
-          "code": "mcn55",
-          "sku": "MCN55",
-          "artist": "Massimo Colonna",
-          "title": "Swan",
-          "path": "/pictures/massimo_colonna/swan/",
-          "ab": 2190,
-          "w": 1050,
-          "h": 1400,
-          "ed": 150,
-          "year": 2024,
-          "r": 0.75,
-          "signed": true,
-          "revenueRank": 3,
-          "story": {
-            "de": "Massimo Colonna aus Scandiano in Norditalien baut seine Bildwelten aus Fotografie und 3D-Rendering. Seine Architektur folgt nicht der Statik, sondern den Gesetzen der Ästhetik.",
-            "en": "Massimo Colonna, from Scandiano in northern Italy, builds his scenes from photography and 3D rendering. His architecture follows the laws of aesthetics rather than statics."
-          }
-        },
-        "offerPct": 20,
-        "voucher": ""
-      },
-      {
-        "day": 7,
-        "date": "2026-12-07",
-        "type": "work",
-        "world": "village",
-        "gesture": "lanterns",
-        "opensAt": "00:00",
-        "work": {
-          "code": "ime97",
-          "sku": "IME100",
-          "artist": "Isabelle Menin",
-          "title": "Only In Your Heart 03",
-          "path": "/pictures/isabelle_menin/only_in_your_heart_03/",
-          "ab": 950,
-          "w": 900,
-          "h": 450,
-          "ed": 150,
-          "year": 2021,
-          "r": 2,
-          "signed": true,
-          "revenueRank": 9,
-          "story": {
-            "de": "Isabelle Menin lebt in Brüssel und fotografiert jede Blüte einzeln, jede Anemone, jede Orchidee. Ihre geschichteten Collagen sind so detailreich, dass Computer nicht selten abzustürzen drohen.",
-            "en": "Isabelle Menin lives in Brussels and photographs every flower on its own, each anemone, each orchid. Her layered collages hold so much detail that computers often threaten to crash."
-          }
-        },
-        "offerPct": 20,
-        "voucher": ""
-      },
-      {
-        "day": 8,
-        "date": "2026-12-08",
-        "type": "work",
-        "world": "birch",
-        "gesture": "snow",
         "opensAt": "00:00",
         "work": {
           "code": "cgo155",
@@ -241,10 +194,68 @@
           "year": 2025,
           "r": 1.4379,
           "signed": true,
-          "revenueRank": 11,
+          "revenueRank": 3,
           "story": {
             "de": "Claudio Gotsch, Fotograf aus dem Engadin, fotografiert seit seinem zehnten Lebensjahr Wildtiere. Für einen Adler im Landeanflug verbrachte er einmal fast eine Woche in einem Schneeloch.",
             "en": "Claudio Gotsch, a photographer from the Engadin, has photographed wildlife since the age of ten. To catch an eagle coming in to land, he once spent almost a week in a snow hole."
+          }
+        },
+        "offerPct": 20,
+        "voucher": ""
+      },
+      {
+        "day": 7,
+        "date": "2026-12-07",
+        "type": "work",
+        "world": "village",
+        "gesture": "lanterns",
+        "opensAt": "00:00",
+        "work": {
+          "code": "caa07",
+          "sku": "CAA08",
+          "artist": "Craig Alan",
+          "title": "Stealing Millions",
+          "path": "/pictures/craig_alan/stealing_millions/",
+          "ab": 549,
+          "w": 600,
+          "h": 600,
+          "ed": 100,
+          "year": 2022,
+          "r": 1.0,
+          "signed": true,
+          "revenueRank": 10,
+          "story": {
+            "de": "Die Idee kam Craig Alan auf einer Hochzeit, als er von oben sah, wie die Gäste gemeinsam die Form eines Auges bildeten. Seitdem setzt er Porträts aus winzigen Figuren zusammen, und jede einzelne hat ihr eigenes Gesicht.",
+            "en": "The idea came to Craig Alan at a wedding, when he looked down and saw the guests forming the shape of an eye together. Since then he has built portraits from tiny figures, each with a face of its own."
+          }
+        },
+        "offerPct": 20,
+        "voucher": ""
+      },
+      {
+        "day": 8,
+        "date": "2026-12-08",
+        "type": "work",
+        "world": "birch",
+        "gesture": "snow",
+        "opensAt": "00:00",
+        "work": {
+          "code": "ime191",
+          "sku": "IME191",
+          "artist": "Isabelle Menin",
+          "title": "Underwater Love 03",
+          "path": "/pictures/isabelle_menin/underwater_love_03/",
+          "ab": 950,
+          "w": 720,
+          "h": 900,
+          "ed": 100,
+          "year": 2026,
+          "r": 0.8,
+          "signed": true,
+          "revenueRank": 11,
+          "story": {
+            "de": "Isabelle Menin lebt in Brüssel und fotografiert jede Blüte einzeln, jede Anemone, jede Orchidee. Ihre geschichteten Collagen sind so detailreich, dass Computer nicht selten abzustürzen drohen.",
+            "en": "Isabelle Menin lives in Brussels and photographs every flower on its own, each anemone, each orchid. Her layered collages hold so much detail that computers often threaten to crash."
           }
         },
         "offerPct": 20,
@@ -258,19 +269,19 @@
         "gesture": "frost",
         "opensAt": "00:00",
         "work": {
-          "code": "mcs41",
-          "sku": "MCS43",
+          "code": "mcs38",
+          "sku": "MCS39",
           "artist": "Marta Contreras Simó",
-          "title": "WINDA",
-          "path": "/pictures/marta_contreras_simo/winda/",
-          "ab": 499,
+          "title": "BO-RA",
+          "path": "/pictures/marta_contreras_simo/bo-ra/",
+          "ab": 449,
           "w": 400,
           "h": 400,
-          "ed": 100,
+          "ed": 150,
           "year": 2023,
-          "r": 1,
+          "r": 1.0,
           "signed": true,
-          "revenueRank": 16,
+          "revenueRank": 12,
           "story": {
             "de": "Marta Contreras Simó aus Barcelona spezialisierte sich als Fotografin auf Street Style und Architektur, Menschen wagte sie nie zu fotografieren. Mit künstlicher Intelligenz erschafft sie heute Frauen mit prächtigen Hüten.",
             "en": "Marta Contreras Simó, from Barcelona, specialised in street style and architecture photography but never dared to photograph people. Today she uses artificial intelligence to create women in magnificent hats."
@@ -287,22 +298,22 @@
         "gesture": "paper",
         "opensAt": "00:00",
         "work": {
-          "code": "ldr73",
-          "sku": "LDR73",
-          "artist": "Luc Dratwa",
-          "title": "mountain view",
-          "path": "/pictures/luc_dratwa/mountain_view/",
-          "ab": 1490,
-          "w": 900,
-          "h": 1200,
+          "code": "tst10",
+          "sku": "TST12",
+          "artist": "Tobias Stutz",
+          "title": "Landscape room III",
+          "path": "/pictures/tobias_stutz/landscape_room_iii/",
+          "ab": 499,
+          "w": 720,
+          "h": 300,
           "ed": 150,
           "year": 2023,
-          "r": 0.75,
+          "r": 2.4014,
           "signed": true,
-          "revenueRank": 12,
+          "revenueRank": 13,
           "story": {
-            "de": "Der Belgier Luc Dratwa ist Autodidakt und lebt in Brüssel. Er zeigt Sehnsuchtsorte durch Fenster: New York durch reale Fensterrahmen, Skyline und Berge durch das Flugzeugfenster.",
-            "en": "Belgian photographer Luc Dratwa is self-taught and lives in Brussels. He shows places of longing through windows: New York through real window frames, skylines and mountains through an aircraft window."
+            "de": "Als Kind wollte der Maler Tobias Stutz Architekt werden. Heute findet er seine Motive in Architektur und Interiordesign, vor allem der Bauhaus-Ära, und die Ideen dazu oft auf dem Fahrrad zum Atelier.",
+            "en": "As a child, painter Tobias Stutz wanted to become an architect. Today he finds his subjects in architecture and interior design, above all the Bauhaus era, and the ideas for them often on his bike ride to the studio."
           }
         },
         "offerPct": 20,
@@ -316,22 +327,22 @@
         "gesture": "ribbon",
         "opensAt": "00:00",
         "work": {
-          "code": "cmu39",
-          "sku": "CMU40",
-          "artist": "Carol Muthiga-Oyekunle",
-          "title": "Osun",
-          "path": "/pictures/carol_muthiga_oyekunle/osun/",
-          "ab": 1050,
-          "w": 800,
-          "h": 800,
+          "code": "hli30",
+          "sku": "HLI32",
+          "artist": "Holger Lippmann",
+          "title": "Tree IV",
+          "path": "/pictures/holger_lippmann/tree_iv/",
+          "ab": 799,
+          "w": 950,
+          "h": 500,
           "ed": 100,
-          "year": 2025,
-          "r": 1,
+          "year": 2011,
+          "r": 1.8945,
           "signed": true,
-          "revenueRank": 10,
+          "revenueRank": 14,
           "story": {
-            "de": "Die kenianisch-amerikanische Künstlerin Carol Muthiga-Oyekunle lebt in Paris und gründete 2001 in New York ihre eigene Accessoire-Marke. In ihren Collagen ist Haar Accessoire und Kleidung Rüstung.",
-            "en": "Kenyan-American artist Carol Muthiga-Oyekunle lives in Paris and founded her own accessories label in New York in 2001. In her collages, hair is the accessory and clothing the armour."
+            "de": "Holger Lippmann studierte Malerei und Bildhauerei in Dresden und Stuttgart und nennt seine Kunst heute E-Art. Seine Werke entstehen aus Algorithmen, die Farbe in kleine, rhythmische Strukturen zerlegen.",
+            "en": "Holger Lippmann studied painting and sculpture in Dresden and Stuttgart and today calls his art e-art. His works grow from algorithms that break colour down into small, rhythmic structures."
           }
         },
         "offerPct": 20,
@@ -345,22 +356,22 @@
         "gesture": "lanterns",
         "opensAt": "00:00",
         "work": {
-          "code": "ldr80",
-          "sku": "LDR83",
-          "artist": "Luc Dratwa",
-          "title": "New York Five",
-          "path": "/pictures/luc_dratwa/new_york_five/",
-          "ab": 599,
-          "w": 600,
-          "h": 400,
+          "code": "nha30",
+          "sku": "NHA32",
+          "artist": "Niki Hare",
+          "title": "Art is Freedom",
+          "path": "/pictures/niki_hare/art_is_freedom/",
+          "ab": 649,
+          "w": 800,
+          "h": 600,
           "ed": 150,
           "year": 2024,
-          "r": 1.5005,
+          "r": 1.3333,
           "signed": true,
           "revenueRank": 15,
           "story": {
-            "de": "Der Belgier Luc Dratwa ist Autodidakt und lebt in Brüssel. Er zeigt Sehnsuchtsorte durch Fenster: New York durch reale Fensterrahmen, Skyline und Berge durch das Flugzeugfenster.",
-            "en": "Belgian photographer Luc Dratwa is self-taught and lives in Brussels. He shows places of longing through windows: New York through real window frames, skylines and mountains through an aircraft window."
+            "de": "Niki Hare lebt in Tewkesbury in England und arbeitete ihr Leben lang mit Pferden, bevor sie zu malen begann. Ihre Wortmalereien schreibt sie ungefiltert, so wie die Gedanken kommen, in Farbverläufen, in denen die Buchstaben zu schweben scheinen.",
+            "en": "Niki Hare lives in Tewkesbury, England, and worked with horses all her life before she began to paint. She writes her word paintings unfiltered, just as the thoughts come, in colour gradients where the letters seem to float."
           }
         },
         "offerPct": 20,
@@ -374,22 +385,22 @@
         "gesture": "candle",
         "opensAt": "00:00",
         "work": {
-          "code": "wuh111",
-          "sku": "WUH111",
-          "artist": "Wolfgang Uhlig",
-          "title": "Seesaw Seascape XIV",
-          "path": "/pictures/wolfgang_uhlig/seesaw_seascape_xiv/",
-          "ab": 2390,
-          "w": 1200,
-          "h": 800,
+          "code": "ylm19",
+          "sku": "YLM21",
+          "artist": "Ysabel Lemay",
+          "title": "Garden of Life",
+          "path": "/pictures/ysabel_lemay-3/garden_of_life/",
+          "ab": 749,
+          "w": 750,
+          "h": 500,
           "ed": 150,
-          "year": 2024,
-          "r": 1.4946,
+          "year": 2021,
+          "r": 1.4403,
           "signed": true,
-          "revenueRank": 2,
+          "revenueRank": 4,
           "story": {
-            "de": "Der Frankfurter Fotograf Wolfgang Uhlig widmet sich immer wieder dem Meer. In seiner Serie Ocean liegt der Horizont stets in der Bildmitte, kein Schiff und kein Ufer stören den Blick.",
-            "en": "Frankfurt photographer Wolfgang Uhlig returns to the sea again and again. In his Ocean series the horizon always sits at the centre, with no ship and no shore to break the view."
+            "de": "Ysabel Lemay, geboren in Quebec, lebt in Texas. Für ihre Hypercollagen fügt sie hunderte Fotografien von ihren Expeditionen digital zusammen, Vogel für Vogel, Blüte für Blüte.",
+            "en": "Ysabel Lemay, born in Quebec, lives in Texas. For her hypercollages she digitally assembles hundreds of photographs from her expeditions, bird by bird, blossom by blossom."
           }
         },
         "offerPct": 20,
@@ -403,22 +414,22 @@
         "gesture": "frost",
         "opensAt": "00:00",
         "work": {
-          "code": "ime83",
-          "sku": "IME84",
-          "artist": "Isabelle Menin",
-          "title": "Up To The Sky 03",
-          "path": "/pictures/isabelle_menin/up_to_the_sky_03/",
-          "ab": 1290,
-          "w": 600,
-          "h": 1200,
+          "code": "wpa215",
+          "sku": "WPA217",
+          "artist": "Werner Pawlok",
+          "title": "Ca' d'Oro VII",
+          "path": "/pictures/werner_pawlok/ca_doro_vii/",
+          "ab": 1190,
+          "w": 980,
+          "h": 500,
           "ed": 150,
-          "year": 2020,
-          "r": 0.5,
+          "year": 2021,
+          "r": 1.9499,
           "signed": true,
-          "revenueRank": 13,
+          "revenueRank": 16,
           "story": {
-            "de": "Isabelle Menin lebt in Brüssel und fotografiert jede Blüte einzeln, jede Anemone, jede Orchidee. Ihre geschichteten Collagen sind so detailreich, dass Computer nicht selten abzustürzen drohen.",
-            "en": "Isabelle Menin lives in Brussels and photographs every flower on its own, each anemone, each orchid. Her layered collages hold so much detail that computers often threaten to crash."
+            "de": "Werner Pawlok griff mit sechzehn zur Kamera, um 1969 sein Idol Jimi Hendrix auf der Bühne zu fotografieren. In Venedig erhielt der gebürtige Stuttgarter Zugang zu privaten Palazzi.",
+            "en": "Werner Pawlok picked up a camera at sixteen to photograph his idol Jimi Hendrix on stage in 1969. In Venice, the Stuttgart-born photographer was given access to private palazzi."
           }
         },
         "offerPct": 20,
@@ -432,22 +443,22 @@
         "gesture": "snow",
         "opensAt": "00:00",
         "work": {
-          "code": "mcn10",
-          "sku": "MCN12",
-          "artist": "Massimo Colonna",
-          "title": "Red Maple Tree",
-          "path": "/pictures/massimo_colonna/red_maple_tree/",
-          "ab": 699,
-          "w": 850,
+          "code": "gua41",
+          "sku": "GUA43",
+          "artist": "Guachinarte",
+          "title": "L.A. Nights",
+          "path": "/pictures/guachinarte/la_nights/",
+          "ab": 649,
+          "w": 800,
           "h": 600,
           "ed": 150,
-          "year": 2020,
-          "r": 1.4175,
+          "year": 2024,
+          "r": 1.3333,
           "signed": true,
-          "revenueRank": 14,
+          "revenueRank": 17,
           "story": {
-            "de": "Massimo Colonna aus Scandiano in Norditalien baut seine Bildwelten aus Fotografie und 3D-Rendering. Seine Architektur folgt nicht der Statik, sondern den Gesetzen der Ästhetik.",
-            "en": "Massimo Colonna, from Scandiano in northern Italy, builds his scenes from photography and 3D rendering. His architecture follows the laws of aesthetics rather than statics."
+            "de": "Guachinarte holt die kalifornische Moderne in die Gegenwart: ikonische Architektur der Jahrhundertmitte, getaucht in Licht und Atmosphäre. In seinen Werken verschmelzen Natur und Architektur, und die Grenze zwischen innen und außen löst sich auf.",
+            "en": "Guachinarte brings California modernism into the present: iconic mid-century architecture, steeped in light and atmosphere. In his works nature and architecture merge, and the line between inside and outside dissolves."
           }
         },
         "offerPct": 20,
@@ -461,22 +472,22 @@
         "gesture": "lanterns",
         "opensAt": "00:00",
         "work": {
-          "code": "mcs35",
-          "sku": "MCS36",
-          "artist": "Marta Contreras Simó",
-          "title": "MINA&SENA",
-          "path": "/pictures/marta_contreras_simo/minasena/",
-          "ab": 449,
-          "w": 400,
-          "h": 400,
-          "ed": 150,
-          "year": 2025,
-          "r": 1,
+          "code": "wuh63",
+          "sku": "WUH64",
+          "artist": "Wolfgang Uhlig",
+          "title": "Saint-Raphaël",
+          "path": "/pictures/wolfgang_uhlig/saint_raphael/",
+          "ab": 499,
+          "w": 900,
+          "h": 300,
+          "ed": 100,
+          "year": 2018,
+          "r": 3.0043,
           "signed": true,
-          "revenueRank": 19,
+          "revenueRank": 18,
           "story": {
-            "de": "Marta Contreras Simó aus Barcelona spezialisierte sich als Fotografin auf Street Style und Architektur, Menschen wagte sie nie zu fotografieren. Mit künstlicher Intelligenz erschafft sie heute Frauen mit prächtigen Hüten.",
-            "en": "Marta Contreras Simó, from Barcelona, specialised in street style and architecture photography but never dared to photograph people. Today she uses artificial intelligence to create women in magnificent hats."
+            "de": "Der Frankfurter Fotograf Wolfgang Uhlig widmet sich immer wieder dem Meer. Auch in Saint-Raphaël bleibt der Blick frei, kein Schiff und kein Ufer stören den Horizont.",
+            "en": "Frankfurt photographer Wolfgang Uhlig returns to the sea again and again. In Saint-Raphaël, too, the view stays open, with no ship and no shore to break the horizon."
           }
         },
         "offerPct": 20,
@@ -490,22 +501,22 @@
         "gesture": "paper",
         "opensAt": "00:00",
         "work": {
-          "code": "bhu106",
-          "sku": "BHU106",
-          "artist": "Beatrice Hug",
-          "title": "Sphaera Topaz",
-          "path": "/pictures/beatrice_hug/sphaera_topaz/",
-          "ab": 2290,
-          "w": 1000,
-          "h": 1000,
+          "code": "htr01",
+          "sku": "HTR01",
+          "artist": "Hans Truöl",
+          "title": "Flying Porsche",
+          "path": "/pictures/hans_truoel/flying_porsche/",
+          "ab": 649,
+          "w": 600,
+          "h": 450,
           "ed": 100,
-          "year": 2025,
-          "r": 1,
-          "signed": true,
+          "year": 1960,
+          "r": 1.3346,
+          "signed": false,
           "revenueRank": 5,
           "story": {
-            "de": "Beatrice Hug lebt in Paris und fotografiert farbige Gläser und gefärbte Flüssigkeiten im Sonnenlicht, mit einer Mittelformatkamera Pentax 6x7. Was abstrakt wirkt, hat einen realen Ursprung.",
-            "en": "Beatrice Hug lives in Paris and photographs coloured glass and tinted liquids in sunlight with a Pentax 6x7 medium-format camera. What looks abstract has an entirely real origin."
+            "de": "Hans Truöl war selbst Skifahrer und Bergsteiger, als er rund um Lech und Zürs zu fotografieren begann. Vor seiner Kamera standen Rennläufer wie Toni Sailer und Karl Schranz, und im Schnee seiner Schwarzweißfotografien wird die Landschaft zur reinen Fläche.",
+            "en": "Hans Truöl was a skier and mountaineer himself when he began photographing around Lech and Zürs. Racers such as Toni Sailer and Karl Schranz stood before his camera, and in the snow of his black-and-white photographs the landscape becomes pure surface."
           }
         },
         "offerPct": 20,
@@ -539,22 +550,22 @@
         "gesture": "candle",
         "opensAt": "00:00",
         "work": {
-          "code": "jgh03",
-          "sku": "JGH03",
-          "artist": "Jean-Marie Ghislain",
-          "title": "Morning Flight",
-          "path": "/pictures/jean_marie_ghislain/morning_flight/",
-          "ab": 2390,
-          "w": 1500,
-          "h": 1000,
-          "ed": 150,
-          "year": 2016,
-          "r": 1.5007,
+          "code": "cgo15",
+          "sku": "CGO16",
+          "artist": "Claudio Gotsch",
+          "title": "Bergwelt",
+          "path": "/pictures/claudio_gotsch/bergwelt/",
+          "ab": 1090,
+          "w": 1050,
+          "h": 700,
+          "ed": 75,
+          "year": 2013,
+          "r": 1.5005,
           "signed": true,
-          "revenueRank": 4,
+          "revenueRank": 6,
           "story": {
-            "de": "Jean-Marie Ghislain fürchtete sich sein Leben lang vor Wasser und vor Haien. 2009, mit Mitte fünfzig, lernte der Belgier tauchen. Seither porträtiert er Haie in Schwarzweiß, stets ohne Blitz.",
-            "en": "Jean-Marie Ghislain was afraid of water and of sharks all his life. In 2009, in his mid-fifties, the Belgian learned to dive. Since then he has portrayed sharks in black and white, always without flash."
+            "de": "Claudio Gotsch, Fotograf aus dem Engadin, fotografiert seit seinem zehnten Lebensjahr Wildtiere. Für einen Adler im Landeanflug verbrachte er einmal fast eine Woche in einem Schneeloch.",
+            "en": "Claudio Gotsch, a photographer from the Engadin, has photographed wildlife since the age of ten. To catch an eagle coming in to land, he once spent almost a week in a snow hole."
           }
         },
         "offerPct": 20,
@@ -582,7 +593,7 @@
           "year": null,
           "r": 1.3333333333333333,
           "signed": true,
-          "revenueRank": 1,
+          "revenueRank": 19,
           "story": {
             "de": "",
             "en": ""
