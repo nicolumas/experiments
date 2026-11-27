@@ -37,7 +37,7 @@
   function title(today, state, now) {
     const A = G.advent;
     if (!today) {
-      /* today's door may open later in the day (the drop opens at 05:00) */
+      /* today's door may open later in the day (the drop opens at 08:00) */
       const later = laterToday(now);
       if (later) {
         const [hh, mm] = (later.opensAt || '00:00').split(':');

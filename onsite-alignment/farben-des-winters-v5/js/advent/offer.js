@@ -71,7 +71,7 @@
     } else if (entry.type === 'drop') {
       const [date, time] = entry.endsAt.split('T');
       parts.push(
-        h('p', { class: 'eyebrow' }, t('dropEyebrow', { n: entry.day })),
+        h('p', { class: 'eyebrow' }, t(live && A.earlyAccess(entry, now) ? 'dropEyebrowEarly' : 'dropEyebrow', { n: entry.day })),
         h('h2', { class: 'display', id: 'offerTitle' }, w.title),
         h('p', { class: 'by' }, by),
         h('p', { class: 'meta' }, `${t('edition', { n: D.fmtNum(w.ed) })} · ${D.size(w)}`),

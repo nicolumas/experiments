@@ -577,7 +577,8 @@
         "type": "drop",
         "world": "shore",
         "gesture": "ribbon",
-        "opensAt": "05:00",
+        "opensAt": "08:00",
+        "earlyUntil": "2026-12-21T12:00",
         "endsAt": "2026-12-22T23:59",
         "ticket": "LUMAS-16650",
         "work": {

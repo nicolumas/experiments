@@ -17,6 +17,8 @@
   const berlinIso = (ms) => berlinFmt.format(new Date(ms));
 
   const opensAtMs = (entry) => Date.parse(`${entry.date}T${entry.opensAt || '00:00'}:00${TZ}`);
+  /* the drop opens to calendar visitors before its official start (early access) */
+  const earlyAccess = (entry, nowMs) => !!entry.earlyUntil && nowMs < Date.parse(`${entry.earlyUntil}:00${TZ}`);
   const endsAtMs = (entry) => (entry.endsAt ? Date.parse(`${entry.endsAt}:00${TZ}`) : Date.parse(`${entry.date}T23:59:59.999${TZ}`));
   const endOfDayMs = (entry) => Date.parse(`${entry.date}T23:59:59.999${TZ}`);
 
@@ -129,7 +131,7 @@
   const api = {
     berlinIso, opensAtMs, endsAtMs, doorState, offerLive, todayEntry, nextEntry, offerPrice, fmtPrice,
     validateSchedule, wallPicks, icsFor, progressKey, loadOpened, saveOpened, simulatedNow, rideWorld, GESTURES, WORLDS,
-    localUrl, forLang,
+    localUrl, forLang, earlyAccess,
   };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else (root.GAL = root.GAL || {}).advent = api;
